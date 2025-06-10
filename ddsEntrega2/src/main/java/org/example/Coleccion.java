@@ -39,5 +39,19 @@ public class Coleccion {
                 .filter(hecho -> criterio.cumpleConCriterio(hecho))
                 .collect(Collectors.toList());
     }
+
+    //como tenemos una lista de criterios, no se si refiere a que un hecho tiene q cumplir todos para q sea de esa coleccion
+    /* public List<Hecho> obtenerHechosQueCumplenTodosLosCriterios() {
+    return hechos.stream()
+            .filter(hecho -> this.cumpleTodosLosCriterios(hecho))
+            .collect(Collectors.toList());
+}
+
+private boolean cumpleTodosLosCriterios(Hecho hecho) {
+    return criteriosDePertenencia.stream()
+            .allMatch(criterio -> criterio.cumpleConCriterio(hecho));
+}   */
+
+    
 }
 
