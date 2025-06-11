@@ -1,4 +1,5 @@
 package org.example;
 
-public class Fuente {
+public abstract class Fuente {
+
 }
