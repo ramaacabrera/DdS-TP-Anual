@@ -1,12 +1,13 @@
 package org.example;
 
-public enum EstadoHecho {
-    ACTIVO("PENDIENTE"),
-    OCULTO("OCULTO");
+public enum TipoContenidoMultimedia {
+    IMAGEN("IMAGEN"),
+    VIDEO("VIDEO"),
+    AUDIO("AUDIO");
 
     private final String descripcion;
 
-    private EstadoHecho(String descripcion) {
+    private TipoContenidoMultimedia(String descripcion) {
         this.descripcion = descripcion;
     }
 
