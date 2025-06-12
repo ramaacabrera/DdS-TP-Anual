@@ -1,9 +1,13 @@
 package presentacion;
-import io.javalin.http;
+import io.javalin.http.Context;
+import io.javalin.http.Handler;
+import org.example.Hecho;
+import org.jetbrains.annotations.NotNull;
+import org.example.HechoRepositorio;
 
 public class PostHechoHandler implements Handler {
 
-    private final RepositorioHechos repositorio = new RepositorioHechos();
+    private final HechoRepositorio repositorio = new HechoRepositorio();
 
     @Override
     public void handle(@NotNull Context context) throws Exception {
@@ -11,9 +15,8 @@ public class PostHechoHandler implements Handler {
         Hecho hecho = context.bodyAsClass(Hecho.class);
 
         System.out.println("Creando hecho: " + bodyString);
-        repositorio.agregar(hecho);
+        repositorio.guardar(hecho);
 
         context.status(201);
     }
 }
-
