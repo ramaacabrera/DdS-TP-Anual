@@ -1,12 +1,13 @@
 package org.example;
 
-public enum EstadoHecho {
-    ACTIVO("Activo"),
-    OCULTO("OCULTO");
+public enum TipoDeTexto {
+    TITULO("TITULO"),
+    DESCRIPCION("DESCRIPCION"),
+    CATEGORIA("CATEGORIA");
 
     private final String descripcion;
 
-    private EstadoHecho(String descripcion) {
+    private TipoDeTexto(String descripcion) {
         this.descripcion = descripcion;
     }
 

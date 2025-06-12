@@ -117,18 +117,3 @@ public class Hecho {
         }
     }
 }
-
-/*Hecho hechito = new Hecho ("Título del hecho",
-        "Descripción detallada del hecho",
-        "Política",
-        ubicacion,
-        new Date(), // fecha de acontecimiento
-        new Date(), // fecha de carga
-        fuente,
-        estado,
-        contribuyente,
-        "Este es el contenido completo del hecho.",
-        etiquetas,
-        true,
-        multimedia);
-*/

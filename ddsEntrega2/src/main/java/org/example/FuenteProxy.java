@@ -1,11 +1,16 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
+import java.util.Map;
+
 public class FuenteProxy extends Fuente {
 
     private Conexion conexion; // falta hacer clase
-    private URL url;
+    private String url;
 
-    public FuenteProxy(Conexion conexion, URL url) {
+    public FuenteProxy(Conexion conexion, String url) {
         this.conexion = conexion;
         this.url = url;
     }

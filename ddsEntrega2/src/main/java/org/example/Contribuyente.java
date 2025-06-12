@@ -17,9 +17,5 @@ public class Contribuyente {
         hechosSubidos.add(hecho);
     }
 
-    public boolean puedeModificarHecho(Hecho hecho){
-        Date fechaActual = new Date();
-        long diferencia = (fechaActual.getTime() - hecho.getFechaDeCarga().getTime()) / (1000 * 60 * 60 * 24);
-        return hecho.getContribuyente().equals(this) &&  diferencia < 7;
-    }
+
 }

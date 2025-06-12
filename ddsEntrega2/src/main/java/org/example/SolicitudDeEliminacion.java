@@ -8,6 +8,7 @@ public class SolicitudDeEliminacion extends Solicitud {
     @Override
     public void aceptarSolicitud() {
         this.estado = EstadoSolicitudEliminacion.ACEPTADA;
+        // Setear hecho como oculto
     }
 
     @Override
