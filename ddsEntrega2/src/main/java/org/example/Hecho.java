@@ -15,15 +15,13 @@ public class Hecho {
     private Fuente fuente;
     private EstadoHecho estadoHecho;
     private Contribuyente contribuyente;
-    private String contenidoDeTexto;
     private List<String> etiquetas = new ArrayList<>();
     private boolean esEditable;
     private List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
 
     // esto es el Constructor
     public Hecho(String titulo, String descripcion, String categoria, Ubicacion ubicacion, Date fechaDeAcontecimiento,
-                 Date fechaDeCarga, Fuente fuente, EstadoHecho estadoHecho, Contribuyente contribuyente,
-                 String contenidoDeTexto, List<String> etiquetas, boolean esEditable,
+                 Date fechaDeCarga, Fuente fuente, EstadoHecho estadoHecho, Contribuyente contribuyente, List<String> etiquetas, boolean esEditable,
                  List<ContenidoMultimedia> contenidoMultimedia) {
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -34,7 +32,6 @@ public class Hecho {
         this.fuente = fuente;
         this.estadoHecho = estadoHecho;
         this.contribuyente = contribuyente;
-        this.contenidoDeTexto = contenidoDeTexto;
         this.etiquetas = etiquetas;
         this.esEditable = esEditable;
         this.contenidoMultimedia = contenidoMultimedia;
@@ -77,10 +74,6 @@ public class Hecho {
         return contribuyente;
     }
 
-    public String getContenidoDeTexto() {
-        return contenidoDeTexto;
-    }
-
     public List<String> getEtiquetas() {
         return etiquetas;
     }
@@ -111,7 +104,6 @@ public class Hecho {
             this.titulo = nuevoTitulo;
             this.descripcion = nuevaDescripcion;
             this.categoria = nuevaCategoria;
-            this.contenidoDeTexto = nuevoContenidoTexto;
         } else {
             System.out.println("Este hecho no es editable.");
         }

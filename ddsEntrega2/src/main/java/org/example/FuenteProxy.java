@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class FuenteProxy extends Fuente {
 
-    private Conexion conexion; // falta hacer clase
+    private Conexion conexion;
     private String url;
 
     public FuenteProxy(Conexion conexion, String url) {
@@ -36,9 +36,20 @@ public class FuenteProxy extends Fuente {
     }
 
     private Hecho convertirAHecho(Map<String, Object> datosHecho) {
-        // Crear un objeto Hecho desde el mapa recibido
-        // Esto depende de cómo estructuren el mapeo
-        return new Hecho(...); // Armar con sus campos.
+
+        String titulo = (String) datosHecho.get("titulo");
+        String descripcion = (String) datosHecho.get("descripcion");
+        String categoria = (String) datosHecho.get("categoria");
+        Ubicacion ubicacion = (Ubicacion) datosHecho.get("ubicacion");
+        Date fechaDeAcontecimiento = (Date) datosHecho.get("fechaDeAcontecimiento");
+        Date fechaDeCarga = new Date();
+        Fuente fuente = this;
+        EstadoHecho estadoHecho = EstadoHecho.ACTIVO;
+        boolean esEditable = false;
+        return new Hecho(titulo, descripcion, categoria, ubicacion,
+                fechaDeAcontecimiento, fechaDeCarga, fuente,
+                estadoHecho, null, new ArrayList<>(), esEditable,
+                new ArrayList<>());
     }
 }
 
