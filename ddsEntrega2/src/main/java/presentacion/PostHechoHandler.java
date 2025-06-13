@@ -9,6 +9,8 @@ public class PostHechoHandler implements Handler {
 
     private final HechoRepositorio repositorio = new HechoRepositorio();
 
+    public PostHechoHandler() {}
+
     @Override
     public void handle(@NotNull Context context) throws Exception {
         String bodyString = context.body();
