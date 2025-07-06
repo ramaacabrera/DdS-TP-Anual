@@ -1,4 +1,4 @@
-package org.example;
+package org.example.agregador;
 
 public class CriterioContribuyente extends Criterio{
     private Contribuyente contribuyente;

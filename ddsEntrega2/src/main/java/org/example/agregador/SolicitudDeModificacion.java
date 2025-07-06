@@ -1,4 +1,4 @@
-package org.example;
+package org.example.agregador;
 
 public class SolicitudDeModificacion extends Solicitud {
     private Hecho hechoModificado;

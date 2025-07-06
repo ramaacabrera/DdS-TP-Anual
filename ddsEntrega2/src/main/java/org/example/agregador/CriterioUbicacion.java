@@ -1,4 +1,4 @@
-package org.example;
+package org.example.agregador;
 
 public class CriterioUbicacion extends Criterio{
     private Ubicacion ubicacion;

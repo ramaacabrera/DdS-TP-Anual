@@ -1,6 +1,4 @@
-package org.example;
-
-import java.util.List;
+package org.example.agregador;
 
 public class CriterioTipoMultimedia extends Criterio{
     private TipoContenidoMultimedia tipoContenidoMultimedia;

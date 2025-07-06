@@ -1,4 +1,4 @@
-package org.example;
+package org.example.agregador;
 import java.util.List;
 
 public interface Conexion {

@@ -1,9 +1,12 @@
-package org.example;
+package org.example.fuenteDinamica;
+
+import org.example.agregador.Conexion;
+import org.example.agregador.Hecho;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConexionBD implements Conexion {
+public class ConexionBD {
     @Override
     public List<Hecho> obtenerHechos(String url){
         return new ArrayList<>();

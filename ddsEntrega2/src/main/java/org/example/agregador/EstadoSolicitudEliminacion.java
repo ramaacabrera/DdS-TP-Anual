@@ -1,14 +1,13 @@
-package org.example;
+package org.example.agregador;
 
-public enum EstadoSolicitudModificacion {
+public enum EstadoSolicitudEliminacion {
     PENDIENTE("PENDIENTE"),
     ACEPTADA("ACEPTADA"),
-    RECHAZADA("RECHAZADA"),
-    ACEPTADACONSUGERENCIA("ACEPTADACONSUGERENCIA");
+    RECHAZADA("RECHAZADA");
 
     private final String descripcion;
 
-    private EstadoSolicitudModificacion(String descripcion) {
+    private EstadoSolicitudEliminacion(String descripcion) {
         this.descripcion = descripcion;
     }
 
