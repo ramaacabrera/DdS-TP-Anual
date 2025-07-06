@@ -1,9 +1,9 @@
 package presentacion;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import org.example.Hecho;
+import org.example.agregador.Hecho;
 import org.jetbrains.annotations.NotNull;
-import org.example.HechoRepositorio;
+import org.example.agregador.HechoRepositorio;
 
 public class PostHechoHandler implements Handler {
 
