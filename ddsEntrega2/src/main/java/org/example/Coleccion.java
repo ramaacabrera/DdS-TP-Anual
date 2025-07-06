@@ -47,11 +47,15 @@ public class Coleccion {
             .collect(Collectors.toList());
 }
 
+
 private boolean cumpleTodosLosCriterios(Hecho hecho) {
     return criteriosDePertenencia.stream()
             .allMatch(criterio -> criterio.cumpleConCriterio(hecho));
 }   */
 
+    public String getHandle() {
+        return handle;
+    }
     
 }
 
