@@ -1,14 +1,24 @@
 package org.example.fuenteDinamica;
 
-import org.example.agregador.Conexion;
-import org.example.agregador.Hecho;
+import org.example.fuente.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ConexionBD {
+public class ConexionBD extends Conexion{
+    private final DinamicoRepositorio baseDeDatos;
+
+    public ConexionBD(DinamicoRepositorio baseDeDatos) {
+        this.baseDeDatos = baseDeDatos;
+    }
+
     @Override
-    public List<Hecho> obtenerHechos(String url){
-        return new ArrayList<>();
+    public List<HechoDTO> obtenerHechos(){ return baseDeDatos.obtenerHechos();}
+
+    public List<SolicitudDeModificacionDTO> obtenerSolicitudDeModificacion() {
+        return baseDeDatos.obtenerSolicitudDeModificacion();
+    }
+
+    public List<SolicitudDeEliminacionDTO> obtenerSolicitudDeEliminacion() {
+        return baseDeDatos.obtenerSolicitudDeEliminacion();
     }
 }

@@ -1,5 +1,7 @@
 package org.example.agregador;
 
+import org.example.fuente.*;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +37,21 @@ public class Hecho {
         this.etiquetas = etiquetas;
         this.esEditable = esEditable;
         this.contenidoMultimedia = contenidoMultimedia;
+    }
+
+    public Hecho(HechoDTO hechoDTO){
+        this.titulo = hechoDTO.getTitulo();
+        this.descripcion = hechoDTO.getDescripcion();
+        this.categoria = hechoDTO.getCategoria();
+        this.ubicacion = hechoDTO.getUbicacion();
+        this.fechaDeAcontecimiento = hechoDTO.getFechaDeAcontecimiento();
+        this.fechaDeCarga = hechoDTO.getFechaDeCarga();
+        this.fuente = hechoDTO.getFuente();
+        this.estadoHecho = hechoDTO.getEstadoHecho();
+        this.contribuyente = hechoDTO.getContribuyente();
+        this.etiquetas = hechoDTO.getEtiquetas();
+        this.esEditable = hechoDTO.getEsEditable();
+        this.contenidoMultimedia = hechoDTO.getContenidoMultimedia();
     }
 
     // Getters

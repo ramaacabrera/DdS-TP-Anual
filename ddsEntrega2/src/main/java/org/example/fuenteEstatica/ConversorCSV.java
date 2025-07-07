@@ -1,12 +1,15 @@
-package org.example;
+package org.example.fuenteEstatica;
 
+import org.example.agregador.*;
+import org.example.fuente.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class ConversorCSV {
-    public Hecho mapearAHecho(String hechoCSV){
+
+    public HechoDTO mapearAHecho(String hechoCSV){
         String[] datos = hechoCSV.split(",");
         String titulo = datos[0].trim();
         String descripcion = datos[1].trim();
@@ -27,6 +30,7 @@ public class ConversorCSV {
         List<String> etiquetas = new ArrayList<>();
         boolean esEditable = false;
         List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
-        return new Hecho(titulo, descripcion, categoria, ubicacion, fechaDeAcontecimiento, fuente, estadoHecho,contribuyente,etiquetas,esEditable,contenidoMultimedia);
+        return new HechoDTO(titulo, descripcion, categoria, ubicacion, fechaDeAcontecimiento, fuente, estadoHecho,contribuyente,etiquetas,esEditable,contenidoMultimedia);
     }
+
 }

@@ -16,22 +16,22 @@ public class CriterioDeTexto extends Criterio {
     @Override
     public boolean cumpleConCriterio(Hecho hecho) {
         // Devuelve true si el hecho contiene al menos una de las palabras buscadas
-        switch (tipoDeTexto.getDescripcion()) {
-            case "TITULO":
+        switch (tipoDeTexto) {
+            case TITULO:
                 for (String palabra : palabras) {
                     if(hecho.getTitulo().contains(palabra)){
                         return true;
                     }
                 }
                 return false;
-            case "DESCRIPCION":
+            case DESCRIPCION:
                 for (String palabra : palabras) {
                     if(hecho.getDescripcion().contains(palabra)){
                         return true;
                     }
                 }
                 return false;
-            case "CATEGORIA":
+            case CATEGORIA:
                 for (String palabra : palabras) {
                     if(hecho.getCategoria().contains(palabra)){
                         return true;
