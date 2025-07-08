@@ -1,4 +1,6 @@
-package org.example;
+package org.example.agregador;
+
+import org.example.fuente.Fuente;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +11,11 @@ public class Coleccion {
     private List<Hecho> hechos = new ArrayList<>();
     private String titulo;
     private String descripcion;
-    private Fuente fuente;
+    private List<Fuente> fuente;
     private String handle;
     private List<Criterio> criteriosDePertenencia = new ArrayList<>();
+    private ModosDeNavegacion modosDeNavegacion;
+    private AlgoritmoConsenso algoritmoDeConsenso;
 
 
     public Coleccion(String titulo, String descripcion, Fuente fuente, String handle) {
