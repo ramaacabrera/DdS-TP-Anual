@@ -5,6 +5,7 @@ import org.example.fuente.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Hecho {
 
@@ -124,5 +125,19 @@ public class Hecho {
         } else {
             System.out.println("Este hecho no es editable.");
         }
+    }
+
+    public boolean tieneMismosAtributosQue(Hecho otro) {
+        if (otro == null) return false;
+
+        return this.titulo.equalsIgnoreCase(otro.titulo)
+                && this.categoria.equalsIgnoreCase(otro.categoria)
+                && Objects.equals(this.ubicacion, otro.ubicacion)
+                && Objects.equals(this.fechaDeAcontecimiento, otro.fechaDeAcontecimiento)
+                && Objects.equals(this.fechaDeCarga, otro.fechaDeCarga)
+                && this.estadoHecho == otro.estadoHecho
+                && Objects.equals(this.contribuyente, otro.contribuyente)
+                && this.etiquetas.equals(otro.etiquetas)
+                && this.esEditable == otro.esEditable;
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Agregador {
 
+    private List<Coleccion> colecciones = new ArrayList<>();
 
     public List<Hecho> obtenerHechosExterno(Fuente fuente) {
         List<Hecho> hechos = new ArrayList();
@@ -15,6 +16,12 @@ public class Agregador {
             hechos.add(hecho);
         }
         return hechos;
+    }
+
+    public void ejecutarAlgoritmoDeConsenso() {
+        for (Coleccion coleccion : colecciones) {
+            coleccion.ejecutarAlgoritmoDeConsenso();
+        }
     }
 
 }
