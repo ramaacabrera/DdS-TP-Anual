@@ -102,6 +102,10 @@ public class Hecho {
         return esEditable;
     }
 
+    public boolean estaActivo() {
+        return this.estadoHecho == EstadoHecho.ACTIVO;
+    }
+
     public List<ContenidoMultimedia> getContenidoMultimedia() {
         return contenidoMultimedia;
     }

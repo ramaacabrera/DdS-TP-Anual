@@ -26,4 +26,9 @@ public class SolicitudEliminacionRepositorio {
     public void actualizarSolicitudEliminacion(SolicitudDeEliminacion solicitud){
         solicitudes.set(solicitudes.indexOf(solicitud), solicitud);
     }
+
+    public Optional<SolicitudDeEliminacion> buscarPorId(String id){
+        return solicitudes.stream().filter(c -> c.getId().equals(id)).findFirst();
+    }
+
 }

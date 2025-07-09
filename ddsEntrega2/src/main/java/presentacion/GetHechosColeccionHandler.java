@@ -13,11 +13,8 @@ import Persistencia.ColeccionRepositorio;
 import org.example.agregador.HechosYColecciones.Hecho;
 
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 
 
@@ -27,13 +24,18 @@ public class GetHechosColeccionHandler implements Handler{
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
         String handle = ctx.pathParam("id"); // parametro de la URL
-        String modNav = ctx.queryParam("modNav");
-        ModosDeNavegacion modoNavegacion = ModosDeNavegacion.valueOf(modNav);
+        String modNav = ctx.queryParam("modoDeNavegacion");
+        ModosDeNavegacion modoNavegacion;
         Optional<Coleccion> coleccionOpt = coleccionRepo.buscarPorHandle(handle);
 
         if (!coleccionOpt.isPresent()) {
             ctx.status(404).result("Colección no encontrada");
             return;
+        }
+        if (Objects.equals(modNav, "CURADA")){
+            modoNavegacion = ModosDeNavegacion.valueOf(modNav);
+        } else {
+            modoNavegacion = ModosDeNavegacion.IRRESTRICTA;
         }
 
         Coleccion coleccion = coleccionOpt.get();

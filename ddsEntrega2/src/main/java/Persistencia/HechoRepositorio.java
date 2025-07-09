@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HechoRepositorio {
-    private List<Hecho> hechos;
+    private final List<Hecho> hechos;
 
     public HechoRepositorio() {
         this.hechos = new ArrayList<>();
@@ -21,7 +21,7 @@ public class HechoRepositorio {
         List<Hecho> hechosADevolver = new ArrayList<Hecho>();
         for (Hecho hecho : hechos) {
             for(Criterio criterio : criterios) {
-                if(criterio.cumpleConCriterio(hecho)) {
+                if(criterio.cumpleConCriterio(hecho) && hecho.estaActivo()) {
                     hechosADevolver.add(hecho);
                 }
             }

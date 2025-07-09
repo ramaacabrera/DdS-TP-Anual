@@ -49,7 +49,7 @@ public class Coleccion {
     public TipoAlgoritmoConsenso getAlgoritmoDeConsenso() {return algoritmoDeConsenso;}
     public List<Criterio> getCriteriosDePertenencia() {return criteriosDePertenencia; }
     public List<Fuente> getFuente(){ return fuentes;}
-    public List<Hecho> getHechos() { return hechos;}
+    public List<Hecho> getHechos() { return hechos.stream().filter(Hecho::estaActivo).collect(Collectors.toList());}
     public String getHandle() {return handle;}
     public List<Hecho> getHechosConsensuados() {return hechosConsensuados;}
 
@@ -90,11 +90,20 @@ public class Coleccion {
         return true; // true → era nuevo, lo agregué
     }
 
+    public void agregarFuente(Fuente fuente){
+        fuentes.add(fuente);
+    }
+
+    public void eliminarFuente(Fuente fuente){
+        fuentes.remove(fuente);
+    }
+
     public List<Hecho> obtenerHechosQueCumplen(List<Criterio> criteriosDeBusqueda, ModosDeNavegacion modosDeNavegacion) {
 
         //Filtramos hechos por criterios
         List<Hecho> hechosFiltrados = hechos.stream()
                 .filter(h -> criteriosDeBusqueda.stream().allMatch(c -> c.cumpleConCriterio(h)))
+                .filter(Hecho::estaActivo)
                 .collect(Collectors.toList());
 
         //Si es IRRESTRICTA devolvemos los hechos filtrados tal cual

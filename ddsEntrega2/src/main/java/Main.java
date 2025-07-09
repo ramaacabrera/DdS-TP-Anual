@@ -35,8 +35,11 @@ public class Main {
         app.post("/api/hechos", new PostHechoHandler(hechoRepositorio)); //creo hecho
         app.post("/api/solicitudes/modificacion", new PostSolicitudModificacionHandler(solicitudModificacionRepositorio));
         app.post("/api/solicitudes/eliminacion", new PostSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); //creo solicitud
+        app.post("api/colecciones/{id}", new PostFuentesColeccionHandler(coleccionRepositorio)); // agrego
         app.put("api/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio)); // actualizo una coleccion
         app.put("api/colecciones/{id}", new PutAlgoritmoConsensoHandler(coleccionRepositorio)); // actualizo algoritmo
+        app.put("api/solicitudes/eliminacion/{id}", new PutSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // aprobar o denegar solicitud eliminacion
+        app.delete("api/colecciones/{id}", new DeleteFuenteHandler(coleccionRepositorio)); // borro una fuente
         app.delete("api/colecciones", new DeleteColeccionesHandler(coleccionRepositorio)); // borro una coleccion
     }
 }

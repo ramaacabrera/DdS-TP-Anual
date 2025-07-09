@@ -9,6 +9,7 @@ import Persistencia.ColeccionRepositorio;
 import org.example.agregador.Criterios.Criterio;
 import org.example.agregador.HechosYColecciones.Hecho;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.example.agregador.HechosYColecciones.TipoAlgoritmoConsenso;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,16 +22,11 @@ public class PutColeccionHandler implements Handler {
     @Override
     public void handle(Context ctx) {
         String handle = ctx.pathParam("id");
-        final Optional<Coleccion> resultadoBusqueda = repositorio.buscarPorHandle(handle);
+        Optional<Coleccion> resultadoBusqueda = repositorio.buscarPorHandle(handle);
         if (resultadoBusqueda.isPresent()) {
             ObjectMapper mapper = new ObjectMapper();
             try {
                 JsonNode body = mapper.readTree((ctx.body()));
-                if(body.has("hechos")){
-                    List<Hecho> nuevosHechos = mapper.readValue(body.get("hechos").toString(),
-                            new TypeReference<List<Hecho>>(){});
-                    resultadoBusqueda.get().setHechos(nuevosHechos);
-                }
                 if(body.has("titulo")){
                     resultadoBusqueda.get().setTitulo(body.get("titulo").asText());
                 }
