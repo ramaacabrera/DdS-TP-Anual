@@ -1,9 +1,11 @@
 package org.example.fuenteProxy;
 
-import org.example.agregador.ContenidoMultimedia;
-import org.example.agregador.EstadoHecho;
-import org.example.agregador.Ubicacion;
-import org.example.fuente.*;
+import org.example.agregador.DTO.HechoDTO;
+import org.example.agregador.HechosYColecciones.ContenidoMultimedia;
+import org.example.agregador.Criterios.Criterio;
+import org.example.agregador.HechosYColecciones.EstadoHecho;
+import org.example.agregador.HechosYColecciones.Ubicacion;
+import org.example.agregador.fuente.*;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,29 +28,71 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
-public class ConexionDemo{
-
+public class ConexionDemo extends Conexion{
+    protected String urlServicioExterno;
     private final ObjectMapper objectMapper;
+    public LocalDateTime fechaUltimaConsulta;
+    private FuenteDemo fuenteAsociada;
+
     public ConexionDemo() {
         this.objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.registerModule(new JavaTimeModule()); // Para manejar LocalDateTime del HechoMock
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Para que LocalDateTime se serialice como string ISO
     }
+    // Constructor que permite inicializar la URL del servicio externo y la Fuente asociada
+    public ConexionDemo(String urlServicioExterno, FuenteDemo fuenteAsociada) {
+        this(); // Llama al constructor por defecto para inicializar ObjectMapper
+        this.urlServicioExterno = urlServicioExterno;
+        this.fuenteAsociada = fuenteAsociada; // Asigna la fuente asociada
+    }
 
+    // Getters y Setters para urlServicioExterno y fechaUltimaConsulta
+    public String getUrlServicioExterno() {
+        return urlServicioExterno;
+    }
 
-     public List<HechoDTO> obtenerNuevosHechos(URL urlServicioExterno, LocalDateTime fechaUltimaConsulta, Fuente fuenteAsociada) {
+    public void setUrlServicioExterno(String urlServicioExterno) {
+        this.urlServicioExterno = urlServicioExterno;
+    }
+
+    public LocalDateTime getFechaUltimaConsulta() {
+        return fechaUltimaConsulta;
+    }
+
+    public void setFechaUltimaConsulta(LocalDateTime fechaUltimaConsulta) {
+        this.fechaUltimaConsulta = fechaUltimaConsulta;
+    }
+
+    // Setter para la fuente asociada (si se necesita configurar después del constructor)
+    public void setFuenteAsociadaParaDTO(Fuente fuenteAsociadaParaDTO) {
+        this.fuenteAsociada = fuenteAsociada;
+    }
+
+    @Override
+    public List<HechoDTO> obtenerHechos(List<Criterio> criterios){
+        LocalDateTime fechaParametro;
+        if(fechaUltimaConsulta == null) {
+            // Si es la primera vez, inicia desde una fecha hace mucho
+            fechaParametro = LocalDateTime.of(1800, 1, 1, 0, 0);
+        }else{
+            fechaParametro = fechaUltimaConsulta;
+        }
+        this.fechaUltimaConsulta = LocalDateTime.now();
+        return obtenerHechos(fechaParametro);
+    }
+
+     public List<HechoDTO> obtenerHechos(LocalDateTime fechaUltimaConsulta) {
         Objects.requireNonNull(urlServicioExterno, "La URL del servicio externo no puede ser nula.");
         Objects.requireNonNull(fechaUltimaConsulta, "La fecha de última consulta no puede ser nula.");
-        Objects.requireNonNull(fuenteAsociada, "La fuente asociada no puede ser nula.");
 
 
-        System.out.println("ConexionDemo: Buscando hechos en " + urlServicioExterno.toString() + " desde " + fechaUltimaConsulta.toString());
+        //System.out.println("ConexionDemo: Buscando hechos en " + urlServicioExterno.toString() + " desde " + fechaUltimaConsulta.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
 
         HttpURLConnection connection = null;
         try {
             // Formatear la fecha para la API Mock
-            String fechaFormateada = fechaUltimaConsulta.toString();
+            String fechaFormateada = fechaUltimaConsulta.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);;
             String requestUrl = urlServicioExterno.toString() + "?fechaDesde=" + fechaFormateada;
 
             URL url = new URL(requestUrl);
@@ -56,7 +101,7 @@ public class ConexionDemo{
             connection.setRequestProperty("Accept", "application/json");
 
             int responseCode = connection.getResponseCode();
-            System.out.println("ConexionDemo: Status de respuesta: " + responseCode);
+            //System.out.println("ConexionDemo: Status de respuesta: " + responseCode);
 
             if (responseCode == HttpURLConnection.HTTP_OK) { // HTTP 200
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -68,7 +113,7 @@ public class ConexionDemo{
                 in.close();
 
                 String responseBody = response.toString();
-                System.out.println("ConexionDemo: Respuesta del servicio externo: " + responseBody);
+                //System.out.println("ConexionDemo: Respuesta del servicio externo: " + responseBody);
 
                 List<HechoMock> hechosExternos =  objectMapper.readValue(responseBody, new TypeReference<List<HechoMock>>() {});
 
@@ -80,12 +125,12 @@ public class ConexionDemo{
 
                 //Mapear HechoMock a HechoDTO
                 return hechosExternos.stream()
-                        .map(hechoMock -> mapHechoMockToHechoDTO(hechoMock, fuenteAsociada))
+                        .map(hechoMock -> mapHechoMockAHechoDTO(hechoMock, this.fuenteAsociada))
                         .collect(Collectors.toList());
 
 
             } else if (responseCode == HttpURLConnection.HTTP_NO_CONTENT) { // HTTP 204
-                System.out.println("ConexionDemo: No hay nuevos hechos por ahora (HTTP 204 No Content).");
+                //System.out.println("ConexionDemo: No hay nuevos hechos por ahora (HTTP 204 No Content).");
                 return null;
             } else {
                 String errorBody = "";
@@ -99,7 +144,7 @@ public class ConexionDemo{
                     errorIn.close();
                     errorBody = errorResponse.toString();
                 }
-                System.err.println("ConexionDemo: Error al obtener hechos. Status: " + responseCode + ", Body: " + errorBody);
+                //System.err.println("ConexionDemo: Error al obtener hechos. Status: " + responseCode + ", Body: " + errorBody);
                 return null;
             }
         } catch (Exception e) {
@@ -113,10 +158,8 @@ public class ConexionDemo{
         }
     }
 
-
-
     // Metodo para mapear HechoMock (desde la API) a HechoDTO (general de MetaMapa)
-    private HechoDTO mapHechoMockToHechoDTO(HechoMock hechoMock, Fuente fuenteAsociada) {
+    private HechoDTO mapHechoMockAHechoDTO(HechoMock hechoMock,FuenteDemo fuente) {
         // Manejo de la fecha de acontecimiento: LocalDateTime a Date
         Date fechaDeAcontecimiento = null;
         if (hechoMock.getMockFechaAcontecimiento() != null) {
@@ -141,12 +184,12 @@ public class ConexionDemo{
                 }
             } else {
                 // Si no es Lat/Lon, asumimos que es un nombre de lugar o dirección
-                ubicacion = new Ubicacion(ubicacionStr); // Usar el constructor de 1 parámetro (String)
+                ubicacion = new Ubicacion(ubicacionStr);
             }
         } else {
             // Si el string de ubicación es nulo o vacío
             System.out.println("ConexionDemo: Ubicación en blanco o vacía para el hecho con ID Externo: " + hechoMock.getMockId() + ". Usando Ubicacion Desconocida.");
-            ubicacion = new Ubicacion(); // Usar el constructor de 0 parámetros para "desconocida"
+            ubicacion = new Ubicacion();//desconocida
         }
 
         // Etiquetas
@@ -162,17 +205,16 @@ public class ConexionDemo{
         }
         etiquetas.add("fuente-demo");
 
-        // Otros campos por defecto para el DTO
         Date fechaDeCarga = new Date();
         EstadoHecho estadoHecho = EstadoHecho.ACTIVO;
-        // Contribuyente se mantiene nulo por ahora para hechos externos
+        // Contribuyente nulo por ahora para hechos externos
         List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
         boolean esEditable = false;
 
         // Validar título antes de crear DTO
         String tituloDTO = hechoMock.getMockTitulo();
         if (tituloDTO == null || tituloDTO.trim().isEmpty()) {
-            System.err.println("ConexionDemo: HechoMock sin título (ID: " + hechoMock.getMockId() + "). Usando ID como título.");
+            //System.err.println("ConexionDemo: HechoMock sin título (ID: " + hechoMock.getMockId() + "). Usando ID como título.");
             tituloDTO = "Hecho Externo (ID: " + hechoMock.getMockId() + ")";
         }
 
@@ -183,7 +225,7 @@ public class ConexionDemo{
                 ubicacion,
                 fechaDeAcontecimiento,
                 fechaDeCarga,
-                fuenteAsociada,
+                fuente,
                 estadoHecho,
                 null, // Contribuyente
                 etiquetas,

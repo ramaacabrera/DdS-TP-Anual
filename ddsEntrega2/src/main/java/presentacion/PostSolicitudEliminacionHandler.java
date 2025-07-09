@@ -1,9 +1,9 @@
 package presentacion;
 
-import org.example.agregador.*;
+import Persistencia.SolicitudEliminacionRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import org.example.agregador.SolicitudDeEliminacion;
+import org.example.agregador.Solicitudes.SolicitudDeEliminacion;
 import org.jetbrains.annotations.NotNull;
 
 public class PostSolicitudEliminacionHandler implements Handler {

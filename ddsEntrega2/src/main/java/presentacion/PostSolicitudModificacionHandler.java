@@ -2,8 +2,8 @@ package presentacion;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import org.example.agregador.SolicitudDeModificacion;
-import org.example.agregador.SolicitudModificacionRepositorio;
+import org.example.agregador.Solicitudes.SolicitudDeModificacion;
+import Persistencia.SolicitudModificacionRepositorio;
 import org.jetbrains.annotations.NotNull;
 
 public class PostSolicitudModificacionHandler implements Handler {

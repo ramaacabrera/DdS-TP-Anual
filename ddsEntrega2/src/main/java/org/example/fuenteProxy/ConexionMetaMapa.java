@@ -1,9 +1,9 @@
 package org.example.fuenteProxy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.agregador.Coleccion;
-import org.example.fuente.Conexion;
-import org.example.fuente.*;
+import org.example.agregador.DTO.HechoDTO;
+import org.example.agregador.HechosYColecciones.Coleccion;
+import org.example.agregador.Criterios.Criterio;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,13 +15,12 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-public class ConexionMetaMapa extends Conexion {
+public class ConexionMetaMapa {
     private final URL url;
 
     public ConexionMetaMapa(URL url) {this.url = url;}
 
-    @Override
-    public List<HechoDTO> obtenerHechos() {
+    public List<HechoDTO> obtenerHechos(List<Criterio> criterios) {
         URL urlHecho;
         try {
             urlHecho = new URL(url + "/hecho");
@@ -59,7 +58,7 @@ public class ConexionMetaMapa extends Conexion {
         }
     }
 
-    public void crearSolicitudEliminacion(String tituloHecho, String justificacion){
+    public void crearSolicitudEliminacion(HechoDTO hechoDTO, String justificacion){
         URL urlSolicitudEliminacion;
         try{
             urlSolicitudEliminacion = new URL(url + "/solicitudes");
@@ -68,8 +67,8 @@ public class ConexionMetaMapa extends Conexion {
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setDoOutput(true);
 
-            Map<String,String> parametros = new HashMap<>();
-            parametros.put("tituloHecho", tituloHecho);
+            Map<String,Object> parametros = new HashMap<>();
+            parametros.put("hechoDTO", hechoDTO);
             parametros.put("justificacion", justificacion);
 
             ObjectMapper mapper = new ObjectMapper();

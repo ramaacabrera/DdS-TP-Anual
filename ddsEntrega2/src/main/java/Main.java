@@ -1,57 +1,18 @@
 
-import io.javalin.Javalin;
-import org.example.agregador.*;
-import org.example.fuenteProxy.*;
-import org.example.fuenteProxy.Quartz.RecopilacionHechosJob;
-import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
-import presentacion.*;
 
-import java.time.LocalDateTime;
+import Persistencia.ColeccionRepositorio;
+import Persistencia.HechoRepositorio;
+import Persistencia.SolicitudEliminacionRepositorio;
+import Persistencia.SolicitudModificacionRepositorio;
+import io.javalin.Javalin;
+import presentacion.*;
+import org.example.fuenteProxy.APIMock.DemoAPIMockServer;
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException, SchedulerException {
-
-        ////////////////////inicio de  cosas para demo
-        // 1. Iniciar el API Mock Server en un hilo separado
-        System.out.println("Iniciando API Mock de Fuente Demo...");
-        new Thread(() -> DemoApiMockServer.main(new String[]{})).start();
-        Thread.sleep(2000); // Dar un pequeño tiempo para que el mock server se inicialice
-
-        // 2. Inicializar componentes de tu dominio que el Job necesita
-        ConexionDemo conexionDemo = new ConexionDemo();
-        FuenteDemo fuenteDemoMetaMapa = new FuenteDemo("Fuente Demo Externa", conexionDemo);
-        Agregador agregador = Agregador.getInstance(); // Obtén la instancia Singleton del Agregador
-
-        // 3. Configurar y iniciar el Scheduler de Quartz
-        System.out.println("Configurando Scheduler de Quartz...");
-        SchedulerFactory schedulerFactory = new StdSchedulerFactory();
-        Scheduler scheduler = schedulerFactory.getScheduler();
-
-        // Crear el Job para recopilación y procesamiento
-        JobDetail recopilacionProcesamientoJob = JobBuilder.newJob(RecopilacionHechosJob.class)
-                .withIdentity("recopilacionProcesamientoHechosJob", "grupoFuentes")
-                .usingJobData("apiUrl", API_MOCK_URL)
-                // Inicia la primera consulta con una fecha en el pasado (ej. 1 hora atrás)
-                .usingJobData("ultimaConsultaFecha", LocalDateTime.now().minusHours(1))
-                .usingJobData("conexionDemoInstance", conexionDemo)
-                .usingJobData("fuenteDemoMetaMapaInstance", fuenteDemoMetaMapa)
-                .usingJobData("agregadorInstance", agregador) // Pasa la instancia del Agregador
-                .build();
-
-        // Crear el Trigger para que el Job se ejecute cada 1 hora
-        Trigger recopilacionProcesamientoTrigger = TriggerBuilder.newTrigger()
-                .withIdentity("recopilacionProcesamientoHechosTrigger", "grupoFuentes")
-                .startNow() // Empieza tan pronto como se inicia la aplicación
-                .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                        .withIntervalInHours(1) // ¡Se ejecutará cada 1 hora!
-                        .repeatForever())
-                .build();
-
-        // Programar el Job en el Scheduler
-        scheduler.scheduleJob(recopilacionProcesamientoJob, recopilacionProcesamientoTrigger);
-        scheduler.start(); // Iniciar el Scheduler de Quartz
-        ////////////////////////////////////////////////////////aca termina
+    public static void main(String[] args) throws InterruptedException {
+        //inicio el mock server para demo
+        new Thread(() -> DemoAPIMockServer.main(new String[]{})).start();
+        Thread.sleep(2000);
 
         System.out.println("Iniciando servidor Javalin en el puerto 8080...");
         Javalin app = Javalin.create(javalinConfig -> {
@@ -72,9 +33,10 @@ public class Main {
         app.get("api/colecciones/{id}", new GetColeccionHandler(coleccionRepositorio)); // lee una coleccion en particular
         app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio)); //creo coleccion
         app.post("/api/hechos", new PostHechoHandler(hechoRepositorio)); //creo hecho
-        app.post("/api/solicitudes", new PostSolicitudModificacionHandler(solicitudModificacionRepositorio));
-        app.post("/api/solicitudes", new PostSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); //creo solicitud
+        app.post("/api/solicitudes/modificacion", new PostSolicitudModificacionHandler(solicitudModificacionRepositorio));
+        app.post("/api/solicitudes/eliminacion", new PostSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); //creo solicitud
         app.put("api/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio)); // actualizo una coleccion
+        app.put("api/colecciones/{id}", new PutAlgoritmoConsensoHandler(coleccionRepositorio)); // actualizo algoritmo
         app.delete("api/colecciones", new DeleteColeccionesHandler(coleccionRepositorio)); // borro una coleccion
     }
 }

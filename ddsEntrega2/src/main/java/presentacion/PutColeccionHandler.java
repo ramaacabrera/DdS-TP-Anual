@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import org.example.agregador.Coleccion;
-import org.example.agregador.ColeccionRepositorio;
-import org.example.agregador.Criterio;
-import org.example.agregador.Hecho;
+import org.example.agregador.HechosYColecciones.Coleccion;
+import Persistencia.ColeccionRepositorio;
+import org.example.agregador.Criterios.Criterio;
+import org.example.agregador.HechosYColecciones.Hecho;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.util.List;

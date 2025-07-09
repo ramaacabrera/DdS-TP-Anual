@@ -1,9 +1,15 @@
 package presentacion;
 
+import Persistencia.HechoRepositorio;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import org.example.agregador.*;
+import org.example.agregador.Criterios.Criterio;
+import org.example.agregador.Criterios.CriterioCategoria;
+import org.example.agregador.Criterios.CriterioFecha;
+import org.example.agregador.Criterios.CriterioUbicacion;
+import org.example.agregador.HechosYColecciones.Hecho;
+import org.example.agregador.HechosYColecciones.Ubicacion;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;

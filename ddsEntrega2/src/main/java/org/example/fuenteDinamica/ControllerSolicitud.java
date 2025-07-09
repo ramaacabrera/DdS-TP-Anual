@@ -1,9 +1,8 @@
 package org.example.fuenteDinamica;
 
-import org.example.agregador.Contribuyente;
-import org.example.agregador.Hecho;
-import org.example.agregador.SolicitudDeModificacion;
-import org.example.fuente.HechoDTO;
+import Persistencia.DinamicoRepositorio;
+import org.example.agregador.DTO.SolicitudDeEliminacionDTO;
+import org.example.agregador.DTO.SolicitudDeModificacionDTO;
 
 public class ControllerSolicitud {
     private final DinamicoRepositorio baseDeDatos;

@@ -1,7 +1,8 @@
 package org.example.fuenteDinamica;
 
-import org.example.agregador.Hecho;
-import org.example.fuente.HechoDTO;
+import Persistencia.DinamicoRepositorio;
+import org.example.agregador.HechosYColecciones.Hecho;
+import org.example.agregador.DTO.HechoDTO;
 import org.example.agregador.Contribuyente;
 
 public class ControllerSubirHechos {

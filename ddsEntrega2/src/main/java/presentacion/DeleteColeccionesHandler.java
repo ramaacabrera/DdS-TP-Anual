@@ -2,8 +2,8 @@ package presentacion;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import org.example.agregador.Coleccion;
-import org.example.agregador.ColeccionRepositorio;
+import org.example.agregador.HechosYColecciones.Coleccion;
+import Persistencia.ColeccionRepositorio;
 
 public class DeleteColeccionesHandler implements Handler {
     ColeccionRepositorio repositorio;

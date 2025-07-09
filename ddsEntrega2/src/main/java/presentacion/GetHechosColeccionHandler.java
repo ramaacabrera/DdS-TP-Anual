@@ -1,15 +1,18 @@
 package presentacion;
 import io.javalin.http.Handler;
 import io.javalin.http.Context;
-import io.javalin.http.Handler;
+import org.example.agregador.Criterios.Criterio;
+import org.example.agregador.Criterios.CriterioCategoria;
+import org.example.agregador.Criterios.CriterioFecha;
+import org.example.agregador.Criterios.CriterioUbicacion;
+import org.example.agregador.HechosYColecciones.ModosDeNavegacion;
+import org.example.agregador.HechosYColecciones.Ubicacion;
 import org.jetbrains.annotations.NotNull;
-import org.example.agregador.Coleccion;
-import org.example.agregador.ColeccionRepositorio;
-import org.example.agregador.Hecho;
-import org.example.agregador.*;
+import org.example.agregador.HechosYColecciones.Coleccion;
+import Persistencia.ColeccionRepositorio;
+import org.example.agregador.HechosYColecciones.Hecho;
 
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -23,7 +26,9 @@ public class GetHechosColeccionHandler implements Handler{
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        String handle = ctx.pathParam("id");  // parametro de la URL
+        String handle = ctx.pathParam("id"); // parametro de la URL
+        String modNav = ctx.queryParam("modNav");
+        ModosDeNavegacion modoNavegacion = ModosDeNavegacion.valueOf(modNav);
         Optional<Coleccion> coleccionOpt = coleccionRepo.buscarPorHandle(handle);
 
         if (!coleccionOpt.isPresent()) {
@@ -32,12 +37,11 @@ public class GetHechosColeccionHandler implements Handler{
         }
 
         Coleccion coleccion = coleccionOpt.get();
-        List<Hecho> hechos = coleccion.getHechos();  // base de hechos desde esta colección
-
+        //List<Hecho> hechos = coleccion.getHechos();  // base de hechos desde esta colección
         List<Criterio> criterios = armarListaDeCriterios(ctx);
-        List<Hecho> hechosFiltrados = this.filtrarHechos(hechos, criterios);
+        List<Hecho> hechosAMostrar = coleccion.obtenerHechosQueCumplen(criterios, modoNavegacion);
 
-        ctx.status(200).json(hechosFiltrados);
+        ctx.status(200).json(hechosAMostrar);
     }
 
     private List<Criterio> armarListaDeCriterios(Context ctx) {

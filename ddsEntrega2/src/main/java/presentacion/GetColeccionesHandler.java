@@ -1,8 +1,8 @@
 package presentacion;
 
+import Persistencia.ColeccionRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import org.example.agregador.*;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -12,7 +12,7 @@ public class GetColeccionesHandler implements Handler {
     public GetColeccionesHandler(ColeccionRepositorio colecciones) { repositorio = colecciones; }
 
     public void handle(@NotNull Context ctx) throws Exception {
-        ctx.json(repositorio);
+        ctx.json(repositorio.obtenerTodas());
     }
 
 }

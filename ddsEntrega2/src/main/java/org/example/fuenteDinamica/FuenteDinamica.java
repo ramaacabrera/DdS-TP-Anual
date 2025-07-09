@@ -1,7 +1,9 @@
 package org.example.fuenteDinamica;
 
-import org.example.agregador.TipoDeFuente;
-import org.example.fuente.*;
+import org.example.agregador.DTO.SolicitudDeEliminacionDTO;
+import org.example.agregador.DTO.SolicitudDeModificacionDTO;
+import org.example.agregador.fuente.TipoDeFuente;
+import org.example.agregador.fuente.*;
 
 import java.util.List;
 

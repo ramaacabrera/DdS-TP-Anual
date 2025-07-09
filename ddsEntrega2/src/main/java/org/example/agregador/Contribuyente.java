@@ -1,5 +1,7 @@
 package org.example.agregador;
 
+import org.example.agregador.HechosYColecciones.Hecho;
+
 import java.util.ArrayList;
 import java.util.List;
 

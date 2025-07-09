@@ -1,6 +1,11 @@
 package org.example.fuenteDinamica;
 
-import org.example.fuente.*;
+import Persistencia.DinamicoRepositorio;
+import org.example.agregador.DTO.HechoDTO;
+import org.example.agregador.DTO.SolicitudDeEliminacionDTO;
+import org.example.agregador.DTO.SolicitudDeModificacionDTO;
+import org.example.agregador.Criterios.Criterio;
+import org.example.agregador.fuente.*;
 
 import java.util.List;
 
@@ -12,7 +17,7 @@ public class ConexionBD extends Conexion{
     }
 
     @Override
-    public List<HechoDTO> obtenerHechos(){ return baseDeDatos.obtenerHechos();}
+    public List<HechoDTO> obtenerHechos(List<Criterio> criterios){ return baseDeDatos.obtenerHechos();}
 
     public List<SolicitudDeModificacionDTO> obtenerSolicitudDeModificacion() {
         return baseDeDatos.obtenerSolicitudDeModificacion();

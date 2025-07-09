@@ -1,6 +1,11 @@
 package org.example.agregador;
 
-import org.example.fuente.*;
+import Persistencia.HechoRepositorio;
+import org.example.agregador.DTO.HechoDTO;
+import org.example.agregador.Criterios.Criterio;
+import org.example.agregador.HechosYColecciones.Coleccion;
+import org.example.agregador.HechosYColecciones.Hecho;
+import org.example.agregador.fuente.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +30,10 @@ public class Agregador {
         }, 0, 1, TimeUnit.HOURS);
 
         long delayInicial = calcularDelayHastaHora(2);  // 2 AM
-
         scheduler.scheduleAtFixedRate(() -> {
             this.ejecutarAlgoritmoDeConsenso();
         }, delayInicial, 24, TimeUnit.HOURS);
+
     }
     //Constructor (lo hicimos para inicializar) que cuando se crea el objeto Agregador,
     // arranca un scheduler que cada 1 hora ejecuta el método actualizarHechosDesdeFuentes().
@@ -38,7 +43,7 @@ public class Agregador {
             List<Fuente> fuentes = coleccion.getFuente();
 
             for (Fuente fuente : fuentes) {
-                List<Hecho> nuevosHechos = obtenerHechosExterno(fuente);
+                List<Hecho> nuevosHechos = obtenerHechosExterno(fuente, new ArrayList<>());
                 for (Hecho hecho : nuevosHechos) {
                     if (coleccion.cumpleCriterio(hecho)) {
                         boolean esNuevo = coleccion.agregarHecho(hecho);
@@ -65,9 +70,9 @@ public class Agregador {
         return null;
     }
 
-    public List<Hecho> obtenerHechosExterno(Fuente fuente) {
+    public List<Hecho> obtenerHechosExterno(Fuente fuente, List<Criterio> criterios) {
         List<Hecho> hechos = new ArrayList();
-        for (HechoDTO hechoDTO : fuente.obtenerHechos()){
+        for (HechoDTO hechoDTO : fuente.obtenerHechos(criterios)){
             Hecho hecho = new Hecho(hechoDTO);
             hechos.add(hecho);
         }
