@@ -9,18 +9,18 @@ import java.util.Date;
 import java.util.List;
 
 public class HechoDTO {
-    private final String titulo;
-    private final String descripcion;
-    private final String categoria;
-    private final Ubicacion ubicacion;
-    private final Date fechaDeAcontecimiento;
-    private final Date fechaDeCarga;
-    private final Fuente fuente;
-    private final EstadoHecho estadoHecho;
-    private final Contribuyente contribuyente;
-    private final List<String> etiquetas;
-    private final boolean esEditable;
-    private final List<ContenidoMultimedia> contenidoMultimedia;
+    private String titulo;
+    private String descripcion;
+    private String categoria;
+    private Ubicacion ubicacion;
+    private Date fechaDeAcontecimiento;
+    private Date fechaDeCarga;
+    private Fuente fuente;
+    private EstadoHecho estadoHecho;
+    private Contribuyente contribuyente;
+    private List<String> etiquetas;
+    private boolean esEditable;
+    private List<ContenidoMultimedia> contenidoMultimedia;
 
     public HechoDTO(String titulo, String descripcion, String categoria, Ubicacion ubicacion, Date fechaDeAcontecimiento,
                     Date fechaDeCarga, Fuente fuente, EstadoHecho estadoHecho, Contribuyente contribuyente, List<String> etiquetas, boolean esEditable,
@@ -51,4 +51,17 @@ public class HechoDTO {
     public List<String> getEtiquetas() { return etiquetas;}
     public boolean getEsEditable() { return esEditable;}
     public List<ContenidoMultimedia> getContenidoMultimedia() { return contenidoMultimedia; }
+
+    public void setTitulo(String titulo){ this.titulo = titulo;}
+    public void setDescripcion(String descripcion){ this.descripcion = descripcion;}
+    public void setCategoria(String categoria){ this.categoria = categoria;}
+    public void setUbicacion(Ubicacion ubicacion) {this.ubicacion = ubicacion;}
+    public void setFechaDeAcontecimiento(Date fechaDeAcontecimiento){ this.fechaDeAcontecimiento = fechaDeAcontecimiento;}
+    public void setFechaDeCarga(Date fechaDeCarga) {this.fechaDeCarga = fechaDeCarga;}
+    public void setFuente(Fuente fuente) {this.fuente = fuente;}
+    public void setEstadoHecho(EstadoHecho estadoHecho){ this.estadoHecho = estadoHecho;}
+    public void setContribuyente(Contribuyente contribuyente){ this.contribuyente = contribuyente;}
+    public void setEtiquetas(List<String> etiquetas) {this.etiquetas = etiquetas;}
+    public void setEsEditable(boolean esEditable) {this.esEditable = esEditable;}
+    public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoMultimedia) {this.contenidoMultimedia = contenidoMultimedia;}
 }

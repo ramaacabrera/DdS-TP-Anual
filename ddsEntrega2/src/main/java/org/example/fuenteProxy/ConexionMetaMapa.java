@@ -1,7 +1,7 @@
 package org.example.fuenteProxy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.Coleccion;
+import org.example.agregador.Coleccion;
 import org.example.fuente.Conexion;
 import org.example.fuente.*;
 
@@ -9,16 +9,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 public class ConexionMetaMapa extends Conexion {
-    private URL url;
+    private final URL url;
+
+    public ConexionMetaMapa(URL url) {this.url = url;}
+
     @Override
     public List<HechoDTO> obtenerHechos() {
         URL urlHecho;
@@ -67,7 +68,7 @@ public class ConexionMetaMapa extends Conexion {
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setDoOutput(true);
 
-            Map<String,String> parametros = new HashMap<String,String>();
+            Map<String,String> parametros = new HashMap<>();
             parametros.put("tituloHecho", tituloHecho);
             parametros.put("justificacion", justificacion);
 
@@ -85,6 +86,5 @@ public class ConexionMetaMapa extends Conexion {
             System.out.println("Error al crear solicitud " + e.getMessage());
         }
     }
-
 
 }

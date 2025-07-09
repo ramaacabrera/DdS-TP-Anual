@@ -1,7 +1,11 @@
 package org.example.agregador;
 
 public class CriterioTipoMultimedia extends Criterio{
-    private TipoContenidoMultimedia tipoContenidoMultimedia;
+    private final TipoContenidoMultimedia tipoContenidoMultimedia;
+
+    public CriterioTipoMultimedia(TipoContenidoMultimedia tipoContenidoMultimediaNuevo) {
+        this.tipoContenidoMultimedia = tipoContenidoMultimediaNuevo;
+    }
 
     @Override
     public boolean cumpleConCriterio(Hecho hecho) {

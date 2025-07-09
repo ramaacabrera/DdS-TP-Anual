@@ -1,12 +1,11 @@
 
 import io.javalin.Javalin;
-import org.example.agregador.Agregador;
-import org.example.fuenteProxy.ConexionDemo;
+import org.example.agregador.*;
+import org.example.fuenteProxy.*;
 import org.example.fuenteProxy.Quartz.RecopilacionHechosJob;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import presentacion.*;
-
 
 import java.time.LocalDateTime;
 
@@ -62,10 +61,20 @@ public class Main {
                             javalinConfig.staticFiles.add("/"); //recursos estaticos (HTML, CSS, JS, IMG)
                         }).start(8080);
 
-        app.get("/api/hechos", new GetColeccionesHandler()); //consulto coleccion
-        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler()); //consulta hechos
-        app.post("/api/colecciones", new PostColeccionHandler()); //creo coleccion
-        app.post("/api/hechos", new PostHechoHandler()); //creo hecho
-        app.post("/api/solicitudes", new PostSolicitudEliminacionHandler()); //creo solicitud
+        HechoRepositorio hechoRepositorio = new HechoRepositorio();
+        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
+        SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio();
+        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
+
+        app.get("/api/hechos", new GetHechosHandler(hechoRepositorio)); // consulto todos los hechos
+        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler()); //consulta hechos de una coleccion
+        app.get("api/colecciones", new GetColeccionesHandler(coleccionRepositorio)); // consulta todas las colecciones
+        app.get("api/colecciones/{id}", new GetColeccionHandler(coleccionRepositorio)); // lee una coleccion en particular
+        app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio)); //creo coleccion
+        app.post("/api/hechos", new PostHechoHandler(hechoRepositorio)); //creo hecho
+        app.post("/api/solicitudes", new PostSolicitudModificacionHandler(solicitudModificacionRepositorio));
+        app.post("/api/solicitudes", new PostSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); //creo solicitud
+        app.put("api/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio)); // actualizo una coleccion
+        app.delete("api/colecciones", new DeleteColeccionesHandler(coleccionRepositorio)); // borro una coleccion
     }
 }

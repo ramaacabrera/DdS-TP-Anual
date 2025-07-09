@@ -7,7 +7,7 @@ public class CriterioDeTexto extends Criterio {
 
     private TipoDeTexto tipoDeTexto;
 
-    private List<String> palabras = new ArrayList<>();
+    private final List<String> palabras;
 
     public CriterioDeTexto(List<String> palabras) {
         this.palabras = palabras;
@@ -41,10 +41,10 @@ public class CriterioDeTexto extends Criterio {
             default:
                 return false;
         }
-        return palabras.stream().anyMatch(texto ->
+        /*return palabras.stream().anyMatch(texto ->
                 hecho.getTitulo().toLowerCase().contains(texto.toLowerCase()) ||
                         hecho.getDescripcion().toLowerCase().contains(texto.toLowerCase())
-                        );
+                        );*/
     }
 }
 //toLowerCase() compara letras sin importar si es mayus o minus

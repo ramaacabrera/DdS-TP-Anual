@@ -140,4 +140,18 @@ public class Hecho {
                 && this.etiquetas.equals(otro.etiquetas)
                 && this.esEditable == otro.esEditable;
     }
+
+    public void actualizarCon(Hecho otroHecho) {
+        this.descripcion = otroHecho.getDescripcion();
+        this.categoria = otroHecho.getCategoria();
+        this.ubicacion = otroHecho.getUbicacion();
+        this.fechaDeAcontecimiento = otroHecho.getFechaDeAcontecimiento();
+        this.fechaDeCarga = otroHecho.getFechaDeCarga();
+        this.fuente = otroHecho.getFuente();
+        this.estadoHecho = otroHecho.getEstadoHecho();
+        this.contribuyente = otroHecho.getContribuyente();
+        this.etiquetas = otroHecho.getEtiquetas();
+        this.esEditable = otroHecho.esEditable();
+        this.contenidoMultimedia = otroHecho.getContenidoMultimedia();
+    }
 }

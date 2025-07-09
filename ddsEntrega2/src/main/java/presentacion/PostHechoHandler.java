@@ -7,9 +7,9 @@ import org.example.agregador.HechoRepositorio;
 
 public class PostHechoHandler implements Handler {
 
-    private final HechoRepositorio repositorio = new HechoRepositorio();
+    private final HechoRepositorio repositorio;
 
-    public PostHechoHandler() {}
+    public PostHechoHandler(HechoRepositorio hechoRepositorio) { repositorio = hechoRepositorio; }
 
     @Override
     public void handle(@NotNull Context context) throws Exception {
