@@ -1,23 +1,25 @@
 package presentacion;
 
+import Persistencia.DinamicoRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import org.example.agregador.DTO.SolicitudDeModificacionDTO;
 import org.example.agregador.Solicitudes.SolicitudDeModificacion;
 import Persistencia.SolicitudModificacionRepositorio;
 import org.jetbrains.annotations.NotNull;
 
 public class PostSolicitudModificacionHandler implements Handler {
-    private final SolicitudModificacionRepositorio repositorio;
+    private final DinamicoRepositorio repositorio;
 
-    public PostSolicitudModificacionHandler(SolicitudModificacionRepositorio solicitudRepositorio) { repositorio = solicitudRepositorio; }
+    public PostSolicitudModificacionHandler(DinamicoRepositorio dinamicoRepositorio) { repositorio = dinamicoRepositorio; }
 
     @Override
     public void handle(@NotNull Context context) throws Exception {
         String bodyString = context.body();
-        SolicitudDeModificacion solicitud = context.bodyAsClass(SolicitudDeModificacion.class);
+        SolicitudDeModificacionDTO solicitud = context.bodyAsClass(SolicitudDeModificacionDTO.class);
 
         System.out.println("Creando solicitud: " + bodyString);
-        repositorio.agregarSolicitudDeModificacion(solicitud);
+        repositorio.guardarSolicitudModificacion(solicitud);
 
         context.status(201);
     }

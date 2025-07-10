@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConexionEstatica extends Conexion{
-    private final String path;
+    private String path;
 
-    public ConexionEstatica(String path, Fuente fuente) {
+    public ConexionEstatica(String path) {
+
         this.path = path;
-        this.fuente = fuente;
+    }
+
+    public ConexionEstatica() {
     }
 
     @Override
@@ -22,10 +25,18 @@ public class ConexionEstatica extends Conexion{
 
         List<String> lineas = csv.leerCSV(path);
         for (String linea : lineas) {
-            HechoDTO hecho = conversor.mapearAHecho(linea, fuente);
+            HechoDTO hecho = conversor.mapearAHecho(linea);
             hechos.add(hecho);
         }
         return hechos;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
 

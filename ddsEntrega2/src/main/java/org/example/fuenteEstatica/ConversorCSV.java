@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ConversorCSV {
 
-    public HechoDTO mapearAHecho(String hechoCSV, Fuente fuente){
+    public HechoDTO mapearAHecho(String hechoCSV){
         String[] datos = hechoCSV.split(",");
         String titulo = datos[0].trim();
         String descripcion = datos[1].trim();
@@ -34,7 +34,7 @@ public class ConversorCSV {
         List<String> etiquetas = new ArrayList<>();
         boolean esEditable = false;
         List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
-        return new HechoDTO(titulo, descripcion, categoria, ubicacion, fechaDeAcontecimiento, fechaDeCarga, fuente, estadoHecho,contribuyente,etiquetas,esEditable,contenidoMultimedia);
+        return new HechoDTO(titulo, descripcion, categoria, ubicacion, fechaDeAcontecimiento, fechaDeCarga, null, estadoHecho,contribuyente,etiquetas,esEditable,contenidoMultimedia);
     }
 
 }

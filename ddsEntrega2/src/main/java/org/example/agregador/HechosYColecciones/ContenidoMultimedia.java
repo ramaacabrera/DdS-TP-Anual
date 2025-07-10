@@ -1,13 +1,20 @@
 package org.example.agregador.HechosYColecciones;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ContenidoMultimedia {
-    private final TipoContenidoMultimedia tipoContenido;
+    private TipoContenidoMultimedia tipoContenido;
     private String contenido;
 
-    public ContenidoMultimedia(TipoContenidoMultimedia tipo, String contenido) {
+    @JsonCreator
+    public ContenidoMultimedia(@JsonProperty("tipoContenido") TipoContenidoMultimedia tipo,
+                               @JsonProperty("contenido") String contenido) {
         this.tipoContenido = tipo;
         this.contenido = contenido;
     }
+
+    public ContenidoMultimedia(){}
 
     public String getContenido() {
         return contenido;

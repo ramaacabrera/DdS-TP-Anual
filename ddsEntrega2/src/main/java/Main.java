@@ -1,13 +1,11 @@
 
 
-import Persistencia.ColeccionRepositorio;
-import Persistencia.HechoRepositorio;
-import Persistencia.SolicitudEliminacionRepositorio;
-import Persistencia.SolicitudModificacionRepositorio;
+import Persistencia.*;
 import io.javalin.Javalin;
 import org.example.agregador.Agregador;
 import org.example.agregador.fuente.Fuente;
 import org.example.fuenteDinamica.FuenteDinamica;
+import org.example.fuenteEstatica.ConexionEstatica;
 import org.example.fuenteEstatica.FuenteEstatica;
 import org.example.fuenteProxy.ConexionDemo;
 import org.example.fuenteProxy.FuenteDemo;
@@ -34,6 +32,7 @@ public class Main {
                         }).start(8080);
 
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
+        DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio();
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
         SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio();
         SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
@@ -41,31 +40,38 @@ public class Main {
         List<Fuente> fuentesDisponibles = new ArrayList<>();
         FuenteDemo fuenteDemo = new FuenteDemo(API_MOCK_URL);
         //FuenteMetapa fuenteMetaMapa= new FuenteMetaMapa();
-        //FuenteEstatica fuenteEstatica = new FuenteEstatica();
+        FuenteEstatica fuenteEstatica = new FuenteEstatica(new ConexionEstatica("desastres_tecnologicos_argentina.csv"));
         //FuenteDinamica fuenteDinamica = new FuenteDinamica();
 
         //FALTA INICIALIZAR ESAS 3 FUENTES!!!!!!!!!!!!!!!!
 
         fuentesDisponibles.add(fuenteDemo);
         //fuentesDisponibles.add(fuenteMetaMapa);
-        //fuentesDisponibles.add(fuenteEstatica);
+        fuentesDisponibles.add(fuenteEstatica);
         //fuentesDisponibles.add(fuenteDinamica);
 
         Agregador agregador = new Agregador(hechoRepositorio, coleccionRepositorio,fuentesDisponibles);
 
-        app.get("/api/hechos", new GetHechosHandler(hechoRepositorio)); // consulto todos los hechos
-        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler()); //consulta hechos de una coleccion
+        // API Administrativa
+        app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio)); //creo coleccion
         app.get("api/colecciones", new GetColeccionesHandler(coleccionRepositorio)); // consulta todas las colecciones
         app.get("api/colecciones/{id}", new GetColeccionHandler(coleccionRepositorio)); // lee una coleccion en particular
-        app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio)); //creo coleccion
-        app.post("/api/hechos", new PostHechoHandler(hechoRepositorio)); //creo hecho
-        app.post("/api/solicitudes/modificacion", new PostSolicitudModificacionHandler(solicitudModificacionRepositorio));
-        app.post("/api/solicitudes/eliminacion", new PostSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); //creo solicitud
-        app.post("api/colecciones/{id}", new PostFuentesColeccionHandler(coleccionRepositorio)); // agrego
         app.put("api/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio)); // actualizo una coleccion
-        app.put("api/colecciones/{id}", new PutAlgoritmoConsensoHandler(coleccionRepositorio)); // actualizo algoritmo
-        app.put("api/solicitudes/eliminacion/{id}", new PutSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // aprobar o denegar solicitud eliminacion
-        app.delete("api/colecciones/{id}", new DeleteFuenteHandler(coleccionRepositorio)); // borro una fuente
         app.delete("api/colecciones", new DeleteColeccionesHandler(coleccionRepositorio)); // borro una coleccion
+
+        app.post("api/colecciones/{id}/fuente", new PostFuentesColeccionHandler(coleccionRepositorio)); // agrego fuentes
+        app.put("api/colecciones/{id}/algoritmo", new PutAlgoritmoConsensoHandler(coleccionRepositorio)); // actualizo algoritmo
+
+        app.delete("api/colecciones/{id}/fuente", new DeleteFuenteHandler(coleccionRepositorio)); // borro una fuente
+
+        app.put("api/solicitudes/eliminacion/{id}", new PutSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // aprobar o denegar solicitud eliminacion
+        // borrar coleccion seria de acuerdo a un id?
+
+        // API publica
+        app.get("/api/hechos", new GetHechosHandler(hechoRepositorio)); // consulto todos los hechos
+        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler()); //consulta hechos de una coleccion (pudiendo mandar criterios o no)
+        app.post("/api/hechos", new PostHechoHandler(dinamicoRepositorio)); //creo hecho
+        app.post("/api/solicitudes/eliminacion", new PostSolicitudEliminacionHandler(dinamicoRepositorio)); //creo solicitud
+        app.post("/api/solicitudes/modificacion", new PostSolicitudModificacionHandler(dinamicoRepositorio));
     }
 }

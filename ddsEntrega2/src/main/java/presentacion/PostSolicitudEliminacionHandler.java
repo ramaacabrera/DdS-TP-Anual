@@ -1,23 +1,25 @@
 package presentacion;
 
+import Persistencia.DinamicoRepositorio;
 import Persistencia.SolicitudEliminacionRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import org.example.agregador.DTO.SolicitudDeEliminacionDTO;
 import org.example.agregador.Solicitudes.SolicitudDeEliminacion;
 import org.jetbrains.annotations.NotNull;
 
 public class PostSolicitudEliminacionHandler implements Handler {
-    private final SolicitudEliminacionRepositorio repositorio;
+    private final DinamicoRepositorio repositorio;
 
-    public PostSolicitudEliminacionHandler(SolicitudEliminacionRepositorio solicitudRepositorio) { repositorio = solicitudRepositorio; }
+    public PostSolicitudEliminacionHandler(DinamicoRepositorio dinamicoRepositorio) { repositorio = dinamicoRepositorio; }
 
     @Override
     public void handle(@NotNull Context context) throws Exception {
         String bodyString = context.body();
-        SolicitudDeEliminacion solicitud = context.bodyAsClass(SolicitudDeEliminacion.class);
+        SolicitudDeEliminacionDTO solicitud = context.bodyAsClass(SolicitudDeEliminacionDTO.class);
 
         System.out.println("Creando solicitud: " + bodyString);
-        repositorio.agregarSolicitudDeEliminacion(solicitud);
+        repositorio.guardarSolicitudEliminacion(solicitud);
 
         context.status(201);
     }

@@ -1,4 +1,5 @@
 package presentacion;
+import Persistencia.DinamicoRepositorio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -8,9 +9,9 @@ import Persistencia.HechoRepositorio;
 
 public class PostHechoHandler implements Handler {
 
-    private final HechoRepositorio repositorio;
+    private final DinamicoRepositorio repositorio;
 
-    public PostHechoHandler(HechoRepositorio hechoRepositorio) { repositorio = hechoRepositorio; }
+    public PostHechoHandler(DinamicoRepositorio dinamicoRepositorio) { repositorio = dinamicoRepositorio; }
 
     @Override
     public void handle(@NotNull Context context) throws Exception {
@@ -19,7 +20,7 @@ public class PostHechoHandler implements Handler {
         HechoDTO hecho = mapper.readValue(bodyString, HechoDTO.class);
 
         System.out.println("Creando hecho: " + bodyString);
-        repositorio.guardar(hecho);
+        repositorio.guardarHecho(hecho);
 
         context.status(201);
     }

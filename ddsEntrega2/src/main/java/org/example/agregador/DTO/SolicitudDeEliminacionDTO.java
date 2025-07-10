@@ -4,4 +4,12 @@ import org.example.agregador.Solicitudes.EstadoSolicitudEliminacion;
 
 public class SolicitudDeEliminacionDTO extends SolicitudDTO {
     private EstadoSolicitudEliminacion estado;
+
+    public EstadoSolicitudEliminacion getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoSolicitudEliminacion estado) {
+        this.estado = estado;
+    }
 }
