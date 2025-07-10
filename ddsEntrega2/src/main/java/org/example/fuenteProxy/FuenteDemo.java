@@ -1,10 +1,26 @@
 package org.example.fuenteProxy;
 
-import org.example.agregador.fuente.Conexion;
+import org.example.agregador.Criterios.Criterio;
+import org.example.agregador.DTO.HechoDTO;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FuenteDemo extends FuenteProxy{
 
-    public FuenteDemo(Conexion conexion) {
-        super(conexion);
+    public FuenteDemo(String urlServicioExterno) {
+        super(new ConexionDemo(urlServicioExterno,null));
+
+        if (this.conexion instanceof ConexionDemo) {
+            ((ConexionDemo) this.conexion).setFuenteAsociada(this);
+        } else {
+            System.err.println("FuenteDemo: Error de configuración. La conexión no es de tipo ConexionDemo.");
+        }
+    }
+    public List<HechoDTO> obtenerHechos(List<Criterio> criterios) {
+        if (this.conexion != null) {
+            return this.conexion.obtenerHechos(criterios);
+        }
+        return new ArrayList<>();
     }
 }
+

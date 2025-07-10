@@ -47,7 +47,7 @@ public class ConexionDemo extends Conexion{
         this.fuenteAsociada = fuenteAsociada; // Asigna la fuente asociada
     }
 
-    // Getters y Setters para urlServicioExterno y fechaUltimaConsulta
+    // Getters y Setters
     public String getUrlServicioExterno() {
         return urlServicioExterno;
     }
@@ -64,8 +64,7 @@ public class ConexionDemo extends Conexion{
         this.fechaUltimaConsulta = fechaUltimaConsulta;
     }
 
-    // Setter para la fuente asociada (si se necesita configurar después del constructor)
-    public void setFuenteAsociadaParaDTO(Fuente fuenteAsociadaParaDTO) {
+    public void setFuenteAsociada(FuenteDemo fuenteAsociada) {
         this.fuenteAsociada = fuenteAsociada;
     }
 
@@ -87,13 +86,13 @@ public class ConexionDemo extends Conexion{
         Objects.requireNonNull(fechaUltimaConsulta, "La fecha de última consulta no puede ser nula.");
 
 
-        //System.out.println("ConexionDemo: Buscando hechos en " + urlServicioExterno.toString() + " desde " + fechaUltimaConsulta.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        //System.out.println("ConexionDemo: Buscando hechos en " + urlServicioExterno. + " desde " + fechaUltimaConsulta.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
 
         HttpURLConnection connection = null;
         try {
             // Formatear la fecha para la API Mock
             String fechaFormateada = fechaUltimaConsulta.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);;
-            String requestUrl = urlServicioExterno.toString() + "?fechaDesde=" + fechaFormateada;
+            String requestUrl = urlServicioExterno + "?fechaDesde=" + fechaFormateada;
 
             URL url = new URL(requestUrl);
             connection = (HttpURLConnection) url.openConnection();
@@ -125,7 +124,7 @@ public class ConexionDemo extends Conexion{
 
                 //Mapear HechoMock a HechoDTO
                 return hechosExternos.stream()
-                        .map(hechoMock -> mapHechoMockAHechoDTO(hechoMock, this.fuenteAsociada))
+                        .map(hechoMock -> mapHechoMockAHechoDTO(hechoMock))
                         .collect(Collectors.toList());
 
 
@@ -159,7 +158,7 @@ public class ConexionDemo extends Conexion{
     }
 
     // Metodo para mapear HechoMock (desde la API) a HechoDTO (general de MetaMapa)
-    private HechoDTO mapHechoMockAHechoDTO(HechoMock hechoMock,FuenteDemo fuente) {
+    private HechoDTO mapHechoMockAHechoDTO(HechoMock hechoMock) {
         // Manejo de la fecha de acontecimiento: LocalDateTime a Date
         Date fechaDeAcontecimiento = null;
         if (hechoMock.getMockFechaAcontecimiento() != null) {
@@ -210,6 +209,7 @@ public class ConexionDemo extends Conexion{
         // Contribuyente nulo por ahora para hechos externos
         List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
         boolean esEditable = false;
+        FuenteDemo fuente = fuenteAsociada;
 
         // Validar título antes de crear DTO
         String tituloDTO = hechoMock.getMockTitulo();
