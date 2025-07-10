@@ -1,11 +1,14 @@
 package org.example.agregador;
 
+import Persistencia.ColeccionRepositorio;
 import Persistencia.HechoRepositorio;
 import org.example.agregador.DTO.HechoDTO;
 import org.example.agregador.Criterios.Criterio;
 import org.example.agregador.HechosYColecciones.Coleccion;
 import org.example.agregador.HechosYColecciones.Hecho;
 import org.example.agregador.fuente.*;
+import org.example.fuenteProxy.ConexionDemo;
+import org.example.fuenteProxy.FuenteDemo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +20,15 @@ import java.time.LocalDateTime;
 
 public class Agregador {
 
-    private List<Coleccion> colecciones = new ArrayList<>();
     private HechoRepositorio hechoRepositorio;
+    private ColeccionRepositorio coleccionRepositorio;
+    private List<Fuente> fuentesDisponibles;
 
-    public Agregador() {
+
+    public Agregador(HechoRepositorio hechoRepositorio, ColeccionRepositorio coleccionRepositorio, List<Fuente> fuentesDisponibles) {
         this.hechoRepositorio = hechoRepositorio;
+        this.coleccionRepositorio = coleccionRepositorio;
+        this.fuentesDisponibles = fuentesDisponibles;
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -39,12 +46,13 @@ public class Agregador {
     // arranca un scheduler que cada 1 hora ejecuta el método actualizarHechosDesdeFuentes().
 
     public void actualizarHechosDesdeFuentes() {
-        for (Coleccion coleccion : colecciones) {
-            List<Fuente> fuentes = coleccion.getFuente();
+        // Traemos hechos nuevos de TODAS las fuentes disponibles
+        for (Fuente fuente : fuentesDisponibles) {
+            List<Hecho> nuevosHechos = obtenerHechosExterno(fuente, new ArrayList<>());
 
-            for (Fuente fuente : fuentes) {
-                List<Hecho> nuevosHechos = obtenerHechosExterno(fuente, new ArrayList<>());
-                for (Hecho hecho : nuevosHechos) {
+            for (Hecho hecho : nuevosHechos) {
+                // Por cada colección, vemos si el hecho cumple criterios
+                for (Coleccion coleccion : coleccionRepositorio.obtenerTodas()) {
                     if (coleccion.cumpleCriterio(hecho)) {
                         boolean esNuevo = coleccion.agregarHecho(hecho);
                         if (esNuevo) {
@@ -80,7 +88,7 @@ public class Agregador {
     }
 
     public void ejecutarAlgoritmoDeConsenso() {
-        for (Coleccion coleccion : colecciones) {
+        for (Coleccion coleccion : coleccionRepositorio.obtenerTodas()) {
             coleccion.ejecutarAlgoritmoDeConsenso();
         }
     }
@@ -102,5 +110,3 @@ public class Agregador {
 
 }
 
-
-// revisar como se actualizan los repos de hechos
