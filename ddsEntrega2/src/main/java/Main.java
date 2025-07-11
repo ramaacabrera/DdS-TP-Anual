@@ -2,6 +2,7 @@
 
 import Persistencia.*;
 import io.javalin.Javalin;
+import io.javalin.http.UnauthorizedResponse;
 import org.example.agregador.Agregador;
 import org.example.agregador.fuente.Fuente;
 import org.example.fuenteDinamica.ConexionBD;
@@ -9,11 +10,15 @@ import org.example.fuenteDinamica.ControllerSolicitud;
 import org.example.fuenteDinamica.ControllerSubirHechos;
 import org.example.fuenteEstatica.ConexionEstatica;
 import org.example.fuenteEstatica.FuenteEstatica;
+import org.example.fuenteProxy.ConexionMetaMapa;
 import org.example.fuenteProxy.FuenteDemo;
 import org.example.fuenteDinamica.FuenteDinamica;
+import org.example.fuenteProxy.FuenteMetaMapa;
 import presentacion.*;
 import org.example.fuenteProxy.APIMock.DemoAPIMockServer;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,9 +49,17 @@ public class Main {
         FuenteEstatica fuenteEstatica = new FuenteEstatica(new ConexionEstatica("desastres_tecnologicos_argentina.csv"));
         DinamicoRepositorio baseDeDatos = new DinamicoRepositorio();
         FuenteDinamica fuenteDinamica = new FuenteDinamica(new ConexionBD(baseDeDatos));
+        URL urlInstancia = null;
+        try {
+            urlInstancia = new URL("http://localhost:8081");
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+        FuenteMetaMapa fuenteMetaMapa = new FuenteMetaMapa(urlInstancia);
 
 
         fuentesDisponibles.add(fuenteDemo);
+        //fuentesDisponibles.add(fuenteMetaMapa);
         fuentesDisponibles.add(fuenteEstatica);
         fuentesDisponibles.add(fuenteDinamica);
 
@@ -58,20 +71,41 @@ public class Main {
         ControllerSolicitud controllerSolicitud = new ControllerSolicitud(dinamicoRepositorio);
 
         // API Administrativa
-        app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio)); //creo coleccion PROBADOOOO
-        app.get("api/colecciones", new GetColeccionesHandler(coleccionRepositorio)); // consulta todas las colecciones PROBADOOOO
-        app.get("api/colecciones/{id}", new GetColeccionHandler(coleccionRepositorio)); // lee una coleccion en particular PROBADOOOOOO
-        app.put("api/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio)); // actualizo una coleccion PROBADOOOOOO
-        app.delete("api/colecciones/{id}", new DeleteColeccionesHandler(coleccionRepositorio)); // borro una coleccion probadoooooo
+        app.exception(UnauthorizedException.class,(e,contexto)->{
+            contexto.status(401).result("No Autorizado");
+        });
+        app.before("/api/admin/*", ctx -> {
 
-        app.post("api/colecciones/{id}/fuente", new PostFuentesColeccionHandler(coleccionRepositorio)); // agrego fuentes probbadisimooooo
-        app.delete("api/colecciones/{id}/fuente", new DeleteFuenteHandler(coleccionRepositorio)); // borro una fuente
+            // Verificar si la ruta comienza con /api/admin/
+            if (ctx.path().startsWith("/api/admin/")) {
+                System.out.println("entro al app before 1");
+                String token = ctx.header("Autorizacion");
 
-        app.put("api/colecciones/{id}/algoritmo", new PutAlgoritmoConsensoHandler(coleccionRepositorio)); // actualizo algoritmo probado
+                if (token == null || token.trim().isEmpty()) {
+                    System.out.println("entro al app before 2");
+                    ctx.status(401).result("No Autorizado - Header de Autorizacion requerido");
+                    throw new UnauthorizedException();
+                }
+                System.out.println("entro al app before 3");
 
-        app.put("api/solicitudes/{id}", new PutSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // aprobar o denegar solicitud eliminacion
-        app.get("api/solicitudes", new GetSolicitudesEliminacionHandler(solicitudEliminacionRepositorio)); // consulta todas las solicitudes
-        app.get("api/solicitudes/{id}", new GetSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // consulta una solicitud por id
+            }
+        });
+
+        //app.post("/api/admin/colecciones", contexto->{contexto.result("Requiere token");});
+        app.post("/api/admin/colecciones", new PostColeccionHandler(coleccionRepositorio)); //creo coleccion PROBADOOOO
+        app.get("/api/admin/colecciones", new GetColeccionesHandler(coleccionRepositorio)); // consulta todas las colecciones PROBADOOOO
+        app.get("/api/admin/colecciones/{id}", new GetColeccionHandler(coleccionRepositorio)); // lee una coleccion en particular PROBADOOOOOO
+        app.put("/api/admin/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio)); // actualizo una coleccion PROBADOOOOOO
+        app.delete("/api/admin/colecciones/{id}", new DeleteColeccionesHandler(coleccionRepositorio)); // borro una coleccion probadoooooo
+
+        app.post("/api/admin/colecciones/{id}/fuente", new PostFuentesColeccionHandler(coleccionRepositorio)); // agrego fuentes probbadisimooooo
+        app.delete("/api/admin/colecciones/{id}/fuente", new DeleteFuenteHandler(coleccionRepositorio)); // borro una fuente
+
+        app.put("/api/admin/colecciones/{id}/algoritmo", new PutAlgoritmoConsensoHandler(coleccionRepositorio)); // actualizo algoritmo probado
+
+        app.put("/api/admin/solicitudes/{id}", new PutSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // aprobar o denegar solicitud eliminacion
+        app.get("/api/admin/solicitudes", new GetSolicitudesEliminacionHandler(solicitudEliminacionRepositorio)); // consulta todas las solicitudes
+        app.get("/api/admin/solicitudes/{id}", new GetSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // consulta una solicitud por id
 
         // API publica
         app.get("/api/hechos", new GetHechosHandler(hechoRepositorio)); // consulto todos los hechos PROBADOOOOO

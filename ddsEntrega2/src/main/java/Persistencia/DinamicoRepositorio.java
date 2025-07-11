@@ -21,19 +21,19 @@ public class DinamicoRepositorio {
 
     public List<HechoDTO> obtenerHechos() {
         List<HechoDTO> hechosADevolver = hechos;
-        hechos = new ArrayList<>();
+        hechos.clear();
         return hechosADevolver;
     }
 
     public List<SolicitudDeModificacionDTO> obtenerSolicitudDeModificacion() {
         List<SolicitudDeModificacionDTO> solicitudesADevolver = solicitudesModificacion;
-        solicitudesModificacion = new ArrayList<>();
+        solicitudesModificacion.clear();
         return solicitudesADevolver;
     }
 
     public List<SolicitudDeEliminacionDTO> obtenerSolicitudDeEliminacion() {
         List<SolicitudDeEliminacionDTO> solicitudesADevolver = solicitudesEliminacion;
-        solicitudesEliminacion = new ArrayList<>();
+        solicitudesEliminacion.clear();
         return solicitudesADevolver;
     }
 
