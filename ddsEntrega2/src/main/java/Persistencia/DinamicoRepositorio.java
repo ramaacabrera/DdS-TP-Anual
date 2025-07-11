@@ -3,9 +3,11 @@ package Persistencia;
 import org.example.agregador.DTO.HechoDTO;
 import org.example.agregador.DTO.SolicitudDeEliminacionDTO;
 import org.example.agregador.DTO.SolicitudDeModificacionDTO;
+import org.example.agregador.Solicitudes.SolicitudDeEliminacion;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DinamicoRepositorio {
 
@@ -38,5 +40,11 @@ public class DinamicoRepositorio {
     public void guardarSolicitudModificacion(SolicitudDeModificacionDTO solicitud){ solicitudesModificacion.add(solicitud);}
 
     public void guardarSolicitudEliminacion(SolicitudDeEliminacionDTO solicitud){ solicitudesEliminacion.add(solicitud);}
+    /*
+    public Optional<SolicitudDeEliminacion> buscarPorId(String id){
+        return solicitudesEliminacion.stream().findFirst(solicitud -> solicitud.getId().equals(id));
 
+   }
+
+    */
 }

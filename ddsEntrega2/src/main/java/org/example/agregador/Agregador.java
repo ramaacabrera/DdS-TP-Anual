@@ -2,13 +2,15 @@ package org.example.agregador;
 
 import Persistencia.ColeccionRepositorio;
 import Persistencia.HechoRepositorio;
+import Persistencia.SolicitudEliminacionRepositorio;
 import org.example.agregador.DTO.HechoDTO;
 import org.example.agregador.Criterios.Criterio;
+import org.example.agregador.DTO.SolicitudDeEliminacionDTO;
 import org.example.agregador.HechosYColecciones.Coleccion;
 import org.example.agregador.HechosYColecciones.Hecho;
+import org.example.agregador.Solicitudes.SolicitudDeEliminacion;
 import org.example.agregador.fuente.*;
-import org.example.fuenteProxy.ConexionDemo;
-import org.example.fuenteProxy.FuenteDemo;
+import org.example.fuenteDinamica.FuenteDinamica;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +25,18 @@ public class Agregador {
     private HechoRepositorio hechoRepositorio;
     private ColeccionRepositorio coleccionRepositorio;
     private List<Fuente> fuentesDisponibles;
+    private SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
 
-
-    public Agregador(HechoRepositorio hechoRepositorio, ColeccionRepositorio coleccionRepositorio, List<Fuente> fuentesDisponibles) {
+    public Agregador(HechoRepositorio hechoRepositorio, ColeccionRepositorio coleccionRepositorio, SolicitudEliminacionRepositorio solicitudEliminacionRepositorio, List<Fuente> fuentesDisponibles) {
         this.hechoRepositorio = hechoRepositorio;
         this.coleccionRepositorio = coleccionRepositorio;
         this.fuentesDisponibles = fuentesDisponibles;
+        this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         scheduler.scheduleAtFixedRate(() -> {
-            this.actualizarHechosDesdeFuentes();
+            this.actualizarSolicitudesYHechosDesdeFuentes();
         }, 1, 1, TimeUnit.HOURS);
 
         long delayInicial = calcularDelayHastaHora(2);  // 2 AM
@@ -48,12 +51,15 @@ public class Agregador {
     */
 
 
-    public void actualizarHechosDesdeFuentes() {
+    public void actualizarSolicitudesYHechosDesdeFuentes() {
         // Traemos hechos nuevos de TODAS las fuentes disponibles
         System.out.printf("Fuentes disponibles: %d \n", fuentesDisponibles.size());
         for (Fuente fuente : fuentesDisponibles) {
             System.out.printf("Fuente a buscar: %s\n", fuente);
             List<Hecho> nuevosHechos = obtenerHechosExterno(fuente, new ArrayList<>());
+            if(fuente.getTipoDeFuente() == TipoDeFuente.DINAMICA && fuente instanceof FuenteDinamica){
+                agregarSolicitudes((FuenteDinamica) fuente);
+            }
             System.out.printf("Se cargan %d nuevos hechos desde %s", nuevosHechos.size(), fuente + "\n");
             for (Hecho hecho : nuevosHechos) {
                 int nuevo = 0;
@@ -102,6 +108,14 @@ public class Agregador {
             hechos.add(hecho);
         }
         return hechos;
+    }
+
+    public void agregarSolicitudes(FuenteDinamica fuente) {
+        List<SolicitudDeEliminacion> solicitudesDeEliminacion = new ArrayList<>();
+        for (SolicitudDeEliminacionDTO solicitudDeEliminacionDTO : fuente.obtenerSolicitudDeEliminacion()){
+            SolicitudDeEliminacion solicitudDeEliminacion = new SolicitudDeEliminacion(solicitudDeEliminacionDTO);
+            solicitudEliminacionRepositorio.add(solicitudDeEliminacion);
+        }
     }
 
     public void ejecutarAlgoritmoDeConsenso() {

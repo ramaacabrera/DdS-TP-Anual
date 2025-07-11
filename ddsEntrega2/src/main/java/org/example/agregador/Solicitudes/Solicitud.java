@@ -25,6 +25,10 @@ public abstract class Solicitud {
         this.justificacion = justificacion;
     }
 
+    public void setId(String justificacion) {
+        this.justificacion = justificacion;
+    }
+
     public Hecho getHechoAsociado() {
         return hechoAsociado;
     }

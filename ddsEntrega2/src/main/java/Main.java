@@ -4,11 +4,13 @@ import Persistencia.*;
 import io.javalin.Javalin;
 import org.example.agregador.Agregador;
 import org.example.agregador.fuente.Fuente;
+import org.example.fuenteDinamica.ConexionBD;
 import org.example.fuenteDinamica.ControllerSolicitud;
 import org.example.fuenteDinamica.ControllerSubirHechos;
 import org.example.fuenteEstatica.ConexionEstatica;
 import org.example.fuenteEstatica.FuenteEstatica;
 import org.example.fuenteProxy.FuenteDemo;
+import org.example.fuenteDinamica.FuenteDinamica;
 import presentacion.*;
 import org.example.fuenteProxy.APIMock.DemoAPIMockServer;
 
@@ -39,18 +41,16 @@ public class Main {
 
         List<Fuente> fuentesDisponibles = new ArrayList<>();
         FuenteDemo fuenteDemo = new FuenteDemo(API_MOCK_URL);
-        //FuenteMetapa fuenteMetaMapa= new FuenteMetaMapa();
         FuenteEstatica fuenteEstatica = new FuenteEstatica(new ConexionEstatica("desastres_tecnologicos_argentina.csv"));
-        //FuenteDinamica fuenteDinamica = new FuenteDinamica();
+        DinamicoRepositorio baseDeDatos = new DinamicoRepositorio();
+        FuenteDinamica fuenteDinamica = new FuenteDinamica(new ConexionBD(baseDeDatos));
 
-        //FALTA INICIALIZAR ESAS 3 FUENTES!!!!!!!!!!!!!!!!
 
         fuentesDisponibles.add(fuenteDemo);
-        //fuentesDisponibles.add(fuenteMetaMapa);
         fuentesDisponibles.add(fuenteEstatica);
-        //fuentesDisponibles.add(fuenteDinamica);
+        fuentesDisponibles.add(fuenteDinamica);
 
-        Agregador agregador = new Agregador(hechoRepositorio, coleccionRepositorio,fuentesDisponibles);
+        Agregador agregador = new Agregador(hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio, fuentesDisponibles);
         agregador.buscarHechosIniciales();
 
         //Inicializacion de Controller
@@ -69,7 +69,7 @@ public class Main {
 
         app.put("api/colecciones/{id}/algoritmo", new PutAlgoritmoConsensoHandler(coleccionRepositorio)); // actualizo algoritmo probado
 
-        app.put("api/solicitudes/{id}", new PutSolicitudEliminacionHandler(controllerSolicitud)); // aprobar o denegar solicitud eliminacion
+        app.put("api/solicitudes/{id}", new PutSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // aprobar o denegar solicitud eliminacion
         app.get("api/solicitudes", new GetSolicitudesEliminacionHandler(solicitudEliminacionRepositorio)); // consulta todas las solicitudes
         app.get("api/solicitudes/{id}", new GetSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // consulta una solicitud por id
 

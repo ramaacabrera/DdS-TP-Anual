@@ -24,21 +24,4 @@ public class ControllerSolicitud {
     public void subirSolicitudEliminacion(SolicitudDeEliminacionDTO solicitud){
         baseDeDatos.guardarSolicitudEliminacion(solicitud);
     }
-
-    public boolean actualizarSolicitudEliminacion(String estado, String id){
-        Optional<SolicitudDeEliminacion> resultadoBusqueda = baseDeDatos.buscarPorId(id);
-        if(resultadoBusqueda.isPresent()) {
-            ObjectMapper mapper = new ObjectMapper();
-            EstadoSolicitudEliminacion estadoEnum = EstadoSolicitudEliminacion.valueOf(estado.toUpperCase());
-            if(estadoEnum == EstadoSolicitudEliminacion.ACEPTADA){
-                resultadoBusqueda.get().aceptarSolicitud();
-            } else if(estadoEnum == EstadoSolicitudEliminacion.RECHAZADA){
-                resultadoBusqueda.get().rechazarSolicitud();
-            } else {
-                return false;
-            }
-            return true;
-        }
-        return false;
-    }
 }

@@ -12,10 +12,11 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.example.agregador.fuente.Conexion;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-public class ConexionMetaMapa {
+public class ConexionMetaMapa extends Conexion{
     private final URL url;
 
     public ConexionMetaMapa(URL url) {this.url = url;}

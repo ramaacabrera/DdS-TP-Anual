@@ -12,15 +12,15 @@ import org.example.fuenteDinamica.ControllerSolicitud;
 import java.util.Optional;
 
 public class PutSolicitudEliminacionHandler implements Handler{
-    private final ControllerSolicitud controllerSolicitudEliminacion;
+    private SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
 
-    public PutSolicitudEliminacionHandler(ControllerSolicitud controllerSolicitudNuevo) {controllerSolicitudEliminacion = controllerSolicitudNuevo;}
+    public PutSolicitudEliminacionHandler(SolicitudEliminacionRepositorio solicitudEliminacionRepositorioNuevo) {solicitudEliminacionRepositorio = solicitudEliminacionRepositorioNuevo;}
 
     @Override
     public void handle(Context context) {
         String id = context.pathParam("id");
         String body = context.body();
-        boolean resultado = controllerSolicitudEliminacion.actualizarSolicitudEliminacion(body,id);
+        boolean resultado = solicitudEliminacionRepositorio.actualizarEstadoSolicitudEliminacion(body,id);
         if(resultado){
             context.status(200);
         } else {

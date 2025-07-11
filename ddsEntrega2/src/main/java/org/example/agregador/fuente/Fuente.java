@@ -36,6 +36,8 @@ public abstract class Fuente {
         return conexion;
     }
 
+    public TipoDeFuente getTipoDeFuente(){return tipoDeFuente;}
+
     public List<HechoDTO> obtenerHechos(List<Criterio> criterios){
         List<HechoDTO> hechos = conexion.obtenerHechos(criterios);
         hechos.forEach(hecho -> hecho.setFuente(this));

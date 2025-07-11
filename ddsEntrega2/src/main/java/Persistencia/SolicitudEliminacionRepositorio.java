@@ -1,5 +1,7 @@
 package Persistencia;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.agregador.Solicitudes.EstadoSolicitudEliminacion;
 import org.example.agregador.Solicitudes.SolicitudDeEliminacion;
 
 import java.util.ArrayList;
@@ -29,8 +31,27 @@ public class SolicitudEliminacionRepositorio {
         solicitudes.set(solicitudes.indexOf(solicitud), solicitud);
     }
 
+    public boolean actualizarEstadoSolicitudEliminacion(String body, String id){
+        Optional<SolicitudDeEliminacion> resultadoBusqueda = this.buscarPorId(id);
+        if(resultadoBusqueda.isPresent()) {
+            EstadoSolicitudEliminacion estadoEnum = EstadoSolicitudEliminacion.valueOf(body.toUpperCase());
+            if(estadoEnum == EstadoSolicitudEliminacion.ACEPTADA){
+                resultadoBusqueda.get().aceptarSolicitud();
+            } else if(estadoEnum == EstadoSolicitudEliminacion.RECHAZADA){
+                resultadoBusqueda.get().rechazarSolicitud();
+            } else {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     public Optional<SolicitudDeEliminacion> buscarPorId(String id){
         return solicitudes.stream().filter(c -> c.getId().equals(id)).findFirst();
     }
 
+    public void add(SolicitudDeEliminacion solicitudDeEliminacion) {
+        solicitudes.add(solicitudDeEliminacion);
+    }
 }
