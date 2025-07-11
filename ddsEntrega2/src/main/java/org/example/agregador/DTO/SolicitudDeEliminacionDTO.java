@@ -5,6 +5,8 @@ import org.example.agregador.Solicitudes.EstadoSolicitudEliminacion;
 public class SolicitudDeEliminacionDTO extends SolicitudDTO {
     private EstadoSolicitudEliminacion estado;
 
+    public SolicitudDeEliminacionDTO() {}
+
     public EstadoSolicitudEliminacion getEstado() {
         return estado;
     }

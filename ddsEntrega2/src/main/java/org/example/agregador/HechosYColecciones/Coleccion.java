@@ -62,12 +62,13 @@ public class Coleccion {
     public void setAlgoritmoDeConsenso(TipoAlgoritmoConsenso algoritmoDeConsenso) {this.algoritmoDeConsenso = algoritmoDeConsenso; }
 
     public void generarHandle() {
-        if(criteriosDePertenencia.isEmpty() || criteriosDePertenencia == null) {
+        if(titulo != null || !titulo.equals("")) {
             handle = UUID.randomUUID().toString();
         }
         else {
-            String contenido = String.join(",", criteriosDePertenencia.toString());
-            handle = UUID.fromString(contenido).toString();
+            String contenido = titulo + descripcion;
+            UUID uuid = UUID.nameUUIDFromBytes(contenido.getBytes());  // genera UUID basado en el contenido
+            handle = uuid.toString();
         }
     }
 

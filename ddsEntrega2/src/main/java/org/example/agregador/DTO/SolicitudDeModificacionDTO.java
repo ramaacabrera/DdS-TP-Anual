@@ -7,6 +7,8 @@ public class SolicitudDeModificacionDTO extends SolicitudDTO {
     private Hecho hechoModificado;
     private EstadoSolicitudModificacion estadoSolicitudModificacion;
 
+    public SolicitudDeModificacionDTO() {}
+
     public Hecho getHechoModificado() {
         return hechoModificado;
     }

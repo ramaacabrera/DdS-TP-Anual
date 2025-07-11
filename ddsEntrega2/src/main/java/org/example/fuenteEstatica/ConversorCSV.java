@@ -1,5 +1,6 @@
 package org.example.fuenteEstatica;
 
+import org.apache.commons.csv.CSVRecord;
 import org.example.agregador.DTO.HechoDTO;
 import org.example.agregador.*;
 import org.example.agregador.HechosYColecciones.ContenidoMultimedia;
@@ -13,28 +14,26 @@ import java.util.List;
 
 public class ConversorCSV {
 
-    public HechoDTO mapearAHecho(String hechoCSV){
-        String[] datos = hechoCSV.split(",");
-        String titulo = datos[0].trim();
-        String descripcion = datos[1].trim();
-        String categoria = datos[2].trim();
-        int latitud = Integer.parseInt(datos[3].trim());
-        int longitud = Integer.parseInt(datos[4].trim());
+    public HechoDTO mapearAHecho(CSVRecord record){
+        String titulo = record.get("Título");
+        String descripcion = record.get("Descripción");
+        String categoria = record.get("Categoría");
+        double latitud = Double.parseDouble(record.get("Latitud"));
+        double longitud = Double.parseDouble(record.get("Longitud"));
         Ubicacion ubicacion = new Ubicacion(latitud, longitud);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaDeAcontecimiento = new Date();
-        try {
-            fechaDeAcontecimiento = sdf.parse(datos[5].trim());
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        Date fechaDeAcontecimiento = null;
+        try{
+            fechaDeAcontecimiento = formato.parse(record.get("Fecha del hecho"));
         } catch (Exception e) {
-            System.out.println("Error al convertir fecha" + e.getMessage());
+            System.out.println("Error al mapear fecha" + e.getMessage());
         }
         Date fechaDeCarga = new Date();
         EstadoHecho estadoHecho = EstadoHecho.ACTIVO;
-        Contribuyente contribuyente = null;
         List<String> etiquetas = new ArrayList<>();
         boolean esEditable = false;
-        List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
-        return new HechoDTO(titulo, descripcion, categoria, ubicacion, fechaDeAcontecimiento, fechaDeCarga, null, estadoHecho,contribuyente,etiquetas,esEditable,contenidoMultimedia);
+        return new HechoDTO(titulo, descripcion, categoria, ubicacion, fechaDeAcontecimiento, fechaDeCarga, null, estadoHecho, null, etiquetas, esEditable, null);
     }
 
 }
+

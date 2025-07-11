@@ -73,7 +73,7 @@ public class ConexionDemo extends Conexion{
         LocalDateTime fechaParametro;
         if(fechaUltimaConsulta == null) {
             // Si es la primera vez, inicia desde una fecha hace mucho
-            fechaParametro = LocalDateTime.of(1800, 1, 1, 0, 0);
+            fechaParametro = LocalDateTime.of(2000, 1, 1, 0, 0);
         }else{
             fechaParametro = fechaUltimaConsulta;
         }

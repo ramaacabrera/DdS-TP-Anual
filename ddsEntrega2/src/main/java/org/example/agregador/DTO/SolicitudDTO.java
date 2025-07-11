@@ -6,6 +6,8 @@ public class SolicitudDTO {
     private Hecho hechoAsociado;
     private String justificacion;
 
+    public SolicitudDTO() {}
+
     public Hecho getHechoAsociado() {
         return hechoAsociado;
     }

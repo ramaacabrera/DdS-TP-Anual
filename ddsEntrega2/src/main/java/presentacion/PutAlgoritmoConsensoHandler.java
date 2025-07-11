@@ -10,6 +10,7 @@ import org.example.agregador.Criterios.Criterio;
 import org.example.agregador.HechosYColecciones.Coleccion;
 import org.example.agregador.HechosYColecciones.Hecho;
 import org.example.agregador.HechosYColecciones.TipoAlgoritmoConsenso;
+import org.example.agregador.fuente.Fuente;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,7 @@ public class PutAlgoritmoConsensoHandler implements Handler {
     @Override
     public void handle(Context ctx) {
         String handle = ctx.pathParam("id");
-        TipoAlgoritmoConsenso algoritmo = TipoAlgoritmoConsenso.valueOf(ctx.pathParam("algoritmo"));
+        TipoAlgoritmoConsenso algoritmo= ctx.bodyAsClass(TipoAlgoritmoConsenso.class);
         final Optional<Coleccion> resultadoBusqueda = repositorio.buscarPorHandle(handle);
         if (resultadoBusqueda.isPresent()) {
             resultadoBusqueda.get().setAlgoritmoDeConsenso(algoritmo);

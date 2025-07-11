@@ -7,6 +7,7 @@ import java.util.List;
 public class CriterioEtiquetas extends Criterio {
     private List<String> etiquetas;
 
+    public CriterioEtiquetas() {}
     public CriterioEtiquetas(List<String> listaEtiquetas) {etiquetas = listaEtiquetas;}
 
     @Override
@@ -17,4 +18,7 @@ public class CriterioEtiquetas extends Criterio {
         }
         return existeEnHecho;
     }
+
+    public List<String> getEtiquetas() { return etiquetas; }
+    public void setEtiquetas(List<String> etiquetas) {etiquetas = etiquetas;}
 }

@@ -4,6 +4,8 @@ import org.example.agregador.HechosYColecciones.Hecho;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,7 +18,6 @@ public class Contribuyente {
     private String nombre;
     @JsonProperty
     private String apellido;
-
     public void Contribuyente() {}
 
     public void VerificarMayoriaDeEdad() {}

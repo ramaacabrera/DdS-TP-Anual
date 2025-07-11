@@ -4,11 +4,13 @@ import org.example.agregador.HechosYColecciones.Hecho;
 import org.example.agregador.HechosYColecciones.TipoContenidoMultimedia;
 
 public class CriterioTipoMultimedia extends Criterio {
-    private final TipoContenidoMultimedia tipoContenidoMultimedia;
+    private TipoContenidoMultimedia tipoContenidoMultimedia;
 
     public CriterioTipoMultimedia(TipoContenidoMultimedia tipoContenidoMultimediaNuevo) {
         this.tipoContenidoMultimedia = tipoContenidoMultimediaNuevo;
     }
+
+    public CriterioTipoMultimedia() {}
 
     @Override
     public boolean cumpleConCriterio(Hecho hecho) {

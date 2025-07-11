@@ -7,6 +7,8 @@ public class CriterioTipoFuente extends Criterio {
 
     private Fuente fuente;
 
+    public CriterioTipoFuente() {}
+
     public CriterioTipoFuente(Fuente fuente) { this.fuente = fuente;}
 
     @Override

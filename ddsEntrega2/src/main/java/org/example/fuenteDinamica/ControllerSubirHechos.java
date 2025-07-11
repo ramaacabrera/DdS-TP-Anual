@@ -6,20 +6,22 @@ import org.example.agregador.DTO.HechoDTO;
 import org.example.agregador.Contribuyente;
 
 public class ControllerSubirHechos {
-    private final Contribuyente contribuyente;
     private final DinamicoRepositorio baseDeDatos;
 
-    public ControllerSubirHechos(Contribuyente contribuyente, DinamicoRepositorio baseDeDatos){
-        this.contribuyente = contribuyente;
+    public ControllerSubirHechos(DinamicoRepositorio baseDeDatos){
         this.baseDeDatos = baseDeDatos;
     }
 
     public void subirHecho(HechoDTO hecho){
         baseDeDatos.guardarHecho(hecho);
-        this.notificar(hecho);
     }
 
-    public void notificar(HechoDTO hechoDTO){
+    public void subirHecho(HechoDTO hecho, Contribuyente contribuyente){
+        baseDeDatos.guardarHecho(hecho);
+        this.notificar(hecho, contribuyente);
+    }
+
+    public void notificar(HechoDTO hechoDTO, Contribuyente contribuyente){
         contribuyente.hechoSubido(new Hecho(hechoDTO));
     }
 

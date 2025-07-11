@@ -34,7 +34,7 @@ public class Agregador {
 
         scheduler.scheduleAtFixedRate(() -> {
             this.actualizarHechosDesdeFuentes();
-        }, 0, 1, TimeUnit.HOURS);
+        }, 1, 1, TimeUnit.HOURS);
 
         long delayInicial = calcularDelayHastaHora(2);  // 2 AM
         scheduler.scheduleAtFixedRate(() -> {
@@ -42,35 +42,52 @@ public class Agregador {
         }, delayInicial, 24, TimeUnit.HOURS);
 
     }
-    //Constructor (lo hicimos para inicializar) que cuando se crea el objeto Agregador,
-    // arranca un scheduler que cada 1 hora ejecuta el método actualizarHechosDesdeFuentes().
+    /*
+    Constructor (lo hicimos para inicializar) que cuando se crea el objeto Agregador,
+    arranca un scheduler que cada 1 hora ejecuta el metodo actualizarHechosDesdeFuentes().
+    */
+
 
     public void actualizarHechosDesdeFuentes() {
         // Traemos hechos nuevos de TODAS las fuentes disponibles
+        System.out.printf("Fuentes disponibles: %d \n", fuentesDisponibles.size());
         for (Fuente fuente : fuentesDisponibles) {
+            System.out.printf("Fuente a buscar: %s\n", fuente);
             List<Hecho> nuevosHechos = obtenerHechosExterno(fuente, new ArrayList<>());
-
+            System.out.printf("Se cargan %d nuevos hechos desde %s", nuevosHechos.size(), fuente + "\n");
             for (Hecho hecho : nuevosHechos) {
+                int nuevo = 0;
                 // Por cada colección, vemos si el hecho cumple criterios
                 for (Coleccion coleccion : coleccionRepositorio.obtenerTodas()) {
                     if (coleccion.cumpleCriterio(hecho)) {
                         boolean esNuevo = coleccion.agregarHecho(hecho);
-                        if (esNuevo) {
-                            hechoRepositorio.guardar(hecho);
-                        } else {
-                            Hecho hechoExistente = buscarHechoPorTitulo(coleccion, hecho.getTitulo());
-                            if (hechoExistente != null) {
-                                hechoRepositorio.actualizar(hechoExistente);
-                            }
-                        }
+                        if(esNuevo){ nuevo++;}
+                    }
+                }
+                if (nuevo>0) {
+                    hechoRepositorio.guardar(hecho);
+                } else {
+                    Hecho hechoExistente = buscarHechoPorTitulo(hecho.getTitulo());
+                    if (hechoExistente != null) {
+                        hechoRepositorio.actualizar(hechoExistente);
                     }
                 }
             }
+            System.out.println("Hechos cargados desde " + fuente+"\n");
+        }
+        System.out.printf("Hechos en repo: %d ", hechoRepositorio.buscarHechos(new ArrayList<>()).size());
+    }
+
+    public void buscarHechosIniciales(){
+        for (Fuente fuente : fuentesDisponibles){
+            List<Hecho> nuevosHechos = obtenerHechosExterno(fuente, new ArrayList<>());
+            nuevosHechos.forEach(hecho -> hechoRepositorio.guardar(hecho));
+            System.out.printf("%d hechos cargados desde %s", nuevosHechos.size(), fuente + "\n");
         }
     }
 
-    private Hecho buscarHechoPorTitulo(Coleccion coleccion, String titulo) {
-        for (Hecho h : coleccion.getHechos()) {
+    private Hecho buscarHechoPorTitulo(String titulo) {
+        for (Hecho h : hechoRepositorio.buscarHechos(null)) {
             if (h.getTitulo().equalsIgnoreCase(titulo)) {
                 return h;
             }
@@ -79,7 +96,7 @@ public class Agregador {
     }
 
     public List<Hecho> obtenerHechosExterno(Fuente fuente, List<Criterio> criterios) {
-        List<Hecho> hechos = new ArrayList();
+        List<Hecho> hechos = new ArrayList<>();
         for (HechoDTO hechoDTO : fuente.obtenerHechos(criterios)){
             Hecho hecho = new Hecho(hechoDTO);
             hechos.add(hecho);

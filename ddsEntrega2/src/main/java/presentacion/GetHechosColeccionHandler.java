@@ -18,8 +18,12 @@ import java.util.stream.Collectors;
 import java.text.SimpleDateFormat;
 
 
-public class GetHechosColeccionHandler implements Handler{
-    private final ColeccionRepositorio coleccionRepo = new ColeccionRepositorio();
+public class GetHechosColeccionHandler implements Handler {
+    private final ColeccionRepositorio coleccionRepo;
+
+    public GetHechosColeccionHandler(ColeccionRepositorio coleccionRepoNuevo) {
+        coleccionRepo = coleccionRepoNuevo;
+    }
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
@@ -32,12 +36,11 @@ public class GetHechosColeccionHandler implements Handler{
             ctx.status(404).result("Colección no encontrada");
             return;
         }
-        if (Objects.equals(modNav, "CURADA")){
+        if (Objects.equals(modNav, "CURADA")) {
             modoNavegacion = ModosDeNavegacion.valueOf(modNav);
         } else {
             modoNavegacion = ModosDeNavegacion.IRRESTRICTA;
         }
-
         Coleccion coleccion = coleccionOpt.get();
         //List<Hecho> hechos = coleccion.getHechos();  // base de hechos desde esta colección
         List<Criterio> criterios = armarListaDeCriterios(ctx);
@@ -55,9 +58,9 @@ public class GetHechosColeccionHandler implements Handler{
         Optional<String> longitud = Optional.ofNullable(ctx.queryParam("longitud"));
 
         try {
- //busco una fecha de reporte en la url, con !=null veo si se mando
- //(condición) ? valor_si_verdadero : valor_si_falso;
- //si entra la fecha entonces la parsea con simpledateformat, sino la deja en null
+            //busco una fecha de reporte en la url, con !=null veo si se mando
+            //(condición) ? valor_si_verdadero : valor_si_falso;
+            //si entra la fecha entonces la parsea con simpledateformat, sino la deja en null
             Date fechaRepDesde = ctx.queryParam("fecha_reporte_desde") != null
                     ? formato.parse(ctx.queryParam("fecha_reporte_desde")) : null;
             Date fechaRepHasta = ctx.queryParam("fecha_reporte_hasta") != null
@@ -91,27 +94,4 @@ public class GetHechosColeccionHandler implements Handler{
 
         return criterios;
     }
-
-    private List<Hecho> filtrarHechos(List<Hecho> hechos, List<Criterio> criterios) {
-        return hechos.stream()
-                .filter(h -> criterios.stream().allMatch(c -> c.cumpleConCriterio(h)))
-                .collect(Collectors.toList());
-    }
-
-    }
-
-
-    /*try {
-            Optional<Date> fechaReporteDesde = Optional.ofNullable(ctx.queryParam("fecha_reporte_desde") != null ? formato.parse(ctx.queryParam("fecha_reporte_desde")) : null);
-            Optional<Date> fechaReporteHasta = Optional.ofNullable(ctx.queryParam("fecha_reporte_hasta") != null ? formato.parse(ctx.queryParam("fecha_reporte_hasta")) : null);
-            Optional<Date> fechaAcontecimientoDesde = Optional.ofNullable(ctx.queryParam("fecha_acontecimiento_desde") != null ? formato.parse(ctx.queryParam("fecha_acontecimiento_desde")) : null);
-            Optional<Date> fechaAcontecimientoHasta = Optional.ofNullable(ctx.queryParam("fecha_acontecimiento_hasta") != null ? formato.parse(ctx.queryParam("fecha_acontecimiento_hasta")) : null);
-
-            //fechaAcontecimientoDesde.ifPresent(f -> criterios.add(new CriterioFechaAcontecimientoDesde(f)));
-            //fechaAcontecimientoHasta.ifPresent(f -> criterios.add(new CriterioFechaAcontecimientoHasta(f)));
-            //fechaReporteDesde.ifPresent(f -> criterios.add(new CriterioFechaReporteDesde(f)));
-            //fechaReporteHasta.ifPresent(f -> criterios.add(new CriterioFechaReporteHasta(f)));
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error al parsear fechas", e);
-        } */
+}

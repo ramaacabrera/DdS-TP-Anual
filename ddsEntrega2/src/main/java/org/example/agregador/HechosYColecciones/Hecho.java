@@ -24,6 +24,7 @@ public class Hecho {
     private boolean esEditable;
     private List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
 
+    public Hecho() {}
     // esto es el Constructor
     public Hecho(String titulo, String descripcion, String categoria, Ubicacion ubicacion, Date fechaDeAcontecimiento,
                  Date fechaDeCarga, Fuente fuente, EstadoHecho estadoHecho, Contribuyente contribuyente, List<String> etiquetas, boolean esEditable,

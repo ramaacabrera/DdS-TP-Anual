@@ -15,6 +15,8 @@ public class SolicitudEliminacionRepositorio {
         return solicitudes.stream().findFirst();
     }
 
+    public List<SolicitudDeEliminacion> buscarTodas(){return solicitudes;}
+
     public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud){
         solicitudes.add(solicitud);
     }

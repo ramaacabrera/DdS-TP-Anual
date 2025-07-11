@@ -6,6 +6,7 @@ import org.example.agregador.HechosYColecciones.Ubicacion;
 public class CriterioUbicacion extends Criterio {
     private Ubicacion ubicacion;
 
+    public CriterioUbicacion() {}
     public CriterioUbicacion(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
     }

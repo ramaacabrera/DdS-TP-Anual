@@ -7,34 +7,24 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.example.agregador.Solicitudes.EstadoSolicitudEliminacion;
 import org.example.agregador.Solicitudes.SolicitudDeEliminacion;
+import org.example.fuenteDinamica.ControllerSolicitud;
 
 import java.util.Optional;
 
 public class PutSolicitudEliminacionHandler implements Handler{
-    private final SolicitudEliminacionRepositorio repositorio;
+    private final ControllerSolicitud controllerSolicitudEliminacion;
 
-    public PutSolicitudEliminacionHandler(SolicitudEliminacionRepositorio repositorio) {this.repositorio = repositorio;}
+    public PutSolicitudEliminacionHandler(ControllerSolicitud controllerSolicitudNuevo) {controllerSolicitudEliminacion = controllerSolicitudNuevo;}
 
     @Override
     public void handle(Context context) {
         String id = context.pathParam("id");
         String body = context.body();
-        Optional<SolicitudDeEliminacion> resultadoBusqueda = repositorio.buscarPorId(id);
-        if(resultadoBusqueda.isPresent()) {
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                JsonNode jsonNode = mapper.readTree(body);
-                EstadoSolicitudEliminacion estado = EstadoSolicitudEliminacion
-                        .valueOf(jsonNode.get("estadoSolicitud").asText());
-                if(estado == EstadoSolicitudEliminacion.ACEPTADA){
-                    resultadoBusqueda.get().aceptarSolicitud();
-                }
-                else{
-                    resultadoBusqueda.get().rechazarSolicitud();
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        boolean resultado = controllerSolicitudEliminacion.actualizarSolicitudEliminacion(body,id);
+        if(resultado){
+            context.status(200);
+        } else {
+            context.status(404);
         }
     }
 
