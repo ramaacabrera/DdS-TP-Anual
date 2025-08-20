@@ -1,0 +1,65 @@
+package org.example.agregador;
+import Persistencia.ColeccionRepositorio;
+import Persistencia.HechoRepositorio;
+import Persistencia.SolicitudEliminacionRepositorio;
+import org.example.agregador.DTO.HechoDTO;
+import org.example.agregador.Criterios.Criterio;
+import org.example.agregador.DTO.SolicitudDeEliminacionDTO;
+import org.example.agregador.HechosYColecciones.Coleccion;
+import org.example.agregador.HechosYColecciones.Hecho;
+import org.example.agregador.Solicitudes.SolicitudDeEliminacion;
+import org.example.agregador.fuente.*;
+import org.example.fuenteDinamica.FuenteDinamica;
+
+import java.util.*;
+public class Normalizador {
+
+    private final Map<String, String> mapaCategorias;
+
+    public Normalizador() {
+        mapaCategorias = new HashMap<>();
+        mapaCategorias.put("Incendio Forestal", "Incendio forestal");
+        mapaCategorias.put("Fuego forestal", "Incendio forestal");
+        mapaCategorias.put("Incendio de monte", "Incendio forestal");
+        // etc (esto seria manualmente, ver como podria hacerce de manera mas generica)
+    }
+
+    public Hecho normalizar(Hecho hecho) {
+        // Normalizar categoría
+        String categoriaNormalizada = mapaCategorias.getOrDefault(
+                hecho.getCategoria(), hecho.getCategoria()
+        );
+        hecho.setCategoria(categoriaNormalizada);
+
+        // Normalizar fecha
+        hecho.setFechaDeAcontecimiento(
+                convertirFecha(hecho.getFechaDeAcontecimiento())
+        );
+        // Normalizar ubicacion
+        hecho.setUbicacion(hecho.getUbicacion().toLowerCase().trim());
+
+        return hecho;
+    }
+
+    private LocalDate convertirFecha(String fechaRaw) {
+        // Lista de formatos que esperás recibir
+        List<DateTimeFormatter> formatos = List.of(
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+                DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.forLanguageTag("es")),
+                DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        );
+
+        for (DateTimeFormatter formato : formatos) {
+            try {
+                return LocalDate.parse(fechaRaw, formato);
+            } catch (Exception e) {
+                // que siga probando con igual formato
+            }
+        }
+
+        // Si no coincidió con ninguno, devolvés null o tirás excepción controlada
+        throw new IllegalArgumentException("Formato de fecha no soportado: " + fechaRaw);
+    }
+
+}

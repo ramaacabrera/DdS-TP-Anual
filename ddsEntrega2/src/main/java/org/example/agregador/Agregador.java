@@ -73,15 +73,26 @@ public class Agregador {
                 if (nuevo>0) {
                     hechoRepositorio.guardar(hecho);
                 } else {
-                    Hecho hechoExistente = buscarHechoPorTitulo(hecho.getTitulo());
+                    Hecho hechoExistente = buscarHechoSimilar(hecho);
                     if (hechoExistente != null) {
                         hechoRepositorio.actualizar(hechoExistente);
                     }
+
                 }
             }
             System.out.println("Hechos cargados desde " + fuente+"\n");
         }
         System.out.printf("Hechos en repo: %d ", hechoRepositorio.buscarHechos(new ArrayList<>()).size());
+    }
+
+
+    private Hecho buscarHechoSimilar(Hecho hechoNuevo) {
+        for (Hecho h : hechoRepositorio.buscarHechos(null)) {
+            if (h.tieneMismosAtributosQue(hechoNuevo)) {
+                return h;
+            }
+        }
+        return null;
     }
 
     public void buscarHechosIniciales(){
@@ -113,8 +124,11 @@ public class Agregador {
     public void agregarSolicitudes(FuenteDinamica fuente) {
         List<SolicitudDeEliminacion> solicitudesDeEliminacion = new ArrayList<>();
         for (SolicitudDeEliminacionDTO solicitudDeEliminacionDTO : fuente.obtenerSolicitudDeEliminacion()){
-            SolicitudDeEliminacion solicitudDeEliminacion = new SolicitudDeEliminacion(solicitudDeEliminacionDTO);
-            solicitudEliminacionRepositorio.add(solicitudDeEliminacion);
+            SolicitudDeEliminacion nueva = new SolicitudDeEliminacion(solicitudDeEliminacionDTO);
+            boolean yaExisteSoli = solicitudEliminacionRepositorio.buscarPorId(nueva.getId()).isPresent();
+            if(!yaExisteSoli) {
+                solicitudEliminacionRepositorio.add(nueva);
+            }
         }
     }
 
@@ -138,6 +152,17 @@ public class Agregador {
 
         return delayEnHoras;
     }
+
+    //idea de normalizacion:
+    Normalizador normalizador = new Normalizador();
+for (Fuente fuente : fuentesDisponibles){
+for (HechoDTO dto : fuente.obtenerHechos(null)) {
+        Hecho hecho = new Hecho(dto);
+        Hecho hechoNormalizado = normalizador.normalizar(hecho);
+        hechoRepositorio.guardar(hechoNormalizado);
+    }
+}
+
 
 }
 
