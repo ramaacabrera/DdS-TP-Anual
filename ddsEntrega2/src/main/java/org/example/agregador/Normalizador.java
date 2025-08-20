@@ -21,7 +21,7 @@ public class Normalizador {
         mapaCategorias.put("Incendio Forestal", "Incendio forestal");
         mapaCategorias.put("Fuego forestal", "Incendio forestal");
         mapaCategorias.put("Incendio de monte", "Incendio forestal");
-        // etc (esto seria manualmente, ver como podria hacerce de manera mas generica)
+        // etc (esto seria manualmente, ver como podria hacerse de manera mas generica)
     }
 
     public Hecho normalizar(Hecho hecho) {
@@ -42,7 +42,6 @@ public class Normalizador {
     }
 
     private LocalDate convertirFecha(String fechaRaw) {
-        // Lista de formatos que esperás recibir
         List<DateTimeFormatter> formatos = List.of(
                 DateTimeFormatter.ofPattern("dd/MM/yyyy"),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd"),
@@ -58,7 +57,6 @@ public class Normalizador {
             }
         }
 
-        // Si no coincidió con ninguno, devolvés null o tirás excepción controlada
         throw new IllegalArgumentException("Formato de fecha no soportado: " + fechaRaw);
     }
 
