@@ -1,8 +1,7 @@
 package Persistencia;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.agregador.Solicitudes.EstadoSolicitudEliminacion;
-import org.example.agregador.Solicitudes.SolicitudDeEliminacion;
+import Agregador.Solicitudes.EstadoSolicitudEliminacion;
+import Agregador.Solicitudes.SolicitudDeEliminacion;
 
 import java.util.ArrayList;
 import java.util.List;

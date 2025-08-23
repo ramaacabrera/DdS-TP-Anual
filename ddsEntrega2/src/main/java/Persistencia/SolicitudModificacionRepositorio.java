@@ -1,6 +1,6 @@
 package Persistencia;
 
-import org.example.agregador.Solicitudes.SolicitudDeModificacion;
+import Agregador.Solicitudes.SolicitudDeModificacion;
 
 import java.util.ArrayList;
 import java.util.List;

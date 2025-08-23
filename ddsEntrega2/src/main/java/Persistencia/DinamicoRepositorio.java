@@ -1,13 +1,11 @@
 package Persistencia;
 
-import org.example.agregador.DTO.HechoDTO;
-import org.example.agregador.DTO.SolicitudDeEliminacionDTO;
-import org.example.agregador.DTO.SolicitudDeModificacionDTO;
-import org.example.agregador.Solicitudes.SolicitudDeEliminacion;
+import Agregador.DTO.HechoDTO;
+import Agregador.DTO.SolicitudDeEliminacionDTO;
+import Agregador.DTO.SolicitudDeModificacionDTO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class DinamicoRepositorio {
 

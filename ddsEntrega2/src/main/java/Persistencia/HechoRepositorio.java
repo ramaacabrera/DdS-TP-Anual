@@ -1,8 +1,8 @@
 package Persistencia;
 
-import org.example.agregador.Criterios.Criterio;
-import org.example.agregador.HechosYColecciones.Hecho;
-import org.example.agregador.DTO.HechoDTO;
+import Agregador.Criterios.Criterio;
+import Agregador.HechosYColecciones.Hecho;
+import Agregador.DTO.HechoDTO;
 
 import java.util.ArrayList;
 import java.util.List;

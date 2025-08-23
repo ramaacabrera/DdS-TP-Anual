@@ -1,6 +1,6 @@
 package Persistencia;
-import org.example.agregador.HechosYColecciones.Coleccion;
-import org.example.agregador.DTO.ColeccionDTO;
+import Agregador.HechosYColecciones.Coleccion;
+import Agregador.DTO.ColeccionDTO;
 
 import java.util.ArrayList;
 import java.util.List;
