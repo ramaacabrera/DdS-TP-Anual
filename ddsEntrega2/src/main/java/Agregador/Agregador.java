@@ -3,9 +3,9 @@ package Agregador;
 import Persistencia.ColeccionRepositorio;
 import Persistencia.HechoRepositorio;
 import Persistencia.SolicitudEliminacionRepositorio;
-import Agregador.DTO.HechoDTO;
+import utils.DTO.HechoDTO;
 import Agregador.Criterios.Criterio;
-import Agregador.DTO.SolicitudDeEliminacionDTO;
+import utils.DTO.SolicitudDeEliminacionDTO;
 import Agregador.HechosYColecciones.Coleccion;
 import Agregador.HechosYColecciones.Hecho;
 import Agregador.Solicitudes.SolicitudDeEliminacion;
@@ -57,7 +57,7 @@ public class Agregador {
         for (Fuente fuente : fuentesDisponibles) {
             System.out.printf("Fuente a buscar: %s\n", fuente);
             List<Hecho> nuevosHechos = obtenerHechosExterno(fuente, new ArrayList<>());
-            if(fuente.getTipoDeFuente() == TipoDeFuente.DINAMICA && fuente instanceof FuenteDinamica){
+            if (fuente.getTipoDeFuente() == TipoDeFuente.DINAMICA && fuente instanceof FuenteDinamica) {
                 agregarSolicitudes((FuenteDinamica) fuente);
             }
             System.out.printf("Se cargan %d nuevos hechos desde %s", nuevosHechos.size(), fuente + "\n");
@@ -67,10 +67,12 @@ public class Agregador {
                 for (Coleccion coleccion : coleccionRepositorio.obtenerTodas()) {
                     if (coleccion.cumpleCriterio(hecho)) {
                         boolean esNuevo = coleccion.agregarHecho(hecho);
-                        if(esNuevo){ nuevo++;}
+                        if (esNuevo) {
+                            nuevo++;
+                        }
                     }
                 }
-                if (nuevo>0) {
+                if (nuevo > 0) {
                     hechoRepositorio.guardar(hecho);
                 } else {
                     Hecho hechoExistente = buscarHechoSimilar(hecho);
@@ -80,7 +82,7 @@ public class Agregador {
 
                 }
             }
-            System.out.println("Hechos cargados desde " + fuente+"\n");
+            System.out.println("Hechos cargados desde " + fuente + "\n");
         }
         System.out.printf("Hechos en repo: %d ", hechoRepositorio.buscarHechos(new ArrayList<>()).size());
     }
@@ -95,8 +97,8 @@ public class Agregador {
         return null;
     }
 
-    public void buscarHechosIniciales(){
-        for (Fuente fuente : fuentesDisponibles){
+    public void buscarHechosIniciales() {
+        for (Fuente fuente : fuentesDisponibles) {
             List<Hecho> nuevosHechos = obtenerHechosExterno(fuente, new ArrayList<>());
             nuevosHechos.forEach(hecho -> hechoRepositorio.guardar(hecho));
             System.out.printf("%d hechos cargados desde %s", nuevosHechos.size(), fuente + "\n");
@@ -114,7 +116,7 @@ public class Agregador {
 
     public List<Hecho> obtenerHechosExterno(Fuente fuente, List<Criterio> criterios) {
         List<Hecho> hechos = new ArrayList<>();
-        for (HechoDTO hechoDTO : fuente.obtenerHechos(criterios)){
+        for (HechoDTO hechoDTO : fuente.obtenerHechos(criterios)) {
             Hecho hecho = new Hecho(hechoDTO);
             hechos.add(hecho);
         }
@@ -123,10 +125,10 @@ public class Agregador {
 
     public void agregarSolicitudes(FuenteDinamica fuente) {
         List<SolicitudDeEliminacion> solicitudesDeEliminacion = new ArrayList<>();
-        for (SolicitudDeEliminacionDTO solicitudDeEliminacionDTO : fuente.obtenerSolicitudDeEliminacion()){
+        for (SolicitudDeEliminacionDTO solicitudDeEliminacionDTO : fuente.obtenerSolicitudDeEliminacion()) {
             SolicitudDeEliminacion nueva = new SolicitudDeEliminacion(solicitudDeEliminacionDTO);
             boolean yaExisteSoli = solicitudEliminacionRepositorio.buscarPorId(nueva.getId()).isPresent();
-            if(!yaExisteSoli) {
+            if (!yaExisteSoli) {
                 solicitudEliminacionRepositorio.add(nueva);
             }
         }
@@ -152,17 +154,16 @@ public class Agregador {
 
         return delayEnHoras;
     }
-
+}
+    /*
     //idea de normalizacion:
     Normalizador normalizador = new Normalizador();
-for (Fuente fuente : fuentesDisponibles){
-for (HechoDTO dto : fuente.obtenerHechos(null)) {
-        Hecho hecho = new Hecho(dto);
-        Hecho hechoNormalizado = normalizador.normalizar(hecho);
-        hechoRepositorio.guardar(hechoNormalizado);
+    for (Fuente fuente : fuentesDisponibles){
+        for (HechoDTO dto : fuente.obtenerHechos(null)) {
+                Hecho hecho = new Hecho(dto);
+                Hecho hechoNormalizado = normalizador.normalizar(hecho);
+                hechoRepositorio.guardar(hechoNormalizado);
+            }
     }
-}
-
-
-}
+    */
 

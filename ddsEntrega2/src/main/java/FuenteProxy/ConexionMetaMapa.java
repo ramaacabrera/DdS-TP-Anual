@@ -1,7 +1,7 @@
 package FuenteProxy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import Agregador.DTO.HechoDTO;
+import utils.DTO.HechoDTO;
 import Agregador.HechosYColecciones.Coleccion;
 import Agregador.Criterios.Criterio;
 

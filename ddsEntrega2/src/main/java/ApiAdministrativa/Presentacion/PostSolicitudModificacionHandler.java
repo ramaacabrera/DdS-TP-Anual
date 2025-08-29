@@ -2,7 +2,7 @@ package ApiAdministrativa.Presentacion;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import Agregador.DTO.SolicitudDeModificacionDTO;
+import utils.DTO.SolicitudDeModificacionDTO;
 import FuenteDinamica.ControllerSolicitud;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,6 +1,6 @@
 package FuenteProxy;
 
-import Agregador.DTO.HechoDTO;
+import utils.DTO.HechoDTO;
 import Agregador.HechosYColecciones.ContenidoMultimedia;
 import Agregador.Criterios.Criterio;
 import Agregador.HechosYColecciones.EstadoHecho;

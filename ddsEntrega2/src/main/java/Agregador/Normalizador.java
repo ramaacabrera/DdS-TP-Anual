@@ -1,6 +1,8 @@
 package Agregador;
 import Agregador.HechosYColecciones.Hecho;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 public class Normalizador {
 
@@ -22,11 +24,9 @@ public class Normalizador {
         hecho.setCategoria(categoriaNormalizada);
 
         // Normalizar fecha
-        hecho.setFechaDeAcontecimiento(
-                convertirFecha(hecho.getFechaDeAcontecimiento())
-        );
+        //hecho.setFechaDeAcontecimiento(convertirFecha(hecho.getFechaDeAcontecimiento()));
         // Normalizar ubicacion
-        hecho.setUbicacion(hecho.getUbicacion().toLowerCase().trim());
+        //hecho.setUbicacion(hecho.getUbicacion().toLowerCase().trim());
 
         return hecho;
     }

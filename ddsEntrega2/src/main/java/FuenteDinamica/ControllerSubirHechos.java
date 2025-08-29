@@ -2,7 +2,7 @@ package FuenteDinamica;
 
 import Persistencia.DinamicoRepositorio;
 import Agregador.HechosYColecciones.Hecho;
-import Agregador.DTO.HechoDTO;
+import utils.DTO.HechoDTO;
 import Agregador.Contribuyente;
 
 public class ControllerSubirHechos {

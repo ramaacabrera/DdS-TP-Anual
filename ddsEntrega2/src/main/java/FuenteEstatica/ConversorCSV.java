@@ -1,7 +1,7 @@
 package FuenteEstatica;
 
 import org.apache.commons.csv.CSVRecord;
-import Agregador.DTO.HechoDTO;
+import utils.DTO.HechoDTO;
 import Agregador.HechosYColecciones.EstadoHecho;
 import Agregador.HechosYColecciones.Ubicacion;
 

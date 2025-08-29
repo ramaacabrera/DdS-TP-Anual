@@ -8,7 +8,6 @@ import io.javalin.Javalin;
 import FuenteProxy.APIMock.DemoAPIMockServer;
 import FuenteProxy.FuenteDemo;
 import FuenteProxy.FuenteMetaMapa;
-import presentacion.UnauthorizedException;
 
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -2,7 +2,7 @@ package Agregador.fuente;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import Agregador.DTO.HechoDTO;
+import utils.DTO.HechoDTO;
 import Agregador.Criterios.Criterio;
 import FuenteEstatica.ConexionEstatica;
 

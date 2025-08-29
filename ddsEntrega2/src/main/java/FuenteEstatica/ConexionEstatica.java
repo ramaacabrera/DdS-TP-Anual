@@ -3,11 +3,14 @@ package FuenteEstatica;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import Agregador.DTO.HechoDTO;
+import utils.DTO.HechoDTO;
 import Agregador.Criterios.Criterio;
 import Agregador.fuente.*;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +18,6 @@ public class ConexionEstatica extends Conexion{
     private String path;
 
     public ConexionEstatica(String filename) {
-
         this.path = filename;
     }
 
@@ -29,12 +31,9 @@ public class ConexionEstatica extends Conexion{
 
         try {
             // Obtener el InputStream del recurso desde /resources
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path);
-            if (inputStream == null) {
-                throw new IllegalArgumentException("No se encontró el archivo: " + path);
-            }
+            Path ruta = Paths.get(path);
 
-            Reader reader = new InputStreamReader(inputStream);
+            Reader reader = Files.newBufferedReader(ruta);
             CSVParser parser = CSVFormat.DEFAULT
                     .withFirstRecordAsHeader()
                     .parse(reader);
@@ -45,10 +44,11 @@ public class ConexionEstatica extends Conexion{
                 HechoDTO hechoDTO = conversor.mapearAHecho(registro);
                 hechos.add(hechoDTO);
             }
-
+            System.out.println("Hechos encontrados: " + hechos.size());
         } catch (Exception e) {
             System.err.println("Error al leer el archivo CSV: " + e.getMessage());
         }
+        return hechos;
 
 
 
@@ -103,8 +103,6 @@ public class ConexionEstatica extends Conexion{
         }
 
         */
-
-        return hechos;
     }
 
     public String getPath() {

@@ -2,7 +2,7 @@ package ApiAdministrativa.Presentacion;
 
 import io.javalin.http.Handler;
 import io.javalin.http.Context;
-import Agregador.DTO.ColeccionDTO;
+import utils.DTO.ColeccionDTO;
 import org.jetbrains.annotations.NotNull;
 import Persistencia.ColeccionRepositorio;
 

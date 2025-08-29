@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.UUID;
-import Agregador.DTO.ColeccionDTO;
+import utils.DTO.ColeccionDTO;
 
 public class Coleccion {
 

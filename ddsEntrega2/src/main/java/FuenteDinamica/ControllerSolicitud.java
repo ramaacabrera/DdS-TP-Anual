@@ -1,8 +1,8 @@
 package FuenteDinamica;
 
 import Persistencia.DinamicoRepositorio;
-import Agregador.DTO.SolicitudDeEliminacionDTO;
-import Agregador.DTO.SolicitudDeModificacionDTO;
+import utils.DTO.SolicitudDeEliminacionDTO;
+import utils.DTO.SolicitudDeModificacionDTO;
 
 public class ControllerSolicitud {
     private final DinamicoRepositorio baseDeDatos;

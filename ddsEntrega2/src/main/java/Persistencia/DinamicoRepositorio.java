@@ -1,8 +1,8 @@
 package Persistencia;
 
-import Agregador.DTO.HechoDTO;
-import Agregador.DTO.SolicitudDeEliminacionDTO;
-import Agregador.DTO.SolicitudDeModificacionDTO;
+import utils.DTO.HechoDTO;
+import utils.DTO.SolicitudDeEliminacionDTO;
+import utils.DTO.SolicitudDeModificacionDTO;
 
 import java.util.ArrayList;
 import java.util.List;

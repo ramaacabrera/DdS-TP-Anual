@@ -1,7 +1,7 @@
 package FuenteDinamica;
 
-import Agregador.DTO.SolicitudDeEliminacionDTO;
-import Agregador.DTO.SolicitudDeModificacionDTO;
+import utils.DTO.SolicitudDeEliminacionDTO;
+import utils.DTO.SolicitudDeModificacionDTO;
 import Agregador.fuente.TipoDeFuente;
 import Agregador.fuente.*;
 

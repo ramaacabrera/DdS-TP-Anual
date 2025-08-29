@@ -1,9 +1,9 @@
 package FuenteDinamica;
 
 import Persistencia.DinamicoRepositorio;
-import Agregador.DTO.HechoDTO;
-import Agregador.DTO.SolicitudDeEliminacionDTO;
-import Agregador.DTO.SolicitudDeModificacionDTO;
+import utils.DTO.HechoDTO;
+import utils.DTO.SolicitudDeEliminacionDTO;
+import utils.DTO.SolicitudDeModificacionDTO;
 import Agregador.Criterios.Criterio;
 import Agregador.fuente.*;
 

@@ -1,7 +1,7 @@
 package Agregador.Solicitudes;
 
 
-import Agregador.DTO.SolicitudDeEliminacionDTO;
+import utils.DTO.SolicitudDeEliminacionDTO;
 
 import java.util.UUID;
 

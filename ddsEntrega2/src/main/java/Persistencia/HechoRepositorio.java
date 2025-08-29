@@ -2,7 +2,7 @@ package Persistencia;
 
 import Agregador.Criterios.Criterio;
 import Agregador.HechosYColecciones.Hecho;
-import Agregador.DTO.HechoDTO;
+import utils.DTO.HechoDTO;
 
 import java.util.ArrayList;
 import java.util.List;

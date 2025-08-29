@@ -1,7 +1,7 @@
 package FuenteProxy;
 
 import Agregador.Criterios.Criterio;
-import Agregador.DTO.HechoDTO;
+import utils.DTO.HechoDTO;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;

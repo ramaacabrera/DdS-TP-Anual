@@ -44,7 +44,7 @@ public class MainViejo {
 
         List<Fuente> fuentesDisponibles = new ArrayList<>();
         FuenteDemo fuenteDemo = new FuenteDemo(API_MOCK_URL);
-        FuenteEstatica fuenteEstatica = new FuenteEstatica(new ConexionEstatica("desastres_tecnologicos_argentina.csv"));
+        FuenteEstatica fuenteEstatica = new FuenteEstatica(new ConexionEstatica("src/csv_files/desastres_tecnologicos_argentina.csv"));
         DinamicoRepositorio baseDeDatos = new DinamicoRepositorio();
         FuenteDinamica fuenteDinamica = new FuenteDinamica(new ConexionBD(baseDeDatos));
         URL urlInstancia = null;
@@ -69,9 +69,7 @@ public class MainViejo {
         ControllerSolicitud controllerSolicitud = new ControllerSolicitud(dinamicoRepositorio);
 
         // API Administrativa
-        app.exception(UnauthorizedException.class,(e,contexto)->{
-            contexto.status(401).result("No Autorizado");
-        });
+        //app.exception(UnauthorizedException.class,(e,contexto)->{contexto.status(401).result("No Autorizado");});
         app.before("/api/admin/*", ctx -> {
 
             // Verificar si la ruta comienza con /api/admin/
@@ -82,7 +80,7 @@ public class MainViejo {
                 if (token == null || token.trim().isEmpty()) {
                     System.out.println("entro al app before 2");
                     ctx.status(401).result("No Autorizado - Header de Autorizacion requerido");
-                    throw new UnauthorizedException();
+                    //throw new UnauthorizedException();
                 }
                 System.out.println("entro al app before 3");
 

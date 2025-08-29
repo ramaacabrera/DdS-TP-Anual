@@ -1,6 +1,6 @@
 package Persistencia;
 import Agregador.HechosYColecciones.Coleccion;
-import Agregador.DTO.ColeccionDTO;
+import utils.DTO.ColeccionDTO;
 
 import java.util.ArrayList;
 import java.util.List;

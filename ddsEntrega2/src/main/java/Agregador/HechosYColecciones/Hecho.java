@@ -1,6 +1,6 @@
 package Agregador.HechosYColecciones;
 
-import Agregador.DTO.HechoDTO;
+import utils.DTO.HechoDTO;
 import Agregador.Contribuyente;
 import Agregador.fuente.*;
 
@@ -99,6 +99,8 @@ public class Hecho {
         return etiquetas;
     }
 
+    public void setCategoria(String categoriaNueva) {categoria = categoriaNueva;}
+
     public boolean esEditable() {
         return esEditable;
     }
@@ -111,18 +113,18 @@ public class Hecho {
         return contenidoMultimedia;
     }
 
-    //Método para ocultar el hecho
+    //Metodo para ocultar el hecho
     public void ocultar() {
         this.estadoHecho = EstadoHecho.OCULTO;
     }
 
-    //Método para comparar si dos hechos son iguales (comparando título)
+    //Metodo para comparar si dos hechos son iguales (comparando título)
     public boolean esIgualAotro(Hecho otroHecho) {
         return this.titulo.equalsIgnoreCase(otroHecho.getTitulo());
     }
     //"dos hechos son iguales si tienen el mismo titulo"
 
-    //Método para modificar un hecho si es editable
+    //Metodo para modificar un hecho si es editable
     //REVISAR CON FUENTE DINAMICA Y SOLICITUDES
     public void modificar(String nuevoTitulo, String nuevaDescripcion, String nuevaCategoria, String nuevoContenidoTexto) {
         if (esEditable) {
