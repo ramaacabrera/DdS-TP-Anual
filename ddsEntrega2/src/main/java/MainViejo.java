@@ -5,15 +5,11 @@ import Persistencia.*;
 import io.javalin.Javalin;
 import Agregador.Agregador;
 import Agregador.fuente.Fuente;
-import FuenteDinamica.ConexionBD;
-import FuenteDinamica.ControllerSolicitud;
-import FuenteDinamica.ControllerSubirHechos;
-import FuenteEstatica.ConexionEstatica;
-import FuenteEstatica.FuenteEstatica;
-import FuenteProxy.FuenteDemo;
-import FuenteDinamica.FuenteDinamica;
-import FuenteProxy.FuenteMetaMapa;
-import FuenteProxy.APIMock.DemoAPIMockServer;
+import CargadorEstatica.ConexionEstatica;
+import CargadorEstatica.FuenteEstatica;
+import CargadorProxy.FuenteDemo;
+import CargadorProxy.FuenteMetaMapa;
+import CargadorProxy.APIMock.DemoAPIMockServer;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -46,7 +42,6 @@ public class MainViejo {
         FuenteDemo fuenteDemo = new FuenteDemo(API_MOCK_URL);
         FuenteEstatica fuenteEstatica = new FuenteEstatica(new ConexionEstatica("src/csv_files/desastres_tecnologicos_argentina.csv"));
         DinamicoRepositorio baseDeDatos = new DinamicoRepositorio();
-        FuenteDinamica fuenteDinamica = new FuenteDinamica(new ConexionBD(baseDeDatos));
         URL urlInstancia = null;
         try {
             urlInstancia = new URL("http://localhost:8081");

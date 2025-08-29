@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import utils.DTO.HechoDTO;
 import Agregador.Criterios.Criterio;
-import FuenteEstatica.ConexionEstatica;
+import CargadorEstatica.ConexionEstatica;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import java.util.List;
 public abstract class Conexion {
     //public Fuente fuente;
 
-    public abstract List<HechoDTO> obtenerHechos(List<Criterio> criterios);
+    public abstract List<HechoDTO> obtenerHechos();
 
     //public Fuente getFuente() { return fuente; }
     //public void setFuente(Fuente fuente) { this.fuente = fuente; }

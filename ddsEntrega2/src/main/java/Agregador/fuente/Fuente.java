@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import utils.DTO.HechoDTO;
 import Agregador.Criterios.Criterio;
-import FuenteDinamica.FuenteDinamica;
-import FuenteEstatica.FuenteEstatica;
-import FuenteProxy.FuenteProxy;
+import CargadorEstatica.FuenteEstatica;
+import CargadorProxy.FuenteProxy;
 
 import java.util.List;
 
@@ -23,23 +22,20 @@ import java.util.List;
 
 public abstract class Fuente {
     protected TipoDeFuente tipoDeFuente;
-    protected Conexion conexion;
+    //protected Conexion conexion;
+    String ruta;
 
     public Fuente() {}
 
-    public Fuente(TipoDeFuente tipoDeFuente, Conexion conexion) {
+    public Fuente(TipoDeFuente tipoDeFuente, String rutaNueva){// Conexion conexion) {
         this.tipoDeFuente = tipoDeFuente;
-        this.conexion = conexion;
-    }
-
-    public Conexion getConexion() {
-        return conexion;
+        this.ruta = rutaNueva;
     }
 
     public TipoDeFuente getTipoDeFuente(){return tipoDeFuente;}
 
-    public List<HechoDTO> obtenerHechos(List<Criterio> criterios){
-        List<HechoDTO> hechos = conexion.obtenerHechos(criterios);
+    public List<HechoDTO> obtenerHechos(){
+        List<HechoDTO> hechos = conexion.obtenerHechos();
         hechos.forEach(hecho -> hecho.setFuente(this));
         return hechos;
     }

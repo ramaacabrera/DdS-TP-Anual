@@ -1,4 +1,6 @@
 package ApiPublica.Presentacion;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
 import io.javalin.http.Context;
 import Agregador.Criterios.Criterio;
@@ -13,15 +15,19 @@ import Persistencia.ColeccionRepositorio;
 import Agregador.HechosYColecciones.Hecho;
 
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.*;
 import java.text.SimpleDateFormat;
 
 
 public class GetHechosColeccionHandler implements Handler {
-    private final ColeccionRepositorio coleccionRepo;
+    ObjectMapper mapper = new ObjectMapper();
 
-    public GetHechosColeccionHandler(ColeccionRepositorio coleccionRepoNuevo) {
-        coleccionRepo = coleccionRepoNuevo;
+    public GetHechosColeccionHandler(){  //ColeccionRepositorio coleccionRepoNuevo) {
+        //coleccionRepo = coleccionRepoNuevo;
     }
 
     @Override
@@ -29,18 +35,45 @@ public class GetHechosColeccionHandler implements Handler {
         String handle = ctx.pathParam("id"); // parametro de la URL
         String modNav = ctx.queryParam("modoDeNavegacion");
         ModosDeNavegacion modoNavegacion;
-        Optional<Coleccion> coleccionOpt = coleccionRepo.buscarPorHandle(handle);
+        //Coleccion coleccion = coleccionOpt.get();
+
+        /*
+
+                CAMBIAR ESTO CUANDO SE IMPLEMENTEN LAS BASES DE DATOS
+
+
+        */
+
+        //    ->>>>>>>>>
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("http://localhost:8080/colecciones/" + handle))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        Coleccion coleccion = mapper.readValue(response.body(), new TypeReference<>() {
+        });
+
+        //    <<<<<<<<<-
+
+
+        /*Optional<Coleccion> coleccionOpt = coleccionRepo.buscarPorHandle(handle);
 
         if (!coleccionOpt.isPresent()) {
             ctx.status(404).result("Colección no encontrada");
             return;
-        }
+        }*/
         if (Objects.equals(modNav, "CURADA")) {
             modoNavegacion = ModosDeNavegacion.valueOf(modNav);
         } else {
             modoNavegacion = ModosDeNavegacion.IRRESTRICTA;
         }
-        Coleccion coleccion = coleccionOpt.get();
+
+
         //List<Hecho> hechos = coleccion.getHechos();  // base de hechos desde esta colección
         List<Criterio> criterios = armarListaDeCriterios(ctx);
         List<Hecho> hechosAMostrar = coleccion.obtenerHechosQueCumplen(criterios, modoNavegacion);
@@ -87,7 +120,8 @@ public class GetHechosColeccionHandler implements Handler {
                 double lon = Integer.parseInt(longitud.get());
                 criterios.add(new CriterioUbicacion(new Ubicacion(lat, lon)));
             } catch (NumberFormatException e) {
-                throw new RuntimeException("Ubicación inválida", e);
+                ctx.status(400).result("Ubicación inválida. Revisar parámetros latitud/longitud.");
+                return null;
             }
         }
 

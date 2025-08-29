@@ -1,8 +1,10 @@
 package Agregador;
 
+import Agregador.Normalizador.NormalizadorMock;
 import Persistencia.ColeccionRepositorio;
 import Persistencia.HechoRepositorio;
 import Persistencia.SolicitudEliminacionRepositorio;
+import Persistencia.SolicitudModificacionRepositorio;
 import utils.DTO.HechoDTO;
 import Agregador.Criterios.Criterio;
 import utils.DTO.SolicitudDeEliminacionDTO;
@@ -10,7 +12,6 @@ import Agregador.HechosYColecciones.Coleccion;
 import Agregador.HechosYColecciones.Hecho;
 import Agregador.Solicitudes.SolicitudDeEliminacion;
 import Agregador.fuente.*;
-import FuenteDinamica.FuenteDinamica;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +27,16 @@ public class Agregador {
     private ColeccionRepositorio coleccionRepositorio;
     private List<Fuente> fuentesDisponibles;
     private SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
+    private SolicitudModificacionRepositorio solicitudModificacionRepositorio;
+    private NormalizadorMock normalizador;
 
-    public Agregador(HechoRepositorio hechoRepositorio, ColeccionRepositorio coleccionRepositorio, SolicitudEliminacionRepositorio solicitudEliminacionRepositorio, List<Fuente> fuentesDisponibles) {
+    public Agregador(HechoRepositorio hechoRepositorio, ColeccionRepositorio coleccionRepositorio, SolicitudEliminacionRepositorio solicitudEliminacionRepositorio,
+                     SolicitudModificacionRepositorio solicitudModificacionRepositorio, NormalizadorMock normalizador){ //List<Fuente> fuentesDisponibles) {
         this.hechoRepositorio = hechoRepositorio;
         this.coleccionRepositorio = coleccionRepositorio;
-        this.fuentesDisponibles = fuentesDisponibles;
+        //this.fuentesDisponibles = fuentesDisponibles;
         this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
+        this.normalizador = normalizador;
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -51,6 +56,11 @@ public class Agregador {
     */
 
 
+
+    private Hecho normalizarHecho(Hecho hecho){
+        return normalizador.normalizar(hecho);
+    }
+
     public void actualizarSolicitudesYHechosDesdeFuentes() {
         // Traemos hechos nuevos de TODAS las fuentes disponibles
         System.out.printf("Fuentes disponibles: %d \n", fuentesDisponibles.size());
@@ -63,19 +73,20 @@ public class Agregador {
             System.out.printf("Se cargan %d nuevos hechos desde %s", nuevosHechos.size(), fuente + "\n");
             for (Hecho hecho : nuevosHechos) {
                 int nuevo = 0;
-                // Por cada colección, vemos si el hecho cumple criterios
+                Hecho hechoNormalizado = normalizarHecho(hecho);
+                // Por cada colección, vemos si el hecho NORMALIZADO cumple criterios
                 for (Coleccion coleccion : coleccionRepositorio.obtenerTodas()) {
-                    if (coleccion.cumpleCriterio(hecho)) {
-                        boolean esNuevo = coleccion.agregarHecho(hecho);
+                    if (coleccion.cumpleCriterio(hechoNormalizado)) {
+                        boolean esNuevo = coleccion.agregarHecho(hechoNormalizado);
                         if (esNuevo) {
                             nuevo++;
                         }
                     }
                 }
                 if (nuevo > 0) {
-                    hechoRepositorio.guardar(hecho);
+                    hechoRepositorio.guardar(hechoNormalizado);
                 } else {
-                    Hecho hechoExistente = buscarHechoSimilar(hecho);
+                    Hecho hechoExistente = buscarHechoSimilar(hechoNormalizado);
                     if (hechoExistente != null) {
                         hechoRepositorio.actualizar(hechoExistente);
                     }
@@ -155,15 +166,3 @@ public class Agregador {
         return delayEnHoras;
     }
 }
-    /*
-    //idea de normalizacion:
-    Normalizador normalizador = new Normalizador();
-    for (Fuente fuente : fuentesDisponibles){
-        for (HechoDTO dto : fuente.obtenerHechos(null)) {
-                Hecho hecho = new Hecho(dto);
-                Hecho hechoNormalizado = normalizador.normalizar(hecho);
-                hechoRepositorio.guardar(hechoNormalizado);
-            }
-    }
-    */
-

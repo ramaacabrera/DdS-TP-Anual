@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Date;
 
 public class GetHechosHandler implements Handler {
-    private final HechoRepositorio repositorio;
+    //private final HechoRepositorio repositorio;
 
-    public GetHechosHandler(HechoRepositorio hechos) { repositorio = hechos; }
+    public GetHechosHandler(){} //HechoRepositorio hechos) { repositorio = hechos; }
 
     public void handle(@NotNull Context ctx) {
         List<Criterio> criterios = this.armarListaDeCriterios(ctx);

@@ -4,7 +4,6 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import Agregador.Contribuyente;
 import utils.DTO.HechoDTO;
-import FuenteDinamica.ControllerSubirHechos;
 import org.jetbrains.annotations.NotNull;
 import com.fasterxml.jackson.core.type.TypeReference;
 

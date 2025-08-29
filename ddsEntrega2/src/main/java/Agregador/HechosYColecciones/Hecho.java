@@ -1,5 +1,6 @@
 package Agregador.HechosYColecciones;
 
+import Agregador.Agregador;
 import utils.DTO.HechoDTO;
 import Agregador.Contribuyente;
 import Agregador.fuente.*;
@@ -100,6 +101,29 @@ public class Hecho {
     }
 
     public void setCategoria(String categoriaNueva) {categoria = categoriaNueva;}
+
+    public void setTitulo(String tituloNuevo) {titulo = tituloNuevo;}
+
+    public void setDescripcion(String descripcionNueva) {descripcion = descripcionNueva;}
+
+    public void setUbicacion(Ubicacion ubicacionNueva) {ubicacion = ubicacionNueva;}
+
+    public void setFechaDeAcontecimiento(Date fechaDeAcontecimientoNueva) {fechaDeAcontecimiento = fechaDeAcontecimientoNueva;}
+
+    public void setFechaDeCarga(Date fechaDeCargaNueva) {fechaDeCarga = fechaDeCargaNueva;}
+
+    public void setFuente(Fuente fuenteNueva) {fuente = fuenteNueva;}
+
+    public void setEstadoHecho(EstadoHecho estadoNuevo) {estadoHecho = estadoNuevo;}
+
+    public void setContribuyente(Contribuyente nuevo) {contribuyente = nuevo;}
+    public void set(Boolean esEditableNuevo) {esEditable = esEditableNuevo;}
+
+    public void setEtiquetas(List<String> etiquetasNuevas) {etiquetas = etiquetasNuevas; }
+
+    public void setEsEditable(Boolean esEditableNuevo) {esEditable = esEditableNuevo;}
+
+    public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoNuevo) {contenidoMultimedia = contenidoNuevo;}
 
     public boolean esEditable() {
         return esEditable;

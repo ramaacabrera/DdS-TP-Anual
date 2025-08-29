@@ -3,7 +3,6 @@ package ApiPublica.Presentacion;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import utils.DTO.SolicitudDeEliminacionDTO;
-import FuenteDinamica.ControllerSolicitud;
 import org.jetbrains.annotations.NotNull;
 
 public class PostSolicitudEliminacionHandler implements Handler {
