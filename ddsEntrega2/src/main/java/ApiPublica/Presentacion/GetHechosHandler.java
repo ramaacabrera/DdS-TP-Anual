@@ -1,6 +1,9 @@
 package ApiPublica.Presentacion;
 
+import Agregador.HechosYColecciones.Coleccion;
 import Persistencia.HechoRepositorio;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -12,6 +15,11 @@ import Agregador.HechosYColecciones.Hecho;
 import Agregador.HechosYColecciones.Ubicacion;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,11 +28,35 @@ import java.util.Date;
 
 public class GetHechosHandler implements Handler {
     //private final HechoRepositorio repositorio;
-
+    ObjectMapper mapper = new ObjectMapper();
     public GetHechosHandler(){} //HechoRepositorio hechos) { repositorio = hechos; }
 
-    public void handle(@NotNull Context ctx) {
+    public void handle(@NotNull Context ctx) throws IOException, InterruptedException {
         List<Criterio> criterios = this.armarListaDeCriterios(ctx);
+
+        /*
+
+                CAMBIAR ESTO CUANDO SE IMPLEMENTEN LAS BASES DE DATOS
+
+
+        */
+
+        //    ->>>>>>>>>
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        try(HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("http://localhost:8080/hechos"))
+                .GET()
+                .build();)
+            
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        HechoRepositorio repositorio = mapper.readValue(response.body(), new TypeReference<>() {
+        });
+
+        //    <<<<<<<<<-
         List<Hecho> hechosFiltrados = repositorio.buscarHechos(criterios);
         ctx.json(hechosFiltrados);
     }

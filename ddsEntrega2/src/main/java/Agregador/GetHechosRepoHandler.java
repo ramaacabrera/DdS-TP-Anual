@@ -16,7 +16,6 @@ public class GetHechosRepoHandler implements Handler {
     public GetHechosRepoHandler(HechoRepositorio hechos) { repositorio = hechos; }
 
     public void handle(@NotNull Context ctx) {
-        List<Hecho> hechos = repositorio.buscarHechos(null);
-        ctx.json(hechos);
+        ctx.json(repositorio);
     }
 }
