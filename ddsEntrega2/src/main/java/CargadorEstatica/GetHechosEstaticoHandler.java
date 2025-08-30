@@ -38,7 +38,7 @@ public class GetHechosEstaticoHandler implements Handler {
                     continue; // Saltear si ya fue procesado o es la guía
 
                 ConexionEstatica conexion = new ConexionEstatica(fileServer + "/" + nombreArchivo);
-                hechosTotales.addAll(conexion.obtenerHechos(new ArrayList<>())); // o tus criterios
+                hechosTotales.addAll(conexion.obtenerHechos()); // o tus criterios
 
                 procesados.add(nombreArchivo); // marcar como procesado
             }

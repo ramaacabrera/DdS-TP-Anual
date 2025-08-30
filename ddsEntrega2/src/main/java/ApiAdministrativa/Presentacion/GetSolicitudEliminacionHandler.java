@@ -15,6 +15,7 @@ public class GetSolicitudEliminacionHandler implements Handler {
     @Override
     public void handle(Context ctx){
         String handle = ctx.pathParam("id");
+
         final Optional<SolicitudDeEliminacion> resultadoBusqueda = repositorio.buscarPorId(handle);
         if (resultadoBusqueda.isPresent()) {
             ctx.status(200).json(resultadoBusqueda.get());

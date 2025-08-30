@@ -2,16 +2,21 @@ package CargadorDinamica;
 
 import Persistencia.DinamicoRepositorio;
 import io.javalin.Javalin;
+import utils.IniciadorApp;
+import utils.LecturaConfig;
+
+import java.util.Properties;
 
 public class MainDinamica {
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("Iniciando servidor Javalin en el puerto 8083...");
-        Javalin app = Javalin.create(javalinConfig -> {
-            javalinConfig.plugins.enableCors(cors -> {
-                cors.add(it -> it.anyHost());
-            }); // para poder hacer requests de un dominio a otro
-            javalinConfig.staticFiles.add("/"); //recursos estaticos (HTML, CSS, JS, IMG)
-        }).start(8083);
+
+        LecturaConfig lector = new LecturaConfig();
+        Properties config = lector.leerConfig();
+        int puerto = Integer.parseInt(config.getProperty("puertoDinamico"));
+
+        System.out.println("Iniciando servidor Javalin en el puerto "+puerto);
+        IniciadorApp iniciador = new IniciadorApp();
+        Javalin app = iniciador.iniciarApp(puerto, "/");
 
         DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio();
 

@@ -1,19 +1,20 @@
 package ApiPublica;
 
-import Persistencia.*;
 import io.javalin.Javalin;
 import ApiPublica.Presentacion.*;
+import utils.IniciadorApp;
+import utils.LecturaConfig;
+
+import java.util.Properties;
 
 public class MainAPIPublica {
     public static void main(String[] args) throws InterruptedException {
+        LecturaConfig lector = new LecturaConfig();
+        Properties config = lector.leerConfig();
+        int puerto = Integer.valueOf(config.getProperty("puertoApiPublica"));
 
-        System.out.println("Iniciando servidor Javalin en el puerto 8082...");
-        Javalin app = Javalin.create(javalinConfig -> {
-            javalinConfig.plugins.enableCors(cors -> {
-                cors.add(it -> it.anyHost());
-            }); // para poder hacer requests de un dominio a otro
-            javalinConfig.staticFiles.add("/"); //recursos estaticos (HTML, CSS, JS, IMG)
-        }).start(8082);
+        IniciadorApp iniciador = new IniciadorApp();
+        Javalin app = iniciador.iniciarApp(puerto, "/");
 
 //        HechoRepositorio hechoRepositorio = new HechoRepositorio();
 //        DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio();
