@@ -1,10 +1,11 @@
 package Agregador;
 
 import Agregador.Normalizador.NormalizadorMock;
-import Persistencia.ColeccionRepositorio;
-import Persistencia.HechoRepositorio;
-import Persistencia.SolicitudEliminacionRepositorio;
-import Persistencia.SolicitudModificacionRepositorio;
+import Agregador.Persistencia.ColeccionRepositorio;
+import Agregador.Persistencia.HechoRepositorio;
+import Agregador.Persistencia.SolicitudEliminacionRepositorio;
+import Agregador.Persistencia.SolicitudModificacionRepositorio;
+import Agregador.Solicitudes.DetectorDeSpam;
 import utils.DTO.HechoDTO;
 import Agregador.Criterios.Criterio;
 import utils.DTO.SolicitudDeEliminacionDTO;
@@ -25,29 +26,31 @@ public class Agregador {
 
     private HechoRepositorio hechoRepositorio;
     private ColeccionRepositorio coleccionRepositorio;
-    private List<Fuente> fuentesDisponibles;
     private SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
     private SolicitudModificacionRepositorio solicitudModificacionRepositorio;
     private NormalizadorMock normalizador;
+    ConexionCargador conexionCargador;
 
     public Agregador(HechoRepositorio hechoRepositorio, ColeccionRepositorio coleccionRepositorio, SolicitudEliminacionRepositorio solicitudEliminacionRepositorio,
-                     SolicitudModificacionRepositorio solicitudModificacionRepositorio, NormalizadorMock normalizador){ //List<Fuente> fuentesDisponibles) {
+                     SolicitudModificacionRepositorio solicitudModificacionRepositorio, NormalizadorMock normalizador, ConexionCargador conexionCargador){
         this.hechoRepositorio = hechoRepositorio;
         this.coleccionRepositorio = coleccionRepositorio;
         //this.fuentesDisponibles = fuentesDisponibles;
         this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
         this.normalizador = normalizador;
+        this.conexionCargador = conexionCargador;
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         scheduler.scheduleAtFixedRate(() -> {
             this.actualizarSolicitudesYHechosDesdeFuentes();
-        }, 1, 1, TimeUnit.HOURS);
+        }, 0, 1, TimeUnit.HOURS);
 
         long delayInicial = calcularDelayHastaHora(2);  // 2 AM
         scheduler.scheduleAtFixedRate(() -> {
             this.ejecutarAlgoritmoDeConsenso();
         }, delayInicial, 24, TimeUnit.HOURS);
+
 
     }
     /*
@@ -62,15 +65,18 @@ public class Agregador {
     }
 
     public void actualizarSolicitudesYHechosDesdeFuentes() {
+
+        List<HechoDTO> hechos = conexionCargador.obtenerHechosNuevos();
+        hechos.forEach(h -> {hechoRepositorio.guardar(h);});
+
         // Traemos hechos nuevos de TODAS las fuentes disponibles
-        System.out.printf("Fuentes disponibles: %d \n", fuentesDisponibles.size());
-        for (Fuente fuente : fuentesDisponibles) {
-            System.out.printf("Fuente a buscar: %s\n", fuente);
+        /*for (Fuente fuente : fuentesDisponibles) {
+
             List<Hecho> nuevosHechos = obtenerHechosExterno(fuente, new ArrayList<>());
             if (fuente.getTipoDeFuente() == TipoDeFuente.DINAMICA && fuente instanceof FuenteDinamica) {
                 agregarSolicitudes((FuenteDinamica) fuente);
             }
-            System.out.printf("Se cargan %d nuevos hechos desde %s", nuevosHechos.size(), fuente + "\n");
+
             for (Hecho hecho : nuevosHechos) {
                 int nuevo = 0;
                 Hecho hechoNormalizado = normalizarHecho(hecho);
@@ -93,9 +99,9 @@ public class Agregador {
 
                 }
             }
-            System.out.println("Hechos cargados desde " + fuente + "\n");
+
         }
-        System.out.printf("Hechos en repo: %d ", hechoRepositorio.buscarHechos(new ArrayList<>()).size());
+        */
     }
 
 
@@ -106,14 +112,6 @@ public class Agregador {
             }
         }
         return null;
-    }
-
-    public void buscarHechosIniciales() {
-        for (Fuente fuente : fuentesDisponibles) {
-            List<Hecho> nuevosHechos = obtenerHechosExterno(fuente, new ArrayList<>());
-            nuevosHechos.forEach(hecho -> hechoRepositorio.guardar(hecho));
-            System.out.printf("%d hechos cargados desde %s", nuevosHechos.size(), fuente + "\n");
-        }
     }
 
     private Hecho buscarHechoPorTitulo(String titulo) {
@@ -136,11 +134,20 @@ public class Agregador {
 
     public void agregarSolicitudes(FuenteDinamica fuente) {
         List<SolicitudDeEliminacion> solicitudesDeEliminacion = new ArrayList<>();
+
         for (SolicitudDeEliminacionDTO solicitudDeEliminacionDTO : fuente.obtenerSolicitudDeEliminacion()) {
             SolicitudDeEliminacion nueva = new SolicitudDeEliminacion(solicitudDeEliminacionDTO);
+
             boolean yaExisteSoli = solicitudEliminacionRepositorio.buscarPorId(nueva.getId()).isPresent();
-            if (!yaExisteSoli) {
+
+            boolean soliEsSpam = DetectorDeSpam.esSpam(solicitudDeEliminacionDTO.getJustificacion());
+
+            if (!yaExisteSoli && !soliEsSpam) {
                 solicitudEliminacionRepositorio.add(nueva);
+            }
+
+            if(soliEsSpam) {
+                nueva.rechazarSolicitud();
             }
         }
     }

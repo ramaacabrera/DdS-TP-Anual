@@ -2,15 +2,13 @@ package CargadorProxy;
 
 import java.util.ArrayList;
 import java.util.List;
-import Agregador.fuente.Fuente;
-import kotlin.collections.ArrayDeque;
 
 public class Cargador {
-    private List<Fuente> fuentes;
+    private List<ConexionProxy> conexiones;
 
-    public Cargador(){ this.fuentes = new ArrayList<Fuente>();}
+    public Cargador(){ this.conexiones = new ArrayList<>();}
 
-    public void agregarFuente(Fuente fuente){fuentes.add(fuente);}
+    public void agregarConexion(ConexionProxy conexion){conexiones.add(conexion);}
 
-    public List<Fuente> getFuentes(){return fuentes;}
+    public List<ConexionProxy> getConexiones(){return conexiones;}
 }

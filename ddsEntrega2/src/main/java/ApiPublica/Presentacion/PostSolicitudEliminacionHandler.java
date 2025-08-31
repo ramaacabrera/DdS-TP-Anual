@@ -5,19 +5,41 @@ import io.javalin.http.Handler;
 import utils.DTO.SolicitudDeEliminacionDTO;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
 public class PostSolicitudEliminacionHandler implements Handler {
-    private final ControllerSolicitud controllerSolicitud;
+        @Override
+        public void handle(Context context) throws Exception {
+            String bodyJson = context.body(); // request JSON completo
 
-    public PostSolicitudEliminacionHandler(ControllerSolicitud controllerSolicitudNuevo) { controllerSolicitud = controllerSolicitudNuevo; }
+            HttpClient httpClient = HttpClient.newHttpClient();
 
-    @Override
-    public void handle(@NotNull Context context) throws Exception {
-        String bodyString = context.body();
-        SolicitudDeEliminacionDTO solicitud = context.bodyAsClass(SolicitudDeEliminacionDTO.class);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("http://localhost:8080/api/solicitudes"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(bodyJson))
+                    .build();
 
-        System.out.println("Creando solicitud: " + bodyString);
-        controllerSolicitud.subirSolicitudEliminacion(solicitud);
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        context.status(201);
-    }
+            context.status(response.statusCode()).result(response.body());
+        }
+
+    //    private final ControllerSolicitud controllerSolicitud;
+//
+//    public PostSolicitudEliminacionHandler(ControllerSolicitud controllerSolicitudNuevo) { controllerSolicitud = controllerSolicitudNuevo; }
+//
+//    @Override
+//    public void handle(@NotNull Context context) throws Exception {
+//        String bodyString = context.body();
+//        SolicitudDeEliminacionDTO solicitud = context.bodyAsClass(SolicitudDeEliminacionDTO.class);
+//
+//        System.out.println("Creando solicitud: " + bodyString);
+//        controllerSolicitud.subirSolicitudEliminacion(solicitud);
+//
+//        context.status(201);
+//    }
 }

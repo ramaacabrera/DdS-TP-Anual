@@ -11,11 +11,11 @@ public abstract class Solicitud {
     public abstract void aceptarSolicitud();
     public abstract void rechazarSolicitud();
 
-    public void evaluarSpam(){
+    /*public void evaluarSpam(){
         if(DetectorDeSpam.esSpam(this.justificacion)){
             this.rechazarSolicitud();
         }
-    }
+    }*/
 
     public void setHechoAsociado(Hecho hechoAsociado) {
         this.hechoAsociado = hechoAsociado;

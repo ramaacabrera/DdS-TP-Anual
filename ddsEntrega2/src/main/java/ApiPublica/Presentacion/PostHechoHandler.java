@@ -7,38 +7,62 @@ import utils.DTO.HechoDTO;
 import org.jetbrains.annotations.NotNull;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Map;
 
 public class PostHechoHandler implements Handler {
+    private final int puertoDinamica;
 
-    private final ControllerSubirHechos controller;
-
-    public PostHechoHandler(ControllerSubirHechos controllerNuevo) { controller = controllerNuevo; }
+    public PostHechoHandler(int puertoDinamicaNuevo) {puertoDinamica = puertoDinamicaNuevo;}
 
     @Override
-    public void handle(@NotNull Context context) throws Exception {
-        String bodyString = context.body();
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> map = mapper.readValue(bodyString, new TypeReference<>() {});
+    public void handle(Context context) throws Exception {
+        String bodyJson = context.body(); // request JSON completo
 
-        String hechoJson = mapper.writeValueAsString(map.get("hecho"));
-        String contribuyenteJson = mapper.writeValueAsString(map.get("contribuyente"));
+        HttpClient httpClient = HttpClient.newHttpClient();
 
-        HechoDTO hecho = mapper.readValue(hechoJson, HechoDTO.class);
-        Contribuyente contribuyente = null;
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("http://localhost:" + puertoDinamica + "/hechos"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(bodyJson))
+                .build();
 
-        if (map.containsKey("contribuyente") && map.get("contribuyente") != null) {
-            contribuyente = mapper.readValue(contribuyenteJson, Contribuyente.class);
-        }
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (contribuyente != null) {
-            controller.subirHecho(hecho, contribuyente);
-        } else {
-            controller.subirHecho(hecho);
-        }
-
-        System.out.println("Creando hecho: " + bodyString);
-
-        context.status(201);
+        context.status(response.statusCode()).result(response.body());
     }
+
+//    private final ControllerSubirHechos controller;
+//
+//    public PostHechoHandler(ControllerSubirHechos controllerNuevo) { controller = controllerNuevo; }
+//
+//    @Override
+//    public void handle(@NotNull Context context) throws Exception {
+//        String bodyString = context.body();
+//        ObjectMapper mapper = new ObjectMapper();
+//        Map<String, Object> map = mapper.readValue(bodyString, new TypeReference<>() {});
+//
+//        String hechoJson = mapper.writeValueAsString(map.get("hecho"));
+//        String contribuyenteJson = mapper.writeValueAsString(map.get("contribuyente"));
+//
+//        HechoDTO hecho = mapper.readValue(hechoJson, HechoDTO.class);
+//        Contribuyente contribuyente = null;
+//
+//        if (map.containsKey("contribuyente") && map.get("contribuyente") != null) {
+//            contribuyente = mapper.readValue(contribuyenteJson, Contribuyente.class);
+//        }
+//
+//        if (contribuyente != null) {
+//            controller.subirHecho(hecho, contribuyente);
+//        } else {
+//            controller.subirHecho(hecho);
+//        }
+//
+//        System.out.println("Creando hecho: " + bodyString);
+//
+//        context.status(201);
+//    }
 }

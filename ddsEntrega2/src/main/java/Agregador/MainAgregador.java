@@ -1,9 +1,10 @@
 package Agregador;
 
 import Agregador.Normalizador.NormalizadorMock;
-import ApiAdministrativa.Presentacion.*;
-import Persistencia.*;
+import Agregador.Presentacion.*;
+import Agregador.Persistencia.*;
 import io.javalin.Javalin;
+import utils.IniciadorApp;
 import utils.LecturaConfig;
 
 import java.util.Properties;
@@ -12,17 +13,10 @@ public class MainAgregador {
     public static void main(String[] args) throws InterruptedException {
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        int puerto = Integer.parseInt(config.getProperty("puertoAgregador"));
-
-        System.out.println("Iniciando servidor Componente Estatico en el puerto "+puerto);
-        Javalin app = Javalin.create(javalinConfig -> {
-            javalinConfig.plugins.enableCors(cors -> {
-                cors.add(it -> it.anyHost());
-            }); // para poder hacer requests de un dominio a otro
-            javalinConfig.staticFiles.add("/"); //recursos estaticos (HTML, CSS, JS, IMG)
-        }).start(puerto);
-
-
+        int puertoAgregador = Integer.parseInt(config.getProperty("puertoAgregador"));
+        int puertoEstatico = Integer.parseInt(config.getProperty("puertoEstatico"));
+        int puertoDinamico = Integer.parseInt(config.getProperty("puertoDinamico"));
+        int puertoProxy = Integer.parseInt(config.getProperty("puertoProxy"));
         /*
 
                 CAMBIAR ESTO CUANDO SE IMPLEMENTEN LAS BASES DE DATOS
@@ -31,6 +25,9 @@ public class MainAgregador {
         */
 
         //    ->>>>>>>>>
+        System.out.println("Iniciando servidor Agregador en el puerto "+puertoAgregador);
+        IniciadorApp iniciador = new IniciadorApp();
+        Javalin app = iniciador.iniciarApp(puertoAgregador, "/");
 
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
@@ -42,28 +39,23 @@ public class MainAgregador {
         app.get("/colecciones/{id}", new GetColeccionEspecificaRepoHandler(coleccionRepositorio));
 
 
-        // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv       HACER       vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-
-        app.post("/hechos", new PostHechoRepoHandler(hechoRepositorio));
         app.post("/solicitudes", new PostSolicitudEliminacionRepoHandler(solicitudEliminacionRepositorio));
 
-        app.put("/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio)); // actualizo una coleccion PROBADOOOOOO
-        app.delete("/colecciones/{id}", new DeleteColeccionesHandler(coleccionRepositorio));
+        app.put("/colecciones/{id}", new PutColeccionRepoHandler(coleccionRepositorio));
+        app.delete("/colecciones/{id}", new DeleteColeccionesRepoHandler(coleccionRepositorio));
 
-        app.post("/colecciones/{id}/fuente", new PostFuentesColeccionHandler(coleccionRepositorio)); // agrego fuentes probbadisimooooo
-        app.delete("/colecciones/{id}/fuente", new DeleteFuenteHandler(coleccionRepositorio));
+        app.post("/colecciones/{id}/fuente", new PostFuentesColeccionRepoHandler(coleccionRepositorio));
+        app.delete("/colecciones/{id}/fuente", new DeleteFuenteRepoHandler(coleccionRepositorio));
 
-        app.put("/colecciones/{id}/algoritmo", new PutAlgoritmoConsensoHandler(coleccionRepositorio)); // actualizo algoritmo probado
+        app.put("/colecciones/{id}/algoritmo", new PutAlgoritmoDeConsensoRepoHandler(coleccionRepositorio));
 
-        app.put("/solicitudes/{id}", new PutSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // aprobar o denegar solicitud eliminacion
+        app.put("/solicitudes/{id}", new PutSolicitudEliminacionRepoHandler(solicitudEliminacionRepositorio));
 
-
-        //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^        HACER       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         //    <<<<<<<<<-
 
         NormalizadorMock normalizadorMock = new NormalizadorMock();
-
-        Agregador agregador = new Agregador(hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio, solicitudModificacionRepositorio, normalizadorMock);
+        ConexionCargador cargador = new ConexionCargador("http://localhost:"+puertoEstatico, "http://localhost:"+puertoDinamico, "http://localhost:"+puertoProxy);
+        Agregador agregador = new Agregador(hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio, solicitudModificacionRepositorio, normalizadorMock, cargador);
     }
 }

@@ -1,7 +1,6 @@
 package ApiPublica.Presentacion;
 
-import Agregador.HechosYColecciones.Coleccion;
-import Persistencia.HechoRepositorio;
+import Agregador.Persistencia.HechoRepositorio;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.BadRequestResponse;

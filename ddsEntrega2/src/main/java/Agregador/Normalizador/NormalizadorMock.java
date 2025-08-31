@@ -2,6 +2,7 @@ package Agregador.Normalizador;
 import Agregador.HechosYColecciones.Hecho;
 
 public class NormalizadorMock {
+
     public NormalizadorMock(){}
 
     public Hecho normalizar(Hecho hecho) {

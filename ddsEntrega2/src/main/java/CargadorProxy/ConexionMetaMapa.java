@@ -3,7 +3,6 @@ package CargadorProxy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.DTO.HechoDTO;
 import Agregador.HechosYColecciones.Coleccion;
-import Agregador.Criterios.Criterio;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,12 +14,12 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-public class ConexionMetaMapa extends Conexion{
-    private final URL url;
+public class ConexionMetaMapa extends ConexionProxy{
 
-    public ConexionMetaMapa(URL url) {this.url = url;}
+    public ConexionMetaMapa(String url) {this.url = url;}
 
-    public List<HechoDTO> obtenerHechos(List<Criterio> criterios) {
+    @Override
+    public List<HechoDTO> obtenerHechos() {
         URL urlHecho;
         try {
             urlHecho = new URL(url + "/hecho");
@@ -31,6 +30,7 @@ public class ConexionMetaMapa extends Conexion{
         return null;
     }
 
+    /*
     public List<HechoDTO> obtenerHechos(Coleccion coleccion){
         URL urlColeccion;
         try {
@@ -41,6 +41,7 @@ public class ConexionMetaMapa extends Conexion{
         }
         return null;
     }
+     */
 
     public List<HechoDTO> conseguirHechos(URL urlHecho){
         try {

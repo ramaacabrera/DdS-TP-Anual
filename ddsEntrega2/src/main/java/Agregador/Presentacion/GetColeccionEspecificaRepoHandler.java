@@ -1,7 +1,7 @@
-package Agregador;
+package Agregador.Presentacion;
 
 import Agregador.HechosYColecciones.Coleccion;
-import Persistencia.ColeccionRepositorio;
+import Agregador.Persistencia.ColeccionRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;

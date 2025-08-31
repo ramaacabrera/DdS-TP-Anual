@@ -1,4 +1,4 @@
-package Persistencia;
+package Agregador.Persistencia;
 import Agregador.HechosYColecciones.Coleccion;
 import utils.DTO.ColeccionDTO;
 

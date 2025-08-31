@@ -4,7 +4,7 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import utils.DTO.HechoDTO;
 import org.jetbrains.annotations.NotNull;
-import Persistencia.DinamicoRepositorio;
+import Agregador.Persistencia.DinamicoRepositorio;
 
 public class PostHechosHandler implements Handler {
 

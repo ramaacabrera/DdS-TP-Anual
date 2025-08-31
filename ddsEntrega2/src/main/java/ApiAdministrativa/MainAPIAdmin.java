@@ -1,7 +1,7 @@
 package ApiAdministrativa;
 
 import ApiAdministrativa.Presentacion.*;
-import Persistencia.*;
+import Agregador.Persistencia.*;
 import io.javalin.Javalin;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
@@ -21,20 +21,20 @@ public class MainAPIAdmin {
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
         SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
 
-        app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio)); //creo coleccion PROBADOOOO
+        app.post("/api/colecciones", new PostColeccionHandler()); //creo coleccion PROBADOOOO
         app.get("/api/colecciones", new GetColeccionesHandler()); // consulta todas las colecciones PROBADOOOO
         app.get("/api/colecciones/{id}", new GetColeccionHandler()); // lee una coleccion en particular PROBADOOOOOO
-        app.put("/api/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio)); // actualizo una coleccion PROBADOOOOOO
-        app.delete("/api/colecciones/{id}", new DeleteColeccionesHandler(coleccionRepositorio)); // borro una coleccion probadoooooo
+        app.put("/api/colecciones/{id}", new PutColeccionHandler()); // actualizo una coleccion PROBADOOOOOO
+        app.delete("/api/colecciones/{id}", new DeleteColeccionesHandler()); // borro una coleccion probadoooooo
 
-        app.post("/api/colecciones/{id}/fuente", new PostFuentesColeccionHandler(coleccionRepositorio)); // agrego fuentes probbadisimooooo
-        app.delete("/api/colecciones/{id}/fuente", new DeleteFuenteHandler(coleccionRepositorio)); // borro una fuente
+        app.post("/api/colecciones/{id}/fuente", new PostFuentesColeccionHandler()); // agrego fuentes probbadisimooooo
+        app.delete("/api/colecciones/{id}/fuente", new DeleteFuenteHandler()); // borro una fuente
 
-        app.put("/api/colecciones/{id}/algoritmo", new PutAlgoritmoConsensoHandler(coleccionRepositorio)); // actualizo algoritmo probado
+        app.put("/api/colecciones/{id}/algoritmo", new PutAlgoritmoConsensoHandler()); // actualizo algoritmo probado
 
-        app.put("/api/solicitudes/{id}", new PutSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // aprobar o denegar solicitud eliminacion
+        app.put("/api/solicitudes/{id}", new PutSolicitudEliminacionHandler()); // aprobar o denegar solicitud eliminacion
         app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler()); // consulta todas las solicitudes
-        app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // consulta una solicitud por id
+        app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler()); // consulta una solicitud por id
     }
 
 

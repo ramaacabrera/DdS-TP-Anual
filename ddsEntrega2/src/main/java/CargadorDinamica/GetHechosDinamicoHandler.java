@@ -1,7 +1,6 @@
 package CargadorDinamica;
 
-import CargadorEstatica.ConexionEstatica;
-import Persistencia.DinamicoRepositorio;
+import Agregador.Persistencia.DinamicoRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;

@@ -11,7 +11,6 @@ import Agregador.HechosYColecciones.ModosDeNavegacion;
 import Agregador.HechosYColecciones.Ubicacion;
 import org.jetbrains.annotations.NotNull;
 import Agregador.HechosYColecciones.Coleccion;
-import Persistencia.ColeccionRepositorio;
 import Agregador.HechosYColecciones.Hecho;
 
 

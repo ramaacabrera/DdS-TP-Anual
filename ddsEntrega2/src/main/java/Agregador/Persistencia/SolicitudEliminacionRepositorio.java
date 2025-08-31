@@ -1,7 +1,8 @@
-package Persistencia;
+package Agregador.Persistencia;
 
 import Agregador.Solicitudes.EstadoSolicitudEliminacion;
 import Agregador.Solicitudes.SolicitudDeEliminacion;
+import utils.DTO.SolicitudDeEliminacionDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,10 @@ public class SolicitudEliminacionRepositorio {
 
     public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud){
         solicitudes.add(solicitud);
+    }
+
+    public void agregarSolicitudEliminacion(SolicitudDeEliminacionDTO solicitud){
+        solicitudes.add(new SolicitudDeEliminacion(solicitud));
     }
 
     public void eliminarSolicitudEliminacion(SolicitudDeEliminacion solicitud){

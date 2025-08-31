@@ -1,6 +1,6 @@
 package CargadorDinamica;
 
-import Persistencia.DinamicoRepositorio;
+import Agregador.Persistencia.DinamicoRepositorio;
 import io.javalin.Javalin;
 import utils.IniciadorApp;
 import utils.LecturaConfig;

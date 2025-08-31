@@ -1,7 +1,5 @@
 package ApiAdministrativa.Presentacion;
 
-import Agregador.HechosYColecciones.Coleccion;
-import Persistencia.SolicitudEliminacionRepositorio;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
@@ -14,7 +12,6 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Optional;
 
 public class GetSolicitudEliminacionHandler implements Handler {
     //private final SolicitudEliminacionRepositorio repositorio;

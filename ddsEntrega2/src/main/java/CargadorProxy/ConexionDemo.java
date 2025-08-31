@@ -28,8 +28,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
-public class ConexionDemo extends Conexion{
-    protected String urlServicioExterno;
+public class ConexionDemo extends ConexionProxy{
     private final ObjectMapper objectMapper;
     public LocalDateTime fechaUltimaConsulta;
     private FuenteDemo fuenteAsociada;
@@ -43,17 +42,17 @@ public class ConexionDemo extends Conexion{
     // Constructor que permite inicializar la URL del servicio externo y la Fuente asociada
     public ConexionDemo(String urlServicioExterno, FuenteDemo fuenteAsociada) {
         this(); // Llama al constructor por defecto para inicializar ObjectMapper
-        this.urlServicioExterno = urlServicioExterno;
+        this.url = urlServicioExterno;
         this.fuenteAsociada = fuenteAsociada; // Asigna la fuente asociada
     }
 
     // Getters y Setters
     public String getUrlServicioExterno() {
-        return urlServicioExterno;
+        return url;
     }
 
     public void setUrlServicioExterno(String urlServicioExterno) {
-        this.urlServicioExterno = urlServicioExterno;
+        this.url = urlServicioExterno;
     }
 
     public LocalDateTime getFechaUltimaConsulta() {
@@ -78,11 +77,11 @@ public class ConexionDemo extends Conexion{
             fechaParametro = fechaUltimaConsulta;
         }
         this.fechaUltimaConsulta = LocalDateTime.now();
-        return obtenerHechos(fechaParametro);
+        return conseguirHechos(fechaParametro);
     }
 
-     public List<HechoDTO> obtenerHechos(LocalDateTime fechaUltimaConsulta) {
-        Objects.requireNonNull(urlServicioExterno, "La URL del servicio externo no puede ser nula.");
+     public List<HechoDTO> conseguirHechos(LocalDateTime fechaUltimaConsulta) {
+        Objects.requireNonNull(url, "La URL del servicio externo no puede ser nula.");
         Objects.requireNonNull(fechaUltimaConsulta, "La fecha de última consulta no puede ser nula.");
 
 
@@ -92,7 +91,7 @@ public class ConexionDemo extends Conexion{
         try {
             // Formatear la fecha para la API Mock
             String fechaFormateada = fechaUltimaConsulta.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);;
-            String requestUrl = urlServicioExterno + "?fechaDesde=" + fechaFormateada;
+            String requestUrl = url + "?fechaDesde=" + fechaFormateada;
 
             URL url = new URL(requestUrl);
             connection = (HttpURLConnection) url.openConnection();

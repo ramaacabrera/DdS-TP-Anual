@@ -1,7 +1,6 @@
 package ApiAdministrativa.Presentacion;
 
 import Agregador.HechosYColecciones.Coleccion;
-import Persistencia.ColeccionRepositorio;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;

@@ -1,25 +1,31 @@
 package ApiAdministrativa.Presentacion;
 
 import Agregador.fuente.Fuente;
-import Persistencia.ColeccionRepositorio;
+import Agregador.Persistencia.ColeccionRepositorio;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import Agregador.HechosYColecciones.Coleccion;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.util.Optional;
+import java.net.http.HttpResponse;
 
 public class DeleteFuenteHandler implements Handler {
-    private final ColeccionRepositorio repositorio;
+    //private final ColeccionRepositorio repositorio;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public DeleteFuenteHandler(ColeccionRepositorio repositorio) {this.repositorio = repositorio;}
+    //public DeleteFuenteHandler(ColeccionRepositorio repositorio) {this.repositorio = repositorio;}
 
     @Override
-    public void handle(Context context) {
+    public void handle(Context context) throws IOException, URISyntaxException, InterruptedException {
         String handle = context.pathParam("id");
-        context.bodyAsClass(Fuente.class)
+        Fuente fuente = context.bodyAsClass(Fuente.class);
+
+        String fuenteJson = objectMapper.writeValueAsString(fuente);
 
         /*
 
@@ -33,9 +39,14 @@ public class DeleteFuenteHandler implements Handler {
         HttpClient httpClient = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("http://localhost:8080/colecciones/" + handle))
-                .DELETE()
+                .uri(new URI("http://localhost:8080/colecciones/" + handle + "/fuente"))
+                .method("DELETE", HttpRequest.BodyPublishers.ofString(fuenteJson)) // DELETE con body
+                .header("Content-Type", "application/json")
                 .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        context.status(response.statusCode()).result(response.body());
 
         //    <<<<<<<<<-
 

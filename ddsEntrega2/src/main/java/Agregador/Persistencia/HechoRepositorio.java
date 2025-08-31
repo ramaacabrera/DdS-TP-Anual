@@ -1,4 +1,4 @@
-package Persistencia;
+package Agregador.Persistencia;
 
 import Agregador.Criterios.Criterio;
 import Agregador.HechosYColecciones.Hecho;
