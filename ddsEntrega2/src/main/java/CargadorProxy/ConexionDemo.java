@@ -21,10 +21,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -148,7 +145,8 @@ public class ConexionDemo extends ConexionProxy{
         } catch (Exception e) {
             System.err.println("ConexionDemo: Error de comunicación con el servicio externo: " + e.getMessage());
             e.printStackTrace();
-            return null;
+            //return null;
+            return Collections.emptyList();
         } finally {
             if (connection != null) {
                 connection.disconnect();

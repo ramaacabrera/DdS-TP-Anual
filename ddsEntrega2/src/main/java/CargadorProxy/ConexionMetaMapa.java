@@ -2,7 +2,6 @@ package CargadorProxy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.DTO.HechoDTO;
-import Agregador.HechosYColecciones.Coleccion;
 
 import java.io.InputStream;
 import java.io.OutputStream;
