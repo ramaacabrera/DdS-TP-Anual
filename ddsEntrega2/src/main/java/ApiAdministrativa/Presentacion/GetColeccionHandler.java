@@ -1,25 +1,57 @@
 package ApiAdministrativa.Presentacion;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import Agregador.HechosYColecciones.Coleccion;
-import Persistencia.ColeccionRepositorio;
 
-import java.util.Optional;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class GetColeccionHandler implements Handler {
-    private final ColeccionRepositorio repositorio;
+    //private final ColeccionRepositorio repositorio;
+    ObjectMapper mapper = new ObjectMapper();
 
-    public GetColeccionHandler(ColeccionRepositorio coleccion) {repositorio = coleccion;}
+//    public GetColeccionHandler(ColeccionRepositorio coleccion) {repositorio = coleccion;}
 
     @Override
-    public void handle(Context ctx) {
+    public void handle(Context ctx) throws URISyntaxException, IOException, InterruptedException {
         String handle = ctx.pathParam("id");
-        final Optional<Coleccion> resultadoBusqueda = repositorio.buscarPorHandle(handle);
-        if (resultadoBusqueda.isPresent()) {
-            ctx.status(200).json(resultadoBusqueda.get());
-        } else {
-            ctx.status(404);
-        }
+        /*
+
+                CAMBIAR ESTO CUANDO SE IMPLEMENTEN LAS BASES DE DATOS
+
+
+        */
+
+        //    ->>>>>>>>>
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("http://localhost:8080/colecciones/" + handle))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        Coleccion coleccion = mapper.readValue(response.body(), new TypeReference<>() {
+        });
+
+        ctx.status(200).json(coleccion);
+
+        //    <<<<<<<<<-
+
+//        final Optional<Coleccion> resultadoBusqueda = repositorio.buscarPorHandle(handle);
+//        if (resultadoBusqueda.isPresent()) {
+//            ctx.status(200).json(resultadoBusqueda.get());
+//        } else {
+//            ctx.status(404);
+//        }
     }
 }

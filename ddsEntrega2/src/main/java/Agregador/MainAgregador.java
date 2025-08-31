@@ -40,18 +40,18 @@ public class MainAgregador {
 
         // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv       HACER       vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-        app.post("/api/hechos", new PostHechoRepoHandler(hechoRepositorio));
-        app.post("/api/solicitudes", new PostSolicitudEliminacionRepoHandler(solicitudEliminacionRepositorio));
+        app.post("/hechos", new PostHechoRepoHandler(hechoRepositorio));
+        app.post("/solicitudes", new PostSolicitudEliminacionRepoHandler(solicitudEliminacionRepositorio));
 
-        app.put("/api/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio)); // actualizo una coleccion PROBADOOOOOO
-        app.delete("/api/colecciones/{id}", new DeleteColeccionesHandler(coleccionRepositorio));
+        app.put("/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio)); // actualizo una coleccion PROBADOOOOOO
+        app.delete("/colecciones/{id}", new DeleteColeccionesHandler(coleccionRepositorio));
 
-        app.post("/api/colecciones/{id}/fuente", new PostFuentesColeccionHandler(coleccionRepositorio)); // agrego fuentes probbadisimooooo
-        app.delete("/api/colecciones/{id}/fuente", new DeleteFuenteHandler(coleccionRepositorio));
+        app.post("/colecciones/{id}/fuente", new PostFuentesColeccionHandler(coleccionRepositorio)); // agrego fuentes probbadisimooooo
+        app.delete("/colecciones/{id}/fuente", new DeleteFuenteHandler(coleccionRepositorio));
 
-        app.put("/api/colecciones/{id}/algoritmo", new PutAlgoritmoConsensoHandler(coleccionRepositorio)); // actualizo algoritmo probado
+        app.put("/colecciones/{id}/algoritmo", new PutAlgoritmoConsensoHandler(coleccionRepositorio)); // actualizo algoritmo probado
 
-        app.put("/api/solicitudes/{id}", new PutSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // aprobar o denegar solicitud eliminacion
+        app.put("/solicitudes/{id}", new PutSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // aprobar o denegar solicitud eliminacion
 
 
         //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^        HACER       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

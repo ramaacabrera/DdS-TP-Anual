@@ -48,10 +48,12 @@ public class GetHechosHandler implements Handler {
         try(HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI("http://localhost:8080/hechos"))
                 .GET()
-                .build();)
-            
+                .build();){}
+        catch(IOException e){
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        }
+
+
 
         HechoRepositorio repositorio = mapper.readValue(response.body(), new TypeReference<>() {
         });

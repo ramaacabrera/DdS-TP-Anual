@@ -18,8 +18,8 @@ public class MainAPIAdmin {
         SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
 
         app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio)); //creo coleccion PROBADOOOO
-        app.get("/api/colecciones", new GetColeccionesHandler(coleccionRepositorio)); // consulta todas las colecciones PROBADOOOO
-        app.get("/api/colecciones/{id}", new GetColeccionHandler(coleccionRepositorio)); // lee una coleccion en particular PROBADOOOOOO
+        app.get("/api/colecciones", new GetColeccionesHandler()); // consulta todas las colecciones PROBADOOOO
+        app.get("/api/colecciones/{id}", new GetColeccionHandler()); // lee una coleccion en particular PROBADOOOOOO
         app.put("/api/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio)); // actualizo una coleccion PROBADOOOOOO
         app.delete("/api/colecciones/{id}", new DeleteColeccionesHandler(coleccionRepositorio)); // borro una coleccion probadoooooo
 
@@ -29,7 +29,7 @@ public class MainAPIAdmin {
         app.put("/api/colecciones/{id}/algoritmo", new PutAlgoritmoConsensoHandler(coleccionRepositorio)); // actualizo algoritmo probado
 
         app.put("/api/solicitudes/{id}", new PutSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // aprobar o denegar solicitud eliminacion
-        app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(solicitudEliminacionRepositorio)); // consulta todas las solicitudes
+        app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler()); // consulta todas las solicitudes
         app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // consulta una solicitud por id
     }
 

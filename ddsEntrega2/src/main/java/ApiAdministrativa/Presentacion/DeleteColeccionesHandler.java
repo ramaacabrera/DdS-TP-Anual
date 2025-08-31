@@ -7,6 +7,7 @@ import Agregador.HechosYColecciones.Coleccion;
 import Persistencia.ColeccionRepositorio;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -18,9 +19,8 @@ public class DeleteColeccionesHandler implements Handler {
     public DeleteColeccionesHandler(ColeccionRepositorio repositorioNuevo) {repositorio = repositorioNuevo;}
 
     @Override
-    public void handle(Context ctx){
+    public void handle(Context ctx) throws URISyntaxException {
         String handle = ctx.pathParam("id");
-        String jsonBody = ctx.body();
 
         /*
 

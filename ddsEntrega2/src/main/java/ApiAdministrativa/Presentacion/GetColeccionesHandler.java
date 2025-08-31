@@ -12,16 +12,17 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 
 
 public class GetColeccionesHandler implements Handler {
-    private final ColeccionRepositorio repositorio;
+    //private final ColeccionRepositorio repositorio;
     ObjectMapper mapper = new ObjectMapper();
 
-    public GetColeccionesHandler(ColeccionRepositorio colecciones) { repositorio = colecciones; }
+    //public GetColeccionesHandler(ColeccionRepositorio colecciones) { repositorio = colecciones; }
 
     public void handle(@NotNull Context ctx) throws Exception {
-        ctx.json(repositorio.obtenerTodas());
+        //ctx.json(repositorio.obtenerTodas());
 
          /*
 
@@ -41,8 +42,10 @@ public class GetColeccionesHandler implements Handler {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        Coleccion coleccion = mapper.readValue(response.body(), new TypeReference<>() {
+        List<Coleccion> colecciones = mapper.readValue(response.body(), new TypeReference<>() {
         });
+
+        ctx.status(200).json(colecciones);
 
         //    <<<<<<<<<-
     }
