@@ -6,7 +6,6 @@ import io.javalin.Javalin;
 import Agregador.Agregador;
 import Agregador.fuente.Fuente;
 import CargadorEstatica.ConexionEstatica;
-import CargadorEstatica.FuenteEstatica;
 import CargadorProxy.FuenteDemo;
 import CargadorProxy.FuenteMetaMapa;
 import CargadorProxy.APIMock.DemoAPIMockServer;

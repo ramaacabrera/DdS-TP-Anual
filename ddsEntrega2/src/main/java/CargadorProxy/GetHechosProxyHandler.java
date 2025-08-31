@@ -10,7 +10,7 @@ import utils.DTO.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetHechosProxyHandler implements Handler{
+public class GetHechosProxyHandler implements Handler {
 
     private Cargador cargador;
 

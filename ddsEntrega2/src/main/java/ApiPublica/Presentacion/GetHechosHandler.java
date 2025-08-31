@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -45,13 +46,19 @@ public class GetHechosHandler implements Handler {
 
         HttpClient httpClient = HttpClient.newHttpClient();
 
-        try(HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("http://localhost:8080/hechos"))
-                .GET()
-                .build();){}
-        catch(IOException e){
-
+        URI uri = null;
+        try{uri = new URI("http://localhost:8080/hechos");}
+        catch (URISyntaxException e) {
+            System.err.println("URI invalido "+e.getMessage());
+            throw new RuntimeException(e);
         }
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .GET()
+                .build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+
 
 
 

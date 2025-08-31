@@ -3,8 +3,6 @@ package Agregador.fuente;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import utils.DTO.HechoDTO;
-import Agregador.Criterios.Criterio;
-import CargadorEstatica.FuenteEstatica;
 import CargadorProxy.FuenteProxy;
 
 import java.util.List;

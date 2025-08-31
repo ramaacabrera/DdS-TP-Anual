@@ -4,7 +4,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import utils.DTO.HechoDTO;
-import Agregador.Criterios.Criterio;
 import Agregador.fuente.*;
 
 import java.io.*;
@@ -14,17 +13,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConexionEstatica extends Conexion{
+public class ConexionEstatica {
     private String path;
 
     public ConexionEstatica(String filename) {
         this.path = filename;
     }
 
-    public ConexionEstatica() {
-    }
 
-    @Override
     public List<HechoDTO> obtenerHechos() {
         ConversorCSV conversor = new ConversorCSV();
         List<HechoDTO> hechos = new ArrayList<>();
