@@ -39,7 +39,7 @@ public class ConexionCargador {
         try{
             HttpResponse<String> response = cliente.send(request, HttpResponse.BodyHandlers.ofString());
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(response.body(), new TypeReference<List<HechoDTO>>() {});
+            return mapper.readValue(response.body(), new TypeReference<>() {});
         }
         catch(Exception e){
             System.err.println("Error al buscar Hecho: " + e.getMessage());

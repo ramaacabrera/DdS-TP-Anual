@@ -20,5 +20,6 @@ public class MainEstatica {
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
         app.get("/hechos", new GetHechosEstaticoHandler(fileServer));
+        app.get("/reprocesado/hechos/{nombre}", new GetReprocesadoHechosEstaticoHandler(fileServer));
     }
 }

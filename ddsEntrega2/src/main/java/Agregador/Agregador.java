@@ -43,7 +43,7 @@ public class Agregador {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         scheduler.scheduleAtFixedRate(() -> {
-            this.actualizarSolicitudesYHechosDesdeFuentes();
+            this.actualizarHechosDesdeFuentes();
         }, 0, 1, TimeUnit.HOURS);
 
         long delayInicial = calcularDelayHastaHora(2);  // 2 AM
@@ -64,7 +64,7 @@ public class Agregador {
         return normalizador.normalizar(hecho);
     }
 
-    public void actualizarSolicitudesYHechosDesdeFuentes() {
+    public void actualizarHechosDesdeFuentes() {
 
         List<HechoDTO> hechos = conexionCargador.obtenerHechosNuevos();
         hechos.forEach(h -> {hechoRepositorio.guardar(h);});
@@ -123,34 +123,34 @@ public class Agregador {
         return null;
     }
 
-    public List<Hecho> obtenerHechosExterno(Fuente fuente, List<Criterio> criterios) {
-        List<Hecho> hechos = new ArrayList<>();
-        for (HechoDTO hechoDTO : fuente.obtenerHechos(criterios)) {
-            Hecho hecho = new Hecho(hechoDTO);
-            hechos.add(hecho);
-        }
-        return hechos;
-    }
+//    public List<Hecho> obtenerHechosExterno(Fuente fuente, List<Criterio> criterios) {
+//        List<Hecho> hechos = new ArrayList<>();
+//        for (HechoDTO hechoDTO : fuente.obtenerHechos(criterios)) {
+//            Hecho hecho = new Hecho(hechoDTO);
+//            hechos.add(hecho);
+//        }
+//        return hechos;
+//    }
 
-    public void agregarSolicitudes(FuenteDinamica fuente) {
-        List<SolicitudDeEliminacion> solicitudesDeEliminacion = new ArrayList<>();
-
-        for (SolicitudDeEliminacionDTO solicitudDeEliminacionDTO : fuente.obtenerSolicitudDeEliminacion()) {
-            SolicitudDeEliminacion nueva = new SolicitudDeEliminacion(solicitudDeEliminacionDTO);
-
-            boolean yaExisteSoli = solicitudEliminacionRepositorio.buscarPorId(nueva.getId()).isPresent();
-
-            boolean soliEsSpam = DetectorDeSpam.esSpam(solicitudDeEliminacionDTO.getJustificacion());
-
-            if (!yaExisteSoli && !soliEsSpam) {
-                solicitudEliminacionRepositorio.add(nueva);
-            }
-
-            if(soliEsSpam) {
-                nueva.rechazarSolicitud();
-            }
-        }
-    }
+//    public void agregarSolicitudes(FuenteDinamica fuente) {
+//        List<SolicitudDeEliminacion> solicitudesDeEliminacion = new ArrayList<>();
+//
+//        for (SolicitudDeEliminacionDTO solicitudDeEliminacionDTO : fuente.obtenerSolicitudDeEliminacion()) {
+//            SolicitudDeEliminacion nueva = new SolicitudDeEliminacion(solicitudDeEliminacionDTO);
+//
+//            boolean yaExisteSoli = solicitudEliminacionRepositorio.buscarPorId(nueva.getId()).isPresent();
+//
+//            boolean soliEsSpam = DetectorDeSpam.esSpam(solicitudDeEliminacionDTO.getJustificacion());
+//
+//            if (!yaExisteSoli && !soliEsSpam) {
+//                solicitudEliminacionRepositorio.add(nueva);
+//            }
+//
+//            if(soliEsSpam) {
+//                nueva.rechazarSolicitud();
+//            }
+//        }
+//    }
 
     public void ejecutarAlgoritmoDeConsenso() {
         for (Coleccion coleccion : coleccionRepositorio.obtenerTodas()) {
