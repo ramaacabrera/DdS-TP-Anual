@@ -1,6 +1,6 @@
-package CargadorDinamica;
+package CargadorDinamica.Presentacion;
 
-import Agregador.Persistencia.DinamicoRepositorio;
+import CargadorDinamica.DinamicoRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class GetHechosDinamicoHandler implements Handler {
     public List<HechoDTO> obtenerHechos(){
         List<HechoDTO> repo = repositorio.buscarHechos();
 
-        repositorio.resetear();
+        repositorio.resetearHechos();
 
         return repo;
     }

@@ -1,6 +1,9 @@
 package CargadorDinamica;
 
-import Agregador.Persistencia.DinamicoRepositorio;
+import CargadorDinamica.Presentacion.GetHechosDinamicoHandler;
+import CargadorDinamica.Presentacion.GetSolicitudesModificacionHandler;
+import CargadorDinamica.Presentacion.PostHechosHandler;
+import CargadorDinamica.Presentacion.PostSolicitudesModificacionHandler;
 import io.javalin.Javalin;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
@@ -23,5 +26,10 @@ public class MainDinamica {
         // Exposicion API mediante REST para el agregador
         app.get("/hechos", new GetHechosDinamicoHandler(dinamicoRepositorio));
         app.post("/hechos", new PostHechosHandler(dinamicoRepositorio));
+
+        app.get("/solicitudes", new GetSolicitudesModificacionHandler(dinamicoRepositorio));
+        app.post("/solicitudes", new PostSolicitudesModificacionHandler(dinamicoRepositorio));
+        app.get("/solicitudesEliminacion", new GetSolicitudesEliminacionHandler(dinamicoRepositorio));
+        app.post("/solicitudesEliminacion", new PostSolicitudesEliminacionHandler(dinamicoRepositorio));
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class  GetHechosProxyHandler implements Handler {
 
-    private Cargador cargador;
+    private final Cargador cargador;
 
     public GetHechosProxyHandler(Cargador cargador){ this.cargador = cargador;}
 

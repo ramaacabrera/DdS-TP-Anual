@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDTO;
+import utils.DTO.SolicitudDeModificacionDTO;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -32,18 +33,32 @@ public class ConexionCargador {
         return listaHecho;
     }
 
-    public List<HechoDTO> buscarHechos(String url){
-        HttpClient cliente = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
 
-        try{
+    public List<HechoDTO> buscarHechos(String url){
+        return this.getFromApi(url + "/hechos", new TypeReference<List<HechoDTO>>() {
+        });
+    }
+
+    public List<SolicitudDeModificacionDTO> obtenerSolicitudes(){
+        return this.getFromApi(urlCompDinamico + "/solicitudes", new TypeReference<List<SolicitudDeModificacionDTO>>() {
+        });
+    }
+
+    private <T> T getFromApi(String url, TypeReference<T> typeRef){
+        HttpClient cliente = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        try {
             HttpResponse<String> response = cliente.send(request, HttpResponse.BodyHandlers.ofString());
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(response.body(), new TypeReference<>() {});
-        }
-        catch(Exception e){
-            System.err.println("Error al buscar Hecho: " + e.getMessage());
+            return mapper.readValue(response.body(), typeRef);
+        } catch (Exception e) {
+            System.err.println("Error al consultar API (" + url + "): " + e.getMessage());
             return null;
         }
     }
+
 }

@@ -1,24 +1,8 @@
-
-
-import ApiAdministrativa.Presentacion.*;
-import Agregador.Persistencia.*;
-import io.javalin.Javalin;
-import Agregador.Agregador;
-import Agregador.fuente.Fuente;
-import CargadorEstatica.ConexionEstatica;
-import CargadorProxy.FuenteDemo;
-import CargadorProxy.FuenteMetaMapa;
-import CargadorProxy.APIMock.DemoAPIMockServer;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainViejo {
     public static void main(String[] args) throws InterruptedException {
         //inicio el mock server para demo
         //Para la fuente demo
+        /*
         final String API_MOCK_URL = "http://localhost:7000/api/hechos";
         new Thread(() -> DemoAPIMockServer.main(new String[]{})).start();
         Thread.sleep(2000);
@@ -97,4 +81,5 @@ public class MainViejo {
         app.get("/api/admin/solicitudes", new GetSolicitudesEliminacionHandler(solicitudEliminacionRepositorio)); // consulta todas las solicitudes
         app.get("/api/admin/solicitudes/{id}", new GetSolicitudEliminacionHandler(solicitudEliminacionRepositorio)); // consulta una solicitud por id
     }
+         */
 }

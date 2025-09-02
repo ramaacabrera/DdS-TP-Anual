@@ -2,10 +2,8 @@ package CargadorProxy;
 
 import utils.DTO.HechoDTO;
 import Agregador.HechosYColecciones.ContenidoMultimedia;
-import Agregador.Criterios.Criterio;
 import Agregador.HechosYColecciones.EstadoHecho;
 import Agregador.HechosYColecciones.Ubicacion;
-import Agregador.fuente.*;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +26,6 @@ import java.util.stream.Collectors;
 public class ConexionDemo extends ConexionProxy{
     private final ObjectMapper objectMapper;
     public LocalDateTime fechaUltimaConsulta;
-    private FuenteDemo fuenteAsociada;
 
     public ConexionDemo() {
         this.objectMapper = new ObjectMapper();
@@ -37,10 +34,9 @@ public class ConexionDemo extends ConexionProxy{
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Para que LocalDateTime se serialice como string ISO
     }
     // Constructor que permite inicializar la URL del servicio externo y la Fuente asociada
-    public ConexionDemo(String urlServicioExterno, FuenteDemo fuenteAsociada) {
+    public ConexionDemo(String urlServicioExterno) {
         this(); // Llama al constructor por defecto para inicializar ObjectMapper
         this.url = urlServicioExterno;
-        this.fuenteAsociada = fuenteAsociada; // Asigna la fuente asociada
     }
 
     // Getters y Setters
@@ -58,10 +54,6 @@ public class ConexionDemo extends ConexionProxy{
 
     public void setFechaUltimaConsulta(LocalDateTime fechaUltimaConsulta) {
         this.fechaUltimaConsulta = fechaUltimaConsulta;
-    }
-
-    public void setFuenteAsociada(FuenteDemo fuenteAsociada) {
-        this.fuenteAsociada = fuenteAsociada;
     }
 
     @Override
@@ -206,7 +198,7 @@ public class ConexionDemo extends ConexionProxy{
         // Contribuyente nulo por ahora para hechos externos
         List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
         boolean esEditable = false;
-        FuenteDemo fuente = fuenteAsociada;
+        String fuente = this.url;
 
         // Validar título antes de crear DTO
         String tituloDTO = hechoMock.getMockTitulo();

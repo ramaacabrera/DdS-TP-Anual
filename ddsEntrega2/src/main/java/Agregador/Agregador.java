@@ -6,9 +6,7 @@ import Agregador.Persistencia.HechoRepositorio;
 import Agregador.Persistencia.SolicitudEliminacionRepositorio;
 import Agregador.Persistencia.SolicitudModificacionRepositorio;
 import Agregador.Solicitudes.DetectorDeSpam;
-import utils.DTO.HechoDTO;
-import Agregador.Criterios.Criterio;
-import utils.DTO.SolicitudDeEliminacionDTO;
+import utils.DTO.*;
 import Agregador.HechosYColecciones.Coleccion;
 import Agregador.HechosYColecciones.Hecho;
 import Agregador.Solicitudes.SolicitudDeEliminacion;
@@ -39,11 +37,13 @@ public class Agregador {
         this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
         this.normalizador = normalizador;
         this.conexionCargador = conexionCargador;
+        this.solicitudModificacionRepositorio = solicitudModificacionRepositorio;
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         scheduler.scheduleAtFixedRate(() -> {
             this.actualizarHechosDesdeFuentes();
+            this.agregarSolicitudes();
         }, 0, 1, TimeUnit.HOURS);
 
         long delayInicial = calcularDelayHastaHora(2);  // 2 AM
@@ -60,50 +60,28 @@ public class Agregador {
 
 
 
-    private Hecho normalizarHecho(Hecho hecho){
-        return normalizador.normalizar(hecho);
+    private Hecho normalizarHecho(HechoDTO hecho){
+        return normalizador.normalizar(new Hecho(hecho));
     }
 
     public void actualizarHechosDesdeFuentes() {
-
         List<HechoDTO> hechos = conexionCargador.obtenerHechosNuevos();
-        hechos.forEach(h -> {hechoRepositorio.guardar(h);});
 
-        // Traemos hechos nuevos de TODAS las fuentes disponibles
-        /*for (Fuente fuente : fuentesDisponibles) {
+        hechos.stream()
+                .map(this::normalizarHecho).forEach(hechoNormalizado -> {
+                    Hecho existente = buscarHechoSimilar(hechoNormalizado);
 
-            List<Hecho> nuevosHechos = obtenerHechosExterno(fuente, new ArrayList<>());
-            if (fuente.getTipoDeFuente() == TipoDeFuente.DINAMICA && fuente instanceof FuenteDinamica) {
-                agregarSolicitudes((FuenteDinamica) fuente);
-            }
-
-            for (Hecho hecho : nuevosHechos) {
-                int nuevo = 0;
-                Hecho hechoNormalizado = normalizarHecho(hecho);
-                // Por cada colección, vemos si el hecho NORMALIZADO cumple criterios
-                for (Coleccion coleccion : coleccionRepositorio.obtenerTodas()) {
-                    if (coleccion.cumpleCriterio(hechoNormalizado)) {
-                        boolean esNuevo = coleccion.agregarHecho(hechoNormalizado);
-                        if (esNuevo) {
-                            nuevo++;
-                        }
+                    if (existente == null) {
+                        // si no existe lo guardo como nuevo
+                        hechoRepositorio.guardar(hechoNormalizado);
+                        System.out.println("Nuevo hecho agregado: " + hechoNormalizado.getTitulo());
+                    } else {
+                        // si ya existe lo actualizo
+                        hechoRepositorio.actualizar(hechoNormalizado);
+                        System.out.println("Hecho actualizado: " + hechoNormalizado.getTitulo());
                     }
-                }
-                if (nuevo > 0) {
-                    hechoRepositorio.guardar(hechoNormalizado);
-                } else {
-                    Hecho hechoExistente = buscarHechoSimilar(hechoNormalizado);
-                    if (hechoExistente != null) {
-                        hechoRepositorio.actualizar(hechoExistente);
-                    }
-
-                }
-            }
-
-        }
-        */
+                });
     }
-
 
     private Hecho buscarHechoSimilar(Hecho hechoNuevo) {
         for (Hecho h : hechoRepositorio.buscarHechos(null)) {
@@ -114,43 +92,32 @@ public class Agregador {
         return null;
     }
 
-    private Hecho buscarHechoPorTitulo(String titulo) {
-        for (Hecho h : hechoRepositorio.buscarHechos(null)) {
-            if (h.getTitulo().equalsIgnoreCase(titulo)) {
-                return h;
+
+    public void agregarSolicitudes() {
+        List<SolicitudDeModificacionDTO> solicitudesDeModificacion = conexionCargador.obtenerSolicitudes();
+        List<SolicitudDeEliminacionDTO>  solicitudesDeEliminacion = conexionCargador.obtenerSolicitudesEliminacion();
+
+
+        for (SolicitudDeEliminacionDTO dto : solicitudesDeEliminacion) {
+            SolicitudDeEliminacion nueva = new SolicitudDeEliminacion(dto);
+        }
+        /*    SolicitudDeEliminacion nueva = new SolicitudDeEliminacion(solicitudDeEliminacionDTO);
+
+            boolean yaExisteSoli = solicitudEliminacionRepositorio.buscarPorId(nueva.getId()).isPresent();
+
+            boolean soliEsSpam = DetectorDeSpam.esSpam(solicitudDeEliminacionDTO.getJustificacion());
+
+            if (!yaExisteSoli && !soliEsSpam) {
+                solicitudEliminacionRepositorio.add(nueva);
+            }
+
+            if(soliEsSpam) {
+                nueva.rechazarSolicitud();
             }
         }
-        return null;
+
+     */
     }
-
-//    public List<Hecho> obtenerHechosExterno(Fuente fuente, List<Criterio> criterios) {
-//        List<Hecho> hechos = new ArrayList<>();
-//        for (HechoDTO hechoDTO : fuente.obtenerHechos(criterios)) {
-//            Hecho hecho = new Hecho(hechoDTO);
-//            hechos.add(hecho);
-//        }
-//        return hechos;
-//    }
-
-//    public void agregarSolicitudes(FuenteDinamica fuente) {
-//        List<SolicitudDeEliminacion> solicitudesDeEliminacion = new ArrayList<>();
-//
-//        for (SolicitudDeEliminacionDTO solicitudDeEliminacionDTO : fuente.obtenerSolicitudDeEliminacion()) {
-//            SolicitudDeEliminacion nueva = new SolicitudDeEliminacion(solicitudDeEliminacionDTO);
-//
-//            boolean yaExisteSoli = solicitudEliminacionRepositorio.buscarPorId(nueva.getId()).isPresent();
-//
-//            boolean soliEsSpam = DetectorDeSpam.esSpam(solicitudDeEliminacionDTO.getJustificacion());
-//
-//            if (!yaExisteSoli && !soliEsSpam) {
-//                solicitudEliminacionRepositorio.add(nueva);
-//            }
-//
-//            if(soliEsSpam) {
-//                nueva.rechazarSolicitud();
-//            }
-//        }
-//    }
 
     public void ejecutarAlgoritmoDeConsenso() {
         for (Coleccion coleccion : coleccionRepositorio.obtenerTodas()) {
