@@ -6,9 +6,9 @@ import utils.DTO.SolicitudDeModificacionDTO;
 import org.jetbrains.annotations.NotNull;
 
 public class PostSolicitudModificacionHandler implements Handler {
-    private final ControllerSolicitud controllerSolicitud;
+    //private final ControllerSolicitud controllerSolicitud;
 
-    public PostSolicitudModificacionHandler(ControllerSolicitud controllerSolicitudNuevo) { controllerSolicitud = controllerSolicitudNuevo; }
+    //public PostSolicitudModificacionHandler(ControllerSolicitud controllerSolicitudNuevo) { controllerSolicitud = controllerSolicitudNuevo; }
 
     @Override
     public void handle(@NotNull Context context) throws Exception {
@@ -16,7 +16,7 @@ public class PostSolicitudModificacionHandler implements Handler {
         SolicitudDeModificacionDTO solicitud = context.bodyAsClass(SolicitudDeModificacionDTO.class);
 
         System.out.println("Creando solicitud: " + bodyString);
-        controllerSolicitud.subirSolicitudModificacion(solicitud);
+        //controllerSolicitud.subirSolicitudModificacion(solicitud);
 
         context.status(201);
     }
