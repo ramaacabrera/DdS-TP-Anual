@@ -13,7 +13,7 @@ public class PostFuentesProxyHandler implements Handler {
     @Override
     public void handle(@NotNull Context context){
         Fuente fuente = context.bodyAsClass(Fuente.class);
-        cargador.agregarFuente(fuente);
+     //   cargador.agregarFuente(fuente);
         context.status(200);
     }
 }

@@ -21,6 +21,6 @@ public class MainProxy {
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
         app.get("/hechos", new GetHechosProxyHandler(cargador));
-        app.post("/fuentes", new PostFuentesProxyHandler(cargador));
+        //app.post("/fuentes", new PostFuentesProxyHandler(cargador));
     }
 }

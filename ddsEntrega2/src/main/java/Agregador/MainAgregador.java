@@ -1,6 +1,6 @@
 package Agregador;
 
-import Agregador.Normalizador.NormalizadorMock;
+import Agregador.PaqueteNormalizador.NormalizadorMock;
 import Agregador.Presentacion.*;
 import Agregador.Persistencia.*;
 import io.javalin.Javalin;

@@ -1,20 +1,14 @@
 package Agregador;
 
-import Agregador.Normalizador.NormalizadorMock;
+import Agregador.PaqueteNormalizador.NormalizadorMock;
 import Agregador.Persistencia.ColeccionRepositorio;
 import Agregador.Persistencia.HechoRepositorio;
 import Agregador.Persistencia.SolicitudEliminacionRepositorio;
 import Agregador.Persistencia.SolicitudModificacionRepositorio;
-import Agregador.Solicitudes.DetectorDeSpam;
 import utils.DTO.HechoDTO;
-import Agregador.Criterios.Criterio;
-import utils.DTO.SolicitudDeEliminacionDTO;
 import Agregador.HechosYColecciones.Coleccion;
 import Agregador.HechosYColecciones.Hecho;
-import Agregador.Solicitudes.SolicitudDeEliminacion;
-import Agregador.fuente.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -26,17 +20,17 @@ public class Agregador {
 
     private HechoRepositorio hechoRepositorio;
     private ColeccionRepositorio coleccionRepositorio;
-    private SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
-    private SolicitudModificacionRepositorio solicitudModificacionRepositorio;
+    //private SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
+    //private SolicitudModificacionRepositorio solicitudModificacionRepositorio;
     private NormalizadorMock normalizador;
     ConexionCargador conexionCargador;
 
-    public Agregador(HechoRepositorio hechoRepositorio, ColeccionRepositorio coleccionRepositorio, SolicitudEliminacionRepositorio solicitudEliminacionRepositorio,
-                     SolicitudModificacionRepositorio solicitudModificacionRepositorio, NormalizadorMock normalizador, ConexionCargador conexionCargador){
+    public Agregador(HechoRepositorio hechoRepositorio, ColeccionRepositorio coleccionRepositorio,NormalizadorMock normalizador, ConexionCargador conexionCargador){ //SolicitudEliminacionRepositorio solicitudEliminacionRepositorio,
+                     //SolicitudModificacionRepositorio solicitudModificacionRepositorio, NormalizadorMock normalizador, ConexionCargador conexionCargador){
         this.hechoRepositorio = hechoRepositorio;
         this.coleccionRepositorio = coleccionRepositorio;
         //this.fuentesDisponibles = fuentesDisponibles;
-        this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
+        //this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
         this.normalizador = normalizador;
         this.conexionCargador = conexionCargador;
 
@@ -60,14 +54,14 @@ public class Agregador {
 
 
 
-    private Hecho normalizarHecho(Hecho hecho){
-        return normalizador.normalizar(hecho);
+    private Hecho normalizarHecho(HechoDTO hecho){
+        return normalizador.normalizar(new Hecho(hecho));
     }
 
     public void actualizarHechosDesdeFuentes() {
 
         List<HechoDTO> hechos = conexionCargador.obtenerHechosNuevos();
-        hechos.forEach(h -> {hechoRepositorio.guardar(h);});
+        hechos.stream().map(this::normalizarHecho).forEach(h -> {hechoRepositorio.guardar(h);});
 
         // Traemos hechos nuevos de TODAS las fuentes disponibles
         /*for (Fuente fuente : fuentesDisponibles) {
