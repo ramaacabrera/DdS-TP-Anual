@@ -22,26 +22,23 @@ public class DinamicoRepositorio {
         return hechos;
     }
 
-    public void guardar(HechoDTO hecho) {
+    public void guardarHecho(HechoDTO hecho) {
         hechos.add(hecho);
     }
-//se guardan ambas solicitudes, de eliminacion y de modificacion
-    public List<SolicitudDeModificacionDTO> buscarSolicitudes(){return solicitudesModificacion;}
 
-    public void guardarSolicitud(SolicitudDeModificacionDTO solicitud){solicitudesModificacion.add(solicitud);}
+    public List<SolicitudDeModificacionDTO> buscarSolicitudesModificacion(){return solicitudesModificacion;}
+
+    public void guardarSolicitudModificacion(SolicitudDeModificacionDTO solicitud){solicitudesModificacion.add(solicitud);}
 
     public List<SolicitudDeEliminacionDTO> buscarSolicitudesEliminacion() {
         return solicitudesEliminacion;
     }
-    public void guardarSolicitudEliminacion(SolicitudDeEliminacionDTO solicitud) {
-        solicitudesEliminacion.add(solicitud);
-    }
 
+    public void guardarSolicitudEliminacion(SolicitudDeEliminacionDTO solicitud) {solicitudesEliminacion.add(solicitud);}
 
-    public void resetearHechos() { hechos = new ArrayList<>();
-    }
+    public void resetearHechos() { hechos = new ArrayList<>();}
 
-    public void resetearSolicitudes() { solicitudesModificacion = new ArrayList<>();
-        solicitudesEliminacion = new ArrayList<>();
-    }
+    public void resetearSolicitudesModificacion() { solicitudesModificacion = new ArrayList<>();}
+
+    public void resetearSolicitudesEliminacion() { solicitudesEliminacion = new ArrayList<>();}
 }

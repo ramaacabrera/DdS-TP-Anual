@@ -16,7 +16,7 @@ public class PutSolicitudEliminacionRepoHandler implements Handler {
 
     @Override
     public void handle(Context context) {
-        String id = context.pathParam("id");
+        int id = Integer.parseInt(context.pathParam("id"));
         String body = context.body();
         boolean resultado = solicitudEliminacionRepositorio.actualizarEstadoSolicitudEliminacion(body,id);
         if(resultado){

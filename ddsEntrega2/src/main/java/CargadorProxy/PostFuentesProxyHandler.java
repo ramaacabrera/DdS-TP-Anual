@@ -6,14 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import Agregador.fuente.Fuente;
 
 public class PostFuentesProxyHandler implements Handler {
-    private Cargador cargador;
+    private final Cargador cargador;
 
     public PostFuentesProxyHandler(Cargador cargador){this.cargador = cargador;}
 
     @Override
     public void handle(@NotNull Context context){
-        Fuente fuente = context.bodyAsClass(Fuente.class);
-        cargador.agregarFuente(fuente);
+        ConexionProxy conexion = context.bodyAsClass(ConexionProxy.class);
+        cargador.agregarConexion(conexion);
         context.status(200);
     }
 }

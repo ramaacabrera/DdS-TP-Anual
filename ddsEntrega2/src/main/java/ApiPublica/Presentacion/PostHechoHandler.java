@@ -1,17 +1,11 @@
 package ApiPublica.Presentacion;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import Agregador.Contribuyente;
-import utils.DTO.HechoDTO;
-import org.jetbrains.annotations.NotNull;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Map;
 
 public class PostHechoHandler implements Handler {
     private final int puertoDinamica;

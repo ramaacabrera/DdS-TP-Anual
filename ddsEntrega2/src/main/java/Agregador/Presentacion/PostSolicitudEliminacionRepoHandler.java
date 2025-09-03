@@ -1,7 +1,7 @@
 package Agregador.Presentacion;
 
 import Agregador.Persistencia.SolicitudEliminacionRepositorio;
-import Agregador.Solicitudes.DetectorDeSpam;
+import Agregador.PaqueteAgregador.DetectorDeSpam;
 import Agregador.Solicitudes.SolicitudDeEliminacion;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;

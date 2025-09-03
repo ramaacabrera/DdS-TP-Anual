@@ -3,26 +3,23 @@ package Agregador.fuente;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import utils.DTO.HechoDTO;
-import CargadorProxy.FuenteProxy;
 
 import java.util.List;
 
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "tipoDeFuente"
-)
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = FuenteEstatica.class, name = "ESTATICA"),
-        @JsonSubTypes.Type(value = FuenteDinamica.class, name = "DINAMICA"),
-        @JsonSubTypes.Type(value = FuenteProxy.class, name = "PROXY")
-})
+//@JsonTypeInfo(
+//        use = JsonTypeInfo.Id.NAME,
+//        include = JsonTypeInfo.As.PROPERTY,
+//        property = "tipoDeFuente"
+//)
+//@JsonSubTypes({
+//        @JsonSubTypes.Type(value = FuenteEstatica.class, name = "ESTATICA"),
+//        @JsonSubTypes.Type(value = FuenteDinamica.class, name = "DINAMICA"),
+//        @JsonSubTypes.Type(value = FuenteProxy.class, name = "PROXY")
+//})
 
-public abstract class Fuente {
+public class Fuente {
     protected TipoDeFuente tipoDeFuente;
     String ruta;
-
-    public Fuente() {}
 
     public Fuente(TipoDeFuente tipoDeFuente, String rutaNueva){// Conexion conexion) {
         this.tipoDeFuente = tipoDeFuente;
@@ -30,7 +27,4 @@ public abstract class Fuente {
     }
 
     public TipoDeFuente getTipoDeFuente(){return tipoDeFuente;}
-
-    public abstract List<HechoDTO> getHechoes();
-
 }

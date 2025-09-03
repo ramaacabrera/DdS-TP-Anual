@@ -8,14 +8,14 @@ import java.util.List;
 
 
 public class GetSolicitudesModificacionHandler implements Handler{
-    private DinamicoRepositorio repositorio;
+    private final DinamicoRepositorio repositorio;
 
     public GetSolicitudesModificacionHandler(DinamicoRepositorio repositorio){this.repositorio = repositorio;}
 
     @Override
     public void handle(Context contexto){
-        List<SolicitudDeModificacionDTO> solicitudes = repositorio.buscarSolicitudes();
-        repositorio.resetearSolicitudes();
+        List<SolicitudDeModificacionDTO> solicitudes = repositorio.buscarSolicitudesModificacion();
+        repositorio.resetearSolicitudesModificacion();
         contexto.json(solicitudes);
         contexto.status(200);
     }

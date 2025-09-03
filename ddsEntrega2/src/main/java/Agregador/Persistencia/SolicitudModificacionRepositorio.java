@@ -1,6 +1,7 @@
 package Agregador.Persistencia;
 
 import Agregador.Solicitudes.SolicitudDeModificacion;
+import utils.DTO.SolicitudDeModificacionDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +20,8 @@ public class SolicitudModificacionRepositorio {
         solicitudes.add(solicitud);
     }
 
-    public void eliminarSolicitudModificacion(SolicitudDeModificacion solicitud){
-        solicitudes.remove(solicitud);
+    public void agregarSolicitudDeModificacion(SolicitudDeModificacionDTO solicitud){
+        solicitudes.add(new SolicitudDeModificacion(solicitud));
     }
 
     public void actualizarSolicitudModificacion(SolicitudDeModificacion solicitud){

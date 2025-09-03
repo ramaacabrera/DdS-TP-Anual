@@ -3,16 +3,17 @@ package utils.DTO;
 import Agregador.HechosYColecciones.Hecho;
 
 public class SolicitudDTO {
-    private Hecho hechoAsociado;
+    private int id;
+    private int hechoAsociado;
     private String justificacion;
 
     public SolicitudDTO() {}
 
-    public Hecho getHechoAsociado() {
+    public int getHechoAsociado() {
         return hechoAsociado;
     }
 
-    public void setHechoAsociado(Hecho hechoAsociado) {
+    public void setHechoAsociado(int hechoAsociado) {
         this.hechoAsociado = hechoAsociado;
     }
 
@@ -23,4 +24,6 @@ public class SolicitudDTO {
     public void setJustificacion(String justificacion) {
         this.justificacion = justificacion;
     }
+
+    public int getId() {return id;}
 }

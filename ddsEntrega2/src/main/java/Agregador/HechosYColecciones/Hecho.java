@@ -1,8 +1,7 @@
 package Agregador.HechosYColecciones;
 
-import Agregador.Agregador;
 import utils.DTO.HechoDTO;
-import Agregador.Contribuyente;
+import Agregador.Contribuyente.Contribuyente;
 import Agregador.fuente.*;
 
 import java.util.ArrayList;
@@ -12,7 +11,9 @@ import java.util.Objects;
 
 public class Hecho {
 
+    private int id;
     private String titulo;
+    private String handle;
     private String descripcion;
     private String categoria;
     private Ubicacion ubicacion;
@@ -42,6 +43,7 @@ public class Hecho {
         this.etiquetas = etiquetas;
         this.esEditable = esEditable;
         this.contenidoMultimedia = contenidoMultimedia;
+        this.id = 0;
     }
 
     public Hecho(HechoDTO hechoDTO){
@@ -51,18 +53,23 @@ public class Hecho {
         this.ubicacion = hechoDTO.getUbicacion();
         this.fechaDeAcontecimiento = hechoDTO.getFechaDeAcontecimiento();
         this.fechaDeCarga = hechoDTO.getFechaDeCarga();
-        this.fuente = hechoDTO.getFuente();
+        this.fuente = this.convertirFuente(hechoDTO.getFuente());
         this.estadoHecho = hechoDTO.getEstadoHecho();
         this.contribuyente = hechoDTO.getContribuyente();
         this.etiquetas = hechoDTO.getEtiquetas();
         this.esEditable = hechoDTO.getEsEditable();
         this.contenidoMultimedia = hechoDTO.getContenidoMultimedia();
+        this.id = 0;
     }
 
     // Getters
     public String getTitulo() {
         return titulo;
     }
+
+    public int getId(){return id;}
+
+    public String getHandle(){return handle;}
 
     public String getDescripcion() {
         return descripcion;
@@ -100,6 +107,8 @@ public class Hecho {
         return etiquetas;
     }
 
+    // Setters
+
     public void setCategoria(String categoriaNueva) {categoria = categoriaNueva;}
 
     public void setTitulo(String tituloNuevo) {titulo = tituloNuevo;}
@@ -117,11 +126,14 @@ public class Hecho {
     public void setEstadoHecho(EstadoHecho estadoNuevo) {estadoHecho = estadoNuevo;}
 
     public void setContribuyente(Contribuyente nuevo) {contribuyente = nuevo;}
-    public void set(Boolean esEditableNuevo) {esEditable = esEditableNuevo;}
 
     public void setEtiquetas(List<String> etiquetasNuevas) {etiquetas = etiquetasNuevas; }
 
     public void setEsEditable(Boolean esEditableNuevo) {esEditable = esEditableNuevo;}
+
+    public void setId(int idNuevo){id = idNuevo;}
+
+    public void setHandle(String handleNuevo){handle = handleNuevo;}
 
     public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoNuevo) {contenidoMultimedia = contenidoNuevo;}
 
@@ -186,5 +198,18 @@ public class Hecho {
         this.etiquetas = otroHecho.getEtiquetas();
         this.esEditable = otroHecho.esEditable();
         this.contenidoMultimedia = otroHecho.getContenidoMultimedia();
+    }
+
+    public Fuente convertirFuente(String ruta){
+        if (ruta.toLowerCase().endsWith(".csv")) {
+            return new Fuente(TipoDeFuente.ESTATICA, ruta);
+        }
+
+        String urlCargadorDinamico = "http://localhost:8084/";
+        if (ruta.contains("localhost") &&  ruta.contains(urlCargadorDinamico)) {
+            return new Fuente(TipoDeFuente.DINAMICA, ruta);
+        }
+
+        return new Fuente(TipoDeFuente.PROXY, ruta);
     }
 }

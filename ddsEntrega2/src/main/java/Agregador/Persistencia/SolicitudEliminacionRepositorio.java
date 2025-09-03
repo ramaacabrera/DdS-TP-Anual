@@ -27,15 +27,7 @@ public class SolicitudEliminacionRepositorio {
         solicitudes.add(new SolicitudDeEliminacion(solicitud));
     }
 
-    public void eliminarSolicitudEliminacion(SolicitudDeEliminacion solicitud){
-        solicitudes.remove(solicitud);
-    }
-
-    public void actualizarSolicitudEliminacion(SolicitudDeEliminacion solicitud){
-        solicitudes.set(solicitudes.indexOf(solicitud), solicitud);
-    }
-
-    public boolean actualizarEstadoSolicitudEliminacion(String body, String id){
+    public boolean actualizarEstadoSolicitudEliminacion(String body, int id){
         Optional<SolicitudDeEliminacion> resultadoBusqueda = this.buscarPorId(id);
         if(resultadoBusqueda.isPresent()) {
             EstadoSolicitudEliminacion estadoEnum = EstadoSolicitudEliminacion.valueOf(body.toUpperCase());
@@ -51,11 +43,7 @@ public class SolicitudEliminacionRepositorio {
         return false;
     }
 
-    public Optional<SolicitudDeEliminacion> buscarPorId(String id){
-        return solicitudes.stream().filter(c -> c.getId().equals(id)).findFirst();
-    }
-
-    public void add(SolicitudDeEliminacion solicitudDeEliminacion) {
-        solicitudes.add(solicitudDeEliminacion);
+    public Optional<SolicitudDeEliminacion> buscarPorId(int id){
+        return solicitudes.stream().filter(c -> c.getId() == id).findFirst();
     }
 }

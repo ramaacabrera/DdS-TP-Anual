@@ -1,10 +1,9 @@
 package utils.DTO;
 
 import Agregador.HechosYColecciones.ContenidoMultimedia;
-import Agregador.Contribuyente;
+import Agregador.Contribuyente.Contribuyente;
 import Agregador.HechosYColecciones.EstadoHecho;
 import Agregador.HechosYColecciones.Ubicacion;
-import Agregador.fuente.Fuente;
 
 import java.util.Date;
 import java.util.List;

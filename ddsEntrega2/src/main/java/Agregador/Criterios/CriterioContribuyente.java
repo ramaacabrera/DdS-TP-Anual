@@ -1,6 +1,6 @@
 package Agregador.Criterios;
 
-import Agregador.Contribuyente;
+import Agregador.Contribuyente.Contribuyente;
 import Agregador.HechosYColecciones.Hecho;
 
 public class CriterioContribuyente extends Criterio {

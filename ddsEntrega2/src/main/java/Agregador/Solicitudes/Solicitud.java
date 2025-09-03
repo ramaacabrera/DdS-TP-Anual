@@ -4,9 +4,9 @@ import Agregador.HechosYColecciones.Hecho;
 
 public abstract class Solicitud {
 
-    private String id;
-    private Hecho hechoAsociado;
-    private String justificacion;
+    protected int id;
+    protected int hechoAsociado;
+    protected String justificacion;
 
     public abstract void aceptarSolicitud();
     public abstract void rechazarSolicitud();
@@ -17,8 +17,8 @@ public abstract class Solicitud {
         }
     }*/
 
-    public void setHechoAsociado(Hecho hechoAsociado) {
-        this.hechoAsociado = hechoAsociado;
+    public void setHechoAsociado(int idHechoAsociado) {
+        this.hechoAsociado = idHechoAsociado;
     }
 
     public void setJustificacion(String justificacion) {
@@ -29,7 +29,7 @@ public abstract class Solicitud {
         this.justificacion = justificacion;
     }
 
-    public Hecho getHechoAsociado() {
+    public int getHechoAsociado() {
         return hechoAsociado;
     }
 
@@ -37,5 +37,5 @@ public abstract class Solicitud {
         return justificacion;
     }
 
-    public String getId() {return id;}
+    public int getId() {return id;}
 }

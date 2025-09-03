@@ -20,7 +20,7 @@ public class PostHechosHandler implements Handler {
         HechoDTO nueva = ctx.bodyAsClass(HechoDTO.class);
 
         System.out.println("Creando hechoDTO: " + jsonBody);
-        repositorio.guardar(nueva);
+        repositorio.guardarHecho(nueva);
 
         ctx.status(201).result("HechoDTO creado con éxito.");
     }

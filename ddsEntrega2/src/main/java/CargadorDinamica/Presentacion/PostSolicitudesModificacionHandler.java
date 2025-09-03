@@ -1,6 +1,5 @@
 package CargadorDinamica.Presentacion;
 
-import Agregador.Solicitudes.DetectorDeSpam;
 import CargadorDinamica.DinamicoRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -18,14 +17,8 @@ public class PostSolicitudesModificacionHandler implements Handler {
     public void handle(@NotNull Context context) throws Exception {
         String bodyString = context.body();
         SolicitudDeModificacionDTO solicitud = context.bodyAsClass(SolicitudDeModificacionDTO.class);
-        if(!DetectorDeSpam.esSpam(solicitud.getJustificacion())) {
-            System.out.println("Creando solicitud: " + bodyString);
-            repositorio.guardarSolicitud(solicitud);
-            context.status(201);
-        }
-        else{
-            context.result("Solicitud de eliminacion no creada, la misma es spam");
-            context.status(400);
-        }
+
+        repositorio.guardarSolicitudModificacion(solicitud);
+        context.status(201);
     }
 }

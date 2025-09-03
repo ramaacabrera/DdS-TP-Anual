@@ -1,6 +1,8 @@
 package Agregador;
 
-import Agregador.Normalizador.NormalizadorMock;
+import Agregador.PaqueteNormalizador.MockNormalizador;
+import Agregador.PaqueteAgregador.Agregador;
+import Agregador.PaqueteAgregador.ConexionCargador;
 import Agregador.Presentacion.*;
 import Agregador.Persistencia.*;
 import io.javalin.Javalin;
@@ -54,8 +56,8 @@ public class MainAgregador {
 
         //    <<<<<<<<<-
 
-        NormalizadorMock normalizadorMock = new NormalizadorMock();
+        MockNormalizador mockNormalizador = new MockNormalizador();
         ConexionCargador cargador = new ConexionCargador("http://localhost:"+puertoEstatico, "http://localhost:"+puertoDinamico, "http://localhost:"+puertoProxy);
-        Agregador agregador = new Agregador(hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio, solicitudModificacionRepositorio, normalizadorMock, cargador);
+        Agregador agregador = new Agregador(hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio, solicitudModificacionRepositorio, mockNormalizador, cargador);
     }
 }
