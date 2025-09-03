@@ -24,7 +24,7 @@ public class PostSolicitudEliminacionHandler implements Handler {
             HttpClient httpClient = HttpClient.newHttpClient();
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8080/solicitudesEliminacion")) // 🔹 Puerto del Dinámico
+                    .uri(new URI("http://localhost:8080/solicitudesEliminacion"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(bodyJson))
                     .build();

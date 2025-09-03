@@ -11,8 +11,8 @@ public class MainAPIPublica {
     public static void main(String[] args) throws InterruptedException {
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        int puerto = Integer.valueOf(config.getProperty("puertoApiPublica"));
-        int puertoDinamica = Integer.valueOf(config.getProperty("puertoDinamica"));
+        int puerto = Integer.parseInt(config.getProperty("puertoApiPublica"));
+        int puertoDinamica = Integer.parseInt(config.getProperty("puertoDinamico"));
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
