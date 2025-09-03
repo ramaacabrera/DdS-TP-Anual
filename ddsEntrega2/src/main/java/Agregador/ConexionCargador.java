@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
+import utils.DTO.SolicitudDeEliminacionDTO;
+
+
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -42,6 +45,13 @@ public class ConexionCargador {
     public List<SolicitudDeModificacionDTO> obtenerSolicitudes(){
         return this.getFromApi(urlCompDinamico + "/solicitudes", new TypeReference<List<SolicitudDeModificacionDTO>>() {
         });
+    }
+
+    public List<SolicitudDeEliminacionDTO> obtenerSolicitudesEliminacion() {
+        return this.getFromApi(
+                urlCompDinamico + "/solicitudesEliminacion",
+                new TypeReference<List<SolicitudDeEliminacionDTO>>() {}
+        );
     }
 
     private <T> T getFromApi(String url, TypeReference<T> typeRef){

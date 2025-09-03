@@ -11,6 +11,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class PostSolicitudEliminacionHandler implements Handler {
+    private final int puertoDinamica;
+
+    public PostSolicitudEliminacionHandler(int puertoDinamica) {
+        this.puertoDinamica = puertoDinamica;
+    }
+
         @Override
         public void handle(Context context) throws Exception {
             String bodyJson = context.body(); // request JSON completo
@@ -18,7 +24,7 @@ public class PostSolicitudEliminacionHandler implements Handler {
             HttpClient httpClient = HttpClient.newHttpClient();
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8080/api/solicitudes"))
+                    .uri(new URI("http://localhost:8080/solicitudesEliminacion")) // 🔹 Puerto del Dinámico
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(bodyJson))
                     .build();

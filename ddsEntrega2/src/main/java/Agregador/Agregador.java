@@ -100,7 +100,18 @@ public class Agregador {
 
         for (SolicitudDeEliminacionDTO dto : solicitudesDeEliminacion) {
             SolicitudDeEliminacion nueva = new SolicitudDeEliminacion(dto);
+            boolean yaExiste = solicitudEliminacionRepositorio.buscarPorId(nueva.getId()).isPresent();
+            boolean esSpam = DetectorDeSpam.esSpam(dto.getJustificacion());
+
+            if (!yaExiste && !esSpam) {
+                solicitudEliminacionRepositorio.add(nueva);
+            }
+
+            if (esSpam) {
+                nueva.rechazarSolicitud();
+            }
         }
+    }
         /*    SolicitudDeEliminacion nueva = new SolicitudDeEliminacion(solicitudDeEliminacionDTO);
 
             boolean yaExisteSoli = solicitudEliminacionRepositorio.buscarPorId(nueva.getId()).isPresent();
@@ -117,7 +128,7 @@ public class Agregador {
         }
 
      */
-    }
+
 
     public void ejecutarAlgoritmoDeConsenso() {
         for (Coleccion coleccion : coleccionRepositorio.obtenerTodas()) {
