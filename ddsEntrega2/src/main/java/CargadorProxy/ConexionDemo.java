@@ -79,7 +79,7 @@ public class ConexionDemo extends ConexionProxy{
         HttpURLConnection connection = null;
         try {
             // Formatear la fecha para la API Mock
-            String fechaFormateada = fechaUltimaConsulta.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);;
+            String fechaFormateada = fechaUltimaConsulta.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             String requestUrl = url + "?fechaDesde=" + fechaFormateada;
 
             URL url = new URL(requestUrl);

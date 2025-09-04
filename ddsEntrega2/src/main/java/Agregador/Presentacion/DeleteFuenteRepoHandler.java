@@ -27,7 +27,7 @@ public class DeleteFuenteRepoHandler implements Handler {
 
         Optional<Coleccion> resultadoBusqueda = repositorio.buscarPorHandle(handle);
         if(resultadoBusqueda.isPresent()){
-            resultadoBusqueda.get().eliminarFuente(context.bodyAsClass(Fuente.class));
+            resultadoBusqueda.get().eliminarFuente(fuente);
             context.status(200);
         } else {
             context.status(404);

@@ -88,7 +88,6 @@ public class Coleccion {
                 return false; // false → no es nuevo, lo actualicé
             }
         }
-        otroHecho.setHandle(this.handle);
         hechos.add(otroHecho);
         return true; // true → era nuevo, lo agregué
     }

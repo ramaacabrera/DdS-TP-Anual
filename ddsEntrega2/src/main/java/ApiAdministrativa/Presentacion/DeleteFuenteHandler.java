@@ -23,9 +23,9 @@ public class DeleteFuenteHandler implements Handler {
     @Override
     public void handle(Context context) throws IOException, URISyntaxException, InterruptedException {
         String handle = context.pathParam("id");
-        Fuente fuente = context.bodyAsClass(Fuente.class);
-
-        String fuenteJson = objectMapper.writeValueAsString(fuente);
+//        Fuente fuente = context.bodyAsClass(Fuente.class);
+//
+//        String fuenteJson = objectMapper.writeValueAsString(fuente);
 
         /*
 
@@ -40,7 +40,7 @@ public class DeleteFuenteHandler implements Handler {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI("http://localhost:8080/colecciones/" + handle + "/fuente"))
-                .method("DELETE", HttpRequest.BodyPublishers.ofString(fuenteJson)) // DELETE con body
+                .method("DELETE", HttpRequest.BodyPublishers.ofString(context.body()))//ofString(fuenteJson)) // DELETE con body
                 .header("Content-Type", "application/json")
                 .build();
 

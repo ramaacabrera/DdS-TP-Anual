@@ -8,7 +8,7 @@ import java.util.Optional;
 
 
 public class ColeccionRepositorio {
-    private static List<Coleccion> colecciones = new ArrayList<>();
+    private static final List<Coleccion> colecciones = new ArrayList<>();
 
     public void guardar(Coleccion coleccion) {
         colecciones.add(coleccion);
@@ -25,13 +25,14 @@ public class ColeccionRepositorio {
     public Optional<Coleccion> buscarPorHandle(String handle) {
         return colecciones.stream().filter(c -> c.getHandle().equals(handle)).findFirst();
     }
-    public Coleccion obtenerColeccionPorHandle(String handle) {
-        return colecciones.stream().filter(c -> c.getHandle().equals(handle)).findFirst().orElse(null);
-    }
 
     public void actualizar(Coleccion coleccion) {
-        Coleccion buscar = obtenerColeccionPorHandle(coleccion.getHandle());
-        colecciones.set(colecciones.indexOf(buscar), coleccion);
+        Optional<Coleccion> col = this.buscarPorHandle(coleccion.getHandle());
+        Coleccion buscar;
+        if(col.isPresent()){
+            buscar = col.get();
+            colecciones.set(colecciones.indexOf(buscar), coleccion);
+        }
     }
 
     public void eliminar(Coleccion coleccion) {colecciones.remove(coleccion);}

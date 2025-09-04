@@ -1,11 +1,12 @@
 package Agregador.fuente;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import utils.DTO.HechoDTO;
+//import com.fasterxml.jackson.annotation.JsonSubTypes;
+//import com.fasterxml.jackson.annotation.JsonTypeInfo;
+//import utils.DTO.HechoDTO;
 
-import java.util.List;
+//import java.util.List;
+import java.util.Objects;
 
 //@JsonTypeInfo(
 //        use = JsonTypeInfo.Id.NAME,
@@ -51,20 +52,18 @@ public class Fuente {
                 ", ruta='" + ruta +
                 '}';
     }
-}
-/*public class Fuente {
-    private TipoDeFuente tipoDeFuente;
-    private String ruta;
-    
-    public Fuente(){}
-    
-    public Fuente(TipoDeFuente tipoDeFuente, String rutaNueva){// Conexion conexion) {
-        this.tipoDeFuente = tipoDeFuente;
-        this.ruta = rutaNueva;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Fuente fuente = (Fuente) o;
+        return Objects.equals(tipoDeFuente, fuente.tipoDeFuente) &&
+                Objects.equals(ruta, fuente.ruta);
     }
 
-    public void setTipoDeFuente(TipoDeFuente tipoDeFuente) {this.tipoDeFuente = tipoDeFuente;}
-    public void setRuta(String ruta){this.ruta = ruta;}
-    public TipoDeFuente getTipoDeFuente(){return tipoDeFuente;}
-    public String getRuta(){return ruta;}
-/*/
+    @Override
+    public int hashCode() {
+        return Objects.hash(tipoDeFuente, ruta);
+    }
+}

@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.DTO.HechoDTO;
 
 import java.io.InputStream;
-import java.io.OutputStream;
+//import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
+//import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+//import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -58,32 +58,32 @@ public class ConexionMetaMapa extends ConexionProxy{
         }
     }
 
-    public void crearSolicitudEliminacion(HechoDTO hechoDTO, String justificacion){
-        URL urlSolicitudEliminacion;
-        try{
-            urlSolicitudEliminacion = new URL(url + "/solicitudes");
-            HttpURLConnection urlConnection = (HttpURLConnection) urlSolicitudEliminacion.openConnection();
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setDoOutput(true);
-
-            Map<String,Object> parametros = new HashMap<>();
-            parametros.put("hechoDTO", hechoDTO);
-            parametros.put("justificacion", justificacion);
-
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(parametros);
-
-            OutputStream output = urlConnection.getOutputStream();
-            output.write(json.getBytes());
-            output.flush();
-            output.close();
-
-            urlConnection.disconnect();
-        }
-        catch (Exception e){
-            System.out.println("Error al crear solicitud " + e.getMessage());
-        }
-    }
+//    public void crearSolicitudEliminacion(HechoDTO hechoDTO, String justificacion){
+//        URL urlSolicitudEliminacion;
+//        try{
+//            urlSolicitudEliminacion = new URL(url + "/solicitudes");
+//            HttpURLConnection urlConnection = (HttpURLConnection) urlSolicitudEliminacion.openConnection();
+//            urlConnection.setRequestMethod("POST");
+//            urlConnection.setRequestProperty("Content-Type", "application/json");
+//            urlConnection.setDoOutput(true);
+//
+//            Map<String,Object> parametros = new HashMap<>();
+//            parametros.put("hechoDTO", hechoDTO);
+//            parametros.put("justificacion", justificacion);
+//
+//            ObjectMapper mapper = new ObjectMapper();
+//            String json = mapper.writeValueAsString(parametros);
+//
+//            OutputStream output = urlConnection.getOutputStream();
+//            output.write(json.getBytes());
+//            output.flush();
+//            output.close();
+//
+//            urlConnection.disconnect();
+//        }
+//        catch (Exception e){
+//            System.out.println("Error al crear solicitud " + e.getMessage());
+//        }
+//    }
 
 }

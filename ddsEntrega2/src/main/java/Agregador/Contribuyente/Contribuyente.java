@@ -19,7 +19,7 @@ public class Contribuyente {
     private String apellido;
     public void Contribuyente() {}
 
-    public void VerificarMayoriaDeEdad() {}
+    //public void VerificarMayoriaDeEdad() {}
 
     public void hechoSubido(Hecho hecho){
         hechosSubidos.add(hecho);

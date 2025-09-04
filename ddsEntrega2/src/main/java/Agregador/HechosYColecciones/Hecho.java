@@ -13,7 +13,6 @@ public class Hecho {
 
     private int id;
     private String titulo;
-    private String handle;
     private String descripcion;
     private String categoria;
     private Ubicacion ubicacion;
@@ -69,7 +68,6 @@ public class Hecho {
 
     public int getId(){return id;}
 
-    public String getHandle(){return handle;}
 
     public String getDescripcion() {
         return descripcion;
@@ -133,7 +131,6 @@ public class Hecho {
 
     public void setId(int idNuevo){id = idNuevo;}
 
-    public void setHandle(String handleNuevo){handle = handleNuevo;}
 
     public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoNuevo) {contenidoMultimedia = contenidoNuevo;}
 

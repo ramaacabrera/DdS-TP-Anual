@@ -41,6 +41,7 @@ public class MainAgregador {
         Agregador agregador = new Agregador(hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio, solicitudModificacionRepositorio, mockNormalizador, cargador);
 
         app.get("/hechos", new GetHechosRepoHandler(hechoRepositorio));
+        app.get("/solicitudesEliminacion", new GetSolicitudesEliminacionRepoHandler(solicitudEliminacionRepositorio));
         app.get("/colecciones", new GetColeccionesRepoHandler(coleccionRepositorio));
         app.get("/colecciones/{id}", new GetColeccionEspecificaRepoHandler(coleccionRepositorio));
 

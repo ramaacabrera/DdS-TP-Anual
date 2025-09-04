@@ -9,6 +9,8 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+import static java.nio.file.Files.*;
+
 public class GetHechosEstaticoHandler implements Handler {
 
     String fileServer;
@@ -30,7 +32,7 @@ public class GetHechosEstaticoHandler implements Handler {
         // Cargar archivo guía
         Set<String> procesados = cargarArchivosProcesados(pathGuia);
 
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(carpeta, "*.csv")) {
+        try (DirectoryStream<Path> stream = newDirectoryStream(carpeta, "*.csv")) {
             for (Path archivo : stream) {
                 String nombreArchivo = archivo.getFileName().toString();
 
@@ -55,9 +57,9 @@ public class GetHechosEstaticoHandler implements Handler {
 
     private Set<String> cargarArchivosProcesados(Path pathGuia) {
         Set<String> procesados = new HashSet<>();
-        if (!Files.exists(pathGuia)) return procesados;
+        if (!exists(pathGuia)) return procesados;
 
-        try (BufferedReader reader = Files.newBufferedReader(pathGuia)) {
+        try (BufferedReader reader = newBufferedReader(pathGuia)) {
             String linea;
             while ((linea = reader.readLine()) != null) {
                 procesados.add(linea.trim());
@@ -69,7 +71,7 @@ public class GetHechosEstaticoHandler implements Handler {
     }
 
     private void guardarGuia(Path pathGuia, Set<String> procesados) {
-        try (BufferedWriter writer = Files.newBufferedWriter(pathGuia)) {
+        try (BufferedWriter writer = newBufferedWriter(pathGuia)) {
             for (String archivo : procesados) {
                 writer.write(archivo);
                 writer.newLine();

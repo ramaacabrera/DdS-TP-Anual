@@ -40,6 +40,7 @@ public class Agregador {
         scheduler.scheduleAtFixedRate(() -> {
             this.actualizarHechosDesdeFuentes();
             this.agregarSolicitudes();
+            this.actualizarColecciones();
         }, 0, 1, TimeUnit.HOURS);
 
         long delayInicial = calcularDelayHastaHora(2);  // 2 AM
@@ -56,6 +57,18 @@ public class Agregador {
 
     private Hecho normalizarHecho(HechoDTO hecho){
         return normalizador.normalizar(new Hecho(hecho));
+    }
+
+    public void actualizarColecciones(){
+        List<Coleccion> colecciones = coleccionRepositorio.obtenerTodas();
+        List<Hecho> hechos = hechoRepositorio.getHechos();
+        for(Coleccion coleccion : colecciones){
+            for(Hecho hecho : hechos){
+                if(coleccion.cumpleCriterio(hecho)){
+                    coleccion.agregarHecho(hecho);
+                }
+            }
+        }
     }
 
     public void actualizarHechosDesdeFuentes() {
@@ -76,23 +89,6 @@ public class Agregador {
                 //System.out.println("Hecho actualizado: " + hechoNormalizado.getTitulo());
             }
         }
-
-        /*hechos.stream()
-                .map(h -> {return this.normalizarHecho(h);})
-                .forEach(hechoNormalizado -> {
-                    System.out.println("Busco hecho existente: " + hechoNormalizado);
-                    Hecho existente = buscarHechoSimilar(hechoNormalizado);
-                    System.out.println("Veo hecho: " + existente);
-                    if (existente == null) {
-                        // si no existe lo guardo como nuevo
-                        hechoRepositorio.guardar(hechoNormalizado);
-                        System.out.println("Nuevo hecho agregado: " + hechoNormalizado.getTitulo());
-                    } else {
-                        // si ya existe lo actualizo
-                        hechoRepositorio.actualizar(hechoNormalizado);
-                        System.out.println("Hecho actualizado: " + hechoNormalizado.getTitulo());
-                    }
-                });*/
     }
 
     private Hecho buscarHechoSimilar(Hecho hechoNuevo) {

@@ -30,7 +30,7 @@ public class PostFuentesColeccionHandler implements Handler {
         HttpClient httpClient = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("http://localhost:8080/colecciones" + handle + "/fuente"))
+                .uri(new URI("http://localhost:8080/colecciones/" + handle + "/fuente"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(fuenteJson))
                 .build();
