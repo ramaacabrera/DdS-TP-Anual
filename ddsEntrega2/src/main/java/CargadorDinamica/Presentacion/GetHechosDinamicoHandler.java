@@ -18,7 +18,7 @@ public class GetHechosDinamicoHandler implements Handler {
     public void handle(@NotNull Context ctx) throws Exception {
         List<HechoDTO> hechos = this.obtenerHechos();
         ctx.json(hechos);
-        ctx.status(200).result("Hechos de fuente dinamica entregados al Agregador.");
+        ctx.status(200);
     }
 
     public List<HechoDTO> obtenerHechos(){

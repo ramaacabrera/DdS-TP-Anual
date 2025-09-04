@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CargadorDinamico" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="CargadorDinamica.MainDinamica" />
+    <module name="pruebaclase1" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -32,6 +32,8 @@ public class ConexionCargador {
         listaHecho.addAll(this.buscarHechos(urlCompDinamico));
         listaHecho.addAll(this.buscarHechos(urlCompProxy));
         listaHecho.addAll(this.buscarHechos(urlCompEstatico));
+
+        System.out.println("Hechos obtenidos desde fuentes: " + listaHecho.size());
         return listaHecho;
     }
 
@@ -42,7 +44,7 @@ public class ConexionCargador {
     }
 
     public List<SolicitudDeModificacionDTO> obtenerSolicitudes(){
-        return this.getFromApi(urlCompDinamico + "/solicitudes", new TypeReference<List<SolicitudDeModificacionDTO>>() {
+        return this.getFromApi(urlCompDinamico + "/solicitudesModificacion", new TypeReference<List<SolicitudDeModificacionDTO>>() {
         });
     }
 
