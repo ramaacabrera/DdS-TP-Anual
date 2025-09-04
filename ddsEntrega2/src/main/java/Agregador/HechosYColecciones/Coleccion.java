@@ -24,6 +24,7 @@ public class Coleccion {
     private TipoAlgoritmoConsenso algoritmoDeConsenso;
     private List<Hecho> hechosConsensuados = new ArrayList<>();
 
+    public Coleccion(){}
 
     public Coleccion(String titulo, String descripcion, List<Criterio> criterios, TipoAlgoritmoConsenso algoritmoDeConsenso) {
         this.titulo = titulo;

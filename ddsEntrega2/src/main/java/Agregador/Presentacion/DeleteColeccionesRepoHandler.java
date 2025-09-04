@@ -23,7 +23,7 @@ public class DeleteColeccionesRepoHandler implements Handler {
         if(aBorrar.isPresent()){
             //System.out.println("Borrando coleccion: " + ctx.json()jsonBody);
             repositorio.eliminar(aBorrar.get());
-            ctx.status(201).result("Colección borrada con éxito.");
+            ctx.status(200).result("Colección borrada con éxito.");
         }
         else {
             //System.out.println("Coleccion no encontrada: " + jsonBody);

@@ -44,6 +44,7 @@ public class MainAgregador {
         app.get("/colecciones", new GetColeccionesRepoHandler(coleccionRepositorio));
         app.get("/colecciones/{id}", new GetColeccionEspecificaRepoHandler(coleccionRepositorio));
 
+        app.post("/colecciones", new PostColeccionRepoHandler(coleccionRepositorio));
 
         app.post("/solicitudes", new PostSolicitudEliminacionRepoHandler(solicitudEliminacionRepositorio));
 

@@ -18,10 +18,10 @@ public class GetColeccionEspecificaRepoHandler implements Handler {
         Optional<Coleccion> coleccionOpt = repositorio.buscarPorHandle(handle);
 
         if (!coleccionOpt.isPresent()) {
-            ctx.status(404).result("Colección no encontrada");
+            ctx.status(404);
             return;
         } else {
-            ctx.json(coleccionOpt);
+            ctx.json(coleccionOpt.get());
         }
     }
 }

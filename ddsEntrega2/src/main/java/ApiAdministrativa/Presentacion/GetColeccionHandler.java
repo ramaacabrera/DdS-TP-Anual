@@ -39,12 +39,15 @@ public class GetColeccionHandler implements Handler {
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        if(response.statusCode() == 200) {
+            Coleccion coleccion = mapper.readValue(response.body(), new TypeReference<>() {
+            });
 
-        Coleccion coleccion = mapper.readValue(response.body(), new TypeReference<>() {
-        });
-
-        ctx.status(200).json(coleccion);
-
+            ctx.status(200).json(coleccion);
+        }
+        else{
+            ctx.status(404).result("No se encontro el registro");
+        }
         //    <<<<<<<<<-
 
 //        final Optional<Coleccion> resultadoBusqueda = repositorio.buscarPorHandle(handle);
