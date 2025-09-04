@@ -38,6 +38,7 @@ public class ConexionEstatica {
             List<CSVRecord> registros = parser.getRecords();
             for (CSVRecord registro : registros) {
                 HechoDTO hechoDTO = conversor.mapearAHecho(registro);
+                hechoDTO.setFuente(path);
                 hechos.add(hechoDTO);
             }
             System.out.println("Hechos encontrados: " + hechos.size());

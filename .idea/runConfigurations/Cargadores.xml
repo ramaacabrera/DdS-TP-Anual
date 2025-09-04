@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Cargadores" type="CompoundRunConfigurationType">
+    <toRun name="CargadorDinamico" type="Application" />
+    <toRun name="CargadorEstatico" type="Application" />
+    <toRun name="CargadorProxy" type="Application" />
+    <method v="2" />
+  </configuration>
+</component>

@@ -1,6 +1,5 @@
 package ApiPublica.Presentacion;
 
-import Agregador.Persistencia.HechoRepositorio;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.BadRequestResponse;
@@ -57,16 +56,12 @@ public class GetHechosHandler implements Handler {
                 .build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-
-
-
-
-        HechoRepositorio repositorio = mapper.readValue(response.body(), new TypeReference<>() {
+        List<Hecho> repositorio = mapper.readValue(response.body(), new TypeReference<>() {
         });
 
         //    <<<<<<<<<-
-        List<Hecho> hechosFiltrados = repositorio.buscarHechos(criterios);
-        ctx.json(hechosFiltrados);
+
+        ctx.json(this.buscarHechos(repositorio, criterios));
     }
 
     private List<Criterio> armarListaDeCriterios(Context ctx) {
@@ -134,5 +129,20 @@ public class GetHechosHandler implements Handler {
         }
 
         return criterios;
+    }
+
+    public List<Hecho> buscarHechos(List<Hecho> hechos, List<Criterio> criterios) {
+        if(criterios == null || criterios.isEmpty()){
+            return hechos;
+        }
+        List<Hecho> hechosADevolver = new ArrayList<Hecho>();
+        for (Hecho hecho : hechos) {
+            for(Criterio criterio : criterios) {
+                if(criterio.cumpleConCriterio(hecho) && hecho.estaActivo()) {
+                    hechosADevolver.add(hecho);
+                }
+            }
+        }
+        return hechosADevolver;
     }
 }

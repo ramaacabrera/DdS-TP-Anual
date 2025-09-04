@@ -2,8 +2,6 @@ package ApiPublica.Presentacion;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import utils.DTO.SolicitudDeEliminacionDTO;
-import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -13,9 +11,7 @@ import java.net.http.HttpResponse;
 public class PostSolicitudEliminacionHandler implements Handler {
     private final int puertoDinamica;
 
-    public PostSolicitudEliminacionHandler(int puertoDinamica) {
-        this.puertoDinamica = puertoDinamica;
-    }
+    public PostSolicitudEliminacionHandler(int puertoDinamicaNuevo) {puertoDinamica = puertoDinamicaNuevo;}
 
         @Override
         public void handle(Context context) throws Exception {
@@ -24,7 +20,7 @@ public class PostSolicitudEliminacionHandler implements Handler {
             HttpClient httpClient = HttpClient.newHttpClient();
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8080/solicitudesEliminacion"))
+                    .uri(new URI("http://localhost:" + puertoDinamica + "/solicitudesEliminacion"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(bodyJson))
                     .build();

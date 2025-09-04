@@ -43,7 +43,7 @@ public class Hecho {
         this.etiquetas = etiquetas;
         this.esEditable = esEditable;
         this.contenidoMultimedia = contenidoMultimedia;
-        this.id = 0;
+        this.id = -1;
     }
 
     public Hecho(HechoDTO hechoDTO){

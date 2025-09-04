@@ -9,9 +9,13 @@ import java.util.List;
 
 public class HechoRepositorio {
     private final List<Hecho> hechos;
-
+    private int idIncremental = 0;
     public HechoRepositorio() {
         this.hechos = new ArrayList<>();
+    }
+
+    public List<Hecho>getHechos(){
+        return this.hechos;
     }
 
     public List<Hecho> buscarHechos(List<Criterio> criterios) {
@@ -30,11 +34,16 @@ public class HechoRepositorio {
     }
 
     public void guardar(Hecho hecho) {
+        hecho.setId(idIncremental);
+        idIncremental++;
         hechos.add(hecho);
     }
 
     public void guardar(HechoDTO hecho) {
-        hechos.add(new Hecho(hecho));
+        Hecho h = new Hecho();
+        h.setId(idIncremental);
+        idIncremental++;
+        hechos.add(h);
     }
 
     public void remover(Hecho hecho) {

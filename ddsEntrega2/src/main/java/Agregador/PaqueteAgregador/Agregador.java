@@ -60,11 +60,29 @@ public class Agregador {
 
     public void actualizarHechosDesdeFuentes() {
         List<HechoDTO> hechos = conexionCargador.obtenerHechosNuevos();
+        System.out.println("Hechos : " + hechos.size());
+        for(HechoDTO hecho : hechos){
+            Hecho hechoNormalizado = this.normalizarHecho(hecho);
+            Hecho existente = buscarHechoSimilar(hechoNormalizado);
+            if (existente == null) {
+                // si no existe lo guardo como nuevo
+                hechoRepositorio.guardar(hechoNormalizado);
+                System.out.println("Fuente del hecho:" + hechoNormalizado.getFuente());
+                //System.out.println("Nuevo hecho agregado: " + hechoNormalizado.getTitulo());
+            } else {
+                // si ya existe lo actualizo
+                hechoRepositorio.actualizar(hechoNormalizado);
+                System.out.println("Fuente del hecho:" + hechoNormalizado.getFuente());
+                //System.out.println("Hecho actualizado: " + hechoNormalizado.getTitulo());
+            }
+        }
 
-        hechos.stream()
-                .map(this::normalizarHecho).forEach(hechoNormalizado -> {
+        /*hechos.stream()
+                .map(h -> {return this.normalizarHecho(h);})
+                .forEach(hechoNormalizado -> {
+                    System.out.println("Busco hecho existente: " + hechoNormalizado);
                     Hecho existente = buscarHechoSimilar(hechoNormalizado);
-
+                    System.out.println("Veo hecho: " + existente);
                     if (existente == null) {
                         // si no existe lo guardo como nuevo
                         hechoRepositorio.guardar(hechoNormalizado);
@@ -74,7 +92,7 @@ public class Agregador {
                         hechoRepositorio.actualizar(hechoNormalizado);
                         System.out.println("Hecho actualizado: " + hechoNormalizado.getTitulo());
                     }
-                });
+                });*/
     }
 
     private Hecho buscarHechoSimilar(Hecho hechoNuevo) {
@@ -94,7 +112,7 @@ public class Agregador {
         for (SolicitudDeEliminacionDTO dto : solicitudesDeEliminacion) {
             //SolicitudDeEliminacion nueva = new SolicitudDeEliminacion(dto);
             //boolean yaExiste = solicitudEliminacionRepositorio.yaExiste(dto);
-            boolean esSpam = DetectorDeSpam.esSpam(dto.getJustificacion());
+            boolean esSpam = detectorDeSpam.esSpam(dto.getJustificacion());
 
             if (!esSpam){ // !yaExiste &&) {
                 solicitudEliminacionRepositorio.agregarSolicitudEliminacion(dto);
