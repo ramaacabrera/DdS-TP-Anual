@@ -25,7 +25,7 @@ public class DemoAPIMockServer {
 
         // Inicializar Javalin con el ObjectMapper personalizado
         Javalin app = Javalin.create(config -> {
-            config.jsonMapper(new JavalinJackson(objectMapper));
+            config.jsonMapper(new JavalinJackson());
             config.showJavalinBanner = false;
             // Se eliminó la configuración CORS
         }).start(PORT);

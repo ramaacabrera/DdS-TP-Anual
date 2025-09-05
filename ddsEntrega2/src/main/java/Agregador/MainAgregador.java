@@ -37,7 +37,11 @@ public class MainAgregador {
         SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
 
         MockNormalizador mockNormalizador = new MockNormalizador();
-        ConexionCargador cargador = new ConexionCargador("http://localhost:"+puertoEstatico, "http://localhost:"+puertoDinamico, "http://localhost:"+puertoProxy);
+        ConexionCargador cargador = new ConexionCargador(
+                "http://localhost:"+puertoEstatico,
+                "http://localhost:"+puertoDinamico,
+                "http://localhost:"+puertoProxy);
+
         Agregador agregador = new Agregador(hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio, solicitudModificacionRepositorio, mockNormalizador, cargador);
 
         app.get("/hechos", new GetHechosRepoHandler(hechoRepositorio));
