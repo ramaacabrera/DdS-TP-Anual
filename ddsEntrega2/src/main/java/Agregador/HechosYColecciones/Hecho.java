@@ -52,7 +52,7 @@ public class Hecho {
         this.ubicacion = hechoDTO.getUbicacion();
         this.fechaDeAcontecimiento = hechoDTO.getFechaDeAcontecimiento();
         this.fechaDeCarga = hechoDTO.getFechaDeCarga();
-        this.fuente = this.convertirFuente(hechoDTO.getFuente());
+        this.fuente = hechoDTO.getFuente();
         this.estadoHecho = hechoDTO.getEstadoHecho();
         this.contribuyente = hechoDTO.getContribuyente();
         this.etiquetas = hechoDTO.getEtiquetas();
@@ -195,18 +195,5 @@ public class Hecho {
         this.etiquetas = otroHecho.getEtiquetas();
         this.esEditable = otroHecho.esEditable();
         this.contenidoMultimedia = otroHecho.getContenidoMultimedia();
-    }
-
-    public Fuente convertirFuente(String ruta){
-        if (ruta.toLowerCase().endsWith(".csv")) {
-            return new Fuente(TipoDeFuente.ESTATICA, ruta);
-        }
-
-        String urlCargadorDinamico = "http://localhost:8084/";
-        if (ruta.contains("localhost") &&  ruta.contains(urlCargadorDinamico)) {
-            return new Fuente(TipoDeFuente.DINAMICA, ruta);
-        }
-
-        return new Fuente(TipoDeFuente.PROXY, ruta);
     }
 }

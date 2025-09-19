@@ -2,7 +2,7 @@ package Agregador;
 
 import Agregador.PaqueteNormalizador.MockNormalizador;
 import Agregador.PaqueteAgregador.Agregador;
-import Agregador.PaqueteAgregador.ConexionCargador;
+import Agregador.Cargador.ConexionCargador;
 import Agregador.Presentacion.*;
 import Agregador.Persistencia.*;
 import io.javalin.Javalin;
@@ -37,12 +37,9 @@ public class MainAgregador {
         SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
 
         MockNormalizador mockNormalizador = new MockNormalizador();
-        ConexionCargador cargador = new ConexionCargador(
-                "http://localhost:"+puertoEstatico,
-                "http://localhost:"+puertoDinamico,
-                "http://localhost:"+puertoProxy);
+        ConexionCargador conexionCargador = new ConexionCargador();
 
-        Agregador agregador = new Agregador(hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio, solicitudModificacionRepositorio, mockNormalizador, cargador);
+        Agregador agregador = new Agregador(hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio, solicitudModificacionRepositorio, mockNormalizador, conexionCargador);
 
         app.get("/hechos", new GetHechosRepoHandler(hechoRepositorio));
         app.get("/solicitudesEliminacion", new GetSolicitudesEliminacionRepoHandler(solicitudEliminacionRepositorio));
@@ -65,5 +62,11 @@ public class MainAgregador {
 
 
         //    <<<<<<<<<-
+
+        app.post("/cargador", new PostFuenteHandler(conexionCargador));
+
+        app.get("/cargador", new GetFuentesHandler(conexionCargador));
+
+        app.delete("/cargador/{id}", new DeleteFuenteHandler(conexionCargador));
     }
 }

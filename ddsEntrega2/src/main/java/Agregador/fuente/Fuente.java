@@ -1,6 +1,7 @@
 package Agregador.fuente;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import utils.DTO.FuenteDTO;
 //import com.fasterxml.jackson.annotation.JsonSubTypes;
 //import com.fasterxml.jackson.annotation.JsonTypeInfo;
 //import utils.DTO.HechoDTO;
@@ -20,14 +21,22 @@ import java.util.Objects;
 //})
 
 public class Fuente {
+    private int id;
     private TipoDeFuente tipoDeFuente;
     private String ruta;
 
-    public Fuente() {}
+//    public Fuente() {}
 
-    public Fuente(TipoDeFuente tipoDeFuente, String ruta) {
+    public Fuente(TipoDeFuente tipoDeFuente, String ruta, int idNuevo) {
         this.tipoDeFuente = tipoDeFuente;
         this.ruta = ruta;
+        this.id = idNuevo;
+    }
+
+    public Fuente(FuenteDTO fuenteDTO, int idNuevo) {
+        this.tipoDeFuente = fuenteDTO.getTipoDeFuente();
+        this.ruta = fuenteDTO.getRuta();
+        this.id = idNuevo;
     }
 
     public TipoDeFuente getTipoDeFuente() {
@@ -44,6 +53,14 @@ public class Fuente {
 
     public void setRuta(String ruta) {
         this.ruta = ruta;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String toString() {

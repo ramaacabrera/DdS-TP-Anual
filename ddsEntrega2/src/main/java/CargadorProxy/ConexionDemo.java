@@ -214,7 +214,7 @@ public class ConexionDemo extends ConexionProxy{
                 ubicacion,
                 fechaDeAcontecimiento,
                 fechaDeCarga,
-                fuente,
+                null,//fuente,
                 estadoHecho,
                 null, // Contribuyente
                 etiquetas,

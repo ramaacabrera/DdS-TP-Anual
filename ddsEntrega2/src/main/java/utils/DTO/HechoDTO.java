@@ -4,6 +4,7 @@ import Agregador.HechosYColecciones.ContenidoMultimedia;
 import Agregador.Contribuyente.Contribuyente;
 import Agregador.HechosYColecciones.EstadoHecho;
 import Agregador.HechosYColecciones.Ubicacion;
+import Agregador.fuente.Fuente;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,7 @@ public class HechoDTO {
     private Ubicacion ubicacion;
     private Date fechaDeAcontecimiento;
     private Date fechaDeCarga;
-    private String fuente;
+    private Fuente fuente;
     private EstadoHecho estadoHecho;
     private Contribuyente contribuyente;
     private List<String> etiquetas;
@@ -25,7 +26,7 @@ public class HechoDTO {
     public HechoDTO() {}
 
     public HechoDTO(String titulo, String descripcion, String categoria, Ubicacion ubicacion, Date fechaDeAcontecimiento,
-                    Date fechaDeCarga, String fuente, EstadoHecho estadoHecho, Contribuyente contribuyente, List<String> etiquetas, boolean esEditable,
+                    Date fechaDeCarga, Fuente fuente, EstadoHecho estadoHecho, Contribuyente contribuyente, List<String> etiquetas, boolean esEditable,
                     List<ContenidoMultimedia> contenidoMultimedia) {
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -47,7 +48,7 @@ public class HechoDTO {
     public Ubicacion getUbicacion() { return ubicacion;}
     public Date getFechaDeAcontecimiento() { return fechaDeAcontecimiento;}
     public Date getFechaDeCarga() { return fechaDeCarga;}
-    public String getFuente() { return fuente;}
+    public Fuente getFuente() { return fuente;}
     public EstadoHecho getEstadoHecho() { return estadoHecho;}
     public Contribuyente getContribuyente() { return contribuyente;}
     public List<String> getEtiquetas() { return etiquetas;}
@@ -59,7 +60,7 @@ public class HechoDTO {
     public void setCategoria(String categoria){ this.categoria = categoria;}
     public void setUbicacion(Ubicacion ubicacion) {this.ubicacion = ubicacion;}
     public void setFechaDeAcontecimiento(Date fechaDeAcontecimiento){ this.fechaDeAcontecimiento = fechaDeAcontecimiento;}
-    public void setFuente(String fuente) {this.fuente = fuente;}
+    public void setFuente(Fuente fuente) {this.fuente = fuente;}
     public void setEstadoHecho(EstadoHecho estadoHecho){ this.estadoHecho = estadoHecho;}
     public void setContribuyente(Contribuyente contribuyente){ this.contribuyente = contribuyente;}
     public void setEtiquetas(List<String> etiquetas) {this.etiquetas = etiquetas;}

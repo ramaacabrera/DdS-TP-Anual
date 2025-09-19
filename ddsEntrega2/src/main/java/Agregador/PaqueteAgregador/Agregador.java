@@ -1,5 +1,6 @@
 package Agregador.PaqueteAgregador;
 
+import Agregador.Cargador.ConexionCargador;
 import Agregador.PaqueteNormalizador.MockNormalizador;
 import Agregador.Persistencia.ColeccionRepositorio;
 import Agregador.Persistencia.HechoRepositorio;
