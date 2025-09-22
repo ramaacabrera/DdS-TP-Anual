@@ -2,9 +2,11 @@ package Agregador.Criterios;
 
 import Agregador.HechosYColecciones.Hecho;
 
+import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class CriterioDeTexto extends Criterio {
 
     private TipoDeTexto tipoDeTexto;

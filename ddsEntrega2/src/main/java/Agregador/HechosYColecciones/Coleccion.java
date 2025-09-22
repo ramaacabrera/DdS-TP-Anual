@@ -11,18 +11,59 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.UUID;
+
+import org.hibernate.annotations.GenericGenerator;
 import utils.DTO.ColeccionDTO;
 
-public class Coleccion {
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.*;
+
+@Entity
+public class Coleccion {
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "handle", updatable = false, nullable = false)
+    private String handle;
+
+    @OneToMany(mappedBy = "coleccion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Hecho> hechos = new ArrayList<>();
+
     private String titulo;
     private String descripcion;
+
+    @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "ColeccionXFuente",
+            joinColumns = @JoinColumn(name = "handle"),
+            inverseJoinColumns = @JoinColumn(name = "id_fuente")
+    )
     private List<Fuente> fuentes = new ArrayList<>();
-    private String handle;
+
+    @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "ColeccionXCriterio",
+            joinColumns = @JoinColumn(name = "handle"),
+            inverseJoinColumns = @JoinColumn(name = "id_criterio")
+    )
     private List<Criterio> criteriosDePertenencia;
+
     private TipoAlgoritmoConsenso algoritmoDeConsenso;
-    private List<Hecho> hechosConsensuados = new ArrayList<>();
+
+    @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "ColeccionXHecho",
+            joinColumns = @JoinColumn(name = "handle"),
+            inverseJoinColumns = @JoinColumn(name = "hecho_id")
+    )
+    private List<Hecho> hechosConsensuados;
 
     public Coleccion(){}
 
@@ -53,7 +94,6 @@ public class Coleccion {
     public List<Hecho> getHechos() { return hechos.stream().filter(Hecho::estaActivo).collect(Collectors.toList());}
     public String getHandle() {return handle;}
     public List<Hecho> getHechosConsensuados() {return hechosConsensuados;}
-
 
     public void setHechos(List<Hecho> hechos) {this.hechos = hechos;}
     public void setTitulo(String titulo) {this.titulo = titulo;}

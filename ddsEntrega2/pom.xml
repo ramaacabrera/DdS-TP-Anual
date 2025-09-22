@@ -66,6 +66,19 @@
             <version>${slf4j.version}</version>
         </dependency>
 
+        <!-- Hibernate (incluye JPA 2.x con javax.persistence) -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.4.18.Final</version>
+        </dependency>
+
+        <!-- Driver de base de datos (ejemplo MySQL, igual al ejemplo que te pasaron) -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.28</version>
+        </dependency>
 
 
     </dependencies>

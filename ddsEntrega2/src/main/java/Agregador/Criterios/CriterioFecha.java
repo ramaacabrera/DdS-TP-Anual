@@ -2,8 +2,10 @@ package Agregador.Criterios;
 
 import Agregador.HechosYColecciones.Hecho;
 
+import javax.persistence.Entity;
 import java.util.Date;
 
+@Entity
 public class CriterioFecha extends Criterio {
     private Date fechaInicio;
     private Date fechaFin;

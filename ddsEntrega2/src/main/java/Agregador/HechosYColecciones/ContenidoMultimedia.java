@@ -3,7 +3,25 @@ package Agregador.HechosYColecciones;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.util.UUID;
+import javax.persistence.*;
+
+@Entity
 public class ContenidoMultimedia {
+
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id_contenido", updatable = false, nullable = false)
+    private UUID id_contenido;
     private TipoContenidoMultimedia tipoContenido;
     private String contenido;
 

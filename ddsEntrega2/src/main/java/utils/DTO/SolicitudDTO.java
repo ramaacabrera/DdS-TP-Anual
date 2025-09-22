@@ -4,16 +4,16 @@ import Agregador.HechosYColecciones.Hecho;
 
 public class SolicitudDTO {
     private int id;
-    private int hechoAsociado;
+    private Hecho hechoAsociado;
     private String justificacion;
 
     public SolicitudDTO() {}
 
-    public int getHechoAsociado() {
+    public Hecho getHechoAsociado() {
         return hechoAsociado;
     }
 
-    public void setHechoAsociado(int hechoAsociado) {
+    public void setHechoAsociado(Hecho hechoAsociado) {
         this.hechoAsociado = hechoAsociado;
     }
 

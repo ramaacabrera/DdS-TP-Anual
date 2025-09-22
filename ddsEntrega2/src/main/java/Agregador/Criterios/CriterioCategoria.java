@@ -2,8 +2,10 @@ package Agregador.Criterios;
 
 import Agregador.HechosYColecciones.Hecho;
 
+import javax.persistence.Entity;
 import java.util.Objects;
 
+@Entity
 public class CriterioCategoria extends Criterio {
     private String categoria;
     public CriterioCategoria() {}

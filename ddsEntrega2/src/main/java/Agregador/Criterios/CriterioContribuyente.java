@@ -1,12 +1,20 @@
 package Agregador.Criterios;
 
-import Agregador.Contribuyente.Contribuyente;
+import Agregador.Usuario.Usuario;
 import Agregador.HechosYColecciones.Hecho;
 
-public class CriterioContribuyente extends Criterio {
-    private Contribuyente contribuyente;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
-    public CriterioContribuyente(Contribuyente contribuyenteNuevo) {contribuyente = contribuyenteNuevo;}
+@Entity
+public class CriterioContribuyente extends Criterio {
+
+    @OneToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario contribuyente;
+
+    public CriterioContribuyente(Usuario contribuyenteNuevo) {contribuyente = contribuyenteNuevo;}
     public CriterioContribuyente() {}
     @Override
     public boolean cumpleConCriterio(Hecho hecho) {

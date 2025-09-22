@@ -3,7 +3,13 @@ package Agregador.Criterios;
 import Agregador.HechosYColecciones.Hecho;
 import Agregador.HechosYColecciones.Ubicacion;
 
+import javax.persistence.*;
+
+@Entity
 public class CriterioUbicacion extends Criterio {
+
+    @OneToOne
+    @JoinColumn(name = "id_ubicacion")
     private Ubicacion ubicacion;
 
     public CriterioUbicacion() {}

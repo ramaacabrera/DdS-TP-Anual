@@ -3,7 +3,11 @@ package Agregador.Criterios;
 import Agregador.HechosYColecciones.Hecho;
 import Agregador.HechosYColecciones.TipoContenidoMultimedia;
 
+import javax.persistence.*;
+
+@Entity
 public class CriterioTipoMultimedia extends Criterio {
+    @Enumerated(EnumType.STRING)
     private TipoContenidoMultimedia tipoContenidoMultimedia;
 
     public CriterioTipoMultimedia(TipoContenidoMultimedia tipoContenidoMultimediaNuevo) {

@@ -3,18 +3,24 @@ package Agregador.Criterios;
 import Agregador.HechosYColecciones.Hecho;
 import Agregador.fuente.*;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+@Entity
 public class CriterioTipoFuente extends Criterio {
 
-    private Fuente fuente;
+    @Enumerated(EnumType.STRING)
+    private TipoDeFuente fuente;
 
     public CriterioTipoFuente() {}
 
-    public CriterioTipoFuente(Fuente fuente) { this.fuente = fuente;}
+    public CriterioTipoFuente(TipoDeFuente fuente) { this.fuente = fuente;}
 
     @Override
     public boolean cumpleConCriterio(Hecho hecho) { return hecho.getFuente().equals(fuente);}
 
-    public Fuente getFuente() { return fuente; }
+    public TipoDeFuente getFuente() { return fuente; }
 
-    public void setFuente(Fuente fuente) {this.fuente = fuente;}
+    public void setFuente(TipoDeFuente fuente) {this.fuente = fuente;}
 }

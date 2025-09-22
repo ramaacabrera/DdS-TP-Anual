@@ -1,10 +1,14 @@
 package Agregador.Solicitudes;
 
 
+import utils.DTO.SolicitudDTO;
 import utils.DTO.SolicitudDeEliminacionDTO;
 
+import javax.persistence.*;
 import java.util.UUID;
 
+@Entity
+@DiscriminatorValue("ELIMINACION")
 public class SolicitudDeEliminacion extends Solicitud {
 
     private EstadoSolicitudEliminacion estado;
@@ -13,8 +17,10 @@ public class SolicitudDeEliminacion extends Solicitud {
         this.setHechoAsociado(dto.getHechoAsociado());
         this.setJustificacion(dto.getJustificacion());
         this.estado = dto.getEstado();
-        this.setId(UUID.randomUUID().toString());
+        this.setId(UUID.randomUUID());
     }
+
+    public SolicitudDeEliminacion(){}
 
     @Override
     public void aceptarSolicitud() {

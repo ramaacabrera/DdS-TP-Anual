@@ -1,6 +1,23 @@
 package Agregador.HechosYColecciones;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.util.UUID;
+import javax.persistence.*;
+
+@Entity
 public class Ubicacion {
+
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id_ubicacion", updatable = false, nullable = false)
+    private UUID id_ubicacion;
 
     private double latitud;
     private double longitud;
@@ -38,11 +55,13 @@ public class Ubicacion {
     public double getLatitud() { return latitud; }
     public double getLongitud() { return longitud; }
     public String getDescripcion() { return descripcion; }
+    public UUID getId_ubicacion() {return id_ubicacion;}
 
     // Setters (si son necesarios, para modificar después de la creación)
     public void setLatitud(double latitud) { this.latitud = latitud; }
     public void setLongitud(double longitud) { this.longitud = longitud; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public void setId_ubicacion(UUID id_ubicacion) {this.id_ubicacion = id_ubicacion;}
 
     // Opcional: toString para fácil depuración
     @Override

@@ -1,35 +1,71 @@
 package Agregador.HechosYColecciones;
 
 import utils.DTO.HechoDTO;
-import Agregador.Contribuyente.Contribuyente;
+import Agregador.Usuario.Usuario;
 import Agregador.fuente.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
+import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.*;
 
+@Entity
 public class Hecho {
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "hecho_id", updatable = false, nullable = false)
+    private UUID hecho_id;
 
-    private int id;
     private String titulo;
     private String descripcion;
     private String categoria;
+
+    @ManyToOne
+    @JoinColumn(name = "id_ubicacion")
     private Ubicacion ubicacion;
+
     private Date fechaDeAcontecimiento;
     private Date fechaDeCarga;
+
+    @ManyToOne
+    @JoinColumn(name = "id_fuente")
     private Fuente fuente;
+
+    @ManyToOne
+    @JoinColumn(name = "handle")
+    private Coleccion coleccion;
+
+    @Enumerated(EnumType.STRING)
     private EstadoHecho estadoHecho;
-    private Contribuyente contribuyente;
-    private List<String> etiquetas = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario contribuyente;
+
+    @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "HechoXEtiqueta",
+            joinColumns = @JoinColumn(name = "hecho_id"),
+            inverseJoinColumns = @JoinColumn(name = "id_etiqueta")
+    )
+    private List<Etiqueta> etiquetas;
+
     private boolean esEditable;
-    private List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
+
+    @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ContenidoMultimedia> contenidoMultimedia;
 
     public Hecho() {}
     // esto es el Constructor
     public Hecho(String titulo, String descripcion, String categoria, Ubicacion ubicacion, Date fechaDeAcontecimiento,
-                 Date fechaDeCarga, Fuente fuente, EstadoHecho estadoHecho, Contribuyente contribuyente, List<String> etiquetas, boolean esEditable,
+                 Date fechaDeCarga, Fuente fuente, EstadoHecho estadoHecho, Usuario contribuyente, List<Etiqueta> etiquetas, boolean esEditable,
                  List<ContenidoMultimedia> contenidoMultimedia) {
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -43,7 +79,7 @@ public class Hecho {
         this.etiquetas = etiquetas;
         this.esEditable = esEditable;
         this.contenidoMultimedia = contenidoMultimedia;
-        this.id = -1;
+        //this.hecho_id = -1;
     }
 
     public Hecho(HechoDTO hechoDTO){
@@ -59,7 +95,7 @@ public class Hecho {
         this.etiquetas = hechoDTO.getEtiquetas();
         this.esEditable = hechoDTO.getEsEditable();
         this.contenidoMultimedia = hechoDTO.getContenidoMultimedia();
-        this.id = 0;
+        //this.hecho_id = 0;
     }
 
     // Getters
@@ -67,7 +103,7 @@ public class Hecho {
         return titulo;
     }
 
-    public int getId(){return id;}
+    //public int getId(){return hecho_id;}
 
 
     public String getDescripcion() {
@@ -98,11 +134,11 @@ public class Hecho {
         return estadoHecho;
     }
 
-    public Contribuyente getContribuyente() {
+    public Usuario getContribuyente() {
         return contribuyente;
     }
 
-    public List<String> getEtiquetas() {
+    public List<Etiqueta> getEtiquetas() {
         return etiquetas;
     }
 
@@ -124,13 +160,13 @@ public class Hecho {
 
     public void setEstadoHecho(EstadoHecho estadoNuevo) {estadoHecho = estadoNuevo;}
 
-    public void setContribuyente(Contribuyente nuevo) {contribuyente = nuevo;}
+    public void setContribuyente(Usuario nuevo) {contribuyente = nuevo;}
 
-    public void setEtiquetas(List<String> etiquetasNuevas) {etiquetas = etiquetasNuevas; }
+    public void setEtiquetas(List<Etiqueta> etiquetasNuevas) {etiquetas = etiquetasNuevas; }
 
     public void setEsEditable(Boolean esEditableNuevo) {esEditable = esEditableNuevo;}
 
-    public void setId(int idNuevo){id = idNuevo;}
+    //public void setId(int idNuevo){hecho_id = idNuevo;}
 
 
     public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoNuevo) {contenidoMultimedia = contenidoNuevo;}

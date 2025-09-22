@@ -3,6 +3,10 @@ package Agregador.Criterios;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import Agregador.HechosYColecciones.Hecho;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.util.UUID;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -20,7 +24,19 @@ import Agregador.HechosYColecciones.Hecho;
         @JsonSubTypes.Type(value = CriterioUbicacion.class, name = "CriterioUbicacion")
 })
 
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Criterio {
+
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id_criterio", updatable = false, nullable = false)
+    private UUID id_criterio;
+
     public abstract boolean cumpleConCriterio(Hecho hecho);
     public Criterio() {}
 }
