@@ -64,8 +64,13 @@ public class SolicitudEliminacionRepositorio {
         }
     }
 
-    public void agregarSolicitudEliminacion(SolicitudDeEliminacionDTO solicitud){
-        solicitudes.add(new SolicitudDeEliminacion(solicitud));
+    //public void agregarSolicitudEliminacion(SolicitudDeEliminacionDTO solicitud){
+        //solicitudes.add(new SolicitudDeEliminacion(solicitud));
+    //}
+    public void agregarSolicitudDeEliminacion(SolicitudDeEliminacionDTO solicitudDTO) {
+        // Convierte DTO a Entidad y guarda
+        SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(solicitudDTO);
+        this.agregarSolicitudDeEliminacion(solicitud);
     }
 
     /*public boolean actualizarEstadoSolicitudEliminacion(String body, int id){

@@ -57,8 +57,13 @@ public class SolicitudModificacionRepositorio {
         }
     }
 
-    public void agregarSolicitudDeModificacion(SolicitudDeModificacionDTO solicitud){
-        solicitudes.add(new SolicitudDeModificacion(solicitud));
+    //public void agregarSolicitudDeModificacion(SolicitudDeModificacionDTO solicitud){
+        //solicitudes.add(new SolicitudDeModificacion(solicitud));
+    //}
+    public void agregarSolicitudDeModificacion(SolicitudDeModificacionDTO solicitudDTO) {
+        // Convierte DTO a Entidad y guarda
+        SolicitudDeModificacion solicitud = new SolicitudDeModificacion(solicitudDTO);
+        this.agregarSolicitudDeModificacion(solicitud);
     }
 
 

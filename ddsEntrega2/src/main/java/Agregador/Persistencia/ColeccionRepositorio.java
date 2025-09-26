@@ -37,9 +37,10 @@ public class ColeccionRepositorio {
         }
     }
 
-    public void guardar(ColeccionDTO coleccionDTO) {
-        colecciones.add(new Coleccion(coleccionDTO));
-    }
+    //public void guardar(ColeccionDTO coleccionDTO) {
+        //colecciones.add(new Coleccion(coleccionDTO));
+    //}
+    public void guardar(ColeccionDTO coleccionDTO) {Coleccion coleccion = new Coleccion(coleccionDTO);}
 
     //public List<Coleccion> obtenerTodas() {
         //return colecciones;
