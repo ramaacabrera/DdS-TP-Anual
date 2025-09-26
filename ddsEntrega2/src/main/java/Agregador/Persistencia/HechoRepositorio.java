@@ -2,55 +2,125 @@ package Agregador.Persistencia;
 
 import Agregador.Criterios.Criterio;
 import Agregador.HechosYColecciones.Hecho;
-import utils.DTO.HechoDTO;
 
-import java.util.ArrayList;
+import utils.BDUtils;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class HechoRepositorio {
-    private final List<Hecho> hechos;
-    private int idIncremental = 0;
-    public HechoRepositorio() {
-        this.hechos = new ArrayList<>();
-    }
 
-    public List<Hecho>getHechos(){
-        return this.hechos;
+    public HechoRepositorio() {}
+
+    // Método para obtener todos los hechos
+    public List<Hecho> getHechos() {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            // JPQL para seleccionar todos los objetos Hecho
+            TypedQuery<Hecho> query = em.createQuery("SELECT h FROM Hecho h", Hecho.class);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
     }
 
     public List<Hecho> buscarHechos(List<Criterio> criterios) {
-        if(criterios == null || criterios.isEmpty()){
-            return hechos;
-        }
-        List<Hecho> hechosADevolver = new ArrayList<Hecho>();
-        for (Hecho hecho : hechos) {
-            for(Criterio criterio : criterios) {
-                if(criterio.cumpleConCriterio(hecho) && hecho.estaActivo()) {
-                    hechosADevolver.add(hecho);
-                }
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            StringBuilder queryString = new StringBuilder("SELECT * FROM Hecho h");
+            if(criterios != null){
+                queryString.append(" WHERE 1=1");
             }
+            for (Criterio criterio : criterios) {
+                queryString.append(" AND ").append(criterio.getQueryCondition());
+            }
+
+            // JPQL para seleccionar todos los objetos Hecho
+            TypedQuery<Hecho> query = em.createQuery(queryString.toString(), Hecho.class);
+            return query.getResultList();
+        } finally {
+            em.close();
         }
-        return hechosADevolver;
+    }
+
+    public Hecho buscarPorTitulo(String titulo) {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            // Consulta JPQL para buscar por un atributo específico
+            TypedQuery<Hecho> query = em.createQuery(
+                    "SELECT h FROM Hecho h WHERE h.titulo = :paramTitulo", Hecho.class);
+
+            // Asignamos el valor al parámetro en la consulta
+            query.setParameter("paramTitulo", titulo);
+
+            // Intentamos obtener un único resultado.
+            // Si no se encuentra, getSingleResult() lanza una excepción NoResultException.
+            return query.getSingleResult();
+
+        } catch (javax.persistence.NoResultException e) {
+            // Esto es normal si no se encuentra el hecho. Retornamos null.
+            return null;
+        } finally {
+            em.close();
+        }
     }
 
     public void guardar(Hecho hecho) {
-        hecho.setId(idIncremental);
-        idIncremental++;
-        hechos.add(hecho);
-    }
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            // 1. Verificar Duplicado
+            // Busca si ya existe un Hecho con el mismo título
+            Hecho existente = this.buscarPorTitulo(hecho.getTitulo());
 
-    public void guardar(HechoDTO hecho) {
-        Hecho h = new Hecho();
-        h.setId(idIncremental);
-        idIncremental++;
-        hechos.add(h);
+            if (existente != null) {
+                hecho.setHecho_id(existente.getHecho_id()); // Aseguramos que el ID del objeto a guardar sea el del existente
+
+                System.out.println("Duplicado encontrado. Actualizando Hecho con ID: " + existente.getHecho_id());
+
+            } else {
+                // No existe. Es una nueva inserción.
+                System.out.println("OK: Guardando nuevo Hecho.");
+            }
+
+            // 2. Ejecutar la Transacción
+            BDUtils.comenzarTransaccion(em);
+
+            // em.merge() maneja la inserción (si es nuevo) o la actualización (si ya existe el ID)
+            em.merge(hecho);
+
+            BDUtils.commit(em);
+
+        } catch (Exception e) {
+            BDUtils.rollback(em);
+            System.err.println("ERROR al guardar Hecho: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
     }
 
     public void remover(Hecho hecho) {
-        hechos.remove(hecho);
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            BDUtils.comenzarTransaccion(em);
+
+            // Para eliminar, primero debemos traer la entidad al contexto de persistencia si no lo está
+            Hecho hechoPersistido = em.contains(hecho) ? hecho : em.find(Hecho.class, hecho.getHecho_id());
+
+            if (hechoPersistido != null) {
+                em.remove(hechoPersistido);
+            }
+
+            BDUtils.commit(em);
+        } catch (Exception e) {
+            BDUtils.rollback(em);
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
     }
 
     public void actualizar(Hecho hecho) {
-        hechos.set(hechos.indexOf(hecho), hecho);
+        this.guardar(hecho);
     }
 }

@@ -17,12 +17,13 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ConexionCargador {
     private final List<Fuente> fuentes =  new ArrayList<>();
     private int idIncremental = 1;
 
-     public List<Fuente> getFuentes() { return fuentes; }
+    public List<Fuente> getFuentes() { return fuentes; }
 
     public List<HechoDTO> obtenerHechosNuevos(){
         List<HechoDTO> listaHecho = new ArrayList<>();
@@ -112,7 +113,7 @@ public class ConexionCargador {
 
     public boolean borrarFuente(String idFuente) {
          for(Fuente fuente1 : fuentes) {
-             if(fuente1.getId() == Integer.parseInt(idFuente)) {
+             if(Objects.equals(fuente1.getId().toString(), idFuente)) {
                  fuentes.remove(fuente1);
                  return true;
              }

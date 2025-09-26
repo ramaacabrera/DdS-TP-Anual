@@ -103,8 +103,7 @@ public class Hecho {
         return titulo;
     }
 
-    //public int getId(){return hecho_id;}
-
+    public UUID getHecho_id() {return hecho_id;}
 
     public String getDescripcion() {
         return descripcion;
@@ -166,7 +165,7 @@ public class Hecho {
 
     public void setEsEditable(Boolean esEditableNuevo) {esEditable = esEditableNuevo;}
 
-    //public void setId(int idNuevo){hecho_id = idNuevo;}
+    public void setHecho_id (UUID id) {hecho_id = id;}
 
 
     public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoNuevo) {contenidoMultimedia = contenidoNuevo;}
