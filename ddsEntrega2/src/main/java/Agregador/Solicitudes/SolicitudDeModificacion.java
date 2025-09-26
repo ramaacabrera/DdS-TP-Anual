@@ -21,7 +21,7 @@ public class SolicitudDeModificacion extends Solicitud {
     public SolicitudDeModificacion(SolicitudDeModificacionDTO solicitud){
         this.setHechoAsociado(solicitud.getHechoAsociado());
         this.estadoSolicitudModificacion = solicitud.getEstadoSolicitudModificacion();
-        this.setId(UUID.randomUUID());
+        //this.setId(UUID.randomUUID());
         this.hechoModificado = solicitud.getHechoModificado();
     }
 
