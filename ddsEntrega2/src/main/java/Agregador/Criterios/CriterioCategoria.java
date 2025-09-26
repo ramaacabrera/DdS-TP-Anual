@@ -18,4 +18,7 @@ public class CriterioCategoria extends Criterio {
     public boolean cumpleConCriterio(Hecho hecho) {
         return Objects.equals(hecho.getCategoria(), categoria);
     }
+
+    @Override
+    public String getQueryCondition() {return "h.categoria = '" + categoria + "'";}
 }

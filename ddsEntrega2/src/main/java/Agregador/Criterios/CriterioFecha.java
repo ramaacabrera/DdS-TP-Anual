@@ -40,4 +40,32 @@ public class CriterioFecha extends Criterio {
 //        return false;
 //    }
 
+    @Override
+    public String getQueryCondition() {
+        StringBuilder retorno = new StringBuilder();
+        if(fechaInicio!=null){
+            retorno.append("('"+ fechaInicio +"' < h.fecha");
+            if(tipoFecha.equals("fechaDeCarga")){
+                retorno.append("DeCarga");
+            } else {
+                retorno.append("DelAcontecimiento");
+            }
+            retorno.append(")");
+        }
+        if(fechaFin!=null){
+            if(fechaInicio!=null){
+                retorno.append(" or ");
+            }
+            retorno.append("('"+ fechaFin +"' < h.fecha");
+            if(tipoFecha.equals("fechaDeCarga")){
+                retorno.append("DeCarga");
+            } else {
+                retorno.append("DelAcontecimiento");
+            }
+            retorno.append(")");
+        }
+
+        return retorno.toString();
+    }
+
 }

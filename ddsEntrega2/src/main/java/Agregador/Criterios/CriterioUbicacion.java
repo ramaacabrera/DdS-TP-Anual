@@ -29,4 +29,9 @@ public class CriterioUbicacion extends Criterio {
     public void setUbicacion(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
     }
+
+    @Override
+    public String getQueryCondition() {
+        return "h.id_ubicacion = " + ubicacion.getId_ubicacion();
+    }
 }

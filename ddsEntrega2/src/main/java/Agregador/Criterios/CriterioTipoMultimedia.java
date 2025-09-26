@@ -20,4 +20,9 @@ public class CriterioTipoMultimedia extends Criterio {
     public boolean cumpleConCriterio(Hecho hecho) {
         return hecho.getContenidoMultimedia().stream().anyMatch(contenido -> contenido.getTipoContenido().equals(tipoContenidoMultimedia));
     }
+
+    @Override
+    public String getQueryCondition() {
+        return "";//"h.contribuyente = " + contribuyente.getId_usuario();
+    }
 }

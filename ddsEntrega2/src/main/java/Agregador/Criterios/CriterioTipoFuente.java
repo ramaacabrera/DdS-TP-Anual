@@ -23,4 +23,9 @@ public class CriterioTipoFuente extends Criterio {
     public TipoDeFuente getFuente() { return fuente; }
 
     public void setFuente(TipoDeFuente fuente) {this.fuente = fuente;}
+
+    @Override
+    public String getQueryCondition() {
+        return "h.fuente = '" + fuente.toString() + "'";
+    }
 }

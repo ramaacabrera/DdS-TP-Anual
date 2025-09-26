@@ -39,4 +39,5 @@ public abstract class Criterio {
 
     public abstract boolean cumpleConCriterio(Hecho hecho);
     public Criterio() {}
+    public abstract String getQueryCondition();
 }

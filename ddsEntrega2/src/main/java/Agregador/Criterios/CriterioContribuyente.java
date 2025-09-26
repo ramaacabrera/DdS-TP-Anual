@@ -20,4 +20,7 @@ public class CriterioContribuyente extends Criterio {
     public boolean cumpleConCriterio(Hecho hecho) {
         return hecho.getContribuyente()==contribuyente;
     }
+
+    @Override
+    public String getQueryCondition() {return "h.contribuyente = " + contribuyente.getId_usuario();}
 }

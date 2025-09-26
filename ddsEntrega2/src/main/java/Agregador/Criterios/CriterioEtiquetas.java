@@ -23,4 +23,15 @@ public class CriterioEtiquetas extends Criterio {
 
     public List<String> getEtiquetas() { return etiquetas; }
     public void setEtiquetas(List<String> etiquetas) {etiquetas = etiquetas;}
+
+    @Override
+    public String getQueryCondition() {
+        return "";
+    }
+//        StringBuilder retorno = new StringBuilder("( 1=1");
+//        for(String etiqueta : etiquetas){
+//        retorno.append(" or h.descripcion like '%").append(etiqueta).append("%'");
+//
+//        }
+//        return retorno.toString();}
 }
