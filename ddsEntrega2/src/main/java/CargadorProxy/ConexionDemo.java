@@ -1,5 +1,6 @@
 package CargadorProxy;
 
+import Agregador.HechosYColecciones.Etiqueta;
 import utils.DTO.HechoDTO;
 import Agregador.HechosYColecciones.ContenidoMultimedia;
 import Agregador.HechosYColecciones.EstadoHecho;
@@ -181,17 +182,21 @@ public class ConexionDemo extends ConexionProxy{
         }
 
         // Etiquetas
-        List<String> etiquetas = new ArrayList<>();
+        List<Etiqueta> etiquetas = new ArrayList<>();
         if (hechoMock.getMockCategoria() != null && !hechoMock.getMockCategoria().isEmpty()) {
-            etiquetas.add(hechoMock.getMockCategoria().toLowerCase());
+            etiquetas.add(new Etiqueta(hechoMock.getMockCategoria().toLowerCase()));
         }
         if (hechoMock.getMockOrigen() != null && !hechoMock.getMockOrigen().isEmpty()) {
-            etiquetas.add("origen-" + hechoMock.getMockOrigen().toLowerCase().replace(" ", "-"));
+            String nombreEtiqueta = "origen-" + hechoMock.getMockOrigen().toLowerCase().replace(" ", "-");
+            etiquetas.add(new Etiqueta(nombreEtiqueta));
         }
         if (hechoMock.getcampoExtra() != null && !hechoMock.getcampoExtra().isEmpty()) {
-            etiquetas.add("extra-" + hechoMock.getcampoExtra().toLowerCase().replace(" ", "-"));
+            String nombreEtiqueta = "extra-" + hechoMock.getcampoExtra().toLowerCase().replace(" ", "-");
+            etiquetas.add(new Etiqueta(nombreEtiqueta));
         }
-        etiquetas.add("fuente-demo");
+        etiquetas.add(new Etiqueta("fuente-demo"));
+
+        //docker run --name my-mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306-d mysql:8
 
         Date fechaDeCarga = new Date();
         EstadoHecho estadoHecho = EstadoHecho.ACTIVO;

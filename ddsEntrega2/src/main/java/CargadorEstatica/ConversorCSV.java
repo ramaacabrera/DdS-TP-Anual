@@ -1,5 +1,6 @@
 package CargadorEstatica;
 
+import Agregador.HechosYColecciones.Etiqueta;
 import org.apache.commons.csv.CSVRecord;
 import utils.DTO.HechoDTO;
 import Agregador.HechosYColecciones.EstadoHecho;
@@ -28,7 +29,7 @@ public class ConversorCSV {
         }
         Date fechaDeCarga = new Date();
         EstadoHecho estadoHecho = EstadoHecho.ACTIVO;
-        List<String> etiquetas = new ArrayList<>();
+        List<Etiqueta> etiquetas = new ArrayList<>();
         boolean esEditable = false;
         return new HechoDTO(titulo, descripcion, categoria, ubicacion, fechaDeAcontecimiento, fechaDeCarga, null, estadoHecho, null, etiquetas, esEditable, null);
     }

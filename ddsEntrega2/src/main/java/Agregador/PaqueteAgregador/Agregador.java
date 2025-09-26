@@ -112,7 +112,7 @@ public class Agregador {
             boolean esSpam = detectorDeSpam.esSpam(dto.getJustificacion());
 
             if (!esSpam){ // !yaExiste &&) {
-                solicitudEliminacionRepositorio.agregarSolicitudEliminacion(dto);
+                solicitudEliminacionRepositorio.agregarSolicitudDeEliminacion(dto);
             }
             // un posible else luego para las estadisticas
 

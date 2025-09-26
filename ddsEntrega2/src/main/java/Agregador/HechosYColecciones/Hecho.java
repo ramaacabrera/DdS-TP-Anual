@@ -167,6 +167,7 @@ public class Hecho {
 
     public void setHecho_id (UUID id) {hecho_id = id;}
 
+    public void setColeccion(Coleccion coleccion_) {coleccion = coleccion_;}
 
     public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoNuevo) {contenidoMultimedia = contenidoNuevo;}
 
@@ -232,4 +233,6 @@ public class Hecho {
         this.esEditable = otroHecho.esEditable();
         this.contenidoMultimedia = otroHecho.getContenidoMultimedia();
     }
+
+
 }
