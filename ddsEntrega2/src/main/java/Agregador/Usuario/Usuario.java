@@ -25,9 +25,11 @@ public class Usuario {
     )
     @Column(name = "id_usuario", updatable = false, nullable = false)
     private UUID id_usuario;
-    
+
+    @OneToMany(mappedBy = "contribuyente")
     @JsonIgnore
     private List<Hecho> hechosSubidos = new ArrayList<Hecho>();
+
     @JsonProperty
     private Integer edad;
     @JsonProperty

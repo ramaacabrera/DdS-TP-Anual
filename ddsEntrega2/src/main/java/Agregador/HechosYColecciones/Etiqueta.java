@@ -22,6 +22,8 @@ public class Etiqueta {
     private UUID id_etiqueta;
     private String nombre;
 
+    public Etiqueta() {}
+
     public Etiqueta(String nombre) {
         this.nombre = nombre;
     }

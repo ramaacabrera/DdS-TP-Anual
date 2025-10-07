@@ -42,7 +42,8 @@ public class Agregador {
             this.actualizarHechosDesdeFuentes();
             this.agregarSolicitudes();
             this.actualizarColecciones();
-        }, 0, 1, TimeUnit.HOURS);
+        //}, 0, 1, TimeUnit.HOURS);
+        }, 0, 30, TimeUnit.SECONDS);
 
         long delayInicial = calcularDelayHastaHora(2);  // 2 AM
         scheduler.scheduleAtFixedRate(() -> {
@@ -77,9 +78,12 @@ public class Agregador {
         System.out.println("Hechos : " + hechos.size());
         for(HechoDTO hecho : hechos){
             Hecho hechoNormalizado = this.normalizarHecho(hecho);
+            System.out.println("Hechos : " + hechos.size());
             Hecho existente = buscarHechoSimilar(hechoNormalizado);
+            System.out.println("Hechos : " + hechos.size());
             if (existente == null) {
                 // si no existe lo guardo como nuevo
+                System.out.println("Hechos : " + hechos.size());
                 hechoRepositorio.guardar(hechoNormalizado);
                 System.out.println("Fuente del hecho:" + hechoNormalizado.getFuente());
                 //System.out.println("Nuevo hecho agregado: " + hechoNormalizado.getTitulo());
@@ -93,7 +97,8 @@ public class Agregador {
     }
 
     private Hecho buscarHechoSimilar(Hecho hechoNuevo) {
-        for (Hecho h : hechoRepositorio.buscarHechos(null)) {
+        List<Hecho> hechosSimilares = hechoRepositorio.buscarSimilares(hechoNuevo.getTitulo());
+        for (Hecho h : hechosSimilares) {
             if (h.tieneMismosAtributosQue(hechoNuevo)) {
                 return h;
             }

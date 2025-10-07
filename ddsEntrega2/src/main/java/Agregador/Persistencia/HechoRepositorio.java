@@ -6,6 +6,8 @@ import Agregador.HechosYColecciones.Hecho;
 import utils.BDUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HechoRepositorio {
@@ -60,6 +62,28 @@ public class HechoRepositorio {
         } catch (javax.persistence.NoResultException e) {
             // Esto es normal si no se encuentra el hecho. Retornamos null.
             return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Hecho> buscarSimilares(String titulo) {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            // Consulta JPQL para buscar hechos con títulos similares (usa LIKE para similitud)
+            TypedQuery<Hecho> query = em.createQuery(
+                    "SELECT h FROM Hecho h WHERE h.titulo LIKE :paramTitulo", Hecho.class);
+
+            // Usamos % para búsqueda parcial (similitud)
+            query.setParameter("paramTitulo", "%" + titulo + "%");
+
+            // getResultList() retorna lista vacía si no hay resultados
+            return query.getResultList();
+
+        } catch (Exception e) {
+            // Log del error y retornar lista vacía
+            System.err.println("Error al buscar hechos similares: " + e.getMessage());
+            return new ArrayList<>();
         } finally {
             em.close();
         }

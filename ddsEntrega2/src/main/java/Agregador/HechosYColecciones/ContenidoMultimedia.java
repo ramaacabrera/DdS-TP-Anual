@@ -22,8 +22,14 @@ public class ContenidoMultimedia {
     )
     @Column(name = "id_contenido", updatable = false, nullable = false)
     private UUID id_contenido;
+
+    @Enumerated(EnumType.STRING)
     private TipoContenidoMultimedia tipoContenido;
     private String contenido;
+
+    @ManyToOne
+    @JoinColumn(name = "hecho_id")
+    private Hecho hecho;
 
     @JsonCreator
     public ContenidoMultimedia(@JsonProperty("tipoContenido") TipoContenidoMultimedia tipo,
@@ -34,15 +40,21 @@ public class ContenidoMultimedia {
 
     public ContenidoMultimedia(){}
 
-    public String getContenido() {
-        return contenido;
-    }
+    // GETTERS
+    public UUID getId_contenido() {return id_contenido;}
 
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
-    }
+    public TipoContenidoMultimedia getTipoContenido() {return tipoContenido;}
 
-    public TipoContenidoMultimedia getTipoContenido() {
-        return tipoContenido;
-    }
+    public String getContenido() {return contenido;}
+
+    public Hecho getHecho() {return hecho;}
+
+    // SETTERS
+    public void setId_contenido(UUID id_contenido_) {this.id_contenido = id_contenido_;}
+
+    public void setTipoContenido(TipoContenidoMultimedia tipoContenido_) {this.tipoContenido = tipoContenido_;}
+
+    public void setContenido(String contenido_) {this.contenido = contenido_;}
+
+    public void setHecho(Hecho hecho_) {this.hecho = hecho_;}
 }

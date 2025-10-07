@@ -1,28 +1,36 @@
 package Agregador.Criterios;
 
+import Agregador.HechosYColecciones.Etiqueta;
 import Agregador.HechosYColecciones.Hecho;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 public class CriterioEtiquetas extends Criterio {
-    private List<String> etiquetas;
+
+    @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "CriterioEtiquetaXEtiqueta",
+            joinColumns = @JoinColumn(name = "id_criterio"),
+            inverseJoinColumns = @JoinColumn(name = "id_etiqueta")
+    )
+    private List<Etiqueta> etiquetas;
 
     public CriterioEtiquetas() {}
-    public CriterioEtiquetas(List<String> listaEtiquetas) {etiquetas = listaEtiquetas;}
+    public CriterioEtiquetas(List<Etiqueta> listaEtiquetas) {etiquetas = listaEtiquetas;}
 
     @Override
     public boolean cumpleConCriterio(Hecho hecho) {
         boolean existeEnHecho = false;
-        for(String etiqueta : etiquetas){
+        for(Etiqueta etiqueta : etiquetas){
             existeEnHecho = hecho.getEtiquetas().contains(etiqueta);
         }
         return existeEnHecho;
     }
 
-    public List<String> getEtiquetas() { return etiquetas; }
-    public void setEtiquetas(List<String> etiquetas) {etiquetas = etiquetas;}
+    public List<Etiqueta> getEtiquetas() { return etiquetas; }
+    public void setEtiquetas(List<Etiqueta> etiquetas_) {etiquetas = etiquetas_;}
 
     @Override
     public String getQueryCondition() {

@@ -9,10 +9,12 @@ import io.javalin.Javalin;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
 
+import javax.persistence.EntityManager;
 import java.util.Properties;
 
 public class MainAgregador {
     public static void main(String[] args) throws InterruptedException {
+
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
         int puertoAgregador = Integer.parseInt(config.getProperty("puertoAgregador"));

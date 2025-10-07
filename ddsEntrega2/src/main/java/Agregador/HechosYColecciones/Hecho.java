@@ -213,11 +213,8 @@ public class Hecho {
                 && this.categoria.equalsIgnoreCase(otro.categoria)
                 && Objects.equals(this.ubicacion, otro.ubicacion)
                 && Objects.equals(this.fechaDeAcontecimiento, otro.fechaDeAcontecimiento)
-                && Objects.equals(this.fechaDeCarga, otro.fechaDeCarga)
-                && this.estadoHecho == otro.estadoHecho
                 && Objects.equals(this.contribuyente, otro.contribuyente)
-                && this.etiquetas.equals(otro.etiquetas)
-                && this.esEditable == otro.esEditable;
+                && this.etiquetas.equals(otro.etiquetas);
     }
 
     public void actualizarCon(Hecho otroHecho) {

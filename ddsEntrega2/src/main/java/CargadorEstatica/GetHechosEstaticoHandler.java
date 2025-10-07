@@ -1,5 +1,6 @@
 package CargadorEstatica;
 
+import Agregador.fuente.Fuente;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,11 @@ import static java.nio.file.Files.*;
 public class GetHechosEstaticoHandler implements Handler {
 
     String fileServer;
-    public GetHechosEstaticoHandler(String path) {fileServer=path;}
+    Fuente fuente;
+    public GetHechosEstaticoHandler(String path, Fuente fuenteNueva) {
+        fileServer=path;
+        fuente = fuenteNueva;
+    }
 
     @Override
     public void handle(@NotNull Context context) throws Exception {
@@ -51,6 +56,8 @@ public class GetHechosEstaticoHandler implements Handler {
         } catch (IOException e) {
             System.err.println("Error al leer archivos CSV: " + e.getMessage());
         }
+
+        hechosTotales.forEach(hecho->hecho.setFuente(this.fuente));
 
         return hechosTotales;
     }

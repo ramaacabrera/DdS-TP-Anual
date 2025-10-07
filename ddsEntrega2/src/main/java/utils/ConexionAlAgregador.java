@@ -27,7 +27,7 @@ public class ConexionAlAgregador {
         String jsonBody = objectMapper.writeValueAsString(self);
 
 
-        String url = "http://localhost:"+puertoAgregador+"/fuentes";
+        String url = "http://localhost:"+puertoAgregador+"/cargador";
 
         HttpClient cliente = HttpClient.newBuilder()
                 .build();
@@ -35,7 +35,7 @@ public class ConexionAlAgregador {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString(jsonBody))
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
 
         try {

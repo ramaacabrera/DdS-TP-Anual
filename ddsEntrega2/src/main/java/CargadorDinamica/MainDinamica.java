@@ -1,5 +1,6 @@
 package CargadorDinamica;
 
+import Agregador.fuente.Fuente;
 import Agregador.fuente.TipoDeFuente;
 import CargadorDinamica.Presentacion.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,10 +32,11 @@ public class MainDinamica {
         agregador.conectarse(TipoDeFuente.DINAMICA, config.getProperty("puertoDinamico"));
 
         DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio();
+        Fuente fuente = new Fuente(TipoDeFuente.DINAMICA, "http://localhost:"+puerto);
 
         // Exposicion API mediante REST para el agregador
         app.get("/hechos", new GetHechosDinamicoHandler(dinamicoRepositorio));
-        app.post("/hechos", new PostHechosHandler(dinamicoRepositorio));
+        app.post("/hechos", new PostHechosHandler(dinamicoRepositorio, fuente));
 
         app.get("/solicitudesModificacion", new GetSolicitudesModificacionHandler(dinamicoRepositorio));
         app.post("/solicitudesModificacion", new PostSolicitudesModificacionHandler(dinamicoRepositorio));

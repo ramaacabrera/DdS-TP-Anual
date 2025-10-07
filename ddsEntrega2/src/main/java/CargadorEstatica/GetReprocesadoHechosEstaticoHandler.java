@@ -1,5 +1,6 @@
 package CargadorEstatica;
 
+import Agregador.fuente.Fuente;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
@@ -14,9 +15,11 @@ import java.util.*;
 public class GetReprocesadoHechosEstaticoHandler implements Handler {
 
     String fileServerPath;
+    Fuente fuente;
 
-    public GetReprocesadoHechosEstaticoHandler(String path) {
+    public GetReprocesadoHechosEstaticoHandler(String path, Fuente fuenteNueva) {
         fileServerPath = path;
+        fuente = fuenteNueva;
     }
 
     @Override
@@ -35,6 +38,7 @@ public class GetReprocesadoHechosEstaticoHandler implements Handler {
 
         try {
             List<HechoDTO> hechos = this.obtenerHechosDeArchivo(nombreArchivo);
+            hechos.forEach(hecho->hecho.setFuente(this.fuente));
             context.json(hechos);
             context.status(200);
         } catch (IOException e) {

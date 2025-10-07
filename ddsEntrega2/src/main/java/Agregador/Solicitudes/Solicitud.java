@@ -43,7 +43,7 @@ public abstract class Solicitud {
     @Enumerated(EnumType.STRING)
     private EstadoSolicitudEliminacion estadoSolicitudEliminacion;
 
-    private String discriminador;
+    //private String discriminador;
 
     public abstract void aceptarSolicitud();
     public abstract void rechazarSolicitud();
@@ -71,7 +71,7 @@ public abstract class Solicitud {
         this.estadoSolicitudEliminacion = _estadoSolicitudEliminacion;
     }
 
-    public void setDiscriminador(String _discriminador) { this.discriminador = _discriminador; }
+    //public void setDiscriminador(String _discriminador) { this.discriminador = _discriminador; }
 
     public Usuario getUsuario() { return usuario; }
 
@@ -89,5 +89,5 @@ public abstract class Solicitud {
 
     public EstadoSolicitudModificacion getEstadoSolicitudModificacion() {return estadoSolicitudModificacion;}
 
-    public String getDiscriminador() { return discriminador; }
+   // public String getDiscriminador() { return discriminador; }
 }

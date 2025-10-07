@@ -1,5 +1,6 @@
 package CargadorEstatica;
 
+import Agregador.fuente.Fuente;
 import Agregador.fuente.TipoDeFuente;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,9 +43,11 @@ public class MainEstatica {
         ConexionAlAgregador agregador = new ConexionAlAgregador();
         agregador.conectarse(TipoDeFuente.ESTATICA, config.getProperty("puertoEstatico"));
 
+        Fuente fuente = new Fuente(TipoDeFuente.DINAMICA, "http://localhost:"+puerto);
 
-        app.get("/hechos", new GetHechosEstaticoHandler(fileServer));
-        app.get("/reprocesado/hechos/{nombre}", new GetReprocesadoHechosEstaticoHandler(fileServer));
+
+        app.get("/hechos", new GetHechosEstaticoHandler(fileServer, fuente));
+        app.get("/reprocesado/hechos/{nombre}", new GetReprocesadoHechosEstaticoHandler(fileServer, fuente));
     }
 
 

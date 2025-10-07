@@ -2,6 +2,7 @@ package Agregador.Criterios;
 
 import Agregador.HechosYColecciones.Hecho;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +12,13 @@ public class CriterioDeTexto extends Criterio {
 
     private TipoDeTexto tipoDeTexto;
 
+    @ElementCollection
     private List<String> palabras = new ArrayList<String>();
 
     public CriterioDeTexto(List<String> palabras) {
         this.palabras = palabras;
     }
+
     public CriterioDeTexto() {}
 
     @Override
