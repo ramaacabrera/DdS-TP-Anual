@@ -78,27 +78,37 @@ public class Agregador {
         System.out.println("Hechos : " + hechos.size());
         for(HechoDTO hecho : hechos){
             Hecho hechoNormalizado = this.normalizarHecho(hecho);
-            System.out.println("Hechos : " + hechos.size());
-            Hecho existente = buscarHechoSimilar(hechoNormalizado);
-            System.out.println("Hechos : " + hechos.size());
-            if (existente == null) {
+            System.out.println("Hechos1 : " + hechos.size());
+            //Hecho existente = buscarHechoSimilar(hechoNormalizado);
+            System.out.println("Hechos2 : " + hechos.size());
+            hechoRepositorio.guardar(hechoNormalizado);
+           /* if (existente == null) {
                 // si no existe lo guardo como nuevo
-                System.out.println("Hechos : " + hechos.size());
+                System.out.println("Hechos3 : " + hechos.size());
                 hechoRepositorio.guardar(hechoNormalizado);
                 System.out.println("Fuente del hecho:" + hechoNormalizado.getFuente());
                 //System.out.println("Nuevo hecho agregado: " + hechoNormalizado.getTitulo());
             } else {
                 // si ya existe lo actualizo
+                System.out.println("Hechos4 : " + hechos.size());
                 hechoRepositorio.actualizar(hechoNormalizado);
                 System.out.println("Fuente del hecho:" + hechoNormalizado.getFuente());
                 //System.out.println("Hecho actualizado: " + hechoNormalizado.getTitulo());
-            }
+            }*/
         }
     }
 
-    private Hecho buscarHechoSimilar(Hecho hechoNuevo) {
+    /*private Hecho buscarHechoSimilar(Hecho hechoNuevo) {
         List<Hecho> hechosSimilares = hechoRepositorio.buscarSimilares(hechoNuevo.getTitulo());
         for (Hecho h : hechosSimilares) {
+            if (h.tieneMismosAtributosQue(hechoNuevo)) {
+                return h;
+            }
+        }
+        return null;
+    }*/
+    private Hecho buscarHechoSimilar(Hecho hechoNuevo) {
+        for (Hecho h : hechoRepositorio.buscarHechos(null)) {
             if (h.tieneMismosAtributosQue(hechoNuevo)) {
                 return h;
             }

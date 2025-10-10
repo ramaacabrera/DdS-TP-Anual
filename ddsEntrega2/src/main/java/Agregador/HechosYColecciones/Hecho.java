@@ -27,26 +27,27 @@ public class Hecho {
     private String descripcion;
     private String categoria;
 
-    @ManyToOne
+    @ManyToOne (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "id_ubicacion")
     private Ubicacion ubicacion;
 
     private Date fechaDeAcontecimiento;
     private Date fechaDeCarga;
 
-    @ManyToOne
-    @JoinColumn(name = "id_fuente")
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "id_fuente", nullable = false)
     private Fuente fuente;
 
-    @ManyToOne
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "handle")
     private Coleccion coleccion;
 
     @Enumerated(EnumType.STRING)
     private EstadoHecho estadoHecho;
 
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @ManyToOne (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "id_usuario", nullable = true)
     private Usuario contribuyente;
 
     @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})

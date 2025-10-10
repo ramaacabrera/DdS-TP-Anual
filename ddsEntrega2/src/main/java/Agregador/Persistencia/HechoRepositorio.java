@@ -88,7 +88,7 @@ public class HechoRepositorio {
             em.close();
         }
     }
-
+    
     public void guardar(Hecho hecho) {
         EntityManager em = BDUtils.getEntityManager();
         try {

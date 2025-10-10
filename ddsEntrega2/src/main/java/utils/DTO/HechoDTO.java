@@ -27,7 +27,7 @@ public class HechoDTO {
     public HechoDTO() {}
 
     public HechoDTO(String titulo, String descripcion, String categoria, Ubicacion ubicacion, Date fechaDeAcontecimiento,
-                    Date fechaDeCarga, Fuente fuente, EstadoHecho estadoHecho, Usuario contribuyente, List<Etiqueta> etiquetas, boolean esEditable,
+                    Date fechaDeCarga, Fuente fuente , EstadoHecho estadoHecho, Usuario contribuyente, List<Etiqueta> etiquetas, boolean esEditable,
                     List<ContenidoMultimedia> contenidoMultimedia) {
         this.titulo = titulo;
         this.descripcion = descripcion;
