@@ -34,7 +34,7 @@ public class SolicitudEliminacionRepositorio {
         } catch (javax.persistence.NoResultException e) {
             return Optional.empty();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 
@@ -46,7 +46,7 @@ public class SolicitudEliminacionRepositorio {
                     "SELECT s FROM SolicitudDeEliminacion s", SolicitudDeEliminacion.class);
             return query.getResultList();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 
@@ -63,7 +63,7 @@ public class SolicitudEliminacionRepositorio {
             BDUtils.rollback(em);
             e.printStackTrace();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 
@@ -117,7 +117,7 @@ public class SolicitudEliminacionRepositorio {
                 e.printStackTrace();
                 return false;
             } finally {
-                em.close();
+                //em.close();
             }
         }
         return false; // No se encontró la solicitud
@@ -133,7 +133,7 @@ public class SolicitudEliminacionRepositorio {
 
             return Optional.ofNullable(solicitud);
         } finally {
-            em.close();
+            //em.close();
         }
     }
 

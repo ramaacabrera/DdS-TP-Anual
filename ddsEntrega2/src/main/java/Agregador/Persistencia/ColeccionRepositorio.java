@@ -36,7 +36,7 @@ public class ColeccionRepositorio {
             BDUtils.rollback(em);
             e.printStackTrace();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 
@@ -55,7 +55,7 @@ public class ColeccionRepositorio {
             TypedQuery<Coleccion> query = em.createQuery("SELECT c FROM Coleccion c", Coleccion.class);
             return query.getResultList();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 
@@ -80,7 +80,7 @@ public class ColeccionRepositorio {
             // Si no encuentra resultados, retorna un Optional vacío
             return Optional.empty();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 
@@ -119,7 +119,7 @@ public class ColeccionRepositorio {
             BDUtils.rollback(em);
             e.printStackTrace();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 }

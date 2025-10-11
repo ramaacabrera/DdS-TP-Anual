@@ -4,6 +4,7 @@ import Agregador.fuente.Fuente;
 import Agregador.fuente.TipoDeFuente;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import utils.ApiGetter;
 import utils.DTO.FuenteDTO;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
@@ -43,7 +44,8 @@ public class ConexionCargador {
 
 
     public List<HechoDTO> buscarHechos(String url){
-        return this.getFromApi(url + "/hechos", new TypeReference<List<HechoDTO>>() {
+        ApiGetter api = new ApiGetter();
+        return api.getFromApi(url + "/hechos", new TypeReference<List<HechoDTO>>() {
         });
     }
 
@@ -58,7 +60,8 @@ public class ConexionCargador {
     }
 
     private List<SolicitudDeModificacionDTO> obtenerSolicitudesDeFuente(Fuente fuente) {
-        return this.getFromApi(
+        ApiGetter api = new ApiGetter();
+        return api.getFromApi(
                 fuente.getRuta() + "/solicitudesModificacion",
                 new TypeReference<List<SolicitudDeModificacionDTO>>() {}
         );
@@ -76,13 +79,14 @@ public class ConexionCargador {
     }
 
     private List<SolicitudDeEliminacionDTO> obtenerSolicitudesDeEliminacionDeFuente(Fuente fuente) {
-        return this.getFromApi(
+        ApiGetter api = new ApiGetter();
+        return api.getFromApi(
                 fuente.getRuta() + "/solicitudesEliminacion",
                 new TypeReference<List<SolicitudDeEliminacionDTO>>() {}
         );
     }
 
-
+/*
     private <T> T getFromApi(String url, TypeReference<T> typeRef){
         HttpClient cliente = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -99,7 +103,7 @@ public class ConexionCargador {
             return null;
         }
     }
-
+*/
     public boolean agregarFuente(FuenteDTO fuente) {
         for(Fuente fuente1 : fuentes) {
             if(fuente1.getRuta().equals(fuente.getRuta())) {

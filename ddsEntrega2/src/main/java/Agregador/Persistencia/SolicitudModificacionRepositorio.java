@@ -39,7 +39,7 @@ public class SolicitudModificacionRepositorio {
             // No se encontró la solicitud
             return Optional.empty();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 
@@ -56,7 +56,7 @@ public class SolicitudModificacionRepositorio {
             BDUtils.rollback(em);
             e.printStackTrace();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 

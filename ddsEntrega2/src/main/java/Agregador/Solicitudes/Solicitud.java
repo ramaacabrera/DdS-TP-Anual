@@ -30,7 +30,7 @@ public abstract class Solicitud {
     protected String justificacion;
 
     @ManyToOne
-    @JoinColumn(name = "id_hecho")
+    @JoinColumn(name = "hecho_id")
     private Hecho hechoAsociado;
 
     @ManyToOne

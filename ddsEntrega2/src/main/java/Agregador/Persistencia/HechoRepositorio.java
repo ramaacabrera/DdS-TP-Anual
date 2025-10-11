@@ -26,7 +26,7 @@ public class HechoRepositorio {
             TypedQuery<Hecho> query = em.createQuery("SELECT h FROM Hecho h", Hecho.class);
             return query.getResultList();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 
@@ -45,7 +45,7 @@ public class HechoRepositorio {
             TypedQuery<Hecho> query = em.createQuery(queryString.toString(), Hecho.class);
             return query.getResultList();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 
@@ -67,7 +67,7 @@ public class HechoRepositorio {
             // Esto es normal si no se encuentra el hecho. Retornamos null.
             return null;
         } finally {
-            em.close();
+            //em.close();
         }
     }
 
@@ -89,7 +89,7 @@ public class HechoRepositorio {
             System.err.println("Error al buscar hechos similares: " + e.getMessage());
             return new ArrayList<>();
         } finally {
-            em.close();
+            //em.close();
         }
     }
     
@@ -122,9 +122,9 @@ public class HechoRepositorio {
             BDUtils.rollback(em);
             System.err.println("ERROR al guardar Hecho: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            em.close();
-        }
+        } //finally {
+       //     em.close();
+        //}
     }
 
     public void remover(Hecho hecho) {
@@ -144,7 +144,7 @@ public class HechoRepositorio {
             BDUtils.rollback(em);
             e.printStackTrace();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 

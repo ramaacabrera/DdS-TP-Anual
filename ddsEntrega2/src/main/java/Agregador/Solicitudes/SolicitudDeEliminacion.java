@@ -16,7 +16,8 @@ public class SolicitudDeEliminacion extends Solicitud {
     public SolicitudDeEliminacion(SolicitudDeEliminacionDTO dto) {
         this.setHechoAsociado(dto.getHechoAsociado());
         this.setJustificacion(dto.getJustificacion());
-        this.estado = dto.getEstado();
+        this.setUsuario(dto.getUsuario());
+        this.setEstadoSolicitudEliminacion(dto.getEstado());
         //this.setId(UUID.randomUUID());
     }
 
