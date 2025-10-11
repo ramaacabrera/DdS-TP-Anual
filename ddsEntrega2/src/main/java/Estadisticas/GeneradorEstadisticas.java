@@ -24,13 +24,14 @@ public class GeneradorEstadisticas {
         List<Contador> provincias = new ArrayList<>();
         for(Hecho hecho : coleccion.getHechos()){
             Optional<Contador> resultado = provincias.stream()
-                    .filter(valor -> valor.equals(hecho.getUbicacion().getDescripcion()))
+                    .filter(contador -> contador
+                            .getValor().equals(hecho.getUbicacion().getDescripcion()))
                     .findFirst();
             if(resultado.isPresent()){
                 resultado.get().incrementar();
             } else{
                 Contador contador = new Contador(hecho.getUbicacion().getDescripcion());
-                
+                provincias.add(contador);
             }
         }
         return "";

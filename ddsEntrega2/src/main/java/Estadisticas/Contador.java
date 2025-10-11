@@ -7,7 +7,7 @@ public class Contador {
 
     public Contador(String valor){
         this.valor = valor;
-        this.contador = 0;
+        this.contador = 1;
     }
 
     public String getValor() { return valor; }
