@@ -10,6 +10,8 @@ import utils.IniciadorApp;
 import utils.LecturaConfig;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.Properties;
 
 public class MainAgregador {
@@ -18,25 +20,19 @@ public class MainAgregador {
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
         int puertoAgregador = Integer.parseInt(config.getProperty("puertoAgregador"));
-        int puertoEstatico = Integer.parseInt(config.getProperty("puertoEstatico"));
-        int puertoDinamico = Integer.parseInt(config.getProperty("puertoDinamico"));
-        int puertoProxy = Integer.parseInt(config.getProperty("puertoProxy"));
-        /*
 
-                CAMBIAR ESTO CUANDO SE IMPLEMENTEN LAS BASES DE DATOS
-
-
-        */
-
-        //    ->>>>>>>>>
         System.out.println("Iniciando servidor Agregador en el puerto "+puertoAgregador);
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("demo-hibernate-PU");
+        EntityManager em = emf.createEntityManager();
+
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puertoAgregador, "/");
 
-        HechoRepositorio hechoRepositorio = new HechoRepositorio();
-        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
-        SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio();
-        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
+        HechoRepositorio hechoRepositorio = new HechoRepositorio(em);
+        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio(em);
+        SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio(em);
+        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(em);
 
         MockNormalizador mockNormalizador = new MockNormalizador();
         ConexionCargador conexionCargador = new ConexionCargador();

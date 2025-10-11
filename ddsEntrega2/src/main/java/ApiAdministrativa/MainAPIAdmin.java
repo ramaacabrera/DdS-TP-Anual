@@ -18,8 +18,8 @@ public class MainAPIAdmin {
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
-        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
-        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
+        //ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
+        //SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
 
         app.post("/api/colecciones", new PostColeccionHandler()); //creo coleccion PROBADOOOO
         app.get("/api/colecciones", new GetColeccionesHandler()); // consulta todas las colecciones PROBADOOOO

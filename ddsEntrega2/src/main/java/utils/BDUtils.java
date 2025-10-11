@@ -6,16 +6,16 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 public class BDUtils {
-    private static final EntityManagerFactory factory;
+//    private static final EntityManagerFactory factory;
 
-    static {
-        factory = Persistence.createEntityManagerFactory("demo-hibernate-PU");
-    }
+//    static {
+//        factory = Persistence.createEntityManagerFactory("demo-hibernate-PU");
+//    }
 
-    public static EntityManager getEntityManager() {
-        EntityManager em = factory.createEntityManager();
-        return em;
-    }
+//    public static EntityManager getEntityManager() {
+//        EntityManager em = factory.createEntityManager();
+//        return em;
+//    }
 
     public static void comenzarTransaccion(EntityManager em) {
         EntityTransaction tx = em.getTransaction();

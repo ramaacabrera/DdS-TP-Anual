@@ -13,15 +13,18 @@ import javax.persistence.TypedQuery;
 
 
 public class ColeccionRepositorio {
+    private final EntityManager em;
     //private static final List<Coleccion> colecciones = new ArrayList<>();
 
-    public ColeccionRepositorio() {}
+    public ColeccionRepositorio(EntityManager emNuevo) {
+        this.em = emNuevo;
+    }
 
     //public void guardar(Coleccion coleccion) {
         //colecciones.add(coleccion);
     //}
     public void guardar(Coleccion coleccion) {
-        EntityManager em = BDUtils.getEntityManager();
+        //EntityManager em = BDUtils.getEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
 
@@ -46,7 +49,7 @@ public class ColeccionRepositorio {
         //return colecciones;
     //}
     public List<Coleccion> obtenerTodas() {
-        EntityManager em = BDUtils.getEntityManager();
+        ///EntityManager em = BDUtils.getEntityManager();
         try {
             // JPQL: Selecciona todos los objetos Coleccion.
             TypedQuery<Coleccion> query = em.createQuery("SELECT c FROM Coleccion c", Coleccion.class);
@@ -61,7 +64,7 @@ public class ColeccionRepositorio {
     //}
 
     public Optional<Coleccion> buscarPorHandle(String handle) {
-        EntityManager em = BDUtils.getEntityManager();
+        //EntityManager em = BDUtils.getEntityManager();
         try {
             // Consulta JPQL para buscar por el campo 'handle'
             TypedQuery<Coleccion> query = em.createQuery(
@@ -96,7 +99,7 @@ public class ColeccionRepositorio {
     //public void eliminar(Coleccion coleccion) {colecciones.remove(coleccion);}
 
     public void eliminar(Coleccion coleccion) {
-        EntityManager em = BDUtils.getEntityManager();
+        //EntityManager em = BDUtils.getEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
 
