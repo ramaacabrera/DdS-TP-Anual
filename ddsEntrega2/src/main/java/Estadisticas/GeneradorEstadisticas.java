@@ -2,13 +2,10 @@ package Estadisticas;
 
 import Agregador.HechosYColecciones.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.Date;
 
 public class GeneradorEstadisticas {
     public GeneradorEstadisticas(){
@@ -24,8 +21,8 @@ public class GeneradorEstadisticas {
         List<Contador> provincias = new ArrayList<>();
         for(Hecho hecho : coleccion.getHechos()){
             Optional<Contador> resultado = provincias.stream()
-                    .filter(contador -> contador
-                            .getValor().equals(hecho.getUbicacion().getDescripcion()))
+                    .filter(contador -> contador.getValor()
+                            .equals(hecho.getUbicacion().getDescripcion()))
                     .findFirst();
             if(resultado.isPresent()){
                 resultado.get().incrementar();
@@ -34,10 +31,12 @@ public class GeneradorEstadisticas {
                 provincias.add(contador);
             }
         }
-        return "";
+        provincias.sort(Comparator.comparing(Contador::getContador).reversed());
+        return provincias.stream().findFirst().get().getValor();
     }
 
-    public String categoriaConMasHechos(){
+    public String categoriaConMasHechos(List<Hecho> hechos){
+
         return "";
     }
 
