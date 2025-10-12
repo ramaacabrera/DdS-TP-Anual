@@ -1,19 +1,20 @@
 package utils.DTO;
 
+import Agregador.HechosYColecciones.HechoModificado;
 import Agregador.Solicitudes.EstadoSolicitudModificacion;
 import Agregador.HechosYColecciones.Hecho;
 
 public class SolicitudDeModificacionDTO extends SolicitudDTO {
-    private Hecho hechoModificado;
+    private HechoModificado hechoModificado;
     private EstadoSolicitudModificacion estadoSolicitudModificacion;
 
     public SolicitudDeModificacionDTO() {}
 
-    public Hecho getHechoModificado() {
+    public HechoModificado getHechoModificado() {
         return hechoModificado;
     }
 
-    public void setHechoModificado(Hecho hechoModificado) {
+    public void setHechoModificado(HechoModificado hechoModificado) {
         this.hechoModificado = hechoModificado;
     }
 

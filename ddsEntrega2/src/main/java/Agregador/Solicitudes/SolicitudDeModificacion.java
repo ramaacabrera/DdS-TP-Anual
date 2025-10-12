@@ -1,6 +1,8 @@
 package Agregador.Solicitudes;
 
 import Agregador.HechosYColecciones.Hecho;
+import Agregador.HechosYColecciones.HechoModificado;
+import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
 
 import javax.persistence.DiscriminatorValue;
@@ -14,8 +16,8 @@ import java.util.UUID;
 public class SolicitudDeModificacion extends Solicitud {
 
     @OneToOne
-    @JoinColumn(name = "hecho_id")
-    private Hecho hechoModificado;
+    @JoinColumn(name = "hecho_modificado_id")
+    private HechoModificado hechoModificado;
     private EstadoSolicitudModificacion estadoSolicitudModificacion;
 
     public SolicitudDeModificacion(SolicitudDeModificacionDTO solicitud){
@@ -27,7 +29,7 @@ public class SolicitudDeModificacion extends Solicitud {
 
     public SolicitudDeModificacion(){}
 
-    public void aceptarSolicitudConSugerencia(Hecho hecho){
+    public void aceptarSolicitudConSugerencia(HechoModificado hecho){
         hechoModificado = hecho;
         estadoSolicitudModificacion = EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA;
     }

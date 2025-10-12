@@ -12,7 +12,9 @@ public class MainEstadisticas {
 
         // Ver forma de obtener la ruta del agregador
 
-        GeneradorEstadisticas generador = new GeneradorEstadisticas();
+        String url = "";
+
+        GeneradorEstadisticas generador = new GeneradorEstadisticas(url);
 
     }
 }
