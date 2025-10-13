@@ -1,5 +1,6 @@
 package CargadorDinamica;
 
+import CargadorDinamica.DinamicaDto.Hecho_D_DTO;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
 import utils.DTO.SolicitudDeEliminacionDTO;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DinamicoRepositorio {
-    private List<HechoDTO> hechos;
+    private List<Hecho_D_DTO> hechos;
     private List<SolicitudDeModificacionDTO> solicitudesModificacion;
     private List <SolicitudDeEliminacionDTO> solicitudesEliminacion;
 
@@ -18,11 +19,11 @@ public class DinamicoRepositorio {
         this.solicitudesEliminacion = new ArrayList<>();
     }
 
-    public List<HechoDTO> buscarHechos() {
+    public List<Hecho_D_DTO> buscarHechos() {
         return hechos;
     }
 
-    public void guardarHecho(HechoDTO hecho) {
+    public void guardarHecho(Hecho_D_DTO hecho) {
         hechos.add(hecho);
     }
 

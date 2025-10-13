@@ -23,7 +23,7 @@ public class MainAgregador {
 
         System.out.println("Iniciando servidor Agregador en el puerto "+puertoAgregador);
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("demo-hibernate-PU");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("agregador-PU");
         EntityManager em = emf.createEntityManager();
 
         IniciadorApp iniciador = new IniciadorApp();

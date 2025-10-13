@@ -39,10 +39,6 @@ public class Hecho {
     private Fuente fuente;
 
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "handle")
-    private Coleccion coleccion;
-
     @Enumerated(EnumType.STRING)
     private EstadoHecho estadoHecho;
 
@@ -167,8 +163,6 @@ public class Hecho {
     public void setEsEditable(Boolean esEditableNuevo) {esEditable = esEditableNuevo;}
 
     public void setHecho_id (UUID id) {hecho_id = id;}
-
-    public void setColeccion(Coleccion coleccion_) {coleccion = coleccion_;}
 
     public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoNuevo) {contenidoMultimedia = contenidoNuevo;}
 
