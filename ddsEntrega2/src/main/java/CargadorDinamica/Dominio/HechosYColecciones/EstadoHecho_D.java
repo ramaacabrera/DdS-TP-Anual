@@ -1,5 +1,5 @@
 package CargadorDinamica.Dominio.HechosYColecciones;
 
-public enum EstadoHecho {
+public enum EstadoHecho_D {
     ACTIVO, OCULTO
 }

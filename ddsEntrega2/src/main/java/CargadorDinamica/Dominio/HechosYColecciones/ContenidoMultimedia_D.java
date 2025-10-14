@@ -20,7 +20,7 @@ public class ContenidoMultimedia_D {
     private UUID id_contenido;
 
     @Enumerated(EnumType.STRING)
-    private TipoContenidoMultimedia tipoContenido;
+    private TipoContenidoMultimedia_D tipoContenido;
     private String contenido;
 
     @ManyToOne
@@ -28,7 +28,7 @@ public class ContenidoMultimedia_D {
     private Hecho_D hecho;
 
     @JsonCreator
-    public ContenidoMultimedia_D(@JsonProperty("tipoContenido") TipoContenidoMultimedia tipo,
+    public ContenidoMultimedia_D(@JsonProperty("tipoContenido") TipoContenidoMultimedia_D tipo,
                                @JsonProperty("contenido") String contenido) {
         this.tipoContenido = tipo;
         this.contenido = contenido;
@@ -39,7 +39,7 @@ public class ContenidoMultimedia_D {
     // GETTERS
     public UUID getId_contenido() {return id_contenido;}
 
-    public TipoContenidoMultimedia getTipoContenido() {return tipoContenido;}
+    public TipoContenidoMultimedia_D getTipoContenido() {return tipoContenido;}
 
     public String getContenido() {return contenido;}
 
@@ -48,7 +48,7 @@ public class ContenidoMultimedia_D {
     // SETTERS
     public void setId_contenido(UUID id_contenido_) {this.id_contenido = id_contenido_;}
 
-    public void setTipoContenido(TipoContenidoMultimedia tipoContenido_) {this.tipoContenido = tipoContenido_;}
+    public void setTipoContenido(TipoContenidoMultimedia_D tipoContenido_) {this.tipoContenido = tipoContenido_;}
 
     public void setContenido(String contenido_) {this.contenido = contenido_;}
 

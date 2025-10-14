@@ -2,9 +2,9 @@ package CargadorDinamica.Presentacion;
 
 import Agregador.fuente.Fuente;
 import CargadorDinamica.DinamicoRepositorio;
+import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import utils.DTO.HechoDTO;
 import org.jetbrains.annotations.NotNull;
 import CargadorDinamica.DinamicaDto.Hecho_D_DTO;
 
@@ -12,7 +12,7 @@ public class PostHechosHandler implements Handler {
 
     private final DinamicoRepositorio repositorio;
 
-    public PostHechosHandler(DinamicoRepositorio repositorioNuevo, Fuente fuenteNueva) {
+    public PostHechosHandler(DinamicoRepositorio repositorioNuevo) {
         this.repositorio = repositorioNuevo;
     }
 
@@ -21,8 +21,10 @@ public class PostHechosHandler implements Handler {
         String jsonBody = ctx.body();
         Hecho_D_DTO nueva = ctx.bodyAsClass(Hecho_D_DTO.class);
 
+        Hecho_D entidad = new Hecho_D(nueva);
+
         System.out.println("Creando hechoDTO: " + jsonBody);
-        repositorio.guardarHecho(nueva);
+        repositorio.guardarHecho(entidad);
 
         ctx.status(201).result("HechoDTO creado con éxito.");
     }

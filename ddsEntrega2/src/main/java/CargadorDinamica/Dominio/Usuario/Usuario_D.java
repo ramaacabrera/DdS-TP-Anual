@@ -36,7 +36,6 @@ public class Usuario_D {
     @Enumerated(EnumType.STRING)
     private RolUsuario rol;
 
-    //public void VerificarMayoriaDeEdad() {}
 
     public void hechoSubido(Hecho hecho){
         hechosSubidos.add(hecho);
