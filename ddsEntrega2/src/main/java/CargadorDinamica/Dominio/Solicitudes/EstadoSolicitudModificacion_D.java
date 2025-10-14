@@ -1,5 +1,5 @@
 package CargadorDinamica.Dominio.Solicitudes;
 
-public enum EstadoSolicitudModificacion {
+public enum EstadoSolicitudModificacion_D {
     PENDIENTE, ACEPTADA, RECHAZADA, ACEPTADACONSUGERENCIA
 }

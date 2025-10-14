@@ -1,6 +1,7 @@
 package CargadorDinamica.Presentacion;
 
 import CargadorDinamica.DinamicoRepositorio;
+import CargadorDinamica.Dominio.Solicitudes.SolicitudDeEliminacion_D;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;

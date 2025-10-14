@@ -79,10 +79,10 @@ public class SolicitudEliminacionRepositorio {
     /*public boolean actualizarEstadoSolicitudEliminacion(String body, int id){
         Optional<SolicitudDeEliminacion> resultadoBusqueda = this.buscarPorId(id);
         if(resultadoBusqueda.isPresent()) {
-            EstadoSolicitudEliminacion estadoEnum = EstadoSolicitudEliminacion.valueOf(body.toUpperCase());
-            if(estadoEnum == EstadoSolicitudEliminacion.ACEPTADA){
+            EstadoSolicitudEliminacion_D estadoEnum = EstadoSolicitudEliminacion_D.valueOf(body.toUpperCase());
+            if(estadoEnum == EstadoSolicitudEliminacion_D.ACEPTADA){
                 resultadoBusqueda.get().aceptarSolicitud();
-            } else if(estadoEnum == EstadoSolicitudEliminacion.RECHAZADA){
+            } else if(estadoEnum == EstadoSolicitudEliminacion_D.RECHAZADA){
                 resultadoBusqueda.get().rechazarSolicitud();
             } else {
                 return false;
