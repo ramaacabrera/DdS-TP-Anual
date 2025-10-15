@@ -1,6 +1,7 @@
 package CargadorDinamica.Dominio.Usuario;
 
 import Agregador.HechosYColecciones.Hecho;
+import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
@@ -23,7 +24,7 @@ public class Usuario_D {
 
     @OneToMany(mappedBy = "contribuyente")
     @JsonIgnore
-    private List<Hecho> hechosSubidos = new ArrayList<Hecho>();
+    private List<Hecho_D> hechosSubidos = new ArrayList<Hecho_D>();
 
     @JsonProperty
     private Integer edad;
@@ -36,16 +37,12 @@ public class Usuario_D {
     @Enumerated(EnumType.STRING)
     private RolUsuario rol;
 
-
-    public void hechoSubido(Hecho hecho){
-        hechosSubidos.add(hecho);
-    }
-
     public Integer getEdad() { return edad; }
     public String getNombre() { return nombre; }
     public String getApellido() { return apellido; }
     public UUID getId_usuario() {return id_usuario;}
     public RolUsuario getRol() {return rol;}
+
 
     public void setEdad(Integer edad) { this.edad = edad; }
     public void setNombre(String nombre) { this.nombre = nombre; }

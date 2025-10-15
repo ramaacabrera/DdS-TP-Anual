@@ -17,7 +17,7 @@ public class BDUtils {
 //        return em;
 //    }
 
-    private static final String PERSISTENCE_UNIT_NAME = "agregador-hibernate-PU";
+    private static final String PERSISTENCE_UNIT_NAME = "agregador-PU";
 
     public static void comenzarTransaccion(EntityManager em) {
         EntityTransaction tx = em.getTransaction();

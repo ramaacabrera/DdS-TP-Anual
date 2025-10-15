@@ -1,11 +1,5 @@
 package CargadorDinamica.Dominio.HechosYColecciones;
 
-import Agregador.HechosYColecciones.ContenidoMultimedia;
-import Agregador.HechosYColecciones.EstadoHecho;
-import Agregador.HechosYColecciones.Etiqueta;
-import Agregador.HechosYColecciones.Ubicacion;
-import Agregador.Usuario.Usuario;
-import Agregador.fuente.Fuente;
 import CargadorDinamica.DinamicaDto.Hecho_D_DTO;
 import CargadorDinamica.Dominio.Usuario.Usuario_D;
 import org.hibernate.annotations.GenericGenerator;
@@ -49,7 +43,7 @@ public class Hecho_D {
 
     @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "HechoXEtiqueta",
+            name = "HechoDXEtiquetaD",
             joinColumns = @JoinColumn(name = "hecho_id"),
             inverseJoinColumns = @JoinColumn(name = "id_etiqueta")
     )

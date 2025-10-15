@@ -5,7 +5,7 @@ import javax.persistence.EntityTransaction;
 
 public class BDUtilsDinamico {
 
-    private static final String PERSISTENCE_UNIT_NAME = "dinamico-hibernate-PU";
+    private static final String PERSISTENCE_UNIT_NAME = "dinamico-PU";
 
     public static void comenzarTransaccion(EntityManager em) {
         EntityTransaction tx = em.getTransaction();

@@ -1,27 +1,16 @@
 version: '3.8'
 services:
-  mysql-agregador:
+  mysql_unificado:
     image: mysql:8.0
-    container_name: metamapa-mysql-agregador
+    container_name: metamapa_mysql_unico
     environment:
+      # CRUCIAL: Contraseña de Root para permitir la conexión y creación de bases de datos
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: metamapa_agregador
+
     ports:
       - "3306:3306"
     volumes:
-      - mysql_agregador_data:/var/lib/mysql
-
-  mysql-dinamico:
-    image: mysql:8.0
-    container_name: metamapa-mysql-dinamico
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: metamapa_dinamico
-    ports:
-      - "3307:3306"
-    volumes:
-      - mysql_dinamico_data:/var/lib/mysql
+      - mysql_datos_unificados:/var/lib/mysql
 
 volumes:
-  mysql_agregador_data:
-  mysql_dinamico_data:
+  mysql_datos_unificados: {}

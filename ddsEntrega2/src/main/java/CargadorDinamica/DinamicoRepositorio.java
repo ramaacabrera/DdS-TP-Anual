@@ -11,14 +11,18 @@ import Agregador.fuente.TipoDeFuente;
 import CargadorDinamica.DinamicaDto.Hecho_D_DTO;
 import CargadorDinamica.Dominio.HechosYColecciones.*;
 
+import CargadorDinamica.Dominio.Solicitudes.EstadoSolicitudEliminacion_D;
 import CargadorDinamica.Dominio.Solicitudes.SolicitudDeEliminacion_D;
 import CargadorDinamica.Dominio.Solicitudes.SolicitudDeModificacion_D;
+
 import CargadorDinamica.Dominio.Usuario.Usuario_D;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
 import utils.DTO.SolicitudDeEliminacionDTO;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
@@ -160,13 +164,40 @@ public class DinamicoRepositorio {
     private ContenidoMultimedia convertirContenidoMultimedia(ContenidoMultimedia_D contenidoD) {
         if (contenidoD == null) return null;
 
+        // Convertir el enum del dinámico al enum del agregador
+        Agregador.HechosYColecciones.TipoContenidoMultimedia tipoConvertido =
+                convertirTipoContenido(contenidoD.getTipoContenido());
+
+        ContenidoMultimedia contenido = new ContenidoMultimedia(
+                tipoConvertido,
+                contenidoD.getContenido()
+        );
+
+        return contenido;
+    }
+
+    private Agregador.HechosYColecciones.TipoContenidoMultimedia convertirTipoContenido(
+            CargadorDinamica.Dominio.HechosYColecciones.TipoContenidoMultimedia_D tipoD) {
+
+        // Mapeo manual entre los enums
+        switch (tipoD) {
+            case IMAGEN: return Agregador.HechosYColecciones.TipoContenidoMultimedia.IMAGEN;
+            case VIDEO: return Agregador.HechosYColecciones.TipoContenidoMultimedia.VIDEO;
+            case AUDIO: return Agregador.HechosYColecciones.TipoContenidoMultimedia.AUDIO;
+        }
+    return null;
+    }
+
+    /*private ContenidoMultimedia convertirContenidoMultimedia(ContenidoMultimedia_D contenidoD) {
+        if (contenidoD == null) return null;
+
         ContenidoMultimedia contenido = new ContenidoMultimedia(
                 contenidoD.getTipoContenido(), // Asumiendo que tienen el mismo enum
                 contenidoD.getContenido()
         );
 
         return contenido;
-    }
+    }*/
 
 
     public void resetearHechos() {
@@ -233,8 +264,46 @@ public class DinamicoRepositorio {
         }
     }
 
-    public List<SolicitudDeModificacionDTO> buscarSolicitudesModificacion(){return solicitudesModificacion;}
-    public List<SolicitudDeEliminacionDTO> buscarSolicitudesEliminacion() {
-        return solicitudesEliminacion;
+    /*
+    public List<SolicitudDeModificacionDTO> buscarSolicitudesModificacion(){
+
     }
+*/
+
+
+    /*public List<SolicitudDeEliminacionDTO> buscarSolicitudesEliminacion() {
+        List<SolicitudDeEliminacion_D> solEliminaciones = this.buscarSolEliminacionEntidades();
+        List<SolicitudDeEliminacionDTO> dtos = new ArrayList<>();
+
+        for (SolicitudDeEliminacion_D sol : solEliminaciones) {
+            SolicitudDeEliminacionDTO dto = convertirEntidadSEliminacionADTO(sol);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    public List<SolicitudDeEliminacion_D> buscarSolEliminacionEntidades() {
+        try {
+            TypedQuery<SolicitudDeEliminacion_D> query = em.createQuery("SELECT se FROM SolicitudDeEliminacion_D se", SolicitudDeEliminacion_D.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            System.err.println("Error al obtener sol de eliminacion: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }*/
+
+    /*private SolicitudDeEliminacionDTO convertirEntidadSEliminacionADTO(SolicitudDeEliminacion_D entidad) {
+        return new SolicitudDeEliminacionDTO(
+                convertirEntidadADTO(entidad.getHechoAsociado()),
+                entidad.getJustificacion(),
+                convertirUsuario(entidad.getUsuario()),
+                convertirEstadoSolicitudEliminacion(entidad.getEstadoSolicitudEliminacion())
+        );
+    }*/
+
+    private EstadoSolicitudEliminacion_D convertirEstadoSolicitudEliminacion(EstadoSolicitudEliminacion_D estadoD) {
+        return EstadoSolicitudEliminacion_D.valueOf(estadoD.name());
+    }
+
+
 }

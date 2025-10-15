@@ -2,6 +2,7 @@ package CargadorDinamica.Dominio.Solicitudes;
 
 import CargadorDinamica.DinamicaDto.SolicitudEliminacion_D_DTO;;
 import CargadorDinamica.Dominio.Usuario.Usuario_D;
+import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -23,7 +24,7 @@ public class SolicitudDeEliminacion_D {
 
     @ManyToOne
     @JoinColumn(name = "hecho_id")
-    private UUID ID_hechoAsociado;  //LO MODIFIQUEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    private Hecho_D hechoAsociado;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
@@ -36,15 +37,15 @@ public class SolicitudDeEliminacion_D {
 
     public SolicitudDeEliminacion_D(SolicitudEliminacion_D_DTO solElimDTO) {
         this.justificacion = solElimDTO.getJustificacion();
-        this.ID_hechoAsociado = solElimDTO.getid_HechoAsociado();
+        this.hechoAsociado = solElimDTO.getHechoAsociado();
         this.usuario = solElimDTO.getUsuario();
         this.estadoSolicitudEliminacion = EstadoSolicitudEliminacion_D.PENDIENTE;
     }
 
     //Getters y Setters
     public void setUsuario(Usuario_D _usuario) {this.usuario = _usuario;}
-    public void setid_HechoAsociado(UUID idHechoAsociado) {
-        this.ID_hechoAsociado = idHechoAsociado;
+    public void setHechoAsociado(Hecho_D idHechoAsociado) {
+        this.hechoAsociado = idHechoAsociado;
     }
     public void setJustificacion(String justificacion) {
         this.justificacion = justificacion;
@@ -57,8 +58,8 @@ public class SolicitudDeEliminacion_D {
     }
 
     public Usuario_D getUsuario() { return usuario; }
-    public UUID getid_HechoAsociado() {
-        return ID_hechoAsociado;
+    public Hecho_D getHechoAsociado() {
+        return hechoAsociado;
     }
     public String getJustificacion() {
         return justificacion;

@@ -33,8 +33,13 @@ public class Coleccion {
     @Column(name = "handle", updatable = false, nullable = false)
     private String handle;
 
-    @OneToMany(mappedBy = "coleccion", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Hecho> hechos = new ArrayList<>();
+    @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "ColeccionXHecho",
+            joinColumns = @JoinColumn(name = "handle"),
+            inverseJoinColumns = @JoinColumn(name = "hecho_id")
+    )
+    private List<Hecho> hechos;
 
     private String titulo;
     private String descripcion;

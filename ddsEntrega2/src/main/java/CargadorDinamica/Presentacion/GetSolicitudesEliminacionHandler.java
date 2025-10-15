@@ -15,9 +15,9 @@ public class GetSolicitudesEliminacionHandler implements Handler {
 
     @Override
     public void handle(Context contexto){
-        List<SolicitudDeEliminacionDTO> solicitudes = repositorio.buscarSolicitudesEliminacion();
+        //List<SolicitudDeEliminacionDTO> solicitudes = repositorio.buscarSolicitudesEliminacion();
         repositorio.resetearSolicitudesEliminacion();
-        contexto.json(solicitudes);
+        //contexto.json(solicitudes);
         contexto.status(200);
     }
 }

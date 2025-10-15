@@ -34,7 +34,7 @@ public class MainDinamica {
         ConexionAlAgregador agregador = new ConexionAlAgregador();
         agregador.conectarse(TipoDeFuente.DINAMICA, config.getProperty("puertoDinamico"));
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("dinamico-hibernate-PU");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("dinamico-PU");
         EntityManager emDinamico = emf.createEntityManager();
 
         DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio(emDinamico);

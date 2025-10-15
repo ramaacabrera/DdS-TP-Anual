@@ -30,7 +30,7 @@ public class SolicitudDeModificacion_D {
 
     @ManyToOne
     @JoinColumn(name = "hecho_id")
-    private UUID ID_hechoAsociado;
+    private Hecho_D hechoAsociado;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
@@ -47,7 +47,7 @@ public class SolicitudDeModificacion_D {
 
     public SolicitudDeModificacion_D(SolicitudModificacion_D_DTO solModDTO) {
         this.justificacion = solModDTO.getJustificacion();
-        this.ID_hechoAsociado = solModDTO.getid_HechoAsociado();
+        this.hechoAsociado = solModDTO.getHechoAsociado();
         this.usuario = solModDTO.getUsuario();
         this.hechoModificado = solModDTO.getHechoModificado();
         this.estadoSolicitudModificacion = EstadoSolicitudModificacion_D.PENDIENTE;
@@ -55,8 +55,8 @@ public class SolicitudDeModificacion_D {
 
     //Getters y Setters
     public void setUsuario(Usuario_D _usuario) {this.usuario = _usuario;}
-    public void setID_HechoAsociado(UUID idHechoAsociado) {
-        this.ID_hechoAsociado = idHechoAsociado;
+    public void setHechoAsociado(Hecho_D HechoAsociado) {
+        this.hechoAsociado = HechoAsociado;
     }
     public void setJustificacion(String justificacion) {
         this.justificacion = justificacion;
@@ -70,8 +70,8 @@ public class SolicitudDeModificacion_D {
     public void serHechoModificado(Hecho_D hechoM) {this.hechoModificado = hechoM; }
 
     public Usuario_D getUsuario() { return usuario; }
-    public UUID getID_HechoAsociado() {
-        return ID_hechoAsociado;
+    public Hecho_D getHechoAsociado() {
+        return hechoAsociado;
     }
     public String getJustificacion() {
         return justificacion;
