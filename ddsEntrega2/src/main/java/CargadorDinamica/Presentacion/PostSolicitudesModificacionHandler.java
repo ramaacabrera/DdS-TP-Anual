@@ -1,10 +1,11 @@
 package CargadorDinamica.Presentacion;
 
+import CargadorDinamica.DinamicaDto.SolicitudModificacion_D_DTO;
 import CargadorDinamica.DinamicoRepositorio;
+import CargadorDinamica.Dominio.Solicitudes.SolicitudDeModificacion_D;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-import utils.DTO.SolicitudDeModificacionDTO;
 
 public class PostSolicitudesModificacionHandler implements Handler {
     private final DinamicoRepositorio repositorio;
@@ -16,9 +17,11 @@ public class PostSolicitudesModificacionHandler implements Handler {
     @Override
     public void handle(@NotNull Context context) throws Exception {
         String bodyString = context.body();
-        SolicitudDeModificacionDTO solicitud = context.bodyAsClass(SolicitudDeModificacionDTO.class);
+        SolicitudModificacion_D_DTO solicitudNueva = context.bodyAsClass(SolicitudModificacion_D_DTO.class);
 
-        repositorio.guardarSolicitudModificacion(solicitud);
+        SolicitudDeModificacion_D entidad = new SolicitudDeModificacion_D(solicitudNueva);
+
+        repositorio.guardarSolicitudModificacion(entidad);
         context.status(201);
     }
 }

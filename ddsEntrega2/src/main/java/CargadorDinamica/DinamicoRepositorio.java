@@ -11,6 +11,8 @@ import Agregador.fuente.TipoDeFuente;
 import CargadorDinamica.DinamicaDto.Hecho_D_DTO;
 import CargadorDinamica.Dominio.HechosYColecciones.*;
 
+import CargadorDinamica.Dominio.Solicitudes.SolicitudDeEliminacion_D;
+import CargadorDinamica.Dominio.Solicitudes.SolicitudDeModificacion_D;
 import CargadorDinamica.Dominio.Usuario.Usuario_D;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
@@ -179,17 +181,60 @@ public class DinamicoRepositorio {
         }
     }
 
+    //-------------------------SOLICITUDES---------------------------------------
+
+    public void guardarSolicitudModificacion(SolicitudDeModificacion_D solicitud){
+        try {
+            BDUtilsDinamico.comenzarTransaccion(em);
+            em.persist(solicitud); // Usamos persist para insertar nuevo
+            BDUtilsDinamico.commit(em);
+            System.out.println("SolicitudDeModificacion_D guardado: " + solicitud.getJustificacion());
+        } catch (Exception e) {
+            BDUtilsDinamico.rollback(em);
+            System.err.println("ERROR al guardar SolicitudDeModificacion_D: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void guardarSolicitudEliminacion(SolicitudDeEliminacion_D solicitud) {
+        try {
+            BDUtilsDinamico.comenzarTransaccion(em);
+            em.persist(solicitud); // Usamos persist para insertar nuevo
+            BDUtilsDinamico.commit(em);
+            System.out.println("SolicitudDeEliminacion_D guardado: " + solicitud.getJustificacion());
+        } catch (Exception e) {
+            BDUtilsDinamico.rollback(em);
+            System.err.println("ERROR al guardar SolicitudDeEliminacion_D: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void resetearSolicitudesModificacion() {
+        try {
+            BDUtilsDinamico.comenzarTransaccion(em);
+            em.createQuery("DELETE FROM SolicitudDeModificacion_D").executeUpdate();
+            BDUtilsDinamico.commit(em);
+            System.out.println("Todos las Solicitudes De Modificacion han sido reseteados");
+        } catch (Exception e) {
+            BDUtilsDinamico.rollback(em);
+            System.err.println("ERROR al resetear Solicitudes De Modificacion: " + e.getMessage());
+        }
+    }
+
+    public void resetearSolicitudesEliminacion() {
+        try {
+            BDUtilsDinamico.comenzarTransaccion(em);
+            em.createQuery("DELETE FROM SolicitudDeEliminacion_D").executeUpdate();
+            BDUtilsDinamico.commit(em);
+            System.out.println("Todos las Solicitudes De Eliminacion han sido reseteados");
+        } catch (Exception e) {
+            BDUtilsDinamico.rollback(em);
+            System.err.println("ERROR al resetear Solicitudes De Eliminacion: " + e.getMessage());
+        }
+    }
+
     public List<SolicitudDeModificacionDTO> buscarSolicitudesModificacion(){return solicitudesModificacion;}
-
-    public void guardarSolicitudModificacion(SolicitudDeModificacionDTO solicitud){solicitudesModificacion.add(solicitud);}
-
     public List<SolicitudDeEliminacionDTO> buscarSolicitudesEliminacion() {
         return solicitudesEliminacion;
     }
-
-    public void guardarSolicitudEliminacion(SolicitudDeEliminacionDTO solicitud) {solicitudesEliminacion.add(solicitud);}
-
-    public void resetearSolicitudesModificacion() { solicitudesModificacion = new ArrayList<>();}
-
-    public void resetearSolicitudesEliminacion() { solicitudesEliminacion = new ArrayList<>();}
 }
