@@ -2,40 +2,49 @@ package Agregador.Cargador;
 
 import Agregador.fuente.Fuente;
 import Agregador.fuente.TipoDeFuente;
+import CargadorDemo.DemoLoader;
+import CargadorMetamapa.MetamapaLoader;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.ApiGetter;
 import utils.DTO.FuenteDTO;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
 import utils.DTO.SolicitudDeEliminacionDTO;
 
-
-
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class ConexionCargador {
+    private final MetamapaLoader metamapaLoader;
+    private final DemoLoader demoLoader;
+
     private final List<Fuente> fuentes =  new ArrayList<>();
     private int idIncremental = 1;
 
+    public ConexionCargador(MetamapaLoader metaLoader, DemoLoader demoLoader) {
+        this.metamapaLoader = metaLoader;
+        this.demoLoader = demoLoader;
+    }
     public List<Fuente> getFuentes() { return fuentes; }
 
     public List<HechoDTO> obtenerHechosNuevos(){
         List<HechoDTO> listaHecho = new ArrayList<>();
 
+        listaHecho.addAll(this.metamapaLoader.obtenerHechos());
+        listaHecho.addAll(this.demoLoader.obtenerHechos());
+
         fuentes.forEach(fuente -> {
+
+            if (fuente.getTipoDeFuente() != TipoDeFuente.METAMAPA &&
+                    fuente.getTipoDeFuente() != TipoDeFuente.DEMO) {
                     List<HechoDTO> hechosTemporales;
                     hechosTemporales = this.buscarHechos(fuente.getRuta());
                     hechosTemporales.forEach((hecho) -> {
                         hecho.setFuente(fuente);
                     });
                     listaHecho.addAll(hechosTemporales);
+            }
         });
 
         System.out.println("Hechos obtenidos desde fuentes: " + listaHecho.size());

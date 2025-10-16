@@ -3,7 +3,7 @@ package Agregador.fuente;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum TipoDeFuente {
-    ESTATICA, DINAMICA, PROXY;
+    ESTATICA, DINAMICA, METAMAPA, DEMO;
 
     @JsonValue
     public String toValue() {

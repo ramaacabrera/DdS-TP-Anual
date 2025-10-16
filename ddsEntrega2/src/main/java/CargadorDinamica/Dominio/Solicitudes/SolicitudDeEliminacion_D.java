@@ -4,6 +4,7 @@ import CargadorDinamica.DinamicaDto.SolicitudEliminacion_D_DTO;;
 import CargadorDinamica.Dominio.Usuario.Usuario_D;
 import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -17,16 +18,17 @@ public class SolicitudDeEliminacion_D {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "id_solicitud_eliminacion", updatable = false, nullable = false)
+    @Type(type = "uuid-char")
+    @Column(name = "id_solicitud_eliminacion",length = 36, updatable = false, nullable = false)
     protected UUID id_solicitud_eliminacion;
 
     protected String justificacion;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "hecho_id")
     private Hecho_D hechoAsociado;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id")
     private Usuario_D usuario;
 
@@ -35,12 +37,12 @@ public class SolicitudDeEliminacion_D {
 
     public SolicitudDeEliminacion_D() {}
 
-    public SolicitudDeEliminacion_D(SolicitudEliminacion_D_DTO solElimDTO) {
+    /*public SolicitudDeEliminacion_D(SolicitudEliminacion_D_DTO solElimDTO) {
         this.justificacion = solElimDTO.getJustificacion();
         this.hechoAsociado = solElimDTO.getHechoAsociado();
         this.usuario = solElimDTO.getUsuario();
         this.estadoSolicitudEliminacion = EstadoSolicitudEliminacion_D.PENDIENTE;
-    }
+    }*/
 
     //Getters y Setters
     public void setUsuario(Usuario_D _usuario) {this.usuario = _usuario;}

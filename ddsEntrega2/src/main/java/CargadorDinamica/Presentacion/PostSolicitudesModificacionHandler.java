@@ -1,7 +1,12 @@
 package CargadorDinamica.Presentacion;
 
+import CargadorDinamica.DinamicaDto.SolicitudEliminacion_D_DTO;
 import CargadorDinamica.DinamicaDto.SolicitudModificacion_D_DTO;
 import CargadorDinamica.DinamicoRepositorio;
+import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
+import CargadorDinamica.Dominio.Solicitudes.EstadoSolicitudEliminacion_D;
+import CargadorDinamica.Dominio.Solicitudes.EstadoSolicitudModificacion_D;
+import CargadorDinamica.Dominio.Solicitudes.SolicitudDeEliminacion_D;
 import CargadorDinamica.Dominio.Solicitudes.SolicitudDeModificacion_D;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -19,7 +24,18 @@ public class PostSolicitudesModificacionHandler implements Handler {
         String bodyString = context.body();
         SolicitudModificacion_D_DTO solicitudNueva = context.bodyAsClass(SolicitudModificacion_D_DTO.class);
 
-        SolicitudDeModificacion_D entidad = new SolicitudDeModificacion_D(solicitudNueva);
+        Hecho_D hechoExistente = repositorio.buscarHechoPorId(solicitudNueva.getID_HechoAsociado());
+        if (hechoExistente == null) {
+            context.status(404).result("Hecho no encontrado");
+            return;
+        }
+
+        SolicitudDeModificacion_D entidad = new SolicitudDeModificacion_D();
+        entidad.setHechoAsociado(hechoExistente);
+        entidad.setJustificacion(solicitudNueva.getJustificacion());
+        entidad.setUsuario(solicitudNueva.getUsuario());
+        entidad.setEstadoSolicitudModificacion(EstadoSolicitudModificacion_D.PENDIENTE);
+        entidad.setHechoAsociado(solicitudNueva.getHechoModificado());
 
         repositorio.guardarSolicitudModificacion(entidad);
         context.status(201);

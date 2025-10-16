@@ -3,6 +3,7 @@ package CargadorDinamica.Dominio.HechosYColecciones;
 import CargadorDinamica.DinamicaDto.Hecho_D_DTO;
 import CargadorDinamica.Dominio.Usuario.Usuario_D;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ public class Hecho_D {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "hecho_id", updatable = false, nullable = false)
+    @Type(type = "uuid-char")
+    @Column(name = "hecho_id", length = 36 , updatable = false, nullable = false)
     private UUID hecho_id;
 
     private String titulo;
@@ -63,16 +65,12 @@ public class Hecho_D {
         this.ubicacion = hechoDTO.getUbicacion();
         this.fechaDeAcontecimiento = hechoDTO.getFechaDeAcontecimiento();
         this.fechaDeCarga = hechoDTO.getFechaDeCarga();
-        this.fuente = "Dinamica";
+        this.fuente = "DINAMICA";
         this.estadoHecho = EstadoHecho_D.ACTIVO;
         this.contribuyente = hechoDTO.getContribuyente();
         this.etiquetas = hechoDTO.getEtiquetas();
         this.esEditable = true;
         this.contenidoMultimedia = hechoDTO.getContenidoMultimedia();
-
-        // Inicializar listas si son null
-        if (this.etiquetas == null) this.etiquetas = new ArrayList<>();
-        if (this.contenidoMultimedia == null) this.contenidoMultimedia = new ArrayList<>();
     }
 
     // Getters
@@ -122,6 +120,5 @@ public class Hecho_D {
     public void setHecho_id (UUID id) {hecho_id = id;}
     public void setEsEditable (Boolean esEditableNuevo) {esEditable = esEditableNuevo; }
     public void setContenidoMultimedia(List<ContenidoMultimedia_D> contenidoNuevo) {contenidoMultimedia = contenidoNuevo;}
-
 
 }

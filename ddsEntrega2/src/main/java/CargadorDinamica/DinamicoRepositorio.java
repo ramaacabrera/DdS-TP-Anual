@@ -7,6 +7,7 @@ import Agregador.Usuario.RolUsuario;
 import Agregador.Usuario.Usuario;
 import Agregador.fuente.Fuente;
 import Agregador.fuente.TipoDeFuente;
+import Agregador.HechosYColecciones.HechoModificado;
 import CargadorDinamica.DinamicaDto.Hecho_D_DTO;
 import CargadorDinamica.Dominio.HechosYColecciones.*;
 
@@ -26,6 +27,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DinamicoRepositorio {
     private final EntityManager em;
@@ -209,6 +211,15 @@ public class DinamicoRepositorio {
         } catch (Exception e) {
             BDUtilsDinamico.rollback(em);
             System.err.println("ERROR al resetear hechos: " + e.getMessage());
+        }
+    }
+
+    public Hecho_D buscarHechoPorId(UUID id) {
+        try {
+            return em.find(Hecho_D.class, id);
+        } catch (Exception e) {
+            System.err.println("Error al buscar hecho por ID: " + e.getMessage());
+            return null;
         }
     }
 

@@ -9,6 +9,7 @@ import CargadorDinamica.Dominio.Solicitudes.EstadoSolicitudModificacion_D;
 import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
 import CargadorDinamica.Dominio.Usuario.Usuario_D;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 
 import javax.persistence.*;
@@ -23,20 +24,21 @@ public class SolicitudDeModificacion_D {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "id_solicitud_modificacion", updatable = false, nullable = false)
+    @Type(type = "uuid-char")
+    @Column(name = "id_solicitud_modificacion", length =36,  updatable = false, nullable = false)
     protected UUID id_solicitud_modificacion;
 
     protected String justificacion;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "hecho_id")
     private Hecho_D hechoAsociado;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id")
     private Usuario_D usuario;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "hechoModificado_id")
     private Hecho_D hechoModificado; //NO SE SI SE HACE ASI O SI HAY QUE HACER OTRA TABLA O SI HAY QUE DIFERENCIARLOS POR UN ATRIBUTO
 
@@ -45,13 +47,13 @@ public class SolicitudDeModificacion_D {
 
     public SolicitudDeModificacion_D() {}
 
-    public SolicitudDeModificacion_D(SolicitudModificacion_D_DTO solModDTO) {
+    /*public SolicitudDeModificacion_D(SolicitudModificacion_D_DTO solModDTO) {
         this.justificacion = solModDTO.getJustificacion();
-        this.hechoAsociado = solModDTO.getHechoAsociado();
+        this.hechoAsociado = solModDTO.getID_HechoAsociado();
         this.usuario = solModDTO.getUsuario();
         this.hechoModificado = solModDTO.getHechoModificado();
         this.estadoSolicitudModificacion = EstadoSolicitudModificacion_D.PENDIENTE;
-    }
+    }*/
 
     //Getters y Setters
     public void setUsuario(Usuario_D _usuario) {this.usuario = _usuario;}

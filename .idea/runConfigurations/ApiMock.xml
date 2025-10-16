@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ApiMock" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="CargadorProxy.APIMock.DemoAPIMockServer" />
+    <option name="MAIN_CLASS_NAME" value="CargadorDemo.APIMock.DemoAPIMockServer" />
     <module name="pruebaclase1" />
     <method v="2">
       <option name="Make" enabled="true" />

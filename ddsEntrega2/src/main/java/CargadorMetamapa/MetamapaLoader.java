@@ -1,5 +1,6 @@
-package CargadorProxy;
+package CargadorMetamapa;
 
+import utils.Conexiones.FuenteExternaConexion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.DTO.HechoDTO;
 
@@ -13,9 +14,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-public class ConexionMetaMapa extends ConexionProxy{
-
-    public ConexionMetaMapa(String url) {this.url = url;}
+public class MetamapaLoader implements FuenteExternaConexion {
+    protected final String url;
+    public MetamapaLoader(String url) {this.url = url;}
 
     @Override
     public List<HechoDTO> obtenerHechos() {

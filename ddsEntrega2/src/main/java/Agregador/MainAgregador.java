@@ -5,6 +5,8 @@ import Agregador.PaqueteAgregador.Agregador;
 import Agregador.Cargador.ConexionCargador;
 import Agregador.Presentacion.*;
 import Agregador.Persistencia.*;
+import CargadorDemo.DemoLoader;
+import CargadorMetamapa.MetamapaLoader;
 import io.javalin.Javalin;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
@@ -34,37 +36,38 @@ public class MainAgregador {
         SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio(em);
         SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(em);
 
-        MockNormalizador mockNormalizador = new MockNormalizador();
-        ConexionCargador conexionCargador = new ConexionCargador();
+        String urlMetamapaExterna = config.getProperty("urlMetamapaExterna");
+        String urlDemoMock = config.getProperty("urlMock");
 
-        Agregador agregador = new Agregador(hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio, solicitudModificacionRepositorio, mockNormalizador, conexionCargador);
+        MetamapaLoader metamapaLoader = new MetamapaLoader(urlMetamapaExterna);
+        DemoLoader demoLoader = new DemoLoader(urlDemoMock);
+        MockNormalizador mockNormalizador = new MockNormalizador();
+        ConexionCargador conexionCargador = new ConexionCargador(metamapaLoader, demoLoader);
+
+        Agregador agregador = new Agregador(
+                hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio,
+                solicitudModificacionRepositorio, mockNormalizador, conexionCargador);
 
         app.get("/hechos", new GetHechosRepoHandler(hechoRepositorio));
-        app.get("/solicitudesEliminacion", new GetSolicitudesEliminacionRepoHandler(solicitudEliminacionRepositorio));
+
+        //Colecciones
         app.get("/colecciones", new GetColeccionesRepoHandler(coleccionRepositorio));
         app.get("/colecciones/{id}", new GetColeccionEspecificaRepoHandler(coleccionRepositorio));
-
         app.post("/colecciones", new PostColeccionRepoHandler(coleccionRepositorio));
-
-        app.post("/solicitudes", new PostSolicitudEliminacionRepoHandler(solicitudEliminacionRepositorio));
-
         app.put("/colecciones/{id}", new PutColeccionRepoHandler(coleccionRepositorio));
         app.delete("/colecciones/{id}", new DeleteColeccionesRepoHandler(coleccionRepositorio));
-
         app.post("/colecciones/{id}/fuente", new PostFuentesColeccionRepoHandler(coleccionRepositorio));
         app.delete("/colecciones/{id}/fuente", new DeleteFuenteRepoHandler(coleccionRepositorio));
-
         app.put("/colecciones/{id}/algoritmo", new PutAlgoritmoDeConsensoRepoHandler(coleccionRepositorio));
 
+        //Solicitudes
+        app.post("/solicitudes", new PostSolicitudEliminacionRepoHandler(solicitudEliminacionRepositorio));
         app.put("/solicitudes/{id}", new PutSolicitudEliminacionRepoHandler(solicitudEliminacionRepositorio));
+        app.get("/solicitudesEliminacion", new GetSolicitudesEliminacionRepoHandler(solicitudEliminacionRepositorio));
 
-
-        //    <<<<<<<<<-
-
+        //Cargadores
         app.post("/cargador", new PostFuenteHandler(conexionCargador));
-
         app.get("/cargador", new GetFuentesHandler(conexionCargador));
-
         app.delete("/cargador/{id}", new DeleteFuenteHandler(conexionCargador));
     }
 }

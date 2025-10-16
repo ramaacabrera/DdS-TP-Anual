@@ -1,6 +1,6 @@
 package utils;
 
-import CargadorProxy.MainProxy;
+import CargadorMetamapa.MainMetamapa;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,7 +12,7 @@ public class LecturaConfig {
     public Properties leerConfig() {
         Properties config = new Properties();
         try{
-            InputStream input = MainProxy.class.getClassLoader()
+            InputStream input = MainMetamapa.class.getClassLoader()
                     .getResourceAsStream("componentes.properties");
             if(input == null){
                 throw new FileNotFoundException("No se encontro el archivo de propiedades");

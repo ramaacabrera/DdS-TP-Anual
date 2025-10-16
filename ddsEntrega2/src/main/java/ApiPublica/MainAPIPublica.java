@@ -32,6 +32,7 @@ public class MainAPIPublica {
         app.get("/api/hechos", new GetHechosHandler()); // consulto todos los hechos PROBADOOOOO
         app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler()); // consulta hechos de una coleccion (pudiendo mandar criterios o no)
         app.post("/api/hechos", new PostHechoHandler(puertoDinamica)); //creo hecho PROBADOOOOOOOO
-        app.post("/api/solicitudes", new PostSolicitudEliminacionHandler(puertoDinamica)); //creo solicitud PROBADOOOOOOO
+        app.post("/api/solicitudesEliminacion", new PostSolicitudEliminacionHandler(puertoDinamica)); //creo solicitud PROBADOOOOOOO
+        app.post("/api/solicitudesModificacion", new PostSolicitudModificacionHandler(puertoDinamica));
     }
 }

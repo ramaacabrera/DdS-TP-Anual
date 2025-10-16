@@ -2,6 +2,7 @@ package CargadorDinamica.Dominio.HechosYColecciones;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -15,7 +16,8 @@ public class ContenidoMultimedia_D {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "id_contenido", updatable = false, nullable = false)
+    @Type(type = "uuid-char")
+    @Column(name = "id_contenido", length = 36, updatable = false, nullable = false)
     private UUID id_contenido;
 
     @Enumerated(EnumType.STRING)

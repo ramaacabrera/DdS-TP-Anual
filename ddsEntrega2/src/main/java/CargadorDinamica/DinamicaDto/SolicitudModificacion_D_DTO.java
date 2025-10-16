@@ -6,22 +6,22 @@ import CargadorDinamica.Dominio.Usuario.Usuario_D;
 import java.util.UUID;
 
 public class SolicitudModificacion_D_DTO {
-    private Hecho_D hechoAsociado;
+    private UUID ID_hechoAsociado;
     private String justificacion;
     private Usuario_D usuario;
     private Hecho_D hechoModificado;
 
     SolicitudModificacion_D_DTO() {}
 
-    SolicitudModificacion_D_DTO(Hecho_D hechoAsociado, String justificacion, Usuario_D usuario, Hecho_D hechoModificado) {
-        this.hechoAsociado = hechoAsociado;
+    SolicitudModificacion_D_DTO(UUID ID_hechoAsociado, String justificacion, Usuario_D usuario, Hecho_D hechoModificado) {
+        this.ID_hechoAsociado = ID_hechoAsociado;
         this.justificacion = justificacion;
         this.usuario = usuario;
         this.hechoModificado = hechoModificado;
     }
 
-    public void setHechoAsociado(Hecho_D hechoAsociado) {
-        this.hechoAsociado = hechoAsociado;
+    public void setID_HechoAsociado(UUID hechoAsociado) {
+        this.ID_hechoAsociado = hechoAsociado;
     }
     public void setusuario(Usuario_D id_usuario) {this.usuario = id_usuario;}
     public void setJustificacion(String justificacion) {
@@ -32,7 +32,7 @@ public class SolicitudModificacion_D_DTO {
     public String getJustificacion() {
         return justificacion;
     }
-    public Hecho_D getHechoAsociado() {return hechoAsociado;}
+    public UUID getID_HechoAsociado() {return ID_hechoAsociado;}
     public Usuario_D getUsuario() {return usuario; }
     public Hecho_D getHechoModificado() {return hechoModificado; }
 }

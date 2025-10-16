@@ -27,7 +27,7 @@ public class GetHechosDinamicoHandler implements Handler {
 
     public List<HechoDTO> obtenerHechos(){
         List<HechoDTO> dtos = repositorio.buscarHechos();
-        repositorio.resetearHechos();
+        //repositorio.resetearHechos();
         return dtos;
     }
 

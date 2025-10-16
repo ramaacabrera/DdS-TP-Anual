@@ -6,20 +6,20 @@ import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
 import java.util.UUID;
 
 public class SolicitudEliminacion_D_DTO {
-    private Hecho_D hechoAsociado;
+    private UUID ID_hechoAsociado;
     private String justificacion;
     private Usuario_D usuario;
 
     SolicitudEliminacion_D_DTO() {}
 
-    SolicitudEliminacion_D_DTO(Hecho_D hechoAsociado, String justificacion, Usuario_D usuario) {
-        this.hechoAsociado = hechoAsociado;
+    SolicitudEliminacion_D_DTO(UUID ID_hechoAsociado, String justificacion, Usuario_D usuario) {
+        this.ID_hechoAsociado = ID_hechoAsociado;
         this.justificacion = justificacion;
         this.usuario = usuario;
     }
 
-    public void setHechoAsociado(Hecho_D hechoAsociado) {
-        this.hechoAsociado = hechoAsociado;
+    public void setHechoAsociado(UUID ID_hechoAsociado) {
+        this.ID_hechoAsociado = ID_hechoAsociado;
     }
     public void setusuario(Usuario_D id_usuario) {this.usuario = id_usuario;}
     public void setJustificacion(String justificacion) {
@@ -29,6 +29,6 @@ public class SolicitudEliminacion_D_DTO {
     public String getJustificacion() {
         return justificacion;
     }
-    public Hecho_D getHechoAsociado() {return hechoAsociado;}
+    public UUID getHechoAsociado() {return ID_hechoAsociado;}
     public Usuario_D getUsuario() {return usuario; }
 }
