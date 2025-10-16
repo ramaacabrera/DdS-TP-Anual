@@ -6,6 +6,8 @@ import Agregador.Persistencia.ColeccionRepositorio;
 import Agregador.Persistencia.HechoRepositorio;
 import Agregador.Persistencia.SolicitudEliminacionRepositorio;
 import Agregador.Persistencia.SolicitudModificacionRepositorio;
+import Agregador.Solicitudes.SolicitudDeEliminacion;
+import Agregador.Solicitudes.SolicitudDeModificacion;
 import utils.DTO.*;
 import Agregador.HechosYColecciones.Coleccion;
 import Agregador.HechosYColecciones.Hecho;
@@ -122,22 +124,30 @@ public class Agregador {
 
 
         for (SolicitudDeEliminacionDTO dto : solicitudesDeEliminacion) {
-            //SolicitudDeEliminacion nueva = new SolicitudDeEliminacion(dto);
-            //boolean yaExiste = solicitudEliminacionRepositorio.yaExiste(dto);
             boolean esSpam = detectorDeSpam.esSpam(dto.getJustificacion());
 
-            if (!esSpam){ // !yaExiste &&) {
+            if (esSpam){ // !yaExiste &&) {
+                SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(dto);
+                solicitud.rechazarSolicitud();
+                solicitud.setEsSpam(true);
+                solicitudEliminacionRepositorio.agregarSolicitudDeEliminacion(solicitud);
+            } else {
                 solicitudEliminacionRepositorio.agregarSolicitudDeEliminacion(dto);
             }
-            // un posible else luego para las estadisticas
 
         }
         for (SolicitudDeModificacionDTO dto : solicitudesDeModificacion) {
-            //boolean yaExiste = solicitudModificacionRepositorio.yaExiste(dto);
+            boolean esSpam = detectorDeSpam.esSpam(dto.getJustificacion());
 
-            //if (!yaExiste) {
+            if (esSpam){
+                SolicitudDeModificacion solicitud = new SolicitudDeModificacion(dto);
+                solicitud.rechazarSolicitud();
+                solicitud.setEsSpam(true);
+                solicitudModificacionRepositorio.agregarSolicitudDeModificacion(solicitud);
+            } else {
                 solicitudModificacionRepositorio.agregarSolicitudDeModificacion(dto);
-            //}
+            }
+
         }
     }
 

@@ -1,95 +1,93 @@
 package Estadisticas;
 
-import Agregador.HechosYColecciones.*;
-import Agregador.PaqueteAgregador.DetectorDeSpam;
-import Agregador.Solicitudes.SolicitudDeEliminacion;
-import com.fasterxml.jackson.core.type.TypeReference;
-import utils.ApiGetter;
+import Estadisticas.Dominio.*;
+import Estadisticas.Persistencia.ConexionAgregador;
+import Estadisticas.Persistencia.EstadisticasCategoriaRepositorio;
+import Estadisticas.Persistencia.EstadisticasColeccionRepositorio;
+import Estadisticas.Persistencia.EstadisticasRepositorio;
 
-import java.util.*;
+import java.time.LocalTime;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 public class GeneradorEstadisticas {
-    private String conexionAgregador;
+    private final ConexionAgregador conexionAgregador;
+    private final EstadisticasRepositorio estadisticasRepositorio;
+    private final EstadisticasCategoriaRepositorio estadisticasCategoriaRepositorio;
+    private final EstadisticasColeccionRepositorio estadisticasColeccionRepositorio;
+    private Estadisticas estadisticasActual = null;
 
-    public GeneradorEstadisticas(String conexionAgregador){
+    public GeneradorEstadisticas(ConexionAgregador conexionAgregador, EstadisticasRepositorio estadisticasRepositorioNuevo,
+                                 EstadisticasCategoriaRepositorio estadisticasCategoriaRepositorioNuevo, EstadisticasColeccionRepositorio estadisticasColeccionRepositorioNuevo){
         this.conexionAgregador = conexionAgregador;
+        this.estadisticasRepositorio = estadisticasRepositorioNuevo;
+        this.estadisticasCategoriaRepositorio = estadisticasCategoriaRepositorioNuevo;
+        this.estadisticasColeccionRepositorio = estadisticasColeccionRepositorioNuevo;
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         scheduler.scheduleAtFixedRate(() -> {
-            ApiGetter apiGetter = new ApiGetter();
-            List<Hecho> hechos = apiGetter.getFromApi(
-                    conexionAgregador + "/hechos", new TypeReference<List<Hecho>>() {
-                    });
-            List<SolicitudDeEliminacion> solicitudes = apiGetter.getFromApi(
-                    conexionAgregador + "/solicitudesEliminacion",
-                    new TypeReference<List<SolicitudDeEliminacion>>() {
-                    });
-
-            this.contarSolicitudesSpam(solicitudes);
-            this.categoriaConMasHechos(hechos);
-
-            /*
-            HAY QUE VER DE PEDIR LA CATEGORIA
-            this.horaConMasHechos(hechos, categoria);
-            this.provinciaConMasHechos(coleccion);
-            this.provinciaConMasHechos(hechos, categoria);
-             */
-
+            this.actualizarEstadisticas();
         }, 0, 1, TimeUnit.DAYS);
 
     }
 
-
-    public String provinciaConMasHechos(Coleccion coleccion){
-        return this.valorMasFrecuente(coleccion.getHechos(),
-                h -> h.getUbicacion().getDescripcion());
+    private void actualizarEstadisticas() {
+        this.actualizarEstadisticasBase();
+        this.actualizarEstadisticasCategoria();
+        this.actualizarEstadisticasColeccion();
     }
 
-    public String categoriaConMasHechos(List<Hecho> hechos){
-        return this.valorMasFrecuente(hechos, Hecho :: getCategoria);
+    private void actualizarEstadisticasBase() {
+        int spam = conexionAgregador.obtenerSpamActual();
+        String categoria = conexionAgregador.obtenerCategoriaMaxHechos();
+        Estadisticas estadisticas = new Estadisticas(UUID.randomUUID(),
+                new Date(), spam, categoria);
+
+        estadisticasRepositorio.guardar(estadisticas);
+
+        this.estadisticasActual= estadisticas;
     }
 
-    public String provinciaConMasHechos(String categoria, List<Hecho> hechos){
-        return this.valorMasFrecuente(hechos.stream()
-                .filter(h -> h.getCategoria().equals(categoria)).toList(),
-                h -> h.getUbicacion().getDescripcion());
-    }
+    private void actualizarEstadisticasCategoria() {
+        Map<String, String> provinciasPorCategoria = conexionAgregador.obtenerProvinciasPorCategoria();
+        Map<String, Integer> horasPorCategoria = conexionAgregador.obtenerHorasPicoPorCategoria();
 
-    public <T> T valorMasFrecuente(List<Hecho> hechos, Function<Hecho, T> criterio){
-        List<Contador<T>> contadores = new ArrayList<>();
-        for(Hecho hecho : hechos){
-            T valor = criterio.apply(hecho);
-            Optional<Contador<T>> resultado = contadores.stream()
-                    .filter(c -> c.getValor().equals(valor))
-                    .findFirst();
-            if(resultado.isPresent()){
-                resultado.get().incrementar();
-            } else{
-                contadores.add(new Contador<>(valor));
-            }
+        for (String categoria : provinciasPorCategoria.keySet()) {
+            String provincia = provinciasPorCategoria.get(categoria);
+            Integer hora = horasPorCategoria.get(categoria);
+
+            EstadisticasCategoriaId id = new EstadisticasCategoriaId(estadisticasActual.getEstadisticas_id(), categoria);
+
+            EstadisticasCategoria estadisticaCategoria = new EstadisticasCategoria(id, provincia, hora);
+
+            estadisticasCategoriaRepositorio.guardar(estadisticaCategoria);
         }
-        contadores.sort(Comparator.comparing((Contador<T> c) -> c.getContador()).reversed());
-        return contadores.get(0).getValor();
     }
 
-    public Date horaConMasHechos(List<Hecho> hechos, String categoria){
-        return this.valorMasFrecuente(hechos.stream()
-                        .filter(h -> h.getCategoria().equals(categoria)).toList(),
-                Hecho :: getFechaDeAcontecimiento);
-    }
+    private void actualizarEstadisticasColeccion() {
+        Map<UUID, String> provinciaPorColeccion = conexionAgregador.obtenerProvinciaPorColeccion();
 
-    public int contarSolicitudesSpam(List<SolicitudDeEliminacion> solicitudes){
-        int contador = 0;
-        for(SolicitudDeEliminacion solicitud : solicitudes){
-            if(DetectorDeSpam.esSpam(solicitud.getJustificacion())){
-                contador++;
-            }
+        for (Map.Entry<UUID, String> entry : provinciaPorColeccion.entrySet()) {
+            UUID coleccionId = entry.getKey();
+            String provincia = entry.getValue();
+
+            EstadisticasColeccionId id = new EstadisticasColeccionId(
+                    estadisticasActual.getEstadisticas_id(),
+                    coleccionId
+            );
+
+            EstadisticasColeccion estadisticaColeccion = new EstadisticasColeccion(
+                    id,
+                    provincia
+            );
+
+            estadisticasColeccionRepositorio.guardar(estadisticaColeccion);
         }
-        return contador;
     }
 }

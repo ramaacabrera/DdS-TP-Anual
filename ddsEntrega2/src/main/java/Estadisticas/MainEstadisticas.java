@@ -1,6 +1,17 @@
 package Estadisticas;
 
+import Estadisticas.Persistencia.ConexionAgregador;
+import Estadisticas.Persistencia.EstadisticasCategoriaRepositorio;
+import Estadisticas.Persistencia.EstadisticasColeccionRepositorio;
+import Estadisticas.Persistencia.EstadisticasRepositorio;
+import Estadisticas.Presentacion.*;
+import io.javalin.Javalin;
+import utils.IniciadorApp;
 import utils.LecturaConfig;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.Properties;
 
 
@@ -8,13 +19,30 @@ public class MainEstadisticas {
     public static void main(String[] args){
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
+        int puerto =  Integer.parseInt(config.getProperty("puertoEstadisticas"));
         int puertoAgregador = Integer.parseInt(config.getProperty("puertoAgregador"));
 
-        // Ver forma de obtener la ruta del agregador
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("db-estadisticas");
+        EntityManager em = emf.createEntityManager();
 
-        String url = "";
+        IniciadorApp iniciador = new IniciadorApp();
+        Javalin app = iniciador.iniciarApp(puerto, "/");
 
-        GeneradorEstadisticas generador = new GeneradorEstadisticas(url);
+        EstadisticasRepositorio estadisticasRepositorio = new EstadisticasRepositorio(em);
+        EstadisticasColeccionRepositorio estadisticasColeccionRepositorio = new EstadisticasColeccionRepositorio(em);
+        EstadisticasCategoriaRepositorio estadisticasCategoriaRepositorio = new EstadisticasCategoriaRepositorio(em);
+
+        ConexionAgregador conexionAgregador = new ConexionAgregador(em);
+        GeneradorEstadisticas generador = new GeneradorEstadisticas(conexionAgregador,estadisticasRepositorio,estadisticasCategoriaRepositorio,estadisticasColeccionRepositorio);
+
+        app.get("/api/estadisticas/provinciaMax/colecciones/{coleccion}", new GetProvinciaColeccionHandler(estadisticasColeccionRepositorio));
+        app.get("/api/estadisticas/categoriaMax", new GetCategoriaMaxHandler(estadisticasRepositorio));
+        app.get("/api/estadisticas/provinciaMax/categorias/{categoria}", new GetProvinciaCategoriaHandler(estadisticasCategoriaRepositorio));
+        app.get("/api/estadisticas/horaMax/categorias/{categoria}", new GetHoraMaxCategoriaHandler(estadisticasCategoriaRepositorio));
+        app.get("/api/estadisticas/solicitudesSpam", new GetSolicitudesSpamHandler(estadisticasRepositorio));
+
+
+
 
     }
 }
