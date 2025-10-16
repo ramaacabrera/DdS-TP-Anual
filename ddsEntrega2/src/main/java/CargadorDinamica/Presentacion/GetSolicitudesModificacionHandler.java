@@ -14,9 +14,9 @@ public class GetSolicitudesModificacionHandler implements Handler{
 
     @Override
     public void handle(Context contexto){
-        //List<SolicitudDeModificacionDTO> solicitudes = repositorio.buscarSolicitudesModificacion();
+        List<SolicitudDeModificacionDTO> solicitudes = repositorio.buscarSolicitudesModificacion();
         repositorio.resetearSolicitudesModificacion();
-        //contexto.json(solicitudes);
+        contexto.json(solicitudes);
         contexto.status(200);
     }
 

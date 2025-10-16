@@ -1,9 +1,8 @@
 package CargadorDinamica;
 
-import Agregador.HechosYColecciones.ContenidoMultimedia;
-import Agregador.HechosYColecciones.EstadoHecho;
-import Agregador.HechosYColecciones.Etiqueta;
-import Agregador.HechosYColecciones.Ubicacion;
+import Agregador.HechosYColecciones.*;
+import Agregador.Solicitudes.EstadoSolicitudEliminacion;
+import Agregador.Solicitudes.EstadoSolicitudModificacion;
 import Agregador.Usuario.RolUsuario;
 import Agregador.Usuario.Usuario;
 import Agregador.fuente.Fuente;
@@ -12,6 +11,7 @@ import CargadorDinamica.DinamicaDto.Hecho_D_DTO;
 import CargadorDinamica.Dominio.HechosYColecciones.*;
 
 import CargadorDinamica.Dominio.Solicitudes.EstadoSolicitudEliminacion_D;
+import CargadorDinamica.Dominio.Solicitudes.EstadoSolicitudModificacion_D;
 import CargadorDinamica.Dominio.Solicitudes.SolicitudDeEliminacion_D;
 import CargadorDinamica.Dominio.Solicitudes.SolicitudDeModificacion_D;
 
@@ -264,14 +264,29 @@ public class DinamicoRepositorio {
         }
     }
 
-    /*
-    public List<SolicitudDeModificacionDTO> buscarSolicitudesModificacion(){
 
+    public List<SolicitudDeModificacionDTO> buscarSolicitudesModificacion() {
+        List<SolicitudDeModificacion_D> solModificaciones = this.buscarSolModificacionEntidades();
+        List<SolicitudDeModificacionDTO> dtos = new ArrayList<>();
+
+        for (SolicitudDeModificacion_D sol : solModificaciones) {
+            SolicitudDeModificacionDTO dto = convertirEntidadSModificacionADTO(sol);
+            dtos.add(dto);
+        }
+        return dtos;
     }
-*/
 
+    public List<SolicitudDeModificacion_D> buscarSolModificacionEntidades() {
+        try {
+            TypedQuery<SolicitudDeModificacion_D> query = em.createQuery("SELECT sm FROM SolicitudDeModificacion_D sm", SolicitudDeModificacion_D.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            System.err.println("Error al obtener sol de modificación: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
 
-    /*public List<SolicitudDeEliminacionDTO> buscarSolicitudesEliminacion() {
+    public List<SolicitudDeEliminacionDTO> buscarSolicitudesEliminacion() {
         List<SolicitudDeEliminacion_D> solEliminaciones = this.buscarSolEliminacionEntidades();
         List<SolicitudDeEliminacionDTO> dtos = new ArrayList<>();
 
@@ -290,20 +305,76 @@ public class DinamicoRepositorio {
             System.err.println("Error al obtener sol de eliminacion: " + e.getMessage());
             return new ArrayList<>();
         }
-    }*/
-
-    /*private SolicitudDeEliminacionDTO convertirEntidadSEliminacionADTO(SolicitudDeEliminacion_D entidad) {
-        return new SolicitudDeEliminacionDTO(
-                convertirEntidadADTO(entidad.getHechoAsociado()),
-                entidad.getJustificacion(),
-                convertirUsuario(entidad.getUsuario()),
-                convertirEstadoSolicitudEliminacion(entidad.getEstadoSolicitudEliminacion())
-        );
-    }*/
-
-    private EstadoSolicitudEliminacion_D convertirEstadoSolicitudEliminacion(EstadoSolicitudEliminacion_D estadoD) {
-        return EstadoSolicitudEliminacion_D.valueOf(estadoD.name());
     }
 
+    private SolicitudDeEliminacionDTO convertirEntidadSEliminacionADTO(SolicitudDeEliminacion_D entidad) {
+        SolicitudDeEliminacionDTO dto = new SolicitudDeEliminacionDTO();
+        dto.setJustificacion(entidad.getJustificacion());
+        dto.setHechoAsociado(convertirHechoEntidadAHecho(entidad.getHechoAsociado()));
+        dto.setusuario(convertirUsuario(entidad.getUsuario()));
+        dto.setEstado(convertirEstadoSolicitudEliminacion(entidad.getEstadoSolicitudEliminacion()));
+        return dto;
+    }
 
+    private SolicitudDeModificacionDTO convertirEntidadSModificacionADTO(SolicitudDeModificacion_D entidad) {
+        SolicitudDeModificacionDTO dto = new SolicitudDeModificacionDTO();
+        dto.setJustificacion(entidad.getJustificacion());
+        dto.setHechoAsociado(convertirHechoEntidadAHecho(entidad.getHechoAsociado()));
+        dto.setusuario(convertirUsuario(entidad.getUsuario()));
+        dto.setHechoModificado(convertirHechoEntidadAHechoModificado(entidad.getHechoModificado()));
+        dto.setEstadoSolicitudModificacion(convertirEstadoSolicitudModificacion(entidad.getEstadoSolicitudModificacion()));
+        return dto;
+    }
+
+    private EstadoSolicitudEliminacion convertirEstadoSolicitudEliminacion(EstadoSolicitudEliminacion_D estadoD) {
+        if (estadoD == null) return EstadoSolicitudEliminacion.PENDIENTE;
+        return EstadoSolicitudEliminacion.valueOf(estadoD.name());
+    }
+
+    private EstadoSolicitudModificacion convertirEstadoSolicitudModificacion(EstadoSolicitudModificacion_D estadoD) {
+        if (estadoD == null) return EstadoSolicitudModificacion.PENDIENTE;
+        return EstadoSolicitudModificacion.valueOf(estadoD.name());
+    }
+
+    private Hecho convertirHechoEntidadAHecho(Hecho_D entidad) {
+        if (entidad == null) return null;
+
+        Hecho hecho = new Hecho();
+        hecho.setTitulo(entidad.getTitulo());
+        hecho.setDescripcion(entidad.getDescripcion());
+        hecho.setCategoria(entidad.getCategoria());
+        hecho.setUbicacion(convertirUbicacion(entidad.getUbicacion()));
+        hecho.setFechaDeAcontecimiento(entidad.getFechaDeAcontecimiento());
+        hecho.setFechaDeCarga(entidad.getFechaDeCarga());
+        hecho.setFuente(crearFuenteDinamica());
+        hecho.setEstadoHecho(convertirEstado(entidad.getEstadoHecho()));
+        hecho.setContribuyente(convertirUsuario(entidad.getContribuyente()));
+        hecho.setEtiquetas(convertirEtiquetas(entidad.getEtiquetas()));
+        hecho.setEsEditable(entidad.getEsEditable());
+        hecho.setContenidoMultimedia(convertirMultimedia(entidad.getContenidoMultimedia()));
+
+        return hecho;
+    }
+
+    private HechoModificado convertirHechoEntidadAHechoModificado(Hecho_D entidad) {
+        if (entidad == null) return null;
+
+        // Usar el constructor de HechoModificado
+        HechoModificado hechoModificado = new HechoModificado(
+                entidad.getTitulo(),
+                entidad.getDescripcion(),
+                entidad.getCategoria(),
+                convertirUbicacion(entidad.getUbicacion()),
+                entidad.getFechaDeAcontecimiento(),
+                entidad.getFechaDeCarga(),
+                crearFuenteDinamica(),
+                convertirEstado(entidad.getEstadoHecho()),
+                convertirUsuario(entidad.getContribuyente()),
+                convertirEtiquetas(entidad.getEtiquetas()),
+                entidad.getEsEditable(),
+                convertirMultimedia(entidad.getContenidoMultimedia())
+        );
+
+        return hechoModificado;
+    }
 }
