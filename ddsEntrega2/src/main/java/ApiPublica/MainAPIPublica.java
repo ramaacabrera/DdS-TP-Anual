@@ -4,8 +4,8 @@ import io.javalin.Javalin;
 import ApiPublica.Presentacion.*;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
-import Agregador.fuente.*;
-
+import Agregador.Persistencia.*;
+import javax.persistence.*;
 import java.util.Properties;
 
 public class MainAPIPublica {
@@ -13,25 +13,26 @@ public class MainAPIPublica {
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
         int puerto = Integer.parseInt(config.getProperty("puertoApiPublica"));
-        int puertoDinamica = Integer.parseInt(config.getProperty("puertoDinamico"));
+        int puertoDinamica = Integer.parseInt(config.getProperty("puertoDinamica"));
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("demo-hibernate-PU");
+        EntityManager em = emf.createEntityManager();
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
-//        HechoRepositorio hechoRepositorio = new HechoRepositorio();
-//        DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio();
-//        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
-//        SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio();
-//        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
+        HechoRepositorio hechoRepositorio = new HechoRepositorio(em);
+        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(em);
 
-        //Inicializacion de Controller
-        //ControllerSubirHechos controllerSubirHechos = new ControllerSubirHechos(dinamicoRepositorio);
-        //ControllerSolicitud controllerSolicitud = new ControllerSolicitud(dinamicoRepositorio);
+        app.get("/api/hechos", new GetHechosHandler(hechoRepositorio));
+        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler());
+        app.post("/api/hechos", new PostHechoHandler(puertoDinamica));
+        app.post("/api/solicitudes", new PostSolicitudEliminacionHandler(puertoDinamica));
 
-        // API publica
-        app.get("/api/hechos", new GetHechosHandler()); // consulto todos los hechos PROBADOOOOO
-        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler()); // consulta hechos de una coleccion (pudiendo mandar criterios o no)
-        app.post("/api/hechos", new PostHechoHandler(puertoDinamica)); //creo hecho PROBADOOOOOOOO
-        app.post("/api/solicitudes", new PostSolicitudEliminacionHandler(puertoDinamica)); //creo solicitud PROBADOOOOOOO
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Cerrando EntityManager de API Pública...");
+            if (em.isOpen()) em.close();
+            if (emf.isOpen()) emf.close();
+        }));
     }
 }

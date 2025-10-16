@@ -1,5 +1,6 @@
 package ApiAdministrativa.Presentacion;
 
+import Agregador.Persistencia.SolicitudEliminacionRepositorio;
 import Agregador.Solicitudes.SolicitudDeEliminacion;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,7 +17,11 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 public class GetSolicitudesEliminacionHandler implements Handler {
-    //private final SolicitudEliminacionRepositorio repositorio;
+
+    private final SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
+
+    public GetSolicitudesEliminacionHandler(SolicitudEliminacionRepositorio solicitudEliminacionRepositorio) {
+        this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
     ObjectMapper mapper = new ObjectMapper();
 
     //public GetSolicitudesEliminacionHandler(SolicitudEliminacionRepositorio repositorio) {this.repositorio = repositorio;}

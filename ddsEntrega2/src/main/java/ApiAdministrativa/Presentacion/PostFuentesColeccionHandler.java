@@ -18,6 +18,11 @@ import java.util.Optional;
 public class PostFuentesColeccionHandler implements Handler {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ColeccionRepositorio coleccionRepositorio;
+
+    public PostFuentesColeccionHandler(ColeccionRepositorio coleccionRepositorio) {
+        this.coleccionRepositorio = coleccionRepositorio;
+    }
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {

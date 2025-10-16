@@ -19,8 +19,13 @@ import java.util.Optional;
 public class PutColeccionHandler implements Handler {
 
         private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ColeccionRepositorio coleccionRepositorio;
 
-        @Override
+    public PutColeccionHandler(ColeccionRepositorio coleccionRepositorio) {
+        this.coleccionRepositorio = coleccionRepositorio;
+    }
+
+    @Override
         public void handle(Context ctx) throws Exception {
             String id = ctx.pathParam("id");
 
