@@ -61,7 +61,7 @@ public class EstadisticasRepositorio {
     public Optional<String> buscarCategoria_max_hechos() {
         try {
             TypedQuery<String> query = em.createQuery(
-                    "SELECT e.estadisticas_categoria_maxHechos FROM Estadisticas e WHERE e.estadisticas_fecha = (select max(e1.estadisticas_fecha) from Estadisticas e1)", String.class);
+                    "SELECT e.estadisticas_categoria_max_hechos FROM Estadisticas e WHERE e.estadisticas_fecha = (select max(e1.estadisticas_fecha) from Estadisticas e1)", String.class);
 
             return Optional.of(query.getSingleResult());
 

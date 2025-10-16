@@ -10,14 +10,14 @@ public class EstadisticasCategoriaId implements Serializable {
     private String categoria;
 
     public  EstadisticasCategoriaId() {}
-    public EstadisticasCategoriaId(UUID estadisticas_id, String categoria) {
-        this.estadisticas_id = estadisticas_id;
-        this.categoria = categoria;
+    public EstadisticasCategoriaId(UUID estadisticasCategoria_estadisticas, String estadisticasCategoria_categoria) {
+        this.estadisticas_id = estadisticasCategoria_estadisticas;
+        this.categoria = estadisticasCategoria_categoria;
     }
 
-    public void setEstadisticas_id(UUID  estadisticas_id) {this.estadisticas_id = estadisticas_id;}
-    public void setCategoria(String categoria){this.categoria = categoria;}
+    public void setEstadisticas_id(UUID estadisticasCategoria_estadisticas) {this.estadisticas_id = estadisticasCategoria_estadisticas;}
+    public void setCategoria(String estadisticasCategoria_categoria){this.categoria = estadisticasCategoria_categoria;}
 
     public UUID getEstadisticas_id() {return this.estadisticas_id;}
-    public  UUID getCategoria() {return this.categoria;}
+    public  String getCategoria() {return this.categoria;}
 }

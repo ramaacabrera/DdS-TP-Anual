@@ -29,6 +29,8 @@ public abstract class Solicitud {
 
     protected String justificacion;
 
+    private Boolean esSpam = false;
+
     @ManyToOne
     @JoinColumn(name = "hecho_id")
     private Hecho hechoAsociado;
@@ -75,6 +77,7 @@ public abstract class Solicitud {
 
     public Usuario getUsuario() { return usuario; }
 
+
     public Hecho getHechoAsociado() {
         return hechoAsociado;
     }
@@ -89,5 +92,13 @@ public abstract class Solicitud {
 
     public EstadoSolicitudModificacion getEstadoSolicitudModificacion() {return estadoSolicitudModificacion;}
 
-   // public String getDiscriminador() { return discriminador; }
+    public Boolean getEsSpam() {
+        return esSpam;
+    }
+
+    public void setEsSpam(Boolean esSpam) {
+        this.esSpam = esSpam;
+    }
+
+    // public String getDiscriminador() { return discriminador; }
 }

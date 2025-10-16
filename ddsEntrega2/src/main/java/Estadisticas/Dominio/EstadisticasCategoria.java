@@ -1,26 +1,37 @@
 package Estadisticas.Dominio;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
+import javax.persistence.*;
+
 import java.sql.Time;
-import java.util.UUID;
+import java.time.LocalTime;
 
 @Entity
 public class EstadisticasCategoria {
 
     @EmbeddedId
     private EstadisticasCategoriaId id;
-    private String provincia;
-    private Time hora;
+    private String estadisticasCategoria_provincia;
+    private Integer estadisticasCategoria_hora;
+
+    @ManyToOne
+    @MapsId("estadisticas_id")
+    @JoinColumn(name = "estadisticas_id")
+    private Estadisticas estadisticas;
 
     public EstadisticasCategoria(){}
 
+    public EstadisticasCategoria(EstadisticasCategoriaId id, String estadisticasCategoria_provincia, Integer estadisticasCategoria_hora) {
+        this.id = id;
+        this.estadisticasCategoria_provincia = estadisticasCategoria_provincia;
+        this.estadisticasCategoria_hora = estadisticasCategoria_hora;
+    }
+
     public void setId(EstadisticasCategoriaId id) {this.id = id;}
-    public void setProvincia(String provincia) {this.provincia = provincia;}
-    public void setHora(Time hora){this.hora = hora;}
+    public void setProvincia(String provincia) {this.estadisticasCategoria_provincia = provincia;}
+    public void setEstadisticasCategoria_hora(Integer estadisticasCategoria_hora){this.estadisticasCategoria_hora = estadisticasCategoria_hora;}
 
     public EstadisticasCategoriaId getId() {return this.id;}
-    public String getProvincia(){return this.provincia;}
-    public Time getHora(){return this.hora;}
+    public String getProvincia(){return this.estadisticasCategoria_provincia;}
+    public Integer getEstadisticasCategoria_hora(){return this.estadisticasCategoria_hora;}
 
 }

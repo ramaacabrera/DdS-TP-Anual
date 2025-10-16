@@ -1,8 +1,6 @@
 package Estadisticas.Persistencia;
 
-import Estadisticas.Dominio.Estadisticas;
 import Estadisticas.Dominio.EstadisticasCategoria;
-import Estadisticas.Dominio.EstadisticasColeccion;
 import utils.BDUtils;
 
 import javax.persistence.EntityManager;
@@ -10,7 +8,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.time.LocalTime;
 import java.util.Optional;
-import java.util.UUID;
 
 public class EstadisticasCategoriaRepositorio {
     private final EntityManager em;
@@ -19,7 +16,7 @@ public class EstadisticasCategoriaRepositorio {
         this.em = emNuevo;
     }
 
-    public void guardar(Estadisticas estadisticas) {
+    public void guardar(EstadisticasCategoria estadisticas) {
         try {
             BDUtils.comenzarTransaccion(em);
 
@@ -35,7 +32,7 @@ public class EstadisticasCategoriaRepositorio {
     public Optional<EstadisticasCategoria> buscarPorHandle(String handle) {
         try {
             TypedQuery<EstadisticasCategoria> query = em.createQuery(
-                    "SELECT e FROM EstadisticasCategoria e WHERE e.estadisticasCategoria_estadisticas = :handleParam", EstadisticasCategoria.class);
+                    "SELECT e FROM EstadisticasCategoria e WHERE e.id.estadisticas_id = :handleParam", EstadisticasCategoria.class);
 
             query.setParameter("handleParam", handle);
 
@@ -46,14 +43,14 @@ public class EstadisticasCategoriaRepositorio {
         }
     }
 
-    public Optional<String> buscarProvinciaCategoria(UUID idCategoria) {
+    public Optional<String> buscarProvinciaCategoria(String categoria) {
         try {
             TypedQuery<String> query = em.createQuery(
-                    "SELECT e.estadisticasCategoria_provincia FROM EstadisticasCategoria e JOIN Estadisticas es on es.estadisticas_id = e.estadisticasCategoria_estadisticas" +
-                            "WHERE e.estadisticasCategoria_categoria = :idCategoria AND es.estadisticas_fecha = " +
+                    "SELECT e.estadisticasCategoria_provincia FROM EstadisticasCategoria e JOIN Estadisticas es on es.estadisticas_id = e.id.estadisticas_id " +
+                            "WHERE e.id.categoria = :idCategoria AND es.estadisticas_fecha = " +
                             "( SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", String.class);
 
-            query.setParameter("idCategoria", idCategoria.toString());
+            query.setParameter("idCategoria", categoria);
 
             return Optional.of(query.getSingleResult());
 
@@ -62,14 +59,14 @@ public class EstadisticasCategoriaRepositorio {
         }
     }
 
-    public Optional<LocalTime> buscarHoraCategoria(UUID idCategoria) {
+    public Optional<LocalTime> buscarHoraCategoria(String categoria) {
         try {
             TypedQuery<LocalTime> query = em.createQuery(
-                    "SELECT e.estadisticasCategoria_hora FROM EstadisticasCategoria e JOIN Estadisticas es on es.estadisticas_id = e.estadisticasCategoria_estadisticas " +
-                            "WHERE e.estadisticasCategoria_categoria = :idCategoria AND es.estadisticas_fecha = " +
+                    "SELECT e.estadisticasCategoria_hora FROM EstadisticasCategoria e JOIN Estadisticas es on es.estadisticas_id = e.id.estadisticas_id " +
+                            "WHERE e.id.categoria = :idCategoria AND es.estadisticas_fecha = " +
                             "( SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", LocalTime.class);
 
-            query.setParameter("idCategoria", idCategoria);
+            query.setParameter("idCategoria", categoria);
 
             return Optional.of(query.getSingleResult());
 

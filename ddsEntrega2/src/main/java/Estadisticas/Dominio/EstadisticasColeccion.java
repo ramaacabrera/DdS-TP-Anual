@@ -8,17 +8,22 @@ public class EstadisticasColeccion {
     @EmbeddedId
     private EstadisticasColeccionId id;
 
-    private String provincia;
+    private String estadisticasColeccion_provincia;
+
+    @ManyToOne
+    @MapsId("estadisticas_id")
+    @JoinColumn(name = "estadisticas_id")
+    private Estadisticas estadisticas;
 
     public void setId(EstadisticasColeccionId id) {this.id = id;}
-    public void setProvincia(String provincia){this.provincia = provincia;}
+    public void setEstadisticasColeccion_provincia(String estadisticasColeccion_provincia){this.estadisticasColeccion_provincia = estadisticasColeccion_provincia;}
 
     public EstadisticasColeccionId getId(){return this.id;}
-    public String getProvincia(){return this.provincia;}
+    public String getEstadisticasColeccion_provincia(){return this.estadisticasColeccion_provincia;}
 
     public EstadisticasColeccion(){}
-    public EstadisticasColeccion(EstadisticasColeccionId id, String provincia){
+    public EstadisticasColeccion(EstadisticasColeccionId id, String estadisticasColeccion_provincia){
         this.id = id;
-        this.provincia = provincia;
+        this.estadisticasColeccion_provincia = estadisticasColeccion_provincia;
     }
 }

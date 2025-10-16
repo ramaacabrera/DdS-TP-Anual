@@ -19,7 +19,6 @@ public class GetColeccionEspecificaRepoHandler implements Handler {
 
         if (!coleccionOpt.isPresent()) {
             ctx.status(404);
-            return;
         } else {
             ctx.json(coleccionOpt.get());
         }
