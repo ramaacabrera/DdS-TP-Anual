@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.UUID;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import utils.DTO.ColeccionDTO;
 
 import javax.persistence.Column;
@@ -30,8 +31,9 @@ public class Coleccion {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "handle", updatable = false, nullable = false)
-    private String handle;
+    @Type(type = "uuid-char")
+    @Column(name = "handle", length = 36 , updatable = false, nullable = false)
+    private UUID handle;
 
     @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -97,7 +99,7 @@ public class Coleccion {
     public List<Criterio> getCriteriosDePertenencia() {return criteriosDePertenencia; }
     public List<Fuente> getFuente(){ return fuentes;}
     public List<Hecho> getHechos() { return hechos.stream().filter(Hecho::estaActivo).collect(Collectors.toList());}
-    public String getHandle() {return handle;}
+    public UUID getHandle() {return handle;}
     public List<Hecho> getHechosConsensuados() {return hechosConsensuados;}
 
     public void setHechos(List<Hecho> hechos) {this.hechos = hechos;}
@@ -108,13 +110,13 @@ public class Coleccion {
     public void setAlgoritmoDeConsenso(TipoAlgoritmoConsenso algoritmoDeConsenso) {this.algoritmoDeConsenso = algoritmoDeConsenso; }
 
     public void generarHandle() {
-        if(titulo != null || !titulo.equals("")) {
-            handle = UUID.randomUUID().toString();
+        if(titulo != null || !titulo.isEmpty()) {
+            handle = UUID.randomUUID();
         }
         else {
             String contenido = titulo + descripcion;
-            UUID uuid = UUID.nameUUIDFromBytes(contenido.getBytes());  // genera UUID basado en el contenido
-            handle = uuid.toString();
+               // genera UUID basado en el contenido
+            handle = UUID.nameUUIDFromBytes(contenido.getBytes());
         }
     }
 

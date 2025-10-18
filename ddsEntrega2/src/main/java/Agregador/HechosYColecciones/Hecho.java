@@ -1,5 +1,6 @@
 package Agregador.HechosYColecciones;
 
+import org.hibernate.annotations.Type;
 import utils.DTO.HechoDTO;
 import Agregador.Usuario.Usuario;
 import Agregador.fuente.*;
@@ -20,7 +21,8 @@ public class Hecho {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "hecho_id", updatable = false, nullable = false)
+    @Type(type = "uuid-char")
+    @Column(name = "hecho_id", length = 36 , updatable = false, nullable = false)
     private UUID hecho_id;
 
     private String titulo;
@@ -34,7 +36,7 @@ public class Hecho {
     private Date fechaDeAcontecimiento;
     private Date fechaDeCarga;
 
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "id_fuente", nullable = false)
     private Fuente fuente;
 

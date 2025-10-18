@@ -6,6 +6,7 @@ import utils.BDUtils;
 import utils.DTO.SolicitudDeEliminacionDTO;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,18 +14,18 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class SolicitudEliminacionRepositorio {
-    private final EntityManager em;
+    private final EntityManagerFactory emf;
     //private final List<SolicitudDeEliminacion> solicitudes = new ArrayList<SolicitudDeEliminacion>();
 
-    public SolicitudEliminacionRepositorio(EntityManager em) {
-        this.em = em;
+    public SolicitudEliminacionRepositorio(EntityManagerFactory emf) {
+        this.emf = emf;
     }
 
     //private Optional<SolicitudDeEliminacion> buscarSolicitudEliminacion(){
         //return solicitudes.stream().findFirst();
     //}
     private Optional<SolicitudDeEliminacion> buscarSolicitudEliminacion() {
-        //EntityManager em = BDUtils.getEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<SolicitudDeEliminacion> query = em.createQuery("SELECT s FROM SolicitudDeEliminacion s", SolicitudDeEliminacion.class);
             query.setMaxResults(1);
@@ -34,19 +35,19 @@ public class SolicitudEliminacionRepositorio {
         } catch (javax.persistence.NoResultException e) {
             return Optional.empty();
         } finally {
-            //em.close();
+            em.close();
         }
     }
 
     //public List<SolicitudDeEliminacion> buscarTodas(){return solicitudes;}
     public List<SolicitudDeEliminacion> buscarTodas() {
-        //EntityManager em = BDUtils.getEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<SolicitudDeEliminacion> query = em.createQuery(
                     "SELECT s FROM SolicitudDeEliminacion s", SolicitudDeEliminacion.class);
             return query.getResultList();
         } finally {
-            //em.close();
+            em.close();
         }
     }
 
@@ -54,7 +55,7 @@ public class SolicitudEliminacionRepositorio {
         //solicitudes.add(solicitud);
     //}
     public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
-        //EntityManager em = BDUtils.getEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
             em.merge(solicitud);
@@ -63,7 +64,7 @@ public class SolicitudEliminacionRepositorio {
             BDUtils.rollback(em);
             e.printStackTrace();
         } finally {
-            //em.close();
+            em.close();
         }
     }
 
@@ -105,7 +106,7 @@ public class SolicitudEliminacionRepositorio {
             }
 
             // Persistencia del cambio
-            //EntityManager em = BDUtils.getEntityManager();
+            EntityManager em = emf.createEntityManager();
             try {
                 BDUtils.comenzarTransaccion(em);
                 // em.merge actualiza el objeto modificado que ya fue cargado de la BD
@@ -117,7 +118,7 @@ public class SolicitudEliminacionRepositorio {
                 e.printStackTrace();
                 return false;
             } finally {
-                //em.close();
+                em.close();
             }
         }
         return false; // No se encontró la solicitud
@@ -127,13 +128,13 @@ public class SolicitudEliminacionRepositorio {
     //    return solicitudes.stream().filter(c -> c.getId() == id).findFirst();
     //}
     public Optional<SolicitudDeEliminacion> buscarPorId(UUID id) {
-        //EntityManager em = BDUtils.getEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             SolicitudDeEliminacion solicitud = em.find(SolicitudDeEliminacion.class, id);
 
             return Optional.ofNullable(solicitud);
         } finally {
-            //em.close();
+            em.close();
         }
     }
 

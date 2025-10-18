@@ -16,34 +16,34 @@ import java.util.List;
 import java.util.Objects;
 
 public class ConexionCargador {
-    private final MetamapaLoader metamapaLoader;
-    private final DemoLoader demoLoader;
+
 
     private final List<Fuente> fuentes =  new ArrayList<>();
     private int idIncremental = 1;
 
-    public ConexionCargador(MetamapaLoader metaLoader, DemoLoader demoLoader) {
-        this.metamapaLoader = metaLoader;
-        this.demoLoader = demoLoader;
+    public ConexionCargador() {
+
     }
     public List<Fuente> getFuentes() { return fuentes; }
 
     public List<HechoDTO> obtenerHechosNuevos(){
         List<HechoDTO> listaHecho = new ArrayList<>();
 
-        listaHecho.addAll(this.metamapaLoader.obtenerHechos());
-        listaHecho.addAll(this.demoLoader.obtenerHechos());
 
         fuentes.forEach(fuente -> {
 
-            if (fuente.getTipoDeFuente() != TipoDeFuente.METAMAPA &&
-                    fuente.getTipoDeFuente() != TipoDeFuente.DEMO) {
-                    List<HechoDTO> hechosTemporales;
-                    hechosTemporales = this.buscarHechos(fuente.getRuta());
-                    hechosTemporales.forEach((hecho) -> {
-                        hecho.setFuente(fuente);
-                    });
+            try {
+                // La llamada a buscarHechos (que usa ApiGetter) debe estar envuelta
+                List<HechoDTO> hechosTemporales = this.buscarHechos(fuente.getRuta());
+
+                if (hechosTemporales != null) {
+                    hechosTemporales.forEach((hecho) -> hecho.setFuente(fuente));
                     listaHecho.addAll(hechosTemporales);
+                }
+            } catch (RuntimeException e) {
+                // Capturar la excepción lanzada por ApiGetter (Error de red, JSON, etc.)
+                System.err.println("Saltando fuente " + fuente.getRuta() + " por error: " + e.getMessage());
+                // No hacemos nada, solo pasamos a la siguiente fuente.
             }
         });
 

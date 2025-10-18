@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="CargadorProxy" type="Application" factoryName="Application">
+  <configuration default="false" name="CargadorMetamapa" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="CargadorMetamapa.MainMetamapa" />
     <module name="pruebaclase1" />
     <method v="2">

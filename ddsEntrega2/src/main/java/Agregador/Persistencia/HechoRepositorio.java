@@ -3,8 +3,10 @@ package Agregador.Persistencia;
 import Agregador.Criterios.Criterio;
 import Agregador.HechosYColecciones.Hecho;
 
+import Agregador.fuente.Fuente;
 import utils.BDUtils;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,26 +14,26 @@ import java.util.List;
 
 public class HechoRepositorio {
 
-    private final EntityManager em;
+    private final EntityManagerFactory emf;
 
-    public HechoRepositorio(EntityManager emNuevo) {
-        this.em = emNuevo;
+    public HechoRepositorio(EntityManagerFactory emfNuevo) {
+        this.emf = emfNuevo;
     }
 
     // Método para obtener todos los hechos
     public List<Hecho> getHechos() {
-        //EntityManager em = BDUtils.getEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             // JPQL para seleccionar todos los objetos Hecho
             TypedQuery<Hecho> query = em.createQuery("SELECT h FROM Hecho h", Hecho.class);
             return query.getResultList();
         } finally {
-            //em.close();
+            em.close();
         }
     }
 
     public List<Hecho> buscarHechos(List<Criterio> criterios) {
-        //EntityManager em = BDUtils.getEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             StringBuilder queryString = new StringBuilder("SELECT * FROM Hecho h");
             if(criterios != null){
@@ -45,12 +47,12 @@ public class HechoRepositorio {
             TypedQuery<Hecho> query = em.createQuery(queryString.toString(), Hecho.class);
             return query.getResultList();
         } finally {
-            //em.close();
+            em.close();
         }
     }
 
     public Hecho buscarPorTitulo(String titulo) {
-        //EntityManager em = BDUtils.getEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             // Consulta JPQL para buscar por un atributo específico
             TypedQuery<Hecho> query = em.createQuery(
@@ -67,12 +69,12 @@ public class HechoRepositorio {
             // Esto es normal si no se encuentra el hecho. Retornamos null.
             return null;
         } finally {
-            //em.close();
+            em.close();
         }
     }
 
     public List<Hecho> buscarSimilares(String titulo) {
-        //EntityManager em = BDUtils.getEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             // Consulta JPQL para buscar hechos con títulos similares (usa LIKE para similitud)
             TypedQuery<Hecho> query = em.createQuery(
@@ -89,15 +91,14 @@ public class HechoRepositorio {
             System.err.println("Error al buscar hechos similares: " + e.getMessage());
             return new ArrayList<>();
         } finally {
-            //em.close();
+            em.close();
         }
     }
     
     public void guardar(Hecho hecho) {
-        //EntityManager em = BDUtils.getEntityManager();
+        //Hecho existente = this.buscarPorTitulo(hecho.getTitulo());
+        EntityManager em = emf.createEntityManager();
         try {
-            // 1. Verificar Duplicado
-            // Busca si ya existe un Hecho con el mismo título
             Hecho existente = this.buscarPorTitulo(hecho.getTitulo());
 
             if (existente != null) {
@@ -109,26 +110,31 @@ public class HechoRepositorio {
                 // No existe. Es una nueva inserción.
                 System.out.println("OK: Guardando nuevo Hecho.");
             }
+            Fuente fuenteAdjunta = hecho.getFuente();
 
-            // 2. Ejecutar la Transacción
+            // 2. RE-ADJUNTAR LA FUENTE
+            // Si no está adjunta la traemos al contexto.
+            if (fuenteAdjunta != null) {
+                Fuente fuenteGestionada = em.merge(fuenteAdjunta);
+                hecho.setFuente(fuenteGestionada);
+            }
+            // Ejecutar la Transacción
             BDUtils.comenzarTransaccion(em);
-
-            // em.merge() maneja la inserción (si es nuevo) o la actualización (si ya existe el ID)
+            // maneja la inserción (si es nuevo) o la actualización (si ya existe el ID)
             em.merge(hecho);
-
             BDUtils.commit(em);
 
         } catch (Exception e) {
             BDUtils.rollback(em);
             System.err.println("ERROR al guardar Hecho: " + e.getMessage());
             e.printStackTrace();
-        } //finally {
-       //     em.close();
-        //}
+        } finally {
+            em.close();
+        }
     }
 
     public void remover(Hecho hecho) {
-        //EntityManager em = BDUtils.getEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
 
@@ -144,7 +150,7 @@ public class HechoRepositorio {
             BDUtils.rollback(em);
             e.printStackTrace();
         } finally {
-            //em.close();
+            em.close();
         }
     }
 

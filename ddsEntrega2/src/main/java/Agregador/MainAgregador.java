@@ -26,27 +26,28 @@ public class MainAgregador {
         System.out.println("Iniciando servidor Agregador en el puerto "+puertoAgregador);
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("agregador-PU");
-        EntityManager em = emf.createEntityManager();
+        //EntityManager em = emf.createEntityManager();
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puertoAgregador, "/");
 
-        HechoRepositorio hechoRepositorio = new HechoRepositorio(em);
-        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio(em);
-        SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio(em);
-        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(em);
+        HechoRepositorio hechoRepositorio = new HechoRepositorio(emf);
+        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio(emf);
+        SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio(emf);
+        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(emf);
+        FuenteRepositorio fuenteRepositorio = new FuenteRepositorio(emf);
 
-        String urlMetamapaExterna = config.getProperty("urlMetamapaExterna");
-        String urlDemoMock = config.getProperty("urlMock");
+        //String urlMetamapaExterna = config.getProperty("urlMetamapaExterna");
+        //String urlDemoMock = config.getProperty("urlMock");
 
-        MetamapaLoader metamapaLoader = new MetamapaLoader(urlMetamapaExterna);
-        DemoLoader demoLoader = new DemoLoader(urlDemoMock);
+        //MetamapaLoader metamapaLoader = new MetamapaLoader(urlMetamapaExterna);
+        //DemoLoader demoLoader = new DemoLoader(urlDemoMock);
         MockNormalizador mockNormalizador = new MockNormalizador();
-        ConexionCargador conexionCargador = new ConexionCargador(metamapaLoader, demoLoader);
+        ConexionCargador conexionCargador = new ConexionCargador();
 
         Agregador agregador = new Agregador(
                 hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio,
-                solicitudModificacionRepositorio, mockNormalizador, conexionCargador);
+                solicitudModificacionRepositorio, fuenteRepositorio, mockNormalizador, conexionCargador);
 
         app.get("/hechos", new GetHechosRepoHandler(hechoRepositorio));
 

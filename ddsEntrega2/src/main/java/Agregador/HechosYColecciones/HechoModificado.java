@@ -3,6 +3,7 @@ package Agregador.HechosYColecciones;
 import Agregador.Usuario.Usuario;
 import Agregador.fuente.Fuente;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import utils.DTO.HechoDTO;
 
 import javax.persistence.*;
@@ -19,7 +20,8 @@ public class HechoModificado {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "hecho_modificado_id", updatable = false, nullable = false)
+    @Type(type = "uuid-char")
+    @Column(name = "hecho_modificado_id", length = 36 , updatable = false, nullable = false)
     private UUID hecho_modificado_id;
 
     private String titulo;
