@@ -1,5 +1,7 @@
 package ApiPublica.Presentacion;
 
+import Agregador.Persistencia.HechoRepositorio;
+import Agregador.Persistencia.SolicitudEliminacionRepositorio;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.BadRequestResponse;
@@ -28,6 +30,10 @@ import java.util.Date;
 public class GetHechosHandler implements Handler {
     //private final HechoRepositorio repositorio;
     ObjectMapper mapper = new ObjectMapper();
+    private final HechoRepositorio hechoRepositorio;
+
+    public GetHechosHandler(HechoRepositorio hechoRepositorio) {
+        this.hechoRepositorio = hechoRepositorio;
     public GetHechosHandler(){} //HechoRepositorio hechos) { repositorio = hechos; }
 
     public void handle(@NotNull Context ctx) throws IOException, InterruptedException {

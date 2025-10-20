@@ -1,5 +1,6 @@
 package ApiAdministrativa.Presentacion;
 
+import Agregador.Persistencia.ColeccionRepositorio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -13,6 +14,11 @@ import java.util.Optional;
 
 public class PutAlgoritmoConsensoHandler implements Handler {
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ColeccionRepositorio coleccionRepositorio;
+
+    public PutAlgoritmoConsensoHandler(ColeccionRepositorio coleccionRepositorio) {
+        this.coleccionRepositorio = coleccionRepositorio;
+    }
 
     @Override
     public void handle(Context ctx) throws Exception {

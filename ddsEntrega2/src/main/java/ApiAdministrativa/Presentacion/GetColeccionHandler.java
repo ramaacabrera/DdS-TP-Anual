@@ -1,5 +1,6 @@
 package ApiAdministrativa.Presentacion;
 
+import Agregador.Persistencia.ColeccionRepositorio;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
@@ -16,6 +17,11 @@ import java.net.http.HttpResponse;
 public class GetColeccionHandler implements Handler {
     //private final ColeccionRepositorio repositorio;
     ObjectMapper mapper = new ObjectMapper();
+    private final ColeccionRepositorio coleccionRepositorio;
+
+    public GetColeccionHandler(ColeccionRepositorio coleccionRepositorio) {
+        this.coleccionRepositorio = coleccionRepositorio;
+    }
 
 //    public GetColeccionHandler(ColeccionRepositorio coleccion) {repositorio = coleccion;}
 

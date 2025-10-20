@@ -17,6 +17,11 @@ import java.net.http.HttpResponse;
 public class DeleteFuenteHandler implements Handler {
     //private final ColeccionRepositorio repositorio;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ColeccionRepositorio coleccionRepositorio;
+
+    public DeleteFuenteHandler(ColeccionRepositorio coleccionRepositorio) {
+        this.coleccionRepositorio = coleccionRepositorio;
+    }
 
     //public DeleteFuenteHandler(ColeccionRepositorio repositorio) {this.repositorio = repositorio;}
 

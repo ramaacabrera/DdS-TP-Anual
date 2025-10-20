@@ -1,5 +1,6 @@
 package ApiAdministrativa.Presentacion;
 
+import Agregador.Persistencia.ColeccionRepositorio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
 import io.javalin.http.Context;
@@ -14,6 +15,11 @@ import java.net.http.HttpResponse;
 public class PostColeccionHandler implements Handler {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ColeccionRepositorio coleccionRepositorio;
+
+    public PostColeccionHandler(ColeccionRepositorio coleccionRepositorio) {
+        this.coleccionRepositorio = coleccionRepositorio;
+    }
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {

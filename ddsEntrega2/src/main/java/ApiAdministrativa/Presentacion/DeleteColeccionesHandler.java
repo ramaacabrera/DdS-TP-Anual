@@ -14,6 +14,11 @@ import java.net.http.HttpResponse;
 public class DeleteColeccionesHandler implements Handler {
     // ColeccionRepositorio repositorio;
 
+    private final ColeccionRepositorio coleccionRepositorio;
+
+    public DeleteColeccionesHandler(ColeccionRepositorio coleccionRepositorio) {
+        this.coleccionRepositorio = coleccionRepositorio;
+    }
 
     //public DeleteColeccionesHandler(ColeccionRepositorio repositorioNuevo) {repositorio = repositorioNuevo;}
 

@@ -70,5 +70,12 @@ public class MainAgregador {
         app.post("/cargador", new PostFuenteHandler(conexionCargador));
         app.get("/cargador", new GetFuentesHandler(conexionCargador));
         app.delete("/cargador/{id}", new DeleteFuenteHandler(conexionCargador));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Cerrando EntityManager y EntityManagerFactory...");
+            if (em.isOpen()) em.close();
+            if (emf.isOpen()) emf.close();
+        }));
     }
+
+
 }

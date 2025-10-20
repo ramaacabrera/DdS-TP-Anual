@@ -1,5 +1,6 @@
 package ApiAdministrativa.Presentacion;
 
+import Agregador.Persistencia.ColeccionRepositorio;
 import Agregador.Persistencia.SolicitudEliminacionRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -10,6 +11,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class PutSolicitudEliminacionHandler implements Handler{
+    private final SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
+
+    public PutSolicitudEliminacionHandler(SolicitudEliminacionRepositorio solicitudEliminacionRepositorio) {
+        this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
+    }
     @Override
     public void handle(Context context) throws Exception {
         String id = context.pathParam("id");
