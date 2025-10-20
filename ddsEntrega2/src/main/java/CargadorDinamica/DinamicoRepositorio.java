@@ -205,6 +205,11 @@ public class DinamicoRepositorio {
     public void resetearHechos() {
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
+            em.createQuery("DELETE FROM Ubicacion_D").executeUpdate();
+            em.createQuery("DELETE FROM Etiqueta_D").executeUpdate();
+            em.createQuery("DELETE FROM ContenidoMultimedia_D").executeUpdate();
+            em.createQuery("DELETE FROM HechoDXEtiquetaD").executeUpdate();
+            em.createQuery("DELETE FROM Usuario_D").executeUpdate();
             em.createQuery("DELETE FROM Hecho_D").executeUpdate();
             BDUtilsDinamico.commit(em);
             System.out.println("Todos los hechos han sido reseteados");
@@ -254,6 +259,7 @@ public class DinamicoRepositorio {
     public void resetearSolicitudesModificacion() {
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
+            em.createQuery("DELETE FROM Usuario_D").executeUpdate();
             em.createQuery("DELETE FROM SolicitudDeModificacion_D").executeUpdate();
             BDUtilsDinamico.commit(em);
             System.out.println("Todos las Solicitudes De Modificacion han sido reseteados");
@@ -266,6 +272,7 @@ public class DinamicoRepositorio {
     public void resetearSolicitudesEliminacion() {
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
+            em.createQuery("DELETE FROM Usuario_D").executeUpdate();
             em.createQuery("DELETE FROM SolicitudDeEliminacion_D").executeUpdate();
             BDUtilsDinamico.commit(em);
             System.out.println("Todos las Solicitudes De Eliminacion han sido reseteados");
