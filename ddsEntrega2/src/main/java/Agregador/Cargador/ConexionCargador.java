@@ -2,40 +2,49 @@ package Agregador.Cargador;
 
 import Agregador.fuente.Fuente;
 import Agregador.fuente.TipoDeFuente;
+import CargadorDemo.DemoLoader;
+import CargadorMetamapa.MetamapaLoader;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.ApiGetter;
 import utils.DTO.FuenteDTO;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
 import utils.DTO.SolicitudDeEliminacionDTO;
 
-
-
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class ConexionCargador {
+
+
     private final List<Fuente> fuentes =  new ArrayList<>();
     private int idIncremental = 1;
 
+    public ConexionCargador() {
+
+    }
     public List<Fuente> getFuentes() { return fuentes; }
 
     public List<HechoDTO> obtenerHechosNuevos(){
         List<HechoDTO> listaHecho = new ArrayList<>();
 
+
         fuentes.forEach(fuente -> {
-                    List<HechoDTO> hechosTemporales;
-                    hechosTemporales = this.buscarHechos(fuente.getRuta());
-                    hechosTemporales.forEach((hecho) -> {
-                        hecho.setFuente(fuente);
-                    });
+
+            try {
+                // La llamada a buscarHechos (que usa ApiGetter) debe estar envuelta
+                List<HechoDTO> hechosTemporales = this.buscarHechos(fuente.getRuta());
+
+                if (hechosTemporales != null) {
+                    hechosTemporales.forEach((hecho) -> hecho.setFuente(fuente));
                     listaHecho.addAll(hechosTemporales);
+                }
+            } catch (RuntimeException e) {
+                // Capturar la excepción lanzada por ApiGetter (Error de red, JSON, etc.)
+                System.err.println("Saltando fuente " + fuente.getRuta() + " por error: " + e.getMessage());
+                // No hacemos nada, solo pasamos a la siguiente fuente.
+            }
         });
 
         System.out.println("Hechos obtenidos desde fuentes: " + listaHecho.size());

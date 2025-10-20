@@ -11,6 +11,9 @@ import utils.DTO.FuenteDTO;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -31,12 +34,15 @@ public class MainDinamica {
         ConexionAlAgregador agregador = new ConexionAlAgregador();
         agregador.conectarse(TipoDeFuente.DINAMICA, config.getProperty("puertoDinamico"));
 
-        DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("dinamico-PU");
+        EntityManager emDinamico = emf.createEntityManager();
+
+        DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio(emDinamico);
         Fuente fuente = new Fuente(TipoDeFuente.DINAMICA, "http://localhost:"+puerto);
 
         // Exposicion API mediante REST para el agregador
         app.get("/hechos", new GetHechosDinamicoHandler(dinamicoRepositorio));
-        app.post("/hechos", new PostHechosHandler(dinamicoRepositorio, fuente));
+        app.post("/hechos", new PostHechosHandler(dinamicoRepositorio));
 
         app.get("/solicitudesModificacion", new GetSolicitudesModificacionHandler(dinamicoRepositorio));
         app.post("/solicitudesModificacion", new PostSolicitudesModificacionHandler(dinamicoRepositorio));

@@ -10,7 +10,7 @@ public class SolicitudDeModificacionDTO extends SolicitudDTO {
 
     public SolicitudDeModificacionDTO() {}
 
-    public HechoModificado getHechoModificado() {
+   public HechoModificado getHechoModificado() {
         return hechoModificado;
     }
 

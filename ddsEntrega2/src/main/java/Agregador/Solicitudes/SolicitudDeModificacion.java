@@ -1,7 +1,7 @@
 package Agregador.Solicitudes;
 
 import Agregador.HechosYColecciones.Hecho;
-import Agregador.HechosYColecciones.HechoModificado;
+//import Agregador.HechosYColecciones.HechoModificado;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
 
@@ -17,22 +17,22 @@ public class SolicitudDeModificacion extends Solicitud {
 
     @OneToOne
     @JoinColumn(name = "hecho_modificado_id")
-    private HechoModificado hechoModificado;
+    //private HechoModificado hechoModificado;
     private EstadoSolicitudModificacion estadoSolicitudModificacion;
 
     public SolicitudDeModificacion(SolicitudDeModificacionDTO solicitud){
         this.setHechoAsociado(solicitud.getHechoAsociado());
         this.estadoSolicitudModificacion = solicitud.getEstadoSolicitudModificacion();
         //this.setId(UUID.randomUUID());
-        this.hechoModificado = solicitud.getHechoModificado();
+        //this.hechoModificado = solicitud.getHechoModificado();
     }
 
     public SolicitudDeModificacion(){}
 
-    public void aceptarSolicitudConSugerencia(HechoModificado hecho){
+    /*public void aceptarSolicitudConSugerencia(HechoModificado hecho){
         hechoModificado = hecho;
         estadoSolicitudModificacion = EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA;
-    }
+    }*/
 
     @Override
     public void aceptarSolicitud() {

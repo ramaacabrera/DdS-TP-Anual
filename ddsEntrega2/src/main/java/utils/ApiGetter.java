@@ -18,11 +18,31 @@ public class ApiGetter {
                     .build();
         try {
             HttpResponse<String> response = cliente.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                String errorMsg = "Servicio remoto devolvió un error (Status: " + response.statusCode() + "). Cuerpo: " + response.body();
+
+
+                System.err.println("ERROR API: " + errorMsg);
+
+                // Devolvemos NULL o una lista vacía para que el llamador (ConexionCargador) lo maneje.
+                throw new RuntimeException("Fallo al obtener datos de la fuente. Estado HTTP: " + response.statusCode());
+            }
+
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(response.body(), typeRef);
+
+        } catch (java.net.ConnectException e) {
+            // Manejar el "Connection Refused" como fallo de red (para reintentos/tolerancia)
+            throw new RuntimeException("Fallo de red: El servicio remoto no está en línea.", e);
+        } catch (com.fasterxml.jackson.core.JsonParseException | com.fasterxml.jackson.databind.exc.MismatchedInputException e) {
+            // Capturar errores específicos de formato JSON.
+            System.err.println("Error de formato JSON en respuesta de " + url + ": " + e.getMessage());
+            throw new RuntimeException("Formato JSON inválido recibido.", e);
         } catch (Exception e) {
-            System.err.println("Error al consultar API (" + url + "): " + e.getMessage());
-            return null;
+            // Manejar otros errores
+            System.err.println("Error desconocido al consultar API (" + url + "): " + e.getMessage());
+            throw new RuntimeException("Error de I/O o desconocido.", e);
         }
     }
 }

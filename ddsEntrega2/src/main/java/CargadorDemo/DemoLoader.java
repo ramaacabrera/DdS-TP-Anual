@@ -1,6 +1,7 @@
-package CargadorProxy;
+package CargadorDemo;
 
 import Agregador.HechosYColecciones.Etiqueta;
+import utils.Conexiones.FuenteExternaConexion;
 import utils.DTO.HechoDTO;
 import Agregador.HechosYColecciones.ContenidoMultimedia;
 import Agregador.HechosYColecciones.EstadoHecho;
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.core.type.TypeReference;
-import CargadorProxy.APIMock.HechoMock;
+import CargadorDemo.APIMock.HechoMock;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,30 +25,30 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class ConexionDemo extends ConexionProxy{
+public class DemoLoader implements FuenteExternaConexion {
+    protected final String url;
     private final ObjectMapper objectMapper;
     public LocalDateTime fechaUltimaConsulta;
 
-    public ConexionDemo() {
+    public DemoLoader(String urlServicioExterno) {
+        this.url = urlServicioExterno;
         this.objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.registerModule(new JavaTimeModule()); // Para manejar LocalDateTime del HechoMock
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Para que LocalDateTime se serialice como string ISO
     }
     // Constructor que permite inicializar la URL del servicio externo y la Fuente asociada
-    public ConexionDemo(String urlServicioExterno) {
+    /*public DemoLoader(String urlServicioExterno) {
         this(); // Llama al constructor por defecto para inicializar ObjectMapper
         this.url = urlServicioExterno;
-    }
+    }*/
 
     // Getters y Setters
     public String getUrlServicioExterno() {
         return url;
     }
 
-    public void setUrlServicioExterno(String urlServicioExterno) {
-        this.url = urlServicioExterno;
-    }
+
 
     public LocalDateTime getFechaUltimaConsulta() {
         return fechaUltimaConsulta;
@@ -71,7 +72,7 @@ public class ConexionDemo extends ConexionProxy{
     }
 
      public List<HechoDTO> conseguirHechos(LocalDateTime fechaUltimaConsulta) {
-        Objects.requireNonNull(url, "La URL del servicio externo no puede ser nula.");
+        Objects.requireNonNull(this.url, "La URL del servicio externo no puede ser nula.");
         Objects.requireNonNull(fechaUltimaConsulta, "La fecha de última consulta no puede ser nula.");
 
 
@@ -81,7 +82,7 @@ public class ConexionDemo extends ConexionProxy{
         try {
             // Formatear la fecha para la API Mock
             String fechaFormateada = fechaUltimaConsulta.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            String requestUrl = url + "?fechaDesde=" + fechaFormateada;
+            String requestUrl = this.url + "?fechaDesde=" + fechaFormateada;
 
             URL url = new URL(requestUrl);
             connection = (HttpURLConnection) url.openConnection();

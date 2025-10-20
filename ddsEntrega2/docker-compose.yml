@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  mysql_unificado:
+    image: mysql:8.0
+    container_name: metamapa_mysql_unico
+    environment:
+      # CRUCIAL: Contraseña de Root para permitir la conexión y creación de bases de datos
+      MYSQL_ROOT_PASSWORD: root
+
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_datos_unificados:/var/lib/mysql
+
+volumes:
+  mysql_datos_unificados: {}

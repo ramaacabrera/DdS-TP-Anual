@@ -3,6 +3,7 @@ package Agregador.HechosYColecciones;
 import Agregador.Usuario.Usuario;
 import Agregador.fuente.Fuente;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import utils.DTO.HechoDTO;
 
 import javax.persistence.*;
@@ -19,8 +20,9 @@ public class HechoModificado {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "hecho_modificado_id", updatable = false, nullable = false)
-    private UUID hecho_id;
+    @Type(type = "uuid-char")
+    @Column(name = "hecho_modificado_id", length = 36 , updatable = false, nullable = false)
+    private UUID hecho_modificado_id;
 
     private String titulo;
     private String descripcion;
@@ -51,8 +53,8 @@ public class HechoModificado {
 
     @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "HechoXEtiqueta",
-            joinColumns = @JoinColumn(name = "hecho_id"),
+            name = "HechoModificadoXEtiqueta",
+            joinColumns = @JoinColumn(name = "hecho_modificado_id"),
             inverseJoinColumns = @JoinColumn(name = "id_etiqueta")
     )
     private List<Etiqueta> etiquetas;
@@ -103,7 +105,7 @@ public class HechoModificado {
         return titulo;
     }
 
-    public UUID getHecho_id() {return hecho_id;}
+    public UUID getHecho_id() {return hecho_modificado_id;}
 
     public String getDescripcion() {
         return descripcion;
@@ -165,7 +167,7 @@ public class HechoModificado {
 
     public void setEsEditable(Boolean esEditableNuevo) {esEditable = esEditableNuevo;}
 
-    public void setHecho_id (UUID id) {hecho_id = id;}
+    public void setHecho_id (UUID id) {hecho_modificado_id = id;}
 
     public void setColeccion(Coleccion coleccion_) {coleccion = coleccion_;}
 

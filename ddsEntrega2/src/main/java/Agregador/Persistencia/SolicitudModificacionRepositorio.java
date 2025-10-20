@@ -5,6 +5,7 @@ import utils.BDUtils;
 import utils.DTO.SolicitudDeModificacionDTO;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
@@ -12,18 +13,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class SolicitudModificacionRepositorio {
-    private final EntityManager em;
+    private final EntityManagerFactory emf;
     //private final List<SolicitudDeModificacion> solicitudes = new ArrayList<SolicitudDeModificacion>();
 
-    public SolicitudModificacionRepositorio(EntityManager em) {
-        this.em = em;
+    public SolicitudModificacionRepositorio(EntityManagerFactory emf) {
+        this.emf = emf;
     }
 
     //private Optional<SolicitudDeModificacion> buscarSolicitudModificacion(){
         //return solicitudes.stream().findFirst();
     //}
     private Optional<SolicitudDeModificacion> buscarSolicitudModificacion() {
-        //EntityManager em = BDUtils.getEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             // JPQL que apunta a la entidad hija.
             TypedQuery<SolicitudDeModificacion> query = em.createQuery(
@@ -39,7 +40,7 @@ public class SolicitudModificacionRepositorio {
             // No se encontró la solicitud
             return Optional.empty();
         } finally {
-            //em.close();
+            em.close();
         }
     }
 
@@ -47,7 +48,7 @@ public class SolicitudModificacionRepositorio {
         //solicitudes.add(solicitud);
     //}
     public void agregarSolicitudDeModificacion(SolicitudDeModificacion solicitud) {
-        //EntityManager em = BDUtils.getEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
             em.merge(solicitud);
@@ -56,7 +57,7 @@ public class SolicitudModificacionRepositorio {
             BDUtils.rollback(em);
             e.printStackTrace();
         } finally {
-            //em.close();
+            em.close();
         }
     }
 

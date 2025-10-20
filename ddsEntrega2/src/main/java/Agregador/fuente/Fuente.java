@@ -2,6 +2,7 @@ package Agregador.fuente;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import utils.DTO.FuenteDTO;
 import java.util.UUID;
 //import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -33,11 +34,13 @@ public class Fuente {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "id_fuente", updatable = false, nullable = false)
+    @Type(type = "uuid-char")
+    @Column(name = "id_fuente", length = 36 , updatable = false, nullable = false)
     private UUID id_fuente;
 
     @Enumerated(EnumType.STRING)
     private TipoDeFuente tipoDeFuente;
+    @Column(name = "ruta", nullable = false, unique = true)
     private String ruta;
 
     public Fuente() {}

@@ -1,10 +1,14 @@
 package CargadorDinamica.Presentacion;
 
+import CargadorDinamica.DinamicaDto.Hecho_D_DTO;
 import CargadorDinamica.DinamicoRepositorio;
+import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 import utils.DTO.HechoDTO;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class GetHechosDinamicoHandler implements Handler {
@@ -22,10 +26,10 @@ public class GetHechosDinamicoHandler implements Handler {
     }
 
     public List<HechoDTO> obtenerHechos(){
-        List<HechoDTO> repo = repositorio.buscarHechos();
-
+        List<HechoDTO> dtos = repositorio.buscarHechos();
         repositorio.resetearHechos();
-
-        return repo;
+        return dtos;
     }
+
+
 }

@@ -2,19 +2,60 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="demo-hibernate-PU" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="agregador-PU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>Agregador.HechosYColecciones.Hecho</class>
+        <class>Agregador.HechosYColecciones.Ubicacion</class>
+        <class>Agregador.HechosYColecciones.Coleccion</class>
+        <class>Agregador.HechosYColecciones.ContenidoMultimedia</class>
+        <class>Agregador.HechosYColecciones.HechoModificado</class>
+        <class>Agregador.HechosYColecciones.Etiqueta</class>
+        <class>Agregador.fuente.Fuente</class>
+        <class>Agregador.Usuario.Usuario</class>
+        <class>Agregador.Criterios.CriterioCategoria</class>
+        <class>Agregador.Criterios.CriterioContribuyente</class>
+        <class>Agregador.Criterios.CriterioDeTexto</class>
+        <class>Agregador.Criterios.CriterioEtiquetas</class>
+        <class>Agregador.Criterios.CriterioFecha</class>
+        <class>Agregador.Criterios.CriterioTipoFuente</class>
+        <class>Agregador.Criterios.CriterioTipoMultimedia</class>
+        <class>Agregador.Criterios.CriterioUbicacion</class>
+        <class>Agregador.Solicitudes.Solicitud</class>
         <properties>
-            <property name="hibernate.archive.autodetection" value="class"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/utndds?serverTimezone=America/Buenos_Aires"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/agregador_db?serverTimezone=America/Buenos_Aires"/>
             <property name="hibernate.connection.username" value="root"/>
             <property name="hibernate.connection.password" value="root"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
-            <!--property name="hibernate.hbm2ddl.auto" value="update"/-->
+            <!--property name="hibernate.hbm2ddl.auto" value="create-drop"/-->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.archive.autodetection" value="none"/>
+        </properties>
+    </persistence-unit>
+
+    <persistence-unit name="dinamico-PU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>CargadorDinamica.Dominio.Usuario.Usuario_D</class>
+        <class>CargadorDinamica.Dominio.Solicitudes.SolicitudDeEliminacion_D</class>
+        <class>CargadorDinamica.Dominio.Solicitudes.SolicitudDeModificacion_D</class>
+        <class>CargadorDinamica.Dominio.HechosYColecciones.Hecho_D</class>
+        <class>CargadorDinamica.Dominio.HechosYColecciones.Etiqueta_D</class>
+        <class>CargadorDinamica.Dominio.HechosYColecciones.Ubicacion_D</class>
+        <class>CargadorDinamica.Dominio.HechosYColecciones.ContenidoMultimedia_D</class>
+
+        <properties>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/dinamico_db?serverTimezone=America/Buenos_Aires"/>
+            <property name="hibernate.connection.username" value="root"/>
+            <property name="hibernate.connection.password" value="root"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect"/>
+            <!--property name="hibernate.hbm2ddl.auto" value="create-drop"/-->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.archive.autodetection" value="none"/>
         </properties>
     </persistence-unit>
     <persistence-unit name="db-estadisticas" transaction-type="RESOURCE_LOCAL">

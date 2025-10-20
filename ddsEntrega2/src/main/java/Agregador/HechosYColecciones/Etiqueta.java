@@ -2,6 +2,7 @@ package Agregador.HechosYColecciones;
 
 import javax.persistence.Entity;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -18,7 +19,8 @@ public class Etiqueta {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "id_etiqueta", updatable = false, nullable = false)
+    @Type(type = "uuid-char")
+    @Column(name = "id_etiqueta", length = 36 , updatable = false, nullable = false)
     private UUID id_etiqueta;
     private String nombre;
 

@@ -2,6 +2,8 @@ package Agregador.PaqueteAgregador;
 
 import Agregador.Cargador.ConexionCargador;
 import Agregador.PaqueteNormalizador.MockNormalizador;
+import Agregador.Persistencia.*;
+import Agregador.fuente.Fuente;
 import Agregador.Persistencia.ColeccionRepositorio;
 import Agregador.Persistencia.HechoRepositorio;
 import Agregador.Persistencia.SolicitudEliminacionRepositorio;
@@ -25,15 +27,17 @@ public class Agregador {
     private final ColeccionRepositorio coleccionRepositorio;
     private final SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
     private final SolicitudModificacionRepositorio solicitudModificacionRepositorio;
+    private final FuenteRepositorio fuenteRepositorio;
     private final MockNormalizador normalizador;
     private final DetectorDeSpam detectorDeSpam =  new DetectorDeSpam();
     private final ConexionCargador conexionCargador;
 
     public Agregador(HechoRepositorio hechoRepositorio, ColeccionRepositorio coleccionRepositorio, SolicitudEliminacionRepositorio solicitudEliminacionRepositorio,
-                     SolicitudModificacionRepositorio solicitudModificacionRepositorio, MockNormalizador normalizador, ConexionCargador conexionCargador){
+                     SolicitudModificacionRepositorio solicitudModificacionRepositorio, FuenteRepositorio fuenteRepositorio, MockNormalizador normalizador, ConexionCargador conexionCargador){
         this.hechoRepositorio = hechoRepositorio;
         this.coleccionRepositorio = coleccionRepositorio;
         this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
+        this.fuenteRepositorio = fuenteRepositorio;
         this.normalizador = normalizador;
         this.conexionCargador = conexionCargador;
         this.solicitudModificacionRepositorio = solicitudModificacionRepositorio;
@@ -45,7 +49,7 @@ public class Agregador {
             this.agregarSolicitudes();
             this.actualizarColecciones();
         //}, 0, 1, TimeUnit.HOURS);
-        }, 0, 30, TimeUnit.SECONDS);
+        }, 5, 30, TimeUnit.SECONDS);
 
         long delayInicial = calcularDelayHastaHora(2);  // 2 AM
         scheduler.scheduleAtFixedRate(() -> {
@@ -77,26 +81,36 @@ public class Agregador {
 
     public void actualizarHechosDesdeFuentes() {
         List<HechoDTO> hechos = conexionCargador.obtenerHechosNuevos();
-        System.out.println("Hechos : " + hechos.size());
-        for(HechoDTO hecho : hechos){
-            Hecho hechoNormalizado = this.normalizarHecho(hecho);
-            System.out.println("Hechos1 : " + hechos.size());
-            //Hecho existente = buscarHechoSimilar(hechoNormalizado);
-            System.out.println("Hechos2 : " + hechos.size());
-            hechoRepositorio.guardar(hechoNormalizado);
-           /* if (existente == null) {
-                // si no existe lo guardo como nuevo
-                System.out.println("Hechos3 : " + hechos.size());
+        System.out.println("Hechos a procesar: " + hechos.size());
+        for(HechoDTO hechoDTO : hechos){
+            try {
+                // Obtener la Fuente transitoria del DTO
+                Fuente fuenteTransitoria = hechoDTO.getFuente();
+
+                // 2. BUSCAR LA FUENTE PERSISTIDA por su ruta
+                // Necesitamos la Fuente del repositorio (gestionada por Hibernate)
+                Fuente fuentePersistida = this.fuenteRepositorio.buscarPorRuta(fuenteTransitoria.getRuta());
+
+                if (fuentePersistida == null) {
+                    // Si la fuente no se registró (nunca debería pasar si el Loader se conecta), la guardamos
+                    System.out.println("Fuente no encontrada en DB. Guardándola: " + fuenteTransitoria.getRuta());
+
+                    fuentePersistida = this.fuenteRepositorio.guardar(fuenteTransitoria);
+                }
+
+                // 3. ASIGNAR LA FUENTE PERSISTIDA al HechoDTO (Sustituir la transitoria)
+                hechoDTO.setFuente(fuentePersistida);
+
+                // 4. Normalizar y Guardar
+                Hecho hechoNormalizado = this.normalizarHecho(hechoDTO);
                 hechoRepositorio.guardar(hechoNormalizado);
-                System.out.println("Fuente del hecho:" + hechoNormalizado.getFuente());
-                //System.out.println("Nuevo hecho agregado: " + hechoNormalizado.getTitulo());
-            } else {
-                // si ya existe lo actualizo
-                System.out.println("Hechos4 : " + hechos.size());
-                hechoRepositorio.actualizar(hechoNormalizado);
-                System.out.println("Fuente del hecho:" + hechoNormalizado.getFuente());
-                //System.out.println("Hecho actualizado: " + hechoNormalizado.getTitulo());
-            }*/
+
+            } catch (Exception e) {
+                // Manejo de errores de un hecho individual (ej: datos inválidos o fallos de DB)
+                System.err.println("ERROR al procesar un hecho. Saltando el hecho. Causa: " + e.getMessage());
+                e.printStackTrace();
+            }
+
         }
     }
 
