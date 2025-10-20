@@ -5,6 +5,8 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public class GetCategoriaMaxHandler implements Handler {
     private final EstadisticasRepositorio repository;
 
@@ -14,6 +16,12 @@ public class GetCategoriaMaxHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        ctx.status(200).json(repository.buscarCategoria_max_hechos());
+
+        Optional<String> resultado = repository.buscarCategoria_max_hechos();
+        if(!resultado.isPresent()){
+            ctx.status(404);
+        }
+
+        ctx.status(200).json(resultado.get());
     }
 }

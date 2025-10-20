@@ -24,7 +24,7 @@ public class GetHoraMaxCategoriaHandler implements Handler {
         if (!hora.isPresent()) {
             ctx.status(404);
         } else {
-            ctx.status(200).json(hora);
+            ctx.status(200).json(hora.get());
         }
     }
 }

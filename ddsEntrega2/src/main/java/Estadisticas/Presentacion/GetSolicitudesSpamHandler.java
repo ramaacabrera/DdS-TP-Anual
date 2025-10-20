@@ -6,6 +6,8 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public class GetSolicitudesSpamHandler implements Handler {
     private final EstadisticasRepositorio repository;
 
@@ -15,6 +17,11 @@ public class GetSolicitudesSpamHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        ctx.status(200).json(repository.buscarSpam());
+        Optional<Integer> resultado = repository.buscarSpam();
+        if(!resultado.isPresent()){
+            ctx.status(404);
+        }
+
+        ctx.status(200).json(resultado.get());
     }
 }

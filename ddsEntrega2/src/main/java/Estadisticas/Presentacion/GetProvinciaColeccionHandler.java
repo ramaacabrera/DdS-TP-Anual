@@ -23,7 +23,7 @@ public class GetProvinciaColeccionHandler implements Handler {
         if (!provincia.isPresent()) {
             ctx.status(404);
         } else {
-            ctx.status(200).json(provincia);
+            ctx.status(200).json(provincia.get());
         }
     }
 }
