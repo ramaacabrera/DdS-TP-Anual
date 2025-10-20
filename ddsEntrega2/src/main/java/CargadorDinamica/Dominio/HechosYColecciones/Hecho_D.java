@@ -64,7 +64,7 @@ public class Hecho_D {
         this.categoria = hechoDTO.getCategoria();
         this.ubicacion = hechoDTO.getUbicacion();
         this.fechaDeAcontecimiento = hechoDTO.getFechaDeAcontecimiento();
-        this.fechaDeCarga = hechoDTO.getFechaDeCarga();
+        this.fechaDeCarga = new Date();
         this.fuente = "DINAMICA";
         this.estadoHecho = EstadoHecho_D.ACTIVO;
         this.contribuyente = hechoDTO.getContribuyente();

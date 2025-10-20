@@ -4,19 +4,21 @@ import Estadisticas.Dominio.EstadisticasCategoria;
 import utils.BDUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.time.LocalTime;
 import java.util.Optional;
 
 public class EstadisticasCategoriaRepositorio {
-    private final EntityManager em;
+    private final EntityManagerFactory emf;
 
-    public EstadisticasCategoriaRepositorio(EntityManager emNuevo) {
-        this.em = emNuevo;
+    public EstadisticasCategoriaRepositorio(EntityManagerFactory emNuevo) {
+        this.emf = emNuevo;
     }
 
     public void guardar(EstadisticasCategoria estadisticas) {
+        EntityManager em = emf.createEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
 
@@ -26,10 +28,13 @@ public class EstadisticasCategoriaRepositorio {
         } catch (Exception e) {
             BDUtils.rollback(em);
             e.printStackTrace();
+        } finally {
+            em.close();
         }
     }
 
     public Optional<EstadisticasCategoria> buscarPorHandle(String handle) {
+        EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<EstadisticasCategoria> query = em.createQuery(
                     "SELECT e FROM EstadisticasCategoria e WHERE e.id.estadisticas_id = :handleParam", EstadisticasCategoria.class);
@@ -40,10 +45,13 @@ public class EstadisticasCategoriaRepositorio {
 
         } catch (NoResultException e) {
             return Optional.empty();
+        } finally {
+            em.close();
         }
     }
 
     public Optional<String> buscarProvinciaCategoria(String categoria) {
+        EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<String> query = em.createQuery(
                     "SELECT e.estadisticasCategoria_provincia FROM EstadisticasCategoria e JOIN Estadisticas es on es.estadisticas_id = e.id.estadisticas_id " +
@@ -56,10 +64,13 @@ public class EstadisticasCategoriaRepositorio {
 
         } catch (NoResultException e) {
             return Optional.empty();
+        } finally {
+            em.close();
         }
     }
 
     public Optional<LocalTime> buscarHoraCategoria(String categoria) {
+        EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<LocalTime> query = em.createQuery(
                     "SELECT e.estadisticasCategoria_hora FROM EstadisticasCategoria e JOIN Estadisticas es on es.estadisticas_id = e.id.estadisticas_id " +
@@ -72,6 +83,8 @@ public class EstadisticasCategoriaRepositorio {
 
         } catch (NoResultException e) {
             return Optional.empty();
+        } finally {
+            em.close();
         }
     }
 }

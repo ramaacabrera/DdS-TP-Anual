@@ -32,9 +32,11 @@ public class GetHechosHandler implements Handler {
     ObjectMapper mapper = new ObjectMapper();
     private final HechoRepositorio hechoRepositorio;
 
-    public GetHechosHandler(HechoRepositorio hechoRepositorio) {
+    //public GetHechosHandler() {}
+
+    public GetHechosHandler(HechoRepositorio hechoRepositorio){
         this.hechoRepositorio = hechoRepositorio;
-    public GetHechosHandler(){} //HechoRepositorio hechos) { repositorio = hechos; }
+    }
 
     public void handle(@NotNull Context ctx) throws IOException, InterruptedException {
         List<Criterio> criterios = this.armarListaDeCriterios(ctx);

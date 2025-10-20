@@ -14,15 +14,18 @@ import java.util.List;
 
 public class HechoRepositorio {
 
-    private final EntityManagerFactory emf;
+    //private final EntityManagerFactory emf;
 
-    public HechoRepositorio(EntityManagerFactory emfNuevo) {
-        this.emf = emfNuevo;
-    }
+    //public HechoRepositorio(EntityManagerFactory emfNuevo) {
+        //this.emf = emfNuevo;
+    //}
+
+    public HechoRepositorio(){}
 
     // Método para obtener todos los hechos
     public List<Hecho> getHechos() {
-        EntityManager em = emf.createEntityManager();
+        //EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             // JPQL para seleccionar todos los objetos Hecho
             TypedQuery<Hecho> query = em.createQuery("SELECT h FROM Hecho h", Hecho.class);
@@ -33,7 +36,8 @@ public class HechoRepositorio {
     }
 
     public List<Hecho> buscarHechos(List<Criterio> criterios) {
-        EntityManager em = emf.createEntityManager();
+        //EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             StringBuilder queryString = new StringBuilder("SELECT * FROM Hecho h");
             if(criterios != null){
@@ -52,7 +56,8 @@ public class HechoRepositorio {
     }
 
     public Hecho buscarPorTitulo(String titulo) {
-        EntityManager em = emf.createEntityManager();
+        //EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             // Consulta JPQL para buscar por un atributo específico
             TypedQuery<Hecho> query = em.createQuery(
@@ -74,7 +79,8 @@ public class HechoRepositorio {
     }
 
     public List<Hecho> buscarSimilares(String titulo) {
-        EntityManager em = emf.createEntityManager();
+        //EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             // Consulta JPQL para buscar hechos con títulos similares (usa LIKE para similitud)
             TypedQuery<Hecho> query = em.createQuery(
@@ -97,7 +103,7 @@ public class HechoRepositorio {
     
     public void guardar(Hecho hecho) {
         //Hecho existente = this.buscarPorTitulo(hecho.getTitulo());
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             Hecho existente = this.buscarPorTitulo(hecho.getTitulo());
 
@@ -134,7 +140,7 @@ public class HechoRepositorio {
     }
 
     public void remover(Hecho hecho) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
 

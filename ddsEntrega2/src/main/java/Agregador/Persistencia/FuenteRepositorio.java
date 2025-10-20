@@ -10,11 +10,13 @@ import javax.persistence.TypedQuery;
 
 public class FuenteRepositorio {
 
-    private final EntityManagerFactory emf;
+    //private final EntityManagerFactory emf;
 
-    public FuenteRepositorio(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
+    //public FuenteRepositorio(EntityManagerFactory emf) {
+        //this.emf = emf;
+    //}
+
+    public FuenteRepositorio() {}
 
     /**
      * Busca una Fuente por su ruta (URL), que actúa como identificador único.
@@ -22,7 +24,8 @@ public class FuenteRepositorio {
      * @return La entidad Fuente si existe, o null.
      */
     public Fuente buscarPorRuta(String ruta) {
-        EntityManager em = emf.createEntityManager();
+        //EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             TypedQuery<Fuente> query = em.createQuery(
                     "SELECT f FROM Fuente f WHERE f.ruta = :rutaParam", Fuente.class);
@@ -41,7 +44,8 @@ public class FuenteRepositorio {
      * @param fuente La entidad Fuente a persistir.
      */
     public Fuente guardar(Fuente fuente) {
-        EntityManager em = emf.createEntityManager();
+        //EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         BDUtils.comenzarTransaccion(em);
         try {
             Fuente fuenteGestionada = em.merge(fuente);

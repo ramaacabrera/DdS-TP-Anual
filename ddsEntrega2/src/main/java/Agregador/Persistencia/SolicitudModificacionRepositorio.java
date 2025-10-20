@@ -13,18 +13,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class SolicitudModificacionRepositorio {
-    private final EntityManagerFactory emf;
+    //private final EntityManagerFactory emf;
     //private final List<SolicitudDeModificacion> solicitudes = new ArrayList<SolicitudDeModificacion>();
 
-    public SolicitudModificacionRepositorio(EntityManagerFactory emf) {
-        this.emf = emf;
+    public SolicitudModificacionRepositorio() {
+
     }
 
     //private Optional<SolicitudDeModificacion> buscarSolicitudModificacion(){
         //return solicitudes.stream().findFirst();
     //}
     private Optional<SolicitudDeModificacion> buscarSolicitudModificacion() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             // JPQL que apunta a la entidad hija.
             TypedQuery<SolicitudDeModificacion> query = em.createQuery(
@@ -48,7 +48,7 @@ public class SolicitudModificacionRepositorio {
         //solicitudes.add(solicitud);
     //}
     public void agregarSolicitudDeModificacion(SolicitudDeModificacion solicitud) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
             em.merge(solicitud);

@@ -22,17 +22,25 @@ public class MainEstadisticas {
         int puerto =  Integer.parseInt(config.getProperty("puertoEstadisticas"));
         int puertoAgregador = Integer.parseInt(config.getProperty("puertoAgregador"));
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("db-estadisticas");
-        EntityManager em = emf.createEntityManager();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("estadisticas-PU");
+        //EntityManager em = emf.createEntityManager();
+
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
-        EstadisticasRepositorio estadisticasRepositorio = new EstadisticasRepositorio(em);
-        EstadisticasColeccionRepositorio estadisticasColeccionRepositorio = new EstadisticasColeccionRepositorio(em);
-        EstadisticasCategoriaRepositorio estadisticasCategoriaRepositorio = new EstadisticasCategoriaRepositorio(em);
+//        EstadisticasRepositorio estadisticasRepositorio = new EstadisticasRepositorio(em);
+//        EstadisticasColeccionRepositorio estadisticasColeccionRepositorio = new EstadisticasColeccionRepositorio(em);
+//        EstadisticasCategoriaRepositorio estadisticasCategoriaRepositorio = new EstadisticasCategoriaRepositorio(em);
 
-        ConexionAgregador conexionAgregador = new ConexionAgregador(em);
+        EstadisticasRepositorio estadisticasRepositorio = new EstadisticasRepositorio(emf);
+        EstadisticasColeccionRepositorio estadisticasColeccionRepositorio = new EstadisticasColeccionRepositorio(emf);
+        EstadisticasCategoriaRepositorio estadisticasCategoriaRepositorio = new EstadisticasCategoriaRepositorio(emf);
+
+        //EntityManagerFactory emfAgregador = Persistence.createEntityManagerFactory("agregador-PU");
+        //EntityManager emAgregador = emfAgregador.createEntityManager();
+        
+        ConexionAgregador conexionAgregador = new ConexionAgregador();
         GeneradorEstadisticas generador = new GeneradorEstadisticas(conexionAgregador,estadisticasRepositorio,estadisticasCategoriaRepositorio,estadisticasColeccionRepositorio);
 
         app.get("/api/estadisticas/provinciaMax/colecciones/{coleccion}", new GetProvinciaColeccionHandler(estadisticasColeccionRepositorio));

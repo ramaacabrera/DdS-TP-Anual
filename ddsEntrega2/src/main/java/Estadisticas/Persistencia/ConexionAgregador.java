@@ -1,6 +1,7 @@
 package Estadisticas.Persistencia;
 
 import Agregador.HechosYColecciones.Hecho;
+import utils.BDUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -13,39 +14,42 @@ import java.util.function.Function;
 
 public class ConexionAgregador {
 
+    /*
     private final EntityManager em;
 
     public ConexionAgregador(EntityManager emNuevo) {
         this.em = emNuevo;
     }
+     */
+    public ConexionAgregador(){}
 
     public int obtenerSpamActual() {
-        TypedQuery<Integer> query = em.createQuery("SELECT count(*) FROM Solicitud s WHERE s.esSpam = true ", Integer.class);
+        TypedQuery<Integer> query = BDUtils.getEntityManager().createQuery("SELECT count(*) FROM Solicitud s WHERE s.esSpam = true ", Integer.class);
         return query.getSingleResult();
     }
 
     public String obtenerCategoriaMaxHechos() {
-        TypedQuery<String> query = em.createQuery("SELECT h.categoria FROM Hecho h group by h.categoria order by count(h.categoria) desc limit 1", String.class);
+        TypedQuery<String> query = BDUtils.getEntityManager().createQuery("SELECT h.categoria FROM Hecho h group by h.categoria order by count(h.categoria) desc limit 1", String.class);
         return query.getSingleResult();
     }
 
     public Map<String, String> obtenerProvinciasPorCategoria() {
         String query = "SELECT h.categoria, u.descripcion, COUNT(h) FROM Hecho h JOIN h.ubicacion u GROUP BY h.categoria, u.descripcion";
-        List<Object[]> resultados = em.createQuery(query, Object[].class).getResultList();
+        List<Object[]> resultados = BDUtils.getEntityManager().createQuery(query, Object[].class).getResultList();
 
         return this.obtenerMaximoPor(resultados, fila -> (String) fila[0], fila -> (String) fila[1]);
     }
 
     public Map<String, Integer> obtenerHorasPicoPorCategoria() {
         String query = "SELECT h.categoria, hour(h.fechaDeAcontecimiento), count(h) FROM Hecho h GROUP BY h.categoria, hour(h.fechaDeAcontecimiento)";
-        List<Object[]> resultados = em.createQuery(query, Object[].class).getResultList();
+        List<Object[]> resultados = BDUtils.getEntityManager().createQuery(query, Object[].class).getResultList();
 
         return this.obtenerMaximoPor(resultados, fila -> (String) fila[0], fila -> (Integer) fila[1]);
     }
 
     public Map<UUID, String> obtenerProvinciaPorColeccion() {
-        String query = "SELECT c.handle, u.descripcion, COUNT(h) FROM Hecho h JOIN h.ubicacion u JOIN h.coleccion c GROUP BY c.handle, u.descripcion";
-        List<Object[]> resultados = em.createQuery(query, Object[].class).getResultList();
+        String query = "SELECT c.handle, u.descripcion, COUNT(h) FROM Coleccion c JOIN c.hechos h JOIN h.ubicacion u GROUP BY c.handle, u.descripcion";
+        List<Object[]> resultados = BDUtils.getEntityManager().createQuery(query, Object[].class).getResultList();
 
         return this.obtenerMaximoPor(resultados, fila -> (UUID) fila[0], fila -> (String) fila[1]);
     }

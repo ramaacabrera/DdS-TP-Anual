@@ -25,17 +25,24 @@ public class MainAgregador {
 
         System.out.println("Iniciando servidor Agregador en el puerto "+puertoAgregador);
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("agregador-PU");
+
+        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("agregador-PU");
         //EntityManager em = emf.createEntityManager();
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puertoAgregador, "/");
 
-        HechoRepositorio hechoRepositorio = new HechoRepositorio(emf);
-        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio(emf);
-        SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio(emf);
-        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(emf);
-        FuenteRepositorio fuenteRepositorio = new FuenteRepositorio(emf);
+//        HechoRepositorio hechoRepositorio = new HechoRepositorio(emf);
+//        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio(emf);
+//        SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio(emf);
+//        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(emf);
+//        FuenteRepositorio fuenteRepositorio = new FuenteRepositorio(emf);
+
+        HechoRepositorio hechoRepositorio = new HechoRepositorio();
+        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
+        SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio();
+        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
+        FuenteRepositorio fuenteRepositorio = new FuenteRepositorio();
 
         //String urlMetamapaExterna = config.getProperty("urlMetamapaExterna");
         //String urlDemoMock = config.getProperty("urlMock");
@@ -70,11 +77,11 @@ public class MainAgregador {
         app.post("/cargador", new PostFuenteHandler(conexionCargador));
         app.get("/cargador", new GetFuentesHandler(conexionCargador));
         app.delete("/cargador/{id}", new DeleteFuenteHandler(conexionCargador));
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+        /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Cerrando EntityManager y EntityManagerFactory...");
             if (em.isOpen()) em.close();
             if (emf.isOpen()) emf.close();
-        }));
+        }));*/
     }
 
 

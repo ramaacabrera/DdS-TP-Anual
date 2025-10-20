@@ -14,21 +14,21 @@ public class Hecho_D_DTO {
     private String categoria;
     private Ubicacion_D ubicacion;
     private Date fechaDeAcontecimiento;
-    private Date fechaDeCarga;
+    //private Date fechaDeCarga;
     private Usuario_D contribuyente;
     private List<Etiqueta_D> etiquetas;
     private List<ContenidoMultimedia_D> contenidoMultimedia;
 
     public Hecho_D_DTO() {}
 
-    public Hecho_D_DTO(String titulo, String descripcion, String categoria, Ubicacion_D ubicacion, Date fechaDeAcontecimiento,
-                    Date fechaDeCarga, Usuario_D contribuyente, List<Etiqueta_D> etiquetas, List<ContenidoMultimedia_D> contenidoMultimedia) {
+    public Hecho_D_DTO(String titulo, String descripcion, String categoria, Ubicacion_D ubicacion, Date fechaDeAcontecimiento
+                    /*Date fechaDeCarga*/, Usuario_D contribuyente, List<Etiqueta_D> etiquetas, List<ContenidoMultimedia_D> contenidoMultimedia) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.categoria = categoria;
         this.ubicacion = ubicacion;
         this.fechaDeAcontecimiento = fechaDeAcontecimiento;
-        this.fechaDeCarga = fechaDeCarga;
+        //this.fechaDeCarga = fechaDeCarga;
         this.contribuyente = contribuyente;
         this.etiquetas = etiquetas;
         this.contenidoMultimedia = contenidoMultimedia;
@@ -39,7 +39,7 @@ public class Hecho_D_DTO {
     public String getCategoria() { return categoria;}
     public Ubicacion_D getUbicacion() { return ubicacion;}
     public Date getFechaDeAcontecimiento() { return fechaDeAcontecimiento;}
-    public Date getFechaDeCarga() { return fechaDeCarga;}
+    //public Date getFechaDeCarga() { return fechaDeCarga;}
     public Usuario_D getContribuyente() { return contribuyente;}
     public List<Etiqueta_D> getEtiquetas() { return etiquetas;}
     public List<ContenidoMultimedia_D> getContenidoMultimedia() { return contenidoMultimedia; }

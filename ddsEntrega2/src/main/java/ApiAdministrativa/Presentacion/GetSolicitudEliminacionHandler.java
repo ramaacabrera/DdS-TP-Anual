@@ -15,12 +15,13 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class GetSolicitudEliminacionHandler implements Handler {
-    private final SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
-
-    public GetSolicitudesEliminacionHandler(SolicitudEliminacionRepositorio solicitudEliminacionRepositorio) {
-        this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
+    private SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
     ObjectMapper mapper = new ObjectMapper();
-    //public GetSolicitudEliminacionHandler(SolicitudEliminacionRepositorio repositorio){ this.repositorio = repositorio; }
+
+    public GetSolicitudEliminacionHandler(SolicitudEliminacionRepositorio solicitudEliminacionRepositorio) {
+        this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
+    //public GetSolicitudEliminacionHandler(SolicitudEliminacionRepositorio repositorio){ this.repositorio = repositorio;
+    }
 
     @Override
     public void handle(Context ctx) throws IOException, InterruptedException {
@@ -64,7 +65,3 @@ public class GetSolicitudEliminacionHandler implements Handler {
 //        }
     }
 }
-
-    public GetSolicitudEliminacionHandler(SolicitudEliminacionRepositorio solicitudEliminacionRepositorio) {
-        this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
-    }

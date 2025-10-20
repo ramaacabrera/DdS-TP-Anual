@@ -22,7 +22,7 @@ public class GetSolicitudesEliminacionHandler implements Handler {
 
     public GetSolicitudesEliminacionHandler(SolicitudEliminacionRepositorio solicitudEliminacionRepositorio) {
         this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
-    ObjectMapper mapper = new ObjectMapper();
+    }
 
     //public GetSolicitudesEliminacionHandler(SolicitudEliminacionRepositorio repositorio) {this.repositorio = repositorio;}
 
@@ -51,6 +51,7 @@ public class GetSolicitudesEliminacionHandler implements Handler {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
+        ObjectMapper mapper = new ObjectMapper();
         List<SolicitudDeEliminacion> solicitudes = mapper.readValue(response.body(), new TypeReference<>() {
         });
 

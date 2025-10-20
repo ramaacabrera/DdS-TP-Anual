@@ -14,18 +14,18 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class SolicitudEliminacionRepositorio {
-    private final EntityManagerFactory emf;
+    //private final EntityManagerFactory emf;
     //private final List<SolicitudDeEliminacion> solicitudes = new ArrayList<SolicitudDeEliminacion>();
 
-    public SolicitudEliminacionRepositorio(EntityManagerFactory emf) {
-        this.emf = emf;
+    public SolicitudEliminacionRepositorio() {
+
     }
 
     //private Optional<SolicitudDeEliminacion> buscarSolicitudEliminacion(){
         //return solicitudes.stream().findFirst();
     //}
     private Optional<SolicitudDeEliminacion> buscarSolicitudEliminacion() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             TypedQuery<SolicitudDeEliminacion> query = em.createQuery("SELECT s FROM SolicitudDeEliminacion s", SolicitudDeEliminacion.class);
             query.setMaxResults(1);
@@ -41,7 +41,7 @@ public class SolicitudEliminacionRepositorio {
 
     //public List<SolicitudDeEliminacion> buscarTodas(){return solicitudes;}
     public List<SolicitudDeEliminacion> buscarTodas() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             TypedQuery<SolicitudDeEliminacion> query = em.createQuery(
                     "SELECT s FROM SolicitudDeEliminacion s", SolicitudDeEliminacion.class);
@@ -55,7 +55,7 @@ public class SolicitudEliminacionRepositorio {
         //solicitudes.add(solicitud);
     //}
     public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
             em.merge(solicitud);
@@ -106,7 +106,7 @@ public class SolicitudEliminacionRepositorio {
             }
 
             // Persistencia del cambio
-            EntityManager em = emf.createEntityManager();
+            EntityManager em = BDUtils.getEntityManager();
             try {
                 BDUtils.comenzarTransaccion(em);
                 // em.merge actualiza el objeto modificado que ya fue cargado de la BD
@@ -128,7 +128,7 @@ public class SolicitudEliminacionRepositorio {
     //    return solicitudes.stream().filter(c -> c.getId() == id).findFirst();
     //}
     public Optional<SolicitudDeEliminacion> buscarPorId(UUID id) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtils.getEntityManager();
         try {
             SolicitudDeEliminacion solicitud = em.find(SolicitudDeEliminacion.class, id);
 

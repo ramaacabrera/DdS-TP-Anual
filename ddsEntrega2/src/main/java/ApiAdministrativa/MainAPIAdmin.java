@@ -19,14 +19,14 @@ public class MainAPIAdmin {
 
         System.out.println("Iniciando API Administrativa en el puerto " + puerto);
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("demo-hibernate-PU");
-        EntityManager em = emf.createEntityManager();
+        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("agregador-PU");
+        //EntityManager em = emf.createEntityManager();
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
-        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio(em);
-        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(em);
+        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
+        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
 
         app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio));
         app.get("/api/colecciones", new GetColeccionesHandler(coleccionRepositorio));
@@ -42,10 +42,10 @@ public class MainAPIAdmin {
         app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(solicitudEliminacionRepositorio));
         app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(solicitudEliminacionRepositorio));
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+       /* Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Cerrando EntityManager de API Admin...");
             if (em.isOpen()) em.close();
             if (emf.isOpen()) emf.close();
-        }));
+        }));*/
     }
 }

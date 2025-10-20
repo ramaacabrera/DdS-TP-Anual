@@ -4,19 +4,21 @@ import Estadisticas.Dominio.EstadisticasColeccion;
 import utils.BDUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
 import java.util.UUID;
 
 public class EstadisticasColeccionRepositorio {
-    private final EntityManager em;
+    private final EntityManagerFactory emf;
 
-    public EstadisticasColeccionRepositorio(EntityManager emNuevo) {
-        this.em = emNuevo;
+    public EstadisticasColeccionRepositorio(EntityManagerFactory emNuevo) {
+        this.emf = emNuevo;
     }
 
         public void guardar(EstadisticasColeccion estadisticas) {
+            EntityManager em = emf.createEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
 
@@ -26,10 +28,13 @@ public class EstadisticasColeccionRepositorio {
         } catch (Exception e) {
             BDUtils.rollback(em);
             e.printStackTrace();
+        } finally {
+            em.close();
         }
     }
 
         public Optional<EstadisticasColeccion> buscarPorHandle(UUID handle) {
+            EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<EstadisticasColeccion> query = em.createQuery(
                     "SELECT e FROM EstadisticasColeccion e WHERE e.id.coleccion_id = :handleParam", EstadisticasColeccion.class);
@@ -40,10 +45,13 @@ public class EstadisticasColeccionRepositorio {
 
         } catch (NoResultException e) {
             return Optional.empty();
+        } finally {
+            em.close();
         }
     }
 
     public Optional<String> buscarProvinciaColeccion(UUID idColeccion) {
+        EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<String> query = em.createQuery(
                     "SELECT e.estadisticasColeccion_provincia FROM EstadisticasColeccion e JOIN Estadisticas es on es.estadisticas_id = e.id.estadisticas_id " +
@@ -56,6 +64,8 @@ public class EstadisticasColeccionRepositorio {
 
         } catch (NoResultException e) {
             return Optional.empty();
+        } finally {
+            em.close();
         }
     }
     }
