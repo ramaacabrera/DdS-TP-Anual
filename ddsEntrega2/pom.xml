@@ -38,6 +38,21 @@
             <version>2.15.2</version>
         </dependency>
 
+
+        <!-- dependencias para cliente websocket -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.12.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>1.5.7</version> <!-- Usa la última versión disponible -->
+        </dependency>
+
+
         <!-- Quartz para scheduling -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>

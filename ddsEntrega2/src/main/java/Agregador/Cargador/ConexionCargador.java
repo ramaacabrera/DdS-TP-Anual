@@ -27,13 +27,13 @@ public class ConexionCargador {
     public ConexionCargador(FuenteRepositorio nuevaFuenteRepositorio) {
         fuenteRepositorio =  nuevaFuenteRepositorio;
     }
-    public List<Fuente> getFuentes() { return fuentes; }
+    public ConcurrentMap<UUID, WsContext> getFuentes() { return fuentes; }
 
     public List<HechoDTO> obtenerHechosNuevos(){
         List<HechoDTO> listaHecho = new ArrayList<>();
 
 
-        fuentes.forEach(fuente -> {
+        /*fuentes.forEach(fuente -> {
 
             try {
                 // La llamada a buscarHechos (que usa ApiGetter) debe estar envuelta
@@ -48,7 +48,7 @@ public class ConexionCargador {
                 System.err.println("Saltando fuente " + fuente.getRuta() + " por error: " + e.getMessage());
                 // No hacemos nada, solo pasamos a la siguiente fuente.
             }
-        });
+        });*/
 
         System.out.println("Hechos obtenidos desde fuentes: " + listaHecho.size());
         return listaHecho;
@@ -63,11 +63,11 @@ public class ConexionCargador {
 
     public List<SolicitudDeModificacionDTO> obtenerSolicitudes() {
         List<SolicitudDeModificacionDTO> todas = new ArrayList<>();
-        for (Fuente fuente : fuentes) {
+        /*for (Fuente fuente : fuentes) {
             if (fuente.getTipoDeFuente() == TipoDeFuente.DINAMICA) {
                 todas.addAll(this.obtenerSolicitudesDeFuente(fuente));
             }
-        }
+        }*/
         return todas;
     }
 
@@ -82,11 +82,11 @@ public class ConexionCargador {
 
     public List<SolicitudDeEliminacionDTO> obtenerSolicitudesEliminacion() {
         List<SolicitudDeEliminacionDTO> todas = new ArrayList<>();
-        for (Fuente fuente : fuentes) {
+        /*for (Fuente fuente : fuentes) {
             if (fuente.getTipoDeFuente() == TipoDeFuente.DINAMICA) {
                 todas.addAll(obtenerSolicitudesDeEliminacionDeFuente(fuente));
             }
-        }
+        }*/
         return todas;
     }
 
@@ -121,12 +121,12 @@ public class ConexionCargador {
     }
 
     public boolean borrarFuente(String idFuente) {
-         for(Fuente fuente1 : fuentes) {
+         /*for(Fuente fuente1 : fuentes) {
              if(Objects.equals(fuente1.getId().toString(), idFuente)) {
                  fuentes.remove(fuente1);
                  return true;
              }
-         }
+         }*/
          return false;
     }
 }

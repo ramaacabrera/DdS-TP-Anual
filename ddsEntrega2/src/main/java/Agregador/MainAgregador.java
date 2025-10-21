@@ -18,8 +18,8 @@ public class MainAgregador {
 
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        int puertoAgregador = Integer.parseInt(config.getProperty("puertoAgregador"));
-
+        //int puertoAgregador = Integer.parseInt(config.getProperty("puertoAgregador"));
+        int puertoAgregador = 8080;
         System.out.println("Iniciando servidor Agregador en el puerto "+puertoAgregador);
 
 
