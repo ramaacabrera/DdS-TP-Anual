@@ -1,6 +1,12 @@
+<<<<<<<< HEAD:DdS/agregador/src/main/java/agregador/Handlers/PostColeccionRepoHandler.java
 package agregador.Handlers;
 
 import utils.Persistencia.ColeccionRepositorio;
+========
+package Agregador.Handlers;
+
+import Agregador.Persistencia.ColeccionRepositorio;
+>>>>>>>> c99213c (Connect y close en agregador implementados):ddsEntrega2/src/main/java/Agregador/Handlers/PostColeccionRepoHandler.java
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;

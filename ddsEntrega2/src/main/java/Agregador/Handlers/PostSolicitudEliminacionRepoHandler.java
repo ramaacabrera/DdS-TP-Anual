@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:DdS/agregador/src/main/java/agregador/Handlers/PostSolicitudEliminacionRepoHandler.java
 package agregador.Handlers;
+========
+package Agregador.Handlers;
+>>>>>>>> c99213c (Connect y close en agregador implementados):ddsEntrega2/src/main/java/Agregador/Handlers/PostSolicitudEliminacionRepoHandler.java
 
 import utils.Persistencia.SolicitudEliminacionRepositorio;
 import agregador.PaqueteAgregador.DetectorDeSpam;

@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:DdS/agregador/src/main/java/agregador/Handlers/GetHechosRepoHandler.java
 package agregador.Handlers;
+========
+package Agregador.Handlers;
+>>>>>>>> c99213c (Connect y close en agregador implementados):ddsEntrega2/src/main/java/Agregador/Handlers/GetHechosRepoHandler.java
 
 import utils.Dominio.HechosYColecciones.Hecho;
 import utils.Persistencia.HechoRepositorio;

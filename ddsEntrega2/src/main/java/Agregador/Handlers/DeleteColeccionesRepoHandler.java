@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:DdS/agregador/src/main/java/agregador/Handlers/DeleteColeccionesRepoHandler.java
 package agregador.Handlers;
+========
+package Agregador.Handlers;
+>>>>>>>> c99213c (Connect y close en agregador implementados):ddsEntrega2/src/main/java/Agregador/Handlers/DeleteColeccionesRepoHandler.java
 
 import utils.Dominio.HechosYColecciones.Coleccion;
 import utils.Persistencia.ColeccionRepositorio;
