@@ -1,4 +1,4 @@
-package Agregador.Presentacion;
+package Agregador.Handlers;
 
 import Agregador.HechosYColecciones.Hecho;
 import Agregador.Persistencia.HechoRepositorio;
@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 
-import java.io.IOException;
 import java.util.List;
 
 public class GetHechosRepoHandler implements Handler {

@@ -1,18 +1,13 @@
-package Agregador.Presentacion;
+package Agregador.Handlers;
 
 import Agregador.HechosYColecciones.Coleccion;
 import Agregador.Persistencia.ColeccionRepositorio;
 import Agregador.fuente.Fuente;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.Optional;
 
 public class DeleteFuenteRepoHandler implements Handler {

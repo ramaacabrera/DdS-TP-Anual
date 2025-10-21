@@ -1,28 +1,31 @@
 package Agregador.Cargador;
 
+import Agregador.Persistencia.FuenteRepositorio;
 import Agregador.fuente.Fuente;
 import Agregador.fuente.TipoDeFuente;
 import CargadorDemo.DemoLoader;
 import CargadorMetamapa.MetamapaLoader;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.javalin.websocket.WsConnectContext;
+import io.javalin.websocket.WsContext;
 import utils.ApiGetter;
 import utils.DTO.FuenteDTO;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
 import utils.DTO.SolicitudDeEliminacionDTO;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class ConexionCargador {
 
 
-    private final List<Fuente> fuentes =  new ArrayList<>();
-    private int idIncremental = 1;
+    private final ConcurrentMap<UUID, WsContext> fuentes =  new ConcurrentHashMap<>();
+    FuenteRepositorio fuenteRepositorio;
 
-    public ConexionCargador() {
-
+    public ConexionCargador(FuenteRepositorio nuevaFuenteRepositorio) {
+        fuenteRepositorio =  nuevaFuenteRepositorio;
     }
     public List<Fuente> getFuentes() { return fuentes; }
 
@@ -113,15 +116,8 @@ public class ConexionCargador {
         }
     }
 */
-    public boolean agregarFuente(FuenteDTO fuente) {
-        for(Fuente fuente1 : fuentes) {
-            if(fuente1.getRuta().equals(fuente.getRuta())) {
-                return false;
-            }
-        }
-        fuentes.add(new Fuente(fuente,idIncremental));
-        idIncremental++;
-        return true;
+    public void agregarFuente(UUID idFuente, WsContext ctx) {
+        fuentes.put(idFuente, ctx);
     }
 
     public boolean borrarFuente(String idFuente) {

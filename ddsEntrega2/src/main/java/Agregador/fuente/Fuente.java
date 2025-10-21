@@ -48,13 +48,13 @@ public class Fuente {
     public Fuente(TipoDeFuente tipoDeFuente, String ruta /*, int idNuevo*/) {
         this.tipoDeFuente = tipoDeFuente;
         this.ruta = ruta;
-        //this.id_fuente = idNuevo;
+
     }
 
-    public Fuente(FuenteDTO fuenteDTO, int idNuevo) {
+    public Fuente(FuenteDTO fuenteDTO) {
         this.tipoDeFuente = fuenteDTO.getTipoDeFuente();
         this.ruta = fuenteDTO.getRuta();
-        //this.id_fuente = idNuevo;
+
     }
 
     public TipoDeFuente getTipoDeFuente() {

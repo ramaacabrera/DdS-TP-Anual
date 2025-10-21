@@ -1,14 +1,9 @@
-package Agregador.Presentacion;
+package Agregador.Handlers;
 
 import Agregador.Persistencia.SolicitudEliminacionRepositorio;
 import io.javalin.http.Handler;
 import io.javalin.http.Context;
 import java.util.UUID;
-
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 public class PutSolicitudEliminacionRepoHandler implements Handler {
     private final SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
