@@ -5,7 +5,9 @@ import Agregador.fuente.TipoDeFuente;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
+import utils.ClienteDelAgregador;
 import utils.ConexionAlAgregador;
+import utils.Controladores.ControladorEstatica;
 import utils.DTO.FuenteDTO;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
@@ -26,28 +28,30 @@ public class MainEstatica {
         // lectura archivo de configuraciones
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        int puerto = Integer.parseInt(config.getProperty("puertoEstatico"));
+        //int puerto = Integer.parseInt(config.getProperty("puertoEstatico"));
         String fileServer = config.getProperty("fileServer");
+        String urlAgregador = config.getProperty("urlAgregador");
 
         //Limpiar guia
         Path carpeta = Paths.get(fileServer);
         String pathGuia = carpeta.resolve("guia.csv").toString();
 
-        limpiarGuia(pathGuia);
+        //limpiarGuia(pathGuia); descomentar solo si se quiere que se carguen nuevamente los hechos cada vez que se runee
 
         //Inicio app de javalin
-        System.out.println("Iniciando servidor Componente Estatico en el puerto "+ puerto);
-        IniciadorApp iniciador = new IniciadorApp();
-        Javalin app = iniciador.iniciarApp(puerto, "/");
+        //System.out.println("Iniciando servidor Componente Estatico en el puerto "+ puerto);
+        //IniciadorApp iniciador = new IniciadorApp();
+        //Javalin app = iniciador.iniciarApp(puerto, "/");
 
-        ConexionAlAgregador agregador = new ConexionAlAgregador();
-        agregador.conectarse(TipoDeFuente.ESTATICA, config.getProperty("puertoEstatico"));
+        //ConexionAlAgregador agregador = new ConexionAlAgregador();
+        //agregador.conectarse(TipoDeFuente.ESTATICA, config.getProperty("puertoEstatico"));
 
-        Fuente fuente = new Fuente(TipoDeFuente.DINAMICA, "http://localhost:"+puerto);
+        FuenteDTO fuente = new FuenteDTO(TipoDeFuente.DINAMICA, "");
+        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorEstatica());
+        cliente.conectar(fuente);
 
-
-        app.get("/hechos", new GetHechosEstaticoHandler(fileServer, fuente));
-        app.get("/reprocesado/hechos/{nombre}", new GetReprocesadoHechosEstaticoHandler(fileServer, fuente));
+        //app.get("/hechos", new GetHechosEstaticoHandler(fileServer, fuente));
+        //app.get("/reprocesado/hechos/{nombre}", new GetReprocesadoHechosEstaticoHandler(fileServer, fuente));
     }
 
 

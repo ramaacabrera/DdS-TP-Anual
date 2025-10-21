@@ -4,9 +4,12 @@ import Agregador.Cargador.ConexionCargador;
 import Agregador.fuente.Fuente;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import io.javalin.websocket.WsContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
 
 public class GetFuentesHandler implements Handler {
     private final ConexionCargador conexionCargador;
@@ -15,7 +18,7 @@ public class GetFuentesHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        List<Fuente> fuentes = conexionCargador.getFuentes();
+        ConcurrentMap<UUID, WsContext> fuentes = conexionCargador.getFuentes();
         ctx.status(200).json(fuentes);
     }
 }
