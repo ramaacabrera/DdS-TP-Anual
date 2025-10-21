@@ -26,7 +26,9 @@ public class OnConnectHandler implements WsConnectHandler {
     private static final ObjectMapper mapper = new ObjectMapper();
     @Override
     public void handleConnect(@NotNull WsConnectContext ctx) throws Exception {
+        System.out.println("Conexion Recibida");
         try {
+
             String header = ctx.header("fuenteDTO");
             FuenteDTO nuevo = mapper.readValue(header, FuenteDTO.class);
 

@@ -1,15 +1,13 @@
-<<<<<<<< HEAD:DdS/agregador/src/main/java/agregador/Handlers/GetFuentesHandler.java
-package agregador.Handlers;
-========
 package Agregador.Handlers;
->>>>>>>> c99213c (Connect y close en agregador implementados):ddsEntrega2/src/main/java/Agregador/Handlers/GetFuentesHandler.java
 
-import agregador.Cargador.ConexionCargador;
+import Agregador.Cargador.ConexionCargador;
+import Agregador.fuente.Fuente;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.websocket.WsContext;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
