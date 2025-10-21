@@ -1,4 +1,4 @@
-package Agregador.Presentacion;
+package Agregador.Handlers;
 
 import Agregador.HechosYColecciones.Coleccion;
 import Agregador.HechosYColecciones.TipoAlgoritmoConsenso;

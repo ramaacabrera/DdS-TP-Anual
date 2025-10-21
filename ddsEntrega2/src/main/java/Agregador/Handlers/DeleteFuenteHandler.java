@@ -1,14 +1,11 @@
-package Agregador.Presentacion;
+package Agregador.Handlers;
 
 import Agregador.Cargador.ConexionCargador;
-import Agregador.HechosYColecciones.Coleccion;
-import Agregador.Persistencia.ColeccionRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Optional;
 
 public class DeleteFuenteHandler implements Handler {
     private final ConexionCargador conexionCargador;

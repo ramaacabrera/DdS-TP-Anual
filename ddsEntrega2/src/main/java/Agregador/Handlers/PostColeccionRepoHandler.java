@@ -1,8 +1,6 @@
-package Agregador.Presentacion;
+package Agregador.Handlers;
 
-import Agregador.HechosYColecciones.Coleccion;
 import Agregador.Persistencia.ColeccionRepositorio;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;

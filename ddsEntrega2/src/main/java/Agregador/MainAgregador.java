@@ -3,17 +3,14 @@ package Agregador;
 import Agregador.PaqueteNormalizador.MockNormalizador;
 import Agregador.PaqueteAgregador.Agregador;
 import Agregador.Cargador.ConexionCargador;
-import Agregador.Presentacion.*;
+import Agregador.Handlers.*;
 import Agregador.Persistencia.*;
-import CargadorDemo.DemoLoader;
-import CargadorMetamapa.MetamapaLoader;
+import Agregador.fuente.Fuente;
+import Agregador.fuente.TipoDeFuente;
 import io.javalin.Javalin;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.Properties;
 
 public class MainAgregador {
@@ -50,7 +47,7 @@ public class MainAgregador {
         //MetamapaLoader metamapaLoader = new MetamapaLoader(urlMetamapaExterna);
         //DemoLoader demoLoader = new DemoLoader(urlDemoMock);
         MockNormalizador mockNormalizador = new MockNormalizador();
-        ConexionCargador conexionCargador = new ConexionCargador();
+        ConexionCargador conexionCargador = new ConexionCargador(fuenteRepositorio);
 
         Agregador agregador = new Agregador(
                 hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio,
@@ -74,15 +71,22 @@ public class MainAgregador {
         app.get("/solicitudesEliminacion", new GetSolicitudesEliminacionRepoHandler(solicitudEliminacionRepositorio));
 
         //Cargadores
-        app.post("/cargador", new PostFuenteHandler(conexionCargador));
-        app.get("/cargador", new GetFuentesHandler(conexionCargador));
-        app.delete("/cargador/{id}", new DeleteFuenteHandler(conexionCargador));
+
+        app.ws("/cargador", ws -> {
+            ws.onConnect(new OnConnectHandler(conexionCargador, fuenteRepositorio));
+            ws.onClose(new OnCloseHandler(conexionCargador, fuenteRepositorio));
+        });
+
+        //app.post("/cargador", new PostFuenteHandler(conexionCargador));
+        //app.get("/cargador", new GetFuentesHandler(conexionCargador));
+        //app.delete("/cargador/{id}", new DeleteFuenteHandler(conexionCargador));
         /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Cerrando EntityManager y EntityManagerFactory...");
             if (em.isOpen()) em.close();
             if (emf.isOpen()) emf.close();
         }));*/
     }
+
 
 
 }

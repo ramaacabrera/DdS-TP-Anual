@@ -1,4 +1,4 @@
-package Agregador.Presentacion;
+package Agregador.Handlers;
 
 import Agregador.Persistencia.SolicitudEliminacionRepositorio;
 import Agregador.PaqueteAgregador.DetectorDeSpam;

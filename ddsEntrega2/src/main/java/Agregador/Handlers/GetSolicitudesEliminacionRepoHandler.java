@@ -1,14 +1,10 @@
-package Agregador.Presentacion;
+package Agregador.Handlers;
 
-import Agregador.HechosYColecciones.Hecho;
-import Agregador.Persistencia.HechoRepositorio;
 import Agregador.Persistencia.SolicitudEliminacionRepositorio;
-import Agregador.Solicitudes.Solicitud;
 import Agregador.Solicitudes.SolicitudDeEliminacion;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-import Agregador.Persistencia.SolicitudEliminacionRepositorio;
 
 import java.util.List;
 
