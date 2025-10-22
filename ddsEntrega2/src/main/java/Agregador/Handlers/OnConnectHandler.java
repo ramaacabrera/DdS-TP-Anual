@@ -31,9 +31,11 @@ public class OnConnectHandler implements WsConnectHandler {
 
             String header = ctx.header("fuenteDTO");
             FuenteDTO nuevo = mapper.readValue(header, FuenteDTO.class);
+            Fuente fuentePersistida = fuenteRepositorio.buscarPorRuta(nuevo.getRuta());
 
-            Fuente fuentePersistida = fuenteRepositorio.guardar(new Fuente(nuevo));
-
+            if(fuentePersistida == null) {
+                fuentePersistida = fuenteRepositorio.guardar(new Fuente(nuevo));
+            }
             conexionCargador.agregarFuente(fuentePersistida.getId(), ctx);
 
             ctx.send(mapper.writeValueAsString(new IdMensajeDTO("idCargador", fuentePersistida.getId())));

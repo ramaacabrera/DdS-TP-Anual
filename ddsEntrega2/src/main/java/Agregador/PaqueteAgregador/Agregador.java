@@ -45,7 +45,8 @@ public class Agregador {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         scheduler.scheduleAtFixedRate(() -> {
-            this.actualizarHechosDesdeFuentes();
+            //this.actualizarHechosDesdeFuentes();
+            conexionCargador.obtenerHechosNuevos();
             this.agregarSolicitudes();
             this.actualizarColecciones();
         //}, 0, 1, TimeUnit.HOURS);
@@ -79,8 +80,8 @@ public class Agregador {
         }
     }
 
-    public void actualizarHechosDesdeFuentes() {
-        List<HechoDTO> hechos = conexionCargador.obtenerHechosNuevos();
+    public void actualizarHechosDesdeFuentes(List<HechoDTO> hechos) {
+        //List<HechoDTO> hechos = conexionCargador.obtenerHechosNuevos();
         System.out.println("Hechos a procesar: " + hechos.size());
         for(HechoDTO hechoDTO : hechos){
             try {
