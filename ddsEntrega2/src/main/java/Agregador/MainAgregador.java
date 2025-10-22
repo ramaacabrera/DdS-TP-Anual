@@ -74,6 +74,7 @@ public class MainAgregador {
 
         app.ws("/cargador", ws -> {
             ws.onConnect(new OnConnectHandler(conexionCargador, fuenteRepositorio));
+            ws.onMessage(new OnMessageHandler(agregador));
             ws.onClose(new OnCloseHandler(conexionCargador, fuenteRepositorio));
         });
 

@@ -1,18 +1,18 @@
-package agregador.PaqueteAgregador;
+package Agregador.PaqueteAgregador;
 
-import agregador.Cargador.ConexionCargador;
-import agregador.PaqueteNormalizador.MockNormalizador;
-import utils.Persistencia.*;
-import utils.Dominio.fuente.Fuente;
-import utils.Persistencia.ColeccionRepositorio;
-import utils.Persistencia.HechoRepositorio;
-import utils.Persistencia.SolicitudEliminacionRepositorio;
-import utils.Persistencia.SolicitudModificacionRepositorio;
-import utils.Dominio.Solicitudes.SolicitudDeEliminacion;
-import utils.Dominio.Solicitudes.SolicitudDeModificacion;
+import Agregador.Cargador.ConexionCargador;
+import Agregador.PaqueteNormalizador.MockNormalizador;
+import Agregador.Persistencia.*;
+import Agregador.fuente.Fuente;
+import Agregador.Persistencia.ColeccionRepositorio;
+import Agregador.Persistencia.HechoRepositorio;
+import Agregador.Persistencia.SolicitudEliminacionRepositorio;
+import Agregador.Persistencia.SolicitudModificacionRepositorio;
+import Agregador.Solicitudes.SolicitudDeEliminacion;
+import Agregador.Solicitudes.SolicitudDeModificacion;
 import utils.DTO.*;
-import utils.Dominio.HechosYColecciones.Coleccion;
-import utils.Dominio.HechosYColecciones.Hecho;
+import Agregador.HechosYColecciones.Coleccion;
+import Agregador.HechosYColecciones.Hecho;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -46,12 +46,11 @@ public class Agregador {
 
         scheduler.scheduleAtFixedRate(() -> {
             //this.actualizarHechosDesdeFuentes();
-            //System.out.println("scheduler funciona");
             conexionCargador.obtenerHechosNuevos();
-            conexionCargador.obtenerSolicitudes();
+            this.agregarSolicitudes();
             this.actualizarColecciones();
         //}, 0, 1, TimeUnit.HOURS);
-        }, 1, 60, TimeUnit.SECONDS);
+        }, 5, 30, TimeUnit.SECONDS);
 
         long delayInicial = calcularDelayHastaHora(2);  // 2 AM
         scheduler.scheduleAtFixedRate(() -> {
@@ -84,37 +83,35 @@ public class Agregador {
     public void actualizarHechosDesdeFuentes(List<HechoDTO> hechos) {
         //List<HechoDTO> hechos = conexionCargador.obtenerHechosNuevos();
         System.out.println("Hechos a procesar: " + hechos.size());
-        if(!hechos.isEmpty()) {
-            for (HechoDTO hechoDTO : hechos) {
-                try {
-                    // Obtener la Fuente transitoria del utils.DTO
-                    Fuente fuenteTransitoria = hechoDTO.getFuente();
+        for(HechoDTO hechoDTO : hechos){
+            try {
+                // Obtener la Fuente transitoria del DTO
+                Fuente fuenteTransitoria = hechoDTO.getFuente();
 
-                    // 2. BUSCAR LA FUENTE PERSISTIDA por su ruta
-                    // Necesitamos la Fuente del repositorio (gestionada por Hibernate)
-                    Fuente fuentePersistida = this.fuenteRepositorio.buscarPorRuta(fuenteTransitoria.getRuta());
+                // 2. BUSCAR LA FUENTE PERSISTIDA por su ruta
+                // Necesitamos la Fuente del repositorio (gestionada por Hibernate)
+                Fuente fuentePersistida = this.fuenteRepositorio.buscarPorRuta(fuenteTransitoria.getRuta());
 
-                    if (fuentePersistida == null) {
-                        // Si la agregador.fuente no se registró (nunca debería pasar si el Loader se conecta), la guardamos
-                        System.out.println("Fuente no encontrada en DB. Guardándola: " + fuenteTransitoria.getRuta());
+                if (fuentePersistida == null) {
+                    // Si la fuente no se registró (nunca debería pasar si el Loader se conecta), la guardamos
+                    System.out.println("Fuente no encontrada en DB. Guardándola: " + fuenteTransitoria.getRuta());
 
-                        fuentePersistida = this.fuenteRepositorio.guardar(fuenteTransitoria);
-                    }
-
-                    // 3. ASIGNAR LA FUENTE PERSISTIDA al HechoDTO (Sustituir la transitoria)
-                    hechoDTO.setFuente(fuentePersistida);
-
-                    // 4. Normalizar y Guardar
-                    Hecho hechoNormalizado = this.normalizarHecho(hechoDTO);
-                    hechoRepositorio.guardar(hechoNormalizado);
-
-                } catch (Exception e) {
-                    // Manejo de errores de un hecho individual (ej: datos inválidos o fallos de DB)
-                    System.err.println("ERROR al procesar un hecho. Saltando el hecho. Causa: " + e.getMessage());
-                    e.printStackTrace();
+                    fuentePersistida = this.fuenteRepositorio.guardar(fuenteTransitoria);
                 }
 
+                // 3. ASIGNAR LA FUENTE PERSISTIDA al HechoDTO (Sustituir la transitoria)
+                hechoDTO.setFuente(fuentePersistida);
+
+                // 4. Normalizar y Guardar
+                Hecho hechoNormalizado = this.normalizarHecho(hechoDTO);
+                hechoRepositorio.guardar(hechoNormalizado);
+
+            } catch (Exception e) {
+                // Manejo de errores de un hecho individual (ej: datos inválidos o fallos de DB)
+                System.err.println("ERROR al procesar un hecho. Saltando el hecho. Causa: " + e.getMessage());
+                e.printStackTrace();
             }
+
         }
     }
 
@@ -136,9 +133,9 @@ public class Agregador {
         return null;
     }
 
-    public void agregarSolicitudes(List<SolicitudDeModificacionDTO> solicitudesDeModificacion, List<SolicitudDeEliminacionDTO> solicitudesDeEliminacion) {
-        //List<SolicitudDeModificacionDTO> solicitudesDeModificacion = conexionCargador.obtenerSolicitudes();
-        //List<SolicitudDeEliminacionDTO>  solicitudesDeEliminacion = conexionCargador.obtenerSolicitudesEliminacion();
+    public void agregarSolicitudes() {
+        List<SolicitudDeModificacionDTO> solicitudesDeModificacion = conexionCargador.obtenerSolicitudes();
+        List<SolicitudDeEliminacionDTO>  solicitudesDeEliminacion = conexionCargador.obtenerSolicitudesEliminacion();
 
 
         for (SolicitudDeEliminacionDTO dto : solicitudesDeEliminacion) {
