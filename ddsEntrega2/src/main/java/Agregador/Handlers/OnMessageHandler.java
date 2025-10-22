@@ -10,7 +10,7 @@ import io.javalin.websocket.WsMessageHandler;
 import org.jetbrains.annotations.NotNull;
 import utils.DTO.ModelosMensajesDTO.HechosObtenidosPayload;
 
-public class OnMessageHandler implements WsMessageHandler {
+public class OnMessageHandler {
 
     Agregador agregador;
 
@@ -20,7 +20,7 @@ public class OnMessageHandler implements WsMessageHandler {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    @Override
+    /*@Override
     public void handleMessage(@NotNull WsMessageContext ctx) throws Exception {
         String raw = ctx.message();
 
@@ -38,5 +38,24 @@ public class OnMessageHandler implements WsMessageHandler {
         catch (Exception e) {
             System.err.println("Error al procesar el objeto " + e.getMessage());
         }
+    }
+    */
+
+    public void handleMessageSeguro(String raw, WsMessageContext ctx) {
+        try {
+            JsonNode root = mapper.readTree(raw);
+            String type = root.get("type").asText();
+
+            switch (type) {
+                case "hechosObtenidos":
+                    HechosObtenidosPayload payload = mapper.treeToValue(root.get("payload"), HechosObtenidosPayload.class);
+                    System.out.println("→ Hechos recibidos: " + payload.hechos.size());
+                    agregador.actualizarHechosDesdeFuentes(payload.hechos);
+            }
+        }
+        catch (Exception e) {
+            System.err.println("Error al procesar el objeto " + e.getMessage());
+        }
+
     }
 }

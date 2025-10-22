@@ -46,8 +46,8 @@ public class MainEstatica {
         //ConexionAlAgregador agregador = new ConexionAlAgregador();
         //agregador.conectarse(TipoDeFuente.ESTATICA, config.getProperty("puertoEstatico"));
 
-        FuenteDTO fuente = new FuenteDTO(TipoDeFuente.DINAMICA, "");
-        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorEstatica());
+        Fuente fuente = new Fuente(TipoDeFuente.DINAMICA, "");
+        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorEstatica(new GetHechosEstaticoHandler(fileServer, fuente)));
         cliente.conectar(fuente);
 
         //app.get("/hechos", new GetHechosEstaticoHandler(fileServer, fuente));

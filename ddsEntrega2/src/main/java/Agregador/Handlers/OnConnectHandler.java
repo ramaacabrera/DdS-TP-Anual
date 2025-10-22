@@ -11,7 +11,8 @@ import io.javalin.websocket.WsConnectContext;
 import io.javalin.websocket.WsConnectHandler;
 import org.jetbrains.annotations.NotNull;
 import utils.DTO.FuenteDTO;
-import utils.DTO.IdMensajeDTO;
+import utils.DTO.ModelosMensajesDTO.IdCargadorPayload;
+import utils.DTO.ModelosMensajesDTO.WsMessage;
 
 public class OnConnectHandler implements WsConnectHandler {
     private final FuenteRepositorio fuenteRepositorio;
@@ -30,15 +31,17 @@ public class OnConnectHandler implements WsConnectHandler {
         try {
 
             String header = ctx.header("fuenteDTO");
-            FuenteDTO nuevo = mapper.readValue(header, FuenteDTO.class);
+            Fuente nuevo = mapper.readValue(header, Fuente.class);
             Fuente fuentePersistida = fuenteRepositorio.buscarPorRuta(nuevo.getRuta());
 
             if(fuentePersistida == null) {
-                fuentePersistida = fuenteRepositorio.guardar(new Fuente(nuevo));
+                fuentePersistida = fuenteRepositorio.guardar(nuevo);
             }
             conexionCargador.agregarFuente(fuentePersistida.getId(), ctx);
 
-            ctx.send(mapper.writeValueAsString(new IdMensajeDTO("idCargador", fuentePersistida.getId())));
+            WsMessage<IdCargadorPayload> mensaje = new WsMessage<IdCargadorPayload>("idCargador", new IdCargadorPayload(fuentePersistida.getId()));
+
+            ctx.send(mapper.writeValueAsString(mensaje));
         } catch (Exception e) {
             ctx.closeSession(400, "Header FuenteDTO invalido "+e.getMessage());
         }
