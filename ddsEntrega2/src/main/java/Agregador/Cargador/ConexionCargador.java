@@ -5,14 +5,13 @@ import Agregador.fuente.Fuente;
 import Agregador.fuente.TipoDeFuente;
 import CargadorDemo.DemoLoader;
 import CargadorMetamapa.MetamapaLoader;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.websocket.WsConnectContext;
 import io.javalin.websocket.WsContext;
 import utils.ApiGetter;
-import utils.DTO.FuenteDTO;
-import utils.DTO.HechoDTO;
-import utils.DTO.SolicitudDeModificacionDTO;
-import utils.DTO.SolicitudDeEliminacionDTO;
+import utils.DTO.*;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,16 +23,31 @@ public class ConexionCargador {
     private final ConcurrentMap<UUID, WsContext> fuentes =  new ConcurrentHashMap<>();
     FuenteRepositorio fuenteRepositorio;
 
+    ObjectMapper mapper = new ObjectMapper();
+
     public ConexionCargador(FuenteRepositorio nuevaFuenteRepositorio) {
         fuenteRepositorio =  nuevaFuenteRepositorio;
     }
     public ConcurrentMap<UUID, WsContext> getFuentes() { return fuentes; }
 
+    public void obtenerHechosNuevos(){
+        fuentes.forEach((fuenteId, ctx) -> {
+            String mensaje = null;
+            try {
+                mensaje = mapper.writeValueAsString(new SolicitudHechosMensajeDTO("obtenerHechosNuevos"));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            ctx.send(mensaje);
+        });
+    }
+
+    /*
     public List<HechoDTO> obtenerHechosNuevos(){
         List<HechoDTO> listaHecho = new ArrayList<>();
 
 
-        /*fuentes.forEach(fuente -> {
+        fuentes.forEach((id, ctx) -> {
 
             try {
                 // La llamada a buscarHechos (que usa ApiGetter) debe estar envuelta
@@ -48,12 +62,12 @@ public class ConexionCargador {
                 System.err.println("Saltando fuente " + fuente.getRuta() + " por error: " + e.getMessage());
                 // No hacemos nada, solo pasamos a la siguiente fuente.
             }
-        });*/
+        });
 
         System.out.println("Hechos obtenidos desde fuentes: " + listaHecho.size());
         return listaHecho;
     }
-
+    */
 
     public List<HechoDTO> buscarHechos(String url){
         ApiGetter api = new ApiGetter();
