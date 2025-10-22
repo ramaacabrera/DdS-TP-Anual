@@ -1,5 +1,19 @@
 package utils.DTO.ModelosMensajesDTO;
 
+import java.util.UUID;
+
 public class IdCargadorPayload {
-    public java.util.UUID idCargador;
+    public UUID idCargador;
+
+    public IdCargadorPayload() {};
+
+    public IdCargadorPayload(UUID id) {
+        this.idCargador = id;
+    }
+
+    public UUID getIdCargador() {
+        return idCargador;
+    }
+
+    public void setIdCargador(UUID idCargador) {};
 }

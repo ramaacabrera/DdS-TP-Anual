@@ -12,6 +12,8 @@ import io.javalin.websocket.WsConnectContext;
 import io.javalin.websocket.WsContext;
 import utils.ApiGetter;
 import utils.DTO.*;
+import utils.DTO.ModelosMensajesDTO.ObtenerHechosPayload;
+import utils.DTO.ModelosMensajesDTO.WsMessage;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,11 +36,10 @@ public class ConexionCargador {
         fuentes.forEach((fuenteId, ctx) -> {
             String mensaje = null;
             try {
-                mensaje = mapper.writeValueAsString(new SolicitudHechosMensajeDTO("obtenerHechosNuevos"));
+                mensaje = mapper.writeValueAsString(new WsMessage<ObtenerHechosPayload>("obtenerHechos", null));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
-            }
-            ctx.send(mensaje);
+            }            ctx.send(mensaje);
         });
     }
 
