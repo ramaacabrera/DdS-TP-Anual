@@ -1,12 +1,19 @@
 package utils;
 
 import Agregador.fuente.Fuente;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import okhttp3.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.Controladores.Controlador;
 import utils.DTO.*;
+import utils.DTO.ModelosMensajesDTO.HechosObtenidosPayload;
+import utils.DTO.ModelosMensajesDTO.IdCargadorPayload;
+import utils.DTO.ModelosMensajesDTO.WsMessage;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class ClienteDelAgregador {
@@ -23,9 +30,9 @@ public class ClienteDelAgregador {
         client = new OkHttpClient.Builder().pingInterval(10, TimeUnit.SECONDS).build();
     }
 
-    public void conectar(FuenteDTO fuenteDTO) {
+    public void conectar(Fuente fuenteDTO) {
         String jsonFuente;
-        System.out.println("Conectando al agregador: " + fuenteDTO + "en " + AGREGADOR_URL+"cargador");
+        System.out.println("Conectando al agregador: " + fuenteDTO + "en " + AGREGADOR_URL +"cargador");
         try{
             jsonFuente = mapper.writeValueAsString(fuenteDTO);
         }
@@ -47,7 +54,28 @@ public class ClienteDelAgregador {
             @Override
             public void onMessage(WebSocket webSocket, String text) {
                 System.out.println("Mensaje recibido: " + text);
-                // Procesa el mensaje recibido del servidor
+                try {
+                    JsonNode root = mapper.readTree(text);
+                    String type = root.get("type").asText();
+                    switch (type) {
+                        case "obtenerHechos" -> {
+                            List<HechoDTO> hechos = controlador.obtenerHechos();
+                            HechosObtenidosPayload payload = new HechosObtenidosPayload(hechos);
+                            WsMessage<HechosObtenidosPayload> mensaje = new WsMessage<HechosObtenidosPayload>("hechosObtenidos", payload);
+
+                            webSocket.send(mapper.writeValueAsString(mensaje));
+                        }
+                        case "obtenerSolicitudes" -> {
+                            controlador.obtenerSolicitudes();
+                        }
+                        case "idCargador" -> {
+                            IdCargadorPayload payload = mapper.treeToValue(root.get("payload"), IdCargadorPayload.class);
+                            controlador.guardarId(payload.getIdCargador());
+                        }
+                    }
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             @Override

@@ -12,6 +12,7 @@ import utils.IniciadorApp;
 import utils.LecturaConfig;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
 
 public class MainAgregador {
     public static void main(String[] args) throws InterruptedException {
@@ -72,9 +73,15 @@ public class MainAgregador {
 
         //Cargadores
 
+        ExecutorService wsWorkers = java.util.concurrent.Executors.newFixedThreadPool(
+                Math.max(4, Runtime.getRuntime().availableProcessors()));
+
         app.ws("/cargador", ws -> {
             ws.onConnect(new OnConnectHandler(conexionCargador, fuenteRepositorio));
-            ws.onMessage(new OnMessageHandler(agregador));
+            ws.onMessage(ctx -> {
+                String raw = ctx.message();
+                wsWorkers.execute(() -> new OnMessageHandler(agregador).handleMessageSeguro(raw, ctx));
+            });
             ws.onClose(new OnCloseHandler(conexionCargador, fuenteRepositorio));
         });
 
