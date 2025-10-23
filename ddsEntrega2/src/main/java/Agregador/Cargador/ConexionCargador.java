@@ -2,17 +2,13 @@ package Agregador.Cargador;
 
 import Agregador.Persistencia.FuenteRepositorio;
 import Agregador.fuente.Fuente;
-import Agregador.fuente.TipoDeFuente;
-import CargadorDemo.DemoLoader;
-import CargadorMetamapa.MetamapaLoader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.javalin.websocket.WsConnectContext;
 import io.javalin.websocket.WsContext;
 import utils.ApiGetter;
 import utils.DTO.*;
-import utils.DTO.ModelosMensajesDTO.ObtenerHechosPayload;
+import utils.DTO.ModelosMensajesDTO.MensajeVacioPayload;
 import utils.DTO.ModelosMensajesDTO.WsMessage;
 
 import java.util.*;
@@ -36,56 +32,30 @@ public class ConexionCargador {
         fuentes.forEach((fuenteId, ctx) -> {
             String mensaje = null;
             try {
-                mensaje = mapper.writeValueAsString(new WsMessage<ObtenerHechosPayload>("obtenerHechos", null));
+                mensaje = mapper.writeValueAsString(new WsMessage<MensajeVacioPayload>("obtenerHechos", null));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
-            }            ctx.send(mensaje);
+            }
+            ctx.send(mensaje);
         });
     }
 
-    /*
-    public List<HechoDTO> obtenerHechosNuevos(){
-        List<HechoDTO> listaHecho = new ArrayList<>();
-
-
-        fuentes.forEach((id, ctx) -> {
-
-            try {
-                // La llamada a buscarHechos (que usa ApiGetter) debe estar envuelta
-                List<HechoDTO> hechosTemporales = this.buscarHechos(fuente.getRuta());
-
-                if (hechosTemporales != null) {
-                    hechosTemporales.forEach((hecho) -> hecho.setFuente(fuente));
-                    listaHecho.addAll(hechosTemporales);
-                }
-            } catch (RuntimeException e) {
-                // Capturar la excepción lanzada por ApiGetter (Error de red, JSON, etc.)
-                System.err.println("Saltando fuente " + fuente.getRuta() + " por error: " + e.getMessage());
-                // No hacemos nada, solo pasamos a la siguiente fuente.
+    public void obtenerSolicitudes() {
+        fuentes.forEach((fuenteId, ctx) -> {
+            String mensaje = null;
+            try{
+                mensaje = mapper.writeValueAsString(new WsMessage<MensajeVacioPayload>("obtenerSolicitudesEliminacion", null));
+                ctx.send(mensaje);
+                mensaje = mapper.writeValueAsString(new WsMessage<MensajeVacioPayload>("obtenerSolicitudesModificacion", null));
+                ctx.send(mensaje);
+            }
+            catch(JsonProcessingException e){
+                throw new RuntimeException(e);
             }
         });
 
-        System.out.println("Hechos obtenidos desde fuentes: " + listaHecho.size());
-        return listaHecho;
     }
-    */
-
-    public List<HechoDTO> buscarHechos(String url){
-        ApiGetter api = new ApiGetter();
-        return api.getFromApi(url + "/hechos", new TypeReference<List<HechoDTO>>() {
-        });
-    }
-
-    public List<SolicitudDeModificacionDTO> obtenerSolicitudes() {
-        List<SolicitudDeModificacionDTO> todas = new ArrayList<>();
-        /*for (Fuente fuente : fuentes) {
-            if (fuente.getTipoDeFuente() == TipoDeFuente.DINAMICA) {
-                todas.addAll(this.obtenerSolicitudesDeFuente(fuente));
-            }
-        }*/
-        return todas;
-    }
-
+/*
     private List<SolicitudDeModificacionDTO> obtenerSolicitudesDeFuente(Fuente fuente) {
         ApiGetter api = new ApiGetter();
         return api.getFromApi(
@@ -97,11 +67,11 @@ public class ConexionCargador {
 
     public List<SolicitudDeEliminacionDTO> obtenerSolicitudesEliminacion() {
         List<SolicitudDeEliminacionDTO> todas = new ArrayList<>();
-        /*for (Fuente fuente : fuentes) {
+        for (Fuente fuente : fuentes) {
             if (fuente.getTipoDeFuente() == TipoDeFuente.DINAMICA) {
                 todas.addAll(obtenerSolicitudesDeEliminacionDeFuente(fuente));
             }
-        }*/
+        }
         return todas;
     }
 
@@ -113,7 +83,7 @@ public class ConexionCargador {
         );
     }
 
-/*
+
     private <T> T getFromApi(String url, TypeReference<T> typeRef){
         HttpClient cliente = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -135,13 +105,8 @@ public class ConexionCargador {
         fuentes.put(idFuente, ctx);
     }
 
-    public boolean borrarFuente(String idFuente) {
-         /*for(Fuente fuente1 : fuentes) {
-             if(Objects.equals(fuente1.getId().toString(), idFuente)) {
-                 fuentes.remove(fuente1);
-                 return true;
-             }
-         }*/
+    public boolean borrarFuente(UUID idFuente) {
+         fuentes.remove(idFuente);
          return false;
     }
 }

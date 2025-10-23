@@ -28,30 +28,17 @@ public class MainEstatica {
         // lectura archivo de configuraciones
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        //int puerto = Integer.parseInt(config.getProperty("puertoEstatico"));
         String fileServer = config.getProperty("fileServer");
         String urlAgregador = config.getProperty("urlAgregador");
 
-        //Limpiar guia
         Path carpeta = Paths.get(fileServer);
         String pathGuia = carpeta.resolve("guia.csv").toString();
 
         //limpiarGuia(pathGuia); descomentar solo si se quiere que se carguen nuevamente los hechos cada vez que se runee
 
-        //Inicio app de javalin
-        //System.out.println("Iniciando servidor Componente Estatico en el puerto "+ puerto);
-        //IniciadorApp iniciador = new IniciadorApp();
-        //Javalin app = iniciador.iniciarApp(puerto, "/");
-
-        //ConexionAlAgregador agregador = new ConexionAlAgregador();
-        //agregador.conectarse(TipoDeFuente.ESTATICA, config.getProperty("puertoEstatico"));
-
-        Fuente fuente = new Fuente(TipoDeFuente.DINAMICA, "");
+        Fuente fuente = new Fuente(TipoDeFuente.ESTATICA, "");
         ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorEstatica(new GetHechosEstaticoHandler(fileServer, fuente)));
         cliente.conectar(fuente);
-
-        //app.get("/hechos", new GetHechosEstaticoHandler(fileServer, fuente));
-        //app.get("/reprocesado/hechos/{nombre}", new GetReprocesadoHechosEstaticoHandler(fileServer, fuente));
     }
 
 

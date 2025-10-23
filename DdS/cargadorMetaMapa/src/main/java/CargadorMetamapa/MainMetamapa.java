@@ -1,7 +1,8 @@
 package CargadorMetamapa;
 
-import utils.Dominio.fuente.Fuente;
-import utils.Dominio.fuente.TipoDeFuente;
+import Agregador.fuente.Fuente;
+import Agregador.fuente.TipoDeFuente;
+import CargadorDinamica.Presentacion.GetSolicitudesEliminacionHandler;
 import CargadorMetamapa.Presentacion.GetHechosHandler;
 import CargadorMetamapa.Presentacion.PostFuentesHandler;
 import utils.Conexiones.Cargador;
@@ -11,7 +12,7 @@ import io.javalin.Javalin;
 import java.util.Properties;
 
 import utils.*;
-import CargadorMetamapa.ConexionAgregador.ControladorMetamapa;
+import utils.Controladores.ControladorMetamapa;
 
 
 public class MainMetamapa {
@@ -26,7 +27,7 @@ public class MainMetamapa {
         String urlMetamapa = config.getProperty("urlMetamapaExterna"); // URL de la otra instancia Metamapa
         String urlAgregador = config.getProperty("urlAgregador");
 
-        // 1. Inicialización del agregador.Cargador con la CONEXIÓN ESPECÍFICA
+        // 1. Inicialización del Cargador con la CONEXIÓN ESPECÍFICA
         Cargador cargadorMetamapa = new Cargador();
         cargadorMetamapa.agregarConexion(new MetamapaLoader(urlMetamapa));
 
@@ -37,13 +38,13 @@ public class MainMetamapa {
         Javalin app = iniciador.iniciarApp(puertoMetamapa, "/");
 
         // 3. Conexión al Agregador
-        Fuente fuente = new Fuente(TipoDeFuente.METAMAPA, "metamapa");
+        Fuente fuente = new Fuente(TipoDeFuente.METAMAPA, "");
         ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorMetamapa(new GetHechosHandler(cargadorMetamapa)));
         cliente.conectar(fuente);
 
 
 
-        // 4. Endpoints (usando el agregador.Cargador ESPECÍFICO)
+        // 4. Endpoints (usando el Cargador ESPECÍFICO)
         app.get("/hechos", new GetHechosHandler(cargadorMetamapa));
         app.post("/fuentes", new PostFuentesHandler(cargadorMetamapa));
     }

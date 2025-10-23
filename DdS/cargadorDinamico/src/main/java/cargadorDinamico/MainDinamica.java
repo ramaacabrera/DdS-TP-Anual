@@ -1,17 +1,27 @@
-package cargadorDinamico;
+package CargadorDinamica;
 
-import utils.Dominio.fuente.*;
-import cargadorDinamico.Presentacion.*;
+import Agregador.fuente.Fuente;
+import Agregador.fuente.TipoDeFuente;
+import CargadorDinamica.Presentacion.*;
+import CargadorEstatica.GetHechosEstaticoHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import utils.ClienteDelAgregador;
-import cargadorDinamico.ConexionAgregador.ControladorDinamica;
+import utils.ConexionAlAgregador;
+import utils.Controladores.ControladorDinamica;
+import utils.Controladores.ControladorEstatica;
+import utils.DTO.FuenteDTO;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Properties;
 
 public class MainDinamica {

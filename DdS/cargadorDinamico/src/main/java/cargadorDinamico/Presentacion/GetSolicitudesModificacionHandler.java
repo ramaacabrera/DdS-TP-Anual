@@ -3,6 +3,7 @@ package cargadorDinamico.Presentacion;
 import cargadorDinamico.DinamicoRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import utils.DTO.SolicitudDeEliminacionDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
 import java.util.List;
 
