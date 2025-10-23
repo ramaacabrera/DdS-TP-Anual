@@ -47,7 +47,7 @@ public class Agregador {
         scheduler.scheduleAtFixedRate(() -> {
             //this.actualizarHechosDesdeFuentes();
             conexionCargador.obtenerHechosNuevos();
-            this.agregarSolicitudes();
+            conexionCargador.obtenerSolicitudes();
             this.actualizarColecciones();
         //}, 0, 1, TimeUnit.HOURS);
         }, 5, 30, TimeUnit.SECONDS);
@@ -133,9 +133,9 @@ public class Agregador {
         return null;
     }
 
-    public void agregarSolicitudes() {
-        List<SolicitudDeModificacionDTO> solicitudesDeModificacion = conexionCargador.obtenerSolicitudes();
-        List<SolicitudDeEliminacionDTO>  solicitudesDeEliminacion = conexionCargador.obtenerSolicitudesEliminacion();
+    public void agregarSolicitudes(List<SolicitudDeModificacionDTO> solicitudesDeModificacion, List<SolicitudDeEliminacionDTO> solicitudesDeEliminacion) {
+        //List<SolicitudDeModificacionDTO> solicitudesDeModificacion = conexionCargador.obtenerSolicitudes();
+        //List<SolicitudDeEliminacionDTO>  solicitudesDeEliminacion = conexionCargador.obtenerSolicitudesEliminacion();
 
 
         for (SolicitudDeEliminacionDTO dto : solicitudesDeEliminacion) {

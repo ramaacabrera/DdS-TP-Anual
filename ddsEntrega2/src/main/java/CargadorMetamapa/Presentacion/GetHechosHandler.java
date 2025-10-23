@@ -18,13 +18,21 @@ public class GetHechosHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context context){
+//        List<FuenteExternaConexion> conexiones = cargador.getConexiones();
+        List<HechoDTO> hechos = this.obtenerHechos();
+////        for(FuenteExternaConexion conexion : conexiones) {
+////            hechos.addAll(conexion.obtenerHechos());
+////        }
+        context.json(hechos);
+        context.status(200);
+    }
+
+    public List<HechoDTO> obtenerHechos(){
         List<FuenteExternaConexion> conexiones = cargador.getConexiones();
         List<HechoDTO> hechos = new ArrayList<>();
         for(FuenteExternaConexion conexion : conexiones) {
             hechos.addAll(conexion.obtenerHechos());
         }
-        context.json(hechos);
-        context.status(200);
+        return hechos;
     }
-
 }
