@@ -1,6 +1,7 @@
 package Estadisticas.Dominio;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +18,8 @@ public class Estadisticas {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "estadisticas_id", updatable = false, nullable = false)
+    @Type(type = "uuid-char")
+    @Column(name = "estadisticas_id", length = 36,updatable = false, nullable = false)
     private UUID estadisticas_id;
     private Date estadisticas_fecha;
     private int estadisticas_spam;

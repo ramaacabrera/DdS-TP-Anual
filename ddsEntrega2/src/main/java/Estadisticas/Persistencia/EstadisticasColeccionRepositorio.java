@@ -54,10 +54,9 @@ public class EstadisticasColeccionRepositorio {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<String> query = em.createQuery(
-                    "SELECT e.estadisticasColeccion_provincia FROM EstadisticasColeccion e JOIN Estadisticas es on es.estadisticas_id = e.id.estadisticas_id " +
-                            "WHERE e.id.coleccion_id = :idColeccion AND es.estadisticas_fecha = " +
+                    "SELECT e.estadisticasColeccion_provincia FROM EstadisticasColeccion e " +
+                            "WHERE e.id.coleccion_id = :idColeccion AND e.estadisticas.estadisticas_fecha = " +
                             "( SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", String.class);
-
             query.setParameter("idColeccion", idColeccion);
 
             return Optional.of(query.getSingleResult());
