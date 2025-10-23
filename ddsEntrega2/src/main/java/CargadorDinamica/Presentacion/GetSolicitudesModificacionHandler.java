@@ -3,6 +3,7 @@ package CargadorDinamica.Presentacion;
 import CargadorDinamica.DinamicoRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import utils.DTO.SolicitudDeEliminacionDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
 import java.util.List;
 
@@ -14,10 +15,15 @@ public class GetSolicitudesModificacionHandler implements Handler{
 
     @Override
     public void handle(Context contexto){
-        List<SolicitudDeModificacionDTO> solicitudes = repositorio.buscarSolicitudesModificacion();
-        repositorio.resetearSolicitudesModificacion();
+        List<SolicitudDeModificacionDTO> solicitudes = this.obtenerSolicitudes();
+        //repositorio.resetearSolicitudesModificacion();
         contexto.json(solicitudes);
         contexto.status(200);
     }
 
+    public List<SolicitudDeModificacionDTO> obtenerSolicitudes(){
+        List<SolicitudDeModificacionDTO> solicitudes = repositorio.buscarSolicitudesModificacion();
+        repositorio.resetearSolicitudesEliminacion();
+        return solicitudes;
+    }
 }

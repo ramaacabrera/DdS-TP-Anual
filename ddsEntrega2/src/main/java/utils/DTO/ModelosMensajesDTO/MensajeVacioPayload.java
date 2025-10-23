@@ -1,4 +1,4 @@
 package utils.DTO.ModelosMensajesDTO;
 
-public class ObtenerHechosPayload {
+public class MensajeVacioPayload {
 }

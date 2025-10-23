@@ -3,10 +3,14 @@ package CargadorDinamica;
 import Agregador.fuente.Fuente;
 import Agregador.fuente.TipoDeFuente;
 import CargadorDinamica.Presentacion.*;
+import CargadorEstatica.GetHechosEstaticoHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
+import utils.ClienteDelAgregador;
 import utils.ConexionAlAgregador;
+import utils.Controladores.ControladorDinamica;
+import utils.Controladores.ControladorEstatica;
 import utils.DTO.FuenteDTO;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
@@ -26,19 +30,20 @@ public class MainDinamica {
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
         int puerto = Integer.parseInt(config.getProperty("puertoDinamico"));
+        String urlAgregador = config.getProperty("urlAgregador");
 
         System.out.println("Iniciando servidor Javalin en el puerto "+puerto);
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
-
-        ConexionAlAgregador agregador = new ConexionAlAgregador();
-        agregador.conectarse(TipoDeFuente.DINAMICA, config.getProperty("puertoDinamico"));
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("dinamico-PU");
         EntityManager emDinamico = emf.createEntityManager();
 
         DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio(emDinamico);
         Fuente fuente = new Fuente(TipoDeFuente.DINAMICA, "http://localhost:"+puerto);
+
+        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDinamica(new GetHechosDinamicoHandler(dinamicoRepositorio), new GetSolicitudesModificacionHandler(dinamicoRepositorio), new GetSolicitudesEliminacionHandler(dinamicoRepositorio)));
+        cliente.conectar(fuente);
 
         // Exposicion API mediante REST para el agregador
         app.get("/hechos", new GetHechosDinamicoHandler(dinamicoRepositorio));

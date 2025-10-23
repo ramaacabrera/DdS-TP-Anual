@@ -6,6 +6,7 @@ import io.javalin.http.Handler;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 public class DeleteFuenteHandler implements Handler {
     private final ConexionCargador conexionCargador;
@@ -14,7 +15,7 @@ public class DeleteFuenteHandler implements Handler {
 
     @Override
     public void handle(Context ctx) throws URISyntaxException, IOException, InterruptedException {
-        String handle = ctx.pathParam("id");
+        UUID handle = UUID.fromString(ctx.pathParam("id"));
 
         if(conexionCargador.borrarFuente(handle)){
             ctx.status(200).result("Colección borrada con éxito.");

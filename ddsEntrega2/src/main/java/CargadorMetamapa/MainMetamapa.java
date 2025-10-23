@@ -1,6 +1,8 @@
 package CargadorMetamapa;
 
+import Agregador.fuente.Fuente;
 import Agregador.fuente.TipoDeFuente;
+import CargadorDinamica.Presentacion.GetSolicitudesEliminacionHandler;
 import CargadorMetamapa.Presentacion.GetHechosHandler;
 import CargadorMetamapa.Presentacion.PostFuentesHandler;
 import utils.Conexiones.Cargador;
@@ -10,6 +12,7 @@ import io.javalin.Javalin;
 import java.util.Properties;
 
 import utils.*;
+import utils.Controladores.ControladorMetamapa;
 
 
 public class MainMetamapa {
@@ -22,6 +25,7 @@ public class MainMetamapa {
         // Asumiendo que has agregado estos puertos a tu config.properties
         int puertoMetamapa = Integer.parseInt(config.getProperty("puertoMetamapa"));
         String urlMetamapa = config.getProperty("urlMetamapaExterna"); // URL de la otra instancia Metamapa
+        String urlAgregador = config.getProperty("urlAgregador");
 
         // 1. Inicialización del Cargador con la CONEXIÓN ESPECÍFICA
         Cargador cargadorMetamapa = new Cargador();
@@ -34,9 +38,11 @@ public class MainMetamapa {
         Javalin app = iniciador.iniciarApp(puertoMetamapa, "/");
 
         // 3. Conexión al Agregador
-        ConexionAlAgregador agregador = new ConexionAlAgregador();
+        Fuente fuente = new Fuente(TipoDeFuente.METAMAPA, "");
+        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorMetamapa(new GetHechosHandler(cargadorMetamapa)));
+        cliente.conectar(fuente);
 
-        agregador.conectarse(TipoDeFuente.METAMAPA, config.getProperty("puertoMetamapa"));
+
 
         // 4. Endpoints (usando el Cargador ESPECÍFICO)
         app.get("/hechos", new GetHechosHandler(cargadorMetamapa));

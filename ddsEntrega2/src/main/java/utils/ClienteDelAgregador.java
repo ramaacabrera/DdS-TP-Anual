@@ -7,9 +7,7 @@ import okhttp3.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.Controladores.Controlador;
 import utils.DTO.*;
-import utils.DTO.ModelosMensajesDTO.HechosObtenidosPayload;
-import utils.DTO.ModelosMensajesDTO.IdCargadorPayload;
-import utils.DTO.ModelosMensajesDTO.WsMessage;
+import utils.DTO.ModelosMensajesDTO.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -65,8 +63,19 @@ public class ClienteDelAgregador {
 
                             webSocket.send(mapper.writeValueAsString(mensaje));
                         }
-                        case "obtenerSolicitudes" -> {
-                            controlador.obtenerSolicitudes();
+                        case "obtenerSolicitudesModificacion" -> {
+                            List<SolicitudDeModificacionDTO> solicitudes = controlador.obtenerSolicitudesModificacion();
+                            SolicitudesModificacionObtenidosPayload payload = new SolicitudesModificacionObtenidosPayload(solicitudes);
+                            WsMessage<SolicitudesModificacionObtenidosPayload> mensaje = new WsMessage<SolicitudesModificacionObtenidosPayload>("solicitudesModificacionObtenidos", payload);
+
+                            webSocket.send(mapper.writeValueAsString(mensaje));
+                        }
+                        case "obtenerSolicitudesEliminacion" -> {
+                            List<SolicitudDeEliminacionDTO> solicitudes = controlador.obtenerSolicitudesEliminacion();
+                            SolicitudesEliminacionObtenidosPayload payload = new SolicitudesEliminacionObtenidosPayload(solicitudes);
+                            WsMessage<SolicitudesEliminacionObtenidosPayload> mensaje = new WsMessage<SolicitudesEliminacionObtenidosPayload>("solicitudesEliminacionObtenidos", payload);
+
+                            webSocket.send(mapper.writeValueAsString(mensaje));
                         }
                         case "idCargador" -> {
                             IdCargadorPayload payload = mapper.treeToValue(root.get("payload"), IdCargadorPayload.class);

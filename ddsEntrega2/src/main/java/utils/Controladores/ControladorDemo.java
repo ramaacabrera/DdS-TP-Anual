@@ -1,6 +1,7 @@
 package utils.Controladores;
 
 import CargadorEstatica.GetHechosEstaticoHandler;
+import CargadorMetamapa.Presentacion.GetHechosHandler;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeEliminacionDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
@@ -8,10 +9,10 @@ import utils.DTO.SolicitudDeModificacionDTO;
 import java.util.List;
 import java.util.UUID;
 
-public class ControladorEstatica extends Controlador {
-    GetHechosEstaticoHandler handler;
+public class ControladorDemo extends Controlador {
+    GetHechosHandler handler;
 
-    public ControladorEstatica(GetHechosEstaticoHandler handlerNuevo) {
+    public ControladorDemo(GetHechosHandler handlerNuevo) {
         this.handler = handlerNuevo;
     }
 
@@ -22,7 +23,7 @@ public class ControladorEstatica extends Controlador {
 
     @Override
     public List<SolicitudDeModificacionDTO> obtenerSolicitudesModificacion() {
-        return null;
+        return List.of();
     }
 
 
