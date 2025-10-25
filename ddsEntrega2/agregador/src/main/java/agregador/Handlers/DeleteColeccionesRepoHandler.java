@@ -1,7 +1,7 @@
 package agregador.Handlers;
 
-import agregador.HechosYColecciones.Coleccion;
-import agregador.Persistencia.ColeccionRepositorio;
+import utils.Dominio.HechosYColecciones.Coleccion;
+import utils.Persistencia.ColeccionRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 

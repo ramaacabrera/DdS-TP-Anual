@@ -1,11 +1,11 @@
 package cargadorDinamico.Presentacion;
 
 import cargadorDinamico.DinamicoRepositorio;
-import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
+import cargadorDinamico.Dominio.HechosYColeccionesD.Hecho_D;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-import CargadorDinamica.DinamicaDto.Hecho_D_DTO;
+import cargadorDinamico.DinamicaDto.Hecho_D_DTO;
 
 public class PostHechosHandler implements Handler {
 

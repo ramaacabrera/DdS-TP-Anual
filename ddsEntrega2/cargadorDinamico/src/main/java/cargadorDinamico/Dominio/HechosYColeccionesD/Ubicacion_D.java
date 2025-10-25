@@ -1,4 +1,6 @@
-package CargadorDinamica.Dominio.HechosYColecciones;
+package cargadorDinamico.Dominio.HechosYColeccionesD;
+
+import utils.Dominio.HechosYColecciones.Ubicacion;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -46,7 +48,7 @@ public class Ubicacion_D {
         this.latitud = -999.0; // Valor por defecto o marcador para indicar que no hay Lat/Lon
         this.longitud = -999.0; // Valor por defecto o marcador
     }
-    public Ubicacion_D(Agregador.HechosYColecciones.Ubicacion ubicacionAgregador) {
+    public Ubicacion_D(Ubicacion ubicacionAgregador) {
         this.id_ubicacion = ubicacionAgregador.getId_ubicacion();
         this.latitud = ubicacionAgregador.getLatitud();
         this.longitud = ubicacionAgregador.getLongitud();

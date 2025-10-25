@@ -1,11 +1,11 @@
 package ApiAdministrativa.Presentacion;
 
-import ApiAdministrativa.Persistencia.ColeccionRepositorio;
+import utils.Persistencia.ColeccionRepositorio;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import ApiAdministrativa.HechosYColecciones.Coleccion;
+import utils.Dominio.HechosYColecciones.Coleccion;
 
 import java.io.IOException;
 import java.net.URI;

@@ -1,10 +1,10 @@
 package ApiAdministrativa.Presentacion;
 
-import ApiAdministrativa.Persistencia.ColeccionRepositorio;
+import utils.Persistencia.ColeccionRepositorio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import ApiAdministrativa.HechosYColecciones.TipoAlgoritmoConsenso;
+import utils.Dominio.HechosYColecciones.TipoAlgoritmoConsenso;
 
 import java.net.URI;
 import java.net.http.HttpClient;

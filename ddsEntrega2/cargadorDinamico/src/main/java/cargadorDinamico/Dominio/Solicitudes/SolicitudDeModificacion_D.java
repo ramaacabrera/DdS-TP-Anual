@@ -1,13 +1,12 @@
-package CargadorDinamica.Dominio.Solicitudes;
+package cargadorDinamico.Dominio.Solicitudes;
 
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 
-import CargadorDinamica.DinamicaDto.SolicitudModificacion_D_DTO;
-import CargadorDinamica.Dominio.Solicitudes.EstadoSolicitudModificacion_D;
-import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
-import CargadorDinamica.Dominio.Usuario.Usuario_D;
+import cargadorDinamico.Dominio.Solicitudes.EstadoSolicitudModificacion_D;
+import cargadorDinamico.Dominio.HechosYColeccionesD.Hecho_D;
+import cargadorDinamico.Dominio.Usuario.Usuario_D;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 

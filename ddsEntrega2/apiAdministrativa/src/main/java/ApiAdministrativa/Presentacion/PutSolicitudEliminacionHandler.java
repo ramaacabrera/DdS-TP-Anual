@@ -1,7 +1,6 @@
 package ApiAdministrativa.Presentacion;
 
-import ApiAdministrativa.Persistencia.ColeccionRepositorio;
-import ApiAdministrativa.Persistencia.SolicitudEliminacionRepositorio;
+import utils.Persistencia.SolicitudEliminacionRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 
@@ -33,21 +32,4 @@ public class PutSolicitudEliminacionHandler implements Handler{
 
         context.status(response.statusCode()).result(response.body());
     }
-
-    //    private SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
-//
-//    public PutSolicitudEliminacionHandler(SolicitudEliminacionRepositorio solicitudEliminacionRepositorioNuevo) {solicitudEliminacionRepositorio = solicitudEliminacionRepositorioNuevo;}
-//
-//    @Override
-//    public void handle(Context context) {
-//        String id = context.pathParam("id");
-//        String body = context.body();
-//        boolean resultado = solicitudEliminacionRepositorio.actualizarEstadoSolicitudEliminacion(body,id);
-//        if(resultado){
-//            context.status(200);
-//        } else {
-//            context.status(404);
-//        }
-//    }
-
 }

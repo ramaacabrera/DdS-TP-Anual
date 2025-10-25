@@ -2,22 +2,24 @@ package cargadorDinamico;
 
 import cargadorDinamico.Dominio.Solicitudes.EstadoSolicitudEliminacion_D;
 import cargadorDinamico.Dominio.Solicitudes.EstadoSolicitudModificacion_D;
-import cargadorDinamico.Dominio.Usuario.RolUsuario;
-import cargadorDinamico.Dominio.Usuario.Usuario;
-import cargadorDinamico.Dominio.fuente.Fuente;
-import cargadorDinamico.Dominio.fuente.TipoDeFuente;
-import cargadorDinamico.Dominio.HechoModificado;
+import utils.Dominio.Usuario.RolUsuario;
+import cargadorDinamico.Dominio.Usuario.Usuario_D;
+import utils.Dominio.Solicitudes.EstadoSolicitudEliminacion;
+import utils.Dominio.Solicitudes.EstadoSolicitudModificacion;
+import utils.Dominio.fuente.Fuente;
+import utils.Dominio.fuente.TipoDeFuente;
 import cargadorDinamico.Dominio.HechosYColeccionesD.*;
+import utils.Dominio.HechosYColecciones.EstadoHecho;
+import utils.Dominio.HechosYColecciones.*;
 
-import CargadorDinamica.Dominio.Solicitudes.EstadoSolicitudEliminacion_D;
-import CargadorDinamica.Dominio.Solicitudes.EstadoSolicitudModificacion_D;
-import CargadorDinamica.Dominio.Solicitudes.SolicitudDeEliminacion_D;
-import CargadorDinamica.Dominio.Solicitudes.SolicitudDeModificacion_D;
 
-import CargadorDinamica.Dominio.Usuario.Usuario_D;
+import cargadorDinamico.Dominio.Solicitudes.SolicitudDeEliminacion_D;
+import cargadorDinamico.Dominio.Solicitudes.SolicitudDeModificacion_D;
+
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
 import utils.DTO.SolicitudDeEliminacionDTO;
+import utils.Dominio.Usuario.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -163,7 +165,7 @@ public class DinamicoRepositorio {
         if (contenidoD == null) return null;
 
         // Convertir el enum del dinámico al enum del agregador
-        Agregador.HechosYColecciones.TipoContenidoMultimedia tipoConvertido =
+        TipoContenidoMultimedia tipoConvertido =
                 convertirTipoContenido(contenidoD.getTipoContenido());
 
         ContenidoMultimedia contenido = new ContenidoMultimedia(
@@ -174,14 +176,14 @@ public class DinamicoRepositorio {
         return contenido;
     }
 
-    private Agregador.HechosYColecciones.TipoContenidoMultimedia convertirTipoContenido(
-            CargadorDinamica.Dominio.HechosYColecciones.TipoContenidoMultimedia_D tipoD) {
+    private TipoContenidoMultimedia convertirTipoContenido(
+            TipoContenidoMultimedia_D tipoD) {
 
         // Mapeo manual entre los enums
         switch (tipoD) {
-            case IMAGEN: return Agregador.HechosYColecciones.TipoContenidoMultimedia.IMAGEN;
-            case VIDEO: return Agregador.HechosYColecciones.TipoContenidoMultimedia.VIDEO;
-            case AUDIO: return Agregador.HechosYColecciones.TipoContenidoMultimedia.AUDIO;
+            case IMAGEN: return TipoContenidoMultimedia.IMAGEN;
+            case VIDEO: return TipoContenidoMultimedia.VIDEO;
+            case AUDIO: return TipoContenidoMultimedia.AUDIO;
         }
     return null;
     }
@@ -352,16 +354,15 @@ public class DinamicoRepositorio {
         return EstadoSolicitudModificacion.valueOf(estadoD.name());
     }
 
-    private Hecho convertirHechoEntidadAHecho(Hecho_D entidad) {
+    private HechoDTO convertirHechoEntidadAHecho(Hecho_D entidad) {
         if (entidad == null) return null;
 
-        Hecho hecho = new Hecho();
+        HechoDTO hecho = new HechoDTO();
         hecho.setTitulo(entidad.getTitulo());
         hecho.setDescripcion(entidad.getDescripcion());
         hecho.setCategoria(entidad.getCategoria());
         hecho.setUbicacion(convertirUbicacion(entidad.getUbicacion()));
         hecho.setFechaDeAcontecimiento(entidad.getFechaDeAcontecimiento());
-        hecho.setFechaDeCarga(entidad.getFechaDeCarga());
         hecho.setFuente(crearFuenteDinamica());
         hecho.setEstadoHecho(convertirEstado(entidad.getEstadoHecho()));
         hecho.setContribuyente(convertirUsuario(entidad.getContribuyente()));

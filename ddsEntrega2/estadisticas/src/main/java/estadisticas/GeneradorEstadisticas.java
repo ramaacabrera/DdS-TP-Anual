@@ -1,6 +1,6 @@
 package estadisticas;
 
-import Estadisticas.Dominio.*;
+import estadisticas.Dominio.*;
 import estadisticas.agregador.ConexionAgregador;
 import estadisticas.agregador.EstadisticasCategoriaRepositorio;
 import estadisticas.agregador.EstadisticasColeccionRepositorio;

@@ -1,4 +1,4 @@
-package CargadorDinamica.Dominio.HechosYColecciones;
+package cargadorDinamico.Dominio.HechosYColeccionesD;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;

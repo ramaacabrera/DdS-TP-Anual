@@ -1,7 +1,7 @@
-package CargadorDinamica.Dominio.HechosYColecciones;
+package cargadorDinamico.Dominio.HechosYColeccionesD;
 
-import CargadorDinamica.DinamicaDto.Hecho_D_DTO;
-import CargadorDinamica.Dominio.Usuario.Usuario_D;
+import cargadorDinamico.DinamicaDto.Hecho_D_DTO;
+import cargadorDinamico.Dominio.Usuario.Usuario_D;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 

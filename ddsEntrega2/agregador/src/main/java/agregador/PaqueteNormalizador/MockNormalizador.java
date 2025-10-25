@@ -1,5 +1,5 @@
 package agregador.PaqueteNormalizador;
-import agregador.HechosYColecciones.Hecho;
+import utils.Dominio.HechosYColecciones.Hecho;
 
 public class MockNormalizador {
 

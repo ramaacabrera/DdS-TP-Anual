@@ -2,8 +2,6 @@ package estadisticas.Dominio;
 
 import javax.persistence.*;
 
-import java.sql.Time;
-import java.time.LocalTime;
 
 @Entity
 public class EstadisticasCategoria {

@@ -2,7 +2,7 @@ package ApiAdministrativa.Presentacion;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import ApiAdministrativa.Persistencia.ColeccionRepositorio;
+import utils.Persistencia.ColeccionRepositorio;
 
 import java.io.IOException;
 import java.net.URI;

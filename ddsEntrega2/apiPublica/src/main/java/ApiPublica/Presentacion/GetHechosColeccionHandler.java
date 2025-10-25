@@ -3,15 +3,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
 import io.javalin.http.Context;
-import Agregador.Criterios.Criterio;
-import Agregador.Criterios.CriterioCategoria;
-import Agregador.Criterios.CriterioFecha;
-import Agregador.Criterios.CriterioUbicacion;
-import Agregador.HechosYColecciones.ModosDeNavegacion;
-import Agregador.HechosYColecciones.Ubicacion;
+import utils.Dominio.HechosYColecciones.Ubicacion;
+import utils.Dominio.Criterios.Criterio;
+import utils.Dominio.Criterios.CriterioCategoria;
+import utils.Dominio.Criterios.CriterioFecha;
+import utils.Dominio.Criterios.CriterioUbicacion;
+import utils.Dominio.HechosYColecciones.ModosDeNavegacion;
 import org.jetbrains.annotations.NotNull;
-import Agregador.HechosYColecciones.Coleccion;
-import Agregador.HechosYColecciones.Hecho;
+import utils.Dominio.HechosYColecciones.Coleccion;
+import utils.Dominio.HechosYColecciones.Hecho;
 
 
 import java.net.URI;

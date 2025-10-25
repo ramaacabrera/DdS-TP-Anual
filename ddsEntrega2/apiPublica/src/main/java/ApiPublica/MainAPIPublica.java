@@ -4,7 +4,7 @@ import io.javalin.Javalin;
 import ApiPublica.Presentacion.*;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
-import Agregador.Persistencia.*;
+import utils.Persistencia.*;
 
 import java.util.Properties;
 

@@ -1,11 +1,8 @@
 package utils.DTO;
 
-import utils.DTO.HechosYColecciones.ContenidoMultimedia;
-import utils.DTO.Usuario.Usuario;
-import utils.DTO.HechosYColecciones.EstadoHecho;
-import utils.DTO.HechosYColecciones.Etiqueta;
-import utils.DTO.HechosYColecciones.Ubicacion;
-import utils.DTO.fuente.Fuente;
+import utils.Dominio.HechosYColecciones.*;
+import utils.Dominio.Usuario.Usuario;
+import utils.Dominio.fuente.Fuente;
 
 import java.util.Date;
 import java.util.List;
@@ -41,6 +38,21 @@ public class HechoDTO {
         this.etiquetas = etiquetas;
         this.esEditable = esEditable;
         this.contenidoMultimedia = contenidoMultimedia;
+    }
+
+    public HechoDTO(Hecho hecho){
+        this.titulo = hecho.getTitulo();
+        this.descripcion = hecho.getDescripcion();
+        this.categoria = hecho.getCategoria();
+        this.ubicacion = hecho.getUbicacion();
+        this.fechaDeAcontecimiento = hecho.getFechaDeAcontecimiento();
+        this.fechaDeCarga = hecho.getFechaDeCarga();
+        this.fuente = hecho.getFuente();
+        this.estadoHecho = hecho.getEstadoHecho();
+        this.contribuyente = hecho.getContribuyente();
+        this.etiquetas = hecho.getEtiquetas();
+        this.esEditable = hecho.esEditable();
+        this.contenidoMultimedia = hecho.getContenidoMultimedia();
     }
 
     public String getTitulo() { return titulo;}

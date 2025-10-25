@@ -1,21 +1,21 @@
 package utils.DTO;
 
 
-import java.util.UUID;
+import utils.Dominio.Usuario.Usuario;
 
 public class SolicitudDTO {
     //private UUID id;
-    private UUID hechoAsociado;
+    private HechoDTO hechoAsociado;
     private String justificacion;
-    private UUID usuario;
+    private Usuario usuario;
 
     public SolicitudDTO() {}
 
 
-    public void setHechoAsociado(UUID hechoAsociado) {
+    public void setHechoAsociado(HechoDTO hechoAsociado) {
         this.hechoAsociado = hechoAsociado;
     }
-    public void setusuario(UUID id_usuario) {this.usuario = id_usuario;}
+    public void setusuario(Usuario id_usuario) {this.usuario = id_usuario;}
     public void setJustificacion(String justificacion) {
         this.justificacion = justificacion;
     }
@@ -23,8 +23,8 @@ public class SolicitudDTO {
     public String getJustificacion() {
         return justificacion;
     }
-    public UUID getHechoAsociado() {return hechoAsociado;}
-    public UUID getUsuario() {return usuario; }
+    public HechoDTO getHechoAsociado() {return hechoAsociado;}
+    public Usuario getUsuario() {return usuario; }
 
 
 }

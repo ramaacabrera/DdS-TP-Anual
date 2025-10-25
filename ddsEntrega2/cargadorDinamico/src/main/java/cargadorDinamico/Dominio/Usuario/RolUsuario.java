@@ -1,4 +1,4 @@
-package CargadorDinamica.Dominio.Usuario;
+package cargadorDinamico.Dominio.Usuario;
 
 public enum RolUsuario {
     CONTRIBUYENTE, ADMINISTRADOR

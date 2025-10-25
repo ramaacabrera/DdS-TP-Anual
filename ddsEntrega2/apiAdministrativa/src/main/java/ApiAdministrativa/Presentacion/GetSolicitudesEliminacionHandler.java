@@ -1,7 +1,7 @@
 package ApiAdministrativa.Presentacion;
 
-import ApiAdministrativa.Persistencia.SolicitudEliminacionRepositorio;
-import ApiAdministrativa.Solicitudes.SolicitudDeEliminacion;
+import utils.Persistencia.SolicitudEliminacionRepositorio;
+import utils.Dominio.Solicitudes.SolicitudDeEliminacion;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
