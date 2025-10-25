@@ -4,7 +4,7 @@ import estadisticas.agregador.ConexionAgregador;
 import estadisticas.agregador.EstadisticasCategoriaRepositorio;
 import estadisticas.agregador.EstadisticasColeccionRepositorio;
 import estadisticas.agregador.EstadisticasRepositorio;
-import Estadisticas.Presentacion.*;
+import estadisticas.Presentacion.*;
 import io.javalin.Javalin;
 import utils.IniciadorApp;
 import utils.LecturaConfig;

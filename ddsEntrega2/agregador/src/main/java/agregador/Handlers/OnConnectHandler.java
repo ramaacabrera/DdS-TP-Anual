@@ -1,8 +1,8 @@
 package agregador.Handlers;
 
 import agregador.Cargador.ConexionCargador;
-import agregador.Persistencia.FuenteRepositorio;
-import agregador.fuente.Fuente;
+import utils.Persistencia.FuenteRepositorio;
+import utils.Dominio.fuente.Fuente;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.websocket.WsConnectContext;
 import io.javalin.websocket.WsConnectHandler;

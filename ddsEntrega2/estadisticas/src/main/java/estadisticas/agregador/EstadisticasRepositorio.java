@@ -1,6 +1,5 @@
 package estadisticas.agregador;
 
-import Agregador.HechosYColecciones.Coleccion;
 import estadisticas.Dominio.Estadisticas;
 import utils.BDUtils;
 

@@ -1,7 +1,7 @@
-package CargadorDinamica.DinamicaDto;
+package cargadorDinamico.DinamicaDto;
 
-import CargadorDinamica.Dominio.Usuario.Usuario_D;
-import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
+import cargadorDinamico.Dominio.Usuario.Usuario_D;
+import cargadorDinamico.Dominio.HechosYColeccionesD.Hecho_D;
 import java.util.UUID;
 
 public class SolicitudEliminacion_D_DTO {

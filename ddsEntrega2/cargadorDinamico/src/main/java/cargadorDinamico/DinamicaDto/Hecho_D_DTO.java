@@ -1,9 +1,9 @@
-package CargadorDinamica.DinamicaDto;
+package cargadorDinamico.DinamicaDto;
 
-import CargadorDinamica.Dominio.HechosYColecciones.ContenidoMultimedia_D;
-import CargadorDinamica.Dominio.HechosYColecciones.Etiqueta_D;
-import CargadorDinamica.Dominio.HechosYColecciones.Ubicacion_D;
-import CargadorDinamica.Dominio.Usuario.Usuario_D;
+import cargadorDinamico.Dominio.HechosYColeccionesD.ContenidoMultimedia_D;
+import cargadorDinamico.Dominio.HechosYColeccionesD.Etiqueta_D;
+import cargadorDinamico.Dominio.HechosYColeccionesD.Ubicacion_D;
+import cargadorDinamico.Dominio.Usuario.Usuario_D;
 
 import java.util.Date;
 import java.util.List;

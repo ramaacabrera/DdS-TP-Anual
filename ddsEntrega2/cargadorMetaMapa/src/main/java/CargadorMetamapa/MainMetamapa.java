@@ -1,7 +1,7 @@
 package CargadorMetamapa;
 
-import Agregador.fuente.Fuente;
-import Agregador.fuente.TipoDeFuente;
+import utils.Dominio.fuente.Fuente;
+import utils.Dominio.fuente.TipoDeFuente;
 import CargadorMetamapa.Presentacion.GetHechosHandler;
 import CargadorMetamapa.Presentacion.PostFuentesHandler;
 import utils.Conexiones.Cargador;
@@ -11,7 +11,7 @@ import io.javalin.Javalin;
 import java.util.Properties;
 
 import utils.*;
-import utils.Controladores.ControladorMetamapa;
+import CargadorMetamapa.ConexionAgregador.ControladorMetamapa;
 
 
 public class MainMetamapa {

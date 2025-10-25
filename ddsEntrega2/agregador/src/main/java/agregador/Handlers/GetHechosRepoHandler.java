@@ -1,7 +1,7 @@
 package agregador.Handlers;
 
-import agregador.HechosYColecciones.Hecho;
-import agregador.Persistencia.HechoRepositorio;
+import utils.Dominio.HechosYColecciones.Hecho;
+import utils.Persistencia.HechoRepositorio;
 import org.jetbrains.annotations.NotNull;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;

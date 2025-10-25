@@ -1,12 +1,11 @@
 package cargadorDinamico;
 
-import cargadorDinamico.Dominio.fuente.Fuente;
-import cargadorDinamico.Dominio.fuente.TipoDeFuente;
+import utils.Dominio.fuente.*;
 import cargadorDinamico.Presentacion.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javalin.Javalin;
 import utils.ClienteDelAgregador;
-import utils.Controladores.ControladorDinamica;
+import cargadorDinamico.ConexionAgregador.ControladorDinamica;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
 

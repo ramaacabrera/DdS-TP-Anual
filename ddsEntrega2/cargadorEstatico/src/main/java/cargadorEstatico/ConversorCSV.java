@@ -1,10 +1,10 @@
 package cargadorEstatico;
 
-import Agregador.HechosYColecciones.Etiqueta;
+import utils.Dominio.HechosYColecciones.Etiqueta;
 import org.apache.commons.csv.CSVRecord;
 import utils.DTO.HechoDTO;
-import Agregador.HechosYColecciones.EstadoHecho;
-import Agregador.HechosYColecciones.Ubicacion;
+import utils.Dominio.HechosYColecciones.EstadoHecho;
+import utils.Dominio.HechosYColecciones.Ubicacion;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

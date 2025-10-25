@@ -1,10 +1,10 @@
 package agregador;
 
+import utils.Persistencia.*;
 import agregador.PaqueteNormalizador.MockNormalizador;
 import agregador.PaqueteAgregador.Agregador;
 import agregador.Cargador.ConexionCargador;
 import agregador.Handlers.*;
-import agregador.Persistencia.*;
 import io.javalin.Javalin;
 import utils.IniciadorApp;
 import utils.LecturaConfig;

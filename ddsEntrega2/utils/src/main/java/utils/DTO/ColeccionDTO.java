@@ -1,8 +1,8 @@
 package utils.DTO;
 
-import utils.DTO.Criterios.Criterio;
-import utils.DTO.HechosYColecciones.TipoAlgoritmoConsenso;
-import utils.DTO.fuente.Fuente;
+import utils.Dominio.Criterios.Criterio;
+import utils.Dominio.HechosYColecciones.TipoAlgoritmoConsenso;
+import utils.Dominio.fuente.Fuente;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,9 +3,7 @@ package ApiAdministrativa.Presentacion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import ApiAdministrativa.HechosYColecciones.Coleccion;
-import ApiAdministrativa.Persistencia.ColeccionRepositorio;
-import ApiAdministrativa.Criterios.Criterio;
+import utils.Persistencia.ColeccionRepositorio;
 
 import java.net.URI;
 import java.net.http.HttpClient;

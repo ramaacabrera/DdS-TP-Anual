@@ -1,6 +1,6 @@
 package cargadorDinamico.Dominio.fuente;
 
-import agregador.fuente.TipoDeFuente;
+import utils.Dominio.fuente.TipoDeFuente;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import utils.DTO.FuenteDTO;

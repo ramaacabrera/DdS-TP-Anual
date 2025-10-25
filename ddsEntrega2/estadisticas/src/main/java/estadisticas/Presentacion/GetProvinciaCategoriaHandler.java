@@ -1,6 +1,5 @@
 package estadisticas.Presentacion;
 
-import Agregador.HechosYColecciones.Coleccion;
 import estadisticas.agregador.EstadisticasCategoriaRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;

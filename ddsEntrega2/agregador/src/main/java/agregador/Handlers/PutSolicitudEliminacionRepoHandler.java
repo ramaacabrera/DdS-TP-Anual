@@ -1,6 +1,6 @@
 package agregador.Handlers;
 
-import agregador.Persistencia.SolicitudEliminacionRepositorio;
+import utils.Persistencia.SolicitudEliminacionRepositorio;
 import io.javalin.http.Handler;
 import io.javalin.http.Context;
 import java.util.UUID;

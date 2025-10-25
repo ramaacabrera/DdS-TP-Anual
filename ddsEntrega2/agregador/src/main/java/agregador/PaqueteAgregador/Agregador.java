@@ -2,17 +2,17 @@ package agregador.PaqueteAgregador;
 
 import agregador.Cargador.ConexionCargador;
 import agregador.PaqueteNormalizador.MockNormalizador;
-import Agregador.Persistencia.*;
-import agregador.fuente.Fuente;
-import agregador.Persistencia.ColeccionRepositorio;
-import agregador.Persistencia.HechoRepositorio;
-import agregador.Persistencia.SolicitudEliminacionRepositorio;
-import agregador.Persistencia.SolicitudModificacionRepositorio;
-import agregador.Solicitudes.SolicitudDeEliminacion;
-import agregador.Solicitudes.SolicitudDeModificacion;
+import utils.Persistencia.*;
+import utils.Dominio.fuente.Fuente;
+import utils.Persistencia.ColeccionRepositorio;
+import utils.Persistencia.HechoRepositorio;
+import utils.Persistencia.SolicitudEliminacionRepositorio;
+import utils.Persistencia.SolicitudModificacionRepositorio;
+import utils.Dominio.Solicitudes.SolicitudDeEliminacion;
+import utils.Dominio.Solicitudes.SolicitudDeModificacion;
 import utils.DTO.*;
-import agregador.HechosYColecciones.Coleccion;
-import agregador.HechosYColecciones.Hecho;
+import utils.Dominio.HechosYColecciones.Coleccion;
+import utils.Dominio.HechosYColecciones.Hecho;
 
 import java.util.List;
 import java.util.concurrent.Executors;

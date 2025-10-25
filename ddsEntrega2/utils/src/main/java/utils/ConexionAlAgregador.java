@@ -1,6 +1,6 @@
 package utils;
 
-import utils.DTO.HechosYColecciones.TipoDeFuente;
+import utils.Dominio.fuente.TipoDeFuente;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.DTO.FuenteDTO;

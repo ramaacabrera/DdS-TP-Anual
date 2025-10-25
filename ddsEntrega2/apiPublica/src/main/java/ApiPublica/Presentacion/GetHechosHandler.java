@@ -1,23 +1,22 @@
 package ApiPublica.Presentacion;
 
-import Agregador.Persistencia.HechoRepositorio;
-import Agregador.Persistencia.SolicitudEliminacionRepositorio;
+import utils.Persistencia.HechoRepositorio;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import Agregador.Criterios.Criterio;
-import Agregador.Criterios.CriterioCategoria;
-import Agregador.Criterios.CriterioFecha;
-import Agregador.Criterios.CriterioUbicacion;
-import Agregador.HechosYColecciones.Hecho;
-import Agregador.HechosYColecciones.Ubicacion;
+import utils.Dominio.Criterios.Criterio;
+import utils.Dominio.Criterios.CriterioCategoria;
+import utils.Dominio.Criterios.CriterioFecha;
+import utils.Dominio.Criterios.CriterioUbicacion;
+import utils.Dominio.HechosYColecciones.Hecho;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import utils.Dominio.HechosYColecciones.Ubicacion;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;

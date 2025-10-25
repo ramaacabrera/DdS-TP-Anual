@@ -1,4 +1,4 @@
-package CargadorDinamica.Dominio.HechosYColecciones;
+package cargadorDinamico.Dominio.HechosYColeccionesD;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;

@@ -1,8 +1,8 @@
-package CargadorDinamica.Dominio.Solicitudes;
+package cargadorDinamico.Dominio.Solicitudes;
 
-import CargadorDinamica.DinamicaDto.SolicitudEliminacion_D_DTO;;
-import CargadorDinamica.Dominio.Usuario.Usuario_D;
-import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
+import cargadorDinamico.DinamicaDto.SolicitudEliminacion_D_DTO;;
+import cargadorDinamico.Dominio.Usuario.Usuario_D;
+import cargadorDinamico.Dominio.HechosYColeccionesD.Hecho_D;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 

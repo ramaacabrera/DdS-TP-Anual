@@ -1,7 +1,7 @@
 package ApiAdministrativa.Presentacion;
 
 import ApiAdministrativa.fuente.Fuente;
-import ApiAdministrativa.Persistencia.ColeccionRepositorio;
+import utils.Persistencia.ColeccionRepositorio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;

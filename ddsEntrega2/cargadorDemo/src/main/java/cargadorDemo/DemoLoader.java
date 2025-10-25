@@ -1,18 +1,18 @@
 package cargadorDemo;
 
-import Agregador.HechosYColecciones.Etiqueta;
+import utils.Dominio.HechosYColecciones.Etiqueta;
 import utils.Conexiones.FuenteExternaConexion;
 import utils.DTO.HechoDTO;
-import Agregador.HechosYColecciones.ContenidoMultimedia;
-import Agregador.HechosYColecciones.EstadoHecho;
-import Agregador.HechosYColecciones.Ubicacion;
+import utils.Dominio.HechosYColecciones.ContenidoMultimedia;
+import utils.Dominio.HechosYColecciones.EstadoHecho;
+import utils.Dominio.HechosYColecciones.Ubicacion;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.core.type.TypeReference;
-import CargadorDemo.APIMock.HechoMock;
+import cargadorDemo.APIMock.HechoMock;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

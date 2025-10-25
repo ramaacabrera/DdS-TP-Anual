@@ -1,7 +1,6 @@
-package CargadorDinamica.Dominio.Usuario;
+package cargadorDinamico.Dominio.Usuario;
 
-import Agregador.HechosYColecciones.Hecho;
-import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
+import cargadorDinamico.Dominio.HechosYColeccionesD.Hecho_D;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
 import ApiAdministrativa.Persistencia.ColeccionRepositorio;
 import io.javalin.http.Context;
-import ApiAdministrativa.fuente.Fuente;
+import utils.Dominio.fuente.Fuente;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;

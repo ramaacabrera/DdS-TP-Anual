@@ -1,6 +1,6 @@
 package utils.DTO;
 
-import utils.DTO.HechosYColecciones.TipoDeFuente;
+import utils.Dominio.fuente.TipoDeFuente;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

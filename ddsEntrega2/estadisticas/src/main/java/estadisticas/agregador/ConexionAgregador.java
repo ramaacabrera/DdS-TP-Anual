@@ -1,6 +1,5 @@
 package estadisticas.agregador;
 
-import Agregador.HechosYColecciones.Hecho;
 import utils.BDUtils;
 
 import javax.persistence.TypedQuery;

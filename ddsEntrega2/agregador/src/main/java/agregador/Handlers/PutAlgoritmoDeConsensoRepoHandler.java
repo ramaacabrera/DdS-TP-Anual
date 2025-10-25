@@ -1,8 +1,8 @@
 package agregador.Handlers;
 
-import agregador.HechosYColecciones.Coleccion;
-import agregador.HechosYColecciones.TipoAlgoritmoConsenso;
-import agregador.Persistencia.ColeccionRepositorio;
+import utils.Dominio.HechosYColecciones.Coleccion;
+import utils.Dominio.HechosYColecciones.TipoAlgoritmoConsenso;
+import utils.Persistencia.ColeccionRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 
