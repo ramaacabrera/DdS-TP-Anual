@@ -4,23 +4,23 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
     <persistence-unit name="agregador-PU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>Agregador.HechosYColecciones.Hecho</class>
-        <class>Agregador.HechosYColecciones.Ubicacion</class>
-        <class>Agregador.HechosYColecciones.Coleccion</class>
-        <class>Agregador.HechosYColecciones.ContenidoMultimedia</class>
-        <class>Agregador.HechosYColecciones.HechoModificado</class>
-        <class>Agregador.HechosYColecciones.Etiqueta</class>
-        <class>Agregador.fuente.Fuente</class>
-        <class>Agregador.Usuario.Usuario</class>
-        <class>Agregador.Criterios.CriterioCategoria</class>
-        <class>Agregador.Criterios.CriterioContribuyente</class>
-        <class>Agregador.Criterios.CriterioDeTexto</class>
-        <class>Agregador.Criterios.CriterioEtiquetas</class>
-        <class>Agregador.Criterios.CriterioFecha</class>
-        <class>Agregador.Criterios.CriterioTipoFuente</class>
-        <class>Agregador.Criterios.CriterioTipoMultimedia</class>
-        <class>Agregador.Criterios.CriterioUbicacion</class>
-        <class>Agregador.Solicitudes.Solicitud</class>
+        <class>Agregador.agregador.HechosYColecciones.Hecho</class>
+        <class>Agregador.agregador.HechosYColecciones.Ubicacion</class>
+        <class>Agregador.agregador.HechosYColecciones.Coleccion</class>
+        <class>Agregador.agregador.HechosYColecciones.ContenidoMultimedia</class>
+        <class>Agregador.agregador.HechosYColecciones.HechoModificado</class>
+        <class>Agregador.agregador.HechosYColecciones.Etiqueta</class>
+        <class>Agregador.agregador.fuente.Fuente</class>
+        <class>Agregador.agregador.Usuario.agregador.Usuario</class>
+        <class>Agregador.agregador.Criterios.CriterioCategoria</class>
+        <class>Agregador.agregador.Criterios.CriterioContribuyente</class>
+        <class>Agregador.agregador.Criterios.CriterioDeTexto</class>
+        <class>Agregador.agregador.Criterios.CriterioEtiquetas</class>
+        <class>Agregador.agregador.Criterios.CriterioFecha</class>
+        <class>Agregador.agregador.Criterios.CriterioTipoFuente</class>
+        <class>Agregador.agregador.Criterios.CriterioTipoMultimedia</class>
+        <class>Agregador.agregador.Criterios.CriterioUbicacion</class>
+        <class>Agregador.agregador.Solicitudes.Solicitud</class>
         <properties>
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/agregador_db?serverTimezone=America/Buenos_Aires"/>
@@ -37,13 +37,13 @@
 
     <persistence-unit name="dinamico-PU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>CargadorDinamica.Dominio.Usuario.Usuario_D</class>
-        <class>CargadorDinamica.Dominio.Solicitudes.SolicitudDeEliminacion_D</class>
-        <class>CargadorDinamica.Dominio.Solicitudes.SolicitudDeModificacion_D</class>
-        <class>CargadorDinamica.Dominio.HechosYColecciones.Hecho_D</class>
-        <class>CargadorDinamica.Dominio.HechosYColecciones.Etiqueta_D</class>
-        <class>CargadorDinamica.Dominio.HechosYColecciones.Ubicacion_D</class>
-        <class>CargadorDinamica.Dominio.HechosYColecciones.ContenidoMultimedia_D</class>
+        <class>CargadorDinamica.cargadorDinamico.Dominio.agregador.Usuario.Usuario_D</class>
+        <class>CargadorDinamica.cargadorDinamico.Dominio.agregador.Solicitudes.SolicitudDeEliminacion_D</class>
+        <class>CargadorDinamica.cargadorDinamico.Dominio.agregador.Solicitudes.SolicitudDeModificacion_D</class>
+        <class>CargadorDinamica.cargadorDinamico.Dominio.agregador.HechosYColecciones.Hecho_D</class>
+        <class>CargadorDinamica.cargadorDinamico.Dominio.agregador.HechosYColecciones.Etiqueta_D</class>
+        <class>CargadorDinamica.cargadorDinamico.Dominio.agregador.HechosYColecciones.Ubicacion_D</class>
+        <class>CargadorDinamica.cargadorDinamico.Dominio.agregador.HechosYColecciones.ContenidoMultimedia_D</class>
 
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/dinamico_db?serverTimezone=America/Buenos_Aires"/>
@@ -60,11 +60,11 @@
     </persistence-unit>
     <persistence-unit name="estadisticas-PU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>Estadisticas.Dominio.Estadisticas</class>
-        <class>Estadisticas.Dominio.EstadisticasCategoria</class>
-        <class>Estadisticas.Dominio.EstadisticasCategoriaId</class>
-        <class>Estadisticas.Dominio.EstadisticasColeccion</class>
-        <class>Estadisticas.Dominio.EstadisticasColeccionId</class>
+        <class>Estadisticas.cargadorDinamico.Dominio.Estadisticas</class>
+        <class>Estadisticas.cargadorDinamico.Dominio.EstadisticasCategoria</class>
+        <class>Estadisticas.cargadorDinamico.Dominio.EstadisticasCategoriaId</class>
+        <class>Estadisticas.cargadorDinamico.Dominio.EstadisticasColeccion</class>
+        <class>Estadisticas.cargadorDinamico.Dominio.EstadisticasColeccionId</class>
         <properties>
             <property name="hibernate.archive.autodetection" value="none"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
