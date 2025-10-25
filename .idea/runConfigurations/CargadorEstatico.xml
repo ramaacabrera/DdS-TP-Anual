@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="CargadorEstatico" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="CargadorEstatica.MainEstatica" />
-    <module name="pruebaclase1" />
+    <option name="MAIN_CLASS_NAME" value="cargadorEstatico.MainEstatica" />
+    <module name="cargador-estatico" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
