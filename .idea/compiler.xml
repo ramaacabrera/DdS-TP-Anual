@@ -8,9 +8,9 @@
         <outputRelativeToContentRoot value="true" />
         <module name="estadisticas" />
         <module name="agregador" />
-        <module name="web" />
         <module name="cargador-metamapa" />
         <module name="utils" />
+        <module name="pruebaclase1" />
         <module name="cargador-estatico" />
         <module name="api-admin" />
         <module name="api-publica" />
@@ -18,14 +18,10 @@
         <module name="cargador-demo" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="MetaMapa" target="17" />
-      <module name="tpa-2025" target="17" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="MetaMapa" options="" />
+      <module name="pruebaclase1" options="" />
     </option>
   </component>
 </project>
