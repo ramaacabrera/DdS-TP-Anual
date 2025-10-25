@@ -1,14 +1,8 @@
 package utils.DTO;
 
-<<<<<<<< HEAD:DdS/utils/src/main/java/utils/DTO/ColeccionDTO.java
 import utils.Dominio.Criterios.Criterio;
 import utils.Dominio.HechosYColecciones.TipoAlgoritmoConsenso;
 import utils.Dominio.fuente.Fuente;
-========
-import utils.DTO.Criterios.Criterio;
-import utils.DTO.HechosYColecciones.TipoAlgoritmoConsenso;
-import utils.DTO.fuente.Fuente;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/utils/src/main/java/utils/DTO/ColeccionDTO.java
 
 import java.util.ArrayList;
 import java.util.List;

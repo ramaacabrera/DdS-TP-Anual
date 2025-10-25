@@ -1,9 +1,5 @@
 package estadisticas.Presentacion;
 
-<<<<<<<< HEAD:DdS/estadisticas/src/main/java/estadisticas/Presentacion/GetProvinciaCategoriaHandler.java
-========
-import Agregador.HechosYColecciones.Coleccion;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/estadisticas/src/main/java/estadisticas/Presentacion/GetProvinciaCategoriaHandler.java
 import estadisticas.agregador.EstadisticasCategoriaRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;

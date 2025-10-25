@@ -1,12 +1,7 @@
 package cargadorDinamico.DinamicaDto;
 
-<<<<<<<< HEAD:DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicaDto/SolicitudEliminacion_D_DTO.java
 import cargadorDinamico.Dominio.Usuario.Usuario_D;
 import cargadorDinamico.Dominio.HechosYColeccionesD.Hecho_D;
-========
-import CargadorDinamica.Dominio.Usuario.Usuario_D;
-import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/cargadorDinamico/src/main/java/cargadorDinamico/DinamicaDto/SolicitudEliminacion_D_DTO.java
 import java.util.UUID;
 
 public class SolicitudEliminacion_D_DTO {

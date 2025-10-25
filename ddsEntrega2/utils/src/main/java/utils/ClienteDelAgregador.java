@@ -1,6 +1,6 @@
 package utils;
 
-import agregador.fuente.Fuente;
+import utils.Dominio.fuente.Fuente;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import okhttp3.*;
@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.Controladores.Controlador;
 import utils.DTO.*;
 import utils.DTO.ModelosMensajesDTO.*;
+import okhttp3.WebSocket;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

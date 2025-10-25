@@ -1,6 +1,6 @@
 package agregador.Handlers;
 
-import agregador.Persistencia.ColeccionRepositorio;
+import utils.Persistencia.ColeccionRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;

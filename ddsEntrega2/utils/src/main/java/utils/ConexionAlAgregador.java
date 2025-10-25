@@ -1,10 +1,6 @@
 package utils;
 
-<<<<<<<< HEAD:DdS/utils/src/main/java/utils/ConexionAlAgregador.java
 import utils.Dominio.fuente.TipoDeFuente;
-========
-import utils.DTO.HechosYColecciones.TipoDeFuente;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/utils/src/main/java/utils/ConexionAlAgregador.java
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.DTO.FuenteDTO;

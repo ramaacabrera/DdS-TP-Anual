@@ -4,11 +4,7 @@ import estadisticas.agregador.ConexionAgregador;
 import estadisticas.agregador.EstadisticasCategoriaRepositorio;
 import estadisticas.agregador.EstadisticasColeccionRepositorio;
 import estadisticas.agregador.EstadisticasRepositorio;
-<<<<<<<< HEAD:DdS/estadisticas/src/main/java/estadisticas/MainEstadisticas.java
 import estadisticas.Presentacion.*;
-========
-import Estadisticas.Presentacion.*;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/estadisticas/src/main/java/estadisticas/MainEstadisticas.java
 import io.javalin.Javalin;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
@@ -23,6 +19,7 @@ public class MainEstadisticas {
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
         int puerto =  Integer.parseInt(config.getProperty("puertoEstadisticas"));
+        int puertoAgregador = Integer.parseInt(config.getProperty("puertoAgregador"));
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("estadisticas-PU");
         //EntityManager em = emf.createEntityManager();

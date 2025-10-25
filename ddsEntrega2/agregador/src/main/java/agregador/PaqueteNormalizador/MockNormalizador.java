@@ -1,9 +1,5 @@
 package agregador.PaqueteNormalizador;
-<<<<<<<< HEAD:DdS/agregador/src/main/java/agregador/PaqueteNormalizador/MockNormalizador.java
 import utils.Dominio.HechosYColecciones.Hecho;
-========
-import agregador.HechosYColecciones.Hecho;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/agregador/src/main/java/agregador/PaqueteNormalizador/MockNormalizador.java
 
 public class MockNormalizador {
 

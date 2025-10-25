@@ -1,10 +1,6 @@
 package utils.DTO;
 
-<<<<<<<< HEAD:DdS/utils/src/main/java/utils/DTO/FuenteDTO.java
 import utils.Dominio.fuente.TipoDeFuente;
-========
-import utils.DTO.HechosYColecciones.TipoDeFuente;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/utils/src/main/java/utils/DTO/FuenteDTO.java
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

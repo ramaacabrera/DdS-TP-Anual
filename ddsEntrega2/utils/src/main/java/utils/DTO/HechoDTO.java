@@ -1,17 +1,8 @@
 package utils.DTO;
 
-<<<<<<<< HEAD:DdS/utils/src/main/java/utils/DTO/HechoDTO.java
 import utils.Dominio.HechosYColecciones.*;
 import utils.Dominio.Usuario.Usuario;
 import utils.Dominio.fuente.Fuente;
-========
-import utils.DTO.HechosYColecciones.ContenidoMultimedia;
-import utils.DTO.Usuario.Usuario;
-import utils.DTO.HechosYColecciones.EstadoHecho;
-import utils.DTO.HechosYColecciones.Etiqueta;
-import utils.DTO.HechosYColecciones.Ubicacion;
-import utils.DTO.fuente.Fuente;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/utils/src/main/java/utils/DTO/HechoDTO.java
 
 import java.util.Date;
 import java.util.List;

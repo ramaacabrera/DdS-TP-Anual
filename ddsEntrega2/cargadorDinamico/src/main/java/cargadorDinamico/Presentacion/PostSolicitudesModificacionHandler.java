@@ -1,18 +1,10 @@
 package cargadorDinamico.Presentacion;
 
-<<<<<<<< HEAD:DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesModificacionHandler.java
 import cargadorDinamico.DinamicaDto.SolicitudModificacion_D_DTO;
 import cargadorDinamico.DinamicoRepositorio;
 import cargadorDinamico.Dominio.HechosYColeccionesD.Hecho_D;
 import cargadorDinamico.Dominio.Solicitudes.EstadoSolicitudModificacion_D;
 import cargadorDinamico.Dominio.Solicitudes.SolicitudDeModificacion_D;
-========
-import CargadorDinamica.DinamicaDto.SolicitudModificacion_D_DTO;
-import cargadorDinamico.DinamicoRepositorio;
-import CargadorDinamica.Dominio.HechosYColecciones.Hecho_D;
-import CargadorDinamica.Dominio.Solicitudes.EstadoSolicitudModificacion_D;
-import CargadorDinamica.Dominio.Solicitudes.SolicitudDeModificacion_D;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesModificacionHandler.java
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;

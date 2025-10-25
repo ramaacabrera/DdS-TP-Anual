@@ -1,10 +1,9 @@
 package cargadorEstatico;
 
-import Agregador.fuente.Fuente;
-import Agregador.fuente.TipoDeFuente;
+import utils.Dominio.fuente.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import utils.ClienteDelAgregador;
-import utils.Controladores.ControladorEstatica;
+import cargadorEstatico.ConexionAgregador.ControladorEstatica;
 import utils.LecturaConfig;
 
 import java.io.IOException;

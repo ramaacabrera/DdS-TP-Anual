@@ -1,11 +1,7 @@
 package ApiAdministrativa;
 
 import ApiAdministrativa.Presentacion.*;
-<<<<<<<< HEAD:DdS/apiAdministrativa/src/main/java/ApiAdministrativa/MainAPIAdmin.java
 import utils.Persistencia.*;
-========
-import ApiAdministrativa.Persistencia.*;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/apiAdministrativa/src/main/java/ApiAdministrativa/MainAPIAdmin.java
 import io.javalin.Javalin;
 import utils.IniciadorApp;
 import utils.LecturaConfig;

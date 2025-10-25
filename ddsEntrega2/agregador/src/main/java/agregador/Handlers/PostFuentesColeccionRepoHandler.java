@@ -1,8 +1,8 @@
 package agregador.Handlers;
 
-import agregador.HechosYColecciones.Coleccion;
-import agregador.Persistencia.ColeccionRepositorio;
-import agregador.fuente.Fuente;
+import utils.Dominio.HechosYColecciones.Coleccion;
+import utils.Persistencia.ColeccionRepositorio;
+import utils.Dominio.fuente.Fuente;
 import io.javalin.http.Handler;
 import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;

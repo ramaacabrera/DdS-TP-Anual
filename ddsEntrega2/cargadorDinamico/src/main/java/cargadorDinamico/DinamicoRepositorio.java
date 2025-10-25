@@ -2,7 +2,6 @@ package cargadorDinamico;
 
 import cargadorDinamico.Dominio.Solicitudes.EstadoSolicitudEliminacion_D;
 import cargadorDinamico.Dominio.Solicitudes.EstadoSolicitudModificacion_D;
-<<<<<<<< HEAD:DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicoRepositorio.java
 import utils.Dominio.Usuario.RolUsuario;
 import cargadorDinamico.Dominio.Usuario.Usuario_D;
 import utils.Dominio.Solicitudes.EstadoSolicitudEliminacion;
@@ -12,14 +11,6 @@ import utils.Dominio.fuente.TipoDeFuente;
 import cargadorDinamico.Dominio.HechosYColeccionesD.*;
 import utils.Dominio.HechosYColecciones.EstadoHecho;
 import utils.Dominio.HechosYColecciones.*;
-========
-import cargadorDinamico.Dominio.Usuario.RolUsuario;
-import cargadorDinamico.Dominio.Usuario.Usuario;
-import cargadorDinamico.Dominio.fuente.Fuente;
-import cargadorDinamico.Dominio.fuente.TipoDeFuente;
-import cargadorDinamico.Dominio.HechoModificado;
-import cargadorDinamico.Dominio.HechosYColeccionesD.*;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/cargadorDinamico/src/main/java/cargadorDinamico/DinamicoRepositorio.java
 
 
 import cargadorDinamico.Dominio.Solicitudes.SolicitudDeEliminacion_D;
@@ -101,10 +92,18 @@ public class DinamicoRepositorio {
         if (ubicacionD.getLatitud() != -999.0 && ubicacionD.getLongitud() != -999.0) {
             return new Ubicacion(
                     ubicacionD.getLatitud(),
-                    ubicacionD.getLongitud()
+                    ubicacionD.getLongitud(),
+                    ubicacionD.getDescripcion()
             );
         }
-        return null;
+        // Si solo tiene descripción, usar constructor con String
+        else if (ubicacionD.getDescripcion() != null) {
+            return new Ubicacion(ubicacionD.getDescripcion());
+        }
+        // Si no tiene nada, ubicación desconocida
+        else {
+            return new Ubicacion();
+        }
     }
 
     private EstadoHecho convertirEstado(EstadoHecho_D estadoD) {

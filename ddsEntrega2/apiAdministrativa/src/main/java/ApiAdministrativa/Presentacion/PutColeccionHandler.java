@@ -3,13 +3,7 @@ package ApiAdministrativa.Presentacion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-<<<<<<<< HEAD:DdS/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/PutColeccionHandler.java
 import utils.Persistencia.ColeccionRepositorio;
-========
-import ApiAdministrativa.HechosYColecciones.Coleccion;
-import ApiAdministrativa.Persistencia.ColeccionRepositorio;
-import ApiAdministrativa.Criterios.Criterio;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/PutColeccionHandler.java
 
 import java.net.URI;
 import java.net.http.HttpClient;

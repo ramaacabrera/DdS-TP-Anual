@@ -1,7 +1,7 @@
 package agregador.Handlers;
 
-import agregador.Persistencia.SolicitudEliminacionRepositorio;
-import agregador.Solicitudes.SolicitudDeEliminacion;
+import utils.Persistencia.SolicitudEliminacionRepositorio;
+import utils.Dominio.Solicitudes.SolicitudDeEliminacion;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;

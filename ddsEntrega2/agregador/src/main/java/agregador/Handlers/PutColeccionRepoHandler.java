@@ -3,9 +3,9 @@ package agregador.Handlers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
-import agregador.HechosYColecciones.Coleccion;
-import agregador.Persistencia.ColeccionRepositorio;
-import agregador.Criterios.Criterio;
+import utils.Dominio.HechosYColecciones.Coleccion;
+import utils.Persistencia.ColeccionRepositorio;
+import utils.Dominio.Criterios.Criterio;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.javalin.http.Handler;
 

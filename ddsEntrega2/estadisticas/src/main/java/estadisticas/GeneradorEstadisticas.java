@@ -1,10 +1,6 @@
 package estadisticas;
 
-<<<<<<<< HEAD:DdS/estadisticas/src/main/java/estadisticas/GeneradorEstadisticas.java
 import estadisticas.Dominio.*;
-========
-import Estadisticas.Dominio.*;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/estadisticas/src/main/java/estadisticas/GeneradorEstadisticas.java
 import estadisticas.agregador.ConexionAgregador;
 import estadisticas.agregador.EstadisticasCategoriaRepositorio;
 import estadisticas.agregador.EstadisticasColeccionRepositorio;

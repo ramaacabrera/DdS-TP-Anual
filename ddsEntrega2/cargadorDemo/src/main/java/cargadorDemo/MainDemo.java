@@ -1,12 +1,12 @@
 package cargadorDemo;
 
-import Agregador.fuente.Fuente;
-import Agregador.fuente.TipoDeFuente;
+import utils.Dominio.fuente.Fuente;
+import utils.Dominio.fuente.TipoDeFuente;
 import utils.ClienteDelAgregador;
 import utils.Conexiones.Cargador;
-import CargadorMetamapa.Presentacion.GetHechosHandler;
+import cargadorDemo.Presentacion.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import utils.Controladores.ControladorDemo;
+import cargadorDemo.ConexionAgregador.ControladorDemo;
 import utils.LecturaConfig;
 
 import java.util.Properties;

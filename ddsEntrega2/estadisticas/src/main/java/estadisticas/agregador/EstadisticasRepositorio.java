@@ -1,9 +1,5 @@
 package estadisticas.agregador;
 
-<<<<<<<< HEAD:DdS/estadisticas/src/main/java/estadisticas/agregador/EstadisticasRepositorio.java
-========
-import Agregador.HechosYColecciones.Coleccion;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/estadisticas/src/main/java/estadisticas/agregador/EstadisticasRepositorio.java
 import estadisticas.Dominio.Estadisticas;
 import utils.BDUtils;
 

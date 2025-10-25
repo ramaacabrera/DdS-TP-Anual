@@ -4,11 +4,7 @@ import io.javalin.Javalin;
 import ApiPublica.Presentacion.*;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
-<<<<<<<< HEAD:DdS/apiPublica/src/main/java/ApiPublica/MainAPIPublica.java
 import utils.Persistencia.*;
-========
-import Agregador.Persistencia.*;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/apiPublica/src/main/java/ApiPublica/MainAPIPublica.java
 
 import java.util.Properties;
 
@@ -26,13 +22,18 @@ public class MainAPIPublica {
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
-        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
+        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
 
         app.get("/api/hechos", new GetHechosHandler(hechoRepositorio));
-        app.get("/api/hechos/{id}", new GetHechoEspecificoHandler(hechoRepositorio));
-        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(coleccionRepositorio));
+        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler());
         app.post("/api/hechos", new PostHechoHandler(puertoDinamica));
         app.post("/api/solicitudEliminacion", new PostSolicitudEliminacionHandler(puertoDinamica));
         app.post("/api/solicitudeModificacion", new PostSolicitudModificacionHandler(puertoDinamica));
+
+        /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Cerrando EntityManager de API Pública...");
+            if (em.isOpen()) em.close();
+            if (emf.isOpen()) emf.close();
+        }));*/
     }
 }

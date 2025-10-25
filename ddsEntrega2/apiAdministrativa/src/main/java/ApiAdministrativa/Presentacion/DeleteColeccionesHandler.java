@@ -2,11 +2,7 @@ package ApiAdministrativa.Presentacion;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-<<<<<<<< HEAD:DdS/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/DeleteColeccionesHandler.java
 import utils.Persistencia.ColeccionRepositorio;
-========
-import ApiAdministrativa.Persistencia.ColeccionRepositorio;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/DeleteColeccionesHandler.java
 
 import java.io.IOException;
 import java.net.URI;

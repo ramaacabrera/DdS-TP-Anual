@@ -1,12 +1,7 @@
 package ApiAdministrativa.Presentacion;
 
-<<<<<<<< HEAD:DdS/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/GetSolicitudesEliminacionHandler.java
 import utils.Persistencia.SolicitudEliminacionRepositorio;
 import utils.Dominio.Solicitudes.SolicitudDeEliminacion;
-========
-import ApiAdministrativa.Persistencia.SolicitudEliminacionRepositorio;
-import ApiAdministrativa.Solicitudes.SolicitudDeEliminacion;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/GetSolicitudesEliminacionHandler.java
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;

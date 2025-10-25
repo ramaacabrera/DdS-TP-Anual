@@ -7,7 +7,7 @@ import utils.DTO.SolicitudDeModificacionDTO;
 import java.util.List;
 import java.util.UUID;
 
-abstract public class Controlador {
+abstract public interface Controlador {
 
     public abstract List<HechoDTO> obtenerHechos();
 

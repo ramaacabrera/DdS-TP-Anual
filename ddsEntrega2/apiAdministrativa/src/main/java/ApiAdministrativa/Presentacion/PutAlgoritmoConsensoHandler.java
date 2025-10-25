@@ -1,18 +1,10 @@
 package ApiAdministrativa.Presentacion;
 
-<<<<<<<< HEAD:DdS/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/PutAlgoritmoConsensoHandler.java
 import utils.Persistencia.ColeccionRepositorio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import utils.Dominio.HechosYColecciones.TipoAlgoritmoConsenso;
-========
-import ApiAdministrativa.Persistencia.ColeccionRepositorio;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.javalin.http.Context;
-import io.javalin.http.Handler;
-import ApiAdministrativa.HechosYColecciones.TipoAlgoritmoConsenso;
->>>>>>>> 198c43e (Pruebas):ddsEntrega2/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/PutAlgoritmoConsensoHandler.java
 
 import java.net.URI;
 import java.net.http.HttpClient;

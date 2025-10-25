@@ -1,6 +1,6 @@
 package cargadorDinamico.DinamicaDto;
 
-import cargadorDinamico.Dominio.HechosYColeccionesD.Hecho_D;
+import cargadorDinamico.Dominio.HechosYColecciones.Hecho_D;
 import cargadorDinamico.Dominio.Usuario.Usuario_D;
 
 import java.util.UUID;
