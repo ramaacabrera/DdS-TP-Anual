@@ -54,8 +54,8 @@ public class EstadisticasCategoriaRepositorio {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<String> query = em.createQuery(
-                    "SELECT e.estadisticasCategoria_provincia FROM EstadisticasCategoria e JOIN Estadisticas es on es.estadisticas_id = e.id.estadisticas_id " +
-                            "WHERE e.id.categoria = :idCategoria AND es.estadisticas_fecha = " +
+                    "SELECT e.estadisticasCategoria_provincia FROM EstadisticasCategoria e " +
+                            "WHERE e.id.categoria = :idCategoria AND e.estadisticas.estadisticas_fecha = " +
                             "( SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", String.class);
 
             query.setParameter("idCategoria", categoria);
@@ -73,8 +73,8 @@ public class EstadisticasCategoriaRepositorio {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<LocalTime> query = em.createQuery(
-                    "SELECT e.estadisticasCategoria_hora FROM EstadisticasCategoria e JOIN Estadisticas es on es.estadisticas_id = e.id.estadisticas_id " +
-                            "WHERE e.id.categoria = :idCategoria AND es.estadisticas_fecha = " +
+                    "SELECT e.estadisticasCategoria_hora FROM EstadisticasCategoria e " +
+                            "WHERE e.id.categoria = :idCategoria AND e.estadisticas.estadisticas_fecha = " +
                             "( SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", LocalTime.class);
 
             query.setParameter("idCategoria", categoria);
