@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="estadisticas" />
         <module name="agregador" />
+        <module name="web" />
         <module name="cargador-metamapa" />
         <module name="utils" />
         <module name="cargador-estatico" />
@@ -19,6 +20,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="MetaMapa" target="17" />
+      <module name="tpa-2025" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
