@@ -10,7 +10,6 @@
         <module name="agregador" />
         <module name="cargador-metamapa" />
         <module name="utils" />
-        <module name="pruebaclase1" />
         <module name="cargador-estatico" />
         <module name="api-admin" />
         <module name="api-publica" />
@@ -18,10 +17,13 @@
         <module name="cargador-demo" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="MetaMapa" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="pruebaclase1" options="" />
+      <module name="MetaMapa" options="" />
     </option>
   </component>
 </project>
