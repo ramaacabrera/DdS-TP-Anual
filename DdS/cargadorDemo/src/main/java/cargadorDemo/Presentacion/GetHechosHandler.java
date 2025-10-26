@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import utils.Conexiones.Cargador;
 import utils.Conexiones.FuenteExternaConexion;
 import utils.DTO.HechoDTO;
+import utils.Dominio.fuente.Fuente;
+import utils.Dominio.fuente.TipoDeFuente;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,9 @@ public class GetHechosHandler implements Handler {
         List<HechoDTO> hechos = new ArrayList<>();
         for(FuenteExternaConexion conexion : conexiones) {
             hechos.addAll(conexion.obtenerHechos());
+            hechos.forEach(hechoDTO -> {
+                hechoDTO.setFuente(new Fuente(TipoDeFuente.DEMO, "fuenteDemo"));
+            });
         }
         return hechos;
     }

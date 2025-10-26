@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Cargadores" type="CompoundRunConfigurationType">
+    <toRun name="CargadorDemo" type="Application" />
     <toRun name="CargadorDinamico" type="Application" />
     <toRun name="CargadorEstatico" type="Application" />
     <toRun name="CargadorMetamapa" type="Application" />
