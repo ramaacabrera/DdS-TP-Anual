@@ -35,7 +35,7 @@ public class GetHechoEspecificoHandler implements Handler {
         Map<String, Object> modelo = TemplateUtil.model("hecho", hecho);
 
         //  Renderizar la plantilla (SSR)
-        ctx.render("hecho-especifico.ftlh", modelo);
+        ctx.render("hecho-especifico.ftl", modelo);
     }
 }
 /*function handleAction(actionType, hechoId) {

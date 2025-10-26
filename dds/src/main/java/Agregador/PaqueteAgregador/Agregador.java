@@ -49,7 +49,7 @@ public class Agregador {
             this.agregarSolicitudes();
             this.actualizarColecciones();
         //}, 0, 1, TimeUnit.HOURS);
-        }, 5, 60, TimeUnit.SECONDS);
+        }, 0, 60, TimeUnit.SECONDS);
 
         long delayInicial = calcularDelayHastaHora(2);  // 2 AM
         scheduler.scheduleAtFixedRate(() -> {
