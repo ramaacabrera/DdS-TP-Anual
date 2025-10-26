@@ -42,6 +42,12 @@ public class MainAPIAdmin {
         app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(solicitudEliminacionRepositorio));
         app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(solicitudEliminacionRepositorio));
 
+        app.get("/crear-coleccion", new GetCrearColeccionHandler()); //para poder ver el formulario
+//se recibe un post en  api/colecciones, crea la coleccion y la mete en la base
+
+        app.post("/crear-coleccion", new PostCrearColeccionHandler(coleccionRepositorio));
+        //recibe los datos, guarda en la base, y muestra la pantalla de éxito
+
        /* Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Cerrando EntityManager de API Admin...");
             if (em.isOpen()) em.close();
