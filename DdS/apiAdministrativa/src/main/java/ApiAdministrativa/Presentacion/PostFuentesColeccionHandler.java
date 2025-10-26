@@ -2,8 +2,7 @@ package ApiAdministrativa.Presentacion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
-import utils.Dominio.HechosYColecciones.Coleccion;
-import utils.Persistencia.ColeccionRepositorio;
+import ApiAdministrativa.Persistencia.ColeccionRepositorio;
 import io.javalin.http.Context;
 import utils.Dominio.fuente.Fuente;
 import org.jetbrains.annotations.NotNull;
@@ -12,10 +11,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Optional;
-import java.util.UUID;
 
 public class PostFuentesColeccionHandler implements Handler {
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final ColeccionRepositorio coleccionRepositorio;
 
     public PostFuentesColeccionHandler(ColeccionRepositorio coleccionRepositorio) {
@@ -27,25 +26,19 @@ public class PostFuentesColeccionHandler implements Handler {
         String handle = ctx.pathParam("id");
         Fuente nueva = ctx.bodyAsClass(Fuente.class);
 
-        try {
-            Optional<Coleccion> coleccionAux = coleccionRepositorio.buscarPorHandle(handle);
-            Coleccion coleccion = coleccionAux.get();
+        // Serializamos la coleccion a JSON
+        String fuenteJson = objectMapper.writeValueAsString(nueva);
 
-            if (coleccion == null) {
-                ctx.status(404).result("Colección no encontrada");
-                return;
-            }
+        HttpClient httpClient = HttpClient.newHttpClient();
 
-            coleccion.agregarFuente(nueva);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("http://localhost:8080/colecciones/" + handle + "/fuente"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(fuenteJson))
+                .build();
 
-            coleccionRepositorio.actualizar(coleccion);
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            ctx.status(201).result("Fuente agregada exitosamente");
-
-        } catch (IllegalArgumentException e) {
-            ctx.status(400).result("Handle inválido: " + e.getMessage());
-        } catch (Exception e) {
-            ctx.status(500).result("Error interno: " + e.getMessage());
-        }
+        ctx.status(response.statusCode()).result(response.body());
     }
 }

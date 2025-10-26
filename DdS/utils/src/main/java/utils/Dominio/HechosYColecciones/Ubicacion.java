@@ -9,7 +9,7 @@ import java.util.UUID;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Ubicacion")
+@Table(name = "ubicacion")
 public class Ubicacion {
 
     @Id
