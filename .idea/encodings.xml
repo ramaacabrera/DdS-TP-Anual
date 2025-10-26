@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/agregador/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/agregador/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/apiAdministrativa/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/apiAdministrativa/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/apiPublica/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/apiPublica/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/cargadorDemo/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/cargadorDemo/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/cargadorDinamico/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/cargadorDinamico/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/cargadorEstatico/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/cargadorEstatico/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/cargadorMetaMapa/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/cargadorMetaMapa/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/estadisticas/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/estadisticas/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/utils/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ddsEntrega2/utils/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/agregador/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/agregador/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/apiAdministrativa/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/apiPublica/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/apiPublica/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/cargadorDemo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/cargadorDemo/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/cargadorDinamico/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/cargadorEstatico/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/estadisticas/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/estadisticas/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/utils/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DdS/utils/src/main/resources" charset="UTF-8" />
   </component>
 </project>

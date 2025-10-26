@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Agregador" type="Application" factoryName="Application">
     <option name="ALTERNATIVE_JRE_PATH" value="ms-11" />
-    <option name="MAIN_CLASS_NAME" value="Agregador.MainAgregador" />
-    <module name="pruebaclase1" />
+    <option name="MAIN_CLASS_NAME" value="agregador.MainAgregador" />
+    <module name="agregador" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
