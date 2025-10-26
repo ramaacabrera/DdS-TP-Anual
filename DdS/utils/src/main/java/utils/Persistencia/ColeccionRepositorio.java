@@ -1,33 +1,28 @@
 package utils.Persistencia;
+import utils.Dominio.Criterios.Criterio;
 import utils.Dominio.HechosYColecciones.Coleccion;
 import utils.DTO.ColeccionDTO;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import utils.BDUtils;
+import utils.Dominio.HechosYColecciones.Hecho;
+import utils.Dominio.HechosYColecciones.ModosDeNavegacion;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 
 public class ColeccionRepositorio {
-    //private final EntityManagerFactory emf;
-    //private static final List<Coleccion> colecciones = new ArrayList<>();
 
-    //public ColeccionRepositorio(EntityManagerFactory emfNuevo) {
-      //  this.emf = emfNuevo;
-    //}
-
-    //public void guardar(Coleccion coleccion) {
-        //colecciones.add(coleccion);
-    //}
     public void guardar(Coleccion coleccion) {
         EntityManager em = BDUtils.getEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
 
-            // em.merge maneja tanto la inserción (si no tiene ID) como la actualización (si tiene ID)
             em.merge(coleccion);
 
             BDUtils.commit(em);
@@ -39,19 +34,12 @@ public class ColeccionRepositorio {
         }
     }
 
-    //public void guardar(ColeccionDTO coleccionDTO) {
-        //colecciones.add(new Coleccion(coleccionDTO));
-    //}
     public void guardar(ColeccionDTO coleccionDTO) {Coleccion coleccion = new Coleccion(coleccionDTO);}
 
-    //public List<Coleccion> obtenerTodas() {
-        //return colecciones;
-    //}
+
     public List<Coleccion> obtenerTodas() {
-        //EntityManager em = emf.createEntityManager();
         EntityManager em = BDUtils.getEntityManager();
         try {
-            // JPQL: Selecciona todos los objetos Coleccion.
             TypedQuery<Coleccion> query = em.createQuery("SELECT c FROM Coleccion c", Coleccion.class);
             return query.getResultList();
         } finally {
@@ -59,55 +47,49 @@ public class ColeccionRepositorio {
         }
     }
 
-    //public Optional<Coleccion> buscarPorHandle(String handle) {
-        //return colecciones.stream().filter(c -> c.getHandle().equals(handle)).findFirst();
-    //}
-
     public Optional<Coleccion> buscarPorHandle(String handle) {
-        //EntityManager em = emf.createEntityManager();
         EntityManager em = BDUtils.getEntityManager();
         try {
-            // Consulta JPQL para buscar por el campo 'handle'
             TypedQuery<Coleccion> query = em.createQuery(
                     "SELECT c FROM Coleccion c WHERE c.handle = :handleParam", Coleccion.class);
 
-            // Asigna el valor del parámetro de forma segura
             query.setParameter("handleParam", handle);
 
-            // Intenta obtener un único resultado
             return Optional.of(query.getSingleResult());
 
         } catch (NoResultException e) {
-            // Si no encuentra resultados, retorna un Optional vacío
             return Optional.empty();
         } finally {
             em.close();
         }
     }
 
-    /*public void actualizar(Coleccion coleccion) {
-        Optional<Coleccion> col = this.buscarPorHandle(coleccion.getHandle());
-        Coleccion buscar;
-        if(col.isPresent()){
-            buscar = col.get();
-            colecciones.set(colecciones.indexOf(buscar), coleccion);
+    public List<Hecho> obtenerHechosEspecificos(String handle, List<Criterio> criterios, ModosDeNavegacion modosDeNavegacion) {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            TypedQuery<Coleccion> query = em.createQuery(
+                    "SELECT c FROM Coleccion c WHERE c.handle = :handleParam", Coleccion.class);
+            query.setParameter("handleParam", handle);
+
+            Coleccion coleccion = query.getSingleResult();
+            return coleccion.obtenerHechosQueCumplen(criterios, modosDeNavegacion);
+
+        } catch (NoResultException e) {
+            return Collections.emptyList();
+        } finally {
+            em.close();
         }
-    }*/
+    }
+
     public void actualizar(Coleccion coleccion) {
         this.guardar(coleccion);
     }
 
-    //public void eliminar(Coleccion coleccion) {colecciones.remove(coleccion);}
-
     public void eliminar(Coleccion coleccion) {
-        //EntityManager em = emf.createEntityManager();
         EntityManager em = BDUtils.getEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
 
-            // 1. Obtener la entidad gestionada (managed) si no lo está.
-            // Esto es necesario para poder llamar a em.remove().
-            // Asumo que tu entidad Coleccion tiene un método getId().
             Coleccion coleccionPersistida = em.contains(coleccion)
                     ? coleccion
                     : em.find(Coleccion.class, coleccion.getHandle());

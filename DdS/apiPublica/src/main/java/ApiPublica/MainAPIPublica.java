@@ -22,18 +22,13 @@ public class MainAPIPublica {
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
-        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
+        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
 
         app.get("/api/hechos", new GetHechosHandler(hechoRepositorio));
-        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler());
+        app.get("/api/hechos/{id}", new GetHechoEspecificoHandler(hechoRepositorio));
+        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(coleccionRepositorio));
         app.post("/api/hechos", new PostHechoHandler(puertoDinamica));
         app.post("/api/solicitudEliminacion", new PostSolicitudEliminacionHandler(puertoDinamica));
         app.post("/api/solicitudeModificacion", new PostSolicitudModificacionHandler(puertoDinamica));
-
-        /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("Cerrando EntityManager de API Pública...");
-            if (em.isOpen()) em.close();
-            if (emf.isOpen()) emf.close();
-        }));*/
     }
 }

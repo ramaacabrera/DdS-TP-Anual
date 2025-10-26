@@ -1,5 +1,6 @@
 package utils.Persistencia;
 
+import org.hibernate.Hibernate;
 import utils.Dominio.Criterios.Criterio;
 import utils.Dominio.HechosYColecciones.Hecho;
 
@@ -9,18 +10,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class HechoRepositorio {
-
-    //private final EntityManagerFactory emf;
-
-    //public HechoRepositorio(EntityManagerFactory emfNuevo) {
-        //this.emf = emfNuevo;
-    //}
-
     public HechoRepositorio(){}
 
-    // Método para obtener todos los hechos
     public List<Hecho> getHechos() {
         //EntityManager em = emf.createEntityManager();
         EntityManager em = BDUtils.getEntityManager();
@@ -70,6 +64,32 @@ public class HechoRepositorio {
 
         } catch (javax.persistence.NoResultException e) {
             // Esto es normal si no se encuentra el hecho. Retornamos null.
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public Hecho buscarPorId(String idString) {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            UUID id = UUID.fromString(idString);
+            Hecho hecho = em.find(Hecho.class, id);
+
+            if (hecho != null) {
+                // FORZAR LA CARGA DE LAS COLECCIONES ANTES DE CERRAR LA SESIÓN
+                Hibernate.initialize(hecho.getEtiquetas());
+
+                Hibernate.initialize(hecho.getContenidoMultimedia());
+
+                // Si tiene Usuario o Ubicacion LAZY, también inicialízalos aquí OJO ESTOOO
+                Hibernate.initialize(hecho.getUbicacion());
+            }
+
+            return hecho;
+        } catch (IllegalArgumentException e) {
+
+            System.err.println("ID de hecho no válido: " + idString);
             return null;
         } finally {
             em.close();

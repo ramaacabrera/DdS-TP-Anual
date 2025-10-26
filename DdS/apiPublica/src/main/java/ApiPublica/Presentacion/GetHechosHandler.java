@@ -27,11 +27,8 @@ import java.util.List;
 import java.util.Date;
 
 public class GetHechosHandler implements Handler {
-    //private final HechoRepositorio repositorio;
-    ObjectMapper mapper = new ObjectMapper();
     private final HechoRepositorio hechoRepositorio;
 
-    //public GetHechosHandler() {}
 
     public GetHechosHandler(HechoRepositorio hechoRepositorio){
         this.hechoRepositorio = hechoRepositorio;
@@ -40,35 +37,8 @@ public class GetHechosHandler implements Handler {
     public void handle(@NotNull Context ctx) throws IOException, InterruptedException {
         List<Criterio> criterios = this.armarListaDeCriterios(ctx);
 
-        /*
-
-                CAMBIAR ESTO CUANDO SE IMPLEMENTEN LAS BASES DE DATOS
-
-
-        */
-
-        //    ->>>>>>>>>
-
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-        URI uri = null;
-        try{uri = new URI("http://localhost:8080/hechos");}
-        catch (URISyntaxException e) {
-            System.err.println("URI invalido "+e.getMessage());
-            throw new RuntimeException(e);
-        }
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri)
-                .GET()
-                .build();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        List<Hecho> repositorio = mapper.readValue(response.body(), new TypeReference<>() {
-        });
-
-        //    <<<<<<<<<-
-
-        ctx.json(this.buscarHechos(repositorio, criterios));
+        List<Hecho> hechos = hechoRepositorio.buscarHechos(criterios);
+        ctx.json(hechos);
     }
 
     private List<Criterio> armarListaDeCriterios(Context ctx) {
@@ -136,20 +106,5 @@ public class GetHechosHandler implements Handler {
         }
 
         return criterios;
-    }
-
-    public List<Hecho> buscarHechos(List<Hecho> hechos, List<Criterio> criterios) {
-        if(criterios == null || criterios.isEmpty()){
-            return hechos;
-        }
-        List<Hecho> hechosADevolver = new ArrayList<Hecho>();
-        for (Hecho hecho : hechos) {
-            for(Criterio criterio : criterios) {
-                if(criterio.cumpleConCriterio(hecho) && hecho.estaActivo()) {
-                    hechosADevolver.add(hecho);
-                }
-            }
-        }
-        return hechosADevolver;
     }
 }

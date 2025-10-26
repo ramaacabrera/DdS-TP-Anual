@@ -13,8 +13,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class PostColeccionHandler implements Handler {
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
     private final ColeccionRepositorio coleccionRepositorio;
 
     public PostColeccionHandler(ColeccionRepositorio coleccionRepositorio) {
@@ -23,21 +21,14 @@ public class PostColeccionHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        ColeccionDTO nueva = ctx.bodyAsClass(ColeccionDTO.class);
+        try{
+            ColeccionDTO nueva = ctx.bodyAsClass(ColeccionDTO.class);
 
-        // Serializamos la coleccion a JSON
-        String coleccionJson = objectMapper.writeValueAsString(nueva);
+            coleccionRepositorio.guardar(nueva);
 
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("http://localhost:8080/colecciones"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(coleccionJson))
-                .build();
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        ctx.status(response.statusCode()).result(response.body());
+            ctx.status(201).result("Coleccion agregada exitosamente");
+        } catch (Exception e) {
+            ctx.status(500).result("Error interno: " + e.getMessage());
+        }
     }
 }
