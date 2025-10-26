@@ -32,10 +32,9 @@ public class GetHechoEspecificoHandler implements Handler {
         }
 
         //  Crear el modelo de datos para FreeMarker
-        //Map<String, Object> modelo = TemplateUtil.model("hecho", hecho);
+        Map<String, Object> modelo = TemplateUtil.model("hecho", hecho);
 
         //  Renderizar la plantilla (SSR)
-        //ctx.render("hecho-especifico.ftl", modelo);
-        ctx.json(hecho);
+        ctx.render("hecho-especifico.ftl", modelo);
     }
 }

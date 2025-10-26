@@ -20,10 +20,10 @@ import java.util.Map;
 public class GetHechoEspecificoHandler implements Handler {
 
     private ObjectMapper mapper = new ObjectMapper();
-    private final String urlPublica;
+    private final String puertoApiPublica;
 
-    public GetHechoEspecificoHandler(String url) {
-        this.urlPublica = url;
+    public GetHechoEspecificoHandler(String puerto) {
+        this.puertoApiPublica = puerto;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class GetHechoEspecificoHandler implements Handler {
         HttpClient httpClient = HttpClient.newHttpClient();
 
         URI uri = null;
-        try{uri = new URI(urlPublica+"/hechos/" + hechoIdString);}
+        try{uri = new URI("http://localhost:"+puertoApiPublica+"/hechos/" + hechoIdString);}
         catch (URISyntaxException e) {
             System.err.println("URI invalido "+e.getMessage());
             throw new RuntimeException(e);

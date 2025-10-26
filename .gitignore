@@ -1,11 +1,1 @@
-dds/target/
-dds/agregador/target
-dds/apiAdministrativa/target
-dds/apiPublica/target
-dds/cargadorDemo/target
-dds/cargadorDinamico/target
-dds/cargadorEstatico/target
-dds/cargadorMetaMapa/target
-dds/estadisticas/target
-dds/utils/target
-dds/web/target
+DdS/target/
