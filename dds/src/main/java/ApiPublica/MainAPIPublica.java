@@ -30,6 +30,9 @@ public class MainAPIPublica {
         app.post("/api/solicitudEliminacion", new PostSolicitudEliminacionHandler(puertoDinamica));
         app.post("/api/solicitudeModificacion", new PostSolicitudModificacionHandler(puertoDinamica));
 
+        app.get("/crear", new GetCrearHechoHandler()); // Para mostrar el formulario de creación
+        app.get("/hecho/{id}/request-delete", new GetSolicitudEliminacionHandler());
+
         /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Cerrando EntityManager de API Pública...");
             if (em.isOpen()) em.close();

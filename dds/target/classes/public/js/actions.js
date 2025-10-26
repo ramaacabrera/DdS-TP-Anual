@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (action === 'edit') {
             // Redirige a la página de solicitud de modificación (GET)
             //////////////////acaaaaaaaaaaaaa
-            window.location.href = `${window.location.origin}/hecho/${encodeURIComponent(hechoId)}/editar`;
+            window.location.href = `${window.location.origin}/hechos/${encodeURIComponent(hechoId)}/editar`;
         } else if (action === 'delete') {
             // Redirige a la página de solicitud de eliminación (GET)
             // aacaaaaaaaaaaaaaaaaaaaa
-            window.location.href = `${window.location.origin}/hecho/${encodeURIComponent(hechoId)}/eliminar`;
+            window.location.href = `${window.location.origin}/hechos/${encodeURIComponent(hechoId)}/eliminar`;
         }
     });
 });

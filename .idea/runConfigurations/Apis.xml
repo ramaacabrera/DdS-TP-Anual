@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Apis" type="CompoundRunConfigurationType">
-    <toRun name="ApiAdministrativa" type="Application" />
-    <toRun name="ApiMock" type="Application" />
-    <toRun name="ApiPublica" type="Application" />
-    <method v="2" />
-  </configuration>
-</component>
