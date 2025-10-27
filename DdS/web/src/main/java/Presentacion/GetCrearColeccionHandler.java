@@ -7,6 +7,12 @@ public class GetCrearColeccionHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        ctx.render("crear-coleccion.ftlh");
+        Map<String, Object> modelo = new HashMap<>();
+
+        modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
+        modelo.put("fuentes", TipoDeFuente.values());
+        modelo.put("pageTitle", "Crear nueva colección");
+
+        ctx.render("crear-coleccion.ftlh", modelo);
     }
 }
