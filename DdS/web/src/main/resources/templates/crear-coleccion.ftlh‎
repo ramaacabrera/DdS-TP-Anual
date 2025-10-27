@@ -26,7 +26,8 @@
     <h3>Criterios de pertenencia</h3>
     <div id="criterios">
         <label for="tipoCriterio">Tipo de criterio:</label><br>
-        <select id="tipoCriterio" name="criteriosDePertenencia">
+<select id="tipoCriterio" name="criteriosDePertenencia" onchange="mostrarCampoCriterio()">
+<div id="campoCriterio"></div>
             <option value="CriterioDeTexto">Texto</option>
             <option value="CriterioCategoria">Categoría</option>
             <option value="CriterioTipoMultimedia">Tipo Multimedia</option>
@@ -39,9 +40,16 @@
     </div>
     <br>
 
-    <h3>Fuentes</h3>
-    <label for="fuentes">Fuentes (separadas por coma):</label><br>
-    <input type="text" id="fuentes" name="fuentes" placeholder="estatica, dinamica, proxy"><br><br>
+<h3>Fuentes</h3>
+<label for="fuentes">Seleccioná una o más fuentes:</label><br>
+
+<select id="fuentes" name="fuentes" multiple size="4">
+    <#list fuentes as fuente>
+        <option value="${fuente}">${fuente?capitalize}</option>
+    </#list>
+</select>
+<br><br>
+
 
 
     <button type="submit">Crear Colección</button>
