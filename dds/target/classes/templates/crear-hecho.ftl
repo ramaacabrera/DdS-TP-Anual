@@ -47,13 +47,13 @@
                 <div class="form-group">
                     <label for="latitud" class="form-label">Latitud *</label>
                     <input type="number" id="latitud" name="ubicacion.latitud" class="form-input" step="any" required
-                           placeholder="Ej: -34.6037">
+                           placeholder="Ej: -34,6037">
                 </div>
 
                 <div class="form-group">
                     <label for="longitud" class="form-label">Longitud *</label>
                     <input type="number" id="longitud" name="ubicacion.longitud" class="form-input" step="any" required
-                           placeholder="Ej: -58.3816">
+                           placeholder="Ej: -58,3816">
                 </div>
             </div>
 

@@ -10,9 +10,14 @@
     <link rel="stylesheet" href="/css/style.css">
 
     <!-- Leaflet CSS (necesario en head para evitar flash sin estilos en el mapa) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+
+    <!--<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-sA+e2e9k1o7f6x5G6kq8jJg1q3nq9xM8yL9w8f5fC80="
+          crossorigin=""/> -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           crossorigin=""/>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺️</text></svg>">
+
 </head>
 <body>
 <header class="site-header">
