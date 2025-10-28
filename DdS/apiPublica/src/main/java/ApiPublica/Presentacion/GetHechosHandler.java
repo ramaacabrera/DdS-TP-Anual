@@ -11,6 +11,7 @@ import utils.Dominio.Criterios.CriterioCategoria;
 import utils.Dominio.Criterios.CriterioFecha;
 import utils.Dominio.Criterios.CriterioUbicacion;
 import utils.Dominio.HechosYColecciones.Hecho;
+import utils.DTO.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 public class GetHechosHandler implements Handler {
     private final HechoRepositorio hechoRepositorio;
@@ -38,7 +40,26 @@ public class GetHechosHandler implements Handler {
         List<Criterio> criterios = this.armarListaDeCriterios(ctx);
 
         List<Hecho> hechos = hechoRepositorio.buscarHechos(criterios);
-        ctx.json(hechos);
+
+        int pagina = ctx.queryParamAsClass("pagina", Integer.class).getOrDefault(1);
+        int limite = ctx.queryParamAsClass("limite", Integer.class).getOrDefault(10);
+        if (pagina < 1) pagina = 1;
+        if (limite < 1) limite = 10;
+
+        int total = hechos.size();
+        int totalPages = (int) Math.ceil(total / (double) limite);
+
+        int fromIndex = (pagina - 1) * limite;
+        if (fromIndex > total) fromIndex = Math.max(0, total - limite);
+        int toIndex = Math.min(fromIndex + limite, total);
+
+        //List<Hecho> hechos = hechoRepositorio.buscarHechos(criterios, fromIndex, toIndex);
+
+        List<Hecho> pageContent = hechos.subList(fromIndex, toIndex);
+
+        List<HechoDTO> hechosDTO = pageContent.stream().map(HechoDTO::new).collect(Collectors.toList());
+
+        ctx.json(new PageDTO<>(hechosDTO, pagina, limite, totalPages, total));
     }
 
     private List<Criterio> armarListaDeCriterios(Context ctx) {
