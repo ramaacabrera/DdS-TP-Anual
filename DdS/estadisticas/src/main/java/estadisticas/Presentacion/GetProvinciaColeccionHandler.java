@@ -17,13 +17,19 @@ public class GetProvinciaColeccionHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        UUID coleccion = UUID.fromString(ctx.pathParam("coleccionId"));
-        Optional<String> provincia = repository.buscarProvinciaColeccion(coleccion);
+        try{
+            UUID coleccion = UUID.fromString(ctx.pathParam("coleccion"));
+            Optional<String> provincia = repository.buscarProvinciaColeccion(coleccion);
 
-        if (!provincia.isPresent()) {
-            ctx.status(404);
-        } else {
-            ctx.status(200).json(provincia.get());
+            if (provincia.isEmpty()) {
+                ctx.status(404);
+            } else {
+                ctx.status(200).json(provincia.get());
+            }
+        } catch (Exception e) {
+            System.err.println("Error en buscar coleccion: " + e.getMessage());
+            ctx.status(500);
         }
+
     }
 }
