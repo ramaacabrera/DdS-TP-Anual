@@ -1,12 +1,19 @@
 package estadisticas.Dominio;
 
+import org.hibernate.annotations.Type;
+
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.UUID;
 
 @Embeddable
 public class EstadisticasColeccionId implements Serializable {
+    @Type(type = "uuid-char")
+    @Column(length = 36)
     private UUID estadisticas_id;
+    @Type(type = "uuid-char")
+    @Column(length = 36)
     private UUID coleccion_id;
 
     public  EstadisticasColeccionId() {}
