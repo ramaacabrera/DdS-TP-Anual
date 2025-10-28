@@ -3,9 +3,12 @@ package ApiPublica;
 import io.javalin.Javalin;
 import ApiPublica.Presentacion.*;
 import utils.IniciadorApp;
+import utils.KeyCloak.TokenValidator;
 import utils.LecturaConfig;
 import Agregador.Persistencia.*;
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class MainAPIPublica {
@@ -21,6 +24,7 @@ public class MainAPIPublica {
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
+        UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
 
@@ -29,6 +33,25 @@ public class MainAPIPublica {
         app.post("/api/hechos", new PostHechoHandler(puertoDinamica));
         app.post("/api/solicitudEliminacion", new PostSolicitudEliminacionHandler(puertoDinamica));
         app.post("/api/solicitudeModificacion", new PostSolicitudModificacionHandler(puertoDinamica));
+
+        // Login
+        app.get("/api/login", new GetLoginHandler());
+        app.post("/api/login", new PostLoginHandler());
+
+        // Sign in
+        app.get("/api/sign-in", new GetSignInHandler());
+        app.post("/api/sign-in", new PostSignInHandler());
+
+        app.post("/api/prueba-validacion", ctx -> {
+            try {
+                TokenValidator.validar(ctx); // si es válido, sigue
+                ctx.status(200).result("Token válido");
+            } catch (io.javalin.http.UnauthorizedResponse e) {
+                ctx.status(401).result("Token inválido");
+            } catch (Exception e) {
+                ctx.status(500).result("Error interno");
+            }
+        });
 
         /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Cerrando EntityManager de API Pública...");
