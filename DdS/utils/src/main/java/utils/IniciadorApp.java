@@ -11,6 +11,19 @@ public class IniciadorApp {
             javalinConfig.plugins.enableCors(cors -> {
                 cors.add(it -> it.anyHost());
             }); // para poder hacer requests de un dominio a otro
+
+            javalinConfig.jetty.wsFactoryConfig(wsFactory -> {
+                wsFactory.setMaxTextMessageSize(2 * 1024 * 1024*1024);   // 2 MB
+                //sFactory.setMaxBinaryMessageSize(2 * 1024 * 1024); // opcional
+            });
+        }).start(puerto);
+    };
+
+    public io.javalin.Javalin iniciarAppWeb(int puerto, String recursoEstatico) {
+        return Javalin.create(javalinConfig -> {
+            javalinConfig.plugins.enableCors(cors -> {
+                cors.add(it -> it.anyHost());
+            }); // para poder hacer requests de un dominio a otro
             freemarker.template.Configuration fmConfig =
                     new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_32);
             // Esto le dice a FreeMarker que busque en src/main/resources/templates/
@@ -28,9 +41,6 @@ public class IniciadorApp {
             javalinConfig.jetty.wsFactoryConfig(wsFactory -> {
                 wsFactory.setMaxTextMessageSize(2 * 1024 * 1024*1024);   // 2 MB
                 //sFactory.setMaxBinaryMessageSize(2 * 1024 * 1024); // opcional
-
-
-
             });
         }).start(puerto);
     };
