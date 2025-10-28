@@ -16,8 +16,8 @@ public class MainWeb {
         String puerto = config.getProperty("puertoWeb");
         System.out.println("Iniciando servidor Web en el puerto "+puerto);
 
-        String puertoApiPublica = config.getProperty("puertoApiPublica");
-        String puertoApiAdmin = config.getProperty("puertoApiAdmin");
+        String urlPublica = config.getProperty("urlPublica");
+        String urlAdmin = config.getProperty("urlAdmin");
         //si hacemos la pag de las estadisticas
         String puertoEstadisticas = config.getProperty("puertoEstadisticas");
 
@@ -25,34 +25,34 @@ public class MainWeb {
         Javalin app = iniciador.iniciarApp(Integer.parseInt(puerto), "/");
 
         // Probar
-        app.get("/api/hechos/{id}", new GetHechoEspecificoHandler(puertoApiPublica));
+        app.get("/api/hechos/{id}", new GetHechoEspecificoHandler(urlPublica));
 
         // Falta
-        app.get("/api/hechos", new GetHechosHandler(puertoApiPublica)); //home
+        app.get("/api/hechos", new GetHechosHandler(urlPublica)); //home
 
         // Falta
-        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(puertoApiPublica));
+        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
 
         // Falta
-        app.get("/crear", new GetCrearHechoHandler(puertoApiPublica)); // Para mostrar el formulario de creación
+        app.get("/crear", new GetCrearHechoHandler(urlPublica)); // Para mostrar el formulario de creación
 
         // Falta
-        app.get("/hecho/{id}/request-delete", new GetSolicitudEliminacionHandler(puertoApiPublica));
+        app.get("/hecho/{id}/request-delete", new GetSolicitudEliminacionHandler(urlPublica));
 
         // Falta
-        app.get("/api/colecciones", new GetColeccionesHandler(puertoApiPublica));
+        app.get("/api/colecciones", new GetColeccionesHandler(urlPublica));
 
         // Falta
-        app.get("/api/colecciones/{id}", new GetColeccionHandler(puertoApiAdmin));
+        app.get("/api/colecciones/{id}", new GetColeccionHandler(urlAdmin));
 
         // Falta
-        app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(puertoApiAdmin));
+        app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
 
         // Falta
-        app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(puertoApiAdmin));
+        app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlAdmin));
 
         //crear y editar colecciones
-        app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(puertoApiAdmin));
+        app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
 
         app.get("/crear-coleccion", new GetCrearColeccionHandler()); //para poder ver el formulario
 //se recibe un post en  api/colecciones, crea la coleccion y la mete en la base
