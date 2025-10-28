@@ -22,7 +22,7 @@ public class MainWeb {
         String puertoEstadisticas = config.getProperty("puertoEstadisticas");
 
         IniciadorApp iniciador = new IniciadorApp();
-        Javalin app = iniciador.iniciarApp(Integer.parseInt(puerto), "/");
+        Javalin app = iniciador.iniciarAppWeb(Integer.parseInt(puerto), "/");
 
         // Probar
         app.get("/api/hechos/{id}", new GetHechoEspecificoHandler(urlPublica));
@@ -31,30 +31,30 @@ public class MainWeb {
         app.get("/api/hechos", new GetHechosHandler(urlPublica)); //home
 
         // Falta
-        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
+        //app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
 
         // Falta
         app.get("/crear", new GetCrearHechoHandler(urlPublica)); // Para mostrar el formulario de creación
 
         // Falta
-        app.get("/hecho/{id}/request-delete", new GetSolicitudEliminacionHandler(urlPublica));
+        //app.get("/hechos/{id}/eliminar", new GetSolicitudEliminacionHandler(urlPublica));
 
         // Falta
-        app.get("/api/colecciones", new GetColeccionesHandler(urlPublica));
+        //app.get("/api/colecciones", new GetColeccionesHandler(urlPublica));
 
         // Falta
-        app.get("/api/colecciones/{id}", new GetColeccionHandler(urlAdmin));
+        //app.get("/api/colecciones/{id}", new GetColeccionHandler(urlAdmin));
 
         // Falta
-        app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
+        //app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
 
         // Falta
-        app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlAdmin));
+        //app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlAdmin));
 
         //crear y editar colecciones
-        app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
+        //app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
 
-        app.get("/crear-coleccion", new GetCrearColeccionHandler()); //para poder ver el formulario
+        //app.get("/crear-coleccion", new GetCrearColeccionHandler()); //para poder ver el formulario
 //se recibe un post en  api/colecciones, crea la coleccion y la mete en la base
 
         // Incompleto
