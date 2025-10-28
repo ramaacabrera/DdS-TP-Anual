@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="agregador-PU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>utils.Dominio.HechosYColecciones.Hecho</class>
+        <class>utils.Dominio.HechosYColecciones.Ubicacion</class>
+        <class>utils.Dominio.HechosYColecciones.Coleccion</class>
+        <class>utils.Dominio.HechosYColecciones.ContenidoMultimedia</class>
+        <class>utils.Dominio.HechosYColecciones.HechoModificado</class>
+        <class>utils.Dominio.HechosYColecciones.Etiqueta</class>
+        <class>utils.Dominio.fuente.Fuente</class>
+        <class>utils.Dominio.Usuario.Usuario</class>
+        <class>utils.Dominio.Criterios.CriterioCategoria</class>
+        <class>utils.Dominio.Criterios.CriterioContribuyente</class>
+        <class>utils.Dominio.Criterios.CriterioDeTexto</class>
+        <class>utils.Dominio.Criterios.CriterioEtiquetas</class>
+        <class>utils.Dominio.Criterios.CriterioFecha</class>
+        <class>utils.Dominio.Criterios.CriterioTipoFuente</class>
+        <class>utils.Dominio.Criterios.CriterioTipoMultimedia</class>
+        <class>utils.Dominio.Criterios.CriterioUbicacion</class>
+        <class>utils.Dominio.Solicitudes.Solicitud</class>
+        <properties>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/agregador_db?serverTimezone=America/Buenos_Aires"/>
+            <property name="hibernate.connection.username" value="root"/>
+            <property name="hibernate.connection.password" value="root"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect"/>
+            <!--property name="hibernate.hbm2ddl.auto" value="create-drop"/-->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.archive.autodetection" value="none"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="estadisticas-PU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>estadisticas.Dominio.Estadisticas</class>
+        <class>estadisticas.Dominio.EstadisticasCategoria</class>
+        <class>estadisticas.Dominio.EstadisticasCategoriaId</class>
+        <class>estadisticas.Dominio.EstadisticasColeccion</class>
+        <class>estadisticas.Dominio.EstadisticasColeccionId</class>
+        <properties>
+            <property name="hibernate.archive.autodetection" value="none"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/estadisticas_db?serverTimezone=America/Buenos_Aires"/>
+            <property name="hibernate.connection.username" value="root"/>
+            <property name="hibernate.connection.password" value="root"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <!--property name="hibernate.hbm2ddl.auto" value="update"/-->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
