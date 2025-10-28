@@ -10,6 +10,10 @@
         Está solicitando la eliminación del hecho ID: <strong>${hechoId?html}</strong>
     </p>
 
+    <script>
+        const URL_PUBLICA = '${urlPublica!"http://localhost:8087/api"}';
+    </script>
+
     <form id="form-solicitud-eliminacion" class="form-container" method="POST" action="/api/solicitudEliminacion">
 
         <!-- ID del Hecho (oculto) -->
