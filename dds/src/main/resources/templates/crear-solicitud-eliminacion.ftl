@@ -19,11 +19,11 @@
         <div class="form-group">
             <label for="justificacion" class="form-label">Justificación *</label>
             <textarea id="justificacion" name="justificacion" class="form-textarea" rows="6" required
-                      placeholder="Explique detalladamente por qué solicita la eliminación de este hecho (mínimo 500 caracteres)..."
-                      minlength="500"></textarea>
-            <small class="form-help">Mínimo 500 caracteres. Sea específico y claro en su justificación.</small>
+                      placeholder="Explique detalladamente por qué solicita la eliminación de este hecho (máximo 500 caracteres)..."
+                      maxlength="500"></textarea>
+            <small class="form-help">Máximo 500 caracteres. Sea específico y claro en su justificación.</small>
             <div id="contador-caracteres" class="contador-caracteres" style="margin-top: 8px; font-size: 0.85rem; color: var(--muted-color);">
-                0 caracteres
+                0 / 500 caracteres
             </div>
         </div>
 
@@ -31,11 +31,28 @@
         <div class="form-section">
             <h3 class="form-section-title">👤 Información del solicitante (opcional)</h3>
 
-            <div class="form-group">
-                <label for="nombreUsuario" class="form-label">Nombre</label>
-                <input type="text" id="nombreUsuario" name="usuario.nombre" class="form-input"
-                       placeholder="Su nombre (opcional)">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nombreUsuario" class="form-label">Nombre</label>
+                    <input type="text" id="nombreUsuario" name="usuario.nombre" class="form-input"
+                           placeholder="Su nombre">
+                </div>
+
+                <div class="form-group">
+                    <label for="apellidoUsuario" class="form-label">Apellido</label>
+                    <input type="text" id="apellidoUsuario" name="usuario.apellido" class="form-input"
+                           placeholder="Su apellido">
+                </div>
             </div>
+
+            <div class="form-group">
+                <label for="edadUsuario" class="form-label">Edad</label>
+                <input type="number" id="edadUsuario" name="usuario.edad" class="form-input" min="1" max="120"
+                       placeholder="Su edad">
+            </div>
+
+            <!-- Rol (siempre será CONTRIBUYENTE para este formulario) -->
+            <input type="hidden" id="rolUsuario" name="usuario.rol" value="CONTRIBUYENTE">
 
             <div class="form-checkbox-group">
                 <input type="checkbox" id="anonimo" name="anonimo" class="form-checkbox">

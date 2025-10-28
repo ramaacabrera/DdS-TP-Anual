@@ -3,9 +3,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnCancelar = document.getElementById('btn-cancelar');
     const checkboxAnonimo = document.getElementById('anonimo');
     const inputNombre = document.getElementById('nombreContribuyente');
+    const selectCategoria = document.getElementById('categoria');
+    const grupoOtraCategoria = document.getElementById('otra-categoria-group');
+    const inputOtraCategoria = document.getElementById('otraCategoria');
     const inputMultimedia = document.getElementById('multimedia');
     const previewContainer = document.getElementById('preview-container');
     const previewGrid = document.getElementById('preview-grid');
+
+    // Mostrar/ocultar campo "Otra categoría"
+    if (selectCategoria && grupoOtraCategoria) {
+        selectCategoria.addEventListener('change', function() {
+            if (this.value === 'Otro') {
+                grupoOtraCategoria.style.display = 'block';
+                if (inputOtraCategoria) {
+                    inputOtraCategoria.required = true;
+                }
+            } else {
+                grupoOtraCategoria.style.display = 'none';
+                if (inputOtraCategoria) {
+                    inputOtraCategoria.required = false;
+                    inputOtraCategoria.value = '';
+                }
+            }
+        });
+    }
 
     // Manejar checkbox anónimo
     if (checkboxAnonimo && inputNombre) {
@@ -81,10 +102,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
             try {
                 // Construir objeto JSON como espera el backend
+                const categoriaSeleccionada = document.getElementById('categoria').value;
+                const otraCategoria = document.getElementById('otraCategoria')?.value.trim();
+
                 const hechoData = {
                     titulo: document.getElementById('titulo').value,
                     descripcion: document.getElementById('descripcion').value,
-                    categoria: document.getElementById('categoria').value,
+                    categoria: categoriaSeleccionada === 'Otro' && otraCategoria ? otraCategoria : categoriaSeleccionada,
                     ubicacion: {
                         latitud: parseFloat(document.getElementById('latitud').value),
                         longitud: parseFloat(document.getElementById('longitud').value),

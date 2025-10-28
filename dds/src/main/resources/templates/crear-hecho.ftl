@@ -29,7 +29,7 @@
             <label for="categoria" class="form-label">Categoría *</label>
             <select id="categoria" name="categoria" class="form-select" required>
                 <option value="">Seleccione una categoría</option>
-                <option value="Incendio forestal">Incendio forestal</option>
+                <option value="Incendio">Incendio</option>
                 <option value="Desaparición">Desaparición</option>
                 <option value="Contaminación">Contaminación</option>
                 <option value="Accidente vial">Accidente vial</option>
@@ -37,6 +37,13 @@
                 <option value="Desastre natural">Desastre natural</option>
                 <option value="Otro">Otro</option>
             </select>
+        </div>
+
+        <!-- Campo para "Otra categoría" (se muestra solo cuando se selecciona "Otro") -->
+        <div id="otra-categoria-group" class="form-group" style="display: none;">
+            <label for="otraCategoria" class="form-label">Especifique la categoría *</label>
+            <input type="text" id="otraCategoria" name="otraCategoria" class="form-input"
+                   placeholder="Ej: Inundación, Derrumbe, etc.">
         </div>
 
         <!-- Ubicación -->

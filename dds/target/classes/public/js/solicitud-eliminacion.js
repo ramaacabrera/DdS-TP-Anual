@@ -3,15 +3,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnCancelar = document.getElementById('btn-cancelar');
     const checkboxAnonimo = document.getElementById('anonimo');
     const inputNombre = document.getElementById('nombreUsuario');
+    const inputApellido = document.getElementById('apellidoUsuario');
+    const inputEdad = document.getElementById('edadUsuario');
     const textareaJustificacion = document.getElementById('justificacion');
     const contadorCaracteres = document.getElementById('contador-caracteres');
 
-    // Contador de caracteres para la justificación
+    // Contador de caracteres para la justificación (MÁXIMO 500)
     textareaJustificacion.addEventListener('input', function() {
         const caracteres = this.value.length;
-        contadorCaracteres.textContent = `${caracteres} caracteres`;
+        contadorCaracteres.textContent = `${caracteres} / 500 caracteres`;
 
-        if (caracteres < 500) {
+        if (caracteres > 500) {
             contadorCaracteres.style.color = '#dc3545';
         } else {
             contadorCaracteres.style.color = 'var(--muted-color)';
@@ -20,10 +22,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Manejar checkbox anónimo
     checkboxAnonimo.addEventListener('change', function() {
-        inputNombre.disabled = this.checked;
-        if (this.checked) {
-            inputNombre.value = '';
-        }
+        const inputsUsuario = [inputNombre, inputApellido, inputEdad];
+
+        inputsUsuario.forEach(input => {
+            if (input) {
+                input.disabled = this.checked;
+                if (this.checked) {
+                    input.value = '';
+                }
+            }
+        });
     });
 
     // Cancelar
@@ -39,9 +47,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const justificacion = textareaJustificacion.value.trim();
 
-        // Validar longitud mínima
-        if (justificacion.length < 500) {
-            alert('La justificación debe tener al menos 500 caracteres. Actualmente tiene ' + justificacion.length + ' caracteres.');
+        // Validar longitud MÁXIMA (500 caracteres)
+        if (justificacion.length > 500) {
+            alert('La justificación no puede tener más de 500 caracteres. Actualmente tiene ' + justificacion.length + ' caracteres.');
+            textareaJustificacion.focus();
+            return;
+        }
+
+        // Validar que la justificación no esté vacía
+        if (justificacion.length === 0) {
+            alert('La justificación es obligatoria.');
             textareaJustificacion.focus();
             return;
         }
@@ -64,11 +79,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 ID_hechoAsociado: document.getElementById('ID_hechoAsociado').value,
                 justificacion: justificacion,
                 usuario: checkboxAnonimo.checked ? null : {
-                    nombre: inputNombre.value.trim() || ""
+                    nombre: inputNombre.value.trim() || "",
+                    apellido: inputApellido.value.trim() || "",
+                    edad: inputEdad.value ? parseInt(inputEdad.value) : null,
+                    rol: "CONTRIBUYENTE"
                 }
             };
 
             console.log('Enviando solicitud de eliminación:', solicitudData);
+            console.log('JSON stringified:', JSON.stringify(solicitudData));
 
             const response = await fetch('/api/solicitudEliminacion', {
                 method: 'POST',
@@ -85,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Éxito:', result);
                 mensajeExito.style.display = 'block';
                 setTimeout(() => {
-                    // Redirigir a la página del hecho o al inicio
+                    // Redirigir a la página del hecho
                     const hechoId = document.getElementById('ID_hechoAsociado').value;
                     window.location.href = '/hecho/' + encodeURIComponent(hechoId);
                 }, 2000);
