@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Enviando solicitud de eliminación:', solicitudData);
             console.log('JSON stringified:', JSON.stringify(solicitudData));
 
-            const response = await fetch('/api/solicitudEliminacion', {
+            const response = await fetch(URL_PUBLICA + '/solicitudEliminacion', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -33,11 +33,10 @@ public class MainWeb {
         // Falta
         //app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
 
-        // Falta
         app.get("/crear", new GetCrearHechoHandler(urlPublica)); // Para mostrar el formulario de creación
 
         // Falta
-        //app.get("/hechos/{id}/eliminar", new GetSolicitudEliminacionHandler(urlPublica));
+        app.get("/hechos/{id}/eliminar", new GetSolicitudEliminacionHandler(urlPublica));
 
         // Falta
         //app.get("/api/colecciones", new GetColeccionesHandler(urlPublica));
