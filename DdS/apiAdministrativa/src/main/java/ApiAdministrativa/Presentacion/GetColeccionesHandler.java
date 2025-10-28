@@ -63,7 +63,7 @@ public class GetColeccionesHandler implements Handler {
         // Obtener colecciones del repositorio con paginación
         List<Coleccion> colecciones;
         try {
-            colecciones = coleccionRepositorio.obtenerColecciones(pagina, limite);
+            //colecciones = coleccionRepositorio.obtenerColecciones(pagina, limite);
         } catch (Exception e) {
             ctx.status(500).json(Map.of(
                     "error", "Error al obtener colecciones",
@@ -72,7 +72,7 @@ public class GetColeccionesHandler implements Handler {
             return;
         }
 
-        ctx.status(200).json(colecciones);
+        //ctx.status(200).json(colecciones);
     }
 
 }

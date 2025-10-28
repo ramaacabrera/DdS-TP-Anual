@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/DdS-TP-Anual.iml" filepath="$PROJECT_DIR$/.idea/DdS-TP-Anual.iml" />
-      <module fileurl="file://$PROJECT_DIR$/DdS/metamapa-parent.iml" filepath="$PROJECT_DIR$/DdS/metamapa-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dds/metamapa.iml" filepath="$PROJECT_DIR$/dds/metamapa.iml" />
     </modules>
   </component>
 </project>
