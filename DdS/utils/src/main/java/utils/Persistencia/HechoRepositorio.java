@@ -31,7 +31,7 @@ public class HechoRepositorio {
         //EntityManager em = emf.createEntityManager();
         EntityManager em = BDUtils.getEntityManager();
         try {
-            StringBuilder queryString = new StringBuilder("SELECT * FROM Hecho h");
+            StringBuilder queryString = new StringBuilder("SELECT h FROM Hecho h");
             if(criterios != null){
                 queryString.append(" WHERE 1=1");
             }
@@ -41,7 +41,16 @@ public class HechoRepositorio {
 
             // JPQL para seleccionar todos los objetos Hecho
             TypedQuery<Hecho> query = em.createQuery(queryString.toString(), Hecho.class);
-            return query.getResultList();
+            List<Hecho> resultados = query.getResultList();
+
+            // INICIALIZAR RELACIONES antes de cerrar la sesión
+            for (Hecho hecho : resultados) {
+                Hibernate.initialize(hecho.getEtiquetas());
+                Hibernate.initialize(hecho.getContenidoMultimedia());
+                Hibernate.initialize(hecho.getUbicacion());
+            }
+
+            return resultados;
         } finally {
             em.close();
         }

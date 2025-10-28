@@ -8,6 +8,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import utils.DTO.PageDTO;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -36,10 +37,10 @@ public class GetHechosHandler implements Handler {
 
     @Override
     public void handle(Context ctx) throws IOException {
-        // 1) Construir lista de filtros disponibles (para UI)
+        // 1) Filtros para la UI
         List<FilterDef> filters = buildFilters();
 
-        // 2) Leer parámetros de búsqueda
+        // 2) Leer filtros y paginación desde la query
         String categoria = ctx.queryParam("categoria");
         String fechaCargaDesde = ctx.queryParam("fecha_carga_desde");
         String fechaCargaHasta = ctx.queryParam("fecha_carga_hasta");
@@ -48,8 +49,13 @@ public class GetHechosHandler implements Handler {
         String latitud = ctx.queryParam("latitud");
         String longitud = ctx.queryParam("longitud");
 
-        // 3) Construir URL del backend (con los nombres EXACTOS que recibe)
-        HttpUrl.Builder b = HttpUrl.parse(urlPublica + "/hechos").newBuilder();
+        int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
+        int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
+
+        // 3) Construir URL del backend con los nombres EXACTOS que recibe + paginación
+        HttpUrl.Builder b = HttpUrl.parse(urlPublica + "/hechos").newBuilder()
+                .addQueryParameter("page", String.valueOf(page))
+                .addQueryParameter("size", String.valueOf(size));
 
         if (categoria != null && !categoria.isBlank())
             b.addQueryParameter("categoria", categoria);
@@ -72,22 +78,23 @@ public class GetHechosHandler implements Handler {
         String finalUrl = b.build().toString();
         System.out.println("📡 Consultando backend: " + finalUrl);
 
-        // 4) Ejecutar llamada HTTP al backend
-        Request request = new Request.Builder()
-                .url(finalUrl)
-                .get()
-                .build();
+        // 4) Ejecutar llamada HTTP al backend (espera PageDTO<HechoDTO>)
+        Request request = new Request.Builder().url(finalUrl).get().build();
 
-        List<HechoDTO> hechos = Collections.emptyList();
+        PageDTO<HechoDTO> resp;
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 throw new IOException("Error al llamar al backend: " + response.code() + " " + response.message());
             }
             String body = Objects.requireNonNull(response.body()).string();
-            hechos = mapper.readValue(body, new TypeReference<List<HechoDTO>>() {});
+            resp = mapper.readValue(body, new TypeReference<PageDTO<HechoDTO>>() {});
         }
 
-        // 5) Modelo de datos para la vista
+        // 5) Índices para “Mostrando X–Y”
+        int fromIndex = (resp.page - 1) * resp.size;                // 0-based
+        int toIndex   = fromIndex + (resp.content != null ? resp.content.size() : 0);
+
+        // 6) Modelo de datos para la vista
         Map<String, Object> model = new HashMap<>();
         model.put("baseHref", "/api/hechos");
         model.put("filters", filters);
@@ -100,13 +107,14 @@ public class GetHechosHandler implements Handler {
                 "latitud", latitud != null ? latitud : "",
                 "longitud", longitud != null ? longitud : ""
         ));
-        model.put("hechos", hechos);
-        model.put("total", hechos.size());
-        model.put("page", 1);
-        model.put("size", hechos.size());
-        model.put("totalPages", 1);
-        model.put("fromIndex", 1);
-        model.put("toIndex", hechos.size());
+
+        model.put("hechos", resp.content != null ? resp.content : Collections.emptyList());
+        model.put("total", resp.totalElements);
+        model.put("page", resp.page);
+        model.put("size", resp.size);
+        model.put("totalPages", resp.totalPages);
+        model.put("fromIndex", fromIndex);
+        model.put("toIndex", toIndex);
 
         ctx.render("home.ftl", model);
     }
