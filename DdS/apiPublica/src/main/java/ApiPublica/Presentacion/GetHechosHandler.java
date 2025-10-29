@@ -1,15 +1,12 @@
 package ApiPublica.Presentacion;
 
+import utils.Dominio.Criterios.*;
 import utils.Persistencia.HechoRepositorio;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import utils.Dominio.Criterios.Criterio;
-import utils.Dominio.Criterios.CriterioCategoria;
-import utils.Dominio.Criterios.CriterioFecha;
-import utils.Dominio.Criterios.CriterioUbicacion;
 import utils.Dominio.HechosYColecciones.Hecho;
 import utils.DTO.*;
 import org.jetbrains.annotations.NotNull;
@@ -58,6 +55,8 @@ public class GetHechosHandler implements Handler {
         List<Hecho> pageContent = hechos.subList(fromIndex, toIndex);
 
         List<HechoDTO> hechosDTO = pageContent.stream().map(HechoDTO::new).collect(Collectors.toList());
+
+        System.out.println("Hechos: " + hechosDTO);
 
         ctx.json(new PageDTO<>(hechosDTO, pagina, limite, totalPages, total));
     }
@@ -124,6 +123,12 @@ public class GetHechosHandler implements Handler {
             int longitud = Integer.parseInt(longitudString);
             criterios.add(new CriterioUbicacion(new Ubicacion(latitud, longitud)));
 
+        }
+
+        // Contribuyente
+        String contribuyente = ctx.queryParam("contribuyente");
+        if (contribuyente != null) {
+            criterios.add(new CriterioContribuyente(contribuyente));
         }
 
         return criterios;

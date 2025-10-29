@@ -91,6 +91,9 @@ public class GetHechosHandler implements Handler {
             resp = mapper.readValue(body, new TypeReference<PageDTO<HechoDTO>>() {});
         }
 
+        String json = mapper.writeValueAsString(resp.content);
+        System.out.println("Lista en JSON:\n" + json);
+
         // 5) Índices para “Mostrando X–Y”
         int fromIndex = (resp.page - 1) * resp.size;                // 0-based
         int toIndex   = fromIndex + (resp.content != null ? resp.content.size() : 0);
@@ -117,7 +120,18 @@ public class GetHechosHandler implements Handler {
         model.put("fromIndex", fromIndex);
         model.put("toIndex", toIndex);
 
-        ctx.render("prueba-home.ftl", model);
+//        Map<String, Object> model = new HashMap<>();
+//        //model.put("usuario", obtenerUsuarioSesion(ctx)); DEPENDE COMO MANEJEMOS LA SESION
+//        model.put("hechos", resp.content != null ? resp.content : Collections.emptyList());
+//        model.put("categorias", obtenerCategorias());
+//        model.put("fuentes", obtenerFuentes());
+//        model.put("colecciones", obtenerColecciones());
+//        model.put("paginaActual", 1);
+//        model.put("totalPaginas", 10);
+//        model.put("cargando", false);
+
+
+        ctx.render("home.ftl", model);
     }
 
     private String normalizarFecha(String raw) {

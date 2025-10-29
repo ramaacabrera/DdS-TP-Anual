@@ -47,202 +47,82 @@
 </nav>
 
 <!-- Main Container -->
-<div class="container">
-    <!-- Sidebar con Filtros -->
+<div class="main-layout">
+    <!-- Sidebar con filtros -->
     <aside class="sidebar">
-        <h2 class="sidebar-title">Filtros</h2>
-        <form id="filterForm">
-            <div class="filter-group">
-                <label class="filter-label" for="categoria">Categoría</label>
-                <select class="filter-select" id="categoria" name="categoria">
-                    <option value="">Todas las categorías</option>
-                    <#list categorias as categoria>
-                        <option value="${categoria}" <#if filtros.categoria?? && filtros.categoria == categoria>selected</#if>>
-                            ${categoria}
-                        </option>
+        <div class="box">
+            <h2 class="section-title">Filtros</h2>
+            <form class="filters-form" method="get" action="${baseHref}">
+                <div class="filters-grid">
+                    <#list filters as filter>
+                        <div class="filter-item">
+                            <label class="filter-label">${filter.label}</label>
+                            <#if filter.type == "select">
+                                <select name="${filter.key}" class="filter-input">
+                                    <option value="">Todos</option>
+                                    <#list filter.options as option>
+                                        <option value="${option}"
+                                                <#if filterValues[filter.key]?? && filterValues[filter.key] == option>selected</#if>>
+                                            ${option}
+                                        </option>
+                                    </#list>
+                                </select>
+                            <#elseif filter.type == "date">
+                                <input type="date"
+                                       name="${filter.key}"
+                                       class="filter-input"
+                                       value="${filterValues[filter.key]!''}" />
+                            <#else>
+                                <input type="text"
+                                       name="${filter.key}"
+                                       class="filter-input"
+                                       placeholder="Buscar..."
+                                       value="${filterValues[filter.key]!''}" />
+                            </#if>
+                        </div>
                     </#list>
-                </select>
-            </div>
+                </div>
 
-            <div class="filter-group">
-                <label class="filter-label" for="ubicacion">Ubicación</label>
-                <input type="text" class="filter-input" id="ubicacion" name="ubicacion"
-                       placeholder="Ej: Buenos Aires" value="${filtros.ubicacion!''}">
-            </div>
-
-            <div class="filter-group">
-                <label class="filter-label" for="fechaDesde">Fecha Acontecimiento (Desde)</label>
-                <input type="date" class="filter-input" id="fechaDesde" name="fechaDesde"
-                       value="${filtros.fechaDesde!''}">
-            </div>
-
-            <div class="filter-group">
-                <label class="filter-label" for="fechaHasta">Fecha Acontecimiento (Hasta)</label>
-                <input type="date" class="filter-input" id="fechaHasta" name="fechaHasta"
-                       value="${filtros.fechaHasta!''}">
-            </div>
-
-            <div class="filter-group">
-                <label class="filter-label" for="fuente">Fuente</label>
-                <select class="filter-select" id="fuente" name="fuente">
-                    <option value="">Todas las fuentes</option>
-                    <#list fuentes as fuente>
-                        <option value="${fuente}" <#if filtros.fuente?? && filtros.fuente == fuente>selected</#if>>
-                            ${fuente}
-                        </option>
-                    </#list>
-                </select>
-            </div>
-
-            <div class="filter-group">
-                <label class="filter-label" for="contribuyente">Contribuyente</label>
-                <input type="text" class="filter-input" id="contribuyente" name="contribuyente"
-                       placeholder="Nombre del contribuyente" value="${filtros.contribuyente!''}">
-            </div>
-
-            <div class="filter-group">
-                <label class="filter-label" for="etiquetas">Etiquetas</label>
-                <input type="text" class="filter-input" id="etiquetas" name="etiquetas"
-                       placeholder="Separadas por comas" value="${filtros.etiquetas!''}">
-            </div>
-
-            <div class="filter-group">
-                <label class="filter-label" for="coleccion">Colección</label>
-                <select class="filter-select" id="coleccion" name="coleccion">
-                    <option value="">Todas las colecciones</option>
-                    <#list colecciones as coleccion>
-                        <option value="${coleccion.id}" <#if filtros.coleccion?? && filtros.coleccion == coleccion.id?string>selected</#if>>
-                            ${coleccion.nombre}
-                        </option>
-                    </#list>
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-filter">Aplicar Filtros</button>
-            <button type="button" class="btn btn-clear" onclick="clearFilters()">Limpiar Filtros</button>
-        </form>
+                <div class="filters-actions">
+                    <button type="submit" class="btn btn-primary">Aplicar</button>
+                    <a href="${baseHref}" class="btn btn-secondary">Limpiar</a>
+                </div>
+            </form>
+        </div>
     </aside>
 
-    <!-- Main Content -->
+    <!-- Contenido principal -->
     <main class="main-content">
-        <!-- Search Bar -->
-        <div class="search-container">
-            <form class="search-bar" id="searchForm">
-                <input type="text" class="search-input" id="searchInput" name="busqueda"
-                       placeholder="Buscar por título, descripción o categoría..."
-                       value="${busqueda!''}">
-                <button type="submit" class="btn btn-search">Buscar</button>
+        <!-- Barra de búsqueda rápida (opcional) -->
+        <div class="box" style="margin-bottom: 2rem;">
+            <form method="get" action="${baseHref}">
+                <div class="search-bar">
+                    <input type="search"
+                           name="q"
+                           placeholder="Buscar hechos..."
+                           class="search-input"
+                           value="${filterValues['q']!''}">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
             </form>
         </div>
 
-        <!-- Hechos Grid -->
-        <div class="hechos-grid" id="hechosGrid">
-            <#if cargando>
-                <!-- Skeleton Loaders -->
-                <#list 1..9 as i>
-                    <div class="hecho-card skeleton">
-                        <div class="hecho-image-container">
-                            <div class="hecho-image skeleton"></div>
-                            <div class="hecho-category skeleton">Categoría</div>
-                        </div>
-                        <div class="hecho-content">
-                            <h3 class="hecho-title skeleton">Título del hecho</h3>
-                            <div class="hecho-info">
-                                <div class="hecho-info-item skeleton">Fecha</div>
-                                <div class="hecho-info-item skeleton">Ubicación</div>
-                                <div class="hecho-info-item skeleton">Contribuyente</div>
-                            </div>
-                            <div class="hecho-tags">
-                                <span class="tag skeleton">etiqueta</span>
-                                <span class="tag skeleton">etiqueta</span>
-                                <span class="tag skeleton">etiqueta</span>
-                            </div>
-                        </div>
-                    </div>
-                </#list>
-            <#elseif hechos?? && (hechos?size > 0)>
-                <!-- Hechos Reales -->
+        <!-- Grid de hechos -->
+        <div class="hechos-grid">
+            <#if hechos?? && (hechos?size > 0)>
                 <#list hechos as hecho>
-                    <div class="hecho-card" onclick="verHecho('${hecho.id}')">
-                        <div class="hecho-image-container">
-                            <img src="${hecho.imagenUrl!'/placeholder.svg?height=200&width=400'}"
-                                 alt="${hecho.titulo}" class="hecho-image">
-                            <span class="hecho-category">${hecho.categoria}</span>
-                        </div>
-                        <div class="hecho-content">
-                            <h3 class="hecho-title">${hecho.titulo}</h3>
-                            <div class="hecho-info">
-                                <div class="hecho-info-item">
-                                    <svg class="hecho-info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                    <span>${hecho.fechaAcontecimiento}</span>
-                                </div>
-                                <div class="hecho-info-item">
-                                    <svg class="hecho-info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    </svg>
-                                    <span>${hecho.ubicacion}</span>
-                                </div>
-                                <div class="hecho-info-item">
-                                    <svg class="hecho-info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                    </svg>
-                                    <span>${hecho.contribuyente!'Anónimo'}</span>
-                                </div>
-                            </div>
-                            <#if hecho.etiquetas?? && (hecho.etiquetas?size > 0)>
-                                <div class="hecho-tags">
-                                    <#list hecho.etiquetas as etiqueta>
-                                        <#if etiqueta?index < 3>
-                                            <span class="tag">${etiqueta}</span>
-                                        </#if>
-                                    </#list>
-                                </div>
-                            </#if>
-                        </div>
-                    </div>
+                    <!-- tu card de hecho aquí -->
                 </#list>
             <#else>
-                <!-- Empty State -->
-                <div class="empty-state" style="grid-column: 1 / -1;">
-                    <div class="empty-state-icon">🔍</div>
-                    <h3 class="empty-state-title">No se encontraron hechos</h3>
-                    <p>Intenta ajustar los filtros o realizar una nueva búsqueda</p>
+                <div class="empty-state">
+                    <p>No se encontraron hechos</p>
                 </div>
             </#if>
         </div>
 
-        <!-- Pagination -->
-        <#if !cargando && hechos?? && (totalPaginas > 1)>
-            <div class="pagination">
-                <button class="pagination-btn" onclick="cambiarPagina(${paginaActual - 1})"
-                        <#if paginaActual == 1>disabled</#if>>
-                    ← Anterior
-                </button>
-
-                <#list 1..totalPaginas as pagina>
-                    <#if (pagina == 1) || (pagina == totalPaginas) ||
-                    ((pagina >= paginaActual - 2) && (pagina <= paginaActual + 2))>
-                        <button class="pagination-btn <#if pagina == paginaActual>active</#if>"
-                                onclick="cambiarPagina(${pagina})">
-                            ${pagina}
-                        </button>
-                    <#elseif (pagina == paginaActual - 3) || (pagina == paginaActual + 3)>
-                        <span style="padding: 0.5rem;">...</span>
-                    </#if>
-                </#list>
-
-                <button class="pagination-btn" onclick="cambiarPagina(${paginaActual + 1})"
-                        <#if paginaActual == totalPaginas>disabled</#if>>
-                    Siguiente →
-                </button>
-            </div>
+        <!-- Paginador -->
+        <#if totalPages gt 1>
+            <!-- tu paginador aquí -->
         </#if>
     </main>
 </div>

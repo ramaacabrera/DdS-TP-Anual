@@ -51,7 +51,7 @@ public class MainWeb {
         //app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlAdmin));
 
         //crear y editar colecciones
-        app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
+        //app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
 
         app.get("/crear-coleccion", new GetCrearColeccionHandler()); //para poder ver el formulario
 //se recibe un post en  api/colecciones, crea la coleccion y la mete en la base

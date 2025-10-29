@@ -46,6 +46,12 @@ public class CriterioDeTexto extends Criterio {
                     }
                 }
                 return false;
+                case BUSQUEDA:
+                    for (String palabra : palabras) {
+                        if(hecho.getTitulo().contains(palabra) || hecho.getDescripcion().contains(palabra) || hecho.getCategoria().contains(palabra)){
+                            return true;
+                        }
+                    }
             default:
                 return palabras.stream().anyMatch(texto ->
                         hecho.getTitulo().toLowerCase().contains(texto.toLowerCase()) ||
@@ -86,7 +92,13 @@ public class CriterioDeTexto extends Criterio {
                 for (String palabra : palabras) {
                     retorno.append(" or h.categoria like '%").append(palabra).append("%'");
                 }
-                default:
+            case BUSQUEDA:
+                for(String palabra : palabras){
+                    retorno.append(" or h.titulo like '%").append(palabra).append("%'").append(" or h.descripcion like '%").append(palabra).append("%'")
+                            .append(" or h.categoria like '%").append(palabra).append("%'");
+                }
+
+            default:
                     retorno = new StringBuilder("(1=1");
         }
 

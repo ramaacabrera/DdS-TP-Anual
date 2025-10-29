@@ -83,6 +83,20 @@
     </div>
 </#macro>
 
+<#-- Función para obtener nombre legible del filtro -->
+<#function getFilterLabel filter>
+    <#if filter??>
+        <#if filter.label??>
+            <#return filter.label>
+        <#elseif filter.key??>
+            <#return filter.key?replace("_", " ")?cap_first>
+        <#else>
+            <#return "Filtro">
+        </#if>
+    </#if>
+    <#return "Filtro">
+</#function>
+
 <#-- ===== Campo de filtro (robusto) ===== -->
 <#macro filterField f values>
 <#-- si f es null, salir silenciosamente -->
@@ -92,7 +106,7 @@
 
 <#-- normalizar acceso a claves -->
     <#assign key   = (f.key)! (f['key'])!''>
-    <#assign label = (f.label)! (f['label'])! (key?cap_first) >
+    <#assign label = getFilterLabel(f) >
     <#assign type  = (f.type)! (f['type'])!'search' >
     <#assign options = (f.options)! (f['options'])![] >
     <#assign optionObjs = (f.optionObjs)! (f['optionObjs'])![] >
@@ -105,7 +119,7 @@
             <#switch type>
                 <#case "search">
                     <input class="input w-100" type="search" name="${key}"
-                           value="${_val(values, key)}"
+                           value="${(values[key])!''}"
                            placeholder="${f.placeholder!'Buscar…'}"/>
                     <#break>
 
@@ -200,4 +214,73 @@
             <a class="btn btn-ghost" href="${(baseHref!'/api/hechos')}">Limpiar</a>
         </div>
     </div>
+</#macro>
+
+<#-- CARD DE HECHO -------------------------------------------------------->
+<#macro hechoCard id titulo resumen fecha categoria ubicacion etiquetas verHref editarHref>
+    <article class="card card-hecho">
+        <div class="card-media skeleton">IMAGEN</div>
+
+        <div class="card-body">
+            <div class="row space-between align-center">
+                <h3 class="card-title">${titulo?html}</h3>
+                <div class="row gap-8">
+                    <a href="${verHref}"   class="btn btn-sm">Ver</a>
+                    <a href="${editarHref}" class="btn btn-sm btn-ghost">Editar</a>
+                </div>
+            </div>
+
+            <p class="muted">${resumen?html}</p>
+
+            <div class="row gap-16 mt-8 small muted">
+                <label><input type="radio" disabled /> Fecha: ${fecha?html}</label>
+                <label><input type="radio" disabled /> Latitud: ${ubicacion.latitud?html}</label>
+                <label><input type="radio" disabled /> Longitud: ${ubicacion.longitud?html}</label>
+                <label><input type="radio" disabled /> Categoría: ${categoria?html}</label>
+            </div>
+
+            <div class="row gap-8 mt-8">
+                <#list etiquetas as e>
+                    <span class="tag">${e?html}</span>
+                </#list>
+            </div>
+        </div>
+    </article>
+</#macro>
+
+<#-- Función fuera del macro -->
+<#function qs k v>
+    <#if v?is_sequence>
+        <#return v?map(x -> (k?url) + "=" + (x?url))?join("&")>
+    <#else>
+        <#return (k?url) + "=" + (v?url)>
+    </#if>
+</#function>
+
+<#-- Función fuera del macro -->
+<#function keepToQuery keep>
+    <#assign parts=[] />
+    <#list keep?keys as k>
+        <#if keep[k]?? && keep[k] != "" && !(keep[k]?is_sequence && keep[k]?size==0)>
+            <#assign parts += [qs(k, keep[k])] />
+        </#if>
+    </#list>
+    <#return parts?join("&")>
+</#function>
+
+<#-- Macro principal sin funciones anidadas -->
+<#macro pager page size totalPages baseHref keep>
+    <#if (totalPages?number > 1)>
+        <#assign q = keepToQuery(keep) />
+        <#assign prev = (page > 1)?then(page-1,1) />
+        <#assign next = (page < totalPages)?then(page+1,totalPages) />
+
+        <nav class="pager row gap-8 mt-16">
+            <a class="btn btn-sm" href="${baseHref}?page=1&size=${size}<#if q?has_content>&${q}</#if>">« Primero</a>
+            <a class="btn btn-sm" href="${baseHref}?page=${prev}&size=${size}<#if q?has_content>&${q}</#if>">‹ Anterior</a>
+            <span class="muted small">Página ${page} de ${totalPages}</span>
+            <a class="btn btn-sm" href="${baseHref}?page=${next}&size=${size}<#if q?has_content>&${q}</#if>">Siguiente ›</a>
+            <a class="btn btn-sm" href="${baseHref}?page=${totalPages}&size=${size}<#if q?has_content>&${q}</#if>">Último »</a>
+        </nav>
+    </#if>
 </#macro>

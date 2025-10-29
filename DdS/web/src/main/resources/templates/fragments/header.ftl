@@ -9,6 +9,12 @@
     <!-- CSS principal (desde src/main/resources/public/css/style.css) -->
     <link rel="stylesheet" href="/css/style.css">
 
+    <#if additionalCss??>
+        <#list additionalCss as css>
+            <link rel="stylesheet" href="${css}">
+        </#list>
+    </#if>
+
     <!-- Leaflet CSS (necesario en head para evitar flash sin estilos en el mapa) -->
     <!--<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-sA+e2e9k1o7f6x5G6kq8jJg1q3nq9xM8yL9w8f5fC80="
