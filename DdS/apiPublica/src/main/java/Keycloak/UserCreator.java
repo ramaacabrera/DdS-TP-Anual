@@ -4,10 +4,20 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONArray;
 import org.json.JSONObject;
+import utils.LecturaConfig;
+
+import java.util.Properties;
 
 public class UserCreator {
+    private String urlServidor;
+    private String urlServidorAdmin;
 
-    public UserCreator(){}
+    public UserCreator(){
+        LecturaConfig lector = new LecturaConfig();
+        Properties config = lector.leerConfig();
+        this.urlServidor = config.getProperty("urlServidorSSO");
+        this.urlServidorAdmin = config.getProperty("urlServidorSSOAdmin");
+    }
 
     public int crearUsuario(String username, String clave, String nombre, String apellido, String email){
 
@@ -18,7 +28,7 @@ public class UserCreator {
          */
 
         String client_secret = "AZAGxoNbaW0aRksB3YWPG7Qj05tKJhr5";
-        String tokenUrl = "http://localhost:8080/realms/tpDDSI/protocol/openid-connect/token";
+        String tokenUrl = urlServidor + "/protocol/openid-connect/token";
 
         HttpResponse<String> response = Unirest.post(tokenUrl)
                 .field("client_id", "miapp-backend")
@@ -35,7 +45,7 @@ public class UserCreator {
             /////////////////////////////////////////////////////////////////
          */
 
-        String apiUrl = "http://localhost:8080/admin/realms/tpDDSI/users";
+        String apiUrl = urlServidorAdmin + "/users";
         JSONObject newUser = new JSONObject();
         newUser.put("username", username);
         newUser.put("email", email);
@@ -66,7 +76,7 @@ public class UserCreator {
 
         String userId = null;
 
-        String searchUrl = "http://localhost:8080/admin/realms/tpDDSI/users?username=" + username;
+        String searchUrl = urlServidorAdmin + "/users?username=" + username;
         HttpResponse<String> res = Unirest.get(searchUrl)
                 .header("Authorization", "Bearer " + accessToken)
                 .asString();
@@ -84,7 +94,7 @@ public class UserCreator {
         password.put("value", clave);
         password.put("temporary", false);
 
-        String resetUrl = "http://localhost:8080/admin/realms/tpDDSI/users/" + userId + "/reset-password";
+        String resetUrl = urlServidorAdmin + "/users/" + userId + "/reset-password";
 
         HttpResponse<String> pwdResponse = Unirest.put(resetUrl)
                 .header("Authorization", "Bearer " + accessToken)

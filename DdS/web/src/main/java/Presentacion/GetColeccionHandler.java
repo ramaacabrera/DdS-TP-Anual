@@ -1,13 +1,23 @@
 package Presentacion;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.Map;
+
 public class GetColeccionHandler implements Handler {
 
     private final String urlAdmin;
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public GetColeccionHandler(String urlAdmin) {
         this.urlAdmin = urlAdmin;
@@ -15,13 +25,42 @@ public class GetColeccionHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        String coleccionId = ctx.pathParam("id");
+        try {
+            String coleccionId = ctx.pathParam("id");
+            System.out.println("Mostrando detalles para colección ID: " + coleccionId);
 
-        Map<String, Object> modelo = new HashMap<>();
-        modelo.put("pageTitle", "Detalle de Colección");
-        modelo.put("coleccionId", coleccionId);
-        modelo.put("urlAdmin", urlAdmin);
+            // 1️Llamada a la API administrativa
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(urlAdmin + "/colecciones/" + coleccionId))
+                    .GET()
+                    .build();
 
-        ctx.render("coleccion.ftlh", modelo);
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                ctx.status(response.statusCode())
+                        .result("Error al obtener la colección desde la API administrativa.");
+                return;
+            }
+
+            // 2️Parseamos JSON a un Map
+            Map<String, Object> coleccion = mapper.readValue(response.body(), new TypeReference<>() {});
+
+            // 3️Armamos el modelo para FreeMarker
+            Map<String, Object> modelo = new HashMap<>();
+            modelo.put("pageTitle", "Detalle de Colección");
+            modelo.put("coleccion", coleccion);
+            modelo.put("urlAdmin", urlAdmin);
+            modelo.put("coleccionId", coleccionId);
+
+            // 4 Renderizamos la vista
+            ctx.render("coleccion.ftl", modelo);
+
+        } catch (Exception e) {
+            System.err.println("ERROR en GetColeccionHandler: " + e.getMessage());
+            e.printStackTrace();
+            ctx.status(500).result("Error al cargar la colección: " + e.getMessage());
+        }
     }
 }

@@ -5,12 +5,21 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import io.javalin.http.UnauthorizedResponse;
+import utils.LecturaConfig;
+
+import java.util.Properties;
 
 public class TokenValidator {
 
-    private static final String ISSUER = "http://localhost:8080/realms/tpDDSI";
+    private final String ISSUER;
 
-    public static void validar(String token) {
+    public TokenValidator(){
+        LecturaConfig lector = new LecturaConfig();
+        Properties config = lector.leerConfig();
+        ISSUER = config.getProperty("urlServidorSSO");
+    }
+
+    public void validar(String token) {
 
         try {
             //Algorithm algorithm = Algorithm.RSA256(KeycloakKeyProvider.getKey(), null);

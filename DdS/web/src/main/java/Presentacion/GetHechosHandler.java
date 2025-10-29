@@ -179,7 +179,10 @@ public class GetHechosHandler implements Handler {
 //        model.put("totalPaginas", 10);
 //        model.put("cargando", false);
 
-
+        String username = ctx.sessionAttribute("username");
+        if(username != null){
+            model.put("username", username);
+        }
         ctx.render("home.ftl", model);
     }
 

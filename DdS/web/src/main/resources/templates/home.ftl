@@ -68,7 +68,7 @@
                             id=h.hecho_id
                             titulo=h.titulo
                             resumen=h.resumen!""
-                            fecha=h.fecha!""
+                            fecha=h.fechaDeAcontecimiento!""
                             categoria=h.categoria!""
                             ubicacion=h.ubicacion!""
                             etiquetas=h.etiquetas![]

@@ -10,12 +10,13 @@ import java.util.Map;
 public class GetLoginHandler implements Handler {
     private String urlPublica;
 
-    public GetLoginHandler(String urlPublica) {this.urlPublica=urlPublica;}
+    public GetLoginHandler(String urlPublica) {this.urlPublica = urlPublica;}
 
     @Override
     public void handle(@NotNull Context ctx){
         Map<String, Object> model = new HashMap<>();
-        model.put("baseAPIUrl", urlPublica);
+        model.put("baseApiUrl", "http://localhost:8087/api");
+        //model.put("baseAPIUrl", urlPublica);
         String error = ctx.sessionAttribute("error");
         if(error != null){
             model.put("error", error);

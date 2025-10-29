@@ -15,6 +15,9 @@ public class MainAPIPublica {
         int puerto = Integer.parseInt(config.getProperty("puertoApiPublica"));
         int puertoDinamica = Integer.parseInt(config.getProperty("puertoDinamico"));
 
+        String urlWeb = config.getProperty("urlWeb");
+        String servidorSSO = config.getProperty("urlServidorSSO");
+
         //EntityManagerFactory emf = Persistence.createEntityManagerFactory("agregador-PU");
         //EntityManager em = emf.createEntityManager();
 
@@ -32,7 +35,7 @@ public class MainAPIPublica {
         app.post("/api/solicitudEliminacion", new PostSolicitudEliminacionHandler(puertoDinamica));
         app.post("/api/solicitudeModificacion", new PostSolicitudModificacionHandler(puertoDinamica));
 
-        app.post("/api/login", new PostLoginHandler(usuarioRepositorio));
-        app.post("/api/sign-in", new PostSignInHandler(usuarioRepositorio));
+        app.post("/api/login", new PostLoginHandler(usuarioRepositorio, urlWeb, servidorSSO));
+        app.post("/api/sign-in", new PostSignInHandler(usuarioRepositorio, urlWeb));
     }
 }

@@ -12,7 +12,7 @@
                 <div class="error">${error}</div>
             </#if>
 
-            <form method="post" action="${baseAPIUrl}/login">
+            <form method="post" action="http://localhost:8087/api/login">
                 <input type="text" name="usuario" placeholder="Usuario" required>
                 <input type="password" name="password" placeholder="Contraseña" required>
                 <button type="submit">Entrar</button>

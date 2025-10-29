@@ -10,7 +10,12 @@ import utils.Dominio.Usuario.*;
 
 public class PostSignInHandler implements Handler {
     private UsuarioRepositorio usuarioRepositorio;
-    public PostSignInHandler(UsuarioRepositorio usuarioRepositorio){this.usuarioRepositorio = usuarioRepositorio;}
+    private String urlWeb;
+
+    public PostSignInHandler(UsuarioRepositorio usuarioRepositorio, String urlWeb) {
+        this.usuarioRepositorio = usuarioRepositorio;
+        this.urlWeb = urlWeb;
+    }
 
     @Override
     public void handle(@NotNull Context ctx) {
@@ -43,7 +48,7 @@ public class PostSignInHandler implements Handler {
 
         usuarioRepositorio.guardar(nuevoUsuario);
 
-        ctx.redirect("/api/login");
+        ctx.redirect("http://localhost:7070/login");
 
     }
 }

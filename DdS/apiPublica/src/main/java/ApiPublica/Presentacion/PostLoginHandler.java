@@ -2,6 +2,7 @@ package ApiPublica.Presentacion;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import io.javalin.http.HttpStatus;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import utils.Persistencia.UsuarioRepositorio;
@@ -13,13 +14,17 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PostLoginHandler implements Handler {
     private UsuarioRepositorio usuarioRepositorio;
+    private String urlWeb;
+    private String servidorSSO;
 
-    public PostLoginHandler(UsuarioRepositorio usuarioRepositorio){this.usuarioRepositorio = usuarioRepositorio;}
+    public PostLoginHandler(UsuarioRepositorio usuarioRepositorio, String urlWeb, String servidorSSO) {
+        this.usuarioRepositorio = usuarioRepositorio;
+        this.urlWeb = urlWeb;
+        this.servidorSSO = servidorSSO;
+    }
 
     @Override
     public void handle(@NotNull Context ctx){
@@ -27,7 +32,7 @@ public class PostLoginHandler implements Handler {
         Usuario usuario = usuarioRepositorio.buscarPorUsername(username);
         if(usuario == null){
             ctx.sessionAttribute("error", "Usuario no existe");
-            ctx.redirect("/api/login");
+            ctx.redirect("http://localhost:7070/login");
             return;
         }
         String password = ctx.formParam("password");
@@ -37,7 +42,7 @@ public class PostLoginHandler implements Handler {
                 "&password=" + URLEncoder.encode(password, StandardCharsets.UTF_8) +
                 "&grant_type=password";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/realms/tpDDSI/protocol/openid-connect/token"))
+                .uri(URI.create(servidorSSO + "/protocol/openid-connect/token"))
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
@@ -50,12 +55,15 @@ public class PostLoginHandler implements Handler {
                 String access_token = json.get("access_token").toString();
                 System.out.println("Access_token: " + access_token);
 
+                System.out.println(urlWeb+"/hechos");
+
                 ctx.sessionAttribute("access_token", access_token);
-                ctx.redirect("/api/home");
+                ctx.sessionAttribute("username", username);
+                //ctx.redirect(urlWeb + "/hechos", HttpStatus.FOUND);
+                ctx.redirect("http://localhost:7070/hechos");
             } else{
-                Map<String, Object> model = new HashMap<>();
                 ctx.sessionAttribute("error", "Password incorrecto");
-                ctx.redirect("/api/login");
+                ctx.redirect("http://localhost:7070/login");
             }
 
         } catch (Exception e){

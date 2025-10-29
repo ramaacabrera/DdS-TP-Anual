@@ -236,27 +236,57 @@
 
         <div class="card-body">
             <div class="row space-between align-center">
-                <h3 class="card-title">${titulo?html}</h3>
+                <h3 class="card-title" title="${titulo?html}">${titulo?html}</h3>
                 <div class="row gap-8">
-                    <a href="${verHref}"   class="btn btn-sm">Ver</a>
+                    <a href="${verHref}" class="btn btn-sm">Ver</a>
                     <a href="${editarHref}" class="btn btn-sm btn-ghost">Editar</a>
                 </div>
             </div>
 
-            <p class="muted">${resumen?html}</p>
+            <#if resumen?has_content>
+                <p class="muted">${resumen?html}</p>
+            </#if>
 
-            <div class="row gap-16 mt-8 small muted">
-                <label><input type="radio" disabled /> Fecha: ${fecha?html}</label>
-                <label><input type="radio" disabled /> Latitud: ${ubicacion.latitud?html}</label>
-                <label><input type="radio" disabled /> Longitud: ${ubicacion.longitud?html}</label>
-                <label><input type="radio" disabled /> Categoría: ${categoria?html}</label>
+            <!-- Información de metadata - Solo fecha y categoría -->
+            <div class="card-meta">
+                <#if fecha??>
+                    <div class="meta-item">
+                        <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span class="meta-label">Fecha:</span>
+                        <span class="meta-value">
+                            <#-- Convertir timestamp a fecha legible -->
+                            <#if fecha?is_number>
+                                ${(fecha?number)?number_to_date?string('dd/MM/yyyy')}
+                            <#elseif fecha?is_date_like>
+                                ${fecha?datetime?string('dd/MM/yyyy')}
+                            <#else>
+                                ${fecha?string!''}
+                            </#if>
+                        </span>
+                    </div>
+                </#if>
+
+                <#if categoria?has_content>
+                    <div class="meta-item">
+                        <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                        <span class="meta-label">Categoría:</span>
+                        <span class="meta-value">${categoria?html}</span>
+                    </div>
+                </#if>
             </div>
 
-            <div class="row gap-8 mt-8">
-                <#list etiquetas as e>
-                    <span class="tag">${e?html}</span>
-                </#list>
-            </div>
+            <!-- Etiquetas -->
+            <#if etiquetas?? && (etiquetas?size > 0)>
+                <div class="card-tags">
+                    <#list etiquetas as e>
+                        <span class="tag">${e?html}</span>
+                    </#list>
+                </div>
+            </#if>
         </div>
     </article>
 </#macro>
