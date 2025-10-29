@@ -58,11 +58,29 @@
             </div>
         </div>
 
+        <!-- Hechos en la colección -->
+        <div class="form-section">
+            <h3 class="form-section-title">Hechos asociados</h3>
+            <div id="lista-hechos" class="lista-vacia">
+                <p class="texto-placeholder">Cargando hechos...</p>
+            </div>
+        </div>
+
+        <!-- Hechos consensuados -->
+        <div class="form-section">
+            <h3 class="form-section-title">Hechos consensuados</h3>
+            <div id="lista-consensuados" class="lista-vacia">
+                <p class="texto-placeholder">Cargando hechos...</p>
+            </div>
+        </div>
+
+
         <!-- Botones -->
         <div class="form-actions">
             <button type="button" id="btn-cancelar" class="btn btn-secondary">Cancelar</button>
             <button type="submit" class="btn btn-primary">Guardar cambios</button>
         </div>
+
 
         <!-- Mensajes -->
         <div id="mensaje-exito" class="mensaje mensaje-exito" style="display:none;">
@@ -133,6 +151,25 @@ document.getElementById("form-editar-coleccion").addEventListener("submit", asyn
         document.getElementById("mensaje-error").style.display = "block";
         console.error(err);
     }
+
+    if (coleccion.hechos && coleccion.hechos.length > 0) {
+        const listaHechos = document.getElementById("lista-hechos");
+        listaHechos.innerHTML = coleccion.hechos.map(h =>
+            `<div class="item-hecho">${h.titulo}</div>`
+        ).join("");
+    } else {
+        document.getElementById("lista-hechos").innerHTML = "<p>No hay hechos asociados aún.</p>";
+    }
+
+    if (coleccion.hechosConsensuados && coleccion.hechosConsensuados.length > 0) {
+        const listaCons = document.getElementById("lista-consensuados");
+        listaCons.innerHTML = coleccion.hechosConsensuados.map(h =>
+            `<div class="item-hecho">${h.titulo}</div>`
+        ).join("");
+    } else {
+        document.getElementById("lista-consensuados").innerHTML = "<p>No hay hechos consensuados aún.</p>";
+    }
+
 });
 </script>
 </#assign>

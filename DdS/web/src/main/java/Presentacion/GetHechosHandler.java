@@ -189,8 +189,8 @@ public class GetHechosHandler implements Handler {
         }
 
         try {
-            // Si ya viene en yyyy-MM-dd (formato input date), devolver igual
-            if (raw.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            // Si ya viene en dd/MM/yyyy, devolver igual
+            if (raw.matches("\\d{2}/\\d{2}/\\d{4}")) {
                 return raw;
             }
 
@@ -198,15 +198,23 @@ public class GetHechosHandler implements Handler {
             // Este formato es: EEE MMM dd HH:mm:ss z yyyy
             if (raw.contains("ART") || raw.matches("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{2}:\\d{2}:\\d{2} [A-Za-z]{3,4} \\d{4}")) {
                 SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
                 Date date = inputFormat.parse(raw);
                 return outputFormat.format(date);
             }
 
-            // Si viene en formato dd/MM/yyyy
-            if (raw.matches("\\d{2}/\\d{2}/\\d{4}")) {
-                SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
-                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            // Si viene en formato yyyy-MM-dd (formato input date)
+            if (raw.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = inputFormat.parse(raw);
+                return outputFormat.format(date);
+            }
+
+            // Si viene en formato yyyy/MM/dd
+            if (raw.matches("\\d{4}/\\d{2}/\\d{2}")) {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy/MM/dd");
+                SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
                 Date date = inputFormat.parse(raw);
                 return outputFormat.format(date);
             }
@@ -223,7 +231,8 @@ public class GetHechosHandler implements Handler {
 
         // Usando constructor
         FilterDef cat = new FilterDef("categoria", "Categoría", "select");
-        cat.setOptions(Arrays.asList("Política", "Economía", "Sociedad", "Cultura", "Deportes"));
+        cat.setOptions(Arrays.asList("Política", "Economía", "Sociedad", "Cultura", "Deportes", "Crisis hídrica"));
+
         list.add(cat);
 
         // Fechas de carga
@@ -245,12 +254,15 @@ public class GetHechosHandler implements Handler {
         if (rawDate == null || rawDate.isBlank()) return "";
 
         try {
+            // Para el input HTML necesitas formato yyyy-MM-dd
+            // Pero convertimos desde cualquier formato a yyyy-MM-dd
+
             // Si ya viene en yyyy-MM-dd, devolver igual
             if (rawDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
                 return rawDate;
             }
 
-            // Si viene en formato FreeMarker
+            // Si viene en formato FreeMarker/Java Date
             if (rawDate.contains("ART")) {
                 SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
                 SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -258,7 +270,7 @@ public class GetHechosHandler implements Handler {
                 return outputFormat.format(date);
             }
 
-            // Si viene en formato dd/MM/yyyy
+            // Si viene en formato dd/MM/yyyy (nuestro nuevo formato de salida)
             if (rawDate.matches("\\d{2}/\\d{2}/\\d{4}")) {
                 SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
                 SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");

@@ -47,6 +47,8 @@
             </p>
         </div>
 
+        
+
         <div class="card">
             <p class="card-subtitle">👤 CONTRIBUYENTE</p>
             <p>

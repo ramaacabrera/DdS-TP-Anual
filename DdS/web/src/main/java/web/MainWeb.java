@@ -28,6 +28,10 @@ public class MainWeb {
             ctx.redirect("/hechos");
         });
 
+        app.get("/login", new GetLoginHandler(urlPublica));
+
+        app.get("/sign-in", new GetSignInHandler(urlPublica));
+
         app.get("/hechos/{id}", new GetHechoEspecificoHandler(urlPublica)); //hecho especifico
 
         // Falta

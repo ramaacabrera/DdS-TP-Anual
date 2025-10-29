@@ -23,6 +23,7 @@ public class MainAPIPublica {
 
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
+        UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 
         app.get("/api/hechos", new GetHechosHandler(hechoRepositorio));
         app.get("/api/hechos/{id}", new GetHechoEspecificoHandler(hechoRepositorio));
@@ -30,5 +31,8 @@ public class MainAPIPublica {
         app.post("/api/hechos", new PostHechoHandler(puertoDinamica));
         app.post("/api/solicitudEliminacion", new PostSolicitudEliminacionHandler(puertoDinamica));
         app.post("/api/solicitudeModificacion", new PostSolicitudModificacionHandler(puertoDinamica));
+
+        app.post("/api/login", new PostLoginHandler(usuarioRepositorio));
+        app.post("/api/sign-in", new PostSignInHandler(usuarioRepositorio));
     }
 }

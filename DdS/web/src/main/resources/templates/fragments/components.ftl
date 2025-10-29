@@ -15,16 +15,15 @@
 </#macro>
 <#macro actionButtons hecho>
     <div class="action-buttons-group" data-hecho-id="${hecho.hecho_id?html}">
-        <!-- Compartir: icono "share" (flecha saliendo de caja) -->
+        <!-- Compartir: chain -->
         <button class="icon-btn" data-action="share" aria-label="Compartir hecho" title="Compartir">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M16 6l-4-4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M12 2v13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10.59 13.41a1 1 0 001.41 0l4.59-4.59a3 3 0 10-4.24-4.24l-1.3 1.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M13.41 10.59a1 1 0 00-1.41 0L7.41 15.18a3 3 0 104.24 4.24l1.3-1.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </button>
 
-        <!-- Editar: lápiz claro -->
+        <!-- Editar: lápiz -->
         <button class="icon-btn" data-action="edit" aria-label="Solicitar modificación" title="Solicitar modificación">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M3 21l3-1 11-11 1-3-3 1L4 20z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>

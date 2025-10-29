@@ -1,5 +1,6 @@
 package utils;
 
+import freemarker.template.TemplateException;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinFreemarker;
 import io.javalin.http.staticfiles.Location;
@@ -28,6 +29,14 @@ public class IniciadorApp {
                     new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_32);
             // Esto le dice a FreeMarker que busque en src/main/resources/templates/
             fmConfig.setClassForTemplateLoading(IniciadorApp.class, "/templates/");
+
+            fmConfig.setDefaultEncoding("UTF-8");
+            try {
+                fmConfig.setSetting(freemarker.template.Configuration.URL_ESCAPING_CHARSET_KEY, "UTF-8");
+                fmConfig.setSetting(freemarker.template.Configuration.OUTPUT_ENCODING_KEY, "UTF-8");
+            } catch (TemplateException e) {
+                throw new RuntimeException(e);
+            }
 
             // 2. Registrar el motor usando la configuración personalizada
             javalinConfig.fileRenderer(new JavalinFreemarker(fmConfig));
