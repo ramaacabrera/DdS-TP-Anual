@@ -67,7 +67,7 @@
         <!-- Botones -->
         <div class="form-actions">
             <button type="button" id="btn-cancelar" class="btn btn-secondary">Cancelar</button>
-            <button type="submit" id="btn-enviar" class="btn btn-danger">Enviar Solicitud</button>
+            <button type="submit" id="btn-enviar" class="btn btn-primary">Enviar Solicitud</button>
         </div>
 
         <!-- Mensajes de estado -->

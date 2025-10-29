@@ -100,7 +100,7 @@ public interface conversorTipoD {
     private SolicitudDeEliminacionDTO convertirEntidadSEliminacionADTO(SolicitudDeEliminacion_D entidad) {
         SolicitudDeEliminacionDTO dto = new SolicitudDeEliminacionDTO();
         dto.setJustificacion(entidad.getJustificacion());
-        dto.setHechoAsociado(convertirHechoEntidadAHecho(entidad.getHechoAsociado()));
+        dto.setID_HechoAsociado(entidad.getHecho_id());
         dto.setusuario(convertirUsuario(entidad.getUsuario()));
         dto.setEstado(convertirEstadoSolicitudEliminacion(entidad.getEstadoSolicitudEliminacion()));
         return dto;
@@ -109,7 +109,7 @@ public interface conversorTipoD {
     private SolicitudDeModificacionDTO convertirEntidadSModificacionADTO(SolicitudDeModificacion_D entidad) {
         SolicitudDeModificacionDTO dto = new SolicitudDeModificacionDTO();
         dto.setJustificacion(entidad.getJustificacion());
-        dto.setHechoAsociado(convertirHechoEntidadAHecho(entidad.getHechoAsociado()));
+        dto.setID_HechoAsociado(entidad.getID_HechoAsociado());
         dto.setusuario(convertirUsuario(entidad.getUsuario()));
         dto.setHechoModificado(convertirHechoEntidadAHechoModificado(entidad.getHechoModificado()));
         dto.setEstadoSolicitudModificacion(convertirEstadoSolicitudModificacion(entidad.getEstadoSolicitudModificacion()));

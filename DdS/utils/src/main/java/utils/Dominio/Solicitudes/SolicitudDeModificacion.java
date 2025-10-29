@@ -3,6 +3,9 @@ package utils.Dominio.Solicitudes;
 import utils.DTO.SolicitudDeModificacionDTO;
 
 import utils.Dominio.HechosYColecciones.Hecho;
+import utils.Dominio.HechosYColecciones.HechoModificado;
+import utils.Persistencia.HechoRepositorio;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -20,14 +23,22 @@ public class SolicitudDeModificacion extends Solicitud {
     private EstadoSolicitudModificacion estadoSolicitudModificacion;
 
     // CORRECCIÓN: Si necesitas referencia al hecho modificado, descomenta y usa:
-    /*
+
     @OneToOne
     @JoinColumn(name = "hecho_modificado_id")
     private HechoModificado hechoModificado;
-    */
 
-    public SolicitudDeModificacion(SolicitudDeModificacionDTO solicitud){
-        this.setHechoAsociado(new Hecho(solicitud.getHechoAsociado()));
+
+    public SolicitudDeModificacion(SolicitudDeModificacionDTO solicitud, HechoRepositorio hechoRepositorio){
+        //this.setHechoAsociado(new Hecho(solicitud.getHechoAsociado()));
+
+        UUID idHecho = solicitud.getID_HechoAsociado();
+        if (idHecho != null) {
+            Hecho hechoCompleto = hechoRepositorio.buscarPorId(idHecho.toString());
+            this.setHechoAsociado(hechoCompleto);
+        } else {
+            throw new IllegalArgumentException("ID de hecho no puede ser nulo");
+        }
 
         // CORRECCIÓN: Manejar posible null
         if (solicitud.getEstadoSolicitudModificacion() != null) {
@@ -37,7 +48,7 @@ public class SolicitudDeModificacion extends Solicitud {
         }
 
         //this.setId(UUID.randomUUID());
-        //this.hechoModificado = solicitud.getHechoModificado();
+        this.hechoModificado = solicitud.getHechoModificado();
     }
 
     public SolicitudDeModificacion(){}
@@ -69,7 +80,7 @@ public class SolicitudDeModificacion extends Solicitud {
         this.estadoSolicitudModificacion = estadoSolicitudModificacion;
     }
 
-    /*
+
     public HechoModificado getHechoModificado() {
         return hechoModificado;
     }
@@ -77,5 +88,5 @@ public class SolicitudDeModificacion extends Solicitud {
     public void setHechoModificado(HechoModificado hechoModificado) {
         this.hechoModificado = hechoModificado;
     }
-    */
+
 }

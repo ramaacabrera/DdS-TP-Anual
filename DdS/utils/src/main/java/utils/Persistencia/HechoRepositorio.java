@@ -121,6 +121,27 @@ public class HechoRepositorio {
         }
     }
 
+    public Hecho buscarPorId(UUID id) {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            Hecho hecho = em.find(Hecho.class, id);
+
+            if (hecho != null) {
+                // FORZAR LA CARGA DE LAS COLECCIONES ANTES DE CERRAR LA SESIÓN
+                Hibernate.initialize(hecho.getEtiquetas());
+                Hibernate.initialize(hecho.getContenidoMultimedia());
+                Hibernate.initialize(hecho.getUbicacion());
+            }
+
+            return hecho;
+        } catch (Exception e) {
+            System.err.println("Error al buscar hecho por ID: " + id + " - " + e.getMessage());
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
     public List<Hecho> buscarSimilares(String titulo) {
         //EntityManager em = emf.createEntityManager();
         EntityManager em = BDUtils.getEntityManager();

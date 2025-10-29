@@ -264,8 +264,8 @@ public class DinamicoRepositorio {
     public void resetearSolicitudesEliminacion() {
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
-            em.createQuery("DELETE FROM Usuario_D").executeUpdate();
             em.createQuery("DELETE FROM SolicitudDeEliminacion_D").executeUpdate();
+            em.createQuery("DELETE FROM Usuario_D").executeUpdate();
             BDUtilsDinamico.commit(em);
             System.out.println("Todos las agregador.Solicitudes De Eliminacion han sido reseteados");
         } catch (Exception e) {
@@ -320,16 +320,17 @@ public class DinamicoRepositorio {
     private SolicitudDeEliminacionDTO convertirEntidadSEliminacionADTO(SolicitudDeEliminacion_D entidad) {
         SolicitudDeEliminacionDTO dto = new SolicitudDeEliminacionDTO();
         dto.setJustificacion(entidad.getJustificacion());
-        dto.setHechoAsociado(convertirHechoEntidadAHecho(entidad.getHechoAsociado()));
+        dto.setID_HechoAsociado(entidad.getHecho_id());
         dto.setusuario(convertirUsuario(entidad.getUsuario()));
         dto.setEstado(convertirEstadoSolicitudEliminacion(entidad.getEstadoSolicitudEliminacion()));
         return dto;
     }
 
+
     private SolicitudDeModificacionDTO convertirEntidadSModificacionADTO(SolicitudDeModificacion_D entidad) {
         SolicitudDeModificacionDTO dto = new SolicitudDeModificacionDTO();
         dto.setJustificacion(entidad.getJustificacion());
-        dto.setHechoAsociado(convertirHechoEntidadAHecho(entidad.getHechoAsociado()));
+        dto.setID_HechoAsociado(entidad.getID_HechoAsociado());
         dto.setusuario(convertirUsuario(entidad.getUsuario()));
         dto.setHechoModificado(convertirHechoEntidadAHechoModificado(entidad.getHechoModificado()));
         dto.setEstadoSolicitudModificacion(convertirEstadoSolicitudModificacion(entidad.getEstadoSolicitudModificacion()));

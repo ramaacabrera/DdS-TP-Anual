@@ -23,7 +23,8 @@ public class MainAPIAdmin {
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
-        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
+        HechoRepositorio hechoRepositorio = new HechoRepositorio();
+        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(hechoRepositorio);
 
         app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio));
         app.get("/api/colecciones", new GetColeccionesHandler(coleccionRepositorio));

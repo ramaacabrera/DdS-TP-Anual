@@ -145,7 +145,7 @@ public class Agregador {
             boolean esSpam = detectorDeSpam.esSpam(dto.getJustificacion());
 
             if (esSpam){ // !yaExiste &&) {
-                SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(dto);
+                SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(dto, hechoRepositorio);
                 solicitud.rechazarSolicitud();
                 solicitud.setEsSpam(true);
                 solicitudEliminacionRepositorio.agregarSolicitudDeEliminacion(solicitud);
@@ -158,7 +158,7 @@ public class Agregador {
             boolean esSpam = detectorDeSpam.esSpam(dto.getJustificacion());
 
             if (esSpam){
-                SolicitudDeModificacion solicitud = new SolicitudDeModificacion(dto);
+                SolicitudDeModificacion solicitud = new SolicitudDeModificacion(dto, hechoRepositorio);
                 solicitud.rechazarSolicitud();
                 solicitud.setEsSpam(true);
                 solicitudModificacionRepositorio.agregarSolicitudDeModificacion(solicitud);

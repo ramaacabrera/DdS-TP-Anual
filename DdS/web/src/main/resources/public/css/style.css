@@ -377,6 +377,7 @@ h1 {
 
 .form-group {
     margin-bottom: 24px;
+    width: 100%;
 }
 
 .form-label {
@@ -394,6 +395,7 @@ h1 {
     font-family: var(--font-family);
     font-size: 1rem;
     transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
 }
 
 .form-input:focus, .form-select:focus, .form-textarea:focus {
@@ -404,34 +406,45 @@ h1 {
 
 .form-textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 120px;
 }
 
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
+    width: 100%;
+}
+
+.form-row .form-group {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-section {
     margin: 32px 0;
-    padding: 20px;
+    padding: 24px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
     background-color: var(--bg-light);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .form-section-title {
     margin-top: 0;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     color: var(--primary-color);
     font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .form-checkbox-group {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-top: 16px;
 }
 
 .form-checkbox {
@@ -441,6 +454,7 @@ h1 {
 .form-checkbox-label {
     font-weight: normal;
     margin: 0;
+    font-size: 0.95rem;
 }
 
 .form-help {
@@ -448,6 +462,7 @@ h1 {
     margin-top: 4px;
     font-size: 0.85rem;
     color: var(--muted-color);
+    line-height: 1.4;
 }
 
 /* Botones del formulario */

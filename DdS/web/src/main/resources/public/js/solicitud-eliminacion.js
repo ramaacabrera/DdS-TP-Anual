@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             // Construir objeto JSON como espera el backend
             const solicitudData = {
-                ID_hechoAsociado: document.getElementById('ID_hechoAsociado').value,
+                id_hechoAsociado: document.getElementById('ID_hechoAsociado').value,
                 justificacion: justificacion,
                 usuario: checkboxAnonimo.checked ? null : {
                     nombre: inputNombre.value.trim() || "",
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(() => {
                     // Redirigir a la página del hecho
                     const hechoId = document.getElementById('ID_hechoAsociado').value;
-                    window.location.href = '/hecho/' + encodeURIComponent(hechoId);
+                    window.location.href = '/hechos/' + encodeURIComponent(hechoId);
                 }, 2000);
             } else {
                 let errorMessage = `Error ${response.status}: ${response.statusText}`;

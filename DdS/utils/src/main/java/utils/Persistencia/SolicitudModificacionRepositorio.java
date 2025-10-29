@@ -12,9 +12,10 @@ import java.util.Optional;
 public class SolicitudModificacionRepositorio {
     //private final EntityManagerFactory emf;
     //private final List<SolicitudDeModificacion> solicitudes = new ArrayList<SolicitudDeModificacion>();
+    private final HechoRepositorio hechoRepositorio;
 
-    public SolicitudModificacionRepositorio() {
-
+    public SolicitudModificacionRepositorio(HechoRepositorio  hechoRepositorio) {
+        this.hechoRepositorio = new HechoRepositorio();
     }
 
     //private Optional<SolicitudDeModificacion> buscarSolicitudModificacion(){
@@ -63,7 +64,7 @@ public class SolicitudModificacionRepositorio {
     //}
     public void agregarSolicitudDeModificacion(SolicitudDeModificacionDTO solicitudDTO) {
         // Convierte utils.DTO a Entidad y guarda
-        SolicitudDeModificacion solicitud = new SolicitudDeModificacion(solicitudDTO);
+        SolicitudDeModificacion solicitud = new SolicitudDeModificacion(solicitudDTO, hechoRepositorio);
         this.agregarSolicitudDeModificacion(solicitud);
     }
 
