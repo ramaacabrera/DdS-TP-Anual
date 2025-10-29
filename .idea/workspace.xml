@@ -4,114 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/DdS/utils/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/DdS-TP-Anual.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/IntelliLang.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/Agregador.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/ApiAdministrativa.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/ApiMock.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/ApiPublica.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/Apis.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/CargadorDinamico.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/CargadorEstatico.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/CargadorMetamapa.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/Cargadores.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/MetaMapa.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/MainAPIAdmin.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/MainAPIAdmin.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/DeleteColeccionesHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/DeleteColeccionesHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/DeleteFuenteHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/DeleteFuenteHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/GetColeccionHandler$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/GetColeccionHandler$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/GetColeccionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/GetColeccionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/GetSolicitudEliminacionHandler$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/GetSolicitudEliminacionHandler$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/GetSolicitudEliminacionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/GetSolicitudEliminacionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/GetSolicitudesEliminacionHandler$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/GetSolicitudesEliminacionHandler$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/PostColeccionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/PostColeccionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/PostFuentesColeccionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/PostFuentesColeccionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/PutAlgoritmoConsensoHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/PutAlgoritmoConsensoHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/PutColeccionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/PutColeccionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/PutSolicitudEliminacionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/ApiAdministrativa/Presentacion/PutSolicitudEliminacionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/target/classes/com/example/apiadministrativa/hello-view.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDemo/target/classes/cargadorDemo/APIMock/DemoAPIMockServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDemo/target/classes/cargadorDemo/APIMock/DemoAPIMockServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDemo/target/classes/cargadorDemo/DemoLoader$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDemo/target/classes/cargadorDemo/DemoLoader$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDemo/target/classes/cargadorDemo/DemoLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDemo/target/classes/cargadorDemo/DemoLoader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDemo/target/classes/cargadorDemo/Presentacion/GetHechosHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDemo/target/classes/cargadorDemo/Presentacion/GetHechosHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/DinamicoRepositorio.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/DinamicoRepositorio.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/HechosYColeccionesD/EstadoHecho_D.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/HechosYColeccionesD/EstadoHecho_D.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/HechosYColeccionesD/TipoContenidoMultimedia_D.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/HechosYColeccionesD/TipoContenidoMultimedia_D.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/Solicitudes/EstadoSolicitudEliminacion_D.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/Solicitudes/EstadoSolicitudEliminacion_D.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/Solicitudes/EstadoSolicitudModificacion_D.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/Solicitudes/EstadoSolicitudModificacion_D.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/Usuario/RolUsuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/Usuario/RolUsuario.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/fuente/Fuente.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/fuente/Fuente.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/fuente/TipoDeFuente.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Dominio/fuente/TipoDeFuente.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/MainDinamica.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/MainDinamica.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Presentacion/GetHechosDinamicoHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Presentacion/GetHechosDinamicoHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Presentacion/PostHechosHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Presentacion/PostHechosHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Presentacion/PostSolicitudesEliminacionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/Presentacion/PostSolicitudesEliminacionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/metamapa-parent.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/components.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/components.ftl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/home.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/home.ftl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetColeccionHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetColeccionesHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetCrearColeccionHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetCrearHechoHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetEditarColeccionHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetEstadisticasHandler$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetEstadisticasHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetHechoEspecificoHandler$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetHechoEspecificoHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetHechosColeccionHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetHechosHandler$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetHechosHandler$FilterDef$Option.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetHechosHandler$FilterDef.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetHechosHandler$HechoDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetHechosHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetSolicitudEliminacionHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/Presentacion/GetSolicitudesEliminacionHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/componentes.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/resources/componentes.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/public/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/public/js/actions.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/public/js/crear-hecho.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/public/js/solicitud-eliminacion.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/public/js/tabs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/templates/coleccion-actualizada.ftlh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/templates/coleccion-creada.ftlh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/templates/crear-coleccion.ftlh‎" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/templates/crear-hecho.ftl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/templates/crear-solicitud-eliminacion.ftl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/templates/editar-coleccion.ftlh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/templates/fragments/components.ftl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/templates/fragments/footer.ftl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/templates/fragments/header.ftl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/templates/hecho-especifico.ftl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/templates/home.ftl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/templates/layout.ftl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/target/classes/web/MainWeb.class" beforeDir="false" />
-    </list>
-    <list id="fbc10810-a605-4e63-80e3-6f0511f82dbf" name="Changes by Luc" comment="">
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/Presentacion/GetCrearColeccionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/Presentacion/GetCrearColeccionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/coleccion-actualizada.ftlh" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/coleccion-actualizada.ftlh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/coleccion-creada.ftlh" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/coleccion-creada.ftlh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-coleccion.ftlh‎" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-coleccion.ftlh‎" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/editar-coleccion.ftlh" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/editar-coleccion.ftlh" afterDir="false" />
-    </list>
-    <list id="d83ec99f-8718-4ff0-9c4e-be0524bc3f50" name="Changes by Rama" comment="">
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/Presentacion/GetHechosHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/Presentacion/GetHechosHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/MainWeb.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/MainWeb.java" afterDir="false" />
-    </list>
+    <list default="true" id="7f48d11f-2e39-40ba-8aee-5b5c06ef3f17" name="Changes" comment="termino flujo de solicitudes (pero faltan los handlers del post y get)" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -174,7 +67,7 @@
       <recent name="C:\Users\Usuario\Documents\GitHub\DdS-TP-Anual\DdS\utils\src\main\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Agregador">
+  <component name="RunManager">
     <configuration name="Web" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -184,18 +77,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <list>
-      <item itemvalue="Application.Agregador" />
-      <item itemvalue="Application.ApiAdministrativa" />
-      <item itemvalue="Application.ApiMock" />
-      <item itemvalue="Application.ApiPublica" />
-      <item itemvalue="Application.CargadorDinamico" />
-      <item itemvalue="Application.Web" />
-      <item itemvalue="Application.CargadorEstatico" />
-      <item itemvalue="Application.CargadorMetamapa" />
-      <item itemvalue="Compound.Apis" />
-      <item itemvalue="Compound.Cargadores" />
-    </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>

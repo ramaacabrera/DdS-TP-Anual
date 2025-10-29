@@ -50,11 +50,9 @@ public class MainWeb {
         // Falta
         //app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlAdmin));
 
-        //crear y editar colecciones
         //app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
 
-        app.get("/crear-coleccion", new GetCrearColeccionHandler()); //para poder ver el formulario
-//se recibe un post en  api/colecciones, crea la coleccion y la mete en la base
+        //app.get("/crear-coleccion", new GetCrearColeccionHandler(urlAdmin));
 
         // Incompleto
         app.get("/api/estadisticas", new GetEstadisticasHandler(puertoEstadisticas));

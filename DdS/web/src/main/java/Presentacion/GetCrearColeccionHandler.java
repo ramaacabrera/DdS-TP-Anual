@@ -9,13 +9,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GetCrearColeccionHandler implements Handler {
+    private final String urlAdmin;
 
-        @Override
-        public void handle(@NotNull Context ctx) throws Exception {
-            Map<String, Object> modelo = new HashMap<>();
-            modelo.put("pageTitle", "Crear nueva colección");
-            modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
-            modelo.put("fuentes", TipoDeFuente.values());
-            ctx.render("crear-coleccion.ftlh", modelo);
-        }
+    public GetCrearColeccionHandler(String urlAdmin) {
+        this.urlAdmin = urlAdmin;
     }
+
+    @Override
+    public void handle(@NotNull Context ctx) throws Exception {
+        Map<String, Object> modelo = new HashMap<>();
+        modelo.put("pageTitle", "Crear nueva colección");
+        modelo.put("urlAdmin", urlAdmin);
+        modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
+        modelo.put("fuentes", TipoDeFuente.values());
+        ctx.render("crear-coleccion.ftlh", modelo);
+    }
+}

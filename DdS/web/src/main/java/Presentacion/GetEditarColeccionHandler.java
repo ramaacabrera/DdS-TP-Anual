@@ -11,33 +11,47 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
 public class GetEditarColeccionHandler implements Handler {
 
-    private final ColeccionRepositorio coleccionRepositorio;
+    private final String urlAdmin;
 
-    public GetEditarColeccionHandler(ColeccionRepositorio repo) {
-        this.coleccionRepositorio = repo;
+    public GetEditarColeccionHandler(String urlAdmin) {
+        this.urlAdmin = urlAdmin;
     }
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        String id = ctx.pathParam("id");
+        try {
+            String coleccionId = ctx.pathParam("id");
+            System.out.println("Abriendo formulario de edición para colección ID: " + coleccionId);
 
-        Optional<Coleccion> coleccionOpt = coleccionRepositorio.buscarPorHandle(id);
-        if (coleccionOpt.isEmpty()) {
-            ctx.status(404).result("Colección no encontrada");
-            return;
+            // Armamos el modelo
+            Map<String, Object> modelo = new HashMap<>();
+            modelo.put("pageTitle", "Editar colección");
+            modelo.put("coleccionId", coleccionId);
+            modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
+            modelo.put("fuentes", TipoDeFuente.values());
+            modelo.put("urlAdmin", urlAdmin);
+
+            // Renderizamos la vista
+            ctx.render("editar-coleccion.ftlh", modelo);
+
+        } catch (Exception e) {
+            System.err.println("ERROR en GetEditarColeccionHandler: " + e.getMessage());
+            e.printStackTrace();
+            ctx.status(500).result("Error al cargar el formulario: " + e.getMessage());
         }
-
-        Coleccion coleccion = coleccionOpt.get();
-
-        List<String> algoritmosDisponibles = List.of("MAYORIASIMPLE", "ABSOLUTA", "MULTIPLESMENCIONES");
-
-        Map<String, Object> modelo = TemplateUtil.model(
-                "coleccion", coleccion,
-                "algoritmosDisponibles", algoritmosDisponibles
-        );
-
-        ctx.render("editar-coleccion.ftlh", modelo);
     }
 }
+
+
+
+
+/*Map<String, Object> modelo = new HashMap<>();
+        modelo.put("pageTitle", "Editar colección");
+        modelo.put("coleccion", coleccion);
+        modelo.put("algoritmosDisponibles", TipoAlgoritmoConsenso.values());
+        modelo.put("fuentes", TipoDeFuente.values());
+        modelo.put("urlAdmin", urlAdmin);
+*/
