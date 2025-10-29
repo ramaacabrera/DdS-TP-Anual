@@ -8,6 +8,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 public class EstadisticasCategoriaRepositorio {
@@ -56,14 +57,20 @@ public class EstadisticasCategoriaRepositorio {
             TypedQuery<String> query = em.createQuery(
                     "SELECT e.estadisticasCategoria_provincia FROM EstadisticasCategoria e " +
                             "WHERE e.id.categoria = :idCategoria AND e.estadisticas.estadisticas_fecha = " +
-                            "( SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", String.class);
+                            "(SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", String.class);
 
             query.setParameter("idCategoria", categoria);
+            query.setMaxResults(1); // ← Evita múltiples resultados
 
-            return Optional.of(query.getSingleResult());
+            List<String> resultados = query.getResultList(); // ← Usa getResultList()
 
-        } catch (NoResultException e) {
-            return Optional.empty();
+            if (resultados.isEmpty() || resultados.get(0) == null) {
+                return Optional.empty();
+            }
+            return Optional.of(resultados.get(0));
+
+        } catch (Exception e) {
+            return Optional.empty(); // ← Captura cualquier excepción
         } finally {
             em.close();
         }
@@ -75,14 +82,20 @@ public class EstadisticasCategoriaRepositorio {
             TypedQuery<LocalTime> query = em.createQuery(
                     "SELECT e.estadisticasCategoria_hora FROM EstadisticasCategoria e " +
                             "WHERE e.id.categoria = :idCategoria AND e.estadisticas.estadisticas_fecha = " +
-                            "( SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", LocalTime.class);
+                            "(SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", LocalTime.class);
 
             query.setParameter("idCategoria", categoria);
+            query.setMaxResults(1); // ← Evita múltiples resultados
 
-            return Optional.of(query.getSingleResult());
+            List<LocalTime> resultados = query.getResultList(); // ← Usa getResultList()
 
-        } catch (NoResultException e) {
-            return Optional.empty();
+            if (resultados.isEmpty() || resultados.get(0) == null) {
+                return Optional.empty();
+            }
+            return Optional.of(resultados.get(0));
+
+        } catch (Exception e) {
+            return Optional.empty(); // ← Captura cualquier excepción
         } finally {
             em.close();
         }

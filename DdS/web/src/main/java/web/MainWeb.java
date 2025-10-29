@@ -54,8 +54,8 @@ public class MainWeb {
 
         //app.get("/crear-coleccion", new GetCrearColeccionHandler(urlAdmin));
 
-        // Incompleto
-        app.get("/api/estadisticas", new GetEstadisticasHandler(puertoEstadisticas));
+        // Falta organizar el tema de categorias y colecciones, y aplicar los estilos
+        app.get("/api/estadisticas", new handlers.GetEstadisticasHandler(puertoEstadisticas));
 
     }
 }

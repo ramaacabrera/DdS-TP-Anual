@@ -5,6 +5,8 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class GetSolicitudesSpamHandler implements Handler {
@@ -16,11 +18,16 @@ public class GetSolicitudesSpamHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        Optional<Integer> resultado = repository.buscarSpam();
-        if(!resultado.isPresent()){
-            ctx.status(404);
-        }
+        Optional<Integer> spamCount = repository.buscarSpam();
 
-        ctx.status(200).json(resultado.get());
+        Map<String,Object> resultado = new HashMap<>();
+        if (!spamCount.isPresent()) {
+            resultado.put("error", "Cantidad de Spam no encontrada");
+            resultado.put("status", 404);
+            ctx.status(404).json(resultado);
+        } else {
+            resultado.put("spamCount", spamCount.get());
+            ctx.status(200).json(resultado);
+        }
     }
 }

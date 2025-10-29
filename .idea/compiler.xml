@@ -16,9 +16,11 @@
         <module name="api-publica" />
         <module name="cargador-dinamico" />
         <module name="cargador-demo" />
+        <module name="apiPublica" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="pruebaclase1" target="1.8" />
       <module name="untitled" target="17" />
     </bytecodeTargetLevel>
   </component>

@@ -1,12 +1,15 @@
 package Presentacion;
 
 import utils.Dominio.HechosYColecciones.Coleccion;
+import utils.Dominio.HechosYColecciones.TipoAlgoritmoConsenso;
+import utils.Dominio.fuente.TipoDeFuente;
 import utils.Persistencia.ColeccionRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.rendering.template.TemplateUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

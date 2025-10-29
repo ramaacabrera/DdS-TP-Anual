@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,14 +52,18 @@ public class EstadisticasRepositorio {
     }
 
     public Optional<Integer> buscarSpam() {
-            EntityManager em = emf.createEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Integer> query = em.createQuery(
-                    "SELECT e.estadisticas_spam FROM Estadisticas e WHERE e.estadisticas_fecha = (select max(e1.estadisticas_fecha) from Estadisticas e1)", Integer.class);
+                    "SELECT e.estadisticas_spam FROM Estadisticas e WHERE e.estadisticas_fecha = (SELECT MAX(e1.estadisticas_fecha) FROM Estadisticas e1)",
+                    Integer.class);
 
-            return Optional.of(query.getSingleResult());
+            query.setMaxResults(1); // ← AÑADE ESTO
+            List<Integer> resultados = query.getResultList();
 
-        } catch (NoResultException e) {
+            return resultados.isEmpty() ? Optional.empty() : Optional.of(resultados.get(0));
+
+        } catch (Exception e) {
             return Optional.empty();
         } finally {
             em.close();
@@ -66,15 +71,23 @@ public class EstadisticasRepositorio {
     }
 
     public Optional<String> buscarCategoria_max_hechos() {
-            EntityManager em = emf.createEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<String> query = em.createQuery(
-                    "SELECT e.estadisticas_categoria_max_hechos FROM Estadisticas e WHERE e.estadisticas_fecha = (select max(e1.estadisticas_fecha) from Estadisticas e1)", String.class);
+                    "SELECT e.estadisticas_categoria_max_hechos FROM Estadisticas e WHERE e.estadisticas_fecha = (SELECT MAX(e1.estadisticas_fecha) FROM Estadisticas e1)",
+                    String.class);
 
-            return Optional.of(query.getSingleResult());
+            query.setMaxResults(1); // ← Evita múltiples resultados
+            List<String> resultados = query.getResultList(); // ← Usa getResultList()
 
-        } catch (NoResultException e) {
-            return Optional.empty();
+            // Verifica si hay resultados y si el valor no es null
+            if (resultados.isEmpty() || resultados.get(0) == null) {
+                return Optional.empty();
+            }
+            return Optional.of(resultados.get(0));
+
+        } catch (Exception e) {
+            return Optional.empty(); // ← Captura cualquier excepción
         } finally {
             em.close();
         }

@@ -6,6 +6,8 @@ import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class GetHoraMaxCategoriaHandler implements Handler {
@@ -20,10 +22,14 @@ public class GetHoraMaxCategoriaHandler implements Handler {
         String categoria = ctx.pathParam("categoria");
         Optional<LocalTime> hora = repository.buscarHoraCategoria(categoria);
 
+        Map<String,Object> resultado = new HashMap<>();
         if (!hora.isPresent()) {
-            ctx.status(404);
+            resultado.put("error", "Categoría no encontrada");
+            resultado.put("status", 404);
+            ctx.status(200).json(resultado);
         } else {
-            ctx.status(200).json(hora.get());
+            resultado.put("hora", hora.get().toString());
+            ctx.status(200).json(resultado);
         }
     }
 }

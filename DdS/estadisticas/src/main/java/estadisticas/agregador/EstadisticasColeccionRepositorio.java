@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -56,13 +57,19 @@ public class EstadisticasColeccionRepositorio {
             TypedQuery<String> query = em.createQuery(
                     "SELECT e.estadisticasColeccion_provincia FROM EstadisticasColeccion e " +
                             "WHERE e.id.coleccion_id = :idColeccion AND e.estadisticas.estadisticas_fecha = " +
-                            "( SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", String.class);
+                            "(SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", String.class);
             query.setParameter("idColeccion", idColeccion);
+            query.setMaxResults(1); // ← Evita múltiples resultados
 
-            return Optional.of(query.getSingleResult());
+            List<String> resultados = query.getResultList(); // ← Usa getResultList()
 
-        } catch (NoResultException e) {
-            return Optional.empty();
+            if (resultados.isEmpty() || resultados.get(0) == null) {
+                return Optional.empty();
+            }
+            return Optional.of(resultados.get(0));
+
+        } catch (Exception e) {
+            return Optional.empty(); // ← Captura cualquier excepción
         } finally {
             em.close();
         }

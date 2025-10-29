@@ -4,13 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7f48d11f-2e39-40ba-8aee-5b5c06ef3f17" name="Changes" comment="termino flujo de solicitudes (pero faltan los handlers del post y get)" />
+    <list default="true" id="b135c6d4-fa6c-47dd-a3bd-2574daa1943d" name="Changes" comment="Cambios de mas" />
+    <list id="e3af17bb-2a1e-4367-befa-3e14b8275605" name="Changes by Administrator" comment="" />
+    <list id="1b8675ef-160f-4264-a4cb-c67b6113bc92" name="Changes by cloud" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -34,40 +41,113 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Agregador.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiAdministrativa.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiMock.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiPublica.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CargadorDinamico.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CargadorEstatico.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CargadorMetamapa.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Web.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#7 on rama-web-sockets&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/utils/src/main/resources/META-INF&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/agregador/untitled/src/main/java/com/metamapa/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Agregador.executor": "Run",
+    "Application.ApiAdministrativa.executor": "Run",
+    "Application.ApiMock.executor": "Run",
+    "Application.ApiPublica.executor": "Run",
+    "Application.CargadorDinamico.executor": "Run",
+    "Application.CargadorEstatico.executor": "Run",
+    "Application.CargadorMetamapa.executor": "Run",
+    "Application.Estadisticas.executor": "Run",
+    "Application.Web.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "#7 on rama-web-sockets",
+    "last_opened_file_path": "C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/utils/src/main/resources/META-INF",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/agregador/untitled/src/main/java/com/metamapa/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "project.propCompiler",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Usuario\Documents\GitHub\DdS-TP-Anual\DdS\utils\src\main\resources\META-INF" />
       <recent name="C:\Users\Usuario\Documents\GitHub\DdS-TP-Anual\DdS\utils\src\main\resources" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Web">
+    <configuration name="Agregador" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="agregador.MainAgregador" />
+      <module name="agregador" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ApiAdministrativa" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="ApiAdministrativa.MainAPIAdmin" />
+      <module name="api-admin" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ApiPublica" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="ApiPublica.MainAPIPublica" />
+      <module name="apiPublica" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CargadorDemo" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="cargadorDemo.MainDemo" />
+      <module name="cargador-demo" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CargadorDinamico" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="cargadorDinamico.MainDinamica" />
+      <module name="cargador-dinamico" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CargadorEstatico" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="cargadorEstatico.MainEstatica" />
+      <module name="cargador-estatico" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CargadorMetamapa" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="CargadorMetamapa.MainMetamapa" />
+      <module name="cargador-metamapa" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Estadisticas" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="estadisticas.MainEstadisticas" />
+      <module name="estadisticas" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Web" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -77,6 +157,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Web" />
+      <item itemvalue="Application.Agregador" />
+      <item itemvalue="Application.CargadorDemo" />
+      <item itemvalue="Application.CargadorEstatico" />
+      <item itemvalue="Application.CargadorDinamico" />
+      <item itemvalue="Application.CargadorMetamapa" />
+      <item itemvalue="Application.Estadisticas" />
+      <item itemvalue="Application.ApiPublica" />
+      <item itemvalue="Application.ApiAdministrativa" />
+    </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>

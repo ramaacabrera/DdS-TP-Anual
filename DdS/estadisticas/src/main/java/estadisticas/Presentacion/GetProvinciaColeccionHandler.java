@@ -5,6 +5,8 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,10 +23,14 @@ public class GetProvinciaColeccionHandler implements Handler {
             UUID coleccion = UUID.fromString(ctx.pathParam("coleccion"));
             Optional<String> provincia = repository.buscarProvinciaColeccion(coleccion);
 
-            if (provincia.isEmpty()) {
-                ctx.status(404);
+            Map<String,Object> resultado = new HashMap<>();
+            if (!provincia.isPresent()) {
+                resultado.put("error", "Coleccion no encontrada");
+                resultado.put("status", 404);
+                ctx.status(404).json(resultado);
             } else {
-                ctx.status(200).json(provincia.get());
+                resultado.put("hora", provincia.get());
+                ctx.status(200).json(resultado);
             }
         } catch (Exception e) {
             System.err.println("Error en buscar coleccion: " + e.getMessage());

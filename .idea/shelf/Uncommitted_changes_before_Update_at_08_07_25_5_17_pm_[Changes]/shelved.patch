@@ -1,0 +1,2251 @@
+Index: ddsEntrega2/src/main/java/org/example/fuenteProxy/ConexionMetaMapa.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.fuenteProxy;\r\n\r\nimport org.example.agregador.Conexion;\r\nimport org.example.agregador.Hecho;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class ConexionMetaMapa {\r\n    @Override\r\n    public List<Hecho> obtenerHechos(){\r\n        return new ArrayList<>();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteProxy/ConexionMetaMapa.java b/ddsEntrega2/src/main/java/org/example/fuenteProxy/ConexionMetaMapa.java
+--- a/ddsEntrega2/src/main/java/org/example/fuenteProxy/ConexionMetaMapa.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteProxy/ConexionMetaMapa.java	(date 1752005741810)
+@@ -1,14 +1,90 @@
+ package org.example.fuenteProxy;
+ 
+-import org.example.agregador.Conexion;
+-import org.example.agregador.Hecho;
++import com.fasterxml.jackson.databind.ObjectMapper;
++import org.example.Coleccion;
++import org.example.fuente.Conexion;
++import org.example.fuente.*;
+ 
++import java.io.InputStream;
++import java.io.OutputStream;
++import java.net.HttpURLConnection;
++import java.net.URL;
+ import java.util.ArrayList;
++import java.util.HashMap;
+ import java.util.List;
++import java.util.Map;
+ 
+-public class ConexionMetaMapa {
++import com.fasterxml.jackson.databind.ObjectMapper;
++import com.fasterxml.jackson.core.type.TypeReference;
++
++public class ConexionMetaMapa extends Conexion {
++    private URL url;
+     @Override
+-    public List<Hecho> obtenerHechos(){
+-        return new ArrayList<>();
++    public List<HechoDTO> obtenerHechos() {
++        URL urlHecho;
++        try {
++            urlHecho = new URL(url + "/hecho");
++            return this.conseguirHechos(urlHecho);
++        } catch (Exception e) {
++            System.out.println("Error al crear url " + e.getMessage());
++        }
++        return null;
+     }
++
++    public List<HechoDTO> obtenerHechos(Coleccion coleccion){
++        URL urlColeccion;
++        try {
++            urlColeccion = new URL (url + "/coleccion/" + coleccion.getHandle() + "/hechos");
++            return this.conseguirHechos(urlColeccion);
++        } catch (Exception e){
++            System.out.println("Error al crear url " + e.getMessage());
++        }
++        return null;
++    }
++
++    public List<HechoDTO> conseguirHechos(URL urlHecho){
++        try {
++            HttpURLConnection urlConnection = (HttpURLConnection) urlHecho.openConnection();
++            urlConnection.setRequestMethod("GET");
++            urlConnection.setRequestProperty("Accept", "application/json");
++
++            InputStream input = urlConnection.getInputStream();
++            ObjectMapper mapper = new ObjectMapper();
++            return mapper.readValue(input, new TypeReference<List<HechoDTO>>() {
++            });
++        } catch (Exception e){
++            System.out.println("Error al conseguir hechos " + e.getMessage());
++            return null;
++        }
++    }
++
++    public void crearSolicitudEliminacion(String tituloHecho, String justificacion){
++        URL urlSolicitudEliminacion;
++        try{
++            urlSolicitudEliminacion = new URL(url + "/solicitudes");
++            HttpURLConnection urlConnection = (HttpURLConnection) urlSolicitudEliminacion.openConnection();
++            urlConnection.setRequestMethod("POST");
++            urlConnection.setRequestProperty("Content-Type", "application/json");
++            urlConnection.setDoOutput(true);
++
++            Map<String,String> parametros = new HashMap<String,String>();
++            parametros.put("tituloHecho", tituloHecho);
++            parametros.put("justificacion", justificacion);
++
++            ObjectMapper mapper = new ObjectMapper();
++            String json = mapper.writeValueAsString(parametros);
++
++            OutputStream output = urlConnection.getOutputStream();
++            output.write(json.getBytes());
++            output.flush();
++            output.close();
++
++            urlConnection.disconnect();
++        }
++        catch (Exception e){
++            System.out.println("Error al crear solicitud " + e.getMessage());
++        }
++    }
++
++
+ }
+Index: ddsEntrega2/src/main/java/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\nimport io.javalin.Javalin;\r\nimport presentacion.*;\r\n\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n\r\n        Javalin app = Javalin.create(javalinConfig -> {\r\n                            javalinConfig.plugins.enableCors(cors -> {\r\n                                cors.add(it -> it.anyHost());\r\n                            }); // para poder hacer requests de un dominio a otro\r\n\r\n                            javalinConfig.staticFiles.add(\"/\"); //recursos estaticos (HTML, CSS, JS, IMG)\r\n                        }\r\n\r\n                )\r\n                .start(8080);\r\n\r\n        app.get(\"/api/hechos\", new GetColeccionesHandler()); //consulto coleccion\r\n        app.get(\"/api/colecciones/{id}/hechos\", new GetHechosColeccionHandler()); //consulta hechos\r\n        app.post(\"/api/colecciones\", new PostColeccionHandler()); //creo coleccion\r\n        app.post(\"/api/hechos\", new PostHechoHandler()); //creo hecho\r\n        app.post(\"/api/solicitudes\", new PostSolicitudEliminacionHandler()); //creo solicitud\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/Main.java b/ddsEntrega2/src/main/java/Main.java
+--- a/ddsEntrega2/src/main/java/Main.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/Main.java	(date 1752005741722)
+@@ -1,20 +1,66 @@
+ 
+ import io.javalin.Javalin;
++import org.example.agregador.Agregador;
++import org.example.fuenteProxy.ConexionDemo;
++import org.example.fuenteProxy.Quartz.RecopilacionHechosJob;
++import org.quartz.*;
++import org.quartz.impl.StdSchedulerFactory;
+ import presentacion.*;
+ 
++
++import java.time.LocalDateTime;
++
+ public class Main {
+-    public static void main(String[] args) {
++    public static void main(String[] args) throws InterruptedException, SchedulerException {
++
++        ////////////////////inicio de  cosas para demo
++        // 1. Iniciar el API Mock Server en un hilo separado
++        System.out.println("Iniciando API Mock de Fuente Demo...");
++        new Thread(() -> DemoApiMockServer.main(new String[]{})).start();
++        Thread.sleep(2000); // Dar un pequeño tiempo para que el mock server se inicialice
++
++        // 2. Inicializar componentes de tu dominio que el Job necesita
++        ConexionDemo conexionDemo = new ConexionDemo();
++        FuenteDemo fuenteDemoMetaMapa = new FuenteDemo("Fuente Demo Externa", conexionDemo);
++        Agregador agregador = Agregador.getInstance(); // Obtén la instancia Singleton del Agregador
++
++        // 3. Configurar y iniciar el Scheduler de Quartz
++        System.out.println("Configurando Scheduler de Quartz...");
++        SchedulerFactory schedulerFactory = new StdSchedulerFactory();
++        Scheduler scheduler = schedulerFactory.getScheduler();
++
++        // Crear el Job para recopilación y procesamiento
++        JobDetail recopilacionProcesamientoJob = JobBuilder.newJob(RecopilacionHechosJob.class)
++                .withIdentity("recopilacionProcesamientoHechosJob", "grupoFuentes")
++                .usingJobData("apiUrl", API_MOCK_URL)
++                // Inicia la primera consulta con una fecha en el pasado (ej. 1 hora atrás)
++                .usingJobData("ultimaConsultaFecha", LocalDateTime.now().minusHours(1))
++                .usingJobData("conexionDemoInstance", conexionDemo)
++                .usingJobData("fuenteDemoMetaMapaInstance", fuenteDemoMetaMapa)
++                .usingJobData("agregadorInstance", agregador) // Pasa la instancia del Agregador
++                .build();
+ 
++        // Crear el Trigger para que el Job se ejecute cada 1 hora
++        Trigger recopilacionProcesamientoTrigger = TriggerBuilder.newTrigger()
++                .withIdentity("recopilacionProcesamientoHechosTrigger", "grupoFuentes")
++                .startNow() // Empieza tan pronto como se inicia la aplicación
++                .withSchedule(SimpleScheduleBuilder.simpleSchedule()
++                        .withIntervalInHours(1) // ¡Se ejecutará cada 1 hora!
++                        .repeatForever())
++                .build();
++
++        // Programar el Job en el Scheduler
++        scheduler.scheduleJob(recopilacionProcesamientoJob, recopilacionProcesamientoTrigger);
++        scheduler.start(); // Iniciar el Scheduler de Quartz
++        ////////////////////////////////////////////////////////aca termina
++
++        System.out.println("Iniciando servidor Javalin en el puerto 8080...");
+         Javalin app = Javalin.create(javalinConfig -> {
+                             javalinConfig.plugins.enableCors(cors -> {
+                                 cors.add(it -> it.anyHost());
+                             }); // para poder hacer requests de un dominio a otro
+-
+                             javalinConfig.staticFiles.add("/"); //recursos estaticos (HTML, CSS, JS, IMG)
+-                        }
+-
+-                )
+-                .start(8080);
++                        }).start(8080);
+ 
+         app.get("/api/hechos", new GetColeccionesHandler()); //consulto coleccion
+         app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler()); //consulta hechos
+Index: ddsEntrega2/src/main/java/org/example/fuenteEstatica/ConexionCSV.java
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteEstatica/ConexionCSV.java b/ddsEntrega2/src/main/java/org/example/fuenteEstatica/ConexionCSV.java
+deleted file mode 100644
+--- a/ddsEntrega2/src/main/java/org/example/fuenteEstatica/ConexionCSV.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ /dev/null	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
+@@ -1,11 +0,0 @@
+-package org.example;
+-
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class ConexionCSV implements Conexion {
+-    @Override
+-    public List<Hecho> obtenerHechos(String url){
+-        return new ArrayList<>();
+-    }
+-}
+\ No newline at end of file
+Index: ddsEntrega2/src/main/java/org/example/agregador/Conexion.java
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/Conexion.java b/ddsEntrega2/src/main/java/org/example/agregador/Conexion.java
+deleted file mode 100644
+--- a/ddsEntrega2/src/main/java/org/example/agregador/Conexion.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ /dev/null	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
+@@ -1,6 +0,0 @@
+-package org.example.agregador;
+-import java.util.List;
+-
+-public interface Conexion {
+-    public List<Hecho> obtenerHechos();
+-}
+Index: ddsEntrega2/src/main/java/org/example/agregador/Fuente.java
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/Fuente.java b/ddsEntrega2/src/main/java/org/example/agregador/Fuente.java
+deleted file mode 100644
+--- a/ddsEntrega2/src/main/java/org/example/agregador/Fuente.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ /dev/null	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
+@@ -1,11 +0,0 @@
+-package org.example.agregador;
+-import java.util.List;
+-
+-
+-public abstract class Fuente {
+-    private TipoDeFuente tipoDeFuente;
+-
+-    public List<Hecho> obtenerHechos() {
+-        return conexion.obtenerHechos();
+-    }
+-}
+Index: ddsEntrega2/src/main/java/org/example/agregador/CriterioTipoFuente.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.agregador;\r\n\r\npublic class CriterioTipoFuente extends Criterio{\r\n\r\n    private Fuente fuente;\r\n\r\n    public CriterioTipoFuente(Fuente fuente) {\r\n        this.fuente = fuente;\r\n    }\r\n\r\n    @Override\r\n    public boolean cumpleConCriterio(Hecho hecho) {\r\n        return hecho.getFuente().equals(fuente);\r\n    }\r\n\r\n    public Fuente getFuente() {\r\n        return fuente;\r\n    }\r\n\r\n    public void setFuente(Fuente fuente) {\r\n        this.fuente = fuente;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/CriterioTipoFuente.java b/ddsEntrega2/src/main/java/org/example/agregador/CriterioTipoFuente.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/CriterioTipoFuente.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/CriterioTipoFuente.java	(date 1752005741739)
+@@ -1,23 +1,17 @@
+ package org.example.agregador;
+ 
++import org.example.fuente.*;
++
+ public class CriterioTipoFuente extends Criterio{
+ 
+     private Fuente fuente;
+ 
+-    public CriterioTipoFuente(Fuente fuente) {
+-        this.fuente = fuente;
+-    }
++    public CriterioTipoFuente(Fuente fuente) { this.fuente = fuente;}
+ 
+     @Override
+-    public boolean cumpleConCriterio(Hecho hecho) {
+-        return hecho.getFuente().equals(fuente);
+-    }
++    public boolean cumpleConCriterio(Hecho hecho) { return hecho.getFuente().equals(fuente);}
+ 
+-    public Fuente getFuente() {
+-        return fuente;
+-    }
++    public Fuente getFuente() { return fuente; }
+ 
+-    public void setFuente(Fuente fuente) {
+-        this.fuente = fuente;
+-    }
++    public void setFuente(Fuente fuente) {this.fuente = fuente;}
+ }
+Index: ddsEntrega2/src/main/java/org/example/agregador/EstadoSolicitudEliminacion.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.agregador;\r\n\r\npublic enum EstadoSolicitudEliminacion {\r\n    PENDIENTE(\"PENDIENTE\"),\r\n    ACEPTADA(\"ACEPTADA\"),\r\n    RECHAZADA(\"RECHAZADA\");\r\n\r\n    private final String descripcion;\r\n\r\n    private EstadoSolicitudEliminacion(String descripcion) {\r\n        this.descripcion = descripcion;\r\n    }\r\n\r\n    public String getDescripcion() {\r\n        return descripcion;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/EstadoSolicitudEliminacion.java b/ddsEntrega2/src/main/java/org/example/agregador/EstadoSolicitudEliminacion.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/EstadoSolicitudEliminacion.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/EstadoSolicitudEliminacion.java	(date 1752005741747)
+@@ -1,17 +1,5 @@
+ package org.example.agregador;
+ 
+ public enum EstadoSolicitudEliminacion {
+-    PENDIENTE("PENDIENTE"),
+-    ACEPTADA("ACEPTADA"),
+-    RECHAZADA("RECHAZADA");
+-
+-    private final String descripcion;
+-
+-    private EstadoSolicitudEliminacion(String descripcion) {
+-        this.descripcion = descripcion;
+-    }
+-
+-    public String getDescripcion() {
+-        return descripcion;
+-    }
++    PENDIENTE, ACEPTADA, RECHAZADA
+ }
+Index: ddsEntrega2/src/main/java/org/example/agregador/EstadoSolicitudModificacion.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.agregador;\r\n\r\npublic enum EstadoSolicitudModificacion {\r\n    PENDIENTE(\"PENDIENTE\"),\r\n    ACEPTADA(\"ACEPTADA\"),\r\n    RECHAZADA(\"RECHAZADA\"),\r\n    ACEPTADACONSUGERENCIA(\"ACEPTADACONSUGERENCIA\");\r\n\r\n    private final String descripcion;\r\n\r\n    private EstadoSolicitudModificacion(String descripcion) {\r\n        this.descripcion = descripcion;\r\n    }\r\n\r\n    public String getDescripcion() {\r\n        return descripcion;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/EstadoSolicitudModificacion.java b/ddsEntrega2/src/main/java/org/example/agregador/EstadoSolicitudModificacion.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/EstadoSolicitudModificacion.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/EstadoSolicitudModificacion.java	(date 1752005741749)
+@@ -1,18 +1,5 @@
+ package org.example.agregador;
+ 
+ public enum EstadoSolicitudModificacion {
+-    PENDIENTE("PENDIENTE"),
+-    ACEPTADA("ACEPTADA"),
+-    RECHAZADA("RECHAZADA"),
+-    ACEPTADACONSUGERENCIA("ACEPTADACONSUGERENCIA");
+-
+-    private final String descripcion;
+-
+-    private EstadoSolicitudModificacion(String descripcion) {
+-        this.descripcion = descripcion;
+-    }
+-
+-    public String getDescripcion() {
+-        return descripcion;
+-    }
++    PENDIENTE, ACEPTADA, RECHAZADA, ACEPTADACONSUGERENCIA
+ }
+Index: ddsEntrega2/src/main/java/org/example/agregador/DetectorDeSpam.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.agregador;\r\n\r\npublic interface DetectorDeSpam {\r\n\r\n    public static boolean esSpam(String cadenaAEvaluar){\r\n        // no se como implementar esto\r\n        return false;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/DetectorDeSpam.java b/ddsEntrega2/src/main/java/org/example/agregador/DetectorDeSpam.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/DetectorDeSpam.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/DetectorDeSpam.java	(date 1752005741743)
+@@ -1,9 +1,30 @@
+ package org.example.agregador;
+ 
+-public interface DetectorDeSpam {
++import java.util.Arrays;
++import java.util.List;
++
++public class DetectorDeSpam {
++
++    private static final List<String> PALABRAS_SPAM = Arrays.asList(
++            "gratis", "gana", "dinero", "click", "oferta", "premio", "crédito", "descuento",
++            "compra ahora", "haz clic", "100% gratis", "limitado", "mejora tu", "sin costo",
++            "ingresá tus datos", "ganador", "recibe ahora", "sin compromiso", "acceso inmediato",
++            "multiplica tus ingresos", "transferencia", "herencia", "bono", "sorteo",
++            "tarjeta de crédito", "alerta", "banco", "factura pendiente", "necesitamos verificar",
++            "confirmar cuenta", "contraseña", "riesgo", "última oportunidad", "reclama tu premio",
++            "mejor precio", "dinero fácil", "dinero rápido", "lujo", "bitcoin", "criptomoneda",
++            "sin impuestos", "sólo hoy", "legalmente", "sin esfuerzo", "cuenta suspendida"
++    );
+ 
+     public static boolean esSpam(String cadenaAEvaluar){
+-        // no se como implementar esto
++        String textoNormalizado = cadenaAEvaluar.toLowerCase();
++        int coincidencia = 0;
++        for (String s : PALABRAS_SPAM) {
++            if (textoNormalizado.contains(s)) {
++                coincidencia++;
++                if (coincidencia >= 2) return true;
++            }
++        }
+         return false;
+     }
+ }
+Index: ddsEntrega2/src/main/java/org/example/agregador/EstadoHecho.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.agregador;\r\n\r\npublic enum EstadoHecho {\r\n    ACTIVO(\"Activo\"),\r\n    OCULTO(\"OCULTO\");\r\n\r\n    private final String descripcion;\r\n\r\n    private EstadoHecho(String descripcion) {\r\n        this.descripcion = descripcion;\r\n    }\r\n\r\n    public String getDescripcion() {\r\n        return descripcion;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/EstadoHecho.java b/ddsEntrega2/src/main/java/org/example/agregador/EstadoHecho.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/EstadoHecho.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/EstadoHecho.java	(date 1752005741743)
+@@ -1,16 +1,5 @@
+ package org.example.agregador;
+ 
+ public enum EstadoHecho {
+-    ACTIVO("Activo"),
+-    OCULTO("OCULTO");
+-
+-    private final String descripcion;
+-
+-    private EstadoHecho(String descripcion) {
+-        this.descripcion = descripcion;
+-    }
+-
+-    public String getDescripcion() {
+-        return descripcion;
+-    }
++    ACTIVO, OCULTO
+ }
+Index: ddsEntrega2/src/main/java/org/example/agregador/Hecho.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.agregador;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Date;\r\nimport java.util.List;\r\n\r\npublic class Hecho {\r\n\r\n    private String titulo;\r\n    private String descripcion;\r\n    private String categoria;\r\n    private Ubicacion ubicacion;\r\n    private Date fechaDeAcontecimiento;\r\n    private Date fechaDeCarga;\r\n    private Fuente fuente;\r\n    private EstadoHecho estadoHecho;\r\n    private Contribuyente contribuyente;\r\n    private List<String> etiquetas = new ArrayList<>();\r\n    private boolean esEditable;\r\n    private List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();\r\n\r\n    // esto es el Constructor\r\n    public Hecho(String titulo, String descripcion, String categoria, Ubicacion ubicacion, Date fechaDeAcontecimiento,\r\n                 Date fechaDeCarga, Fuente fuente, EstadoHecho estadoHecho, Contribuyente contribuyente, List<String> etiquetas, boolean esEditable,\r\n                 List<ContenidoMultimedia> contenidoMultimedia) {\r\n        this.titulo = titulo;\r\n        this.descripcion = descripcion;\r\n        this.categoria = categoria;\r\n        this.ubicacion = ubicacion;\r\n        this.fechaDeAcontecimiento = fechaDeAcontecimiento;\r\n        this.fechaDeCarga = fechaDeCarga;\r\n        this.fuente = fuente;\r\n        this.estadoHecho = estadoHecho;\r\n        this.contribuyente = contribuyente;\r\n        this.etiquetas = etiquetas;\r\n        this.esEditable = esEditable;\r\n        this.contenidoMultimedia = contenidoMultimedia;\r\n    }\r\n\r\n    // Getters\r\n    public String getTitulo() {\r\n        return titulo;\r\n    }\r\n\r\n    public String getDescripcion() {\r\n        return descripcion;\r\n    }\r\n\r\n    public String getCategoria() {\r\n        return categoria;\r\n    }\r\n\r\n    public Ubicacion getUbicacion() {\r\n        return ubicacion;\r\n    }\r\n\r\n    public Date getFechaDeAcontecimiento() {\r\n        return fechaDeAcontecimiento;\r\n    }\r\n\r\n    public Date getFechaDeCarga() {\r\n        return fechaDeCarga;\r\n    }\r\n\r\n    public Fuente getFuente() {\r\n        return fuente;\r\n    }\r\n\r\n    public EstadoHecho getEstadoHecho() {\r\n        return estadoHecho;\r\n    }\r\n\r\n    public Contribuyente getContribuyente() {\r\n        return contribuyente;\r\n    }\r\n\r\n    public List<String> getEtiquetas() {\r\n        return etiquetas;\r\n    }\r\n\r\n    public boolean esEditable() {\r\n        return esEditable;\r\n    }\r\n\r\n    public List<ContenidoMultimedia> getContenidoMultimedia() {\r\n        return contenidoMultimedia;\r\n    }\r\n\r\n    //Método para ocultar el hecho\r\n    public void ocultar() {\r\n        this.estadoHecho = EstadoHecho.OCULTO;\r\n    }\r\n\r\n    //Método para comparar si dos hechos son iguales (comparando título)\r\n    public boolean esIgualAotro(Hecho otroHecho) {\r\n        return this.titulo.equalsIgnoreCase(otroHecho.getTitulo());\r\n    }\r\n    //\"dos hechos son iguales si tienen el mismo titulo\"\r\n\r\n    //Método para modificar un hecho si es editable\r\n    //REVISAR CON FUENTE DINAMICA Y SOLICITUDES\r\n    public void modificar(String nuevoTitulo, String nuevaDescripcion, String nuevaCategoria, String nuevoContenidoTexto) {\r\n        if (esEditable) {\r\n            this.titulo = nuevoTitulo;\r\n            this.descripcion = nuevaDescripcion;\r\n            this.categoria = nuevaCategoria;\r\n        } else {\r\n            System.out.println(\"Este hecho no es editable.\");\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/Hecho.java b/ddsEntrega2/src/main/java/org/example/agregador/Hecho.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/Hecho.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/Hecho.java	(date 1752005741754)
+@@ -1,8 +1,11 @@
+ package org.example.agregador;
+ 
++import org.example.fuente.*;
++
+ import java.util.ArrayList;
+ import java.util.Date;
+ import java.util.List;
++import java.util.Objects;
+ 
+ public class Hecho {
+ 
+@@ -37,6 +40,21 @@
+         this.contenidoMultimedia = contenidoMultimedia;
+     }
+ 
++    public Hecho(HechoDTO hechoDTO){
++        this.titulo = hechoDTO.getTitulo();
++        this.descripcion = hechoDTO.getDescripcion();
++        this.categoria = hechoDTO.getCategoria();
++        this.ubicacion = hechoDTO.getUbicacion();
++        this.fechaDeAcontecimiento = hechoDTO.getFechaDeAcontecimiento();
++        this.fechaDeCarga = hechoDTO.getFechaDeCarga();
++        this.fuente = hechoDTO.getFuente();
++        this.estadoHecho = hechoDTO.getEstadoHecho();
++        this.contribuyente = hechoDTO.getContribuyente();
++        this.etiquetas = hechoDTO.getEtiquetas();
++        this.esEditable = hechoDTO.getEsEditable();
++        this.contenidoMultimedia = hechoDTO.getContenidoMultimedia();
++    }
++
+     // Getters
+     public String getTitulo() {
+         return titulo;
+@@ -108,4 +126,18 @@
+             System.out.println("Este hecho no es editable.");
+         }
+     }
++
++    public boolean tieneMismosAtributosQue(Hecho otro) {
++        if (otro == null) return false;
++
++        return this.titulo.equalsIgnoreCase(otro.titulo)
++                && this.categoria.equalsIgnoreCase(otro.categoria)
++                && Objects.equals(this.ubicacion, otro.ubicacion)
++                && Objects.equals(this.fechaDeAcontecimiento, otro.fechaDeAcontecimiento)
++                && Objects.equals(this.fechaDeCarga, otro.fechaDeCarga)
++                && this.estadoHecho == otro.estadoHecho
++                && Objects.equals(this.contribuyente, otro.contribuyente)
++                && this.etiquetas.equals(otro.etiquetas)
++                && this.esEditable == otro.esEditable;
++    }
+ }
+Index: ddsEntrega2/src/main/java/org/example/agregador/TipoContenidoMultimedia.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.agregador;\r\n\r\npublic enum TipoContenidoMultimedia {\r\n    IMAGEN(\"IMAGEN\"),\r\n    VIDEO(\"VIDEO\"),\r\n    AUDIO(\"AUDIO\");\r\n\r\n    private final String descripcion;\r\n\r\n    private TipoContenidoMultimedia(String descripcion) {\r\n        this.descripcion = descripcion;\r\n    }\r\n\r\n    public String getDescripcion() {\r\n        return descripcion;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/TipoContenidoMultimedia.java b/ddsEntrega2/src/main/java/org/example/agregador/TipoContenidoMultimedia.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/TipoContenidoMultimedia.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/TipoContenidoMultimedia.java	(date 1752005741755)
+@@ -1,17 +1,5 @@
+ package org.example.agregador;
+ 
+ public enum TipoContenidoMultimedia {
+-    IMAGEN("IMAGEN"),
+-    VIDEO("VIDEO"),
+-    AUDIO("AUDIO");
+-
+-    private final String descripcion;
+-
+-    private TipoContenidoMultimedia(String descripcion) {
+-        this.descripcion = descripcion;
+-    }
+-
+-    public String getDescripcion() {
+-        return descripcion;
+-    }
++    IMAGEN, VIDEO, AUDIO
+ }
+\ No newline at end of file
+Index: ddsEntrega2/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n    <modelVersion>4.0.0</modelVersion>\r\n\r\n    <groupId>org.example</groupId>\r\n    <artifactId>pruebaclase1</artifactId>\r\n    <version>1.0-SNAPSHOT</version>\r\n\r\n    <properties>\r\n        <maven.compiler.source>8</maven.compiler.source>\r\n        <maven.compiler.target>8</maven.compiler.target>\r\n    </properties>\r\n\r\n\r\n    <dependencies>\r\n    <!-- Javalin (servidor web) -->\r\n    <dependency>\r\n        <groupId>io.javalin</groupId>\r\n        <artifactId>javalin</artifactId>\r\n        <version>5.6.1</version>\r\n    </dependency>\r\n\r\n    <dependency>\r\n        <groupId>io.javalin</groupId>\r\n        <artifactId>javalin-rendering</artifactId>\r\n        <version>5.6.1</version>\r\n    </dependency>\r\n\r\n    <!-- Librería de logueo requerida por Javalin -->\r\n    <dependency>\r\n        <groupId>org.slf4j</groupId>\r\n        <artifactId>slf4j-simple</artifactId>\r\n        <version>2.0.5</version>\r\n    </dependency>\r\n\r\n        <!--Llamadas HTTP-->\r\n        <dependency>\r\n            <groupId>org.apache.cxf</groupId>\r\n            <artifactId>cxf-rt-rs-client</artifactId>\r\n            <version>3.4.3</version>\r\n        </dependency>\r\n\r\n        <!--Serializacion JSON-->\r\n        <dependency>\r\n            <groupId>com.fasterxml.jackson.core</groupId>\r\n            <artifactId>jackson-databind</artifactId>\r\n            <version>2.12.3</version>\r\n        </dependency>\r\n\r\n    </dependencies>\r\n\r\n\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/pom.xml b/ddsEntrega2/pom.xml
+--- a/ddsEntrega2/pom.xml	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/pom.xml	(date 1752005741722)
+@@ -3,53 +3,97 @@
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+-
+-    <groupId>org.example</groupId>
+-    <artifactId>pruebaclase1</artifactId>
+-    <version>1.0-SNAPSHOT</version>
++    <!--
++        <groupId>org.example</groupId>
++        <artifactId>pruebaclase1</artifactId>
++        <version>1.0-SNAPSHOT</version>
+ 
+-    <properties>
+-        <maven.compiler.source>8</maven.compiler.source>
+-        <maven.compiler.target>8</maven.compiler.target>
+-    </properties>
++        <properties>
++            <maven.compiler.source>8</maven.compiler.source>
++            <maven.compiler.target>8</maven.compiler.target>
++        </properties>
+ 
+ 
+-    <dependencies>
+-    <!-- Javalin (servidor web) -->
+-    <dependency>
+-        <groupId>io.javalin</groupId>
+-        <artifactId>javalin</artifactId>
+-        <version>5.6.1</version>
+-    </dependency>
++        <dependencies>
++         Javalin (servidor web)
++        <dependency>
++            <groupId>io.javalin</groupId>
++            <artifactId>javalin</artifactId>
++            <version>5.6.1</version>
++        </dependency>
+ 
+-    <dependency>
+-        <groupId>io.javalin</groupId>
+-        <artifactId>javalin-rendering</artifactId>
+-        <version>5.6.1</version>
+-    </dependency>
++        <dependency>
++            <groupId>io.javalin</groupId>
++            <artifactId>javalin-rendering</artifactId>
++            <version>5.6.1</version>
++        </dependency>
+ 
+-    <!-- Librería de logueo requerida por Javalin -->
+-    <dependency>
+-        <groupId>org.slf4j</groupId>
+-        <artifactId>slf4j-simple</artifactId>
+-        <version>2.0.5</version>
+-    </dependency>
++         Librería de logueo requerida por Javalin
++        <dependency>
++            <groupId>org.slf4j</groupId>
++            <artifactId>slf4j-simple</artifactId>
++            <version>2.0.5</version>
++        </dependency>
+ 
+-        <!--Llamadas HTTP-->
++            Llamadas HTTP
+         <dependency>
+             <groupId>org.apache.cxf</groupId>
+             <artifactId>cxf-rt-rs-client</artifactId>
+             <version>3.4.3</version>
+         </dependency>
+ 
+-        <!--Serializacion JSON-->
+-        <dependency>
+-            <groupId>com.fasterxml.jackson.core</groupId>
+-            <artifactId>jackson-databind</artifactId>
+-            <version>2.12.3</version>
+-        </dependency>
++            Serializacion JSON
++            <dependency>
++                <groupId>com.fasterxml.jackson.core</groupId>
++                <artifactId>jackson-databind</artifactId>
++                <version>2.12.3</version>
++            </dependency>
+ 
++
++        </dependencies>
++
++
++    </project>-->
++
++
++
++    <groupId>org.example</groupId>
++    <artifactId>pruebaclase1</artifactId>
++    <version>1.0-SNAPSHOT</version>
++
++    <properties>
++        <maven.compiler.source>8</maven.compiler.source>
++        <maven.compiler.target>8</maven.compiler.target>
++        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> </properties>
++
++    <dependencies>
++
++        <dependency>
++            <groupId>io.javalin</groupId>
++            <artifactId>javalin</artifactId>
++            <version>5.6.1</version> </dependency>
++
++        <dependency>
++            <groupId>org.slf4j</groupId>
++            <artifactId>slf4j-simple</artifactId>
++            <version>1.7.36</version> </dependency>
++
++        <dependency>
++            <groupId>com.fasterxml.jackson.core</groupId>
++            <artifactId>jackson-databind</artifactId>
++            <version>2.15.2</version> </dependency>
++
++        <dependency>
++            <groupId>com.fasterxml.jackson.datatype</groupId>
++            <artifactId>jackson-datatype-jsr310</artifactId>
++            <version>2.15.2</version> </dependency>
++
++        <dependency>
++            <groupId>org.quartz-scheduler</groupId>
++            <artifactId>quartz</artifactId>
++            <version>2.3.2</version> </dependency>
++
++
+     </dependencies>
+ 
+-
+ </project>
+\ No newline at end of file
+Index: ddsEntrega2/src/main/java/org/example/agregador/Ubicacion.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.agregador;\r\n\r\npublic class Ubicacion {\r\n\r\n    public Integer latitud;\r\n    public Integer longitud;\r\n\r\n    // Constructor\r\n    public Ubicacion(Integer latitud, Integer longitud) {\r\n        this.latitud = latitud;\r\n        this.longitud = longitud;\r\n    }\r\n\r\n    public void setLatitud(Integer lat) {\r\n        this.latitud = lat;\r\n    }\r\n\r\n    public Integer getLatitud() {\r\n        return this.latitud;\r\n    }\r\n    public void setLongitud(Integer lon) {\r\n        this.longitud = lon;\r\n    }\r\n\r\n    public Integer getLongitud() {\r\n        return this.longitud;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/Ubicacion.java b/ddsEntrega2/src/main/java/org/example/agregador/Ubicacion.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/Ubicacion.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/Ubicacion.java	(date 1752005741769)
+@@ -2,27 +2,56 @@
+ 
+ public class Ubicacion {
+ 
+-    public Integer latitud;
+-    public Integer longitud;
++    private double latitud;
++    private double longitud;
++    private String descripcion; // Para ubicaciones que no son Lat/Lon o para una descripción más detallada
+ 
+-    // Constructor
+-    public Ubicacion(Integer latitud, Integer longitud) {
++    // Constructor 1: Para Latitud y Longitud, con una descripción por defecto
++    public Ubicacion(double latitud, double longitud) {
++        this.latitud = latitud;
++        this.longitud = longitud;
++        this.descripcion = "Coordenadas: " + latitud + ", " + longitud;
++    }
++
++    // Constructor 2: Para Latitud, Longitud y una descripción específica
++    public Ubicacion(double latitud, double longitud, String descripcion) {
+         this.latitud = latitud;
+         this.longitud = longitud;
++        this.descripcion = descripcion;
+     }
+ 
+-    public void setLatitud(Integer lat) {
+-        this.latitud = lat;
++    // Constructor 3: Para ubicaciones que son solo un String (nombre, dirección)
++    public Ubicacion(String descripcion) {
++        this.descripcion = descripcion;
++        this.latitud = -999.0; // Valor por defecto o marcador para indicar que no hay Lat/Lon
++        this.longitud = -999.0; // Valor por defecto o marcador
+     }
+ 
+-    public Integer getLatitud() {
+-        return this.latitud;
++    // Constructor 4: Sin parámetros, para "Ubicación Desconocida"
++    public Ubicacion() {
++        this.descripcion = "Ubicación Desconocida";
++        this.latitud = -999.0;
++        this.longitud = -999.0;
+     }
+-    public void setLongitud(Integer lon) {
+-        this.longitud = lon;
+-    }
+-
+-    public Integer getLongitud() {
+-        return this.longitud;
++
++    // Getters
++    public double getLatitud() { return latitud; }
++    public double getLongitud() { return longitud; }
++    public String getDescripcion() { return descripcion; }
++
++    // Setters (si son necesarios, para modificar después de la creación)
++    public void setLatitud(double latitud) { this.latitud = latitud; }
++    public void setLongitud(double longitud) { this.longitud = longitud; }
++    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
++
++    // Opcional: toString para fácil depuración
++    @Override
++    public String toString() {
++        if (latitud != -999.0 && longitud != -999.0) {
++            return "Ubicacion{lat=" + latitud + ", lon=" + longitud + ", desc='" + descripcion + "'}";
++        } else {
++            return "Ubicacion{desc='" + descripcion + "'}";
++        }
+     }
+ }
++
+Index: ddsEntrega2/src/main/java/org/example/agregador/TipoDeFuente.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.agregador;\r\n\r\npublic enum TipoDeFuente {\r\n    ESTATICA(\"ESTATICA\"),\r\n    DINAMICA(\"DINAMICA\"),\r\n    PROXY(\"PROXY\");\r\n\r\n    private final String descripcion;\r\n\r\n    private TipoDeFuente(String descripcion) {\r\n        this.descripcion = descripcion;\r\n    }\r\n\r\n    public String getDescripcion() {\r\n        return descripcion;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/TipoDeFuente.java b/ddsEntrega2/src/main/java/org/example/agregador/TipoDeFuente.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/TipoDeFuente.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/TipoDeFuente.java	(date 1752005741765)
+@@ -1,17 +1,5 @@
+ package org.example.agregador;
+ 
+ public enum TipoDeFuente {
+-    ESTATICA("ESTATICA"),
+-    DINAMICA("DINAMICA"),
+-    PROXY("PROXY");
+-
+-    private final String descripcion;
+-
+-    private TipoDeFuente(String descripcion) {
+-        this.descripcion = descripcion;
+-    }
+-
+-    public String getDescripcion() {
+-        return descripcion;
+-    }
++    ESTATICA, DINAMICA, PROXY
+ }
+\ No newline at end of file
+Index: ddsEntrega2/src/main/java/org/example/agregador/TipoDeTexto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.agregador;\r\n\r\npublic enum TipoDeTexto {\r\n    TITULO(\"TITULO\"),\r\n    DESCRIPCION(\"DESCRIPCION\"),\r\n    CATEGORIA(\"CATEGORIA\");\r\n\r\n    private final String descripcion;\r\n\r\n    private TipoDeTexto(String descripcion) {\r\n        this.descripcion = descripcion;\r\n    }\r\n\r\n    public String getDescripcion() {\r\n        return descripcion;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/TipoDeTexto.java b/ddsEntrega2/src/main/java/org/example/agregador/TipoDeTexto.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/TipoDeTexto.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/TipoDeTexto.java	(date 1752005741766)
+@@ -1,17 +1,5 @@
+ package org.example.agregador;
+ 
+ public enum TipoDeTexto {
+-    TITULO("TITULO"),
+-    DESCRIPCION("DESCRIPCION"),
+-    CATEGORIA("CATEGORIA");
+-
+-    private final String descripcion;
+-
+-    private TipoDeTexto(String descripcion) {
+-        this.descripcion = descripcion;
+-    }
+-
+-    public String getDescripcion() {
+-        return descripcion;
+-    }
++    TITULO, DESCRIPCION, CATEGORIA
+ }
+\ No newline at end of file
+Index: ddsEntrega2/src/main/java/org/example/fuenteProxy/ConexionDemo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\nimport java.net.MalformedURLException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.io.BufferedReader;\r\nimport java.io.InputStreamReader;\r\nimport java.net.URL;\r\nimport java.net.HttpURLConnection;\r\n\r\nimport com.fasterxml.jackson.core.type.TypeReference;\r\nimport com.fasterxml.jackson.databind.ObjectMapper;\r\n\r\npublic class ConexionMetaMapa implements Conexion {\r\n\r\n    private URL url;\r\n\r\n    @Override\r\n    public List<Hecho> obtenerHechos() {\r\n        List<Hecho> hechos = new ArrayList<>();\r\n        try {\r\n            URL nuevaURL = new URL(url + \"/hechos\");\r\n            hechos = this.recibirHechos(nuevaURL);\r\n        } catch (MalformedURLException e) {\r\n            System.out.println(\"URL invalida: \" + e.getMessage());\r\n        }\r\n        return hechos;\r\n    }\r\n\r\n    public List<Hecho> obtenerHechos (Coleccion coleccion){\r\n        List<Hecho> hechos = new ArrayList<>();\r\n        try {\r\n            URL nuevaURL = new URL(url + \"/colecciones/\" + coleccion.getHandle() + \"/hechos\");\r\n            hechos = this.recibirHechos(nuevaURL);\r\n        } catch (MalformedURLException e) {\r\n            System.out.println(\"URL invalida: \" + e.getMessage());\r\n        }\r\n        return hechos;\r\n    }\r\n\r\n    public List<Hecho> recibirHechos(URL urlAPI){\r\n        List<Hecho> hechos = new ArrayList<>();\r\n        try {\r\n            HttpURLConnection conexion = (HttpURLConnection) urlAPI.openConnection();\r\n            conexion.setRequestMethod(\"GET\");\r\n\r\n            int estado = conexion.getResponseCode();\r\n            if(estado == 200){\r\n                BufferedReader lector = new BufferedReader(new InputStreamReader(conexion.getInputStream()));\r\n                String linea;\r\n                StringBuilder contenido = new StringBuilder();\r\n                while ((linea = lector.readLine()) != null){\r\n                    contenido.append(linea);\r\n                }\r\n                lector.close();\r\n\r\n                String json = contenido.toString();\r\n\r\n                ObjectMapper mapper = new ObjectMapper();\r\n\r\n                hechos = mapper.readValue(json, new TypeReference<List<Hecho>>() {});\r\n            }\r\n            else {\r\n                System.out.println(\"Error HTTP: \" + estado);\r\n            }\r\n        } catch (Exception e) {\r\n            System.out.println(\"Error al obtener hechos: \" + e.getMessage());\r\n        }\r\n        return hechos;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteProxy/ConexionDemo.java b/ddsEntrega2/src/main/java/org/example/fuenteProxy/ConexionDemo.java
+--- a/ddsEntrega2/src/main/java/org/example/fuenteProxy/ConexionDemo.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteProxy/ConexionDemo.java	(date 1752005741807)
+@@ -1,71 +1,195 @@
+-package org.example;
++package org.example.fuenteProxy;
++
++import org.example.agregador.ContenidoMultimedia;
++import org.example.agregador.EstadoHecho;
++import org.example.agregador.Ubicacion;
++import org.example.fuente.*;
+ 
+-import java.net.MalformedURLException;
+-import java.util.ArrayList;
+-import java.util.List;
++import com.fasterxml.jackson.databind.DeserializationFeature;
++import com.fasterxml.jackson.databind.ObjectMapper;
++import com.fasterxml.jackson.databind.SerializationFeature;
++import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
++import com.fasterxml.jackson.core.type.TypeReference;
++import org.example.fuenteProxy.APIMock.HechoMock;
++
+ import java.io.BufferedReader;
+ import java.io.InputStreamReader;
++import java.net.HttpURLConnection;
+ import java.net.URL;
+-import java.net.HttpURLConnection;
+-
+-import com.fasterxml.jackson.core.type.TypeReference;
+-import com.fasterxml.jackson.databind.ObjectMapper;
++import java.time.LocalDateTime;
++import java.time.ZoneId;
++import java.util.ArrayList;
++import java.util.Date;
++import java.util.List;
++import java.util.Objects;
++import java.util.stream.Collectors;
+ 
+-public class ConexionMetaMapa implements Conexion {
+ 
+-    private URL url;
++public class ConexionDemo{
+ 
+-    @Override
+-    public List<Hecho> obtenerHechos() {
+-        List<Hecho> hechos = new ArrayList<>();
+-        try {
+-            URL nuevaURL = new URL(url + "/hechos");
+-            hechos = this.recibirHechos(nuevaURL);
+-        } catch (MalformedURLException e) {
+-            System.out.println("URL invalida: " + e.getMessage());
+-        }
+-        return hechos;
++    private final ObjectMapper objectMapper;
++    public ConexionDemo() {
++        this.objectMapper = new ObjectMapper();
++        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
++        objectMapper.registerModule(new JavaTimeModule()); // Para manejar LocalDateTime del HechoMock
++        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Para que LocalDateTime se serialice como string ISO
+     }
++
++
++     public List<HechoDTO> obtenerNuevosHechos(URL urlServicioExterno, LocalDateTime fechaUltimaConsulta, Fuente fuenteAsociada) {
++        Objects.requireNonNull(urlServicioExterno, "La URL del servicio externo no puede ser nula.");
++        Objects.requireNonNull(fechaUltimaConsulta, "La fecha de última consulta no puede ser nula.");
++        Objects.requireNonNull(fuenteAsociada, "La fuente asociada no puede ser nula.");
+ 
+-    public List<Hecho> obtenerHechos (Coleccion coleccion){
+-        List<Hecho> hechos = new ArrayList<>();
++
++        System.out.println("ConexionDemo: Buscando hechos en " + urlServicioExterno.toString() + " desde " + fechaUltimaConsulta.toString());
++
++        HttpURLConnection connection = null;
+         try {
+-            URL nuevaURL = new URL(url + "/colecciones/" + coleccion.getHandle() + "/hechos");
+-            hechos = this.recibirHechos(nuevaURL);
+-        } catch (MalformedURLException e) {
+-            System.out.println("URL invalida: " + e.getMessage());
+-        }
+-        return hechos;
+-    }
++            // Formatear la fecha para la API Mock
++            String fechaFormateada = fechaUltimaConsulta.toString();
++            String requestUrl = urlServicioExterno.toString() + "?fechaDesde=" + fechaFormateada;
++
++            URL url = new URL(requestUrl);
++            connection = (HttpURLConnection) url.openConnection();
++            connection.setRequestMethod("GET");
++            connection.setRequestProperty("Accept", "application/json");
++
++            int responseCode = connection.getResponseCode();
++            System.out.println("ConexionDemo: Status de respuesta: " + responseCode);
++
++            if (responseCode == HttpURLConnection.HTTP_OK) { // HTTP 200
++                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
++                String inputLine;
++                StringBuilder response = new StringBuilder();
++                while ((inputLine = in.readLine()) != null) {
++                    response.append(inputLine);
++                }
++                in.close();
++
++                String responseBody = response.toString();
++                System.out.println("ConexionDemo: Respuesta del servicio externo: " + responseBody);
++
++                List<HechoMock> hechosExternos =  objectMapper.readValue(responseBody, new TypeReference<List<HechoMock>>() {});
++
++                if (hechosExternos == null || hechosExternos.isEmpty()) {
++                    System.out.println("ConexionDemo: No se encontraron nuevos hechos en la respuesta (lista vacía o nula).");
++                    return new ArrayList<>(); // Devolver lista vacía en lugar de null
++
++                }
+ 
+-    public List<Hecho> recibirHechos(URL urlAPI){
+-        List<Hecho> hechos = new ArrayList<>();
+-        try {
+-            HttpURLConnection conexion = (HttpURLConnection) urlAPI.openConnection();
+-            conexion.setRequestMethod("GET");
+-
+-            int estado = conexion.getResponseCode();
+-            if(estado == 200){
+-                BufferedReader lector = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+-                String linea;
+-                StringBuilder contenido = new StringBuilder();
+-                while ((linea = lector.readLine()) != null){
+-                    contenido.append(linea);
++                //Mapear HechoMock a HechoDTO
++                return hechosExternos.stream()
++                        .map(hechoMock -> mapHechoMockToHechoDTO(hechoMock, fuenteAsociada))
++                        .collect(Collectors.toList());
++
++
++            } else if (responseCode == HttpURLConnection.HTTP_NO_CONTENT) { // HTTP 204
++                System.out.println("ConexionDemo: No hay nuevos hechos por ahora (HTTP 204 No Content).");
++                return null;
++            } else {
++                String errorBody = "";
++                if (connection.getErrorStream() != null) {
++                    BufferedReader errorIn = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
++                    String errorLine;
++                    StringBuilder errorResponse = new StringBuilder();
++                    while ((errorLine = errorIn.readLine()) != null) {
++                        errorResponse.append(errorLine);
++                    }
++                    errorIn.close();
++                    errorBody = errorResponse.toString();
++                }
++                System.err.println("ConexionDemo: Error al obtener hechos. Status: " + responseCode + ", Body: " + errorBody);
++                return null;
++            }
++        } catch (Exception e) {
++            System.err.println("ConexionDemo: Error de comunicación con el servicio externo: " + e.getMessage());
++            e.printStackTrace();
++            return null;
++        } finally {
++            if (connection != null) {
++                connection.disconnect();
++            }
++        }
++    }
++
++
++
++    // Metodo para mapear HechoMock (desde la API) a HechoDTO (general de MetaMapa)
++    private HechoDTO mapHechoMockToHechoDTO(HechoMock hechoMock, Fuente fuenteAsociada) {
++        // Manejo de la fecha de acontecimiento: LocalDateTime a Date
++        Date fechaDeAcontecimiento = null;
++        if (hechoMock.getMockFechaAcontecimiento() != null) {
++            fechaDeAcontecimiento = Date.from(hechoMock.getMockFechaAcontecimiento().atZone(ZoneId.systemDefault()).toInstant());
++        }
++
++        // Manejo de la ubicación
++        Ubicacion ubicacion = null;
++        String ubicacionStr = hechoMock.getMockUbicacion(); // Obtener el String de ubicacion
++
++        if (ubicacionStr != null && !ubicacionStr.trim().isEmpty()) {
++            // Intentar parsear como Lat/Lon (ej: "Lat: -34.5800, Lon: -58.4200")
++            if (ubicacionStr.contains("Lat:") && ubicacionStr.contains("Lon:")) {
++                try {
++                    double lat = Double.parseDouble(ubicacionStr.split("Lat:")[1].split(",")[0].trim());
++                    double lon = Double.parseDouble(ubicacionStr.split("Lon:")[1].trim());
++                    ubicacion = new Ubicacion(lat, lon, ubicacionStr); // Usar el constructor con 3 parámetros si existe
++                    // O new Ubicacion(lat, lon) si el de 3 no existe
++                } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
++                    System.err.println("ConexionDemo: Error al parsear Lat/Lon para ubicación: " + ubicacionStr + ". Usando como texto simple.");
++                    ubicacion = new Ubicacion(ubicacionStr); // Si falla, guardar como texto simple
+                 }
+-                lector.close();
++            } else {
++                // Si no es Lat/Lon, asumimos que es un nombre de lugar o dirección
++                ubicacion = new Ubicacion(ubicacionStr); // Usar el constructor de 1 parámetro (String)
++            }
++        } else {
++            // Si el string de ubicación es nulo o vacío
++            System.out.println("ConexionDemo: Ubicación en blanco o vacía para el hecho con ID Externo: " + hechoMock.getMockId() + ". Usando Ubicacion Desconocida.");
++            ubicacion = new Ubicacion(); // Usar el constructor de 0 parámetros para "desconocida"
++        }
+ 
+-                String json = contenido.toString();
+-
+-                ObjectMapper mapper = new ObjectMapper();
+-
+-                hechos = mapper.readValue(json, new TypeReference<List<Hecho>>() {});
+-            }
+-            else {
+-                System.out.println("Error HTTP: " + estado);
+-            }
+-        } catch (Exception e) {
+-            System.out.println("Error al obtener hechos: " + e.getMessage());
++        // Etiquetas
++        List<String> etiquetas = new ArrayList<>();
++        if (hechoMock.getMockCategoria() != null && !hechoMock.getMockCategoria().isEmpty()) {
++            etiquetas.add(hechoMock.getMockCategoria().toLowerCase());
++        }
++        if (hechoMock.getMockOrigen() != null && !hechoMock.getMockOrigen().isEmpty()) {
++            etiquetas.add("origen-" + hechoMock.getMockOrigen().toLowerCase().replace(" ", "-"));
++        }
++        if (hechoMock.getcampoExtra() != null && !hechoMock.getcampoExtra().isEmpty()) {
++            etiquetas.add("extra-" + hechoMock.getcampoExtra().toLowerCase().replace(" ", "-"));
+         }
+-        return hechos;
+-    }
+-}
++        etiquetas.add("fuente-demo");
++
++        // Otros campos por defecto para el DTO
++        Date fechaDeCarga = new Date();
++        EstadoHecho estadoHecho = EstadoHecho.ACTIVO;
++        // Contribuyente se mantiene nulo por ahora para hechos externos
++        List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
++        boolean esEditable = false;
++
++        // Validar título antes de crear DTO
++        String tituloDTO = hechoMock.getMockTitulo();
++        if (tituloDTO == null || tituloDTO.trim().isEmpty()) {
++            System.err.println("ConexionDemo: HechoMock sin título (ID: " + hechoMock.getMockId() + "). Usando ID como título.");
++            tituloDTO = "Hecho Externo (ID: " + hechoMock.getMockId() + ")";
++        }
++
++        return new HechoDTO(
++                tituloDTO,
++                hechoMock.getMockDescripcion(),
++                hechoMock.getMockCategoria(),
++                ubicacion,
++                fechaDeAcontecimiento,
++                fechaDeCarga,
++                fuenteAsociada,
++                estadoHecho,
++                null, // Contribuyente
++                etiquetas,
++                esEditable,
++                contenidoMultimedia
++        );
++    }
++
++}
+\ No newline at end of file
+Index: ddsEntrega2/src/main/java/org/example/fuente/HechoDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuente/HechoDTO.java b/ddsEntrega2/src/main/java/org/example/fuente/HechoDTO.java
+new file mode 100644
+--- /dev/null	(date 1752005741777)
++++ b/ddsEntrega2/src/main/java/org/example/fuente/HechoDTO.java	(date 1752005741777)
+@@ -0,0 +1,54 @@
++package org.example.fuente;
++
++import org.example.agregador.ContenidoMultimedia;
++import org.example.agregador.Contribuyente;
++import org.example.agregador.EstadoHecho;
++import org.example.agregador.Ubicacion;
++
++import java.util.Date;
++import java.util.List;
++
++public class HechoDTO {
++    private final String titulo;
++    private final String descripcion;
++    private final String categoria;
++    private final Ubicacion ubicacion;
++    private final Date fechaDeAcontecimiento;
++    private final Date fechaDeCarga;
++    private final Fuente fuente;
++    private final EstadoHecho estadoHecho;
++    private final Contribuyente contribuyente;
++    private final List<String> etiquetas;
++    private final boolean esEditable;
++    private final List<ContenidoMultimedia> contenidoMultimedia;
++
++    public HechoDTO(String titulo, String descripcion, String categoria, Ubicacion ubicacion, Date fechaDeAcontecimiento,
++                    Date fechaDeCarga, Fuente fuente, EstadoHecho estadoHecho, Contribuyente contribuyente, List<String> etiquetas, boolean esEditable,
++                    List<ContenidoMultimedia> contenidoMultimedia) {
++        this.titulo = titulo;
++        this.descripcion = descripcion;
++        this.categoria = categoria;
++        this.ubicacion = ubicacion;
++        this.fechaDeAcontecimiento = fechaDeAcontecimiento;
++        this.fechaDeCarga = fechaDeCarga;
++        this.fuente = fuente;
++        this.estadoHecho = estadoHecho;
++        this.contribuyente = contribuyente;
++        this.etiquetas = etiquetas;
++        this.esEditable = esEditable;
++        this.contenidoMultimedia = contenidoMultimedia;
++    }
++
++    public String getTitulo() { return titulo;}
++    public String getDescripcion() { return descripcion;}
++    public String getCategoria() { return categoria;}
++    public Ubicacion getUbicacion() { return ubicacion;}
++    public Date getFechaDeAcontecimiento() { return fechaDeAcontecimiento;}
++    public Date getFechaDeCarga() { return fechaDeCarga;}
++    public Fuente getFuente() { return fuente;}
++    public EstadoHecho getEstadoHecho() { return estadoHecho;}
++    public Contribuyente getContribuyente() { return contribuyente;}
++    public List<String> getEtiquetas() { return etiquetas;}
++    public boolean getEsEditable() { return esEditable;}
++    public List<ContenidoMultimedia> getContenidoMultimedia() { return contenidoMultimedia; }
++}
+Index: ddsEntrega2/src/main/java/org/example/agregador/MultiplesMenciones.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/MultiplesMenciones.java b/ddsEntrega2/src/main/java/org/example/agregador/MultiplesMenciones.java
+new file mode 100644
+--- /dev/null	(date 1752005741755)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/MultiplesMenciones.java	(date 1752005741755)
+@@ -0,0 +1,59 @@
++package org.example.agregador;
++import org.example.fuente.Fuente;
++
++import java.util.*;
++
++public class MultiplesMenciones extends AlgoritmoConsenso {
++    @Override
++    public List<Hecho> obtenerHechosConsensuados(Coleccion coleccion){
++
++        List<Hecho> hechos = coleccion.getHechos();
++        List<Fuente> fuentes = coleccion.getFuente();
++
++        // Agrupamos los hechos por título
++        Map<String, List<Hecho>> hechosPorTitulo = new HashMap<>();
++
++        for (Hecho hecho : hechos) {
++            String titulo = hecho.getTitulo();
++            hechosPorTitulo.putIfAbsent(titulo, new ArrayList<>());
++            hechosPorTitulo.get(titulo).add(hecho);
++        }
++
++        List<Hecho> hechosConsensuados = new ArrayList<>();
++
++        // Procesamos cada grupo de hechos con el mismo título
++        for (Map.Entry<String, List<Hecho>> entry : hechosPorTitulo.entrySet()) {
++            List<Hecho> hechosConMismoTitulo = entry.getValue();
++
++            // Agrupamos hechos equivalentes por sus atributos completos
++            Map<Hecho, Set<Fuente>> variantes = new HashMap<>();
++
++            for (Hecho hecho : hechosConMismoTitulo) {
++                boolean agregado = false;
++                for (Hecho clave : variantes.keySet()) {
++                    if (hecho.tieneMismosAtributosQue(clave)) {
++                        variantes.get(clave).add(hecho.getFuente());
++                        agregado = true;
++                        break;
++                    }
++                }
++                if (!agregado) {
++                    Set<Fuente> fuentesSet = new HashSet<>();
++                    fuentesSet.add(hecho.getFuente());
++                    variantes.put(hecho, fuentesSet);
++                }
++            }
++
++            // Buscar si hay una variante que tenga al menos 2 fuentes y sea la única variante
++            for (Map.Entry<Hecho, Set<Fuente>> variante : variantes.entrySet()) {
++                if (variante.getValue().size() >= 2 && variantes.size() == 1) {
++                    hechosConsensuados.add(variante.getKey());
++                    break; // solo una por título
++                }
++            }
++        }
++
++        return hechosConsensuados;
++    }
++
++}
+Index: ddsEntrega2/src/main/java/org/example/fuente/Conexion.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuente/Conexion.java b/ddsEntrega2/src/main/java/org/example/fuente/Conexion.java
+new file mode 100644
+--- /dev/null	(date 1752005741771)
++++ b/ddsEntrega2/src/main/java/org/example/fuente/Conexion.java	(date 1752005741771)
+@@ -0,0 +1,8 @@
++package org.example.fuente;
++
++import java.util.List;
++
++public abstract class Conexion {
++
++    public abstract List<HechoDTO> obtenerHechos();
++}
+Index: ddsEntrega2/src/main/java/org/example/fuente/Fuente.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuente/Fuente.java b/ddsEntrega2/src/main/java/org/example/fuente/Fuente.java
+new file mode 100644
+--- /dev/null	(date 1752005741771)
++++ b/ddsEntrega2/src/main/java/org/example/fuente/Fuente.java	(date 1752005741771)
+@@ -0,0 +1,19 @@
++package org.example.fuente;
++
++import org.example.agregador.TipoDeFuente;
++
++import java.util.List;
++
++public abstract class Fuente {
++    protected TipoDeFuente tipoDeFuente;
++    protected Conexion conexion;
++
++    public Fuente(TipoDeFuente tipoDeFuente, Conexion conexion) {
++        this.tipoDeFuente = tipoDeFuente;
++        this.conexion = conexion;
++    }
++
++    public List<HechoDTO> obtenerHechos(){
++        return conexion.obtenerHechos();
++    }
++}
+\ No newline at end of file
+Index: ddsEntrega2/src/main/java/org/example/agregador/MayoriaSimple.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/MayoriaSimple.java b/ddsEntrega2/src/main/java/org/example/agregador/MayoriaSimple.java
+new file mode 100644
+--- /dev/null	(date 1752005741755)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/MayoriaSimple.java	(date 1752005741755)
+@@ -0,0 +1,47 @@
++package org.example.agregador;
++import org.example.fuente.Fuente;
++
++import java.util.*;
++
++public class MayoriaSimple extends AlgoritmoConsenso {
++    @Override
++    public List<Hecho> obtenerHechosConsensuados(Coleccion coleccion) {
++        List<Hecho> hechos = coleccion.getHechos();
++        List<Fuente> fuentes = coleccion.getFuente(); // fuentes distintas de la colección
++        int totalFuentes = fuentes.size();
++
++        // 1. Diccionario: título → fuentes que lo mencionan
++        Map<String, Set<Fuente>> fuentesPorTitulo = new HashMap<>();
++
++        // 2. Diccionario: título → un ejemplo de Hecho con ese título
++        Map<String, Hecho> hechoPorTitulo = new HashMap<>();
++
++        for (Hecho hecho : hechos) {
++            String titulo = hecho.getTitulo();
++            Fuente fuente = hecho.getFuente();
++
++            // si aún no existe el título en el mapa, lo agrego con un set vacío
++            fuentesPorTitulo.putIfAbsent(titulo, new HashSet<>());
++            fuentesPorTitulo.get(titulo).add(fuente);
++
++            // guardo un ejemplo del hecho para devolverlo luego
++            hechoPorTitulo.putIfAbsent(titulo, hecho);
++        }
++
++        // 3. Filtrar los hechos consensuados
++        List<Hecho> hechosConsensuados = new ArrayList<>();
++
++        for (String titulo : fuentesPorTitulo.keySet()) {
++            int cantidadFuentes = fuentesPorTitulo.get(titulo).size();
++
++            // mayoría simple: al menos la mitad de las fuentes (redondeado para arriba)
++            if (cantidadFuentes >= (totalFuentes + 1) / 2) {
++                Hecho hecho = hechoPorTitulo.get(titulo);
++                hechosConsensuados.add(hecho);
++            }
++        }
++
++        return hechosConsensuados;
++    }
++}
++
+Index: ddsEntrega2/src/main/java/org/example/agregador/AlgoritmoConsenso.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/AlgoritmoConsenso.java b/ddsEntrega2/src/main/java/org/example/agregador/AlgoritmoConsenso.java
+new file mode 100644
+--- /dev/null	(date 1752005741733)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/AlgoritmoConsenso.java	(date 1752005741733)
+@@ -0,0 +1,7 @@
++package org.example.agregador;
++
++import java.util.List;
++
++public abstract class AlgoritmoConsenso {
++    public abstract List<Hecho> obtenerHechosConsensuados(Coleccion coleccion);
++}
+Index: ddsEntrega2/src/main/java/org/example/agregador/Absoluta.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/Absoluta.java b/ddsEntrega2/src/main/java/org/example/agregador/Absoluta.java
+new file mode 100644
+--- /dev/null	(date 1752005741731)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/Absoluta.java	(date 1752005741731)
+@@ -0,0 +1,44 @@
++package org.example.agregador;
++import org.example.fuente.Fuente;
++
++import java.util.*;
++
++public class Absoluta extends AlgoritmoConsenso {
++
++    @Override
++    public List<Hecho> obtenerHechosConsensuados(Coleccion coleccion){
++        List<Hecho> hechos = coleccion.getHechos();
++        List<Fuente> fuentes = coleccion.getFuente(); // fuentes distintas
++        int totalFuentes = fuentes.size();
++
++        // título → set de fuentes que mencionan ese título
++        Map<String, Set<Fuente>> fuentesPorTitulo = new HashMap<>();
++
++        // título → un Hecho representativo con ese título
++        Map<String, Hecho> hechoPorTitulo = new HashMap<>();
++
++        for (Hecho hecho : hechos) {
++            String titulo = hecho.getTitulo();
++            Fuente fuente = hecho.getFuente();
++
++            fuentesPorTitulo.putIfAbsent(titulo, new HashSet<>());
++            fuentesPorTitulo.get(titulo).add(fuente);
++
++            hechoPorTitulo.putIfAbsent(titulo, hecho);
++        }
++
++        // Solo quedan los hechos cuyos títulos fueron mencionados por TODAS las fuentes
++        List<Hecho> hechosConsensuados = new ArrayList<>();
++
++        for (Map.Entry<String, Set<Fuente>> entry : fuentesPorTitulo.entrySet()) {
++            String titulo = entry.getKey();
++            Set<Fuente> fuentesQueLoTienen = entry.getValue();
++
++            if (fuentesQueLoTienen.size() == totalFuentes) {
++                hechosConsensuados.add(hechoPorTitulo.get(titulo));
++            }
++        }
++
++        return hechosConsensuados;
++    }
++}
+Index: ddsEntrega2/src/main/java/org/example/agregador/ModosDeNavegacion.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/ModosDeNavegacion.java b/ddsEntrega2/src/main/java/org/example/agregador/ModosDeNavegacion.java
+new file mode 100644
+--- /dev/null	(date 1752005741755)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/ModosDeNavegacion.java	(date 1752005741755)
+@@ -0,0 +1,5 @@
++package org.example.agregador;
++
++public enum ModosDeNavegacion {
++    IRRESTRICTA, CURADA
++}
+Index: ddsEntrega2/src/main/java/org/example/fuenteDinamica/SolicitudDeEliminacionDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteDinamica/SolicitudDeEliminacionDTO.java b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/SolicitudDeEliminacionDTO.java
+new file mode 100644
+--- /dev/null	(date 1752005741789)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/SolicitudDeEliminacionDTO.java	(date 1752005741789)
+@@ -0,0 +1,7 @@
++package org.example.fuenteDinamica;
++
++import org.example.agregador.EstadoSolicitudEliminacion;
++
++public class SolicitudDeEliminacionDTO extends SolicitudDTO {
++    private EstadoSolicitudEliminacion estado;
++}
+Index: ddsEntrega2/src/main/java/org/example/fuenteDinamica/FuenteDinamica.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteDinamica/FuenteDinamica.java b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/FuenteDinamica.java
+new file mode 100644
+--- /dev/null	(date 1752005741785)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/FuenteDinamica.java	(date 1752005741785)
+@@ -0,0 +1,19 @@
++package org.example.fuenteDinamica;
++
++import org.example.agregador.TipoDeFuente;
++import org.example.fuente.*;
++
++import java.util.List;
++
++public class FuenteDinamica extends Fuente {
++
++    public FuenteDinamica(Conexion conexion) { super(TipoDeFuente.DINAMICA, conexion); }
++
++    public List<SolicitudDeModificacionDTO> obtenerSolicitudDeModificacion() {
++        return ((ConexionBD) conexion).obtenerSolicitudDeModificacion();
++    }
++
++    public List<SolicitudDeEliminacionDTO> obtenerSolicitudDeEliminacion() {
++        return ((ConexionBD) conexion).obtenerSolicitudDeEliminacion();
++    }
++}
+Index: ddsEntrega2/src/main/java/org/example/fuenteDinamica/ControllerSubirHechos.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteDinamica/ControllerSubirHechos.java b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/ControllerSubirHechos.java
+new file mode 100644
+--- /dev/null	(date 1752005741783)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/ControllerSubirHechos.java	(date 1752005741783)
+@@ -0,0 +1,25 @@
++package org.example.fuenteDinamica;
++
++import org.example.agregador.Hecho;
++import org.example.fuente.HechoDTO;
++import org.example.agregador.Contribuyente;
++
++public class ControllerSubirHechos {
++    private final Contribuyente contribuyente;
++    private final DinamicoRepositorio baseDeDatos;
++
++    public ControllerSubirHechos(Contribuyente contribuyente, DinamicoRepositorio baseDeDatos){
++        this.contribuyente = contribuyente;
++        this.baseDeDatos = baseDeDatos;
++    }
++
++    public void subirHecho(HechoDTO hecho){
++        baseDeDatos.guardarHecho(hecho);
++        this.notificar(hecho);
++    }
++
++    public void notificar(HechoDTO hechoDTO){
++        contribuyente.hechoSubido(new Hecho(hechoDTO));
++    }
++
++}
+Index: ddsEntrega2/src/main/java/org/example/fuenteDinamica/SolicitudDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteDinamica/SolicitudDTO.java b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/SolicitudDTO.java
+new file mode 100644
+--- /dev/null	(date 1752005741786)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/SolicitudDTO.java	(date 1752005741786)
+@@ -0,0 +1,8 @@
++package org.example.fuenteDinamica;
++
++import org.example.agregador.Hecho;
++
++public class SolicitudDTO {
++    private Hecho hechoAsociado;
++    private String justificacion;
++}
+Index: ddsEntrega2/src/main/java/org/example/fuenteDinamica/ControllerSolicitud.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteDinamica/ControllerSolicitud.java b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/ControllerSolicitud.java
+new file mode 100644
+--- /dev/null	(date 1752005741779)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/ControllerSolicitud.java	(date 1752005741779)
+@@ -0,0 +1,22 @@
++package org.example.fuenteDinamica;
++
++import org.example.agregador.Contribuyente;
++import org.example.agregador.Hecho;
++import org.example.agregador.SolicitudDeModificacion;
++import org.example.fuente.HechoDTO;
++
++public class ControllerSolicitud {
++    private final DinamicoRepositorio baseDeDatos;
++
++    public ControllerSolicitud(DinamicoRepositorio baseDeDatos){
++        this.baseDeDatos = baseDeDatos;
++    }
++
++    public void subirSolicitudModificacion(SolicitudDeModificacionDTO solicitud){
++        baseDeDatos.guardarSolicitudModificacion(solicitud);
++    }
++
++    public void subirSolicitudEliminacion(SolicitudDeEliminacionDTO solicitud){
++        baseDeDatos.guardarSolicitudEliminacion(solicitud);
++    }
++}
+Index: ddsEntrega2/src/main/java/org/example/fuenteEstatica/FuenteEstatica.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteEstatica/FuenteEstatica.java b/ddsEntrega2/src/main/java/org/example/fuenteEstatica/FuenteEstatica.java
+new file mode 100644
+--- /dev/null	(date 1752005741797)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteEstatica/FuenteEstatica.java	(date 1752005741797)
+@@ -0,0 +1,14 @@
++package org.example.fuenteEstatica;
++
++import org.example.agregador.TipoDeFuente;
++import org.example.fuente.*;
++import org.example.fuente.Conexion;
++
++
++public class FuenteEstatica extends Fuente {
++
++    public FuenteEstatica(Conexion conexion) {
++        super(TipoDeFuente.ESTATICA, conexion);
++    }
++
++}
+Index: ddsEntrega2/src/main/java/org/example/fuenteDinamica/DinamicoRepositorio.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteDinamica/DinamicoRepositorio.java b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/DinamicoRepositorio.java
+new file mode 100644
+--- /dev/null	(date 1752005741783)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/DinamicoRepositorio.java	(date 1752005741783)
+@@ -0,0 +1,41 @@
++package org.example.fuenteDinamica;
++
++import org.example.agregador.SolicitudDeEliminacion;
++import org.example.agregador.SolicitudDeModificacion;
++import org.example.fuente.*;
++import java.util.ArrayList;
++import java.util.List;
++
++public class DinamicoRepositorio {
++
++    private List<HechoDTO> hechos;
++    private List<SolicitudDeModificacionDTO> solicitudesModificacion;
++    private List<SolicitudDeEliminacionDTO> solicitudesEliminacion;
++
++    public DinamicoRepositorio() { this.hechos = new ArrayList<>(); this.solicitudesModificacion = new ArrayList<>(); this.solicitudesEliminacion = new ArrayList<>();}
++
++    public void guardarHecho(HechoDTO hecho){ hechos.add(hecho);}
++
++    public List<HechoDTO> obtenerHechos() {
++        List<HechoDTO> hechosADevolver = hechos;
++        hechos = new ArrayList<>();
++        return hechosADevolver;
++    }
++
++    public List<SolicitudDeModificacionDTO> obtenerSolicitudDeModificacion() {
++        List<SolicitudDeModificacionDTO> solicitudesADevolver = solicitudesModificacion;
++        solicitudesModificacion = new ArrayList<>();
++        return solicitudesADevolver;
++    }
++
++    public List<SolicitudDeEliminacionDTO> obtenerSolicitudDeEliminacion() {
++        List<SolicitudDeEliminacionDTO> solicitudesADevolver = solicitudesEliminacion;
++        solicitudesEliminacion = new ArrayList<>();
++        return solicitudesADevolver;
++    }
++
++    public void guardarSolicitudModificacion(SolicitudDeModificacionDTO solicitud){ solicitudesModificacion.add(solicitud);}
++
++    public void guardarSolicitudEliminacion(SolicitudDeEliminacionDTO solicitud){ solicitudesEliminacion.add(solicitud);}
++
++}
+Index: ddsEntrega2/src/main/java/org/example/fuenteDinamica/SolicitudDeModificacionDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteDinamica/SolicitudDeModificacionDTO.java b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/SolicitudDeModificacionDTO.java
+new file mode 100644
+--- /dev/null	(date 1752005741790)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/SolicitudDeModificacionDTO.java	(date 1752005741790)
+@@ -0,0 +1,9 @@
++package org.example.fuenteDinamica;
++
++import org.example.agregador.EstadoSolicitudModificacion;
++import org.example.agregador.Hecho;
++
++public class SolicitudDeModificacionDTO extends SolicitudDTO {
++    private Hecho hechoModificado;
++    private EstadoSolicitudModificacion estadoSolicitudModificacion;
++}
+Index: ddsEntrega2/src/main/java/org/example/ConversorCSV.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/ConversorCSV.java b/ddsEntrega2/src/main/java/org/example/fuenteEstatica/ConversorCSV.java
+rename from ddsEntrega2/src/main/java/org/example/ConversorCSV.java
+rename to ddsEntrega2/src/main/java/org/example/fuenteEstatica/ConversorCSV.java
+--- a/ddsEntrega2/src/main/java/org/example/ConversorCSV.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteEstatica/ConversorCSV.java	(date 1752005741793)
+@@ -1,12 +1,15 @@
+-package org.example;
++package org.example.fuenteEstatica;
+ 
++import org.example.agregador.*;
++import org.example.fuente.*;
+ import java.text.SimpleDateFormat;
+ import java.util.ArrayList;
+ import java.util.Date;
+ import java.util.List;
+ 
+ public class ConversorCSV {
+-    public Hecho mapearAHecho(String hechoCSV){
++
++    public HechoDTO mapearAHecho(String hechoCSV){
+         String[] datos = hechoCSV.split(",");
+         String titulo = datos[0].trim();
+         String descripcion = datos[1].trim();
+@@ -27,6 +30,7 @@
+         List<String> etiquetas = new ArrayList<>();
+         boolean esEditable = false;
+         List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
+-        return new Hecho(titulo, descripcion, categoria, ubicacion, fechaDeAcontecimiento, fuente, estadoHecho,contribuyente,etiquetas,esEditable,contenidoMultimedia);
++        return new HechoDTO(titulo, descripcion, categoria, ubicacion, fechaDeAcontecimiento, fuente, estadoHecho,contribuyente,etiquetas,esEditable,contenidoMultimedia);
+     }
++
+ }
+Index: ddsEntrega2/src/main/java/org/example/fuenteEstatica/ConexionEstatica.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteEstatica/ConexionEstatica.java b/ddsEntrega2/src/main/java/org/example/fuenteEstatica/ConexionEstatica.java
+new file mode 100644
+--- /dev/null	(date 1752005741793)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteEstatica/ConexionEstatica.java	(date 1752005741793)
+@@ -0,0 +1,29 @@
++package org.example.fuenteEstatica;
++
++import org.example.fuente.*;
++import java.util.ArrayList;
++import java.util.List;
++
++public class ConexionEstatica extends Conexion{
++    private final String path;
++
++    public ConexionEstatica(String path) {
++        this.path = path;
++    }
++
++    @Override
++    public List<HechoDTO> obtenerHechos() {
++        ConversorCSV conversor = new ConversorCSV();
++        CSVLoader csv = new CSVLoader();
++        List<HechoDTO> hechos = new ArrayList<>();
++
++        List<String> lineas = csv.leerCSV(path);
++        for (String linea : lineas) {
++            HechoDTO hecho = conversor.mapearAHecho(linea);
++            hechos.add(hecho);
++        }
++        return hechos;
++    }
++
++
++}
+Index: ddsEntrega2/src/main/java/org/example/CSVLoader.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/CSVLoader.java b/ddsEntrega2/src/main/java/org/example/fuenteEstatica/CSVLoader.java
+rename from ddsEntrega2/src/main/java/org/example/CSVLoader.java
+rename to ddsEntrega2/src/main/java/org/example/fuenteEstatica/CSVLoader.java
+--- a/ddsEntrega2/src/main/java/org/example/CSVLoader.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteEstatica/CSVLoader.java	(date 1752005741792)
+@@ -1,4 +1,4 @@
+-package org.example;
++package org.example.fuenteEstatica;
+ 
+ import java.io.BufferedReader;
+ import java.io.FileReader;
+Index: ddsEntrega2/src/main/java/org/example/fuenteProxy/FuenteProxy.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteProxy/FuenteProxy.java b/ddsEntrega2/src/main/java/org/example/fuenteProxy/FuenteProxy.java
+new file mode 100644
+--- /dev/null	(date 1752005741812)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteProxy/FuenteProxy.java	(date 1752005741812)
+@@ -0,0 +1,12 @@
++package org.example.fuenteProxy;
++
++import org.example.agregador.TipoDeFuente;
++import org.example.fuente.Conexion;
++import org.example.fuente.Fuente;
++import org.example.fuente.HechoDTO;
++
++import java.util.List;
++
++public class FuenteProxy extends Fuente {
++    public FuenteProxy(Conexion conexion) { super(TipoDeFuente.PROXY, conexion); }
++}
+Index: .idea/encodings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/encodings.xml b/.idea/encodings.xml
+new file mode 100644
+--- /dev/null	(date 1752005741715)
++++ b/.idea/encodings.xml	(date 1752005741715)
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Encoding">
++    <file url="file://$PROJECT_DIR$/ddsEntrega2/src/main/java" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/ddsEntrega2/src/main/resources" charset="UTF-8" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/inspectionProfiles/Project_Default.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/inspectionProfiles/Project_Default.xml b/.idea/inspectionProfiles/Project_Default.xml
+new file mode 100644
+--- /dev/null	(date 1752005741722)
++++ b/.idea/inspectionProfiles/Project_Default.xml	(date 1752005741722)
+@@ -0,0 +1,11 @@
++<component name="InspectionProjectProfileManager">
++  <profile version="1.0">
++    <option name="myName" value="Project Default" />
++    <inspection_tool class="LanguageDetectionInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
++    <inspection_tool class="SpellCheckingInspection" enabled="false" level="TYPO" enabled_by_default="false">
++      <option name="processCode" value="true" />
++      <option name="processLiterals" value="true" />
++      <option name="processComments" value="true" />
++    </inspection_tool>
++  </profile>
++</component>
+\ No newline at end of file
+Index: ddsEntrega2/src/main/java/org/example/fuenteProxy/APIMock/HechoMock.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteProxy/APIMock/HechoMock.java b/ddsEntrega2/src/main/java/org/example/fuenteProxy/APIMock/HechoMock.java
+new file mode 100644
+--- /dev/null	(date 1752005741804)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteProxy/APIMock/HechoMock.java	(date 1752005741804)
+@@ -0,0 +1,60 @@
++package org.example.fuenteProxy.APIMock;
++
++
++import java.time.LocalDateTime;
++
++public class HechoMock {
++    private String mockId;
++    private String mockTitulo;
++    private String mockDescripcion;
++    private String mockCategoria;
++    private String mockUbicacion; // Ej: "Lat: -34.0, Lon: -58.0"
++    private LocalDateTime mockFechaAcontecimiento;
++    private String mockOrigen;
++    private String campoExtra; // Un campo extra que solo algunos hechos tendrán
++
++
++    //constructor
++    public HechoMock(String mockId, String mockTitulo, String mockDescripcion,
++                     String mockCategoria, String mockUbicacion, LocalDateTime mockFechaAcontecimiento,
++                     String mockOrigen, String campoExtra) {
++        this.mockId = mockId;
++        this.mockTitulo = mockTitulo;
++        this.mockDescripcion = mockDescripcion;
++        this.mockCategoria = mockCategoria;
++        this.mockUbicacion = mockUbicacion;
++        this.mockFechaAcontecimiento = mockFechaAcontecimiento;
++        this.mockOrigen = mockOrigen;
++        this.campoExtra = campoExtra;
++
++    }
++
++    // Constructor mínimo para hechos con menos campos
++    public HechoMock(String mockId, String mockTitulo, String mockDescripcion, String mockCategoria,
++                     String mockUbicacion, LocalDateTime mockFechaAcontecimiento, String mockOrigen) {
++        this(mockId, mockTitulo, mockDescripcion, mockCategoria, mockUbicacion, mockFechaAcontecimiento, mockOrigen, null);
++    }
++    //necesito un constructor vacio para jackson
++    public HechoMock() {}
++
++    // Getters y Setters
++    public String getMockId() { return mockId; }
++    public void setMockId(String mockId) { this.mockId = mockId; }
++    public String getMockTitulo() { return mockTitulo; }
++    public void setMockTitulo(String mockTitulo) { this.mockTitulo = mockTitulo; }
++    public String getMockDescripcion() { return mockDescripcion; }
++    public void setMockDescripcion(String mockDescripcion) { this.mockDescripcion = mockDescripcion; }
++    public String getMockCategoria() { return mockCategoria; }
++    public void setMockCategoria(String mockCategoria) { this.mockCategoria = mockCategoria; }
++    public String getMockUbicacion() { return mockUbicacion; }
++    public void setMockUbicacion(String mockUbicacion) { this.mockUbicacion = mockUbicacion; }
++    public LocalDateTime getMockFechaAcontecimiento() { return mockFechaAcontecimiento; }
++    public void setMockFechaAcontecimiento(LocalDateTime mockFechaAcontecimiento) { this.mockFechaAcontecimiento = mockFechaAcontecimiento; }
++    public String getMockOrigen() { return mockOrigen; }
++    public void setMockOrigen(String mockOrigen) { this.mockOrigen = mockOrigen; }
++    public String getcampoExtra() { return campoExtra; }
++    public void setcampoExtra(String campoExtra) { this.campoExtra = campoExtra; }
++
++}
++
++
+Index: ddsEntrega2/src/main/java/org/example/fuenteDinamica/ConexionBD.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.fuenteDinamica;\r\n\r\nimport org.example.agregador.Conexion;\r\nimport org.example.agregador.Hecho;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class ConexionBD {\r\n    @Override\r\n    public List<Hecho> obtenerHechos(String url){\r\n        return new ArrayList<>();\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteDinamica/ConexionBD.java b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/ConexionBD.java
+--- a/ddsEntrega2/src/main/java/org/example/fuenteDinamica/ConexionBD.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteDinamica/ConexionBD.java	(date 1752005741779)
+@@ -1,14 +1,24 @@
+ package org.example.fuenteDinamica;
+ 
+-import org.example.agregador.Conexion;
+-import org.example.agregador.Hecho;
++import org.example.fuente.*;
+ 
+-import java.util.ArrayList;
+ import java.util.List;
+ 
+-public class ConexionBD {
++public class ConexionBD extends Conexion{
++    private final DinamicoRepositorio baseDeDatos;
++
++    public ConexionBD(DinamicoRepositorio baseDeDatos) {
++        this.baseDeDatos = baseDeDatos;
++    }
++
+     @Override
+-    public List<Hecho> obtenerHechos(String url){
+-        return new ArrayList<>();
++    public List<HechoDTO> obtenerHechos(){ return baseDeDatos.obtenerHechos();}
++
++    public List<SolicitudDeModificacionDTO> obtenerSolicitudDeModificacion() {
++        return baseDeDatos.obtenerSolicitudDeModificacion();
++    }
++
++    public List<SolicitudDeEliminacionDTO> obtenerSolicitudDeEliminacion() {
++        return baseDeDatos.obtenerSolicitudDeEliminacion();
+     }
+ }
+\ No newline at end of file
+Index: ddsEntrega2/src/main/java/org/example/fuenteProxy/Quartz/RecopilacionHechosJob.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteProxy/Quartz/RecopilacionHechosJob.java b/ddsEntrega2/src/main/java/org/example/fuenteProxy/Quartz/RecopilacionHechosJob.java
+new file mode 100644
+--- /dev/null	(date 1752005741812)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteProxy/Quartz/RecopilacionHechosJob.java	(date 1752005741812)
+@@ -0,0 +1,65 @@
++package org.example.fuenteProxy.Quartz;
++
++import org.quartz.Job;
++import org.example.fuenteProxy.ConexionDemo;
++import org.example.agregador.Hecho;
++import org.example.fuente.HechoDTO;
++import org.example.fuente.Fuente;
++import org.quartz.JobDataMap;
++import org.quartz.JobExecutionContext;
++import org.quartz.JobExecutionException;
++import java.time.LocalDateTime;
++import java.time.format.DateTimeFormatter;
++import java.net.URL;
++import java.util.List;
++
++public class RecopilacionHechosJob implements Job {
++
++    @Override
++    public void execute(JobExecutionContext context) throws JobExecutionException {
++        JobDataMap dataMap = context.getJobDetail().getJobDataMap();
++
++        String apiUrlStr = dataMap.getString("apiUrl");
++        LocalDateTime ultimaConsultaFecha = (LocalDateTime) dataMap.get("ultimaConsultaFecha");
++        ConexionDemo conexionDemo = (ConexionDemo) dataMap.get("conexionDemoInstance");
++        Fuente fuenteDemoMetaMapa = (Fuente) dataMap.get("fuenteDemoMetaMapaInstance");
++
++        if (conexionDemo == null || ultimaConsultaFecha == null || apiUrlStr == null || fuenteDemoMetaMapa == null) {
++            throw new JobExecutionException("Faltan parámetros en JobDataMap para RecopilacionHechosJob.");
++        }
++
++        try {
++            URL apiUrl = new URL(apiUrlStr);
++            System.out.println("--- Ejecutando tarea de recopilación de hechos (Quartz) ---");
++            System.out.println("Fecha de última consulta enviada a la API: " + ultimaConsultaFecha.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
++
++            List<HechoDTO> nuevosHechosDTO = conexionDemo.obtenerNuevosHechos(apiUrl, ultimaConsultaFecha, fuenteDemoMetaMapa);
++
++            if (nuevosHechosDTO != null && !nuevosHechosDTO.isEmpty()) {
++                System.out.println("Recopilador: Se encontraron " + nuevosHechosDTO.size() + " nuevos hechos.");
++                for (HechoDTO hechoDTO : nuevosHechosDTO) {
++                    Hecho hechoInterno = new Hecho(hechoDTO);
++
++                    if (hechoInterno != null) {
++                        System.out.println("Recopilador: Hecho [Título: " + hechoInterno.getTitulo() + "] recuperado y mapeado.");
++                        //agregador.agregarHecho(hechoInterno); FALTA ESTO *(entrega 3)* ver si cambia o sea si el agregador agrega de a 1 o lista
++
++                        System.out.println("  HechoDTO - Titulo: " + hechoDTO.getTitulo() + ", Ubicacion: " + (hechoDTO.getUbicacion() != null ? hechoDTO.getUbicacion().getDescripcion() : "N/A"));
++                        System.out.println("  Hecho Model - Titulo: " + hechoInterno.getTitulo() + ", Ubicacion: " + (hechoInterno.getUbicacion() != null ? hechoInterno.getUbicacion().getDescripcion() : "N/A"));
++                    } else {
++                        System.out.println("Recopilador: No se pudo mapear un HechoDTO a un objeto Hecho interno.");
++                    }
++                }
++                dataMap.put("ultimaConsultaFecha", LocalDateTime.now());
++                System.out.println("Recopilador: Fecha de última consulta actualizada a: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
++            } else {
++                System.out.println("Recopilador: No se encontraron nuevos hechos en esta ejecución.");
++            }
++        } catch (Exception e) {
++            System.err.println("Recopilador: Error durante la ejecución del Job de recopilación de hechos: " + e.getMessage());
++            e.printStackTrace();
++            throw new JobExecutionException(e);
++        }
++    }
++
++}
+\ No newline at end of file
+Index: ddsEntrega2/src/main/java/org/example/agregador/Agregador.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.agregador;\r\n\r\npublic class Agregador {\r\n\r\npublic Hecho obtenerHechoExterno(Fuente fuente) {\r\n    return null;\r\n}\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/Agregador.java b/ddsEntrega2/src/main/java/org/example/agregador/Agregador.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/Agregador.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/Agregador.java	(date 1752005741733)
+@@ -1,9 +1,27 @@
+ package org.example.agregador;
+ 
++import org.example.fuente.*;
++
++import java.util.ArrayList;
++import java.util.List;
++
+ public class Agregador {
+ 
+-public Hecho obtenerHechoExterno(Fuente fuente) {
+-    return null;
+-}
++    private List<Coleccion> colecciones = new ArrayList<>();
++
++    public List<Hecho> obtenerHechosExterno(Fuente fuente) {
++        List<Hecho> hechos = new ArrayList();
++        for (HechoDTO hechoDTO : fuente.obtenerHechos()){
++            Hecho hecho = new Hecho(hechoDTO);
++            hechos.add(hecho);
++        }
++        return hechos;
++    }
++
++    public void ejecutarAlgoritmoDeConsenso() {
++        for (Coleccion coleccion : colecciones) {
++            coleccion.ejecutarAlgoritmoDeConsenso();
++        }
++    }
+ 
+ }
+Index: ddsEntrega2/src/main/java/org/example/fuenteProxy/APIMock/DemoAPIMockServer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/fuenteProxy/APIMock/DemoAPIMockServer.java b/ddsEntrega2/src/main/java/org/example/fuenteProxy/APIMock/DemoAPIMockServer.java
+new file mode 100644
+--- /dev/null	(date 1752005741801)
++++ b/ddsEntrega2/src/main/java/org/example/fuenteProxy/APIMock/DemoAPIMockServer.java	(date 1752005741801)
+@@ -0,0 +1,112 @@
++package org.example.fuenteProxy.APIMock;
++
++import io.javalin.Javalin;
++import io.javalin.json.JavalinJackson;
++import com.fasterxml.jackson.databind.DeserializationFeature;
++import com.fasterxml.jackson.databind.ObjectMapper;
++import com.fasterxml.jackson.databind.SerializationFeature;
++import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
++import java.time.LocalDateTime;
++import java.time.format.DateTimeFormatter;
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Random;
++import java.util.concurrent.atomic.AtomicInteger;
++
++public class DemoAPIMockServer {
++    private static final int PORT = 7000;
++    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
++    private static final AtomicInteger factIdCounter = new AtomicInteger(100); // Para IDs únicos
++    private static LocalDateTime lastGeneratedTime = LocalDateTime.now().minusHours(2); // Inicia con hechos 'antiguos'
++
++    public static void main(String[] args) {
++        // Configuración de ObjectMapper para Jackson
++        ObjectMapper objectMapper = new ObjectMapper();
++        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
++        objectMapper.registerModule(new JavaTimeModule());
++        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
++
++        // Inicializar Javalin con el ObjectMapper personalizado
++        Javalin app = Javalin.create(config -> {
++            config.jsonMapper(new JavalinJackson(objectMapper));
++            config.showJavalinBanner = false;
++        }).start(PORT);
++
++        System.out.println("API Mock de Fuente Demo iniciada en http://localhost:" + PORT);
++        System.out.println("Generando hechos simulados...");
++
++        // Endpoint para obtener una LISTA de hechos
++        app.get("/api/hechos", ctx -> {
++            String fechaDesdeStr = ctx.queryParam("fechaDesde");
++            LocalDateTime fechaDesde = null;
++            if (fechaDesdeStr != null) {
++                try {
++                    fechaDesde = LocalDateTime.parse(fechaDesdeStr, FORMATTER);
++                } catch (Exception e) {
++                    System.err.println("Mock API: Formato de fecha inválido: " + fechaDesdeStr);
++                    ctx.status(400).result("Formato de fecha inválido. Use ISO_LOCAL_DATE_TIME (yyyy-MM-ddTHH:mm:ss).");
++                    return;
++                }
++            }
++
++            List<HechoMock> nuevosHechos = new ArrayList<>();
++            Random random = new Random();
++            int numHechos = random.nextInt(3) + 1; // Genera entre 1 y 3 hechos cada vez
++
++            // Simula la generación de hechos "nuevos"
++            LocalDateTime now = LocalDateTime.now();
++            if (fechaDesde == null || now.isAfter(lastGeneratedTime)) { // Si no hay fecha o la fecha actual es posterior a la última generada
++                for (int i = 0; i < numHechos; i++) {
++                    nuevosHechos.add(generarHechoAleatorio(now.plusMinutes(random.nextInt(5)))); // Un hecho un poco después
++                }
++                lastGeneratedTime = now; // Actualiza el marcador de última generación
++            }
++
++
++            if (nuevosHechos.isEmpty()) {
++                System.out.println("Mock API: Solicitud desde " + (fechaDesde != null ? fechaDesde.format(FORMATTER) : "N/A") + ". No hay nuevos hechos en este momento. Enviando 204.");
++                ctx.status(204); // No Content
++            } else {
++                System.out.println("Mock API: Solicitud desde " + (fechaDesde != null ? fechaDesde.format(FORMATTER) : "N/A") + ". Enviando " + nuevosHechos.size() + " nuevos hechos.");
++                ctx.json(nuevosHechos);
++            }
++        });
++
++        // Simula un hecho aleatorio
++        app.get("/api/hecho/random", ctx -> ctx.json(generarHechoAleatorio(LocalDateTime.now())));
++    }
++
++    private static HechoMock generarHechoAleatorio(LocalDateTime fechaAcontecimiento) {
++        String[] categorias = {"Delito", "Accidente", "Fenómeno Natural", "Evento Social", "Incidente"};
++        String[] descripciones = {
++                "Un incidente menor fue reportado.",
++                "Se registró una actividad inusual.",
++                "Las autoridades están investigando.",
++                "Gran impacto en la comunidad local.",
++                "Situación bajo control."
++        };
++        String[] ubicaciones = {
++                "Lat: -34.5800, Lon: -58.4200", // CABA
++                "Av. Corrientes 1234, Buenos Aires",
++                "Lat: -34.9213, Lon: -57.9545", // La Plata
++                "Centro de la ciudad",
++                "Zona rural, a 10km del pueblo"
++        };
++        String[] origenes = {"Policía", "Vecinos", "Medios", "Testigo"};
++        String[] extraData = {"", "Urgente", "Verificado", "En Curso"};
++
++        Random random = new Random();
++        String id = "EXT-" + factIdCounter.getAndIncrement();
++        String titulo = categorias[random.nextInt(categorias.length)] + " - " + id;
++        String descripcion = descripciones[random.nextInt(descripciones.length)];
++        String categoria = categorias[random.nextInt(categorias.length)];
++        String ubicacion = ubicaciones[random.nextInt(ubicaciones.length)];
++        String origen = origenes[random.nextInt(origenes.length)];
++        String extra = extraData[random.nextInt(extraData.length)];
++
++
++        return new HechoMock(id, titulo, descripcion, categoria, ubicacion, fechaAcontecimiento, origen, extra);
++    }
++
++
++}
+Index: ddsEntrega2/src/main/java/org/example/agregador/Coleccion.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.util.stream.Collectors;\r\n\r\npublic class Coleccion {\r\n\r\n    private List<Hecho> hechos = new ArrayList<>();\r\n    private String titulo;\r\n    private String descripcion;\r\n    private Fuente fuente;\r\n    private String handle;\r\n    private List<Criterio> criteriosDePertenencia = new ArrayList<>();\r\n\r\n\r\n    public Coleccion(String titulo, String descripcion, Fuente fuente, String handle) {\r\n        this.titulo = titulo;\r\n        this.descripcion = descripcion;\r\n        this.fuente = fuente;\r\n        this.handle = handle;\r\n    } //las listas las seteo antes con new\r\n\r\n\r\n    public void setCriterio(Criterio criterio) {\r\n        criteriosDePertenencia.add(criterio);\r\n    }\r\n\r\n    public List<Hecho> getHechos() {\r\n        return hechos;\r\n    }\r\n\r\n    public void agregarHecho(Hecho hecho) {\r\n        hechos.add(hecho);\r\n    }\r\n\r\n    public List<Hecho> obtenerHechosQueCumplen(Criterio criterio) {\r\n        return hechos.stream()\r\n                .filter(hecho -> criterio.cumpleConCriterio(hecho))\r\n                .collect(Collectors.toList());\r\n    }\r\n\r\n    //como tenemos una lista de criterios, no se si refiere a que un hecho tiene q cumplir todos para q sea de esa coleccion\r\n    /* public List<Hecho> obtenerHechosQueCumplenTodosLosCriterios() {\r\n    return hechos.stream()\r\n            .filter(hecho -> this.cumpleTodosLosCriterios(hecho))\r\n            .collect(Collectors.toList());\r\n}\r\n\r\n\r\nprivate boolean cumpleTodosLosCriterios(Hecho hecho) {\r\n    return criteriosDePertenencia.stream()\r\n            .allMatch(criterio -> criterio.cumpleConCriterio(hecho));\r\n}   */\r\n\r\n    public String getHandle() {\r\n        return handle;\r\n    }\r\n    \r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/Coleccion.java b/ddsEntrega2/src/main/java/org/example/agregador/Coleccion.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/Coleccion.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/Coleccion.java	(date 1752005741733)
+@@ -1,4 +1,6 @@
+-package org.example;
++package org.example.agregador;
++
++import org.example.fuente.Fuente;
+ 
+ import java.util.ArrayList;
+ import java.util.List;
+@@ -9,53 +11,67 @@
+     private List<Hecho> hechos = new ArrayList<>();
+     private String titulo;
+     private String descripcion;
+-    private Fuente fuente;
++    private List<Fuente> fuente = new ArrayList<>();
+     private String handle;
+     private List<Criterio> criteriosDePertenencia = new ArrayList<>();
++    private ModosDeNavegacion modosDeNavegacion;
++    private AlgoritmoConsenso algoritmoDeConsenso;
++    private List<Hecho> hechosConsensuados = new ArrayList<>();
+ 
+ 
+-    public Coleccion(String titulo, String descripcion, Fuente fuente, String handle) {
++    public Coleccion(String titulo, String descripcion, String handle, ModosDeNavegacion modosDeNavegacion, AlgoritmoConsenso algoritmoDeConsenso) {
+         this.titulo = titulo;
+         this.descripcion = descripcion;
+-        this.fuente = fuente;
+         this.handle = handle;
++        this.modosDeNavegacion = modosDeNavegacion;
++        this.algoritmoDeConsenso = algoritmoDeConsenso;
+     } //las listas las seteo antes con new
+ 
+ 
+-    public void setCriterio(Criterio criterio) {
++    public void agregarCriterio(Criterio criterio) {
+         criteriosDePertenencia.add(criterio);
+     }
+ 
+-    public List<Hecho> getHechos() {
+-        return hechos;
+-    }
+-
+     public void agregarHecho(Hecho hecho) {
+         hechos.add(hecho);
+     }
+ 
+-    public List<Hecho> obtenerHechosQueCumplen(Criterio criterio) {
+-        return hechos.stream()
+-                .filter(hecho -> criterio.cumpleConCriterio(hecho))
++    public List<Hecho> getHechos() {
++        return hechos;
++    }
++
++    public List<Hecho> obtenerHechosQueCumplen(List<Criterio> criteriosDePertencia, ModosDeNavegacion modosDeNavegacion) {
++
++        //Filtramos hechos por criterios
++        List<Hecho> hechosFiltrados = hechos.stream()
++                .filter(h -> criteriosDePertencia.stream().allMatch(c -> c.cumpleConCriterio(h)))
+                 .collect(Collectors.toList());
+-    }
++
++        //Si es IRRESTRICTA devolvemos los hechos filtrados tal cual
++        if (modosDeNavegacion == ModosDeNavegacion.IRRESTRICTA || algoritmoDeConsenso == null ) {
++            return hechosFiltrados;
++        }
+ 
+-    //como tenemos una lista de criterios, no se si refiere a que un hecho tiene q cumplir todos para q sea de esa coleccion
+-    /* public List<Hecho> obtenerHechosQueCumplenTodosLosCriterios() {
+-    return hechos.stream()
+-            .filter(hecho -> this.cumpleTodosLosCriterios(hecho))
+-            .collect(Collectors.toList());
+-}
++        //Si es CURADA devolvemos la intersección entre hechos filtrados y consensuados
++        return hechosFiltrados.stream()
++                .filter(hechosConsensuados::contains)
++                .collect(Collectors.toList());
++    }
+ 
+-
+-private boolean cumpleTodosLosCriterios(Hecho hecho) {
+-    return criteriosDePertenencia.stream()
+-            .allMatch(criterio -> criterio.cumpleConCriterio(hecho));
+-}   */
+-
+     public String getHandle() {
+         return handle;
+     }
++
++    public void ejecutarAlgoritmoDeConsenso() {
++        if (algoritmoDeConsenso != null) {
++            this.hechosConsensuados = algoritmoDeConsenso.obtenerHechosConsensuados(this);
++        }
++        else{
++            this.hechosConsensuados = hechos;
++        }
++    }
++
++    public List<Fuente> getFuente(){ return fuente; }
+     
+ }
+ 
+Index: ddsEntrega2/src/main/java/org/example/agregador/CriterioDeTexto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example.agregador;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class CriterioDeTexto extends Criterio {\r\n\r\n    private TipoDeTexto tipoDeTexto;\r\n\r\n    private List<String> palabras = new ArrayList<>();\r\n\r\n    public CriterioDeTexto(List<String> palabras) {\r\n        this.palabras = palabras;\r\n    }\r\n\r\n    @Override\r\n    public boolean cumpleConCriterio(Hecho hecho) {\r\n        // Devuelve true si el hecho contiene al menos una de las palabras buscadas\r\n        switch (tipoDeTexto.getDescripcion()) {\r\n            case \"TITULO\":\r\n                for (String palabra : palabras) {\r\n                    if(hecho.getTitulo().contains(palabra)){\r\n                        return true;\r\n                    }\r\n                }\r\n                return false;\r\n            case \"DESCRIPCION\":\r\n                for (String palabra : palabras) {\r\n                    if(hecho.getDescripcion().contains(palabra)){\r\n                        return true;\r\n                    }\r\n                }\r\n                return false;\r\n            case \"CATEGORIA\":\r\n                for (String palabra : palabras) {\r\n                    if(hecho.getCategoria().contains(palabra)){\r\n                        return true;\r\n                    }\r\n                }\r\n                return false;\r\n            default:\r\n                return false;\r\n        }\r\n        return palabras.stream().anyMatch(texto ->\r\n                hecho.getTitulo().toLowerCase().contains(texto.toLowerCase()) ||\r\n                        hecho.getDescripcion().toLowerCase().contains(texto.toLowerCase())\r\n                        );\r\n    }\r\n}\r\n//toLowerCase() compara letras sin importar si es mayus o minus\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ddsEntrega2/src/main/java/org/example/agregador/CriterioDeTexto.java b/ddsEntrega2/src/main/java/org/example/agregador/CriterioDeTexto.java
+--- a/ddsEntrega2/src/main/java/org/example/agregador/CriterioDeTexto.java	(revision ccbf2eea7debf7a63b45338b227d620de6c34e01)
++++ b/ddsEntrega2/src/main/java/org/example/agregador/CriterioDeTexto.java	(date 1752005741739)
+@@ -16,22 +16,22 @@
+     @Override
+     public boolean cumpleConCriterio(Hecho hecho) {
+         // Devuelve true si el hecho contiene al menos una de las palabras buscadas
+-        switch (tipoDeTexto.getDescripcion()) {
+-            case "TITULO":
++        switch (tipoDeTexto) {
++            case TITULO:
+                 for (String palabra : palabras) {
+                     if(hecho.getTitulo().contains(palabra)){
+                         return true;
+                     }
+                 }
+                 return false;
+-            case "DESCRIPCION":
++            case DESCRIPCION:
+                 for (String palabra : palabras) {
+                     if(hecho.getDescripcion().contains(palabra)){
+                         return true;
+                     }
+                 }
+                 return false;
+-            case "CATEGORIA":
++            case CATEGORIA:
+                 for (String palabra : palabras) {
+                     if(hecho.getCategoria().contains(palabra)){
+                         return true;

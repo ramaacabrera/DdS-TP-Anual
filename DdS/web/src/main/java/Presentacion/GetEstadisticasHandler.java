@@ -1,57 +1,69 @@
-package Presentacion;
+package handlers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import io.javalin.rendering.template.TemplateUtil;
 import org.jetbrains.annotations.NotNull;
-import utils.Dominio.HechosYColecciones.Hecho;
-import utils.Persistencia.HechoRepositorio;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GetEstadisticasHandler implements Handler {
-    private ObjectMapper mapper = new ObjectMapper();
-    private final String puertoEstadisticas;
-    private final HttpClient httpClient; // ← Reutilizar mismo cliente
 
-    public GetEstadisticasHandler(String puerto) {
-        this.puertoEstadisticas = puerto;
-        this.httpClient = HttpClient.newHttpClient(); // ← Crear una sola vez
+    private final HttpClient httpClient;
+    private final ObjectMapper mapper;
+    private final int puertoEstadisticas;
+
+    public GetEstadisticasHandler(String puertoEstadisticas) {
+        this.httpClient = HttpClient.newHttpClient();
+        this.mapper = new ObjectMapper();
+        this.puertoEstadisticas = Integer.parseInt(puertoEstadisticas);
     }
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        String categoriaId = ctx.pathParam("categoriaId");
-        String coleccionId = ctx.pathParam("coleccionId");
-
         try {
-            // Estadísticas generales
             Map<String, Object> statsGenerales = hacerConsulta("/api/estadisticas/categoriaMax");
             Map<String, Object> statsUsuarios = hacerConsulta("/api/estadisticas/solicitudesSpam");
 
-            // Particulares (si aplica)
-//            Map<String, Object> statsColecciones = hacerConsulta("/api/estadisticas/colecciones");
-/// //////////////////////////////////////////////////////////////////////
+            List<String> categoriasComunes = Arrays.asList(
+                    "Asesinato", "Choque", "Inundacion", "Incendio", "Terremoto"
+            );
 
+            List<Map<String, Object>> statsCategoria = new ArrayList<>();
+            for (String categoria : categoriasComunes) {
+                try {
+                    Map<String, Object> provincia = hacerConsulta(
+                            "/api/estadisticas/provinciaMax/categorias/" + categoria
+                    );
+                    Map<String, Object> hora = hacerConsulta(
+                            "/api/estadisticas/horaMax/categorias/" + categoria
+                    );
 
+                    Map<String, Object> categoriaData = new HashMap<>();
+                    categoriaData.put("nombre", categoria);
+                    categoriaData.put("provincia", provincia.getOrDefault("provincia",
+                            provincia.getOrDefault("estadisticasCategoria_provincia", "N/A")));
+                    categoriaData.put("hora", hora.getOrDefault("hora",
+                            hora.getOrDefault("estadisticasCategoria_hora", "N/A")));
 
-        ///  COMPLETAR ESTO
+                    statsCategoria.add(categoriaData);
+                } catch (Exception e) {
+                    // Si falla una categoría, continuar con las demás
+                    System.err.println("Error consultando categoría " + categoria + ": " + e.getMessage());
+                }
+            }
 
-
-        ///!!!!
-
-            // Preparar modelo con todas las estadísticas
             Map<String, Object> modelo = new HashMap<>();
-            modelo.put("statsGenerales", statsGenerales);
-            modelo.put("statsUsuarios", statsUsuarios);
+            modelo.put("categoriaMax", statsGenerales.getOrDefault("categoria",
+                    statsGenerales.getOrDefault("estadisticas_categoria_max_hechos", "N/A")));
+            modelo.put("solicitudesSpam", statsUsuarios.getOrDefault("spam",
+                    statsUsuarios.getOrDefault("estadisticas_spam", 0)));
+            modelo.put("categorias", statsCategoria);
             modelo.put("baseUrl", "http://localhost:" + puertoEstadisticas);
 
             ctx.render("estadisticas.ftl", modelo);
