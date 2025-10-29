@@ -6,6 +6,8 @@ import utils.Dominio.fuente.*;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Transient;
+import java.util.Map;
 
 @Entity
 public class CriterioTipoFuente extends Criterio {
@@ -27,5 +29,11 @@ public class CriterioTipoFuente extends Criterio {
     @Override
     public String getQueryCondition() {
         return "h.agregador.fuente = '" + fuente.toString() + "'";
+    }
+
+    @Override
+    @Transient
+    public Map<String, Object> getQueryParameters() {
+        return Map.of();
     }
 }

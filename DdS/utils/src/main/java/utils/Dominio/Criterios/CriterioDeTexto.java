@@ -4,8 +4,10 @@ import utils.Dominio.HechosYColecciones.Hecho;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class CriterioDeTexto extends Criterio {
@@ -103,6 +105,12 @@ public class CriterioDeTexto extends Criterio {
         }
 
         return retorno.toString() + ")";
+    }
+
+    @Override
+    @Transient
+    public Map<String, Object> getQueryParameters() {
+        return Map.of();
     }
 }
 //toLowerCase() compara letras sin importar si es mayus o minus

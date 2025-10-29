@@ -3,6 +3,8 @@ package utils.Dominio.Criterios;
 import utils.Dominio.HechosYColecciones.Hecho;
 
 import javax.persistence.Entity;
+import javax.persistence.Transient;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -21,4 +23,10 @@ public class CriterioCategoria extends Criterio {
 
     @Override
     public String getQueryCondition() {return "h.categoria = '" + categoria + "'";}
+
+    @Override
+    @Transient
+    public Map<String, Object> getQueryParameters() {
+        return Map.of();
+    }
 }

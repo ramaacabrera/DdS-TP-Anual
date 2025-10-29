@@ -4,20 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b135c6d4-fa6c-47dd-a3bd-2574daa1943d" name="Changes" comment="Cambios de mas" />
-    <list id="e3af17bb-2a1e-4367-befa-3e14b8275605" name="Changes by Administrator" comment="" />
-    <list id="1b8675ef-160f-4264-a4cb-c67b6113bc92" name="Changes by cloud" comment="" />
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="" />
+    <list id="1cc1f052-f7be-4f64-88a8-3e20e9b1b866" name="Changes by idiar" comment="" />
+    <list id="fbc10810-a605-4e63-80e3-6f0511f82dbf" name="Changes by Luc" comment="" />
+    <list id="d83ec99f-8718-4ff0-9c4e-be0524bc3f50" name="Changes by Rama" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="main" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -29,7 +25,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/ramaacabrera/DdS-TP-Anual.git&quot;,
-    &quot;accountId&quot;: &quot;79d08cde-a273-4f7d-b590-cc5ee11f26f1&quot;
+    &quot;accountId&quot;: &quot;bd66b56b-8baf-48f7-b0f7-f11bb25aba78&quot;
   },
   &quot;editorReviewEnabled&quot;: false
 }</component>
@@ -50,12 +46,15 @@
     "Application.CargadorDinamico.executor": "Run",
     "Application.CargadorEstatico.executor": "Run",
     "Application.CargadorMetamapa.executor": "Run",
-    "Application.Estadisticas.executor": "Run",
     "Application.Web.executor": "Run",
+    "Application.estadisticas.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "#7 on rama-web-sockets",
-    "last_opened_file_path": "C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/utils/src/main/resources/META-INF",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/Proyectos Intellij/DdS-TP-Anual",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -74,20 +73,19 @@
       <recent name="C:\Users\Usuario\Documents\GitHub\DdS-TP-Anual\DdS\utils\src\main\resources\META-INF" />
       <recent name="C:\Users\Usuario\Documents\GitHub\DdS-TP-Anual\DdS\utils\src\main\resources" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\resources\public\img" />
+    </key>
   </component>
-  <component name="RunManager" selected="Application.Web">
+  <component name="RunManager" selected="Application.ApiPublica">
     <configuration name="Agregador" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="agregador.MainAgregador" />
       <module name="agregador" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ApiAdministrativa" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <configuration name="ApiAdmin" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="ApiAdministrativa.MainAPIAdmin" />
       <module name="api-admin" />
       <method v="2">
@@ -95,8 +93,6 @@
       </method>
     </configuration>
     <configuration name="ApiPublica" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="ApiPublica.MainAPIPublica" />
       <module name="apiPublica" />
       <method v="2">
@@ -104,8 +100,6 @@
       </method>
     </configuration>
     <configuration name="CargadorDemo" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="cargadorDemo.MainDemo" />
       <module name="cargador-demo" />
       <method v="2">
@@ -113,8 +107,6 @@
       </method>
     </configuration>
     <configuration name="CargadorDinamico" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="cargadorDinamico.MainDinamica" />
       <module name="cargador-dinamico" />
       <method v="2">
@@ -122,28 +114,15 @@
       </method>
     </configuration>
     <configuration name="CargadorEstatico" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="cargadorEstatico.MainEstatica" />
       <module name="cargador-estatico" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CargadorMetamapa" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="CargadorMetamapa.MainMetamapa" />
-      <module name="cargador-metamapa" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Estadisticas" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="estadisticas.MainEstadisticas" />
-      <module name="estadisticas" />
+    <configuration name="DemoMockServer" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="cargadorDemo.APIMock.DemoAPIMockServer" />
+      <module name="cargador-demo" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -157,23 +136,32 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="estadisticas" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="estadisticas.MainEstadisticas" />
+      <module name="estadisticas" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.Web" />
-      <item itemvalue="Application.Agregador" />
-      <item itemvalue="Application.CargadorDemo" />
-      <item itemvalue="Application.CargadorEstatico" />
-      <item itemvalue="Application.CargadorDinamico" />
-      <item itemvalue="Application.CargadorMetamapa" />
-      <item itemvalue="Application.Estadisticas" />
       <item itemvalue="Application.ApiPublica" />
-      <item itemvalue="Application.ApiAdministrativa" />
+      <item itemvalue="Application.Agregador" />
+      <item itemvalue="Application.CargadorDinamico" />
+      <item itemvalue="Application.CargadorEstatico" />
+      <item itemvalue="Application.ApiAdmin" />
+      <item itemvalue="Application.CargadorDemo" />
+      <item itemvalue="Application.DemoMockServer" />
+      <item itemvalue="Application.estadisticas" />
     </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
       </set>
     </attachedChunks>
   </component>
@@ -185,6 +173,9 @@
       <option name="presentableId" value="Default" />
       <updated>1761687279265</updated>
       <workItem from="1761687281598" duration="8791000" />
+      <workItem from="1761738610078" duration="755000" />
+      <workItem from="1761740894608" duration="122000" />
+      <workItem from="1761741309483" duration="13948000" />
     </task>
     <servers />
   </component>

@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class HechoRepositorio {
@@ -28,19 +29,34 @@ public class HechoRepositorio {
     }
 
     public List<Hecho> buscarHechos(List<Criterio> criterios) {
-        //EntityManager em = emf.createEntityManager();
         EntityManager em = BDUtils.getEntityManager();
         try {
             StringBuilder queryString = new StringBuilder("SELECT h FROM Hecho h");
-            if(criterios != null){
+
+            if (criterios != null && !criterios.isEmpty()) {
                 queryString.append(" WHERE 1=1");
-            }
-            for (Criterio criterio : criterios) {
-                queryString.append(" AND ").append(criterio.getQueryCondition());
+
+                // Construir condiciones
+                for (Criterio criterio : criterios) {
+                    String condition = criterio.getQueryCondition();
+                    if (condition != null && !condition.trim().isEmpty()) {
+                        queryString.append(" AND ").append(condition);
+                    }
+                }
             }
 
-            // JPQL para seleccionar todos los objetos Hecho
             TypedQuery<Hecho> query = em.createQuery(queryString.toString(), Hecho.class);
+
+            // Establecer parámetros
+            if (criterios != null) {
+                for (Criterio criterio : criterios) {
+                    Map<String, Object> params = criterio.getQueryParameters();
+                    for (Map.Entry<String, Object> param : params.entrySet()) {
+                        query.setParameter(param.getKey(), param.getValue());
+                    }
+                }
+            }
+
             List<Hecho> resultados = query.getResultList();
 
             // INICIALIZAR RELACIONES antes de cerrar la sesión

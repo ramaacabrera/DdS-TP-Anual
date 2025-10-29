@@ -4,6 +4,7 @@ import utils.Dominio.HechosYColecciones.Hecho;
 import utils.Dominio.HechosYColecciones.TipoContenidoMultimedia;
 
 import javax.persistence.*;
+import java.util.Map;
 
 @Entity
 public class CriterioTipoMultimedia extends Criterio {
@@ -24,5 +25,11 @@ public class CriterioTipoMultimedia extends Criterio {
     @Override
     public String getQueryCondition() {
         return "";//"h.contribuyente = " + contribuyente.getId_usuario();
+    }
+
+    @Override
+    @Transient
+    public Map<String, Object> getQueryParameters() {
+        return Map.of();
     }
 }

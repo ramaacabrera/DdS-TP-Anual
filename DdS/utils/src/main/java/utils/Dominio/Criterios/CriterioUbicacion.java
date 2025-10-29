@@ -4,6 +4,7 @@ import utils.Dominio.HechosYColecciones.Hecho;
 import utils.Dominio.HechosYColecciones.Ubicacion;
 
 import javax.persistence.*;
+import java.util.Map;
 
 @Entity
 public class CriterioUbicacion extends Criterio {
@@ -33,5 +34,11 @@ public class CriterioUbicacion extends Criterio {
     @Override
     public String getQueryCondition() {
         return "h.id_ubicacion = " + ubicacion.getId_ubicacion();
+    }
+
+    @Override
+    @Transient
+    public Map<String, Object> getQueryParameters() {
+        return Map.of();
     }
 }

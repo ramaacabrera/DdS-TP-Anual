@@ -5,6 +5,7 @@ import utils.Dominio.HechosYColecciones.Hecho;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class CriterioEtiquetas extends Criterio {
@@ -36,10 +37,11 @@ public class CriterioEtiquetas extends Criterio {
     public String getQueryCondition() {
         return "";
     }
-//        StringBuilder retorno = new StringBuilder("( 1=1");
-//        for(String etiqueta : etiquetas){
-//        retorno.append(" or h.descripcion like '%").append(etiqueta).append("%'");
-//
-//        }
-//        return retorno.toString();}
+
+    @Override
+    @Transient
+    public Map<String, Object> getQueryParameters() {
+        return Map.of();
+    }
+
 }

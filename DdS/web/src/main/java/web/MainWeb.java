@@ -28,11 +28,10 @@ public class MainWeb {
             ctx.redirect("/hechos");
         });
 
-        // Probar
-        app.get("/hechos/{id}", new GetHechoEspecificoHandler(urlPublica));
+        app.get("/hechos/{id}", new GetHechoEspecificoHandler(urlPublica)); //hecho especifico
 
         // Falta
-        app.get("/hechos", new GetHechosHandler(urlPublica)); //home
+        app.get("/hechos", new GetHechosHandler(urlPublica)); //home con hechos
 
         // Falta
         //app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
@@ -59,7 +58,7 @@ public class MainWeb {
         //app.get("/crear-coleccion", new GetCrearColeccionHandler(urlAdmin));
 
         // Falta organizar el tema de categorias y colecciones, y aplicar los estilos
-        app.get("/api/estadisticas", new handlers.GetEstadisticasHandler(puertoEstadisticas));
+        app.get("/estadisticas", new handlers.GetEstadisticasHandler(puertoEstadisticas));
 
     }
 }
