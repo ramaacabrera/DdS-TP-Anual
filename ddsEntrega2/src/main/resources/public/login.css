@@ -5,7 +5,10 @@
 
 body {
 font-family: Arial, sans-serif;
-background: #f2f2f2;
+background-image: url(images/dibujado-mano-recopilacion-datos-concepto-negocio_23-2149152354.jpg);
+background-size: cover;       /* hace que cubra toda la pantalla */
+background-position: center;  /* centra la imagen */
+background-repeat: no-repeat;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -43,6 +46,7 @@ padding: 10px;
 border: none;
 border-radius: 4px;
 cursor: pointer;
+margin-bottom: 6px;
 }
 
         button:hover { background: #005fcc; }

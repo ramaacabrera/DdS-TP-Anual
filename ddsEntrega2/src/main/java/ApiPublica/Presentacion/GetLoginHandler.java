@@ -13,7 +13,11 @@ public class GetLoginHandler implements Handler {
     @Override
     public void handle(@NotNull Context ctx){
         Map<String, Object> model = new HashMap<>();
-        model.put("error", ctx.queryParam("error"));
+        String error = ctx.sessionAttribute("error");
+        if(error != null){
+            model.put("error", error);
+            ctx.sessionAttribute("error", null);
+        }
         ctx.render("login.ftl", model);
     }
 }

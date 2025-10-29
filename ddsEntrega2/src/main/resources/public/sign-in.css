@@ -49,7 +49,7 @@ border-radius: 4px;
 cursor: pointer;
 }
 
-        button:hover { background: #005fcc; }
+button:hover { background: #005fcc; }
 
 .error {
 color: red;

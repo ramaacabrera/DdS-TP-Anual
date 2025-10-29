@@ -2,6 +2,10 @@ package ApiPublica;
 
 import io.javalin.Javalin;
 import ApiPublica.Presentacion.*;
+import kong.unirest.Unirest;
+import kong.unirest.HttpResponse;
+import kong.unirest.json.JSONArray;
+import org.json.JSONObject;
 import utils.IniciadorApp;
 import utils.KeyCloak.TokenValidator;
 import utils.LecturaConfig;
@@ -36,22 +40,16 @@ public class MainAPIPublica {
 
         // Login
         app.get("/api/login", new GetLoginHandler());
-        app.post("/api/login", new PostLoginHandler());
+        app.post("/api/login", new PostLoginHandler(usuarioRepositorio));
 
         // Sign in
         app.get("/api/sign-in", new GetSignInHandler());
-        app.post("/api/sign-in", new PostSignInHandler());
+        app.post("/api/sign-in", new PostSignInHandler(usuarioRepositorio));
 
-        app.post("/api/prueba-validacion", ctx -> {
-            try {
-                TokenValidator.validar(ctx); // si es válido, sigue
-                ctx.status(200).result("Token válido");
-            } catch (io.javalin.http.UnauthorizedResponse e) {
-                ctx.status(401).result("Token inválido");
-            } catch (Exception e) {
-                ctx.status(500).result("Error interno");
-            }
-        });
+        // Home
+        app.get("/api/home", new GetHomeHandler());
+
+
 
         /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Cerrando EntityManager de API Pública...");
@@ -59,4 +57,5 @@ public class MainAPIPublica {
             if (emf.isOpen()) emf.close();
         }));*/
     }
+
 }

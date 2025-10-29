@@ -30,15 +30,15 @@ public class UsuarioRepositorio {
         }
     }
 
-    public Usuario buscarPorId(UUID idUsuario){
+    public Usuario buscarPorUsername(String username){
         EntityManager em = BDUtils.getEntityManager();
         try {
             // Consulta JPQL para buscar por un atributo específico
             TypedQuery<Usuario> query = em.createQuery(
-                    "SELECT u FROM Usuario u WHERE u.id_usuario = :paramId", Usuario.class);
+                    "SELECT u FROM Usuario u WHERE u.username = :paramUsername", Usuario.class);
 
             // Asignamos el valor al parámetro en la consulta
-            query.setParameter("paramId", idUsuario);
+            query.setParameter("paramUsername", username);
 
             // Intentamos obtener un único resultado.
             // Si no se encuentra, getSingleResult() lanza una excepción NoResultException.

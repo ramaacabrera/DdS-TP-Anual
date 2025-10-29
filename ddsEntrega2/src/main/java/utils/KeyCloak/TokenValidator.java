@@ -11,14 +11,7 @@ public class TokenValidator {
 
     private static final String ISSUER = "http://localhost:8080/realms/tpDDSI";
 
-    public static void validar(Context ctx) {
-        String header = ctx.header("Authorization");
-
-        if (header == null || !header.startsWith("Bearer ")) {
-            throw new UnauthorizedResponse("Falta el token en el header Authorization");
-        }
-
-        String token = header.substring("Bearer ".length());
+    public static void validar(String token) {
 
         try {
             //Algorithm algorithm = Algorithm.RSA256(KeycloakKeyProvider.getKey(), null);
