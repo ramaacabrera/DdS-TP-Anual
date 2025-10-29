@@ -1,25 +1,32 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Colección Actualizada</title>
-    <link rel="stylesheet" href="/public/css/style.css">
-</head>
-<body>
-<div class="container">
-    <h1>Colección actualizada correctamente</h1>
-    <p><b>Título:</b> ${coleccion.titulo}</p>
-    <p><b>Descripción:</b> ${coleccion.descripcion}</p>
-    <p><b>Algoritmo de consenso:</b> ${coleccion.algoritmoDeConsenso}</p>
+<#assign pageTitle = "Colección actualizada">
+<#assign content>
+    <div class="container">
+        <div class="header">
+            <a href="/colecciones" class="header-link">← Volver a colecciones</a>
+        </div>
 
-    <h3>Fuentes asociadas:</h3>
-    <ul>
-        <#list coleccion.fuentes as fuente>
-            <li>${fuente.nombre}</li>
-        </#list>
-    </ul>
+        <h1>✅ Colección actualizada correctamente</h1>
+        <div class="card" style="margin-top:25px;">
+            <p><b>Título:</b> ${coleccion.titulo}</p>
+            <p><b>Descripción:</b> ${coleccion.descripcion}</p>
+            <p><b>Algoritmo de consenso:</b> ${coleccion.algoritmoDeConsenso}</p>
 
-    <a href="/colecciones">Volver</a>
-</div>
-</body>
-</html>
+            <h3>Fuentes asociadas</h3>
+            <ul>
+                <#if coleccion.fuentes?? && coleccion.fuentes?size > 0>
+                    <#list coleccion.fuentes as fuente>
+                        <li>${fuente.tipoDeFuente}</li>
+                    </#list>
+                <#else>
+                    <li>No hay fuentes asociadas</li>
+                </#if>
+            </ul>
+        </div>
+
+        <div style="margin-top:30px;">
+            <a href="/editar-coleccion/${coleccion.handle}" class="action-button">✏️ Editar nuevamente</a>
+            <a href="/colecciones" class="action-button">📚 Ver colecciones</a>
+        </div>
+    </div>
+</#assign>
+<#include "layout.ftl">

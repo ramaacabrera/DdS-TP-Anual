@@ -21,15 +21,15 @@
                 <#import "fragments/components.ftl" as cmp>
                 <#list hechos as h>
                     <@cmp.hechoCard
-                    id=h.id
+                    id=h.hecho_id
                     titulo=h.titulo
                     resumen=h.resumen!""
                     fecha=h.fecha!""
                     categoria=h.categoria!""
                     ubicacion=h.ubicacion!""
-                    etiquetas=h.etiquetas!?[]
-                    verHref="/api/hechos/${h.id}"
-                    editarHref="/editar-hecho/${h.id}" />
+                    etiquetas=h.etiquetas![]
+                    verHref="/api/hechos/${h.hecho_id}"
+                    editarHref="/editar-hecho/${h.hecho_id}" />
                 </#list>
             </div>
         <#else>

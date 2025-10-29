@@ -1,97 +1,58 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Crear Colección</title>
-    <link rel="stylesheet" href="/public/css/style.css">
-</head>
-<body>
+<#assign pageTitle = "Crear Colección">
+<#assign content>
 <div class="container">
+    <div class="header">
+        <a href="/" class="header-link">← Volver al inicio</a>
+    </div>
+
     <h1>Crear nueva colección</h1>
 
-<form action="/crear-coleccion" method="post">
-    <label for="titulo">Título:</label><br>
-    <input type="text" id="titulo" name="titulo" required><br><br>
+    <script>
+        const URL_ADMINISTRATIVA = '${urlAdministrativa!"http://localhost:8081"}';
+    </script>
 
-    <label for="descripcion">Descripción:</label><br>
-    <textarea id="descripcion" name="descripcion" rows="4" required></textarea><br><br>
+    <form action="/api/colecciones" method="post">
+        <label for="titulo">Título:</label><br>
+        <input type="text" id="titulo" name="titulo" required><br><br>
 
-    <label for="algoritmo">Algoritmo de consenso:</label><br>
-    <select id="algoritmo" name="algoritmo">
-        <option value="ABSOLUTA">Absoluta</option>
-        <option value="MAYORIASIMPLE">Mayoria simple</option>
-        <option value="MULTIPLESMENCIONES">Multiples menciones</option>
-    </select><br><br>
+        <label for="descripcion">Descripción:</label><br>
+        <textarea id="descripcion" name="descripcion" rows="4" required></textarea><br><br>
 
-    <h3>Criterios de pertenencia</h3>
-    <div id="criterios">
-        <label for="tipoCriterio">Tipo de criterio:</label><br>
-<select id="tipoCriterio" name="criteriosDePertenencia" onchange="mostrarCampoCriterio()">
-<div id="campoCriterio"></div>
-            <option value="CriterioDeTexto">Texto</option>
-            <option value="CriterioCategoria">Categoría</option>
-            <option value="CriterioTipoMultimedia">Tipo Multimedia</option>
-            <option value="CriterioEtiquetas">Etiquetas</option>
-            <option value="CriterioFecha">Fecha</option>
-            <option value="CriterioUbicacion">Ubicación</option>
-            <option value="CriterioContribuyente">Contribuyente</option>
-            <option value="CriterioTipoFuente">Tipo Fuente</option>
+        <label for="algoritmo">Algoritmo de consenso:</label><br>
+        <select id="algoritmo" name="algoritmo">
+            <#list algoritmos as alg>
+                <option value="${alg}">${alg?capitalize}</option>
+            </#list>
+        </select><br><br>
+
+        <h3>Criterios de pertenencia</h3>
+        <div id="criterios">
+            <label for="tipoCriterio">Tipo de criterio:</label><br>
+            <select id="tipoCriterio" name="criteriosDePertenencia" onchange="mostrarCampoCriterio()">
+                <option value="CriterioDeTexto">Texto</option>
+                <option value="CriterioCategoria">Categoría</option>
+                <option value="CriterioTipoMultimedia">Tipo Multimedia</option>
+                <option value="CriterioEtiquetas">Etiquetas</option>
+                <option value="CriterioFecha">Fecha</option>
+                <option value="CriterioUbicacion">Ubicación</option>
+                <option value="CriterioContribuyente">Contribuyente</option>
+                <option value="CriterioTipoFuente">Tipo Fuente</option>
+            </select>
+            <div id="campoCriterio"></div>
+        </div>
+        <br>
+
+        <h3>Fuentes</h3>
+        <label for="fuentes">Seleccioná una o más fuentes:</label><br>
+        <select id="fuentes" name="fuentes" multiple size="4">
+            <#list fuentes as fuente>
+                <option value="${fuente}">${fuente?capitalize}</option>
+            </#list>
         </select>
-    </div>
-    <br>
+        <br><br>
 
-<h3>Fuentes</h3>
-<label for="fuentes">Seleccioná una o más fuentes:</label><br>
-
-<select id="fuentes" name="fuentes" multiple size="4">
-    <#list fuentes as fuente>
-        <option value="${fuente}">${fuente?capitalize}</option>
-    </#list>
-</select>
-<br><br>
-
-
-
-    <button type="submit">Crear Colección</button>
-</form>
-
-
-    <br>
-    <a class="back-link" href="/">← Volver al inicio</a>
+        <button type="submit" class="btn btn-primary">Crear Colección</button>
+    </form>
 </div>
-
-<script>
-    function mostrarCampoCriterio() {
-        const tipo = document.getElementById("tipoCriterio").value;
-        const contenedor = document.getElementById("campoCriterio");
-        contenedor.innerHTML = ""; // Limpia lo anterior
-
-        if (tipo === "CriterioDeTexto") {
-            contenedor.innerHTML = `
-                <label for="valorTexto">Palabra clave:</label><br>
-                <input type="text" id="valorTexto" name="valorTexto"><br><br>
-            `;
-        } else if (tipo === "CriterioFecha") {
-            contenedor.innerHTML = `
-                <label for="fechaDesde">Desde:</label>
-                <input type="date" id="fechaDesde" name="fechaDesde"><br>
-                <label for="fechaHasta">Hasta:</label>
-                <input type="date" id="fechaHasta" name="fechaHasta"><br><br>
-            `;
-        } else if (tipo === "CriterioUbicacion") {
-            contenedor.innerHTML = `
-                <label for="provincia">Provincia:</label><br>
-                <input type="text" id="provincia" name="provincia"><br><br>
-            `;
-        } else if (tipo === "CriterioCategoria") {
-            contenedor.innerHTML = `
-                <label for="categoria">Categoría:</label><br>
-                <input type="text" id="categoria" name="categoria"><br><br>
-            `;
-        } else {
-            contenedor.innerHTML = `<p style="color:#777;">(Este tipo de criterio no requiere parámetros)</p>`;
-        }
-    }
-</script>
-</body>
-</html>
+</#assign>
+<#include "layout.ftl">

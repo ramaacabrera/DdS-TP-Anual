@@ -40,7 +40,7 @@
                 <#if hecho.ubicacion??>
                     Lat: ${hecho.ubicacion.latitud?string("#.#####")}, Lon: ${hecho.ubicacion.longitud?string("#.#####")}
                     <br>
-                    (${hecho.ubicacion.descripcion?default("Coordenadas")?html})
+                    <!-- (${hecho.ubicacion.descripcion?default("Coordenadas")?html})-->
                 <#else>
                     No especificada
                 </#if>

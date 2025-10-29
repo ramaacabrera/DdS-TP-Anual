@@ -7,7 +7,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="estadisticas" />
-        <module name="agregador" />
         <module name="web" />
         <module name="cargador-metamapa" />
         <module name="utils" />
@@ -19,13 +18,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="MetaMapa" target="17" />
-      <module name="tpa-2025" target="17" />
+      <module name="untitled" target="17" />
     </bytecodeTargetLevel>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="MetaMapa" options="" />
-    </option>
   </component>
 </project>

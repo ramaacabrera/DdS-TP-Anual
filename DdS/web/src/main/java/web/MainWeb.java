@@ -25,10 +25,10 @@ public class MainWeb {
         Javalin app = iniciador.iniciarAppWeb(Integer.parseInt(puerto), "/");
 
         // Probar
-        app.get("/api/hechos/{id}", new GetHechoEspecificoHandler(urlPublica));
+        app.get("/hechos/{id}", new GetHechoEspecificoHandler(urlPublica));
 
         // Falta
-        app.get("/api/hechos", new GetHechosHandler(urlPublica)); //home
+        app.get("/hechos", new GetHechosHandler(urlPublica)); //home
 
         // Falta
         //app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
@@ -51,9 +51,9 @@ public class MainWeb {
         //app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlAdmin));
 
         //crear y editar colecciones
-        //app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
+        app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
 
-        //app.get("/crear-coleccion", new GetCrearColeccionHandler()); //para poder ver el formulario
+        app.get("/crear-coleccion", new GetCrearColeccionHandler()); //para poder ver el formulario
 //se recibe un post en  api/colecciones, crea la coleccion y la mete en la base
 
         // Incompleto

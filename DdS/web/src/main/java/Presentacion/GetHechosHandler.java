@@ -8,6 +8,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import utils.DTO.HechoDTO;
 import utils.DTO.PageDTO;
 
 import java.io.IOException;
@@ -116,7 +117,7 @@ public class GetHechosHandler implements Handler {
         model.put("fromIndex", fromIndex);
         model.put("toIndex", toIndex);
 
-        ctx.render("home.ftl", model);
+        ctx.render("prueba-home.ftl", model);
     }
 
     private String normalizarFecha(String raw) {
@@ -182,17 +183,5 @@ public class GetHechosHandler implements Handler {
         list.add(lon);
 
         return list;
-    }
-
-    // DTO para parsear respuesta del backend
-    public static class HechoDTO {
-        public String id;
-        public String titulo;
-        public String descripcion;
-        public String categoria;
-        public String fechaDeCarga;
-        public String fechaDeAcontecimiento;
-        public String latitud;
-        public String longitud;
     }
 }
