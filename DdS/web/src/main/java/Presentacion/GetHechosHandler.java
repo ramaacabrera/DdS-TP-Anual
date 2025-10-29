@@ -14,6 +14,7 @@ import utils.DTO.PageDTO;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GetHechosHandler implements Handler {
 
@@ -28,18 +29,57 @@ public class GetHechosHandler implements Handler {
 
     // --- Definición declarativa de filtros ---
     public static class FilterDef {
-        public String key, label, type;
-        public List<String> options;
-        public List<Option> optionObjs;
-        public String placeholder;
-        public Integer size;
-        public static class Option { public String value, label; }
+        private String key;
+        private String label;
+        private String type;
+        private List<String> options;
+
+        // Constructor vacío
+        public FilterDef() {
+            this.options = new ArrayList<>();
+        }
+
+        // Constructor con parámetros
+        public FilterDef(String key, String label, String type) {
+            this.key = key;
+            this.label = label;
+            this.type = type;
+            this.options = new ArrayList<>();
+        }
+
+        // GETTERS PÚBLICOS (crucial para FreeMarker)
+        public String getKey() { return key; }
+        public String getLabel() { return label; }
+        public String getType() { return type; }
+        public List<String> getOptions() { return options; }
+
+        // SETTERS PÚBLICOS (para poder asignar valores)
+        public void setKey(String key) { this.key = key; }
+        public void setLabel(String label) { this.label = label; }
+        public void setType(String type) { this.type = type; }
+        public void setOptions(List<String> options) { this.options = options; }
+
+        // Método helper para agregar opciones
+        public FilterDef addOption(String option) {
+            this.options.add(option);
+            return this;
+        }
     }
 
     @Override
     public void handle(Context ctx) throws IOException {
         // 1) Filtros para la UI
         List<FilterDef> filters = buildFilters();
+
+        // Convertir FilterDef a Map para FreeMarker
+        List<Map<String, Object>> filtersForTemplate = filters.stream()
+                .map(filter -> Map.of(
+                        "key", filter.getKey(),
+                        "label", filter.getLabel(),
+                        "type", filter.getType(),
+                        "options", filter.getOptions()
+                ))
+                .collect(Collectors.toList());
 
         // 2) Leer filtros y paginación desde la query
         String categoria = ctx.queryParam("categoria");
@@ -49,14 +89,20 @@ public class GetHechosHandler implements Handler {
         String fechaAcontecimientoHasta = ctx.queryParam("fecha_acontecimiento_hasta");
         String latitud = ctx.queryParam("latitud");
         String longitud = ctx.queryParam("longitud");
+        String query = ctx.queryParam("q");
 
         int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
         int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
 
         // 3) Construir URL del backend con los nombres EXACTOS que recibe + paginación
         HttpUrl.Builder b = HttpUrl.parse(urlPublica + "/hechos").newBuilder()
-                .addQueryParameter("page", String.valueOf(page))
-                .addQueryParameter("size", String.valueOf(size));
+                .addQueryParameter("pagina", String.valueOf(page))
+                .addQueryParameter("limite", String.valueOf(size));
+
+        // Agregar búsqueda general si existe
+        if (query != null && !query.isBlank()) {
+            b.addQueryParameter("q", query);
+        }
 
         if (categoria != null && !categoria.isBlank())
             b.addQueryParameter("categoria", categoria);
@@ -100,9 +146,12 @@ public class GetHechosHandler implements Handler {
 
         // 6) Modelo de datos para la vista
         Map<String, Object> model = new HashMap<>();
-        model.put("baseHref", "/api/hechos");
-        model.put("filters", filters);
+        model.put("baseHref", "/hechos");
+        model.put("filters", filtersForTemplate); // ← Usar la versión convertida a Map
+
+// Agrega el parámetro de búsqueda general 'q' que falta
         model.put("filterValues", Map.of(
+                "q", query != null ? query : "",  // ← ESTE FALTABA
                 "categoria", categoria != null ? categoria : "",
                 "fecha_carga_desde", fechaCargaDesde != null ? fechaCargaDesde : "",
                 "fecha_carga_hasta", fechaCargaHasta != null ? fechaCargaHasta : "",
@@ -153,48 +202,22 @@ public class GetHechosHandler implements Handler {
     private List<FilterDef> buildFilters() {
         List<FilterDef> list = new ArrayList<>();
 
-        FilterDef cat = new FilterDef();
-        cat.key = "categoria";
-        cat.label = "Categoría";
-        cat.type = "select";
-        cat.options = Arrays.asList("Política", "Economía", "Sociedad", "Cultura", "Deportes");
+        // Usando constructor
+        FilterDef cat = new FilterDef("categoria", "Categoría", "select");
+        cat.setOptions(Arrays.asList("Política", "Economía", "Sociedad", "Cultura", "Deportes"));
         list.add(cat);
 
-        FilterDef fechaCargaDesde = new FilterDef();
-        fechaCargaDesde.key = "fecha_carga_desde";
-        fechaCargaDesde.label = "Fecha carga desde";
-        fechaCargaDesde.type = "date";
-        list.add(fechaCargaDesde);
+        // Fechas de carga
+        list.add(new FilterDef("fecha_carga_desde", "Fecha carga desde", "date"));
+        list.add(new FilterDef("fecha_carga_hasta", "Fecha carga hasta", "date"));
 
-        FilterDef fechaCargaHasta = new FilterDef();
-        fechaCargaHasta.key = "fecha_carga_hasta";
-        fechaCargaHasta.label = "Fecha carga hasta";
-        fechaCargaHasta.type = "date";
-        list.add(fechaCargaHasta);
+        // Fechas de acontecimiento
+        list.add(new FilterDef("fecha_acontecimiento_desde", "Acontecimiento desde", "date"));
+        list.add(new FilterDef("fecha_acontecimiento_hasta", "Acontecimiento hasta", "date"));
 
-        FilterDef fechaAcontecimientoDesde = new FilterDef();
-        fechaAcontecimientoDesde.key = "fecha_acontecimiento_desde";
-        fechaAcontecimientoDesde.label = "Acontecimiento desde";
-        fechaAcontecimientoDesde.type = "date";
-        list.add(fechaAcontecimientoDesde);
-
-        FilterDef fechaAcontecimientoHasta = new FilterDef();
-        fechaAcontecimientoHasta.key = "fecha_acontecimiento_hasta";
-        fechaAcontecimientoHasta.label = "Acontecimiento hasta";
-        fechaAcontecimientoHasta.type = "date";
-        list.add(fechaAcontecimientoHasta);
-
-        FilterDef lat = new FilterDef();
-        lat.key = "latitud";
-        lat.label = "Latitud";
-        lat.type = "search";
-        list.add(lat);
-
-        FilterDef lon = new FilterDef();
-        lon.key = "longitud";
-        lon.label = "Longitud";
-        lon.type = "search";
-        list.add(lon);
+        // Coordenadas
+        list.add(new FilterDef("latitud", "Latitud", "search"));
+        list.add(new FilterDef("longitud", "Longitud", "search"));
 
         return list;
     }

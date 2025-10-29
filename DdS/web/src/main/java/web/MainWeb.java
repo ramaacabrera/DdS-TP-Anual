@@ -24,6 +24,10 @@ public class MainWeb {
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarAppWeb(Integer.parseInt(puerto), "/");
 
+        app.get("/", ctx -> {
+            ctx.redirect("/hechos");
+        });
+
         // Probar
         app.get("/hechos/{id}", new GetHechoEspecificoHandler(urlPublica));
 

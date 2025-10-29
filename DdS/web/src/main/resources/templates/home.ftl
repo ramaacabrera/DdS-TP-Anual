@@ -7,7 +7,7 @@
         <!-- Barra de búsqueda principal -->
         <div class="search-hero">
             <div class="box">
-                <h2 class="section-title">Buscar Hechos</h2>
+                <h2 class="section-title">Buscador de Hechos</h2>
                 <form method="get" action="${baseHref}" class="search-main-form">
                     <div class="search-container">
                         <div class="search-input-group">
@@ -22,24 +22,6 @@
                                 </svg>
                                 Buscar
                             </button>
-                        </div>
-
-                        <!-- Selector de filtro avanzado -->
-                        <div class="search-filter-selector">
-                            <label class="filter-selector-label">Filtrar por:</label>
-                            <select name="filterType" class="filter-type-select">
-                                <option value="">Todos los campos</option>
-                                <#if filters??>
-                                    <#list filters as filter>
-                                        <#if filter?? && filter.key?? && filter.label??>
-                                            <option value="${filter.key}"
-                                                    <#if filterValues['filterType']?? && filterValues['filterType'] == filter.key>selected</#if>>
-                                                ${filter.label}
-                                            </option>
-                                        </#if>
-                                    </#list>
-                                </#if>
-                            </select>
                         </div>
                     </div>
                 </form>
@@ -109,7 +91,7 @@
                     page=(page!1)
                     size=(size!10)
                     totalPages=(totalPages!1)
-                    baseHref=(baseHref!"/api/hechos")
+                    baseHref=(baseHref!"/hechos")
                     keep=filterValues />
                 </#if>
             </main>

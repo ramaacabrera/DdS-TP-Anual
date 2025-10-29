@@ -83,6 +83,27 @@
     </div>
 </#macro>
 
+<#-- ===== FUNCIONES HELPER PARA FILTROS ===== -->
+<#-- Función para obtener un valor simple -->
+<#function _val values key>
+    <#if values?? && values[key]??>
+        <#return values[key]>
+    </#if>
+    <#return "">
+</#function>
+
+<#-- Función para obtener múltiples valores (array/lista) -->
+<#function _vals values key>
+    <#if values?? && values[key]??>
+        <#if values[key]?is_sequence>
+            <#return values[key]>
+        <#else>
+            <#return [values[key]]>
+        </#if>
+    </#if>
+    <#return []>
+</#function>
+
 <#-- Función para obtener nombre legible del filtro -->
 <#function getFilterLabel filter>
     <#if filter??>
@@ -111,85 +132,84 @@
     <#assign options = (f.options)! (f['options'])![] >
     <#assign optionObjs = (f.optionObjs)! (f['optionObjs'])![] >
     <#assign sizeV = (f.size!6)?c >
+    <#assign placeholder = (f.placeholder)! (f['placeholder'])!'Buscar…'>
 
     <div class="filter-item">
         <label class="filter-label">${label}</label>
 
-        <#if type??>
-            <#switch type>
-                <#case "search">
-                    <input class="input w-100" type="search" name="${key}"
-                           value="${(values[key])!''}"
-                           placeholder="${f.placeholder!'Buscar…'}"/>
-                    <#break>
+        <#switch type>
+            <#case "search">
+                <input class="input w-100 filter-input" type="search" name="${key}"
+                       value="${_val(values, key)}"
+                       placeholder="${placeholder}"/>
+                <#break>
 
-                <#case "select">
-                    <select class="input" name="${key}">
-                        <option value="">--</option>
-                        <#list options as opt>
-                            <option value="${opt}" <#if _val(values, key)==opt>selected</#if>>${opt}</option>
+            <#case "select">
+                <select class="input filter-input" name="${key}">
+                    <option value="">--</option>
+                    <#list options as opt>
+                        <option value="${opt}" <#if _val(values, key)==opt>selected</#if>>${opt}</option>
+                    </#list>
+                </select>
+                <#break>
+
+            <#case "multiselect">
+                <select class="input filter-input" name="${key}" multiple size="${sizeV}">
+                    <#list options as opt>
+                        <option value="${opt}" <#if _vals(values, key)?seq_contains(opt)>selected</#if>>${opt}</option>
+                    </#list>
+                </select>
+                <#break>
+
+            <#case "date">
+                <input class="input filter-input" type="date" name="${key}" value="${_val(values, key)}"/>
+                <#break>
+
+            <#case "radio-group">
+                <div class="row gap-12">
+                    <#if optionObjs?has_content>
+                        <#list optionObjs as opt>
+                            <label class="chip">
+                                <input type="radio" name="${key}" value="${opt.value!opt}"
+                                       <#if _val(values, key)==(opt.value!opt)>checked</#if>/> ${opt.label!opt}
+                            </label>
                         </#list>
-                    </select>
-                    <#break>
-
-                <#case "multiselect">
-                    <select class="input" name="${key}" multiple size="${sizeV}">
+                    <#else>
                         <#list options as opt>
-                            <option value="${opt}" <#if (_vals(values, key)?seq_contains(opt))>selected</#if>>${opt}</option>
+                            <label class="chip">
+                                <input type="radio" name="${key}" value="${opt}"
+                                       <#if _val(values, key)==opt>checked</#if>/> ${opt}
+                            </label>
                         </#list>
-                    </select>
-                    <#break>
+                    </#if>
+                </div>
+                <#break>
 
-                <#case "date">
-                    <input class="input" type="date" name="${key}" value="${_val(values, key)}"/>
-                    <#break>
+            <#case "checkbox-group">
+                <div class="row gap-12">
+                    <#if optionObjs?has_content>
+                        <#list optionObjs as opt>
+                            <label class="chip">
+                                <input type="checkbox" name="${key}" value="${opt.value!opt}"
+                                       <#if _vals(values, key)?seq_contains(opt.value!opt)>checked</#if>/> ${opt.label!opt}
+                            </label>
+                        </#list>
+                    <#else>
+                        <#list options as opt>
+                            <label class="chip">
+                                <input type="checkbox" name="${key}" value="${opt}"
+                                       <#if _vals(values, key)?seq_contains(opt)>checked</#if>/> ${opt}
+                            </label>
+                        </#list>
+                    </#if>
+                </div>
+                <#break>
 
-                <#case "radio-group">
-                    <div class="row gap-12">
-                        <#if optionObjs?has_content>
-                            <#list optionObjs as opt>
-                                <label class="chip">
-                                    <input type="radio" name="${key}" value="${opt.value}"
-                                           <#if _val(values, key)==opt.value>checked</#if>/> ${opt.label}
-                                </label>
-                            </#list>
-                        <#else>
-                            <#list options as opt>
-                                <label class="chip">
-                                    <input type="radio" name="${key}" value="${opt}"
-                                           <#if _val(values, key)==opt>checked</#if>/> ${opt}
-                                </label>
-                            </#list>
-                        </#if>
-                    </div>
-                    <#break>
-
-                <#case "checkbox-group">
-                    <div class="row gap-12">
-                        <#if optionObjs?has_content>
-                            <#list optionObjs as opt>
-                                <label class="chip">
-                                    <input type="checkbox" name="${key}" value="${opt.value}"
-                                           <#if (_vals(values, key)?seq_contains(opt.value))>checked</#if>/> ${opt.label}
-                                </label>
-                            </#list>
-                        <#else>
-                            <#list options as opt>
-                                <label class="chip">
-                                    <input type="checkbox" name="${key}" value="${opt}"
-                                           <#if (_vals(values, key)?seq_contains(opt))>checked</#if>/> ${opt}
-                                </label>
-                            </#list>
-                        </#if>
-                    </div>
-                    <#break>
-
-                <#default>
-                    <input class="input w-100" type="search" name="${key}"
-                           value="${_val(values, key)}"
-                           placeholder="${f.placeholder!'Buscar…'}"/>
-            </#switch>
-        </#if>  <#-- 👈 CIERRE del <#if f.type??> que faltaba -->
+            <#default>
+                <input class="input w-100 filter-input" type="search" name="${key}"
+                       value="${_val(values, key)}"
+                       placeholder="${placeholder}"/>
+        </#switch>
     </div>
 </#macro>
 
@@ -198,20 +218,14 @@
     <div class="filters-grid">
         <#if filters?has_content>
             <#list filters?filter(x -> x??) as f>
-            <#-- Si viene un string, lo convierto a filtro search simple -->
-                <#if f?is_string>
-                    <@filterField f={"key": f, "label": f?cap_first, "type": "search"} values=values />
-                <#elseif f?is_hash || f?is_hash_ex>
-                    <@filterField f=f values=values />
-                <#else>
-                <#-- item desconocido: lo ignoro -->
-                </#if>
+            <#-- Ahora f siempre es un Map que FreeMarker puede manejar -->
+                <@filterField f=f values=values />
             </#list>
         </#if>
 
         <div class="filter-actions">
             <button class="btn" type="submit">Aplicar</button>
-            <a class="btn btn-ghost" href="${(baseHref!'/api/hechos')}">Limpiar</a>
+            <a class="btn btn-ghost" href="${(baseHref!'/hechos')}">Limpiar</a>
         </div>
     </div>
 </#macro>
