@@ -29,9 +29,12 @@ public class GetSolicitudEliminacionHandler implements Handler {
             modelo.put("hechoId", hechoId);
             modelo.put("urlPublica", urlPublica);
 
-            if(ctx.sessionAttributeMap().isEmpty()){
-                modelo.put("username",ctx.sessionAttribute("username"));
-                modelo.put("access_token", ctx.sessionAttribute("access_token"));
+            if(!ctx.sessionAttributeMap().isEmpty()){
+                String username = ctx.sessionAttribute("username");
+                System.out.println("Usuario: " + username);
+                String access_token = ctx.sessionAttribute("access_token");
+                modelo.put("username", username);
+                modelo.put("access_token", access_token);
             }
 
             ctx.render("crear-solicitud-eliminacion.ftl", modelo);

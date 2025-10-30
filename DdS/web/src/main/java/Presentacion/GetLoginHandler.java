@@ -17,15 +17,12 @@ public class GetLoginHandler implements Handler {
         Map<String, Object> model = new HashMap<>();
         model.put("baseApiUrl", "http://localhost:8087/api");
         //model.put("baseAPIUrl", urlPublica);
-        String ultimaUrl = ctx.header("Referer");
         String error = ctx.sessionAttribute("error");
         if(error != null){
             model.put("error", error);
             ctx.sessionAttribute("error", null);
         }
-        if(ultimaUrl != null && !ultimaUrl.contains("/login")){
-            model.put("ultimaUrl", ultimaUrl);
-        }
+
         ctx.render("login.ftl", model);
     }
 }

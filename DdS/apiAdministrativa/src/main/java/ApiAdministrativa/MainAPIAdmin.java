@@ -27,6 +27,7 @@ public class MainAPIAdmin {
         SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(hechoRepositorio);
 
 
+
         app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio));
         app.put("/api/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio));
         app.delete("/api/colecciones/{id}", new DeleteColeccionesHandler(coleccionRepositorio));

@@ -71,6 +71,14 @@ public class GetColeccionesHandler implements Handler {
             modelo.put("colecciones", resp.content);
             modelo.put("urlAdmin", urlPublica);
 
+            if(!ctx.sessionAttributeMap().isEmpty()){
+                String username = ctx.sessionAttribute("username");
+                System.out.println("Usuario: " + username);
+                String access_token = ctx.sessionAttribute("access_token");
+                modelo.put("username", username);
+                modelo.put("access_token", access_token);
+            }
+
             // Renderizar plantilla
             ctx.render("colecciones.ftl", modelo);
 

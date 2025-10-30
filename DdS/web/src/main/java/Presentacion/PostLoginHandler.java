@@ -48,11 +48,7 @@ public class PostLoginHandler implements Handler {
                 ctx.sessionAttribute("access_token", accessToken);
                 ctx.sessionAttribute("username", username);
 
-                if(redirectUrl != null){
-                    ctx.redirect(redirectUrl);
-                } else{
-                    ctx.redirect("/hechos");
-                }
+                ctx.redirect("/hechos");
             } else {
                 Map<String, Object> model = new HashMap<>();
                 model.put("error", json.getString("error"));

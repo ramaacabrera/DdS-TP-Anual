@@ -56,7 +56,7 @@ public class MainWeb {
         //app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
 
         // Falta
-        //app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlAdmin));
+        app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlAdmin));
 
         app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
 
