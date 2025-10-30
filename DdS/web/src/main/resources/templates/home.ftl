@@ -9,6 +9,13 @@
             <div class="search-hero">
                 <div class="box">
                     <h2 class="section-title">Buscador de Hechos</h2>
+
+                    <div style="text-align: right; margin-bottom: 10px;">
+                    <a href="/colecciones" class="btn btn-secondary" style="font-size: 14px;">
+                    📚 Ver Colecciones
+                    </a>
+                    </div>
+<!-- 🔗 Botón para ir a las colecciones -->
                     <div class="search-container">
                         <div class="search-input-group">
                             <input type="search"
