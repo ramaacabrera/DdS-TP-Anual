@@ -27,7 +27,7 @@ public class MainWeb {
         app.get("/", ctx -> {
             ctx.redirect("/hechos");
         });
-
+        //app.get("/home", new GetHomeHandler(urlPublica));
         app.get("/login", new GetLoginHandler(urlPublica));
         app.post("/login", new PostLoginHandler(urlPublica));
 
@@ -49,10 +49,10 @@ public class MainWeb {
         app.get("/hechos/{id}/eliminar", new GetSolicitudEliminacionHandler(urlPublica));
 
         // Falta
-        //app.get("/api/colecciones", new GetColeccionesHandler(urlPublica));
+        app.get("/colecciones", new GetColeccionesHandler(urlAdmin));
 
         // Falta
-        //app.get("/api/colecciones/{id}", new GetColeccionHandler(urlAdmin));
+        app.get("/colecciones/{id}", new GetColeccionHandler(urlAdmin));
 
         // Falta
         //app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));

@@ -1,4 +1,5 @@
 package utils.Persistencia;
+import utils.DTO.PageDTO;
 import utils.Dominio.Criterios.Criterio;
 import utils.Dominio.HechosYColecciones.Coleccion;
 import utils.DTO.ColeccionDTO;

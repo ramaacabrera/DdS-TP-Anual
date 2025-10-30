@@ -1,0 +1,408 @@
+openapi: 3.0.0
+info:
+  title: API de Estadísticas
+  description: API para obtener estadísticas relacionadas con colecciones, categorías, provincias y análisis de solicitudes
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8088/api/estadisticas
+
+paths:
+  /provinciaMax/colecciones/{coleccion}:
+    get:
+      summary: Obtener Provincia con Máxima Colección
+      description: Retorna la provincia que tiene la máxima cantidad de elementos en una colección específica
+      operationId: getProvinciaColeccion
+      tags:
+        - Estadísticas
+      parameters:
+        - name: coleccion
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID de la colección a consultar
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Solicitud exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  provincia:
+                    type: string
+                    example: "Buenos Aires"
+                  nombre:
+                    type: string
+                    example: "Nombre de la colección"
+        '400':
+          description: UUID de colección inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "UUID de colección inválido"
+                  status:
+                    type: integer
+                    example: 400
+        '404':
+          description: Colección no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Colección no encontrada"
+                  status:
+                    type: integer
+                    example: 404
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error interno del servidor"
+                  detalle:
+                    type: string
+                    example: "Mensaje de error específico"
+
+  /categoriaMax:
+    get:
+      summary: Obtener Categoría con Máximo Valor
+      description: Retorna la categoría con el valor máximo según las métricas del sistema
+      operationId: getCategoriaMax
+      tags:
+        - Estadísticas
+      responses:
+        '200':
+          description: Solicitud exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categoria:
+                    type: string
+                    example: "Tecnología"
+        '404':
+          description: Categoría no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Categoría no encontrada"
+                  status:
+                    type: integer
+                    example: 404
+        '500':
+          description: Error interno del servidor
+
+  /provinciaMax/categorias/{categoria}:
+    get:
+      summary: Obtener Provincia con Máxima Categoría
+      description: Retorna la provincia que tiene el máximo valor para una categoría específica
+      operationId: getProvinciaCategoria
+      tags:
+        - Estadísticas
+      parameters:
+        - name: categoria
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Nombre de la categoría a consultar
+          example: "tecnologia"
+      responses:
+        '200':
+          description: Solicitud exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  provincia:
+                    type: string
+                    example: "Córdoba"
+                  categoria:
+                    type: string
+                    example: "tecnologia"
+        '400':
+          description: Categoría no especificada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Categoría no especificada"
+                  status:
+                    type: integer
+                    example: 400
+        '404':
+          description: No se encontraron datos para la categoría
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No se encontraron datos para la categoría: tecnologia"
+                  status:
+                    type: integer
+                    example: 404
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error interno del servidor"
+                  detalle:
+                    type: string
+                    example: "Mensaje de error específico"
+
+  /horaMax/categorias/{categoria}:
+    get:
+      summary: Obtener Hora Máxima por Categoría
+      description: Retorna la hora del día con máxima actividad para una categoría específica (formato numérico 0-23)
+      operationId: getHoraMaxCategoria
+      tags:
+        - Estadísticas
+      parameters:
+        - name: categoria
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Nombre de la categoría a consultar
+          example: "tecnologia"
+      responses:
+        '200':
+          description: Solicitud exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hora:
+                    type: integer
+                    minimum: 0
+                    maximum: 23
+                    description: Hora del día en formato numérico (0-23)
+                    example: 14
+                  categoria:
+                    type: string
+                    example: "tecnologia"
+        '400':
+          description: Categoría no especificada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Categoría no especificada"
+                  status:
+                    type: integer
+                    example: 400
+        '404':
+          description: No se encontraron datos para la categoría
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No se encontraron datos para la categoría: tecnologia"
+                  status:
+                    type: integer
+                    example: 404
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error interno del servidor"
+                  detalle:
+                    type: string
+                    example: "Mensaje de error específico"
+
+  /solicitudesSpam:
+    get:
+      summary: Obtener Cantidad de Solicitudes Spam
+      description: Retorna la cantidad total de solicitudes identificadas como spam
+      operationId: getSolicitudesSpam
+      tags:
+        - Estadísticas
+      responses:
+        '200':
+          description: Solicitud exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  spam:
+                    type: integer
+                    format: int64
+                    example: 45
+                    description: Cantidad total de solicitudes spam
+        '404':
+          description: Cantidad de spam no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Cantidad de Spam no encontrada"
+                  status:
+                    type: integer
+                    example: 404
+        '500':
+          description: Error interno del servidor
+
+  /categorias:
+    get:
+      summary: Obtener Lista de Categorías
+      description: Retorna la lista completa de categorías disponibles en el sistema
+      operationId: getCategorias
+      tags:
+        - Estadísticas
+      responses:
+        '200':
+          description: Solicitud exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categorias:
+                    type: array
+                    items:
+                      type: string
+                    example: ["tecnologia", "deportes", "cultura", "salud"]
+                  total:
+                    type: integer
+                    example: 15
+                  timestamp:
+                    type: string
+                    format: date-time
+                    description: Fecha y hora de la consulta
+        '404':
+          description: No se encontraron categorías
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No se encontraron categorías en las estadísticas"
+                  status:
+                    type: integer
+                    example: 404
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error interno del servidor"
+                  detalle:
+                    type: string
+                    example: "Mensaje de error específico"
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: integer
+    DetailedErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        detalle:
+          type: string
+
+  parameters:
+    ColeccionUUIDPathParam:
+      name: coleccion
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: UUID de la colección
+      example: "123e4567-e89b-12d3-a456-426614174000"
+    CategoriaPathParam:
+      name: categoria
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Nombre de la categoría
+      example: "tecnologia"
+
+tags:
+  - name: Estadísticas
+    description: Endpoints para consultar estadísticas del sistema
+
+x-handlers-info:
+  GetProvinciaColeccionHandler:
+    repository: EstadisticasColeccionRepositorio
+    method: buscarProvinciaYNombreColeccion
+    param-type: UUID
+  GetCategoriaMaxHandler:
+    repository: EstadisticasRepositorio
+    method: buscarCategoria_max_hechos
+  GetProvinciaCategoriaHandler:
+    repository: EstadisticasCategoriaRepositorio
+    method: buscarProvinciaCategoria
+  GetHoraMaxCategoriaHandler:
+    repository: EstadisticasCategoriaRepositorio
+    method: buscarHoraCategoria
+    response-format: "hora en formato numérico (0-23)"
+  GetSolicitudesSpamHandler:
+    repository: EstadisticasRepositorio
+    method: buscarSpam
+    response-format: "cantidad total como entero largo"
+  GetCategoriasHandler:
+    repository: EstadisticasCategoriaRepositorio
+    method: obtenerTodasLasCategorias
+    response-includes: "lista de strings, total y timestamp"

@@ -1,5 +1,6 @@
 package ApiAdministrativa.Presentacion;
 
+import utils.DTO.PageDTO;
 import utils.Dominio.HechosYColecciones.Coleccion;
 import utils.Persistencia.ColeccionRepositorio;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -63,7 +64,7 @@ public class GetColeccionesHandler implements Handler {
         // Obtener colecciones del repositorio con paginación
         List<Coleccion> colecciones;
         try {
-            //colecciones = coleccionRepositorio.obtenerColecciones(pagina, limite);
+            colecciones = coleccionRepositorio.obtenerTodas();
         } catch (Exception e) {
             ctx.status(500).json(Map.of(
                     "error", "Error al obtener colecciones",
@@ -72,7 +73,16 @@ public class GetColeccionesHandler implements Handler {
             return;
         }
 
-        //ctx.status(200).json(colecciones);
+        int total = colecciones.size();
+        int totalPages = (int) Math.ceil(total / (double) limite);
+
+        int fromIndex = (pagina - 1) * limite;
+        if (fromIndex > total) fromIndex = Math.max(0, total - limite);
+        int toIndex = Math.min(fromIndex + limite, total);
+
+        colecciones = colecciones.subList(fromIndex, toIndex);
+
+        ctx.json(new PageDTO<>(colecciones, pagina,limite, totalPages,total));
     }
 
 }

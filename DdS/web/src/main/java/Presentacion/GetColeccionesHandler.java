@@ -4,15 +4,22 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
+import utils.DTO.PageDTO;
+import utils.Dominio.HechosYColecciones.Coleccion;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class GetColeccionesHandler implements Handler {
 
@@ -28,27 +35,40 @@ public class GetColeccionesHandler implements Handler {
         try {
             System.out.println("Listando todas las colecciones desde " + urlAdmin);
 
-            HttpClient httpClient = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI(urlAdmin + "/colecciones"))
-                    .GET()
-                    .build();
+            int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
+            int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpUrl.Builder b = HttpUrl.parse(urlAdmin + "/colecciones").newBuilder()
+                    .addQueryParameter("pagina", String.valueOf(page))
+                    .addQueryParameter("limite", String.valueOf(size));
 
-            if (response.statusCode() != 200) {
-                ctx.status(response.statusCode())
-                        .result("Error al obtener las colecciones desde la API administrativa.");
-                return;
+
+            String finalUrl = b.build().toString();
+            Request request = new Request.Builder().url(finalUrl).get().build();
+            OkHttpClient client = new OkHttpClient();
+            PageDTO<Coleccion> resp;
+            try(Response response = client.newCall(request).execute()){
+                if (!response.isSuccessful()) {
+                    throw new IOException("Error al llamar al backend: " + response.code() + " " + response.message());
+                }
+                String body = Objects.requireNonNull(response.body()).string();
+                System.out.println(body);
+                resp = mapper.readValue(body, new TypeReference<PageDTO<Coleccion>>() {});
             }
 
-            // Parsear JSON → lista de colecciones
-            List<Map<String, Object>> colecciones = mapper.readValue(response.body(), new TypeReference<>() {});
+            int fromIndex = (resp.page - 1) * resp.size;                // 0-based
+            int toIndex   = fromIndex + (resp.content != null ? resp.content.size() : 0);
 
             // Armar modelo para FreeMarker
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("pageTitle", "Colecciones");
-            modelo.put("colecciones", colecciones);
+            modelo.put("total", resp.totalElements);
+            modelo.put("page", resp.page);
+            modelo.put("size", resp.size);
+            modelo.put("totalPages", resp.totalPages);
+            modelo.put("fromIndex", fromIndex);
+            modelo.put("toIndex", toIndex);
+            modelo.put("colecciones", resp.content);
             modelo.put("urlAdmin", urlAdmin);
 
             // Renderizar plantilla
