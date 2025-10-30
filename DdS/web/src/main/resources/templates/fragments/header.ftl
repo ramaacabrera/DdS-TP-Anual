@@ -27,18 +27,29 @@
     <div class="header-inner">
         <a href="/" class="brand" style="font-family: 'Georgia', serif;">MetaMapa</a>
         <nav class="site-nav">
-            <a href="/hechos" class="nav-link">Explorar</a>
-            <a href="/crear" class="nav-link">Reportar</a>
-            <a href="/estadisticas" class="nav-link">Estadísticas</a>
-            <#if username??>
-                <h3>Hola, ${username}</h3>
-            <#else>
-                <a href="/login" class="nav-link">Iniciar sesión</a>
-            </#if>
+            <div>
+                <a href="/hechos" class="nav-link">Explorar</a>
+                <a href="/crear" class="nav-link">Reportar</a>
+                <a href="/estadisticas" class="nav-link">Estadísticas</a>
+                <#if username??>
+                    <p class="nav-link" onclick="cerrarSesion()">Cerrar sesión</p>
+                    <p class="nav-link">Bienvenido, ${username}</p>
+                <#else>
+                    <a href="/login" class="nav-link">Iniciar sesión</a>
+                </#if>
+            </div>
         </nav>
     </div>
 </header>
 <script src="https://unpkg.com/feather-icons"></script>
 <script>
     feather.replace();
+</script>
+<script>
+    async function cerrarSesion() {
+
+        await fetch('/logout', { method: 'GET' });
+
+        location.reload();
+    }
 </script>

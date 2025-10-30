@@ -2,7 +2,6 @@ package ApiPublica.Presentacion;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import io.javalin.http.HttpStatus;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import utils.Persistencia.UsuarioRepositorio;
@@ -14,6 +13,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 public class PostLoginHandler implements Handler {
     private UsuarioRepositorio usuarioRepositorio;
@@ -31,8 +31,10 @@ public class PostLoginHandler implements Handler {
         String username = ctx.formParam("usuario");
         Usuario usuario = usuarioRepositorio.buscarPorUsername(username);
         if(usuario == null){
-            ctx.sessionAttribute("error", "Usuario no existe");
-            ctx.redirect("http://localhost:7070/login");
+            //ctx.sessionAttribute("error", "Usuario no existe");
+            //ctx.redirect("http://localhost:7070/login");
+            System.out.println("Usuario no encontrado");
+            ctx.status(401).json(Map.of("error", "El usuario no existe"));
             return;
         }
         String password = ctx.formParam("password");
@@ -57,13 +59,14 @@ public class PostLoginHandler implements Handler {
 
                 System.out.println(urlWeb+"/hechos");
 
-                ctx.sessionAttribute("access_token", access_token);
-                ctx.sessionAttribute("username", username);
+                //ctx.sessionAttribute("access_token", access_token);
+                //ctx.sessionAttribute("username", username);
                 //ctx.redirect(urlWeb + "/hechos", HttpStatus.FOUND);
-                ctx.redirect("http://localhost:7070/hechos");
+                //ctx.redirect("http://localhost:7070/hechos?username=" + username + "&access_token=" + access_token);
+                ctx.json(Map.of("username", username, "access_token", access_token));
             } else{
-                ctx.sessionAttribute("error", "Password incorrecto");
-                ctx.redirect("http://localhost:7070/login");
+                ctx.status(401).json(Map.of("error", "Password incorrecto"));
+                return;
             }
 
         } catch (Exception e){

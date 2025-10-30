@@ -89,7 +89,7 @@ public class GetHechosHandler implements Handler {
         String fechaAcontecimientoHasta = ctx.queryParam("fecha_acontecimiento_hasta");
         String latitud = ctx.queryParam("latitud");
         String longitud = ctx.queryParam("longitud");
-        String query = ctx.queryParam("q");
+        String textoBusqueda = ctx.queryParam("textoBusqueda");
 
         int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
         int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
@@ -100,8 +100,8 @@ public class GetHechosHandler implements Handler {
                 .addQueryParameter("limite", String.valueOf(size));
 
         // Agregar búsqueda general si existe
-        if (query != null && !query.isBlank()) {
-            b.addQueryParameter("q", query);
+        if (textoBusqueda != null && !textoBusqueda.isBlank()) {
+            b.addQueryParameter("textoBusqueda", textoBusqueda);
         }
 
         if (categoria != null && !categoria.isBlank())
@@ -151,7 +151,7 @@ public class GetHechosHandler implements Handler {
 
 // Agrega el parámetro de búsqueda general 'q' que falta
         model.put("filterValues", Map.of(
-                "q", query != null ? query : "",
+                "textoBusqueda", textoBusqueda != null ? textoBusqueda : "",
                 "categoria", categoria != null ? categoria : "",
                 "fecha_carga_desde", fechaCargaDesde != null ? formatDateForInput(fechaCargaDesde) : "",
                 "fecha_carga_hasta", fechaCargaHasta != null ? formatDateForInput(fechaCargaHasta) : "",
@@ -179,9 +179,13 @@ public class GetHechosHandler implements Handler {
 //        model.put("totalPaginas", 10);
 //        model.put("cargando", false);
 
-        String username = ctx.sessionAttribute("username");
-        if(username != null){
+
+        if(!ctx.sessionAttributeMap().isEmpty()){
+            String username = ctx.sessionAttribute("username");
+            System.out.println("Usuario: " + username);
+            String access_token = ctx.sessionAttribute("access_token");
             model.put("username", username);
+            model.put("access_token", access_token);
         }
         ctx.render("home.ftl", model);
     }
@@ -234,9 +238,20 @@ public class GetHechosHandler implements Handler {
 
         // Usando constructor
         FilterDef cat = new FilterDef("categoria", "Categoría", "select");
-        cat.setOptions(Arrays.asList("Política", "Economía", "Sociedad", "Cultura", "Deportes", "Crisis hídrica"));
+        HttpUrl.Builder b = HttpUrl.parse(urlPublica + "/categoria").newBuilder();
+        String finalUrl = b.build().toString();
+        Request request = new Request.Builder().url(finalUrl).get().build();
+        try (Response response = client.newCall(request).execute()) {
+            List<String> categorias = mapper.readValue(response.body().string(), List.class);
+            System.out.println(categorias);
 
-        list.add(cat);
+            cat.setOptions(categorias);
+
+            list.add(cat);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         // Fechas de carga
         list.add(new FilterDef("fecha_carga_desde", "Fecha carga desde", "date"));

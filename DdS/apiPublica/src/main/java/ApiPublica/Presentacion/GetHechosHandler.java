@@ -21,6 +21,7 @@ import java.net.http.HttpResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -129,6 +130,15 @@ public class GetHechosHandler implements Handler {
         String contribuyente = ctx.queryParam("contribuyente");
         if (contribuyente != null) {
             criterios.add(new CriterioContribuyente(contribuyente));
+        }
+
+        //Criterios de texto
+        String texto = ctx.queryParam("textoBusqueda");
+        System.out.println("📝 Palabras: " + texto);
+        if (texto != null) {
+            List<String> textos = Arrays.asList(texto.split(" "));
+            System.out.println("📝 Palabras separadas: " + textos);
+            criterios.add(new CriterioDeTexto(textos, TipoDeTexto.BUSQUEDA));
         }
 
         return criterios;

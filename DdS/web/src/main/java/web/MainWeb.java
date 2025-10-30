@@ -29,8 +29,11 @@ public class MainWeb {
         });
 
         app.get("/login", new GetLoginHandler(urlPublica));
+        app.post("/login", new PostLoginHandler(urlPublica));
 
         app.get("/sign-in", new GetSignInHandler(urlPublica));
+
+        app.get("/logout", new GetLogOutHandler());
 
         app.get("/hechos/{id}", new GetHechoEspecificoHandler(urlPublica)); //hecho especifico
 

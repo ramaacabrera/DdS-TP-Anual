@@ -217,7 +217,6 @@
     <div class="filters-grid">
         <#if filters?has_content>
             <#list filters?filter(x -> x??) as f>
-            <#-- Ahora f siempre es un Map que FreeMarker puede manejar -->
                 <@filterField f=f values=values />
             </#list>
         </#if>

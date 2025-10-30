@@ -227,4 +227,20 @@ public class HechoRepositorio {
     public void actualizar(Hecho hecho) {
         this.guardar(hecho);
     }
+
+    public List<String> buscarCategorias() {
+        EntityManager em = BDUtils.getEntityManager();
+        try{
+            String jpql = "SELECT DISTINCT h.categoria FROM Hecho h WHERE h.categoria IS NOT NULL ORDER BY h.categoria";
+            TypedQuery<String> query = em.createQuery(jpql, String.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            BDUtils.rollback(em);
+            e.printStackTrace();
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+
+    }
 }
