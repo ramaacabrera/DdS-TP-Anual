@@ -464,17 +464,139 @@ select[multiple] option:checked {
     padding: var(--spacing-lg);
 }
 
+/* Contenedor del título y botones */
+.card-body .row.space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Cambiado de center a flex-start */
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Título que se ajusta y no empuja los botones */
 .card-title {
     font-size: var(--font-size-lg);
     font-weight: 600;
     color: var(--primary-dark);
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: 0; /* Eliminar margen inferior */
+    flex: 1; /* Ocupa el espacio disponible */
+    min-width: 0; /* Permite que el texto se trunque */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+/* Contenedor de botones fijo */
+.card-body .row.gap-8 {
+    display: flex;
+    flex-shrink: 0; /* No se reduce */
+    gap: var(--spacing-sm);
+    margin-left: var(--spacing-md);
+}
+
+/* Asegurar que los botones mantengan su tamaño */
+.card-body .btn-sm {
+    white-space: nowrap;
+    min-width: 60px; /* Ancho mínimo para los botones */
+}
+
+/* === INFORMACIÓN DE METADATOS MEJORADA === */
+.card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm) 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.meta-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.meta-label {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.meta-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Tags mejorados */
+.card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    color: var(--text-light);
+    background-color: var(--accent);
+    border-radius: 12px;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+
+.tag:hover {
+    background-color: var(--accent-dark);
+    transform: translateY(-1px);
 }
 
 .card-subtitle {
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
     margin-bottom: var(--spacing-sm);
+}
+
+/* === RESPONSIVE PARA METADATOS === */
+@media (max-width: 768px) {
+    .card-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .meta-item {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-body .row.space-between {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-md);
+    }
+
+    .card-body .row.gap-8 {
+        margin-left: 0;
+        justify-content: flex-end;
+    }
+
+    .card-title {
+        margin-bottom: var(--spacing-sm);
+    }
 }
 
 /* === HERO === */
@@ -701,6 +823,12 @@ select[multiple] option:checked {
 }
 
 /* === BARRA DE BÚSQUEDA PRINCIPAL === */
+.search-input-group,
+.search-main-input,
+.search-btn {
+    border-radius: 0 !important;
+}
+
 .search-hero {
     margin-bottom: 2rem;
 }
@@ -732,9 +860,9 @@ select[multiple] option:checked {
 .search-input-group {
     display: flex;
     gap: 0;
-    border-radius: var(--border-radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-lg);
+    border-radius: 0;
 }
 
 .search-main-input {
@@ -744,6 +872,7 @@ select[multiple] option:checked {
     font-size: 1.1rem;
     background: var(--bg-primary);
     color: var(--text-primary);
+    border-radius: 0;
 }
 
 .search-main-input:focus {

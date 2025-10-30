@@ -21,7 +21,7 @@ public class PostSolicitudEliminacionRepoHandler implements Handler {
         SolicitudDeEliminacionDTO solicitud = context.bodyAsClass(SolicitudDeEliminacionDTO.class);
         if(!DetectorDeSpam.esSpam(solicitud.getJustificacion())) {
             System.out.println("Creando solicitud: " + bodyString);
-            solicitudEliminacionRepositorio.agregarSolicitudDeEliminacion(new SolicitudDeEliminacion(solicitud));
+            solicitudEliminacionRepositorio.agregarSolicitudDeEliminacion(solicitud);
             context.status(201);
         }
         else{

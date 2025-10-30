@@ -1,5 +1,7 @@
 package Presentacion;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.Dominio.HechosYColecciones.Coleccion;
 import utils.Dominio.HechosYColecciones.TipoAlgoritmoConsenso;
 import utils.Dominio.fuente.TipoDeFuente;
@@ -13,11 +15,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.Map;
+
 
 
 public class GetEditarColeccionHandler implements Handler {
 
     private final String urlAdmin;
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public GetEditarColeccionHandler(String urlAdmin) {
         this.urlAdmin = urlAdmin;
@@ -29,25 +39,43 @@ public class GetEditarColeccionHandler implements Handler {
             String coleccionId = ctx.pathParam("id");
             System.out.println("Abriendo formulario de edición para colección ID: " + coleccionId);
 
-            // Armamos el modelo
+            // 1️Traemos la colección desde la API administrativa
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(urlAdmin + "/colecciones/" + coleccionId))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                ctx.status(response.statusCode())
+                        .result("Error al obtener la colección desde la API administrativa.");
+                return;
+            }
+
+            // 2️Parseamos la respuesta JSON a un Map (para FreeMarker)
+            Map<String, Object> coleccion = mapper.readValue(response.body(), new TypeReference<>() {});
+
+            // 3️Armamos el modelo para la vista
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("pageTitle", "Editar colección");
+            modelo.put("coleccion", coleccion);
             modelo.put("coleccionId", coleccionId);
             modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
             modelo.put("fuentes", TipoDeFuente.values());
             modelo.put("urlAdmin", urlAdmin);
 
-            // Renderizamos la vista
-            ctx.render("editar-coleccion.ftlh", modelo);
+            // Renderizamos el template
+            ctx.render("editar-coleccion.ftl", modelo);
 
         } catch (Exception e) {
-            System.err.println("ERROR en GetEditarColeccionHandler: " + e.getMessage());
+            System.err.println(" ERROR en GetEditarColeccionHandler: " + e.getMessage());
             e.printStackTrace();
             ctx.status(500).result("Error al cargar el formulario: " + e.getMessage());
         }
     }
 }
-
 
 
 

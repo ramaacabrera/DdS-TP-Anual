@@ -29,9 +29,10 @@ public class SolicitudDeModificacion_D {
 
     protected String justificacion;
 
-    @ManyToOne (cascade = CascadeType.ALL)
+    /*@ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "hecho_id")
-    private Hecho_D hechoAsociado;
+    private Hecho_D hechoAsociado;*/
+    private UUID hecho_id;
 
     @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id")
@@ -55,10 +56,10 @@ public class SolicitudDeModificacion_D {
     }*/
 
     //Getters y Setters
+
+    public void setID_HechoAsociado(UUID id_hecho) { this.hecho_id = id_hecho;}
     public void setUsuario(Usuario_D _usuario) {this.usuario = _usuario;}
-    public void setHechoAsociado(Hecho_D HechoAsociado) {
-        this.hechoAsociado = HechoAsociado;
-    }
+    //public void setHechoAsociado(Hecho_D HechoAsociado) { this.hechoAsociado = HechoAsociado;}
     public void setJustificacion(String justificacion) {
         this.justificacion = justificacion;
     }
@@ -68,11 +69,11 @@ public class SolicitudDeModificacion_D {
     public void setEstadoSolicitudModificacion(EstadoSolicitudModificacion_D estadoSolicitudModificacion){
         this.estadoSolicitudModificacion = estadoSolicitudModificacion;
     }
-    public void serHechoModificado(Hecho_D hechoM) {this.hechoModificado = hechoM; }
+    public void setHechoModificado(Hecho_D hechoM) {this.hechoModificado = hechoM; }
 
     public Usuario_D getUsuario() { return usuario; }
-    public Hecho_D getHechoAsociado() {
-        return hechoAsociado;
+    public UUID getID_HechoAsociado() {
+        return hecho_id;
     }
     public String getJustificacion() {
         return justificacion;

@@ -6,6 +6,8 @@ import utils.Dominio.HechosYColecciones.Hecho;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -34,5 +36,11 @@ public class CriterioContribuyente extends Criterio {
         }
         return "h.contribuyente in (SELECT u.id_usuario FROM Usuario u WHERE u.nombre LIKE '%" +
                 nombreContribuyente + "%')";
+    }
+
+    @Override
+    @Transient
+    public Map<String, Object> getQueryParameters() {
+        return Map.of();
     }
 }

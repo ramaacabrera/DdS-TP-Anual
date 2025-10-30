@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class HechoRepositorio {
@@ -28,19 +29,34 @@ public class HechoRepositorio {
     }
 
     public List<Hecho> buscarHechos(List<Criterio> criterios) {
-        //EntityManager em = emf.createEntityManager();
         EntityManager em = BDUtils.getEntityManager();
         try {
             StringBuilder queryString = new StringBuilder("SELECT h FROM Hecho h");
-            if(criterios != null){
+
+            if (criterios != null && !criterios.isEmpty()) {
                 queryString.append(" WHERE 1=1");
-            }
-            for (Criterio criterio : criterios) {
-                queryString.append(" AND ").append(criterio.getQueryCondition());
+
+                // Construir condiciones
+                for (Criterio criterio : criterios) {
+                    String condition = criterio.getQueryCondition();
+                    if (condition != null && !condition.trim().isEmpty()) {
+                        queryString.append(" AND ").append(condition);
+                    }
+                }
             }
 
-            // JPQL para seleccionar todos los objetos Hecho
             TypedQuery<Hecho> query = em.createQuery(queryString.toString(), Hecho.class);
+
+            // Establecer parámetros
+            if (criterios != null) {
+                for (Criterio criterio : criterios) {
+                    Map<String, Object> params = criterio.getQueryParameters();
+                    for (Map.Entry<String, Object> param : params.entrySet()) {
+                        query.setParameter(param.getKey(), param.getValue());
+                    }
+                }
+            }
+
             List<Hecho> resultados = query.getResultList();
 
             // INICIALIZAR RELACIONES antes de cerrar la sesión
@@ -99,6 +115,27 @@ public class HechoRepositorio {
         } catch (IllegalArgumentException e) {
 
             System.err.println("ID de hecho no válido: " + idString);
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public Hecho buscarPorId(UUID id) {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            Hecho hecho = em.find(Hecho.class, id);
+
+            if (hecho != null) {
+                // FORZAR LA CARGA DE LAS COLECCIONES ANTES DE CERRAR LA SESIÓN
+                Hibernate.initialize(hecho.getEtiquetas());
+                Hibernate.initialize(hecho.getContenidoMultimedia());
+                Hibernate.initialize(hecho.getUbicacion());
+            }
+
+            return hecho;
+        } catch (Exception e) {
+            System.err.println("Error al buscar hecho por ID: " + id + " - " + e.getMessage());
             return null;
         } finally {
             em.close();
@@ -189,5 +226,21 @@ public class HechoRepositorio {
 
     public void actualizar(Hecho hecho) {
         this.guardar(hecho);
+    }
+
+    public List<String> buscarCategorias() {
+        EntityManager em = BDUtils.getEntityManager();
+        try{
+            String jpql = "SELECT DISTINCT h.categoria FROM Hecho h WHERE h.categoria IS NOT NULL ORDER BY h.categoria";
+            TypedQuery<String> query = em.createQuery(jpql, String.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            BDUtils.rollback(em);
+            e.printStackTrace();
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+
     }
 }

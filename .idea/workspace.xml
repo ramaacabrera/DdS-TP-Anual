@@ -4,20 +4,85 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b135c6d4-fa6c-47dd-a3bd-2574daa1943d" name="Changes" comment="Cambios de mas" />
-    <list id="e3af17bb-2a1e-4367-befa-3e14b8275605" name="Changes by Administrator" comment="" />
-    <list id="1b8675ef-160f-4264-a4cb-c67b6113bc92" name="Changes by cloud" comment="" />
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/agregador.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Cargador/ConexionCargador.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Cargador/ConexionCargador.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/OnConnectHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/OnConnectHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/OnMessageHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/OnMessageHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/PostColeccionRepoHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/PostColeccionRepoHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/PostSolicitudEliminacionRepoHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/PostSolicitudEliminacionRepoHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/PutColeccionRepoHandler$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/PutColeccionRepoHandler$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/MainAgregador.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/MainAgregador.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/PaqueteAgregador/Agregador.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/PaqueteAgregador/Agregador.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicaDto/SolicitudEliminacion_D_DTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicaDto/SolicitudEliminacion_D_DTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicoRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeEliminacion_D.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeEliminacion_D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeModificacion_D.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeModificacion_D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesEliminacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesEliminacionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/DTO/SolicitudDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/DTO/SolicitudDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeEliminacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeEliminacion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeModificacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeModificacion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ApiGetter.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ApiGetter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ClienteDelAgregador$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ClienteDelAgregador$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ClienteDelAgregador.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ClienteDelAgregador.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ConexionAlAgregador.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ConexionAlAgregador.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioCategoria.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioCategoria.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioContribuyente.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioContribuyente.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioDeTexto.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioDeTexto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioTipoFuente.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioTipoFuente.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioTipoMultimedia.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioTipoMultimedia.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioUbicacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioUbicacion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/TipoDeTexto.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/TipoDeTexto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/Coleccion.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/Coleccion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/EstadoHecho.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/EstadoHecho.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/ModosDeNavegacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/ModosDeNavegacion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/TipoAlgoritmoConsenso.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/TipoAlgoritmoConsenso.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/TipoContenidoMultimedia.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/TipoContenidoMultimedia.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Solicitudes/EstadoSolicitudEliminacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Solicitudes/EstadoSolicitudEliminacion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Solicitudes/EstadoSolicitudModificacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Solicitudes/EstadoSolicitudModificacion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Usuario/RolUsuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Usuario/RolUsuario.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/fuente/Fuente.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/fuente/Fuente.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/fuente/TipoDeFuente.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/fuente/TipoDeFuente.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/IniciadorApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/IniciadorApp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/LecturaConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/LecturaConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Persistencia/HechoRepositorio.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Persistencia/HechoRepositorio.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/img/noimg-default.png" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/img/noimg-default.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-eliminacion.js" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-eliminacion.js" afterDir="false" />
+    </list>
+    <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="">
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/Handlers/PostSolicitudEliminacionRepoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/Handlers/PostSolicitudEliminacionRepoHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/MainAgregador.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/MainAgregador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/PaqueteAgregador/Agregador.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/PaqueteAgregador/Agregador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java/ApiAdministrativa/MainAPIAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java/ApiAdministrativa/MainAPIAdmin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicaDto/SolicitudEliminacion_D_DTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicaDto/SolicitudEliminacion_D_DTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicoRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeEliminacion_D.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeEliminacion_D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeModificacion_D.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeModificacion_D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesEliminacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesEliminacionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesModificacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesModificacionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/conversorTipoD.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/conversorTipoD.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/DTO/SolicitudDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/DTO/SolicitudDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeEliminacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeEliminacion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeModificacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeModificacion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/HechoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/HechoRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/SolicitudEliminacionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/SolicitudEliminacionRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/SolicitudModificacionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/SolicitudModificacionRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-eliminacion.js" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-eliminacion.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-solicitud-eliminacion.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-solicitud-eliminacion.ftl" afterDir="false" />
+    </list>
+    <list id="1cc1f052-f7be-4f64-88a8-3e20e9b1b866" name="Changes by idiar" comment="" />
+    <list id="fbc10810-a605-4e63-80e3-6f0511f82dbf" name="Changes by Luc" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="main" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -29,10 +94,89 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/ramaacabrera/DdS-TP-Anual.git&quot;,
-    &quot;accountId&quot;: &quot;79d08cde-a273-4f7d-b590-cc5ee11f26f1&quot;
+    &quot;accountId&quot;: &quot;bd66b56b-8baf-48f7-b0f7-f11bb25aba78&quot;
   },
   &quot;editorReviewEnabled&quot;: false
 }</component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicaDto/SolicitudEliminacion_D_DTO.java">
+      <ranges>
+        <range start1="7" end1="8" start2="7" end2="8" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="13" end1="15" start2="13" end2="15" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="19" end1="21" start2="19" end2="21" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="30" end1="31" start2="30" end2="31" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesEliminacionHandler.java">
+      <ranges>
+        <range start1="23" end1="23" start2="23" end2="24" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="28" end1="29" start2="29" end2="30" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="31" end1="32" start2="32" end2="34" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeModificacion.java">
+      <ranges>
+        <range start1="5" end1="5" start2="5" end2="8" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="22" end1="23" start2="25" end2="26" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="26" end1="27" start2="29" end2="30" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="28" end1="30" start2="31" end2="41" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="39" end1="40" start2="50" end2="51" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="71" end1="72" start2="82" end2="83" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="79" end1="80" start2="90" end2="91" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeModificacion_D.java">
+      <ranges>
+        <range start1="31" end1="32" start2="31" end2="32" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="33" end1="34" start2="33" end2="35" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="57" end1="57" start2="58" end2="60" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="58" end1="61" start2="61" end2="62" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="70" end1="71" start2="71" end2="72" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="73" end1="75" start2="74" end2="76" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-eliminacion.js">
+      <ranges>
+        <range start1="78" end1="79" start2="78" end2="79" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="108" end1="109" start2="108" end2="109" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicoRepositorio.java">
+      <ranges>
+        <range start1="266" end1="266" start2="266" end2="267" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="267" end1="268" start2="268" end2="268" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="322" end1="323" start2="322" end2="323" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="327" end1="327" start2="327" end2="328" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="331" end1="332" start2="332" end2="333" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/DdS/utils/src/main/java/utils/DTO/SolicitudDTO.java">
+      <ranges>
+        <range start1="4" end1="4" start2="4" end2="6" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="7" end1="8" start2="9" end2="10" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="14" end1="16" start2="16" end2="18" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="25" end1="26" start2="27" end2="28" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeEliminacion_D.java">
+      <ranges>
+        <range start1="26" end1="27" start2="26" end2="27" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="28" end1="29" start2="28" end2="32" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="47" end1="47" start2="50" end2="51" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="48" end1="51" start2="52" end2="53" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="61" end1="61" start2="63" end2="64" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="62" end1="65" start2="65" end2="66" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeEliminacion.java">
+      <ranges>
+        <range start1="5" end1="5" start2="5" end2="6" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="7" end1="7" start2="8" end2="9" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="14" end1="16" start2="16" end2="18" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="20" end1="20" start2="22" end2="30" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+      </ranges>
+    </file>
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -41,53 +185,56 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Agregador.executor": "Run",
-    "Application.ApiAdministrativa.executor": "Run",
-    "Application.ApiMock.executor": "Run",
-    "Application.ApiPublica.executor": "Run",
-    "Application.CargadorDinamico.executor": "Run",
-    "Application.CargadorEstatico.executor": "Run",
-    "Application.CargadorMetamapa.executor": "Run",
-    "Application.Estadisticas.executor": "Run",
-    "Application.Web.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#7 on rama-web-sockets",
-    "last_opened_file_path": "C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/utils/src/main/resources/META-INF",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/agregador/untitled/src/main/java/com/metamapa/Main.java",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "project.propCompiler",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Agregador.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ApiAdministrativa.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ApiMock.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ApiPublica.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CargadorDinamico.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CargadorEstatico.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CargadorMetamapa.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Web.executor&quot;: &quot;Run&quot;,
+    &quot;Application.estadisticas.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;rama-web-sockets&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Proyectos Intellij/DdS-TP-Anual&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/agregador/untitled/src/main/java/com/metamapa/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Usuario\Documents\GitHub\DdS-TP-Anual\DdS\utils\src\main\resources\META-INF" />
       <recent name="C:\Users\Usuario\Documents\GitHub\DdS-TP-Anual\DdS\utils\src\main\resources" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\helga\Bri\Diseño\DdS-TP-Anual\DdS\web\src\main\resources\public\img" />
+      <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\resources\public\img" />
+    </key>
   </component>
-  <component name="RunManager" selected="Application.Web">
+  <component name="RunManager" selected="Application.Agregador">
     <configuration name="Agregador" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="agregador.MainAgregador" />
       <module name="agregador" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ApiAdministrativa" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <configuration name="ApiAdmin" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="ApiAdministrativa.MainAPIAdmin" />
       <module name="api-admin" />
       <method v="2">
@@ -95,17 +242,13 @@
       </method>
     </configuration>
     <configuration name="ApiPublica" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="ApiPublica.MainAPIPublica" />
-      <module name="apiPublica" />
+      <module name="api-publica" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="CargadorDemo" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="cargadorDemo.MainDemo" />
       <module name="cargador-demo" />
       <method v="2">
@@ -113,8 +256,6 @@
       </method>
     </configuration>
     <configuration name="CargadorDinamico" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="cargadorDinamico.MainDinamica" />
       <module name="cargador-dinamico" />
       <method v="2">
@@ -122,28 +263,15 @@
       </method>
     </configuration>
     <configuration name="CargadorEstatico" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="cargadorEstatico.MainEstatica" />
       <module name="cargador-estatico" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CargadorMetamapa" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="CargadorMetamapa.MainMetamapa" />
-      <module name="cargador-metamapa" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Estadisticas" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="estadisticas.MainEstadisticas" />
-      <module name="estadisticas" />
+    <configuration name="DemoMockServer" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="cargadorDemo.APIMock.DemoAPIMockServer" />
+      <module name="cargador-demo" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -157,23 +285,32 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="estadisticas" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="estadisticas.MainEstadisticas" />
+      <module name="estadisticas" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.Web" />
-      <item itemvalue="Application.Agregador" />
-      <item itemvalue="Application.CargadorDemo" />
-      <item itemvalue="Application.CargadorEstatico" />
-      <item itemvalue="Application.CargadorDinamico" />
-      <item itemvalue="Application.CargadorMetamapa" />
-      <item itemvalue="Application.Estadisticas" />
       <item itemvalue="Application.ApiPublica" />
-      <item itemvalue="Application.ApiAdministrativa" />
+      <item itemvalue="Application.Agregador" />
+      <item itemvalue="Application.CargadorDinamico" />
+      <item itemvalue="Application.CargadorEstatico" />
+      <item itemvalue="Application.ApiAdmin" />
+      <item itemvalue="Application.CargadorDemo" />
+      <item itemvalue="Application.DemoMockServer" />
+      <item itemvalue="Application.estadisticas" />
     </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
       </set>
     </attachedChunks>
   </component>
@@ -185,6 +322,12 @@
       <option name="presentableId" value="Default" />
       <updated>1761687279265</updated>
       <workItem from="1761687281598" duration="8791000" />
+      <workItem from="1761738610078" duration="755000" />
+      <workItem from="1761740894608" duration="122000" />
+      <workItem from="1761741309483" duration="13948000" />
+      <workItem from="1761760632482" duration="218000" />
+      <workItem from="1761760872643" duration="26000" />
+      <workItem from="1761760931808" duration="10999000" />
     </task>
     <servers />
   </component>

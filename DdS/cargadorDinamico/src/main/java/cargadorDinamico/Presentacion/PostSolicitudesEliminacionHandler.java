@@ -21,15 +21,17 @@ public class PostSolicitudesEliminacionHandler implements Handler {
         String bodyString = context.body();
         SolicitudEliminacion_D_DTO solicitudnueva = context.bodyAsClass(SolicitudEliminacion_D_DTO.class);
 
+        /*
         Hecho_D hechoExistente = repositorio.buscarHechoPorId(solicitudnueva.getHechoAsociado());
 
         if (hechoExistente == null) {
             context.status(404).result("Hecho no encontrado");
             return;
-        }
+        }*/
 
         SolicitudDeEliminacion_D entidad = new SolicitudDeEliminacion_D();
-        entidad.setHechoAsociado(hechoExistente);
+        //entidad.setHechoAsociado(hechoExistente);
+        entidad.setHecho_id(solicitudnueva.getID_hechoAsociado());
         entidad.setJustificacion(solicitudnueva.getJustificacion());
         entidad.setUsuario(solicitudnueva.getUsuario());
         entidad.setEstadoSolicitudEliminacion(EstadoSolicitudEliminacion_D.PENDIENTE);

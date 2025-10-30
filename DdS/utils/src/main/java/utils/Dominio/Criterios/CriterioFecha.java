@@ -3,7 +3,10 @@ package utils.Dominio.Criterios;
 import utils.Dominio.HechosYColecciones.Hecho;
 
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class CriterioFecha extends Criterio {
@@ -40,32 +43,46 @@ public class CriterioFecha extends Criterio {
 //        return false;
 //    }
 
-    @Override
-    public String getQueryCondition() {
-        StringBuilder retorno = new StringBuilder();
-        if(fechaInicio!=null){
-            retorno.append("('"+ fechaInicio +"' < h.fecha");
-            if(tipoFecha.equals("fechaDeCarga")){
-                retorno.append("DeCarga");
-            } else {
-                retorno.append("DelAcontecimiento");
-            }
-            retorno.append(")");
-        }
-        if(fechaFin!=null){
-            if(fechaInicio!=null){
-                retorno.append(" or ");
-            }
-            retorno.append("('"+ fechaFin +"' < h.fecha");
-            if(tipoFecha.equals("fechaDeCarga")){
-                retorno.append("DeCarga");
-            } else {
-                retorno.append("DelAcontecimiento");
-            }
-            retorno.append(")");
-        }
+@Override
+public String getQueryCondition() {
+    StringBuilder retorno = new StringBuilder();
 
-        return retorno.toString();
+    if (fechaInicio != null) {
+        retorno.append("(h.");
+        if (tipoFecha.equals("fechaDeCarga")) {
+            retorno.append("fechaDeCarga");
+        } else {
+            retorno.append("fechaDeAcontecimiento");
+        }
+        retorno.append(" >= :fechaInicio)");
     }
+
+    if (fechaFin != null) {
+        if (fechaInicio != null) {
+            retorno.append(" AND ");
+        }
+        retorno.append("(h.");
+        if (tipoFecha.equals("fechaDeCarga")) {
+            retorno.append("fechaDeCarga");
+        } else {
+            retorno.append("fechaDeAcontecimiento");
+        }
+        retorno.append(" <= :fechaFin)");
+    }
+
+    return retorno.toString();
+}
+
+@Transient
+public Map<String, Object> getQueryParameters() {
+    Map<String, Object> params = new HashMap<>();
+    if (fechaInicio != null) {
+        params.put("fechaInicio", fechaInicio);
+    }
+    if (fechaFin != null) {
+        params.put("fechaFin", fechaFin);
+    }
+    return params;
+}
 
 }

@@ -14,9 +14,10 @@ import java.util.UUID;
 public class SolicitudEliminacionRepositorio {
     //private final EntityManagerFactory emf;
     //private final List<SolicitudDeEliminacion> solicitudes = new ArrayList<SolicitudDeEliminacion>();
+    private final HechoRepositorio hechoRepositorio;
 
-    public SolicitudEliminacionRepositorio() {
-
+    public SolicitudEliminacionRepositorio(HechoRepositorio hechoRepositorio) {
+        this.hechoRepositorio = hechoRepositorio;
     }
 
     //private Optional<SolicitudDeEliminacion> buscarSolicitudEliminacion(){
@@ -71,7 +72,7 @@ public class SolicitudEliminacionRepositorio {
     //}
     public void agregarSolicitudDeEliminacion(SolicitudDeEliminacionDTO solicitudDTO) {
         // Convierte utils.DTO a Entidad y guarda
-        SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(solicitudDTO);
+        SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(solicitudDTO, hechoRepositorio);
         this.agregarSolicitudDeEliminacion(solicitud);
     }
 

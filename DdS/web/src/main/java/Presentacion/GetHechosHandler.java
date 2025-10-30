@@ -14,6 +14,7 @@ import utils.DTO.PageDTO;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GetHechosHandler implements Handler {
 
@@ -28,18 +29,57 @@ public class GetHechosHandler implements Handler {
 
     // --- Definición declarativa de filtros ---
     public static class FilterDef {
-        public String key, label, type;
-        public List<String> options;
-        public List<Option> optionObjs;
-        public String placeholder;
-        public Integer size;
-        public static class Option { public String value, label; }
+        private String key;
+        private String label;
+        private String type;
+        private List<String> options;
+
+        // Constructor vacío
+        public FilterDef() {
+            this.options = new ArrayList<>();
+        }
+
+        // Constructor con parámetros
+        public FilterDef(String key, String label, String type) {
+            this.key = key;
+            this.label = label;
+            this.type = type;
+            this.options = new ArrayList<>();
+        }
+
+        // GETTERS PÚBLICOS (crucial para FreeMarker)
+        public String getKey() { return key; }
+        public String getLabel() { return label; }
+        public String getType() { return type; }
+        public List<String> getOptions() { return options; }
+
+        // SETTERS PÚBLICOS (para poder asignar valores)
+        public void setKey(String key) { this.key = key; }
+        public void setLabel(String label) { this.label = label; }
+        public void setType(String type) { this.type = type; }
+        public void setOptions(List<String> options) { this.options = options; }
+
+        // Método helper para agregar opciones
+        public FilterDef addOption(String option) {
+            this.options.add(option);
+            return this;
+        }
     }
 
     @Override
     public void handle(Context ctx) throws IOException {
         // 1) Filtros para la UI
         List<FilterDef> filters = buildFilters();
+
+        // Convertir FilterDef a Map para FreeMarker
+        List<Map<String, Object>> filtersForTemplate = filters.stream()
+                .map(filter -> Map.of(
+                        "key", filter.getKey(),
+                        "label", filter.getLabel(),
+                        "type", filter.getType(),
+                        "options", filter.getOptions()
+                ))
+                .collect(Collectors.toList());
 
         // 2) Leer filtros y paginación desde la query
         String categoria = ctx.queryParam("categoria");
@@ -49,14 +89,20 @@ public class GetHechosHandler implements Handler {
         String fechaAcontecimientoHasta = ctx.queryParam("fecha_acontecimiento_hasta");
         String latitud = ctx.queryParam("latitud");
         String longitud = ctx.queryParam("longitud");
+        String textoBusqueda = ctx.queryParam("textoBusqueda");
 
         int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
         int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
 
         // 3) Construir URL del backend con los nombres EXACTOS que recibe + paginación
         HttpUrl.Builder b = HttpUrl.parse(urlPublica + "/hechos").newBuilder()
-                .addQueryParameter("page", String.valueOf(page))
-                .addQueryParameter("size", String.valueOf(size));
+                .addQueryParameter("pagina", String.valueOf(page))
+                .addQueryParameter("limite", String.valueOf(size));
+
+        // Agregar búsqueda general si existe
+        if (textoBusqueda != null && !textoBusqueda.isBlank()) {
+            b.addQueryParameter("textoBusqueda", textoBusqueda);
+        }
 
         if (categoria != null && !categoria.isBlank())
             b.addQueryParameter("categoria", categoria);
@@ -100,14 +146,17 @@ public class GetHechosHandler implements Handler {
 
         // 6) Modelo de datos para la vista
         Map<String, Object> model = new HashMap<>();
-        model.put("baseHref", "/api/hechos");
-        model.put("filters", filters);
+        model.put("baseHref", "/hechos");
+        model.put("filters", filtersForTemplate); // ← Usar la versión convertida a Map
+
+// Agrega el parámetro de búsqueda general 'q' que falta
         model.put("filterValues", Map.of(
+                "textoBusqueda", textoBusqueda != null ? textoBusqueda : "",
                 "categoria", categoria != null ? categoria : "",
-                "fecha_carga_desde", fechaCargaDesde != null ? fechaCargaDesde : "",
-                "fecha_carga_hasta", fechaCargaHasta != null ? fechaCargaHasta : "",
-                "fecha_acontecimiento_desde", fechaAcontecimientoDesde != null ? fechaAcontecimientoDesde : "",
-                "fecha_acontecimiento_hasta", fechaAcontecimientoHasta != null ? fechaAcontecimientoHasta : "",
+                "fecha_carga_desde", fechaCargaDesde != null ? formatDateForInput(fechaCargaDesde) : "",
+                "fecha_carga_hasta", fechaCargaHasta != null ? formatDateForInput(fechaCargaHasta) : "",
+                "fecha_acontecimiento_desde", fechaAcontecimientoDesde != null ? formatDateForInput(fechaAcontecimientoDesde) : "",
+                "fecha_acontecimiento_hasta", fechaAcontecimientoHasta != null ? formatDateForInput(fechaAcontecimientoHasta) : "",
                 "latitud", latitud != null ? latitud : "",
                 "longitud", longitud != null ? longitud : ""
         ));
@@ -131,71 +180,126 @@ public class GetHechosHandler implements Handler {
 //        model.put("cargando", false);
 
 
+        if(!ctx.sessionAttributeMap().isEmpty()){
+            String username = ctx.sessionAttribute("username");
+            System.out.println("Usuario: " + username);
+            String access_token = ctx.sessionAttribute("access_token");
+            model.put("username", username);
+            model.put("access_token", access_token);
+        }
         ctx.render("home.ftl", model);
     }
 
     private String normalizarFecha(String raw) {
-        // Si ya viene en dd/MM/yyyy, devolver igual
-        if (raw.matches("\\d{2}/\\d{2}/\\d{4}")) return raw;
+        if (raw == null || raw.isBlank()) {
+            return raw;
+        }
 
-        // Si viene en yyyy-MM-dd (por ejemplo, <input type="date">)
-        if (raw.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            try {
-                Date parsed = new SimpleDateFormat("yyyy-MM-dd").parse(raw);
-                return formato.format(parsed);
-            } catch (Exception e) {
+        try {
+            // Si ya viene en dd/MM/yyyy, devolver igual
+            if (raw.matches("\\d{2}/\\d{2}/\\d{4}")) {
                 return raw;
             }
+
+            // Si viene en formato texto "Thu Oct 09 00:00:00 ART 2025"
+            // Este formato es: EEE MMM dd HH:mm:ss z yyyy
+            if (raw.contains("ART") || raw.matches("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{2}:\\d{2}:\\d{2} [A-Za-z]{3,4} \\d{4}")) {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = inputFormat.parse(raw);
+                return outputFormat.format(date);
+            }
+
+            // Si viene en formato yyyy-MM-dd (formato input date)
+            if (raw.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = inputFormat.parse(raw);
+                return outputFormat.format(date);
+            }
+
+            // Si viene en formato yyyy/MM/dd
+            if (raw.matches("\\d{4}/\\d{2}/\\d{2}")) {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy/MM/dd");
+                SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = inputFormat.parse(raw);
+                return outputFormat.format(date);
+            }
+
+            return raw;
+        } catch (Exception e) {
+            System.err.println("Error normalizando fecha: " + raw + " - " + e.getMessage());
+            return raw;
         }
-        return raw;
     }
 
     private List<FilterDef> buildFilters() {
         List<FilterDef> list = new ArrayList<>();
 
-        FilterDef cat = new FilterDef();
-        cat.key = "categoria";
-        cat.label = "Categoría";
-        cat.type = "select";
-        cat.options = Arrays.asList("Política", "Economía", "Sociedad", "Cultura", "Deportes");
-        list.add(cat);
+        // Usando constructor
+        FilterDef cat = new FilterDef("categoria", "Categoría", "select");
+        HttpUrl.Builder b = HttpUrl.parse(urlPublica + "/categoria").newBuilder();
+        String finalUrl = b.build().toString();
+        Request request = new Request.Builder().url(finalUrl).get().build();
+        try (Response response = client.newCall(request).execute()) {
+            List<String> categorias = mapper.readValue(response.body().string(), List.class);
+            System.out.println(categorias);
 
-        FilterDef fechaCargaDesde = new FilterDef();
-        fechaCargaDesde.key = "fecha_carga_desde";
-        fechaCargaDesde.label = "Fecha carga desde";
-        fechaCargaDesde.type = "date";
-        list.add(fechaCargaDesde);
+            cat.setOptions(categorias);
 
-        FilterDef fechaCargaHasta = new FilterDef();
-        fechaCargaHasta.key = "fecha_carga_hasta";
-        fechaCargaHasta.label = "Fecha carga hasta";
-        fechaCargaHasta.type = "date";
-        list.add(fechaCargaHasta);
+            list.add(cat);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        FilterDef fechaAcontecimientoDesde = new FilterDef();
-        fechaAcontecimientoDesde.key = "fecha_acontecimiento_desde";
-        fechaAcontecimientoDesde.label = "Acontecimiento desde";
-        fechaAcontecimientoDesde.type = "date";
-        list.add(fechaAcontecimientoDesde);
 
-        FilterDef fechaAcontecimientoHasta = new FilterDef();
-        fechaAcontecimientoHasta.key = "fecha_acontecimiento_hasta";
-        fechaAcontecimientoHasta.label = "Acontecimiento hasta";
-        fechaAcontecimientoHasta.type = "date";
-        list.add(fechaAcontecimientoHasta);
+        // Fechas de carga
+        list.add(new FilterDef("fecha_carga_desde", "Fecha carga desde", "date"));
+        list.add(new FilterDef("fecha_carga_hasta", "Fecha carga hasta", "date"));
 
-        FilterDef lat = new FilterDef();
-        lat.key = "latitud";
-        lat.label = "Latitud";
-        lat.type = "search";
-        list.add(lat);
+        // Fechas de acontecimiento
+        list.add(new FilterDef("fecha_acontecimiento_desde", "Acontecimiento desde", "date"));
+        list.add(new FilterDef("fecha_acontecimiento_hasta", "Acontecimiento hasta", "date"));
 
-        FilterDef lon = new FilterDef();
-        lon.key = "longitud";
-        lon.label = "Longitud";
-        lon.type = "search";
-        list.add(lon);
+        // Coordenadas
+        list.add(new FilterDef("latitud", "Latitud", "search"));
+        list.add(new FilterDef("longitud", "Longitud", "search"));
 
         return list;
+    }
+
+    private String formatDateForInput(String rawDate) {
+        if (rawDate == null || rawDate.isBlank()) return "";
+
+        try {
+            // Para el input HTML necesitas formato yyyy-MM-dd
+            // Pero convertimos desde cualquier formato a yyyy-MM-dd
+
+            // Si ya viene en yyyy-MM-dd, devolver igual
+            if (rawDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                return rawDate;
+            }
+
+            // Si viene en formato FreeMarker/Java Date
+            if (rawDate.contains("ART")) {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = inputFormat.parse(rawDate);
+                return outputFormat.format(date);
+            }
+
+            // Si viene en formato dd/MM/yyyy (nuestro nuevo formato de salida)
+            if (rawDate.matches("\\d{2}/\\d{2}/\\d{4}")) {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = inputFormat.parse(rawDate);
+                return outputFormat.format(date);
+            }
+
+            return rawDate;
+        } catch (Exception e) {
+            System.err.println("Error formateando fecha para input: " + rawDate);
+            return "";
+        }
     }
 }

@@ -6,6 +6,7 @@ import utils.Dominio.HechosYColecciones.Hecho;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Map;
 import java.util.UUID;
 
 @JsonTypeInfo(
@@ -40,4 +41,5 @@ public abstract class Criterio {
     public abstract boolean cumpleConCriterio(Hecho hecho);
     public Criterio() {}
     public abstract String getQueryCondition();
+    public abstract Map<String, Object> getQueryParameters();
 }

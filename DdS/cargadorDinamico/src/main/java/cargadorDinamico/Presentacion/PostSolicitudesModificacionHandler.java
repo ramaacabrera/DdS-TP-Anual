@@ -21,18 +21,18 @@ public class PostSolicitudesModificacionHandler implements Handler {
         String bodyString = context.body();
         SolicitudModificacion_D_DTO solicitudNueva = context.bodyAsClass(SolicitudModificacion_D_DTO.class);
 
-        Hecho_D hechoExistente = repositorio.buscarHechoPorId(solicitudNueva.getID_HechoAsociado());
+        /*Hecho_D hechoExistente = repositorio.buscarHechoPorId(solicitudNueva.getID_HechoAsociado());
         if (hechoExistente == null) {
             context.status(404).result("Hecho no encontrado");
             return;
-        }
+        }*/
 
         SolicitudDeModificacion_D entidad = new SolicitudDeModificacion_D();
-        entidad.setHechoAsociado(hechoExistente);
+        entidad.setID_HechoAsociado(solicitudNueva.getID_HechoAsociado());
         entidad.setJustificacion(solicitudNueva.getJustificacion());
         entidad.setUsuario(solicitudNueva.getUsuario());
         entidad.setEstadoSolicitudModificacion(EstadoSolicitudModificacion_D.PENDIENTE);
-        entidad.setHechoAsociado(solicitudNueva.getHechoModificado());
+        entidad.setHechoModificado(solicitudNueva.getHechoModificado());
 
         repositorio.guardarSolicitudModificacion(entidad);
         context.status(201);
