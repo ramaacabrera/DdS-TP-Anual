@@ -5,11 +5,7 @@ import Agregador.Usuario.RolUsuario;
 import Agregador.Usuario.Usuario;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import kong.unirest.HttpResponse;
-import kong.unirest.Unirest;
-import kong.unirest.json.JSONArray;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 import utils.KeyCloak.UserCreator;
 
 
