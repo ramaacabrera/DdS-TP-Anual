@@ -7,7 +7,9 @@ import estadisticas.agregador.ConexionAgregador;
 import estadisticas.agregador.EstadisticasCategoriaRepositorio;
 import estadisticas.agregador.EstadisticasColeccionRepositorio;
 import estadisticas.agregador.EstadisticasRepositorio;
+import utils.NormalizadorCategorias;
 
+import javax.persistence.EntityManager;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -65,21 +67,37 @@ public class GeneradorEstadisticas {
         }
 
         enEjecucion = true;
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
+
         try {
             System.out.println("=== Iniciando actualización de estadísticas: " + new Date() + " ===");
-            this.actualizarEstadisticasBase();
-            this.actualizarEstadisticasCategoria();
-            this.actualizarEstadisticasColeccion();
+            em.getTransaction().begin();
+
+            // Resetear la referencia anterior
+            this.estadisticasActual = null;
+
+            this.actualizarEstadisticasBase(em);
+            this.actualizarEstadisticasCategoria(em);
+            this.actualizarEstadisticasColeccion(em);
+
+            em.getTransaction().commit();
             System.out.println("=== Actualización completada exitosamente ===");
+
         } catch (Exception e) {
             System.err.println("=== Error en actualización de estadísticas: " + e.getMessage() + " ===");
             e.printStackTrace();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
         } finally {
             enEjecucion = false;
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
     }
 
-    private void actualizarEstadisticasBase() {
+    private void actualizarEstadisticasBase(EntityManager em) {
         try {
             System.out.println("Actualizando estadísticas base...");
             Long spam = conexionAgregador.obtenerSpamActual();
@@ -93,8 +111,10 @@ public class GeneradorEstadisticas {
             );
 
             System.out.println("Guardando Estadisticas con ID: " + nuevasEstadisticas.getEstadisticas_id());
-            estadisticasRepositorio.guardar(nuevasEstadisticas);
-            this.estadisticasActual = nuevasEstadisticas;
+
+            // USAR MERGE() en lugar de persist() para entidades con ID pre-asignado
+            Estadisticas estadisticasGuardadas = em.merge(nuevasEstadisticas);
+            this.estadisticasActual = estadisticasGuardadas;
 
             System.out.println("Estadísticas base guardadas - Spam: " + spam + ", Categoría: " + categoria);
 
@@ -105,7 +125,7 @@ public class GeneradorEstadisticas {
         }
     }
 
-    private void actualizarEstadisticasCategoria() {
+    private void actualizarEstadisticasCategoria(EntityManager em) {
         try {
             System.out.println("=== INICIANDO ACTUALIZACIÓN CATEGORÍAS ===");
             if (estadisticasActual == null) {
@@ -113,26 +133,29 @@ public class GeneradorEstadisticas {
                 return;
             }
 
-            Map<String, String> coordenadasPorCategoria = conexionAgregador.obtenerProvinciasPorCategoria();
-            Map<String, Integer> horasPorCategoria = conexionAgregador.obtenerHorasPicoPorCategoria();
+            Map<String, Map<String, Object>> estadisticas = obtenerEstadisticasCategoria();
+            System.out.println("Categorías a procesar: " + estadisticas.size());
+            System.out.println("ID Estadísticas actual: " + estadisticasActual.getEstadisticas_id());
 
-            System.out.println("Categorías a procesar: " + coordenadasPorCategoria.size());
+            for (Map.Entry<String, Map<String, Object>> entry : estadisticas.entrySet()) {
+                String categoriaOriginal = entry.getKey();
+                Map<String, Object> datos = entry.getValue();
 
-            for (String categoria : coordenadasPorCategoria.keySet()) {
-                String coordenadas = coordenadasPorCategoria.get(categoria);
-                Integer hora = horasPorCategoria.getOrDefault(categoria, 0);
+                String categoria = NormalizadorCategorias.normalizar(categoriaOriginal);
+                String provincia = (String) datos.get("provincia");
+                Integer hora = (Integer) datos.get("hora");
 
-                String provincia = obtenerProvinciaDesdeCoordenadas(coordenadas);
-                System.out.println("Procesando categoría: " + categoria + " → " + provincia + " (hora: " + hora + ")");
+                System.out.println("Procesando categoría: " + categoria + " → Provincia: " + provincia + " (hora: " + hora + ")");
 
-                EstadisticasCategoriaId id = new EstadisticasCategoriaId(
-                        estadisticasActual.getEstadisticas_id(),
-                        categoria
+                EstadisticasCategoria estadisticaCategoria = new EstadisticasCategoria(
+                        estadisticasActual,  // Relación directa - entidad managed
+                        categoria,           // Campo directo
+                        provincia,           // Campo directo
+                        hora                 // Campo directo
                 );
 
-                EstadisticasCategoria estadisticaCategoria = new EstadisticasCategoria(id, provincia, hora);
-                estadisticasCategoriaRepositorio.guardar(estadisticaCategoria);
-                System.out.println("✅ Categoría guardada: " + categoria);
+                em.merge(estadisticaCategoria); // Usar merge
+                System.out.println("✅ Categoría guardada: " + categoria + " con estadisticas_id: " + estadisticasActual.getEstadisticas_id());
             }
 
             System.out.println("=== ACTUALIZACIÓN CATEGORÍAS COMPLETADA ===");
@@ -140,32 +163,52 @@ public class GeneradorEstadisticas {
         } catch (Exception e) {
             System.err.println("ERROR en actualizarEstadisticasCategoria: " + e.getMessage());
             e.printStackTrace();
+            throw e;
         }
     }
 
-    private String obtenerProvinciaDesdeCoordenadas(String coordenadas) {
+    public Map<String, Map<String, Object>> obtenerEstadisticasCategoria() {
+        Map<String, Map<String, Object>> datosCategorias = new HashMap<>();
+
         try {
-            if (coordenadas == null || coordenadas.equals("Coordenadas inválidas")) {
-                return "N/A";
+            // Obtener coordenadas por categoría
+            Map<String, Map<String, Object>> coordenadasPorCategoria = conexionAgregador.obtenerCoordenadasPorCategoria();
+            Map<String, Integer> horasPorCategoria = conexionAgregador.obtenerHorasPicoPorCategoria();
+
+            for (String categoriaOriginal : coordenadasPorCategoria.keySet()) {
+                Map<String, Object> datosCategoria = coordenadasPorCategoria.get(categoriaOriginal);
+
+                @SuppressWarnings("unchecked")
+                List<Map<String, Double>> coordenadas = (List<Map<String, Double>>) datosCategoria.get("coordenadas");
+
+                Integer hora = horasPorCategoria.getOrDefault(categoriaOriginal, 0);
+
+                // Determinar provincia usando la coordenada más frecuente (primera de la lista)
+                String provincia = "N/A";
+                if (coordenadas != null && !coordenadas.isEmpty()) {
+                    Map<String, Double> coord = coordenadas.get(0); // La más frecuente por ORDER BY COUNT DESC
+                    Double latitud = coord.get("latitud");
+                    Double longitud = coord.get("longitud");
+
+                    provincia = llamarAPIProvincia(latitud, longitud);
+                }
+
+                // Crear mapa de datos para esta categoría
+                Map<String, Object> datos = new HashMap<>();
+                datos.put("provincia", provincia);
+                datos.put("hora", hora);
+
+                datosCategorias.put(categoriaOriginal, datos);
             }
-
-            String[] partes = coordenadas.split(",");
-            if (partes.length != 2) {
-                return "Formato inválido";
-            }
-
-            Double latitud = Double.parseDouble(partes[0]);
-            Double longitud = Double.parseDouble(partes[1]);
-
-            return llamarAPIProvincia(latitud, longitud);
 
         } catch (Exception e) {
-            System.err.println("Error parseando coordenadas: " + coordenadas + " - " + e.getMessage());
-            return "Error";
+            System.err.println("Error en obtenerEstadisticasCategoria: " + e.getMessage());
         }
+
+        return datosCategorias;
     }
 
-    private void actualizarEstadisticasColeccion(){
+    private void actualizarEstadisticasColeccion(EntityManager em) {
         try {
             System.out.println("=== INICIANDO ACTUALIZACIÓN COLECCIONES ===");
             if (estadisticasActual == null) {
@@ -175,6 +218,7 @@ public class GeneradorEstadisticas {
 
             Map<UUID, Map<String, Object>> estadisticas = obtenerEstadisticasColeccion();
             System.out.println("Colecciones a procesar: " + estadisticas.size());
+            System.out.println("ID Estadísticas actual: " + estadisticasActual.getEstadisticas_id());
 
             for (Map.Entry<UUID, Map<String, Object>> entry : estadisticas.entrySet()) {
                 UUID coleccionId = entry.getKey();
@@ -185,18 +229,15 @@ public class GeneradorEstadisticas {
 
                 System.out.println("Procesando colección: " + nombre + " → Provincia: " + provincia);
 
-                EstadisticasColeccionId id = new EstadisticasColeccionId(
-                        estadisticasActual.getEstadisticas_id(),
-                        coleccionId,
-                        nombre
+                EstadisticasColeccion estadisticaColeccion = new EstadisticasColeccion(
+                        estadisticasActual,  // Relación directa - entidad managed
+                        coleccionId,         // Campo directo
+                        nombre,              // Campo directo
+                        provincia            // Campo directo
                 );
 
-                EstadisticasColeccion estadisticaColeccion = new EstadisticasColeccion();
-                estadisticaColeccion.setId(id);
-                estadisticaColeccion.setEstadisticasColeccion_provincia(provincia);
-
-                estadisticasColeccionRepositorio.guardar(estadisticaColeccion);
-                System.out.println("✅ Colección guardada: " + nombre);
+                em.merge(estadisticaColeccion); // Usar merge
+                System.out.println("✅ Colección guardada: " + nombre + " con estadisticas_id: " + estadisticasActual.getEstadisticas_id());
             }
 
             System.out.println("=== ACTUALIZACIÓN COLECCIONES COMPLETADA ===");
@@ -204,6 +245,7 @@ public class GeneradorEstadisticas {
         } catch (Exception e) {
             System.err.println("ERROR en actualizarEstadisticasColeccion: " + e.getMessage());
             e.printStackTrace();
+            throw e;
         }
     }
 
@@ -290,7 +332,7 @@ public class GeneradorEstadisticas {
             }
 
             // Usar el endpoint principal con parámetros optimizados
-            String url = "https://apis.datos.gob.ar/georef/api/ubicacion?lat=" + latitud +
+            String url = "https://apis.datos.gob.ar/georef/api/v2.0/ubicacion?lat=" + latitud +
                     "&lon=" + longitud + "&aplanar=true&campos=estandar";
 
             System.out.println("Consultando API: " + url);
@@ -312,30 +354,18 @@ public class GeneradorEstadisticas {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
-                    .header("User-Agent", "Metamapa-Stats/1.0")
                     .header("accept", "application/json")
                     .GET()
-                    .timeout(java.time.Duration.ofSeconds(15))
+                    .timeout(java.time.Duration.ofSeconds(10))
                     .build();
 
             HttpResponse<String> response = HttpClient.newHttpClient()
                     .send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Response status: " + response.statusCode());
+            return response.statusCode() == 200 ?
+                    parsearRespuesta(response.body()) :
+                    "Error API - Status: " + response.statusCode();
 
-            if (response.statusCode() == 200) {
-                return parsearRespuesta(response.body());
-            } else if (response.statusCode() == 429) {
-                System.err.println("Límite de tasa excedido, esperando...");
-                Thread.sleep(2000); // Esperar 2 segundos antes de reintentar
-                return "Error API - Límite excedido";
-            } else {
-                return "Error API - Status: " + response.statusCode();
-            }
-
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return "Interrumpido";
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
@@ -346,107 +376,22 @@ public class GeneradorEstadisticas {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(jsonResponse);
 
-            // DEBUG: Mostrar estructura de la respuesta
-            System.out.println("Estructura de respuesta: " + root.getNodeType() + " con " + root.size() + " campos");
-
-            // Estrategia 1: Buscar en ubicaciones (estructura más común)
-            JsonNode ubicaciones = root.path("ubicaciones");
-            if (ubicaciones.isArray() && ubicaciones.size() > 0) {
-                JsonNode primeraUbicacion = ubicaciones.get(0);
-                JsonNode provincia = primeraUbicacion.path("provincia");
-                if (provincia.has("nombre")) {
-                    String nombreProvincia = provincia.get("nombre").asText();
-                    if (!nombreProvincia.isEmpty()) {
-                        System.out.println("✅ Provincia encontrada en ubicaciones[0].provincia.nombre: " + nombreProvincia);
-                        return nombreProvincia;
-                    }
-                }
-            }
-
-            // Estrategia 2: Buscar directamente en provincia
-            JsonNode provincia = root.path("provincia");
-            if (provincia.has("nombre")) {
-                String nombreProvincia = provincia.get("nombre").asText();
+            // Acceder directamente a ubicacion.provincia_nombre
+            JsonNode ubicacion = root.path("ubicacion");
+            if (!ubicacion.isMissingNode()) {
+                String nombreProvincia = ubicacion.path("provincia_nombre").asText();
                 if (!nombreProvincia.isEmpty()) {
-                    System.out.println("✅ Provincia encontrada en provincia.nombre: " + nombreProvincia);
+                    System.out.println("✅ Provincia encontrada: " + nombreProvincia);
                     return nombreProvincia;
                 }
             }
 
-            // Estrategia 3: Buscar en resultados (estructura alternativa)
-            JsonNode resultados = root.path("resultados");
-            if (resultados.isArray() && resultados.size() > 0) {
-                JsonNode primerResultado = resultados.get(0);
-                JsonNode provinciaResultado = primerResultado.path("provincia");
-                if (provinciaResultado.has("nombre")) {
-                    String nombreProvincia = provinciaResultado.get("nombre").asText();
-                    if (!nombreProvincia.isEmpty()) {
-                        System.out.println("✅ Provincia encontrada en resultados[0].provincia.nombre: " + nombreProvincia);
-                        return nombreProvincia;
-                    }
-                }
-            }
-
-            // Estrategia 4: Búsqueda recursiva en todo el JSON
-            String provinciaEncontrada = buscarProvinciaRecursivamente(root);
-            if (provinciaEncontrada != null) {
-                System.out.println("✅ Provincia encontrada en búsqueda recursiva: " + provinciaEncontrada);
-                return provinciaEncontrada;
-            }
-
             System.out.println("❌ No se pudo encontrar la provincia en la respuesta JSON");
-            System.out.println("Estructura completa: " + root.toPrettyString());
-            return "N/A - Estructura no reconocida";
+            return "N/A - Provincia no encontrada";
 
         } catch (Exception e) {
             System.err.println("💥 Error parseando respuesta JSON: " + e.getMessage());
             return "Error parsing";
         }
-    }
-
-    private String buscarProvinciaRecursivamente(JsonNode node) {
-        if (node.isObject()) {
-            Iterator<Map.Entry<String, JsonNode>> campos = node.fields();
-            while (campos.hasNext()) {
-                Map.Entry<String, JsonNode> campo = campos.next();
-                String nombreCampo = campo.getKey().toLowerCase();
-                JsonNode valor = campo.getValue();
-
-                // Si el campo contiene "provincia" y es texto, devolverlo
-                if (nombreCampo.contains("provincia") && valor.isTextual()) {
-                    String provincia = valor.asText();
-                    if (!provincia.isEmpty() && !provincia.equals("null")) {
-                        return provincia;
-                    }
-                }
-
-                // Si el campo es "nombre" y el padre es "provincia"
-                if (nombreCampo.equals("nombre") && campo.getKey().equals("nombre")) {
-                    JsonNode padre = node;
-                    if (padre.has("provincia") || node.toString().toLowerCase().contains("provincia")) {
-                        String nombre = valor.asText();
-                        if (!nombre.isEmpty() && !nombre.equals("null")) {
-                            return nombre;
-                        }
-                    }
-                }
-
-                // Buscar recursivamente
-                if (valor.isObject() || valor.isArray()) {
-                    String resultado = buscarProvinciaRecursivamente(valor);
-                    if (resultado != null) {
-                        return resultado;
-                    }
-                }
-            }
-        } else if (node.isArray()) {
-            for (JsonNode elemento : node) {
-                String resultado = buscarProvinciaRecursivamente(elemento);
-                if (resultado != null) {
-                    return resultado;
-                }
-            }
-        }
-        return null;
     }
 }

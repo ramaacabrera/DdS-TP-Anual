@@ -40,25 +40,64 @@ public class ConexionAgregador {
         }
     }
 
-    public Map<String, String> obtenerProvinciasPorCategoria() {
+    public Map<String, Map<String, Object>> obtenerCoordenadasPorCategoria() {
         try {
             String query = "SELECT h.categoria, u.latitud, u.longitud, COUNT(h) FROM Hecho h JOIN h.ubicacion u " +
                     "WHERE h.categoria IS NOT NULL AND u.latitud IS NOT NULL AND u.longitud IS NOT NULL " +
                     "GROUP BY h.categoria, u.latitud, u.longitud " +
                     "ORDER BY h.categoria, COUNT(h) DESC";
 
-            List<Object[]> resultados = BDUtils.getEntityManager().createQuery(query, Object[].class).getResultList();
+            List<Object[]> resultados = BDUtils.getEntityManager()
+                    .createQuery(query, Object[].class)
+                    .getResultList();
 
-            return this.obtenerMaximoPor(resultados,
-                    fila -> (String) fila[0],
-                    fila -> {
-                        Double latitud = (Double) fila[1];
-                        Double longitud = (Double) fila[2];
-                        return latitud + "," + longitud; // Formato: "latitud,longitud"
-                    });
+            Map<String, Map<String, Object>> datosCategorias = new HashMap<>();
+
+            for (Object[] fila : resultados) {
+                String categoria = (String) fila[0];
+                Double latitud = (Double) fila[1];
+                Double longitud = (Double) fila[2];
+                Long count = (Long) fila[3];
+
+                // Validar coordenadas
+                if (latitud == null || longitud == null ||
+                        latitud < -90 || latitud > 90 ||
+                        longitud < -180 || longitud > 180) {
+                    continue; // Saltar coordenadas inválidas
+                }
+
+                // Si es la primera vez que vemos esta categoría, inicializar sus datos
+                if (!datosCategorias.containsKey(categoria)) {
+                    Map<String, Object> datos = new HashMap<>();
+                    datos.put("coordenadas", new ArrayList<Map<String, Double>>());
+                    datos.put("count", 0L);
+                    datosCategorias.put(categoria, datos);
+                }
+
+                // Agregar las coordenadas del hecho actual
+                Map<String, Double> coordenada = new HashMap<>();
+                coordenada.put("latitud", latitud);
+                coordenada.put("longitud", longitud);
+
+                @SuppressWarnings("unchecked")
+                List<Map<String, Double>> coordenadas =
+                        (List<Map<String, Double>>) datosCategorias.get(categoria).get("coordenadas");
+                coordenadas.add(coordenada);
+
+                // Actualizar el contador (usamos el máximo count)
+                Long currentCount = (Long) datosCategorias.get(categoria).get("count");
+                if (count > currentCount) {
+                    datosCategorias.get(categoria).put("count", count);
+                }
+            }
+
+            // Filtrar categorías sin coordenadas válidas
+            return datosCategorias.entrySet().stream()
+                    .filter(entry -> !((List<?>) entry.getValue().get("coordenadas")).isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         } catch (Exception e) {
-            System.err.println("Error en obtenerProvinciasPorCategoria: " + e.getMessage());
+            System.err.println("Error en obtenerCoordenadasPorCategoria: " + e.getMessage());
             return new HashMap<>();
         }
     }

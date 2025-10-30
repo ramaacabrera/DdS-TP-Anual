@@ -1,5 +1,6 @@
 package estadisticas.Presentacion;
 
+import utils.NormalizadorCategorias;
 import estadisticas.agregador.EstadisticasCategoriaRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -19,15 +20,17 @@ public class GetHoraMaxCategoriaHandler implements Handler {
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
         try {
-            String categoria = ctx.pathParam("categoria");
+            String categoriaParam = ctx.pathParam("categoria");
 
-            if (categoria == null || categoria.trim().isEmpty()) {
+            if (categoriaParam == null || categoriaParam.trim().isEmpty()) {
                 Map<String, Object> resultado = new HashMap<>();
                 resultado.put("error", "Categoría no especificada");
                 resultado.put("status", 400);
                 ctx.status(400).json(resultado);
                 return;
             }
+
+            String categoria = NormalizadorCategorias.normalizar(categoriaParam);
 
             // Usar el nuevo método con dos queries separadas
             Optional<Integer> horaOpt = repository.buscarHoraCategoria(categoria.trim());

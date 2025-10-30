@@ -35,30 +35,13 @@ public class EstadisticasCategoriaRepositorio {
         }
     }
 
-    public Optional<EstadisticasCategoria> buscarPorHandle(String handle) {
-        EntityManager em = BDUtilsEstadisticas.getEntityManager();
-        try {
-            TypedQuery<EstadisticasCategoria> query = em.createQuery(
-                    "SELECT e FROM EstadisticasCategoria e WHERE e.id.estadisticas_id = :handleParam", EstadisticasCategoria.class);
-
-            query.setParameter("handleParam", handle);
-
-            return Optional.of(query.getSingleResult());
-
-        } catch (NoResultException e) {
-            return Optional.empty();
-        } finally {
-            em.close();
-        }
-    }
-
     public List<String> obtenerTodasLasCategorias() {
         EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
             TypedQuery<String> query = em.createQuery(
-                    "SELECT ec.id.categoria FROM EstadisticasCategoria ec " +
-                            "JOIN Estadisticas e ON ec.id.estadisticas_id = e.estadisticas_id " +
-                            "ORDER BY e.estadisticas_fecha DESC, ec.id.categoria",
+                    "SELECT ec.categoria FROM EstadisticasCategoria ec " +
+                            "WHERE ec.estadisticas.estadisticas_id = (SELECT MAX(e2.estadisticas_id) FROM Estadisticas e2) " +
+                            "ORDER BY ec.categoria",
                     String.class);
 
             return query.getResultList();
@@ -75,10 +58,9 @@ public class EstadisticasCategoriaRepositorio {
         EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
             TypedQuery<String> query = em.createQuery(
-                    "SELECT ec.estadisticasCategoria_provincia FROM EstadisticasCategoria ec " +
-                            "JOIN Estadisticas e ON ec.id.estadisticas_id = e.estadisticas_id " +
-                            "WHERE ec.id.categoria = :categoria " +
-                            "ORDER BY e.estadisticas_fecha DESC",
+                    "SELECT ec.provincia FROM EstadisticasCategoria ec " +
+                            "WHERE ec.categoria = :categoria " +
+                            "AND ec.estadisticas.estadisticas_id = (SELECT MAX(e2.estadisticas_id) FROM Estadisticas e2)",
                     String.class);
 
             query.setParameter("categoria", categoria);
@@ -100,10 +82,9 @@ public class EstadisticasCategoriaRepositorio {
         EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
             TypedQuery<Integer> query = em.createQuery(
-                    "SELECT ec.estadisticasCategoria_hora FROM EstadisticasCategoria ec " +
-                            "JOIN Estadisticas e ON ec.id.estadisticas_id = e.estadisticas_id " +
-                            "WHERE ec.id.categoria = :categoria " +
-                            "ORDER BY e.estadisticas_fecha DESC",
+                    "SELECT ec.hora FROM EstadisticasCategoria ec " +
+                            "WHERE ec.categoria = :categoria " +
+                            "AND ec.estadisticas.estadisticas_id = (SELECT MAX(e2.estadisticas_id) FROM Estadisticas e2)",
                     Integer.class);
 
             query.setParameter("categoria", categoria);

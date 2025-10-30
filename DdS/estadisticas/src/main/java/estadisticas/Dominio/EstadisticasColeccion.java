@@ -1,31 +1,60 @@
 package estadisticas.Dominio;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"estadisticas_id", "coleccion_id"})
+})
 public class EstadisticasColeccion {
 
-    @EmbeddedId
-    private EstadisticasColeccionId id;
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Type(type = "uuid-char")
+    @Column(name = "id", length = 36, updatable = false, nullable = false)
+    private UUID id;
 
-    private String estadisticasColeccion_provincia;
+    @ManyToOne
+    @JoinColumn(name = "estadisticas_id", nullable = false)
+    private Estadisticas estadisticas;
 
-//    @ManyToOne
-//    @MapsId("estadisticas_id")
-//    @JoinColumn(name = "estadisticas_id")
-//    private Estadisticas estadisticas;
+    @Type(type = "uuid-char")
+    @Column(name = "coleccion_id", length = 36, nullable = false)
+    private UUID coleccionId;
 
-//    public void setEstadisticas(Estadisticas estadisticasNuevas) {this.estadisticas=estadisticasNuevas;}
-    public void setId(EstadisticasColeccionId id) {this.id = id;}
-    public void setEstadisticasColeccion_provincia(String estadisticasColeccion_provincia){this.estadisticasColeccion_provincia = estadisticasColeccion_provincia;}
+    private String titulo;
+    private String provincia;
 
-    public EstadisticasColeccionId getId(){return this.id;}
-    public String getEstadisticasColeccion_provincia(){return this.estadisticasColeccion_provincia;}
-//    public Estadisticas getEstadisticas(){return this.estadisticas;}
+    public EstadisticasColeccion() {}
 
-    public EstadisticasColeccion(){}
-    public EstadisticasColeccion(EstadisticasColeccionId id, String estadisticasColeccion_provincia){
-        this.id = id;
-        this.estadisticasColeccion_provincia = estadisticasColeccion_provincia;
+    public EstadisticasColeccion(Estadisticas estadisticas, UUID coleccionId, String titulo, String provincia) {
+        this.estadisticas = estadisticas;
+        this.coleccionId = coleccionId;
+        this.titulo = titulo;
+        this.provincia = provincia;
     }
+
+    // Getters y Setters
+    public UUID getId() { return this.id; }
+    public void setId(UUID id) { this.id = id; }
+
+    public Estadisticas getEstadisticas() { return this.estadisticas; }
+    public void setEstadisticas(Estadisticas estadisticas) { this.estadisticas = estadisticas; }
+
+    public UUID getColeccionId() { return this.coleccionId; }
+    public void setColeccionId(UUID coleccionId) { this.coleccionId = coleccionId; }
+
+    public String getTitulo() { return this.titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
+
+    public String getProvincia() { return this.provincia; }
+    public void setProvincia(String provincia) { this.provincia = provincia; }
 }

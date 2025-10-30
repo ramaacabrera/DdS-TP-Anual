@@ -65,7 +65,7 @@ public class MainWeb {
         //app.get("/crear-coleccion", new GetCrearColeccionHandler(urlAdmin));
 
         // Falta organizar el tema de categorias y colecciones, y aplicar los estilos
-        app.get("/estadisticas", new handlers.GetEstadisticasHandler(puertoEstadisticas));
+        app.get("/estadisticas", new GetEstadisticasHandler(puertoEstadisticas));
 
     }
 }

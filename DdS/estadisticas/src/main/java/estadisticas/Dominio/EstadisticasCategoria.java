@@ -1,41 +1,59 @@
 package estadisticas.Dominio;
 
-import javax.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"estadisticas_id", "categoria"})
+})
 public class EstadisticasCategoria {
 
-    @EmbeddedId
-    private EstadisticasCategoriaId id;
-    private String estadisticasCategoria_provincia;
-    private Integer estadisticasCategoria_hora;
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Type(type = "uuid-char")
+    @Column(name = "id", length = 36, updatable = false, nullable = false)
+    private UUID id;
 
-//    @ManyToOne
-//    @MapsId("estadisticas_id")
-//    @JoinColumn(name = "estadisticas_id")
-//    private Estadisticas estadisticas;
+    @ManyToOne
+    @JoinColumn(name = "estadisticas_id", nullable = false)
+    private Estadisticas estadisticas;
 
-    public EstadisticasCategoria(){}
+    @Column(nullable = false)
+    private String categoria;
 
-    public EstadisticasCategoria(EstadisticasCategoriaId id, String estadisticasCategoria_provincia, Integer estadisticasCategoria_hora) {
-        this.id = id;
-        this.estadisticasCategoria_provincia = estadisticasCategoria_provincia;
-        this.estadisticasCategoria_hora = estadisticasCategoria_hora;
+    private String provincia;
+    private Integer hora;
+
+    public EstadisticasCategoria() {}
+
+    public EstadisticasCategoria(Estadisticas estadisticas, String categoria, String provincia, Integer hora) {
+        this.estadisticas = estadisticas;
+        this.categoria = categoria;
+        this.provincia = provincia;
+        this.hora = hora;
     }
 
-//    public void setEstadisticas(Estadisticas estadisticas) {
-//        this.estadisticas = estadisticas;
-//    }
-    public void setId(EstadisticasCategoriaId id) {this.id = id;}
-    public void setProvincia(String provincia) {this.estadisticasCategoria_provincia = provincia;}
-    public void setEstadisticasCategoria_hora(Integer estadisticasCategoria_hora){this.estadisticasCategoria_hora = estadisticasCategoria_hora;}
+    // Getters y Setters
+    public UUID getId() { return this.id; }
+    public void setId(UUID id) { this.id = id; }
 
-    public EstadisticasCategoriaId getId() {return this.id;}
-    public String getProvincia(){return this.estadisticasCategoria_provincia;}
-    public Integer getEstadisticasCategoria_hora(){return this.estadisticasCategoria_hora;}
-//    public Estadisticas getEstadisticas() {
-//        return this.estadisticas;
-//    }
+    public Estadisticas getEstadisticas() { return this.estadisticas; }
+    public void setEstadisticas(Estadisticas estadisticas) { this.estadisticas = estadisticas; }
 
+    public String getCategoria() { return this.categoria; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
+
+    public String getProvincia() { return this.provincia; }
+    public void setProvincia(String provincia) { this.provincia = provincia; }
+
+    public Integer getHora() { return this.hora; }
+    public void setHora(Integer hora) { this.hora = hora; }
 }

@@ -51,11 +51,10 @@ public class EstadisticasColeccionRepositorio {
         EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
             TypedQuery<Object[]> query = em.createQuery(
-                    "SELECT ec.estadisticasColeccion_provincia, ec.id.estadisticasColeccion_titulo " +
+                    "SELECT ec.provincia, ec.titulo " +
                             "FROM EstadisticasColeccion ec " +
-                            "JOIN Estadisticas e ON ec.id.estadisticas_id = e.estadisticas_id " +
-                            "WHERE ec.id.coleccion_id = :idColeccion " +
-                            "ORDER BY e.estadisticas_fecha DESC",
+                            "WHERE ec.coleccionId = :idColeccion " +
+                            "AND ec.estadisticas.estadisticas_id = (SELECT MAX(e2.estadisticas_id) FROM Estadisticas e2)",
                     Object[].class);
 
             query.setParameter("idColeccion", idColeccion);

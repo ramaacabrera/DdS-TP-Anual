@@ -1,16 +1,19 @@
-package handlers;
+package Presentacion;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
+import utils.DesnormalizadorCategorias;
+import utils.NormalizadorCategorias;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
+
 
 public class GetEstadisticasHandler implements Handler {
 
@@ -37,6 +40,8 @@ public class GetEstadisticasHandler implements Handler {
 
             List<String> categoriasTotales = this.obtenerTodasLasCategorias();
 
+            //categoriasTotales.forEach(System.out::println);
+
             // Procesar categorías en paralelo
             List<Map<String, Object>> statsCategoria = procesarCategorias(categoriasTotales);
 
@@ -49,7 +54,6 @@ public class GetEstadisticasHandler implements Handler {
             modelo.put("baseUrl", baseUrl);
             modelo.put("totalCategorias", categoriasTotales.size());
 
-            // ... resto del código para manejar UUID de colección
             if (uuidColeccion != null && !uuidColeccion.trim().isEmpty() && esUUIDValido(uuidColeccion)) {
                 try {
                     Map<String, Object> statsColeccion = hacerConsulta(
@@ -124,15 +128,19 @@ public class GetEstadisticasHandler implements Handler {
 
         for (String categoria : categorias) {
             try {
+                // NORMALIZAR la categoría antes de hacer las consultas
+                String categoriaNormalizada = NormalizadorCategorias.normalizar(categoria);
+
                 Map<String, Object> provincia = hacerConsulta(
-                        "/api/estadisticas/provinciaMax/categorias/" + encodeURL(categoria)
+                        "/api/estadisticas/provinciaMax/categorias/" + encodeURL(categoriaNormalizada)
                 );
                 Map<String, Object> hora = hacerConsulta(
-                        "/api/estadisticas/horaMax/categorias/" + encodeURL(categoria)
+                        "/api/estadisticas/horaMax/categorias/" + encodeURL(categoriaNormalizada)
                 );
 
                 Map<String, Object> categoriaData = new HashMap<>();
-                categoriaData.put("nombre", categoria);
+                // Desnormalizar el nombre para mostrar
+                categoriaData.put("nombre", DesnormalizadorCategorias.desnormalizar(categoriaNormalizada));
                 categoriaData.put("provincia", obtenerValorConFallback(provincia,
                         Arrays.asList("provincia", "estadisticasCategoria_provincia"), "N/A"));
                 categoriaData.put("hora", obtenerValorConFallback(hora,
@@ -140,13 +148,14 @@ public class GetEstadisticasHandler implements Handler {
 
                 resultados.add(categoriaData);
             } catch (Exception e) {
-                System.err.println("Error consultando categoría " + categoria + ": " + e.getMessage());
+                System.err.println("❌ Error procesando categoría '" + categoria + "': " + e.getMessage());
 
-                // Agregar categoría con datos por defecto en caso de error
                 Map<String, Object> categoriaData = new HashMap<>();
-                categoriaData.put("nombre", categoria);
+                categoriaData.put("nombre", categoria); // Usar el original en caso de error
                 categoriaData.put("provincia", "Error");
                 categoriaData.put("hora", "Error");
+                categoriaData.put("error", e.getMessage());
+
                 resultados.add(categoriaData);
             }
         }

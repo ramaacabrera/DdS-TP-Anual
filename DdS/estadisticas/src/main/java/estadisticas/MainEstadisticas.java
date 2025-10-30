@@ -35,7 +35,7 @@ public class MainEstadisticas {
         app.get("/api/estadisticas/provinciaMax/categorias/{categoria}", new GetProvinciaCategoriaHandler(estadisticasCategoriaRepositorio));
         app.get("/api/estadisticas/horaMax/categorias/{categoria}", new GetHoraMaxCategoriaHandler(estadisticasCategoriaRepositorio));
         app.get("/api/estadisticas/solicitudesSpam", new GetSolicitudesSpamHandler(estadisticasRepositorio));
-        app.get("/api/estadisticas/categorias/", new GetCategoriasHandler(estadisticasCategoriaRepositorio));
+        app.get("/api/estadisticas/categorias", new GetCategoriasHandler(estadisticasCategoriaRepositorio));
 
 
     }

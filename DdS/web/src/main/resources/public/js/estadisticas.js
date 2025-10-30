@@ -113,73 +113,69 @@ async function buscarColeccion() {
 }
 
 // Cargar todas las categorías (ejemplo con categorías comunes)
-async function cargarTodasCategorias() {
-    const categoriasComunes = ["Incendio", "Choque", "Asesinato", "Terremoto"]
-    const container = document.getElementById("todas-categorias")
-
-    showLoading()
-
-    const API_BASE_URL = 'http://localhost:8088/api/estadisticas';
-
-    try {
-        const resultados = await Promise.all(
-            categoriasComunes.map(async (categoria) => {
-                try {
-                    const [provinciaRes, horaRes] = await Promise.all([
-                        fetch(`${API_BASE_URL}/provinciaMax/categorias/${encodeURIComponent(categoria)}`),
-                        fetch(`${API_BASE_URL}/horaMax/categorias/${encodeURIComponent(categoria)}`),
-                    ])
-
-                    const provinciaData = await provinciaRes.json()
-                    const horaData = await horaRes.json()
-
-                    return {
-                        categoria,
-                        provincia: provinciaData.provincia || provinciaData.estadisticasCategoria_provincia || "N/A",
-                        hora: horaData.hora || horaData.estadisticasCategoria_hora || "N/A",
-                    }
-                } catch {
-                    return null
-                }
-            }),
-        )
-
-        const categoriasValidas = resultados.filter((r) => r !== null)
-
-        if (categoriasValidas.length > 0) {
-            container.innerHTML = categoriasValidas
-                .map(
-                    (cat) => `
-                <div class="categoria-card">
-                    <h3>${cat.categoria}</h3>
-                    <div class="categoria-info">
-                        <div class="info-row">
-                            <span class="result-label">Provincia:</span>
-                            <span class="result-value">${cat.provincia}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="result-label">Hora pico:</span>
-                            <span class="result-value">${cat.hora}:00 hs</span>
-                        </div>
-                    </div>
-                </div>
-            `,
-                )
-                .join("")
-        } else {
-            container.innerHTML = '<p class="placeholder-text">No se encontraron categorías disponibles</p>'
-        }
-    } catch (error) {
-        container.innerHTML = '<p class="error-message">Error al cargar las categorías</p>'
-    } finally {
-        hideLoading()
-    }
-}
+// async function cargarTodasCategorias() {
+//     const container = document.getElementById("todas-categorias")
+//     showLoading()
+//
+//     try {
+//         const response = await fetch(`${API_BASE_URL}/categorias`)
+//         if (response.ok) {
+//             const data = await response.json()
+//
+//             if (data.categorias && data.categorias.length > 0) {
+//                 const resultados = await Promise.all(
+//                     data.categorias.map(async (categoria) => {
+//                         try {
+//                             const [provinciaRes, horaRes] = await Promise.all([
+//                                 fetch(`${API_BASE_URL}/provinciaMax/categorias/${encodeURIComponent(categoria)}`),
+//                                 fetch(`${API_BASE_URL}/horaMax/categorias/${encodeURIComponent(categoria)}`),
+//                             ])
+//
+//                             const provinciaData = await provinciaRes.json()
+//                             const horaData = await horaRes.json()
+//
+//                             return {
+//                                 categoria,
+//                                 provincia: provinciaData.provincia || provinciaData.estadisticasCategoria_provincia || "N/A",
+//                                 hora: horaData.hora || horaData.estadisticasCategoria_hora || "N/A",
+//                             }
+//                         } catch {
+//                             return { categoria, provincia: "Error", hora: "Error" }
+//                         }
+//                     })
+//                 )
+//
+//                 container.innerHTML = resultados
+//                     .map((cat) => `
+//                         <div class="categoria-card">
+//                             <h3>${cat.categoria}</h3>
+//                             <div class="categoria-info">
+//                                 <div class="info-row">
+//                                     <span class="result-label">Provincia:</span>
+//                                     <span class="result-value">${cat.provincia}</span>
+//                                 </div>
+//                                 <div class="info-row">
+//                                     <span class="result-label">Hora pico:</span>
+//                                     <span class="result-value">${cat.hora}:00 hs</span>
+//                                 </div>
+//                             </div>
+//                         </div>
+//                     `).join("")
+//             } else {
+//                 container.innerHTML = '<p class="placeholder-text">No se encontraron categorías disponibles</p>'
+//             }
+//         }
+//     } catch (error) {
+//         container.innerHTML = '<p class="error-message">Error al cargar las categorías</p>'
+//     } finally {
+//         hideLoading()
+//     }
+// }
 
 // Permitir buscar con Enter
 document.addEventListener("DOMContentLoaded", () => {
     cargarEstadisticasGenerales()
-    cargarTodasCategorias()
+    //cargarTodasCategorias()
 
     document.getElementById("categoria-select").addEventListener("keypress", (e) => {
         if (e.key === "Enter") buscarCategoria()
