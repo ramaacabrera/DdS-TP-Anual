@@ -1,33 +1,34 @@
 package estadisticas.agregador;
 
+import estadisticas.BDUtilsEstadisticas;
 import estadisticas.Dominio.EstadisticasCategoria;
-import utils.BDUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class EstadisticasCategoriaRepositorio {
-    private final EntityManagerFactory emf;
 
-    public EstadisticasCategoriaRepositorio(EntityManagerFactory emNuevo) {
-        this.emf = emNuevo;
+    public EstadisticasCategoriaRepositorio() {
+
     }
 
     public void guardar(EstadisticasCategoria estadisticas) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
-            BDUtils.comenzarTransaccion(em);
+            BDUtilsEstadisticas.comenzarTransaccion(em);
 
-            em.merge(estadisticas);
+            em.persist(estadisticas);
 
-            BDUtils.commit(em);
+            BDUtilsEstadisticas.commit(em);
         } catch (Exception e) {
-            BDUtils.rollback(em);
+            BDUtilsEstadisticas.rollback(em);
             e.printStackTrace();
         } finally {
             em.close();
@@ -35,7 +36,7 @@ public class EstadisticasCategoriaRepositorio {
     }
 
     public Optional<EstadisticasCategoria> buscarPorHandle(String handle) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
             TypedQuery<EstadisticasCategoria> query = em.createQuery(
                     "SELECT e FROM EstadisticasCategoria e WHERE e.id.estadisticas_id = :handleParam", EstadisticasCategoria.class);
@@ -51,51 +52,70 @@ public class EstadisticasCategoriaRepositorio {
         }
     }
 
-    public Optional<String> buscarProvinciaCategoria(String categoria) {
-        EntityManager em = emf.createEntityManager();
+    public List<String> obtenerTodasLasCategorias() {
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
             TypedQuery<String> query = em.createQuery(
-                    "SELECT e.estadisticasCategoria_provincia FROM EstadisticasCategoria e " +
-                            "WHERE e.id.categoria = :idCategoria AND e.estadisticas.estadisticas_fecha = " +
-                            "(SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", String.class);
+                    "SELECT ec.id.categoria FROM EstadisticasCategoria ec " +
+                            "JOIN Estadisticas e ON ec.id.estadisticas_id = e.estadisticas_id " +
+                            "ORDER BY e.estadisticas_fecha DESC, ec.id.categoria",
+                    String.class);
 
-            query.setParameter("idCategoria", categoria);
-            query.setMaxResults(1); // ← Evita múltiples resultados
-
-            List<String> resultados = query.getResultList(); // ← Usa getResultList()
-
-            if (resultados.isEmpty() || resultados.get(0) == null) {
-                return Optional.empty();
-            }
-            return Optional.of(resultados.get(0));
+            return query.getResultList();
 
         } catch (Exception e) {
-            return Optional.empty(); // ← Captura cualquier excepción
+            System.err.println("Error obteniendo categorías: " + e.getMessage());
+            return new ArrayList<>();
         } finally {
             em.close();
         }
     }
 
-    public Optional<LocalTime> buscarHoraCategoria(String categoria) {
-        EntityManager em = emf.createEntityManager();
+    public Optional<String> buscarProvinciaCategoria(String categoria) {
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
-            TypedQuery<LocalTime> query = em.createQuery(
-                    "SELECT e.estadisticasCategoria_hora FROM EstadisticasCategoria e " +
-                            "WHERE e.id.categoria = :idCategoria AND e.estadisticas.estadisticas_fecha = " +
-                            "(SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", LocalTime.class);
+            TypedQuery<String> query = em.createQuery(
+                    "SELECT ec.estadisticasCategoria_provincia FROM EstadisticasCategoria ec " +
+                            "JOIN Estadisticas e ON ec.id.estadisticas_id = e.estadisticas_id " +
+                            "WHERE ec.id.categoria = :categoria " +
+                            "ORDER BY e.estadisticas_fecha DESC",
+                    String.class);
 
-            query.setParameter("idCategoria", categoria);
-            query.setMaxResults(1); // ← Evita múltiples resultados
+            query.setParameter("categoria", categoria);
+            query.setMaxResults(1);
 
-            List<LocalTime> resultados = query.getResultList(); // ← Usa getResultList()
+            List<String> resultados = query.getResultList();
 
-            if (resultados.isEmpty() || resultados.get(0) == null) {
-                return Optional.empty();
-            }
-            return Optional.of(resultados.get(0));
+            return resultados.isEmpty() ? Optional.empty() : Optional.of(resultados.get(0));
 
         } catch (Exception e) {
-            return Optional.empty(); // ← Captura cualquier excepción
+            System.err.println("Error buscando provincia para categoría '" + categoria + "': " + e.getMessage());
+            return Optional.empty();
+        } finally {
+            em.close();
+        }
+    }
+
+    public Optional<Integer> buscarHoraCategoria(String categoria) {
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
+        try {
+            TypedQuery<Integer> query = em.createQuery(
+                    "SELECT ec.estadisticasCategoria_hora FROM EstadisticasCategoria ec " +
+                            "JOIN Estadisticas e ON ec.id.estadisticas_id = e.estadisticas_id " +
+                            "WHERE ec.id.categoria = :categoria " +
+                            "ORDER BY e.estadisticas_fecha DESC",
+                    Integer.class);
+
+            query.setParameter("categoria", categoria);
+            query.setMaxResults(1);
+
+            List<Integer> resultados = query.getResultList();
+
+            return resultados.isEmpty() ? Optional.empty() : Optional.of(resultados.get(0));
+
+        } catch (Exception e) {
+            System.err.println("Error buscando hora para categoría '" + categoria + "': " + e.getMessage());
+            return Optional.empty();
         } finally {
             em.close();
         }

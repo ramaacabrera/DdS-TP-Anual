@@ -11,10 +11,10 @@ public class EstadisticasCategoria {
     private String estadisticasCategoria_provincia;
     private Integer estadisticasCategoria_hora;
 
-    @ManyToOne
-    @MapsId("estadisticas_id")
-    @JoinColumn(name = "estadisticas_id")
-    private Estadisticas estadisticas;
+//    @ManyToOne
+//    @MapsId("estadisticas_id")
+//    @JoinColumn(name = "estadisticas_id")
+//    private Estadisticas estadisticas;
 
     public EstadisticasCategoria(){}
 
@@ -24,6 +24,9 @@ public class EstadisticasCategoria {
         this.estadisticasCategoria_hora = estadisticasCategoria_hora;
     }
 
+//    public void setEstadisticas(Estadisticas estadisticas) {
+//        this.estadisticas = estadisticas;
+//    }
     public void setId(EstadisticasCategoriaId id) {this.id = id;}
     public void setProvincia(String provincia) {this.estadisticasCategoria_provincia = provincia;}
     public void setEstadisticasCategoria_hora(Integer estadisticasCategoria_hora){this.estadisticasCategoria_hora = estadisticasCategoria_hora;}
@@ -31,5 +34,8 @@ public class EstadisticasCategoria {
     public EstadisticasCategoriaId getId() {return this.id;}
     public String getProvincia(){return this.estadisticasCategoria_provincia;}
     public Integer getEstadisticasCategoria_hora(){return this.estadisticasCategoria_hora;}
+//    public Estadisticas getEstadisticas() {
+//        return this.estadisticas;
+//    }
 
 }

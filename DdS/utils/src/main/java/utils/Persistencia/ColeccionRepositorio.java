@@ -34,7 +34,9 @@ public class ColeccionRepositorio {
         }
     }
 
-    public void guardar(ColeccionDTO coleccionDTO) {Coleccion coleccion = new Coleccion(coleccionDTO);}
+    public void guardar(ColeccionDTO coleccionDTO) {Coleccion coleccion = new Coleccion(coleccionDTO);
+     this.guardar(coleccion);
+    }
 
 
     public List<Coleccion> obtenerTodas() {

@@ -1,33 +1,29 @@
 package estadisticas.agregador;
 
+import estadisticas.BDUtilsEstadisticas;
 import estadisticas.Dominio.EstadisticasColeccion;
-import utils.BDUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class EstadisticasColeccionRepositorio {
-    private final EntityManagerFactory emf;
 
-    public EstadisticasColeccionRepositorio(EntityManagerFactory emNuevo) {
-        this.emf = emNuevo;
+    public EstadisticasColeccionRepositorio() {
     }
 
         public void guardar(EstadisticasColeccion estadisticas) {
-            EntityManager em = emf.createEntityManager();
+            EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
-            BDUtils.comenzarTransaccion(em);
+            BDUtilsEstadisticas.comenzarTransaccion(em);
 
-            em.merge(estadisticas);
+            em.persist(estadisticas);
 
-            BDUtils.commit(em);
+            BDUtilsEstadisticas.commit(em);
         } catch (Exception e) {
-            BDUtils.rollback(em);
+            BDUtilsEstadisticas.rollback(em);
             e.printStackTrace();
         } finally {
             em.close();
@@ -35,7 +31,7 @@ public class EstadisticasColeccionRepositorio {
     }
 
         public Optional<EstadisticasColeccion> buscarPorHandle(UUID handle) {
-            EntityManager em = emf.createEntityManager();
+            EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
             TypedQuery<EstadisticasColeccion> query = em.createQuery(
                     "SELECT e FROM EstadisticasColeccion e WHERE e.id.coleccion_id = :handleParam", EstadisticasColeccion.class);
@@ -51,25 +47,35 @@ public class EstadisticasColeccionRepositorio {
         }
     }
 
-    public Optional<String> buscarProvinciaColeccion(UUID idColeccion) {
-        EntityManager em = emf.createEntityManager();
+    public Optional<Map<String, String>> buscarProvinciaYNombreColeccion(UUID idColeccion) {
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
-            TypedQuery<String> query = em.createQuery(
-                    "SELECT e.estadisticasColeccion_provincia FROM EstadisticasColeccion e " +
-                            "WHERE e.id.coleccion_id = :idColeccion AND e.estadisticas.estadisticas_fecha = " +
-                            "(SELECT MAX(e2.estadisticas_fecha) FROM Estadisticas e2)", String.class);
+            TypedQuery<Object[]> query = em.createQuery(
+                    "SELECT ec.estadisticasColeccion_provincia, ec.id.estadisticasColeccion_titulo " +
+                            "FROM EstadisticasColeccion ec " +
+                            "JOIN Estadisticas e ON ec.id.estadisticas_id = e.estadisticas_id " +
+                            "WHERE ec.id.coleccion_id = :idColeccion " +
+                            "ORDER BY e.estadisticas_fecha DESC",
+                    Object[].class);
+
             query.setParameter("idColeccion", idColeccion);
-            query.setMaxResults(1); // ← Evita múltiples resultados
+            query.setMaxResults(1);
 
-            List<String> resultados = query.getResultList(); // ← Usa getResultList()
+            List<Object[]> resultados = query.getResultList();
 
-            if (resultados.isEmpty() || resultados.get(0) == null) {
+            if (resultados.isEmpty()) {
                 return Optional.empty();
             }
-            return Optional.of(resultados.get(0));
+
+            Object[] resultado = resultados.get(0);
+            Map<String, String> datos = new HashMap<>();
+            datos.put("provincia", (String) resultado[0]);
+            datos.put("nombre", (String) resultado[1]);
+
+            return Optional.of(datos);
 
         } catch (Exception e) {
-            return Optional.empty(); // ← Captura cualquier excepción
+            return Optional.empty();
         } finally {
             em.close();
         }

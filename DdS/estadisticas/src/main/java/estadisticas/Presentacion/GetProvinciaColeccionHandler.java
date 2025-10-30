@@ -19,23 +19,39 @@ public class GetProvinciaColeccionHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        try{
-            UUID coleccion = UUID.fromString(ctx.pathParam("coleccion"));
-            Optional<String> provincia = repository.buscarProvinciaColeccion(coleccion);
+        try {
+            String coleccionParam = ctx.pathParam("coleccion");
+            UUID coleccion;
 
-            Map<String,Object> resultado = new HashMap<>();
-            if (!provincia.isPresent()) {
-                resultado.put("error", "Coleccion no encontrada");
+            try {
+                coleccion = UUID.fromString(coleccionParam);
+            } catch (IllegalArgumentException e) {
+                Map<String, Object> resultado = new HashMap<>();
+                resultado.put("error", "UUID de colección inválido");
+                resultado.put("status", 400);
+                ctx.status(400).json(resultado);
+                return;
+            }
+
+            Optional<Map<String, String>> datosColeccion = repository.buscarProvinciaYNombreColeccion(coleccion);
+
+            Map<String, Object> resultado = new HashMap<>();
+            if (!datosColeccion.isPresent()) {
+                resultado.put("error", "Colección no encontrada");
                 resultado.put("status", 404);
                 ctx.status(404).json(resultado);
             } else {
-                resultado.put("hora", provincia.get());
+                Map<String, String> datos = datosColeccion.get();
+                resultado.put("provincia", datos.get("provincia"));
+                resultado.put("nombre", datos.get("nombre"));
                 ctx.status(200).json(resultado);
             }
         } catch (Exception e) {
-            System.err.println("Error en buscar coleccion: " + e.getMessage());
-            ctx.status(500);
+            System.err.println("Error en buscar colección: " + e.getMessage());
+            ctx.status(500).json(Map.of(
+                    "error", "Error interno del servidor",
+                    "detalle", e.getMessage()
+            ));
         }
-
     }
 }

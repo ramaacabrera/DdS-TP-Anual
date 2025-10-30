@@ -5,7 +5,6 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -19,17 +18,36 @@ public class GetHoraMaxCategoriaHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        String categoria = ctx.pathParam("categoria");
-        Optional<LocalTime> hora = repository.buscarHoraCategoria(categoria);
+        try {
+            String categoria = ctx.pathParam("categoria");
 
-        Map<String,Object> resultado = new HashMap<>();
-        if (!hora.isPresent()) {
-            resultado.put("error", "Categoría no encontrada");
-            resultado.put("status", 404);
-            ctx.status(200).json(resultado);
-        } else {
-            resultado.put("hora", hora.get().toString());
-            ctx.status(200).json(resultado);
+            if (categoria == null || categoria.trim().isEmpty()) {
+                Map<String, Object> resultado = new HashMap<>();
+                resultado.put("error", "Categoría no especificada");
+                resultado.put("status", 400);
+                ctx.status(400).json(resultado);
+                return;
+            }
+
+            // Usar el nuevo método con dos queries separadas
+            Optional<Integer> horaOpt = repository.buscarHoraCategoria(categoria.trim());
+
+            Map<String, Object> resultado = new HashMap<>();
+            if (!horaOpt.isPresent()) {
+                resultado.put("error", "No se encontraron datos para la categoría: " + categoria);
+                resultado.put("status", 404);
+                ctx.status(404).json(resultado);
+            } else {
+                resultado.put("hora", horaOpt.get());
+                resultado.put("categoria", categoria);
+                ctx.status(200).json(resultado);
+            }
+        } catch (Exception e) {
+            System.err.println("Error en GetHoraMaxCategoriaHandler: " + e.getMessage());
+            ctx.status(500).json(Map.of(
+                    "error", "Error interno del servidor",
+                    "detalle", e.getMessage()
+            ));
         }
     }
 }

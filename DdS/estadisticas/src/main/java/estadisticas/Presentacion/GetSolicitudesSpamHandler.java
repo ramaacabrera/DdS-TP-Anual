@@ -18,7 +18,7 @@ public class GetSolicitudesSpamHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        Optional<Integer> spamCount = repository.buscarSpam();
+        Optional<Long> spamCount = repository.buscarSpam();
 
         Map<String,Object> resultado = new HashMap<>();
         if (!spamCount.isPresent()) {
@@ -26,7 +26,7 @@ public class GetSolicitudesSpamHandler implements Handler {
             resultado.put("status", 404);
             ctx.status(404).json(resultado);
         } else {
-            resultado.put("spamCount", spamCount.get());
+            resultado.put("spam", spamCount.get());
             ctx.status(200).json(resultado);
         }
     }

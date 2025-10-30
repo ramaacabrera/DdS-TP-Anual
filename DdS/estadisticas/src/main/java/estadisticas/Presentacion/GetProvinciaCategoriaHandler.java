@@ -18,17 +18,35 @@ public class GetProvinciaCategoriaHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        String categoria = ctx.pathParam("categoria");
-        Optional<String> provincia = repository.buscarProvinciaCategoria(categoria);
+        try {
+            String categoria = ctx.pathParam("categoria");
 
-        Map<String,Object> resultado = new HashMap<>();
-        if (!provincia.isPresent()) {
-            resultado.put("error", "Categoría no encontrada");
-            resultado.put("status", 404);
-            ctx.status(404).json(resultado);
-        } else {
-            resultado.put("provincia", provincia.get());
-            ctx.status(200).json(resultado);
+            if (categoria == null || categoria.trim().isEmpty()) {
+                Map<String, Object> resultado = new HashMap<>();
+                resultado.put("error", "Categoría no especificada");
+                resultado.put("status", 400);
+                ctx.status(400).json(resultado);
+                return;
+            }
+
+            Optional<String> provinciaOpt = repository.buscarProvinciaCategoria(categoria.trim());
+
+            Map<String, Object> resultado = new HashMap<>();
+            if (!provinciaOpt.isPresent()) {
+                resultado.put("error", "No se encontraron datos para la categoría: " + categoria);
+                resultado.put("status", 404);
+                ctx.status(404).json(resultado);
+            } else {
+                resultado.put("provincia", provinciaOpt.get());
+                resultado.put("categoria", categoria);
+                ctx.status(200).json(resultado);
+            }
+        } catch (Exception e) {
+            System.err.println("Error en GetProvinciaCategoriaHandler: " + e.getMessage());
+            ctx.status(500).json(Map.of(
+                    "error", "Error interno del servidor",
+                    "detalle", e.getMessage()
+            ));
         }
     }
 }

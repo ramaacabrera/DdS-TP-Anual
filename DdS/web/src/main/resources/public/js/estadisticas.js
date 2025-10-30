@@ -14,16 +14,17 @@ function showError(containerId, message) {
 
 // Cargar estadísticas generales al inicio
 async function cargarEstadisticasGenerales() {
+    const API_BASE_URL = 'http://localhost:8088/api/estadisticas';
     try {
         // Cargar spam
-        const spamResponse = await fetch("/api/estadisticas/solicitudesSpam")
+        const spamResponse = await fetch(`${API_BASE_URL}/solicitudesSpam`)
         if (spamResponse.ok) {
             const spamData = await spamResponse.json()
             document.getElementById("spam-count").textContent = spamData.spam || spamData.estadisticas_spam || 0
         }
 
         // Cargar categoría máxima
-        const categoriaResponse = await fetch("/api/estadisticas/categoriaMax")
+        const categoriaResponse = await fetch(`${API_BASE_URL}/categoriaMax`)
         if (categoriaResponse.ok) {
             const categoriaData = await categoriaResponse.json()
             document.getElementById("categoria-max").textContent =
@@ -45,14 +46,15 @@ async function buscarCategoria() {
 
     showLoading()
     const resultsContainer = document.getElementById("categoria-results")
+    const API_BASE_URL = 'http://localhost:8088/api/estadisticas';
 
     try {
         // Obtener provincia máxima
-        const provinciaResponse = await fetch(`/api/estadisticas/provinciaMax/categorias/${encodeURIComponent(categoria)}`)
+        const provinciaResponse = await fetch(`${API_BASE_URL}/provinciaMax/categorias/${encodeURIComponent(categoria)}`)
         const provinciaData = await provinciaResponse.json()
 
         // Obtener hora máxima
-        const horaResponse = await fetch(`/api/estadisticas/horaMax/categorias/${encodeURIComponent(categoria)}`)
+        const horaResponse = await fetch(`${API_BASE_URL}/horaMax/categorias/${encodeURIComponent(categoria)}`)
         const horaData = await horaResponse.json()
 
         if (provinciaResponse.ok && horaResponse.ok) {
@@ -70,7 +72,7 @@ async function buscarCategoria() {
             showError("categoria-results", "No se encontraron datos para esta categoría")
         }
     } catch (error) {
-        showError("categoria-results", "Error al buscar la categoría: " + error.message)
+        showError("categoria-results", "Categoria Invalida: " + error.message)
     } finally {
         hideLoading()
     }
@@ -86,10 +88,11 @@ async function buscarColeccion() {
     }
 
     showLoading()
+    const API_BASE_URL = 'http://localhost:8088/api/estadisticas';
     const resultsContainer = document.getElementById("coleccion-results")
 
     try {
-        const response = await fetch(`/api/estadisticas/provinciaMax/colecciones/${encodeURIComponent(coleccion)}`)
+        const response = await fetch(`${API_BASE_URL}/provinciaMax/colecciones/${encodeURIComponent(coleccion)}`)
         const data = await response.json()
 
         if (response.ok) {
@@ -111,18 +114,20 @@ async function buscarColeccion() {
 
 // Cargar todas las categorías (ejemplo con categorías comunes)
 async function cargarTodasCategorias() {
-    const categoriasComunes = ["ROBO", "VANDALISMO", "ACCIDENTE", "INCENDIO", "MANIFESTACION"]
+    const categoriasComunes = ["Incendio", "Choque", "Asesinato", "Terremoto"]
     const container = document.getElementById("todas-categorias")
 
     showLoading()
+
+    const API_BASE_URL = 'http://localhost:8088/api/estadisticas';
 
     try {
         const resultados = await Promise.all(
             categoriasComunes.map(async (categoria) => {
                 try {
                     const [provinciaRes, horaRes] = await Promise.all([
-                        fetch(`/api/estadisticas/provinciaMax/categorias/${encodeURIComponent(categoria)}`),
-                        fetch(`/api/estadisticas/horaMax/categorias/${encodeURIComponent(categoria)}`),
+                        fetch(`${API_BASE_URL}/provinciaMax/categorias/${encodeURIComponent(categoria)}`),
+                        fetch(`${API_BASE_URL}/horaMax/categorias/${encodeURIComponent(categoria)}`),
                     ])
 
                     const provinciaData = await provinciaRes.json()

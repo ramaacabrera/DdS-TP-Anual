@@ -20,23 +20,12 @@ public class MainEstadisticas {
         Properties config = lector.leerConfig();
         int puerto =  Integer.parseInt(config.getProperty("puertoEstadisticas"));
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("estadisticas-PU");
-        //EntityManager em = emf.createEntityManager();
-
-
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
-//        EstadisticasRepositorio estadisticasRepositorio = new EstadisticasRepositorio(em);
-//        EstadisticasColeccionRepositorio estadisticasColeccionRepositorio = new EstadisticasColeccionRepositorio(em);
-//        EstadisticasCategoriaRepositorio estadisticasCategoriaRepositorio = new EstadisticasCategoriaRepositorio(em);
-
-        EstadisticasRepositorio estadisticasRepositorio = new EstadisticasRepositorio(emf);
-        EstadisticasColeccionRepositorio estadisticasColeccionRepositorio = new EstadisticasColeccionRepositorio(emf);
-        EstadisticasCategoriaRepositorio estadisticasCategoriaRepositorio = new EstadisticasCategoriaRepositorio(emf);
-
-        //EntityManagerFactory emfAgregador = Persistence.createEntityManagerFactory("agregador-PU");
-        //EntityManager emAgregador = emfAgregador.createEntityManager();
+        EstadisticasRepositorio estadisticasRepositorio = new EstadisticasRepositorio();
+        EstadisticasColeccionRepositorio estadisticasColeccionRepositorio = new EstadisticasColeccionRepositorio();
+        EstadisticasCategoriaRepositorio estadisticasCategoriaRepositorio = new EstadisticasCategoriaRepositorio();
         
         ConexionAgregador conexionAgregador = new ConexionAgregador();
         GeneradorEstadisticas generador = new GeneradorEstadisticas(conexionAgregador,estadisticasRepositorio,estadisticasCategoriaRepositorio,estadisticasColeccionRepositorio);
@@ -46,8 +35,7 @@ public class MainEstadisticas {
         app.get("/api/estadisticas/provinciaMax/categorias/{categoria}", new GetProvinciaCategoriaHandler(estadisticasCategoriaRepositorio));
         app.get("/api/estadisticas/horaMax/categorias/{categoria}", new GetHoraMaxCategoriaHandler(estadisticasCategoriaRepositorio));
         app.get("/api/estadisticas/solicitudesSpam", new GetSolicitudesSpamHandler(estadisticasRepositorio));
-
-
+        app.get("/api/estadisticas/categorias/", new GetCategoriasHandler(estadisticasCategoriaRepositorio));
 
 
     }

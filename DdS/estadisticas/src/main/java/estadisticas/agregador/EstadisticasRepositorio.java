@@ -1,7 +1,7 @@
 package estadisticas.agregador;
 
+import estadisticas.BDUtilsEstadisticas;
 import estadisticas.Dominio.Estadisticas;
-import utils.BDUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -12,30 +12,29 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class EstadisticasRepositorio {
-    private final EntityManagerFactory emf;
-
-    public EstadisticasRepositorio(EntityManagerFactory emNuevo) {
-        this.emf = emNuevo;
+    public EstadisticasRepositorio() {
     }
 
     public void guardar(Estadisticas estadisticas) {
-            EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
-            BDUtils.comenzarTransaccion(em);
+            em.getTransaction().begin();
 
             em.merge(estadisticas);
 
-            BDUtils.commit(em);
+            em.getTransaction().commit();
         } catch (Exception e) {
-            BDUtils.rollback(em);
-            e.printStackTrace();
-        }  finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        }finally {
             em.close();
         }
     }
 
     public Optional<Estadisticas> buscarPorHandle(UUID handle) {
-            EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
             TypedQuery<Estadisticas> query = em.createQuery(
                     "SELECT e FROM Estadisticas e WHERE e.estadisticas_id = :handleParam", Estadisticas.class);
@@ -51,15 +50,15 @@ public class EstadisticasRepositorio {
         }
     }
 
-    public Optional<Integer> buscarSpam() {
-        EntityManager em = emf.createEntityManager();
+    public Optional<Long> buscarSpam() {
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
-            TypedQuery<Integer> query = em.createQuery(
+            TypedQuery<Long> query = em.createQuery(
                     "SELECT e.estadisticas_spam FROM Estadisticas e WHERE e.estadisticas_fecha = (SELECT MAX(e1.estadisticas_fecha) FROM Estadisticas e1)",
-                    Integer.class);
+                    Long.class);
 
             query.setMaxResults(1); // ← AÑADE ESTO
-            List<Integer> resultados = query.getResultList();
+            List<Long> resultados = query.getResultList();
 
             return resultados.isEmpty() ? Optional.empty() : Optional.of(resultados.get(0));
 
@@ -71,23 +70,28 @@ public class EstadisticasRepositorio {
     }
 
     public Optional<String> buscarCategoria_max_hechos() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
             TypedQuery<String> query = em.createQuery(
                     "SELECT e.estadisticas_categoria_max_hechos FROM Estadisticas e WHERE e.estadisticas_fecha = (SELECT MAX(e1.estadisticas_fecha) FROM Estadisticas e1)",
                     String.class);
 
-            query.setMaxResults(1); // ← Evita múltiples resultados
-            List<String> resultados = query.getResultList(); // ← Usa getResultList()
+            query.setMaxResults(1);
+            List<String> resultados = query.getResultList();
 
-            // Verifica si hay resultados y si el valor no es null
             if (resultados.isEmpty() || resultados.get(0) == null) {
+                System.out.println("No se encontró categoría máxima");
                 return Optional.empty();
             }
-            return Optional.of(resultados.get(0));
+
+            String categoria = resultados.get(0);
+            System.out.println("Categoría máxima encontrada: " + categoria);
+            return Optional.of(categoria);
 
         } catch (Exception e) {
-            return Optional.empty(); // ← Captura cualquier excepción
+            System.err.println("Error buscando categoría máxima: " + e.getMessage());
+            e.printStackTrace();
+            return Optional.empty();
         } finally {
             em.close();
         }

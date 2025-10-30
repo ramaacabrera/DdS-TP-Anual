@@ -42,7 +42,7 @@
         <class>estadisticas.Dominio.EstadisticasColeccion</class>
         <class>estadisticas.Dominio.EstadisticasColeccionId</class>
         <properties>
-            <property name="hibernate.archive.autodetection" value="none"/>
+            <!--property name="hibernate.archive.autodetection" value="none"/-->
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/estadisticas_db?serverTimezone=America/Buenos_Aires"/>
             <property name="hibernate.connection.username" value="root"/>
