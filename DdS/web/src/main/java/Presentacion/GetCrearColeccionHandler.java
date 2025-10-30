@@ -22,6 +22,15 @@ public class GetCrearColeccionHandler implements Handler {
         modelo.put("urlAdmin", urlAdmin);
         modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
         modelo.put("fuentes", TipoDeFuente.values());
+
+        if(!ctx.sessionAttributeMap().isEmpty()){
+            String username = ctx.sessionAttribute("username");
+            System.out.println("Usuario: " + username);
+            String access_token = ctx.sessionAttribute("access_token");
+            modelo.put("username", username);
+            modelo.put("access_token", access_token);
+        }
+
         ctx.render("crear-coleccion.ftlh", modelo);
     }
 }

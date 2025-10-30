@@ -25,6 +25,7 @@ public class PostLoginHandler implements Handler {
     public void handle(@NotNull Context ctx) {
         String usuario = ctx.formParam("usuario");
         String password = ctx.formParam("password");
+        String redirectUrl = ctx.formParam("redirectUrl");
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -47,7 +48,11 @@ public class PostLoginHandler implements Handler {
                 ctx.sessionAttribute("access_token", accessToken);
                 ctx.sessionAttribute("username", username);
 
-                ctx.redirect("/hechos");
+                if(redirectUrl != null){
+                    ctx.redirect(redirectUrl);
+                } else{
+                    ctx.redirect("/hechos");
+                }
             } else {
                 Map<String, Object> model = new HashMap<>();
                 model.put("error", json.getString("error"));

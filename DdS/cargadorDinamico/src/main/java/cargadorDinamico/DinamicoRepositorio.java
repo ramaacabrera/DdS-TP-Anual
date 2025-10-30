@@ -114,6 +114,7 @@ public class DinamicoRepositorio {
         usuario.setNombre(usuarioD.getNombre());
         usuario.setApellido(usuarioD.getApellido());
         usuario.setRol(RolUsuario.CONTRIBUYENTE);
+        usuario.setUsername(usuarioD.getUsername());
 
         return usuario;
     }
@@ -200,7 +201,7 @@ public class DinamicoRepositorio {
             em.createQuery("DELETE FROM Hecho_D").executeUpdate();
             em.createQuery("DELETE FROM Etiqueta_D").executeUpdate();
             em.createQuery("DELETE FROM ContenidoMultimedia_D").executeUpdate();
-            em.createQuery("DELETE FROM Usuario_D").executeUpdate();
+            //em.createQuery("DELETE FROM Usuario_D").executeUpdate();
             em.createQuery("DELETE FROM Ubicacion_D").executeUpdate();
 
             BDUtilsDinamico.commit(em);
@@ -265,7 +266,7 @@ public class DinamicoRepositorio {
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
             em.createQuery("DELETE FROM SolicitudDeEliminacion_D").executeUpdate();
-            em.createQuery("DELETE FROM Usuario_D").executeUpdate();
+            //em.createQuery("DELETE FROM Usuario_D").executeUpdate();
             BDUtilsDinamico.commit(em);
             System.out.println("Todos las agregador.Solicitudes De Eliminacion han sido reseteados");
         } catch (Exception e) {

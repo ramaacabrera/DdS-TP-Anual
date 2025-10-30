@@ -16,11 +16,11 @@ import java.util.Map;
 
 public class GetColeccionHandler implements Handler {
 
-    private final String urlAdmin;
+    private final String urlPublica;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public GetColeccionHandler(String urlAdmin) {
-        this.urlAdmin = urlAdmin;
+    public GetColeccionHandler(String urlPublica) {
+        this.urlPublica = urlPublica;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class GetColeccionHandler implements Handler {
             // 1️Llamada a la API administrativa
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI(urlAdmin + "/colecciones/" + coleccionId))
+                    .uri(new URI(urlPublica + "/colecciones/" + coleccionId))
                     .GET()
                     .build();
 
@@ -51,7 +51,7 @@ public class GetColeccionHandler implements Handler {
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("pageTitle", "Detalle de Colección");
             modelo.put("coleccion", coleccion);
-            modelo.put("urlAdmin", urlAdmin);
+            modelo.put("urlAdmin", urlPublica);
             modelo.put("coleccionId", coleccionId);
 
             // 4 Renderizamos la vista

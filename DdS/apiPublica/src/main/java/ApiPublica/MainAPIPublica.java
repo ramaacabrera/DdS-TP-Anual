@@ -31,6 +31,8 @@ public class MainAPIPublica {
         app.get("/api/hechos", new GetHechosHandler(hechoRepositorio));
         app.get("/api/hechos/{id}", new GetHechoEspecificoHandler(hechoRepositorio));
         app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(coleccionRepositorio));
+        app.get("/api/colecciones", new GetColeccionesHandler(coleccionRepositorio));
+        app.get("/api/colecciones/{id}", new GetColeccionHandler(coleccionRepositorio));
         app.get("/api/categoria", new GetCategoriaHandler(hechoRepositorio));
         app.post("/api/hechos", new PostHechoHandler(puertoDinamica));
         app.post("/api/solicitudEliminacion", new PostSolicitudEliminacionHandler(puertoDinamica));

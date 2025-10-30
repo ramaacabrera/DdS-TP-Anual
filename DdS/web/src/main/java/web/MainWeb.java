@@ -48,11 +48,9 @@ public class MainWeb {
         // Falta
         app.get("/hechos/{id}/eliminar", new GetSolicitudEliminacionHandler(urlPublica));
 
-        // Falta
-        app.get("/colecciones", new GetColeccionesHandler(urlAdmin));
+        app.get("/colecciones", new GetColeccionesHandler(urlPublica));
 
-        // Falta
-        app.get("/colecciones/{id}", new GetColeccionHandler(urlAdmin));
+        app.get("/colecciones/{id}", new GetColeccionHandler(urlPublica));
 
         // Falta
         //app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
@@ -60,9 +58,9 @@ public class MainWeb {
         // Falta
         //app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlAdmin));
 
-        //app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
+        app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
 
-        //app.get("/crear-coleccion", new GetCrearColeccionHandler(urlAdmin));
+        app.get("/crear-coleccion", new GetCrearColeccionHandler(urlAdmin));
 
         // Falta organizar el tema de categorias y colecciones, y aplicar los estilos
         app.get("/estadisticas", new GetEstadisticasHandler(puertoEstadisticas));

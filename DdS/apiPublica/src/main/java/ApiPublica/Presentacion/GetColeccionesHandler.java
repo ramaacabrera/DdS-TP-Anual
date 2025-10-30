@@ -1,18 +1,12 @@
-package ApiAdministrativa.Presentacion;
+package ApiPublica.Presentacion;
 
 import utils.DTO.PageDTO;
 import utils.Dominio.HechosYColecciones.Coleccion;
 import utils.Persistencia.ColeccionRepositorio;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
 

@@ -39,7 +39,7 @@ public class GetEditarColeccionHandler implements Handler {
             String coleccionId = ctx.pathParam("id");
             System.out.println("Abriendo formulario de edición para colección ID: " + coleccionId);
 
-            // 1️Traemos la colección desde la API administrativa
+            // 1️ Traemos la colección desde la API administrativa
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(urlAdmin + "/colecciones/" + coleccionId))
@@ -54,10 +54,28 @@ public class GetEditarColeccionHandler implements Handler {
                 return;
             }
 
-            // 2️Parseamos la respuesta JSON a un Map (para FreeMarker)
+            // 2️ Parseamos la respuesta JSON a un Map (para FreeMarker)
             Map<String, Object> coleccion = mapper.readValue(response.body(), new TypeReference<>() {});
 
-            // 3️Armamos el modelo para la vista
+            // Valido que el usuario sea un admin
+
+            if(ctx.sessionAttributeMap().isEmpty()){
+                ctx.status(500).result("Administrador no identificado");
+            }
+
+            String username = ctx.sessionAttribute("username");
+            String access_token = ctx.sessionAttribute("access_token");
+
+            HttpClient cliente = HttpClient.newHttpClient();
+            HttpRequest req = HttpRequest.newBuilder()
+                    .uri(new URI(urlAdmin + "/colecciones/" + coleccionId))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> res = cliente.send(req, HttpResponse.BodyHandlers.ofString());
+
+
+            // 3️ Armamos el modelo para la vista
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("pageTitle", "Editar colección");
             modelo.put("coleccion", coleccion);
@@ -65,6 +83,10 @@ public class GetEditarColeccionHandler implements Handler {
             modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
             modelo.put("fuentes", TipoDeFuente.values());
             modelo.put("urlAdmin", urlAdmin);
+
+            modelo.put("username", username);
+            modelo.put("access_token", access_token);
+
 
             // Renderizamos el template
             ctx.render("editar-coleccion.ftl", modelo);

@@ -31,6 +31,7 @@ public interface conversorTipoD {
         usuario.setNombre(usuarioD.getNombre());
         usuario.setApellido(usuarioD.getApellido());
         usuario.setRol(RolUsuario.CONTRIBUYENTE);
+        usuario.setUsername(usuarioD.getUsername());
 
         return usuario;
     }

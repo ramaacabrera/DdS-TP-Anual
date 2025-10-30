@@ -17,7 +17,7 @@ public class MainAgregador {
 
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        int puertoAgregador = 8080;
+        int puertoAgregador = 8070;
         System.out.println("Iniciando servidor Agregador en el puerto "+puertoAgregador);
 
         IniciadorApp iniciador = new IniciadorApp();

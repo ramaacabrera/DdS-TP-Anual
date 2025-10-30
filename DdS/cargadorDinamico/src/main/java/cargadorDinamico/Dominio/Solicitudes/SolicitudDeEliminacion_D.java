@@ -32,7 +32,7 @@ public class SolicitudDeEliminacion_D {
     private UUID hecho_id;
 
     @ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "id_usuario")
     private Usuario_D usuario;
 
     @Enumerated(EnumType.STRING)

@@ -36,13 +36,13 @@ public class OnMessageHandler {
                 }
                 case "solicitudesModificacionObtenidos" -> {
                     SolicitudesModificacionObtenidosPayload payload = mapper.treeToValue(root.get("payload"), SolicitudesModificacionObtenidosPayload.class);
-                    System.out.println("→ Hechos recibidos: " + payload.solicitudes.size());
+                    System.out.println("→ Solicitud de Modificacion recibidas: " + payload.solicitudes.size());
                     List<SolicitudDeEliminacionDTO> solicitudesVacia = new ArrayList<>();
                     agregador.agregarSolicitudes(payload.solicitudes, solicitudesVacia);
                 }
-                case "solicitudesDeEliminacionObtenidos" -> {
+                case "solicitudesEliminacionObtenidos" -> {
                     SolicitudesEliminacionObtenidosPayload payload = mapper.treeToValue(root.get("payload"), SolicitudesEliminacionObtenidosPayload.class);
-                    System.out.println("→ Hechos recibidos: " + payload.solicitudes.size());
+                    System.out.println("→ Solicitud de Eliminacion recibidas: " + payload.solicitudes.size());
                     List<SolicitudDeModificacionDTO> solicitudesVacia = new ArrayList<>();
                     agregador.agregarSolicitudes(solicitudesVacia, payload.solicitudes);
                 }

@@ -1,4 +1,4 @@
-package ApiAdministrativa.Presentacion;
+package ApiPublica.Presentacion;
 
 import utils.Persistencia.ColeccionRepositorio;
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -23,22 +23,22 @@ import java.util.Objects;
 
 public class GetColeccionesHandler implements Handler {
 
-    private final String urlAdmin;
+    private final String urlPublica;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public GetColeccionesHandler(String urlAdmin) {
-        this.urlAdmin = urlAdmin;
+    public GetColeccionesHandler(String urlPublica) {
+        this.urlPublica = urlPublica;
     }
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
         try {
-            System.out.println("Listando todas las colecciones desde " + urlAdmin);
+            System.out.println("Listando todas las colecciones desde " + urlPublica);
 
             int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
             int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
 
-            HttpUrl.Builder b = HttpUrl.parse(urlAdmin + "/colecciones").newBuilder()
+            HttpUrl.Builder b = HttpUrl.parse(urlPublica + "/colecciones").newBuilder()
                     .addQueryParameter("pagina", String.valueOf(page))
                     .addQueryParameter("limite", String.valueOf(size));
 
@@ -69,7 +69,7 @@ public class GetColeccionesHandler implements Handler {
             modelo.put("fromIndex", fromIndex);
             modelo.put("toIndex", toIndex);
             modelo.put("colecciones", resp.content);
-            modelo.put("urlAdmin", urlAdmin);
+            modelo.put("urlAdmin", urlPublica);
 
             // Renderizar plantilla
             ctx.render("colecciones.ftl", modelo);

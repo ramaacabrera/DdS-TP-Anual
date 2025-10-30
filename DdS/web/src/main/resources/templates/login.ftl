@@ -15,6 +15,7 @@
             <form method="post" action="/login">
                 <input type="text" name="usuario" placeholder="Usuario" required>
                 <input type="password" name="password" placeholder="Contraseña" required>
+                <input type="hidden" name="redirectUrl" value="${ultimaUrl!}">
                 <button type="submit">Entrar</button>
             </form>
             <div class="link">

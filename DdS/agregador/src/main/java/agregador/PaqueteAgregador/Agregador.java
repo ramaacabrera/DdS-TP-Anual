@@ -140,6 +140,8 @@ public class Agregador {
         //List<SolicitudDeModificacionDTO> solicitudesDeModificacion = conexionCargador.obtenerSolicitudes();
         //List<SolicitudDeEliminacionDTO>  solicitudesDeEliminacion = conexionCargador.obtenerSolicitudesEliminacion();
 
+        System.out.println("Solicitudes de modificacion a guardar: " + solicitudesDeModificacion.size());
+        System.out.println("Solicitudes de eliminacion a guardar: " + solicitudesDeEliminacion.size());
 
         for (SolicitudDeEliminacionDTO dto : solicitudesDeEliminacion) {
             boolean esSpam = detectorDeSpam.esSpam(dto.getJustificacion());
