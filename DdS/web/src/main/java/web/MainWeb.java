@@ -27,7 +27,7 @@ public class MainWeb {
         app.get("/", ctx -> {
             ctx.redirect("/hechos");
         });
-        //app.get("/home", new GetHomeHandler(urlPublica));
+        app.get("/home", new GetHomeHandler(urlPublica));
         app.get("/login", new GetLoginHandler(urlPublica));
         app.post("/login", new PostLoginHandler(urlPublica));
 

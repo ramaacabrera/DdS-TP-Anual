@@ -13,6 +13,16 @@ body {
     background-color: var(--bg-light);
     color: var(--text-color);
 }
+.home-background {
+    background-color: #e2e6ea;
+    background-image: url('/public/img/fondomapa.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 100vh;
+    padding-top: 1px;
+}
+
 .container {
     max-width: 1000px;
     margin: 30px auto;

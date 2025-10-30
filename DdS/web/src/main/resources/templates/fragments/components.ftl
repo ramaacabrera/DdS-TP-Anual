@@ -1,3 +1,60 @@
+<#macro quickNavCards>
+    <div class="quick-nav-section">
+        <h2 class="section-title">Navegación Rápida</h2>
+        <div class="quick-nav-cards">
+            <a href="/solicitudes" class="nav-card">
+                <div class="nav-card-icon">📋</div>
+                <h3>Ver Solicitudes</h3>
+                <p>Consulta y gestiona las solicitudes de mapeo pendientes</p>
+            </a>
+            <a href="/colecciones/crear" class="nav-card">
+                <div class="nav-card-icon">🗂️</div>
+                <h3>Crear Colección</h3>
+                <p>Organiza y agrupa hechos relacionados en colecciones temáticas</p>
+            </a>
+            <a href="/hechos" class="nav-card">
+                <div class="nav-card-icon">📊</div>
+                <h3>Ver Hechos (Lista)</h3>
+                <p>Explora todos los hechos registrados en formato de lista</p>
+            </a>
+            <a href="/colecciones" class="nav-card">
+                <div class="nav-card-icon">📚</div>
+                <h3>Ver Colecciones</h3>
+                <p>Accede a las colecciones de datos creadas por la comunidad</p>
+            </a>
+        </div>
+    </div>
+</#macro>
+
+<#macro heroSection title subtitle backgroundImage="">
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>${title}</h1>
+            <p>${subtitle}</p>
+            <div class="hero-buttons">
+                <a href="/hechos" class="btn btn-primary btn-large">Explorar el Mapa</a>
+                <a href="/crear" class="btn btn-outline btn-large">Reportar Hecho</a>
+            </div>
+        </div>
+    </section>
+</#macro>
+
+<#macro mapSection title totalHechos displayedHechos>
+    <section class="map-section">
+        <div class="container">
+            <h2 class="section-title">${title} (${displayedHechos} de ${totalHechos} mostrados)</h2>
+            <div class="map-container">
+                <div id="map" class="map-placeholder">
+                    <div class="map-loading">Cargando mapa...</div>
+                </div>
+                <div class="map-info">
+                    <p><strong>${displayedHechos}</strong> de <strong>${totalHechos}</strong> hechos mostrados en el mapa</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</#macro>
+
 <#macro hero hecho>
     <div class="hero">
         <#-- lógica: si hay multimedia, usá la primera imagen; si no, fallback -->
