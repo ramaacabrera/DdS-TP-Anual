@@ -1,4 +1,5 @@
 package utils.Persistencia;
+import org.hibernate.Hibernate;
 import utils.DTO.PageDTO;
 import utils.Dominio.Criterios.Criterio;
 import utils.Dominio.HechosYColecciones.Coleccion;
@@ -44,6 +45,14 @@ public class ColeccionRepositorio {
         EntityManager em = BDUtils.getEntityManager();
         try {
             TypedQuery<Coleccion> query = em.createQuery("SELECT c FROM Coleccion c", Coleccion.class);
+            List<Coleccion> resultado = query.getResultList();
+
+            for(Coleccion c : resultado){
+                Hibernate.initialize(c.getHechos());
+                Hibernate.initialize(c.getFuente());
+                Hibernate.initialize(c.getHechosConsensuados());
+                Hibernate.initialize(c.getCriteriosDePertenencia());
+            }
             return query.getResultList();
         } finally {
             em.close();

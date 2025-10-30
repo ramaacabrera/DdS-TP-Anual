@@ -40,7 +40,7 @@ public class GetColeccionHandler implements Handler {
 
             if (response.statusCode() != 200) {
                 ctx.status(response.statusCode())
-                        .result("Error al obtener la colección desde la API administrativa.");
+                        .result("Error al obtener la colección desde la API administrativa." + response.body());
                 return;
             }
 

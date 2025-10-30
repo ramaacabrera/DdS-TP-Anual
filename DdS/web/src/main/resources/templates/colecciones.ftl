@@ -19,8 +19,8 @@
                         <p>${c.descripcion!''}</p>
                         <small><b>Algoritmo:</b> ${c.algoritmoDeConsenso!''}</small>
                         <div style="margin-top:10px;">
-                            <a href="/colecciones/${c.id}" class="btn btn-secondary btn-sm">👁️ Ver Detalle</a>
-                            <a href="/editar-coleccion/${c.id}" class="btn btn-sm btn-outline">✏️ Editar</a>
+                            <a href="/colecciones/${c.handle}" class="btn btn-secondary btn-sm">👁️ Ver Detalle</a>
+                            <a href="/editar-coleccion/${c.handle}" class="btn btn-sm btn-outline">✏️ Editar</a>
                         </div>
                     </div>
                 </#list>
