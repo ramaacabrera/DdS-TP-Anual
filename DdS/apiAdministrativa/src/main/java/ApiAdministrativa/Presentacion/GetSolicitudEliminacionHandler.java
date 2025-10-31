@@ -13,55 +13,37 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Optional;
+import java.util.UUID;
 
 public class GetSolicitudEliminacionHandler implements Handler {
-    private SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
-    ObjectMapper mapper = new ObjectMapper();
+    private final SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public GetSolicitudEliminacionHandler(SolicitudEliminacionRepositorio solicitudEliminacionRepositorio) {
         this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
-    //public GetSolicitudEliminacionHandler(SolicitudEliminacionRepositorio repositorio){ this.repositorio = repositorio;
     }
 
     @Override
-    public void handle(Context ctx) throws IOException, InterruptedException {
-        String handle = ctx.pathParam("id");
+    public void handle(Context ctx) throws Exception {
+        String idString = ctx.pathParam("id");
 
-        /*
-
-                CAMBIAR ESTO CUANDO SE IMPLEMENTEN LAS BASES DE DATOS
-
-
-        */
-
-        //    ->>>>>>>>>
-
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-        HttpRequest request = null;
         try {
-            request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8080/colecciones/" + handle))
-                    .GET()
-                    .build();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            UUID id = UUID.fromString(idString);
+
+            // USAR EL REPOSITORIO DIRECTAMENTE
+            Optional<SolicitudDeEliminacion> resultadoBusqueda = solicitudEliminacionRepositorio.buscarPorId(id);
+
+            if (resultadoBusqueda.isPresent()) {
+                System.out.println("✅ Solicitud encontrada: " + id);
+                ctx.status(200).json(resultadoBusqueda.get());
+            } else {
+                System.out.println("❌ Solicitud no encontrada: " + id);
+                ctx.status(404).result("Solicitud no encontrada");
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println("❌ ID inválido: " + idString);
+            ctx.status(400).result("ID inválido");
         }
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        SolicitudDeEliminacion solicitud = mapper.readValue(response.body(), new TypeReference<>() {
-        });
-
-        ctx.status(200).json(solicitud);
-
-        //    <<<<<<<<<-
-
-//        final Optional<SolicitudDeEliminacion> resultadoBusqueda = repositorio.buscarPorId(handle);
-//        if (resultadoBusqueda.isPresent()) {
-//            ctx.status(200).json(resultadoBusqueda.get());
-//        } else {
-//            ctx.status(404);
-//        }
     }
 }

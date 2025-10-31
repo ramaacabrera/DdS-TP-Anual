@@ -21,6 +21,8 @@
         <class>utils.Dominio.Criterios.CriterioTipoMultimedia</class>
         <class>utils.Dominio.Criterios.CriterioUbicacion</class>
         <class>utils.Dominio.Solicitudes.Solicitud</class>
+        <class>utils.Dominio.Solicitudes.SolicitudDeEliminacion</class>
+        <class>utils.Dominio.Solicitudes.SolicitudDeModificacion</class>
         <properties>
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/agregador_db?serverTimezone=America/Buenos_Aires"/>

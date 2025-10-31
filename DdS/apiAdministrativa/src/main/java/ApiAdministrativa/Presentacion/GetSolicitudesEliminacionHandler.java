@@ -17,49 +17,17 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 public class GetSolicitudesEliminacionHandler implements Handler {
-
     private final SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
 
     public GetSolicitudesEliminacionHandler(SolicitudEliminacionRepositorio solicitudEliminacionRepositorio) {
         this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
     }
 
-    //public GetSolicitudesEliminacionHandler(SolicitudEliminacionRepositorio repositorio) {this.repositorio = repositorio;}
-
     @Override
-    public void handle(@NotNull Context ctx) throws IOException, InterruptedException {
-        /*
-
-                CAMBIAR ESTO CUANDO SE IMPLEMENTEN LAS BASES DE DATOS
-
-
-        */
-
-        //    ->>>>>>>>>
-
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-        HttpRequest request = null;
-        try {
-            request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8080/solicitudes"))
-                    .GET()
-                    .build();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        ObjectMapper mapper = new ObjectMapper();
-        List<SolicitudDeEliminacion> solicitudes = mapper.readValue(response.body(), new TypeReference<>() {
-        });
-
+    public void handle(@NotNull Context ctx) throws Exception {
+        // USAR EL REPOSITORIO DIRECTAMENTE - eliminar las llamadas HTTP
+        List<SolicitudDeEliminacion> solicitudes = solicitudEliminacionRepositorio.buscarTodas();
+        System.out.println("📋 Solicitudes encontradas en BD: " + solicitudes.size());
         ctx.status(200).json(solicitudes);
-
-        //    <<<<<<<<<-
-
-        //context.json(repositorio.buscarTodas());
     }
-
 }

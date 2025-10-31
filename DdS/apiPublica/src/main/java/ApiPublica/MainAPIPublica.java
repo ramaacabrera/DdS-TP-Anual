@@ -36,7 +36,7 @@ public class MainAPIPublica {
         app.get("/api/categoria", new GetCategoriaHandler(hechoRepositorio));
         app.post("/api/hechos", new PostHechoHandler(puertoDinamica));
         app.post("/api/solicitudEliminacion", new PostSolicitudEliminacionHandler(puertoDinamica));
-        app.post("/api/solicitudeModificacion", new PostSolicitudModificacionHandler(puertoDinamica));
+        app.post("/api/solicitudModificacion", new PostSolicitudModificacionHandler(puertoDinamica));
 
         app.post("/api/login", new PostLoginHandler(usuarioRepositorio, urlWeb, servidorSSO));
         app.post("/api/sign-in", new PostSignInHandler(usuarioRepositorio, urlWeb));

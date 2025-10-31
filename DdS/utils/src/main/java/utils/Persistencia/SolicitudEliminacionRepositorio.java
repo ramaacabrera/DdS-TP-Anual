@@ -1,5 +1,7 @@
 package utils.Persistencia;
 
+import org.hibernate.Hibernate;
+import utils.Dominio.HechosYColecciones.Hecho;
 import utils.Dominio.Solicitudes.EstadoSolicitudEliminacion;
 import utils.Dominio.Solicitudes.SolicitudDeEliminacion;
 import utils.BDUtils;
@@ -8,22 +10,18 @@ import utils.Dominio.Usuario.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class SolicitudEliminacionRepositorio {
-    //private final EntityManagerFactory emf;
-    //private final List<SolicitudDeEliminacion> solicitudes = new ArrayList<SolicitudDeEliminacion>();
     private final HechoRepositorio hechoRepositorio;
 
     public SolicitudEliminacionRepositorio(HechoRepositorio hechoRepositorio) {
         this.hechoRepositorio = hechoRepositorio;
     }
 
-    //private Optional<SolicitudDeEliminacion> buscarSolicitudEliminacion(){
-        //return solicitudes.stream().findFirst();
-    //}
     private Optional<SolicitudDeEliminacion> buscarSolicitudEliminacion() {
         EntityManager em = BDUtils.getEntityManager();
         try {
@@ -39,21 +37,41 @@ public class SolicitudEliminacionRepositorio {
         }
     }
 
-    //public List<SolicitudDeEliminacion> buscarTodas(){return solicitudes;}
-    public List<SolicitudDeEliminacion> buscarTodas() {
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            TypedQuery<SolicitudDeEliminacion> query = em.createQuery(
-                    "SELECT s FROM SolicitudDeEliminacion s", SolicitudDeEliminacion.class);
-            return query.getResultList();
-        } finally {
-            em.close();
-        }
-    }
+ public List<SolicitudDeEliminacion> buscarTodas() {
+     EntityManager em = BDUtils.getEntityManager();
+     try {
+         TypedQuery<SolicitudDeEliminacion> query = em.createQuery(
+                 "SELECT s FROM SolicitudDeEliminacion s", SolicitudDeEliminacion.class);
 
-    //public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud){
-        //solicitudes.add(solicitud);
-    //}
+         List<SolicitudDeEliminacion> resultados = query.getResultList();
+
+         // ✅ INICIALIZAR RELACIONES LAZY ANTES DE CERRAR LA SESIÓN
+         for (SolicitudDeEliminacion solicitud : resultados) {
+             // Inicializar el hecho asociado y sus relaciones
+             if (solicitud.getHechoAsociado() != null) {
+                 Hecho hecho = solicitud.getHechoAsociado();
+                 Hibernate.initialize(hecho.getContenidoMultimedia()); // ← ESTE ERA EL PROBLEMA
+                 Hibernate.initialize(hecho.getEtiquetas());
+                 Hibernate.initialize(hecho.getUbicacion());
+             }
+
+             // Inicializar el usuario si existe
+             if (solicitud.getUsuario() != null) {
+                 Hibernate.initialize(solicitud.getUsuario());
+             }
+         }
+
+         System.out.println("✅ Encontradas " + resultados.size() + " solicitudes de eliminación");
+         return resultados;
+
+     } catch (Exception e) {
+         System.err.println("❌ Error en buscarTodas: " + e.getMessage());
+         e.printStackTrace();
+         return new ArrayList<>();
+     } finally {
+         em.close();
+     }
+ }
     public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
         EntityManager em = BDUtils.getEntityManager();
         try {
@@ -125,21 +143,6 @@ public class SolicitudEliminacionRepositorio {
         this.agregarSolicitudDeEliminacion(solicitud);
     }
 
-    /*public boolean actualizarEstadoSolicitudEliminacion(String body, int id){
-        Optional<SolicitudDeEliminacion> resultadoBusqueda = this.buscarPorId(id);
-        if(resultadoBusqueda.isPresent()) {
-            EstadoSolicitudEliminacion_D estadoEnum = EstadoSolicitudEliminacion_D.valueOf(body.toUpperCase());
-            if(estadoEnum == EstadoSolicitudEliminacion_D.ACEPTADA){
-                resultadoBusqueda.get().aceptarSolicitud();
-            } else if(estadoEnum == EstadoSolicitudEliminacion_D.RECHAZADA){
-                resultadoBusqueda.get().rechazarSolicitud();
-            } else {
-                return false;
-            }
-            return true;
-        }
-        return false;
-    }*/
     public boolean actualizarEstadoSolicitudEliminacion(String body, UUID id) {
         Optional<SolicitudDeEliminacion> resultadoBusqueda = this.buscarPorId(id);
         if (resultadoBusqueda.isPresent()) {
@@ -172,18 +175,53 @@ public class SolicitudEliminacionRepositorio {
         return false; // No se encontró la solicitud
     }
 
-    //public Optional<SolicitudDeEliminacion> buscarPorId(int id){
-    //    return solicitudes.stream().filter(c -> c.getId() == id).findFirst();
-    //}
     public Optional<SolicitudDeEliminacion> buscarPorId(UUID id) {
         EntityManager em = BDUtils.getEntityManager();
         try {
+            System.out.println("🔍 Buscando solicitud con ID: " + id);
+
             SolicitudDeEliminacion solicitud = em.find(SolicitudDeEliminacion.class, id);
 
+            if (solicitud != null) {
+                System.out.println("✅ Solicitud encontrada: " + solicitud.getId());
+
+                // ✅ INICIALIZAR TODAS LAS RELACIONES LAZY
+                if (solicitud.getHechoAsociado() != null) {
+                    Hecho hecho = solicitud.getHechoAsociado();
+
+                    // Inicializar todas las colecciones lazy del Hecho
+                    Hibernate.initialize(hecho.getEtiquetas());        // ← ESTE FALTABA
+                    Hibernate.initialize(hecho.getContenidoMultimedia());
+                    Hibernate.initialize(hecho.getUbicacion());
+
+                    // Si el hecho tiene usuario contribuyente, inicializarlo también
+                    if (hecho.getContribuyente() != null) {
+                        Hibernate.initialize(hecho.getContribuyente());
+                    }
+
+                    // Si el hecho tiene fuente, inicializarla
+                    if (hecho.getFuente() != null) {
+                        Hibernate.initialize(hecho.getFuente());
+                    }
+                }
+
+                // Inicializar el usuario de la solicitud
+                if (solicitud.getUsuario() != null) {
+                    Hibernate.initialize(solicitud.getUsuario());
+                }
+            } else {
+                System.out.println("❌ Solicitud NO encontrada con ID: " + id);
+            }
+
             return Optional.ofNullable(solicitud);
+        } catch (Exception e) {
+            System.err.println("❌ Error en buscarPorId: " + e.getMessage());
+            e.printStackTrace();
+            return Optional.empty();
         } finally {
             em.close();
         }
     }
+
 
 }

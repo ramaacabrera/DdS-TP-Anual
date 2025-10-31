@@ -11,15 +11,13 @@ import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 import utils.DTO.PageDTO;
 import utils.Dominio.HechosYColecciones.Coleccion;
+import utils.Dominio.Solicitudes.SolicitudDeEliminacion;
+import utils.Dominio.Solicitudes.SolicitudDeModificacion;
+import utils.Persistencia.SolicitudEliminacionRepositorio;
+import utils.Persistencia.SolicitudModificacionRepositorio;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class GetColeccionesHandler implements Handler {
 
@@ -47,17 +45,18 @@ public class GetColeccionesHandler implements Handler {
             Request request = new Request.Builder().url(finalUrl).get().build();
             OkHttpClient client = new OkHttpClient();
             PageDTO<Coleccion> resp;
-            try(Response response = client.newCall(request).execute()){
+            try (Response response = client.newCall(request).execute()) {
                 if (!response.isSuccessful()) {
                     throw new IOException("Error al llamar al backend: " + response.code() + " " + response.message());
                 }
                 String body = Objects.requireNonNull(response.body()).string();
                 System.out.println(body);
-                resp = mapper.readValue(body, new TypeReference<PageDTO<Coleccion>>() {});
+                resp = mapper.readValue(body, new TypeReference<PageDTO<Coleccion>>() {
+                });
             }
 
             int fromIndex = (resp.page - 1) * resp.size;                // 0-based
-            int toIndex   = fromIndex + (resp.content != null ? resp.content.size() : 0);
+            int toIndex = fromIndex + (resp.content != null ? resp.content.size() : 0);
 
             // Armar modelo para FreeMarker
             Map<String, Object> modelo = new HashMap<>();
@@ -89,4 +88,3 @@ public class GetColeccionesHandler implements Handler {
         }
     }
 }
-

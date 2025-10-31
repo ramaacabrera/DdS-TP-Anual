@@ -2,10 +2,10 @@
     <div class="home-quick-nav-section">
         <h2 class="home-section-title">Navegación Rápida</h2>
         <div class="home-quick-nav-cards">
-            <a href="/solicitudes" class="home-nav-card">
+            <a href="/admin/solicitudes" class="home-nav-card">
                 <div class="home-nav-card-icon">📋</div>
                 <h3>Ver Solicitudes</h3>
-                <p>Consulta y gestiona las solicitudes de mapeo pendientes</p>
+                <p>Consulta y gestiona las solicitudes pendientes</p>
             </a>
             <a href="/crear-coleccion" class="home-nav-card">
                 <div class="home-nav-card-icon">🗂️</div>
@@ -20,7 +20,7 @@
             <a href="/colecciones" class="home-nav-card">
                 <div class="home-nav-card-icon">📚</div>
                 <h3>Ver Colecciones</h3>
-                <p>Accede a las colecciones de datos creadas por la comunidad</p>
+                <p>Accede a las colecciones de hechos creadas por nuestros administradores</p>
             </a>
         </div>
     </div>

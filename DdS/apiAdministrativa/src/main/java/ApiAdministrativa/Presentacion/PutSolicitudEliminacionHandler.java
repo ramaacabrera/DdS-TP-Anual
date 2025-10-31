@@ -8,28 +8,36 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.UUID;
 
-public class PutSolicitudEliminacionHandler implements Handler{
+public class PutSolicitudEliminacionHandler implements Handler {
     private final SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
 
     public PutSolicitudEliminacionHandler(SolicitudEliminacionRepositorio solicitudEliminacionRepositorio) {
         this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
     }
+
     @Override
-    public void handle(Context context) throws Exception {
-        String id = context.pathParam("id");
-        String bodyJson = context.body(); // el body recibido
+    public void handle(Context ctx) throws Exception {
+        String idString = ctx.pathParam("id");
+        String accion = ctx.body(); // "ACEPTADA" o "RECHAZADA"
 
-        HttpClient httpClient = HttpClient.newHttpClient();
+        try {
+            UUID id = UUID.fromString(idString);
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("http://localhost:8080/api/solicitudes/" + id))
-                .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString(bodyJson))
-                .build();
+            // USAR EL REPOSITORIO DIRECTAMENTE
+            boolean resultado = solicitudEliminacionRepositorio.actualizarEstadoSolicitudEliminacion(accion, id);
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        context.status(response.statusCode()).result(response.body());
+            if (resultado) {
+                System.out.println("✅ Solicitud " + accion + ": " + id);
+                ctx.status(200).result("Solicitud " + accion.toLowerCase() + " correctamente");
+            } else {
+                System.out.println("❌ Solicitud no encontrada para actualizar: " + id);
+                ctx.status(404).result("Solicitud no encontrada");
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println("❌ ID inválido: " + idString);
+            ctx.status(400).result("ID inválido");
+        }
     }
 }

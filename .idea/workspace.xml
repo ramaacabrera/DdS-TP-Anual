@@ -5,82 +5,59 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/Presentacion/GetSolicitudAdminHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/Presentacion/GetSolicitudesAdminHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleSolicitudes.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/solicitud-detalle.ftl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/solicitudes.ftl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/agregador.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Cargador/ConexionCargador.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Cargador/ConexionCargador.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/OnConnectHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/OnConnectHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/OnMessageHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/OnMessageHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/PostColeccionRepoHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/PostColeccionRepoHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/PostSolicitudEliminacionRepoHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/PostSolicitudEliminacionRepoHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/PutColeccionRepoHandler$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/Handlers/PutColeccionRepoHandler$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/MainAgregador.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/MainAgregador.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/PaqueteAgregador/Agregador.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/target/classes/agregador/PaqueteAgregador/Agregador.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicaDto/SolicitudEliminacion_D_DTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicaDto/SolicitudEliminacion_D_DTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicoRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeEliminacion_D.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeEliminacion_D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeModificacion_D.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeModificacion_D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesEliminacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesEliminacionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/DTO/SolicitudDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/DTO/SolicitudDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeEliminacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeEliminacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeModificacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeModificacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ApiGetter.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ApiGetter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ClienteDelAgregador$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ClienteDelAgregador$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ClienteDelAgregador.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ClienteDelAgregador.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ConexionAlAgregador.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/ConexionAlAgregador.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioCategoria.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioCategoria.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioContribuyente.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioContribuyente.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioDeTexto.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioDeTexto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioTipoFuente.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioTipoFuente.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioTipoMultimedia.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioTipoMultimedia.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioUbicacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/CriterioUbicacion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/TipoDeTexto.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Criterios/TipoDeTexto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/Coleccion.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/Coleccion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/EstadoHecho.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/EstadoHecho.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/ModosDeNavegacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/ModosDeNavegacion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/TipoAlgoritmoConsenso.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/TipoAlgoritmoConsenso.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/TipoContenidoMultimedia.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/HechosYColecciones/TipoContenidoMultimedia.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Solicitudes/EstadoSolicitudEliminacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Solicitudes/EstadoSolicitudEliminacion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Solicitudes/EstadoSolicitudModificacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Solicitudes/EstadoSolicitudModificacion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Usuario/RolUsuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Usuario/RolUsuario.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/fuente/Fuente.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/fuente/Fuente.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/fuente/TipoDeFuente.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/fuente/TipoDeFuente.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/IniciadorApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/IniciadorApp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/LecturaConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/LecturaConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Persistencia/HechoRepositorio.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Persistencia/HechoRepositorio.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/img/noimg-default.png" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/img/noimg-default.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-eliminacion.js" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-eliminacion.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java/ApiAdministrativa/MainAPIAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java/ApiAdministrativa/MainAPIAdmin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/GetSolicitudEliminacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/GetSolicitudEliminacionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/GetSolicitudesEliminacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/GetSolicitudesEliminacionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/PutSolicitudEliminacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java/ApiAdministrativa/Presentacion/PutSolicitudEliminacionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/apiPublica/src/main/java/ApiPublica/MainAPIPublica.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiPublica/src/main/java/ApiPublica/MainAPIPublica.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/apiPublica/target/classes/ApiPublica/MainAPIPublica.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiPublica/target/classes/ApiPublica/MainAPIPublica.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/apiPublica/target/classes/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiPublica/target/classes/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/DinamicoRepositorio.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/target/classes/cargadorDinamico/DinamicoRepositorio.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/Solicitud.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/Solicitud.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/SolicitudEliminacionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/SolicitudEliminacionRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Solicitudes/Solicitud.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Dominio/Solicitudes/Solicitud.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Persistencia/SolicitudEliminacionRepositorio.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Persistencia/SolicitudEliminacionRepositorio.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Persistencia/SolicitudModificacionRepositorio.class" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/target/classes/utils/Persistencia/SolicitudModificacionRepositorio.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/Presentacion/GetColeccionesHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/Presentacion/GetColeccionesHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/MainWeb.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/MainWeb.java" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="">
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/Handlers/PostSolicitudEliminacionRepoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/Handlers/PostSolicitudEliminacionRepoHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/MainAgregador.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/MainAgregador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/PaqueteAgregador/Agregador.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/PaqueteAgregador/Agregador.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java/ApiAdministrativa/MainAPIAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/java/ApiAdministrativa/MainAPIAdmin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicaDto/SolicitudEliminacion_D_DTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicaDto/SolicitudEliminacion_D_DTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicoRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeEliminacion_D.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeEliminacion_D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeModificacion_D.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeModificacion_D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesEliminacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesEliminacionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesModificacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesModificacionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/conversorTipoD.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/conversorTipoD.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/DTO/SolicitudDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/DTO/SolicitudDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeEliminacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeEliminacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeModificacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeModificacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/HechoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/HechoRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiAdministrativa/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/apiPublica/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/apiPublica/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/resources/META-INF/persistence.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/SolicitudEliminacionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/SolicitudEliminacionRepositorio.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/SolicitudModificacionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/SolicitudModificacionRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-eliminacion.js" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-eliminacion.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-solicitud-eliminacion.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-solicitud-eliminacion.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/Presentacion/GetColeccionesHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/Presentacion/GetColeccionesHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/MainWeb.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/MainWeb.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/componentes.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/componentes.properties" afterDir="false" />
     </list>
     <list id="1cc1f052-f7be-4f64-88a8-3e20e9b1b866" name="Changes by idiar" comment="" />
     <list id="fbc10810-a605-4e63-80e3-6f0511f82dbf" name="Changes by Luc" comment="" />
+    <list id="d58e6f0e-4204-4a02-a453-9689990975ca" name="Changes by MMS" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -99,81 +76,36 @@
   &quot;editorReviewEnabled&quot;: false
 }</component>
   <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicaDto/SolicitudEliminacion_D_DTO.java">
+    <file path="$PROJECT_DIR$/DdS/web/src/main/java/web/MainWeb.java">
       <ranges>
-        <range start1="7" end1="8" start2="7" end2="8" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-        <range start1="13" end1="15" start2="13" end2="15" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-        <range start1="19" end1="21" start2="19" end2="21" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="30" end1="31" start2="30" end2="31" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="53" end1="59" start2="53" end2="53" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="67" end1="67" start2="61" end2="66" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
       </ranges>
     </file>
-    <file path="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Presentacion/PostSolicitudesEliminacionHandler.java">
+    <file path="$PROJECT_DIR$/DdS/web/src/main/java/Presentacion/GetColeccionesHandler.java">
       <ranges>
-        <range start1="23" end1="23" start2="23" end2="24" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="28" end1="29" start2="29" end2="30" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="31" end1="32" start2="32" end2="34" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="13" end1="13" start2="13" end2="17" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="15" end1="22" start2="19" end2="20" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="49" end1="50" start2="47" end2="48" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="55" end1="56" start2="53" end2="55" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="59" end1="60" start2="58" end2="59" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="83" end1="85" start2="82" end2="82" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
       </ranges>
     </file>
-    <file path="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeModificacion.java">
+    <file path="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Persistencia/SolicitudEliminacionRepositorio.java">
       <ranges>
-        <range start1="5" end1="5" start2="5" end2="8" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-        <range start1="22" end1="23" start2="25" end2="26" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-        <range start1="26" end1="27" start2="29" end2="30" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-        <range start1="28" end1="30" start2="31" end2="41" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="39" end1="40" start2="50" end2="51" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="71" end1="72" start2="82" end2="83" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="79" end1="80" start2="90" end2="91" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeModificacion_D.java">
-      <ranges>
-        <range start1="31" end1="32" start2="31" end2="32" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="33" end1="34" start2="33" end2="35" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="57" end1="57" start2="58" end2="60" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="58" end1="61" start2="61" end2="62" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="70" end1="71" start2="71" end2="72" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="73" end1="75" start2="74" end2="76" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-eliminacion.js">
-      <ranges>
-        <range start1="78" end1="79" start2="78" end2="79" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-        <range start1="108" end1="109" start2="108" end2="109" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/DinamicoRepositorio.java">
-      <ranges>
-        <range start1="266" end1="266" start2="266" end2="267" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-        <range start1="267" end1="268" start2="268" end2="268" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-        <range start1="322" end1="323" start2="322" end2="323" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-        <range start1="327" end1="327" start2="327" end2="328" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="331" end1="332" start2="332" end2="333" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/DdS/utils/src/main/java/utils/DTO/SolicitudDTO.java">
-      <ranges>
-        <range start1="4" end1="4" start2="4" end2="6" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="7" end1="8" start2="9" end2="10" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-        <range start1="14" end1="16" start2="16" end2="18" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="25" end1="26" start2="27" end2="28" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/Dominio/Solicitudes/SolicitudDeEliminacion_D.java">
-      <ranges>
-        <range start1="26" end1="27" start2="26" end2="27" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-        <range start1="28" end1="29" start2="28" end2="32" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="47" end1="47" start2="50" end2="51" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="48" end1="51" start2="52" end2="53" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="61" end1="61" start2="63" end2="64" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="62" end1="65" start2="65" end2="66" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/DdS/utils/src/main/java/utils/Dominio/Solicitudes/SolicitudDeEliminacion.java">
-      <ranges>
-        <range start1="5" end1="5" start2="5" end2="6" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="7" end1="7" start2="8" end2="9" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="14" end1="16" start2="16" end2="18" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
-        <range start1="20" end1="20" start2="22" end2="30" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="2" end1="2" start2="2" end2="4" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="9" end1="9" start2="11" end2="12" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="14" end1="16" start2="17" end2="17" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="22" end1="25" start2="23" end2="23" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="40" end1="55" start2="38" end2="73" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="69" end1="72" start2="87" end2="87" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="78" end1="93" start2="93" end2="93" changelist="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" />
+        <range start1="125" end1="128" start2="125" end2="125" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="131" end1="131" start2="128" end2="130" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="133" end1="133" start2="132" end2="163" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="134" end1="134" start2="164" end2="168" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
+        <range start1="138" end1="138" start2="172" end2="173" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
       </ranges>
     </file>
   </component>
@@ -188,6 +120,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Application.Agregador.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ApiAdmin.executor&quot;: &quot;Run&quot;,
     &quot;Application.ApiAdministrativa.executor&quot;: &quot;Run&quot;,
     &quot;Application.ApiMock.executor&quot;: &quot;Run&quot;,
     &quot;Application.ApiPublica.executor&quot;: &quot;Run&quot;,
@@ -222,11 +155,12 @@
       <recent name="C:\Users\Usuario\Documents\GitHub\DdS-TP-Anual\DdS\utils\src\main\resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\helga\Bri\Diseño\DdS-TP-Anual\DdS\web\src\main\resources\templates" />
       <recent name="C:\Users\helga\Bri\Diseño\DdS-TP-Anual\DdS\web\src\main\resources\public\img" />
       <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\resources\public\img" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Agregador">
+  <component name="RunManager" selected="Application.Web">
     <configuration name="Agregador" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="agregador.MainAgregador" />
       <module name="agregador" />
@@ -328,6 +262,8 @@
       <workItem from="1761760632482" duration="218000" />
       <workItem from="1761760872643" duration="26000" />
       <workItem from="1761760931808" duration="10999000" />
+      <workItem from="1761862887412" duration="785000" />
+      <workItem from="1761863719736" duration="9565000" />
     </task>
     <servers />
   </component>

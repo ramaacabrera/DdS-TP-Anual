@@ -1,5 +1,6 @@
 package utils.Dominio.Solicitudes;
 
+import org.hibernate.annotations.Type;
 import utils.Dominio.HechosYColecciones.Hecho;
 import utils.Dominio.Usuario.Usuario;
 import org.hibernate.annotations.GenericGenerator;
@@ -24,7 +25,8 @@ public abstract class Solicitud {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "id_solicitud", updatable = false, nullable = false)
+    @Type(type = "uuid-char")
+    @Column(name = "id_solicitud", length = 36 , updatable = false, nullable = false)
     protected UUID id_solicitud;
 
     protected String justificacion;
