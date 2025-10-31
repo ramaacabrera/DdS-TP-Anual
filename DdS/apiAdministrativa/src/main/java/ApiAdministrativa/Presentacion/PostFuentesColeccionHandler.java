@@ -28,8 +28,7 @@ public class PostFuentesColeccionHandler implements Handler {
         Fuente nueva = ctx.bodyAsClass(Fuente.class);
 
         try {
-            Optional<Coleccion> coleccionAux = coleccionRepositorio.buscarPorHandle(handle);
-            Coleccion coleccion = coleccionAux.get();
+            Coleccion coleccion = coleccionRepositorio.buscarPorHandle(handle);
 
             if (coleccion == null) {
                 ctx.status(404).result("Colección no encontrada");

@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Optional;
 
 public class GetColeccionHandler implements Handler {
     //private final ColeccionRepositorio repositorio;
@@ -28,39 +29,15 @@ public class GetColeccionHandler implements Handler {
     @Override
     public void handle(Context ctx) throws URISyntaxException, IOException, InterruptedException {
         String handle = ctx.pathParam("id");
-        /*
 
-                CAMBIAR ESTO CUANDO SE IMPLEMENTEN LAS BASES DE DATOS
-
-
-        */
-
-        //    ->>>>>>>>>
-
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("http://localhost:8080/colecciones/" + handle))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        if(response.statusCode() == 200) {
-            Coleccion coleccion = mapper.readValue(response.body(), new TypeReference<>() {
-            });
+        if(!handle.trim().isEmpty()) {
+            Coleccion coleccion = coleccionRepositorio.buscarPorHandle(handle);
 
             ctx.status(200).json(coleccion);
-        }
-        else{
-            ctx.status(404).result("No se encontro el registro");
-        }
-        //    <<<<<<<<<-
 
-//        final Optional<Coleccion> resultadoBusqueda = repositorio.buscarPorHandle(handle);
-//        if (resultadoBusqueda.isPresent()) {
-//            ctx.status(200).json(resultadoBusqueda.get());
-//        } else {
-//            ctx.status(404);
-//        }
+        } else {
+            ctx.status(404);
+        }
+
     }
 }

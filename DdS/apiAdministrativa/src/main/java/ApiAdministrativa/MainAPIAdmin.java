@@ -30,7 +30,7 @@ public class MainAPIAdmin {
         app.before(new ValidarAdminHandler(usuarioRepositorio));
 
 
-        app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio));
+        app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio, hechoRepositorio));
         app.put("/api/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio));
         app.delete("/api/colecciones/{id}", new DeleteColeccionesHandler(coleccionRepositorio));
 
