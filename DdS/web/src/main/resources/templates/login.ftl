@@ -18,9 +18,15 @@
                 <input type="hidden" name="redirectUrl" value="${ultimaUrl!}">
                 <button type="submit">Entrar</button>
             </form>
+            <#if authUrl??>
+                <div style="text-align: center">
+                    <a href="${authUrl}">Iniciar sesión con Keycloak</a>
+                </div>
+            </#if>
             <div class="link">
                 <a href ="/sign-in">¿No tenés cuenta? Registrate</a>
             </div>
+
         </div>
     </main>
 

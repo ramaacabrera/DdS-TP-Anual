@@ -27,8 +27,6 @@ public class PostColeccionHandler implements Handler {
         List<Map<String, String>> criteriosDePertenencia = new ArrayList<>();
         Map<String, String> map = new HashMap<>();
         this.obtenerCriteriosDePertenencia(map, ctx);
-        map.put("@type", ctx.formParam("criteriosDePertenencia"));
-        map.put("categoria", "ejemplo");
         criteriosDePertenencia.add(map);
         bodyData.put("titulo", ctx.formParam("titulo"));
         bodyData.put("descripcion", ctx.formParam("descripcion"));
@@ -46,7 +44,7 @@ public class PostColeccionHandler implements Handler {
         HttpClient httpClient = HttpClient.newHttpClient();
         try{
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-                    .uri(new URI(urlAdmin + "/colecciones"))
+                    .uri(new URI(urlAdmin+"/colecciones"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody));
 
@@ -64,7 +62,6 @@ public class PostColeccionHandler implements Handler {
 
             System.out.println("Mandamos la request");
 
-            Map<String, Object> modelo = new HashMap<>();
             if (response.statusCode() == 200) {
                 System.out.println("Coleccion creada");
             } else {
@@ -80,6 +77,7 @@ public class PostColeccionHandler implements Handler {
 
     public void obtenerCriteriosDePertenencia(Map<String, String> map, Context ctx) {
         map.put("@type", ctx.formParam("criteriosDePertenencia"));
+        String resultado = "";
         switch (ctx.formParam("criteriosDePertenencia").toString()) {
             case "CriterioDeTexto":
                 switch(ctx.formParam("criterio.tipoDeTexto").toString()){
@@ -94,7 +92,7 @@ public class PostColeccionHandler implements Handler {
                         break;
                 }
                 List<String> palabras = ctx.formParams("criterio.palabras[]");
-                String resultado = String.join(",", palabras);
+                resultado = String.join(",", palabras);
                 map.put("palabras", resultado);
                 break;
             case "CriterioFecha":
@@ -104,7 +102,7 @@ public class PostColeccionHandler implements Handler {
                 break;
             case "CriterioEtiquetas":
                 List<String> etiquetas = ctx.formParams("criterio.etiquetas[]");
-                String resultado = String.join(",", etiquetas);
+                resultado = String.join(",", etiquetas);
                 map.put("etiquetas", resultado);
                 break;
             case "CriterioContribuyente":
