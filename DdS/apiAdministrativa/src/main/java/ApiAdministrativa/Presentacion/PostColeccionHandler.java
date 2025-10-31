@@ -21,14 +21,20 @@ public class PostColeccionHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
+
+        System.out.println("Iniciando creacion de coleccion");
         try{
+
             ColeccionDTO nueva = ctx.bodyAsClass(ColeccionDTO.class);
 
             coleccionRepositorio.guardar(nueva);
 
+            System.out.println("Coleccion guardado: " + nueva);
+
             ctx.status(201).result("Coleccion agregada exitosamente");
         } catch (Exception e) {
             ctx.status(500).result("Error interno: " + e.getMessage());
+            System.out.println("Error interno: " + e.getMessage());
         }
     }
 }

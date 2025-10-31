@@ -1,6 +1,6 @@
 package ApiPublica.Presentacion;
 
-import Keycloak.UserCreator;
+import utils.Keycloak.UserCreator;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ public class PostSignInHandler implements Handler {
         String usuario = ctx.formParam("usuario");
         if(usuarioRepositorio.buscarPorUsername(usuario) != null){
             ctx.sessionAttribute("error", "Nombre de usuario invalido");
-            ctx.redirect("/api/sign-in");
+            ctx.redirect("http://localhost:7070/sign-in");
             return;
         }
         String nombre = ctx.formParam("nombre");
@@ -35,7 +35,7 @@ public class PostSignInHandler implements Handler {
         int codigo = creador.crearUsuario(usuario, password, nombre, apellido, email);
         if(codigo != 204){
             ctx.sessionAttribute("error", "No se pudo crear el usuario");
-            ctx.redirect("/api/sign-in");
+            ctx.redirect("http://localhost:7070/sign-in");
             return;
         }
 

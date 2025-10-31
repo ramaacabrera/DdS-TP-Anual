@@ -21,6 +21,11 @@ header {
     flex-shrink: 0;
 }
 
+.error{
+   text-align: center;
+    color: red;
+}
+
 /* Main ocupa el espacio intermedio y centra su contenido */
 main {
     flex: 1;

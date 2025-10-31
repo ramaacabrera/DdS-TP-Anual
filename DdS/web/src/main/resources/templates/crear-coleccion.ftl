@@ -7,11 +7,15 @@
 
         <h1 class="main-title">Crear nueva colección</h1>
 
+        <#if resultado??>
+            <h2 style="text-align: center">${resultado}</h2>
+        </#if>
+
         <script>
             const URL_ADMIN = '${urlAdmin!"http://localhost:8081"}';
         </script>
 
-        <form id="form-crear-coleccion" class="form-container" method="POST" action="/api/colecciones">
+        <form id="form-crear-coleccion" class="form-container" method="POST" action="/colecciones">
             <!-- Título -->
             <div class="form-group">
                 <label for="titulo" class="form-label">Título *</label>

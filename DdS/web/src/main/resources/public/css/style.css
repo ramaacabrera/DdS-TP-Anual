@@ -11,11 +11,11 @@ body {
     font-family: var(--font-family);
     margin: 0;
     background-color: var(--bg-light);
+    background-image: url("../img/fondomapa.png");
     color: var(--text-color);
 }
 .home-background {
     background-color: #e2e6ea;
-    background-image: url('/public/img/fondomapa.png');
     background-size: cover;
     background-attachment: fixed;
     background-position: center;

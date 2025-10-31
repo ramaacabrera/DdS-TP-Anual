@@ -1,5 +1,6 @@
 package utils.DTO;
 
+import org.hibernate.annotations.Type;
 import utils.Dominio.Criterios.Criterio;
 import utils.Dominio.HechosYColecciones.TipoAlgoritmoConsenso;
 import utils.Dominio.fuente.Fuente;

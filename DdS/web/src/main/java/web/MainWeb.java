@@ -25,7 +25,7 @@ public class MainWeb {
         Javalin app = iniciador.iniciarAppWeb(Integer.parseInt(puerto), "/");
 
         app.get("/", ctx -> {
-            ctx.redirect("/hechos");
+            ctx.redirect("/home");
         });
         app.get("/home", new GetHomeHandler(urlPublica));
         app.get("/login", new GetLoginHandler(urlPublica));
@@ -56,11 +56,13 @@ public class MainWeb {
         //app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
 
         // Falta
-        app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlAdmin));
+        app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlPublica));
 
         app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
 
         app.get("/crear-coleccion", new GetCrearColeccionHandler(urlAdmin));
+
+        app.post("/colecciones", new PostColeccionHandler(urlAdmin));
 
         // Falta organizar el tema de categorias y colecciones, y aplicar los estilos
         app.get("/estadisticas", new GetEstadisticasHandler(puertoEstadisticas));

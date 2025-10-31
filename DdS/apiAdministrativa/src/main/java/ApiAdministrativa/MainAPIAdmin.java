@@ -25,7 +25,9 @@ public class MainAPIAdmin {
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(hechoRepositorio);
+        UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 
+        app.before(new ValidarAdminHandler(usuarioRepositorio));
 
 
         app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio));

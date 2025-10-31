@@ -31,6 +31,6 @@ public class GetCrearColeccionHandler implements Handler {
             modelo.put("access_token", access_token);
         }
 
-        ctx.render("crear-coleccion.ftlh", modelo);
+        ctx.render("crear-coleccion.ftl", modelo);
     }
 }

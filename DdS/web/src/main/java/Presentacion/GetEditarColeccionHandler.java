@@ -41,10 +41,22 @@ public class GetEditarColeccionHandler implements Handler {
 
             // 1️ Traemos la colección desde la API administrativa
             HttpClient httpClient = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
+            HttpRequest request;
+            if(!ctx.sessionAttributeMap().isEmpty()){
+                request = HttpRequest.newBuilder()
                     .uri(new URI(urlAdmin + "/colecciones/" + coleccionId))
+                    .header("username", ctx.sessionAttribute("username"))
+                    .header("access_token", ctx.sessionAttribute("access_token"))
                     .GET()
                     .build();
+            } else{
+                request = HttpRequest.newBuilder()
+                        .uri(new URI(urlAdmin + "/colecciones/" + coleccionId))
+                        .header("username", ctx.sessionAttribute("username"))
+                        .header("access_token", ctx.sessionAttribute("access_token"))
+                        .GET()
+                        .build();
+            }
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 

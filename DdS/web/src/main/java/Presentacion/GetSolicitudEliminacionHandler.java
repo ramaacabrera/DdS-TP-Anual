@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GetSolicitudEliminacionHandler implements Handler {
-    private final String urlPublica;
+    private final String urlAdmin;
 
-    public GetSolicitudEliminacionHandler(String urlPublica) {
-        this.urlPublica = urlPublica;
+    public GetSolicitudEliminacionHandler(String urlAdmin) {
+        this.urlAdmin = urlAdmin;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class GetSolicitudEliminacionHandler implements Handler {
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("pageTitle", "Solicitar Eliminación");
             modelo.put("hechoId", hechoId);
-            modelo.put("urlPublica", urlPublica);
+            modelo.put("urlPublica", urlAdmin);
 
             if(!ctx.sessionAttributeMap().isEmpty()){
                 String username = ctx.sessionAttribute("username");

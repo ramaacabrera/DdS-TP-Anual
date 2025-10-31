@@ -24,6 +24,9 @@ public class CriterioCategoria extends Criterio {
     @Override
     public String getQueryCondition() {return "h.categoria = '" + categoria + "'";}
 
+    public String getCategoria() { return categoria; }
+    public void setCategoria(String categoria) {this.categoria = categoria;}
+
     @Override
     @Transient
     public Map<String, Object> getQueryParameters() {

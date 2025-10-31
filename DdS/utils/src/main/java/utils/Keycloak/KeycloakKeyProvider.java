@@ -1,9 +1,10 @@
-package Keycloak;
+package utils.Keycloak;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import utils.LecturaConfig;
 
 import java.math.BigInteger;
 import java.net.URI;
@@ -14,17 +15,23 @@ import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
+import java.util.Properties;
 
 public class KeycloakKeyProvider {
 
     private static RSAPublicKey cachedKey;
 
     public static RSAPublicKey getKey(String token) throws Exception {
+        LecturaConfig lector = new LecturaConfig();
+        Properties config = lector.leerConfig();
+
+        String url = "http://localhost:8080/realms/tpDDSI";
+
         if (cachedKey != null) return cachedKey;
         DecodedJWT jwt = JWT.decode(token);
         String tokenKid = jwt.getKeyId();
 
-        String jwksUrl = "http://localhost:8080/realms/tpDDSI/protocol/openid-connect/certs";
+        String jwksUrl = url + "/protocol/openid-connect/certs";
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(jwksUrl)).build();
         HttpResponse<String> response = HttpClient.newHttpClient()
                 .send(request, HttpResponse.BodyHandlers.ofString());

@@ -1,6 +1,5 @@
 package utils.Dominio.Usuario;
 
-import org.hibernate.annotations.Type;
 import utils.Dominio.HechosYColecciones.Hecho;
 
 import java.util.ArrayList;
@@ -24,8 +23,7 @@ public class Usuario {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Type (type= "uuid-char")
-    @Column(name = "id_usuario",length = 36 , updatable = false, nullable = false)
+    @Column(name = "id_usuario", updatable = false, nullable = false)
     private UUID id_usuario;
 
     @OneToMany(mappedBy = "contribuyente")

@@ -1,7 +1,7 @@
 package utils.Persistencia;
 
 import utils.BDUtils;
-import utils.Dominio.Usuario.Usuario;
+import utils.Dominio.Usuario.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -35,6 +35,29 @@ public class UsuarioRepositorio {
 
             // Asignamos el valor al parámetro en la consulta
             query.setParameter("paramUsername", username);
+
+            // Intentamos obtener un único resultado.
+            // Si no se encuentra, getSingleResult() lanza una excepción NoResultException.
+            return query.getSingleResult();
+
+        } catch (javax.persistence.NoResultException e) {
+            // Esto es normal si no se encuentra el hecho. Retornamos null.
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public Usuario buscarAdmin(String username){
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            // Consulta JPQL para buscar por un atributo específico
+            TypedQuery<Usuario> query = em.createQuery(
+                    "SELECT u FROM Usuario u WHERE u.username = :paramUsername and u.rol = :paramRol", Usuario.class);
+
+            // Asignamos el valor al parámetro en la consulta
+            query.setParameter("paramUsername", username);
+            query.setParameter("paramRol", RolUsuario.ADMINISTRADOR);
 
             // Intentamos obtener un único resultado.
             // Si no se encuentra, getSingleResult() lanza una excepción NoResultException.
