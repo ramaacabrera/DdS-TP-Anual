@@ -1,11 +1,10 @@
 package agregador.PaqueteAgregador;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class DetectorDeSpam {
 
-    private static final List<String> PALABRAS_SPAM = Arrays.asList(
+    private static final List<String> PALABRAS_SPAM_INICIALES = Arrays.asList(
             "gratis", "gana", "dinero", "click", "oferta", "premio", "crédito", "descuento",
             "compra ahora", "haz clic", "100% gratis", "limitado", "mejora tu", "sin costo",
             "ingresá tus datos", "ganador", "recibe ahora", "sin compromiso", "acceso inmediato",
@@ -28,15 +27,31 @@ public class DetectorDeSpam {
             "secret", "trial", "deal ends soon", "today only", "winner!", "earn cash", "act immediately"
     );
 
+    private static final Set<String> palabrasSpam = new HashSet<>(PALABRAS_SPAM_INICIALES);
+
     public static boolean esSpam(String cadenaAEvaluar){
         String textoNormalizado = cadenaAEvaluar.toLowerCase();
         int coincidencia = 0;
-        for (String s : PALABRAS_SPAM) {
+        for (String s : palabrasSpam) {
             if (textoNormalizado.contains(s)) {
                 coincidencia++;
-                if (coincidencia >= 2) return true;
+                if (coincidencia >= 4) return true;
             }
         }
         return false;
+    }
+
+    public static void agregarPalabraSpam(String palabra) {
+        if (palabra != null && !palabra.trim().isEmpty()) {
+            palabrasSpam.add(palabra.toLowerCase().trim());
+        }
+    }
+
+    public static void agregarPalabrasSpam(Collection<String> palabras) {
+        if (palabras != null) {
+            for (String palabra : palabras) {
+                agregarPalabraSpam(palabra);
+            }
+        }
     }
 }

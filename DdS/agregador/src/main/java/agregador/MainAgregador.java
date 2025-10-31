@@ -1,7 +1,8 @@
 package agregador;
 
+import agregador.PaqueteAgregador.AgregadorScheduler;
 import utils.Persistencia.*;
-import agregador.PaqueteNormalizador.MockNormalizador;
+import utils.PaqueteNormalizador.MockNormalizador;
 import agregador.PaqueteAgregador.Agregador;
 import agregador.Cargador.ConexionCargador;
 import agregador.Handlers.*;
@@ -35,6 +36,7 @@ public class MainAgregador {
         Agregador agregador = new Agregador(
                 hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio,
                 solicitudModificacionRepositorio, fuenteRepositorio, mockNormalizador, conexionCargador);
+        AgregadorScheduler agregadorScheduler = new AgregadorScheduler(agregador);
 
 
         ExecutorService wsWorkers = java.util.concurrent.Executors.newFixedThreadPool(

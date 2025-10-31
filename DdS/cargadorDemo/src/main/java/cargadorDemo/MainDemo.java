@@ -23,7 +23,7 @@ public class MainDemo {
         Cargador cargadorDemo = new Cargador();
         cargadorDemo.agregarConexion(new DemoLoader(urlMock));
 
-        Fuente fuente = new Fuente(TipoDeFuente.DEMO, "");
+        Fuente fuente = new Fuente(TipoDeFuente.DEMO, "Demo");
         ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDemo(new GetHechosHandler(cargadorDemo)));
         cliente.conectar(fuente);
     }

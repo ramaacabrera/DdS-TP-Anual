@@ -6,15 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FuenteDTO {
     private TipoDeFuente tipoDeFuente;
-    private String ruta;
+    private String descriptor;
 
     public FuenteDTO() {}
 
     @JsonCreator
     public FuenteDTO(@JsonProperty("tipoDeFuente") TipoDeFuente tipoDeFuente,
-                     @JsonProperty("ruta") String ruta) {
+                     @JsonProperty("ruta") String descriptorNuevo) {
         this.tipoDeFuente = tipoDeFuente;
-        this.ruta = ruta;
+        this.descriptor = descriptorNuevo;
     }
 
     @JsonProperty("tipoDeFuente")
@@ -29,11 +29,11 @@ public class FuenteDTO {
 
     @JsonProperty("ruta")
     public String getRuta() {
-        return ruta;
+        return descriptor;
     }
 
     @JsonProperty("ruta")
-    public void setRuta(String ruta) {
-        this.ruta = ruta;
+    public void setRuta(String descriptorNuevo) {
+        this.descriptor = descriptorNuevo;
     }
 }

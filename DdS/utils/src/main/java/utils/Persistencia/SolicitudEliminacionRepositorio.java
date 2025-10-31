@@ -4,6 +4,7 @@ import utils.Dominio.Solicitudes.EstadoSolicitudEliminacion;
 import utils.Dominio.Solicitudes.SolicitudDeEliminacion;
 import utils.BDUtils;
 import utils.DTO.SolicitudDeEliminacionDTO;
+import utils.Dominio.Usuario.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -57,6 +58,12 @@ public class SolicitudEliminacionRepositorio {
         EntityManager em = BDUtils.getEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);
+
+            if (solicitud.getUsuario() != null) {
+                this.setearUsuario(solicitud, em);
+            }
+
+            System.out.println("Agregando SolicitudDeEliminacion: "+solicitud);
             em.merge(solicitud);
             BDUtils.commit(em);
         } catch (Exception e) {
@@ -67,9 +74,51 @@ public class SolicitudEliminacionRepositorio {
         }
     }
 
-    //public void agregarSolicitudEliminacion(SolicitudDeEliminacionDTO solicitud){
-        //solicitudes.add(new SolicitudDeEliminacion(solicitud));
-    //}
+    public void setearUsuario(SolicitudDeEliminacion solicitud, EntityManager em) {
+            Usuario usuarioExistente = null;
+
+            if (solicitud.getUsuario().getId_usuario() != null) {
+                usuarioExistente = em.find(Usuario.class, solicitud.getUsuario().getId_usuario());
+            }
+
+            if (usuarioExistente == null && solicitud.getUsuario().getUsername() != null) {
+                try {
+                    usuarioExistente = em.createQuery(
+                                    "SELECT u FROM Usuario u WHERE u.username = :username", Usuario.class)
+                            .setParameter("username", solicitud.getUsuario().getUsername())
+                            .getResultStream()
+                            .findFirst()
+                            .orElse(null);
+                } catch (Exception e) {
+                    System.out.println("⚠️ Error buscando usuario por username: " + e.getMessage());
+                }
+            }
+
+            if (usuarioExistente == null &&
+                    solicitud.getUsuario().getNombre() != null &&
+                    solicitud.getUsuario().getApellido() != null) {
+                try {
+                    usuarioExistente = em.createQuery(
+                                    "SELECT u FROM Usuario u WHERE u.nombre = :nombre AND u.apellido = :apellido", Usuario.class)
+                            .setParameter("nombre", solicitud.getUsuario().getNombre())
+                            .setParameter("apellido", solicitud.getUsuario().getApellido())
+                            .getResultStream()
+                            .findFirst()
+                            .orElse(null);
+                } catch (Exception e) {
+                    System.out.println("⚠️ Error buscando usuario por nombre/apellido: " + e.getMessage());
+                }
+            }
+
+            if (usuarioExistente == null) {
+                em.persist(solicitud.getUsuario()); // Persistir el nuevo usuario
+                usuarioExistente = solicitud.getUsuario();
+            }
+            solicitud.setUsuario(usuarioExistente);
+
+    }
+
+
     public void agregarSolicitudDeEliminacion(SolicitudDeEliminacionDTO solicitudDTO) {
         // Convierte utils.DTO a Entidad y guarda
         SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(solicitudDTO, hechoRepositorio);

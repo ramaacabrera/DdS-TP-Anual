@@ -1,4 +1,4 @@
-package agregador.PaqueteNormalizador;
+package utils.PaqueteNormalizador;
 import utils.Dominio.HechosYColecciones.Hecho;
 
 public class MockNormalizador {
@@ -27,7 +27,7 @@ public class MockNormalizador {
         hechoNormalizado.setContenidoMultimedia(hecho.getContenidoMultimedia());
 
         // Normalizar categoría
-        String categoriaNormalizada = CategoriaNormalizador.normalizarCategoria(hecho.getCategoria());
+        String categoriaNormalizada = NormalizadorCategorias.normalizar(hecho.getCategoria());
         hechoNormalizado.setCategoria(categoriaNormalizada);
 
         // Normalizar título (eliminar espacios extras)

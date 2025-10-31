@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import estadisticas.Dominio.*;
 import estadisticas.agregador.ConexionAgregador;
-import estadisticas.agregador.EstadisticasCategoriaRepositorio;
-import estadisticas.agregador.EstadisticasColeccionRepositorio;
-import estadisticas.agregador.EstadisticasRepositorio;
-import utils.NormalizadorCategorias;
+import utils.PaqueteNormalizador.NormalizadorCategorias;
 
 import javax.persistence.EntityManager;
 import java.net.URI;
@@ -15,52 +12,17 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class GeneradorEstadisticas {
     private final ConexionAgregador conexionAgregador;
-    private final EstadisticasRepositorio estadisticasRepositorio;
-    private final EstadisticasCategoriaRepositorio estadisticasCategoriaRepositorio;
-    private final EstadisticasColeccionRepositorio estadisticasColeccionRepositorio;
     private Estadisticas estadisticasActual = null;
-    private final ScheduledExecutorService scheduler;
     private volatile boolean enEjecucion = false;
 
-    public GeneradorEstadisticas(ConexionAgregador conexionAgregador,
-                                 EstadisticasRepositorio estadisticasRepositorioNuevo,
-                                 EstadisticasCategoriaRepositorio estadisticasCategoriaRepositorioNuevo,
-                                 EstadisticasColeccionRepositorio estadisticasColeccionRepositorioNuevo){
+    public GeneradorEstadisticas(ConexionAgregador conexionAgregador){
         this.conexionAgregador = conexionAgregador;
-        this.estadisticasRepositorio = estadisticasRepositorioNuevo;
-        this.estadisticasCategoriaRepositorio = estadisticasCategoriaRepositorioNuevo;
-        this.estadisticasColeccionRepositorio = estadisticasColeccionRepositorioNuevo;
-
-        this.scheduler = Executors.newScheduledThreadPool(1);
-        this.iniciarScheduling();
     }
 
-    public void iniciarScheduling() {
-        System.out.println("Iniciando scheduler de estadísticas...");
-        scheduler.scheduleAtFixedRate(this::actualizarEstadisticas, 0, 360, TimeUnit.SECONDS);
-        System.out.println("Scheduler iniciado - ejecución cada 360 segundos");
-    }
-
-    public void detenerScheduling() {
-        System.out.println("Deteniendo scheduler de estadísticas...");
-        scheduler.shutdown();
-        try {
-            if (!scheduler.awaitTermination(10, TimeUnit.SECONDS)) {
-                scheduler.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            scheduler.shutdownNow();
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    private void actualizarEstadisticas() {
+    public void actualizarEstadisticas() {
         if (enEjecucion) {
             System.out.println("Actualización ya en curso, omitiendo...");
             return;

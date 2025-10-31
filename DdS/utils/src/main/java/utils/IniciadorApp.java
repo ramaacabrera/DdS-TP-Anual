@@ -4,6 +4,9 @@ import freemarker.template.TemplateException;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinFreemarker;
 import io.javalin.http.staticfiles.Location;
+import org.eclipse.jetty.websocket.api.WebSocketPolicy;
+
+import java.time.Duration;
 
 public class IniciadorApp {
 
@@ -14,8 +17,8 @@ public class IniciadorApp {
             }); // para poder hacer requests de un dominio a otro
 
             javalinConfig.jetty.wsFactoryConfig(wsFactory -> {
-                wsFactory.setMaxTextMessageSize(2 * 1024 * 1024*1024);   // 2 MB
-                //sFactory.setMaxBinaryMessageSize(2 * 1024 * 1024); // opcional
+                wsFactory.setIdleTimeout(Duration.ofDays(1));
+                wsFactory.setMaxTextMessageSize(2L * 1024 * 1024 * 1024); // 2 MB
             });
         }).start(puerto);
     };

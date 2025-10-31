@@ -24,11 +24,7 @@ public class SolicitudDeEliminacion_D {
 
     protected String justificacion;
 
-    /*@ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name = "hecho_id")
-    private Hecho_D hechoAsociado;*/
-    @Type(type = "uuid-char")
-    @Column(name = "hecho_id",length = 36, updatable = false, nullable = false)
+    @Column(name = "hecho_id",length = 36, updatable = false, nullable = true)
     private UUID hecho_id;
 
     @ManyToOne (cascade = CascadeType.ALL)

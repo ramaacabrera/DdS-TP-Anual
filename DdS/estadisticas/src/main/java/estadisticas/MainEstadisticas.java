@@ -28,7 +28,8 @@ public class MainEstadisticas {
         EstadisticasCategoriaRepositorio estadisticasCategoriaRepositorio = new EstadisticasCategoriaRepositorio();
         
         ConexionAgregador conexionAgregador = new ConexionAgregador();
-        GeneradorEstadisticas generador = new GeneradorEstadisticas(conexionAgregador,estadisticasRepositorio,estadisticasCategoriaRepositorio,estadisticasColeccionRepositorio);
+        GeneradorEstadisticas generador = new GeneradorEstadisticas(conexionAgregador);
+        EstadisticasScheduler estadisticasScheduler = new EstadisticasScheduler(generador);
 
         app.get("/api/estadisticas/provinciaMax/colecciones/{coleccion}", new GetProvinciaColeccionHandler(estadisticasColeccionRepositorio));
         app.get("/api/estadisticas/categoriaMax", new GetCategoriaMaxHandler(estadisticasRepositorio));

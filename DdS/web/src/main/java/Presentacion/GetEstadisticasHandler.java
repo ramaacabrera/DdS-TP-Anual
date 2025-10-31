@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-import utils.DesnormalizadorCategorias;
-import utils.NormalizadorCategorias;
+import utils.PaqueteNormalizador.DesnormalizadorCategorias;
+import utils.PaqueteNormalizador.NormalizadorCategorias;
 
 import java.net.URI;
 import java.net.http.HttpClient;

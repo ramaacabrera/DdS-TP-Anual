@@ -37,7 +37,7 @@ public class MainMetamapa {
         Javalin app = iniciador.iniciarApp(puertoMetamapa, "/");
 
         // 3. Conexión al Agregador
-        Fuente fuente = new Fuente(TipoDeFuente.METAMAPA, "metamapa");
+        Fuente fuente = new Fuente(TipoDeFuente.METAMAPA, "METAMAPA");
         ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorMetamapa(new GetHechosHandler(cargadorMetamapa)));
         cliente.conectar(fuente);
 

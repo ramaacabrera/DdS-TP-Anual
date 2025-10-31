@@ -107,6 +107,7 @@ public class Coleccion {
     public void setFuente(List<Fuente> fuente) {this.fuentes = fuente;}
     public void setCriteriosDePertenencia(List<Criterio> criteriosDePertenencia) {this.criteriosDePertenencia = criteriosDePertenencia;}
     public void setAlgoritmoDeConsenso(TipoAlgoritmoConsenso algoritmoDeConsenso) {this.algoritmoDeConsenso = algoritmoDeConsenso; }
+    public void setHechosConsensuados(List<Hecho> hechosConsensuados) {this.hechosConsensuados = hechosConsensuados;}
 
     public void generarHandle() {
         if(titulo != null || !titulo.isEmpty()) {
@@ -129,7 +130,7 @@ public class Coleccion {
 
     public boolean agregarHecho(Hecho otroHecho) {
         for (Hecho hechoExistente : hechos) {
-            if (hechoExistente.esIgualAotro(otroHecho)) {
+            if (hechoExistente.tieneMismosAtributosQue(otroHecho)) {
                 hechoExistente.actualizarCon(otroHecho);
                 return false; // false → no es nuevo, lo actualicé
             }
@@ -180,7 +181,7 @@ public class Coleccion {
         return true;
     }
 
-    public void ejecutarAlgoritmoDeConsenso() {
+    public boolean ejecutarAlgoritmoDeConsenso() {
         AlgoritmoConsenso algoritmo;
         if (algoritmoDeConsenso != null) {
             switch (algoritmoDeConsenso) {
@@ -197,9 +198,11 @@ public class Coleccion {
                         throw new IllegalStateException("Algoritmo no existe");
             }
             this.hechosConsensuados = algoritmo.obtenerHechosConsensuados(this);
+            return true;
         }
         else{
             this.hechosConsensuados = hechos;
+            return false;
         }
     }
     

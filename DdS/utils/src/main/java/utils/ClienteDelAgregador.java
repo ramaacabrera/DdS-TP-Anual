@@ -24,7 +24,12 @@ public class ClienteDelAgregador {
     public ClienteDelAgregador(String url, Controlador contr) {
         controlador = contr;
         AGREGADOR_URL = url;
-        client = new OkHttpClient.Builder().pingInterval(10, TimeUnit.SECONDS).build();
+        client = new OkHttpClient.Builder().pingInterval(1000, TimeUnit.SECONDS)
+                .connectTimeout(100, TimeUnit.SECONDS)    // Timeout de conexión
+                .readTimeout(600, TimeUnit.SECONDS)      // ⬅️ AUMENTAR ESTE (5 minutos)
+                .writeTimeout(600, TimeUnit.SECONDS)     // ⬅️ Y ESTE (5 minutos)
+                .retryOnConnectionFailure(true)
+                .build();
     }
 
     public void conectar(Fuente fuenteDTO) {
@@ -71,8 +76,9 @@ public class ClienteDelAgregador {
                         }
                         case "obtenerSolicitudesEliminacion" -> {
                             List<SolicitudDeEliminacionDTO> solicitudes = controlador.obtenerSolicitudesEliminacion();
+                            solicitudes.forEach(System.out::println);
                             SolicitudesEliminacionObtenidosPayload payload = new SolicitudesEliminacionObtenidosPayload(solicitudes);
-                            WsMessage<SolicitudesEliminacionObtenidosPayload> mensaje = new WsMessage<SolicitudesEliminacionObtenidosPayload>("solicitudesEliminacionObtenidos", payload);
+                            WsMessage<SolicitudesEliminacionObtenidosPayload> mensaje = new WsMessage<SolicitudesEliminacionObtenidosPayload>("solicitudesDeEliminacionObtenidos", payload);
 
                             webSocket.send(mapper.writeValueAsString(mensaje));
                         }
@@ -111,13 +117,5 @@ public class ClienteDelAgregador {
             socket.close(1000, "Cerrando conexión");
         }
     }
-
-    /*
-    public static void main(String[] args) {
-        CargadorWebSocketClient cliente = new CargadorWebSocketClient();
-        cliente.conectar();
-        cliente.enviarMensaje("Hola desde el cargador");
-    }
-    */
 }
 

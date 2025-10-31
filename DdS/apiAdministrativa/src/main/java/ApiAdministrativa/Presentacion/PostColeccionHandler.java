@@ -1,22 +1,30 @@
 package ApiAdministrativa.Presentacion;
 
+import utils.Dominio.Criterios.Criterio;
+import utils.Dominio.HechosYColecciones.Coleccion;
+import utils.Dominio.HechosYColecciones.Hecho;
 import utils.Persistencia.ColeccionRepositorio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
 import io.javalin.http.Context;
 import utils.DTO.ColeccionDTO;
 import org.jetbrains.annotations.NotNull;
+import utils.Persistencia.HechoRepositorio;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PostColeccionHandler implements Handler {
     private final ColeccionRepositorio coleccionRepositorio;
+    private final HechoRepositorio hechoRepositorio;
 
-    public PostColeccionHandler(ColeccionRepositorio coleccionRepositorio) {
+    public PostColeccionHandler(ColeccionRepositorio coleccionRepositorio, HechoRepositorio hechoRepositorioNuevo) {
         this.coleccionRepositorio = coleccionRepositorio;
+        this.hechoRepositorio = hechoRepositorioNuevo;
     }
 
     @Override
@@ -27,7 +35,25 @@ public class PostColeccionHandler implements Handler {
 
             ColeccionDTO nueva = ctx.bodyAsClass(ColeccionDTO.class);
 
-            coleccionRepositorio.guardar(nueva);
+            Coleccion coleccion = new Coleccion(nueva);
+            List<Criterio> criterios = coleccion.getCriteriosDePertenencia();
+            List<Hecho> hechos = hechoRepositorio.getHechos();
+            List<Hecho> hechosQueCumplen = new ArrayList<>();
+
+            for(Hecho hecho : hechos){
+                boolean cumpleTodosLosCriterios = true;
+                for(Criterio criterio : criterios) {
+                    if (!criterio.cumpleConCriterio(hecho)) {
+                        cumpleTodosLosCriterios = false;
+                        break;
+                    }
+                }
+                if (cumpleTodosLosCriterios) {
+                    hechosQueCumplen.add(hecho);
+                }
+            }
+            coleccion.setHechos(hechosQueCumplen);
+            coleccionRepositorio.guardar(coleccion);
 
             System.out.println("Coleccion guardado: " + nueva);
 

@@ -1,11 +1,25 @@
 package cargadorDinamico;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
 public class BDUtilsDinamico {
+    private static final EntityManagerFactory factory;
 
-    private static final String PERSISTENCE_UNIT_NAME = "dinamico-PU";
+    static {
+        try {
+            factory = Persistence.createEntityManagerFactory("dinamico-PU");
+        } catch (Exception e) {
+            throw new RuntimeException("Error inicializando EntityManagerFactory", e);
+        }
+    }
+
+    public static EntityManager getEntityManager() {
+        EntityManager em = factory.createEntityManager();
+        return em;
+    }
 
     public static void comenzarTransaccion(EntityManager em) {
         EntityTransaction tx = em.getTransaction();

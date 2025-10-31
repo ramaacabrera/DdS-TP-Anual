@@ -1,11 +1,10 @@
 package estadisticas.Presentacion;
 
 import estadisticas.agregador.EstadisticasCategoriaRepositorio;
-import estadisticas.Dominio.EstadisticasCategoria;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-import utils.NormalizadorCategorias;
+import utils.PaqueteNormalizador.NormalizadorCategorias;
 
 import java.util.*;
 import java.util.stream.Collectors;

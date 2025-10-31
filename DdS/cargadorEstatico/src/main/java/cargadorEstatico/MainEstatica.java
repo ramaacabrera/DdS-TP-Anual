@@ -26,7 +26,7 @@ public class MainEstatica {
 
         //limpiarGuia(pathGuia); descomentar solo si se quiere que se carguen nuevamente los hechos cada vez que se runee
 
-        Fuente fuente = new Fuente(TipoDeFuente.ESTATICA, "estatica");
+        Fuente fuente = new Fuente(TipoDeFuente.ESTATICA, "ESTATICA");
         ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorEstatica(new GetHechosEstaticoHandler(fileServer, fuente)));
         cliente.conectar(fuente);
     }

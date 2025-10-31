@@ -2,16 +2,15 @@ package utils.Persistencia;
 
 import org.hibernate.Hibernate;
 import utils.Dominio.Criterios.Criterio;
+import utils.Dominio.HechosYColecciones.Etiqueta;
 import utils.Dominio.HechosYColecciones.Hecho;
 
 import utils.Dominio.fuente.Fuente;
 import utils.BDUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class HechoRepositorio {
     public HechoRepositorio(){}
@@ -64,6 +63,7 @@ public class HechoRepositorio {
                 Hibernate.initialize(hecho.getEtiquetas());
                 Hibernate.initialize(hecho.getContenidoMultimedia());
                 Hibernate.initialize(hecho.getUbicacion());
+                Hibernate.initialize(hecho.getContribuyente());
             }
 
             return resultados;
@@ -73,22 +73,16 @@ public class HechoRepositorio {
     }
 
     public Hecho buscarPorTitulo(String titulo) {
-        //EntityManager em = emf.createEntityManager();
         EntityManager em = BDUtils.getEntityManager();
         try {
-            // Consulta JPQL para buscar por un atributo específico
             TypedQuery<Hecho> query = em.createQuery(
                     "SELECT h FROM Hecho h WHERE h.titulo = :paramTitulo", Hecho.class);
 
-            // Asignamos el valor al parámetro en la consulta
             query.setParameter("paramTitulo", titulo);
 
-            // Intentamos obtener un único resultado.
-            // Si no se encuentra, getSingleResult() lanza una excepción NoResultException.
             return query.getSingleResult();
 
         } catch (javax.persistence.NoResultException e) {
-            // Esto es normal si no se encuentra el hecho. Retornamos null.
             return null;
         } finally {
             em.close();
@@ -109,6 +103,7 @@ public class HechoRepositorio {
 
                 // Si tiene Usuario o Ubicacion LAZY, también inicialízalos aquí OJO ESTOOO
                 Hibernate.initialize(hecho.getUbicacion());
+                Hibernate.initialize(hecho.getContribuyente());
             }
 
             return hecho;
@@ -124,6 +119,7 @@ public class HechoRepositorio {
     public Hecho buscarPorId(UUID id) {
         EntityManager em = BDUtils.getEntityManager();
         try {
+            System.out.println("Buscando el hecho por ID");
             Hecho hecho = em.find(Hecho.class, id);
 
             if (hecho != null) {
@@ -131,6 +127,7 @@ public class HechoRepositorio {
                 Hibernate.initialize(hecho.getEtiquetas());
                 Hibernate.initialize(hecho.getContenidoMultimedia());
                 Hibernate.initialize(hecho.getUbicacion());
+                Hibernate.initialize(hecho.getContribuyente());
             }
 
             return hecho;
@@ -142,55 +139,32 @@ public class HechoRepositorio {
         }
     }
 
-    public List<Hecho> buscarSimilares(String titulo) {
-        //EntityManager em = emf.createEntityManager();
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            // Consulta JPQL para buscar hechos con títulos similares (usa LIKE para similitud)
-            TypedQuery<Hecho> query = em.createQuery(
-                    "SELECT h FROM Hecho h WHERE h.titulo LIKE :paramTitulo", Hecho.class);
-
-            // Usamos % para búsqueda parcial (similitud)
-            query.setParameter("paramTitulo", "%" + titulo + "%");
-
-            // getResultList() retorna lista vacía si no hay resultados
-            return query.getResultList();
-
-        } catch (Exception e) {
-            // Log del error y retornar lista vacía
-            System.err.println("Error al buscar hechos similares: " + e.getMessage());
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-    
     public void guardar(Hecho hecho) {
-        //Hecho existente = this.buscarPorTitulo(hecho.getTitulo());
         EntityManager em = BDUtils.getEntityManager();
         try {
             Hecho existente = this.buscarPorTitulo(hecho.getTitulo());
 
-            if (existente != null) {
-                hecho.setHecho_id(existente.getHecho_id()); // Aseguramos que el ID del objeto a guardar sea el del existente
-
+            if (existente != null && existente.tieneMismosAtributosQue(hecho)) {
+                hecho.setHecho_id(existente.getHecho_id());
                 System.out.println("Duplicado encontrado. Actualizando Hecho con ID: " + existente.getHecho_id());
-
             } else {
-                // No existe. Es una nueva inserción.
                 System.out.println("OK: Guardando nuevo Hecho.");
             }
-            Fuente fuenteAdjunta = hecho.getFuente();
 
-            // 2. RE-ADJUNTAR LA FUENTE
-            // Si no está adjunta la traemos al contexto.
-            if (fuenteAdjunta != null) {
-                Fuente fuenteGestionada = em.merge(fuenteAdjunta);
-                hecho.setFuente(fuenteGestionada);
-            }
-            // Ejecutar la Transacción
             BDUtils.comenzarTransaccion(em);
-            // maneja la inserción (si es nuevo) o la actualización (si ya existe el ID)
+
+            hecho.setFuente(gestionarRelacion(em, hecho.getFuente()));
+            hecho.setUbicacion(gestionarRelacion(em, hecho.getUbicacion()));
+
+            // Gestionar colección de etiquetas
+            if (hecho.getEtiquetas() != null) {
+                Set<Etiqueta> etiquetasGestionadas = hecho.getEtiquetas().stream()
+                        .map(etiqueta -> gestionarRelacion(em, etiqueta))
+                        .collect(Collectors.toSet());
+
+                hecho.setEtiquetas(new ArrayList<>(etiquetasGestionadas));
+            }
+
             em.merge(hecho);
             BDUtils.commit(em);
 
@@ -201,6 +175,20 @@ public class HechoRepositorio {
         } finally {
             em.close();
         }
+    }
+
+    private <T> T gestionarRelacion(EntityManager em, T entidad) {
+        if (entidad == null) return null;
+
+        Object id = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entidad);
+        if (id != null) {
+            T existente = em.find((Class<T>) entidad.getClass(), id);
+            if (existente != null) {
+                return existente;
+            }
+        }
+
+        return em.merge(entidad);
     }
 
     public void remover(Hecho hecho) {

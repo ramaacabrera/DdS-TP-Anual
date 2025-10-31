@@ -1,6 +1,6 @@
 package estadisticas.Presentacion;
 
-import utils.NormalizadorCategorias;
+import utils.PaqueteNormalizador.NormalizadorCategorias;
 import estadisticas.agregador.EstadisticasCategoriaRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;

@@ -26,11 +26,8 @@ public class MainDinamica {
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("dinamico-PU");
-        EntityManager emDinamico = emf.createEntityManager();
-
-        DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio(emDinamico);
-        Fuente fuente = new Fuente(TipoDeFuente.DINAMICA, "http://localhost:"+puerto);
+        DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio();
+        Fuente fuente = new Fuente(TipoDeFuente.DINAMICA, "DINAMICA");
 
         ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDinamica(new GetHechosDinamicoHandler(dinamicoRepositorio), new GetSolicitudesModificacionHandler(dinamicoRepositorio), new GetSolicitudesEliminacionHandler(dinamicoRepositorio)));
         cliente.conectar(fuente);

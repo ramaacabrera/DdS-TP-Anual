@@ -10,29 +10,20 @@ import java.util.UUID;
 
 public class FuenteRepositorio {
 
-    //private final EntityManagerFactory emf;
-
-    //public FuenteRepositorio(EntityManagerFactory emf) {
-        //this.emf = emf;
-    //}
-
     public FuenteRepositorio() {}
 
-    /**
-     * Busca una Fuente por su ruta (URL), que actúa como identificador único.
-     * @param ruta La URL de la agregador.fuente (ej: http://localhost:8084).
-     * @return La entidad Fuente si existe, o null.
-     */
     public Fuente buscarPorRuta(String ruta) {
         //EntityManager em = emf.createEntityManager();
+        System.out.println("Buscando fuente: " + ruta);
         EntityManager em = BDUtils.getEntityManager();
         try {
             TypedQuery<Fuente> query = em.createQuery(
-                    "SELECT f FROM Fuente f WHERE f.ruta = :rutaParam", Fuente.class);
+                    "SELECT f FROM Fuente f WHERE f.descriptor = :rutaParam", Fuente.class);
             query.setParameter("rutaParam", ruta);
-
+            System.out.println("Ya se busco");
             return query.getSingleResult();
-        } catch (NoResultException e) {
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             return null;
         } finally {
             em.close();

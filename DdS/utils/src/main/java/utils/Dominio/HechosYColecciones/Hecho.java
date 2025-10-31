@@ -185,12 +185,6 @@ public class Hecho {
         this.estadoHecho = EstadoHecho.OCULTO;
     }
 
-    //Metodo para comparar si dos hechos son iguales (comparando título)
-    public boolean esIgualAotro(Hecho otroHecho) {
-        return this.titulo.equalsIgnoreCase(otroHecho.getTitulo());
-    }
-    //"dos hechos son iguales si tienen el mismo titulo"
-
     //Metodo para modificar un hecho si es editable
     //REVISAR CON FUENTE DINAMICA Y SOLICITUDES
     public void modificar(String nuevoTitulo, String nuevaDescripcion, String nuevaCategoria, String nuevoContenidoTexto) {
@@ -207,11 +201,11 @@ public class Hecho {
         if (otro == null) return false;
 
         return this.titulo.equalsIgnoreCase(otro.titulo)
+                && this.descripcion.equalsIgnoreCase(otro.descripcion)
                 && this.categoria.equalsIgnoreCase(otro.categoria)
                 && Objects.equals(this.ubicacion, otro.ubicacion)
                 && Objects.equals(this.fechaDeAcontecimiento, otro.fechaDeAcontecimiento)
-                && Objects.equals(this.contribuyente, otro.contribuyente)
-                && this.etiquetas.equals(otro.etiquetas);
+                && Objects.equals(this.contribuyente, otro.contribuyente);
     }
 
     public void actualizarCon(Hecho otroHecho) {

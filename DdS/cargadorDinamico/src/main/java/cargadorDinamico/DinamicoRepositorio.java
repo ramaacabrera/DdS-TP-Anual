@@ -2,6 +2,7 @@ package cargadorDinamico;
 
 import cargadorDinamico.Dominio.Solicitudes.EstadoSolicitudEliminacion_D;
 import cargadorDinamico.Dominio.Solicitudes.EstadoSolicitudModificacion_D;
+import org.hibernate.Hibernate;
 import utils.Dominio.Usuario.RolUsuario;
 import cargadorDinamico.Dominio.Usuario.Usuario_D;
 import utils.Dominio.Solicitudes.EstadoSolicitudEliminacion;
@@ -25,35 +26,52 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class DinamicoRepositorio {
-    private final EntityManager em;
-
-    public DinamicoRepositorio(EntityManager emNuevo) {
-        this.em = emNuevo;
-    }
+    public DinamicoRepositorio() {}
 
     public void guardarHecho(Hecho_D hecho) {
+        EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
-            em.persist(hecho); // Usamos persist para insertar nuevo
+            em.merge(hecho); // Usamos persist para insertar nuevo
             BDUtilsDinamico.commit(em);
             System.out.println("Hecho_D guardado: " + hecho.getTitulo());
         } catch (Exception e) {
             BDUtilsDinamico.rollback(em);
             System.err.println("ERROR al guardar Hecho_D: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            em.close();
         }
     }
 
     public List<Hecho_D> buscarHechosEntidades() {
+        EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             TypedQuery<Hecho_D> query = em.createQuery("SELECT h FROM Hecho_D h", Hecho_D.class);
-            return query.getResultList();
+            List<Hecho_D> hechos = query.getResultList();
+
+            for (Hecho_D hecho : hechos) {
+                if (hecho.getUbicacion() != null && !Hibernate.isInitialized(hecho.getUbicacion())) {
+                    Hibernate.initialize(hecho.getUbicacion());}
+                if (hecho.getContribuyente() != null && !Hibernate.isInitialized(hecho.getContribuyente())) {
+                    Hibernate.initialize(hecho.getContribuyente());}
+                if (hecho.getEtiquetas() != null && !Hibernate.isInitialized(hecho.getEtiquetas())) {
+                    Hibernate.initialize(hecho.getEtiquetas());}
+                if (hecho.getContenidoMultimedia() != null && !Hibernate.isInitialized(hecho.getContenidoMultimedia())) {
+                    Hibernate.initialize(hecho.getContenidoMultimedia());}
+            }
+
+            return hechos;
         } catch (Exception e) {
             System.err.println("Error al obtener hechos: " + e.getMessage());
             return new ArrayList<>();
+        } finally {
+            em.close();
         }
     }
 
@@ -103,7 +121,7 @@ public class DinamicoRepositorio {
     }
 
     private Fuente crearFuenteDinamica() {
-        return new Fuente(TipoDeFuente.DINAMICA, "http://localhost:puerto-dinamico");
+        return new Fuente(TipoDeFuente.DINAMICA, "DINAMICA");
     }
 
     private Usuario convertirUsuario(Usuario_D usuarioD) {
@@ -194,6 +212,7 @@ public class DinamicoRepositorio {
 
 
     public void resetearHechos() {
+        EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
 
@@ -209,47 +228,59 @@ public class DinamicoRepositorio {
         } catch (Exception e) {
             BDUtilsDinamico.rollback(em);
             System.err.println("ERROR al resetear hechos: " + e.getMessage());
+        }finally {
+            em.close();
         }
     }
 
     public Hecho_D buscarHechoPorId(UUID id) {
+        EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             return em.find(Hecho_D.class, id);
         } catch (Exception e) {
             System.err.println("Error al buscar hecho por ID: " + e.getMessage());
             return null;
+        }finally {
+            em.close();
         }
     }
 
     //-------------------------SOLICITUDES---------------------------------------
 
     public void guardarSolicitudModificacion(SolicitudDeModificacion_D solicitud){
+        EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
-            em.persist(solicitud); // Usamos persist para insertar nuevo
+            em.merge(solicitud); // Usamos persist para insertar nuevo
             BDUtilsDinamico.commit(em);
             System.out.println("SolicitudDeModificacion_D guardado: " + solicitud.getJustificacion());
         } catch (Exception e) {
             BDUtilsDinamico.rollback(em);
             System.err.println("ERROR al guardar SolicitudDeModificacion_D: " + e.getMessage());
             e.printStackTrace();
+        }finally {
+            em.close();
         }
     }
 
     public void guardarSolicitudEliminacion(SolicitudDeEliminacion_D solicitud) {
+        EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
-            em.persist(solicitud); // Usamos persist para insertar nuevo
+            em.merge(solicitud); // Usamos persist para insertar nuevo
             BDUtilsDinamico.commit(em);
             System.out.println("SolicitudDeEliminacion_D guardado: " + solicitud.getJustificacion());
         } catch (Exception e) {
             BDUtilsDinamico.rollback(em);
             System.err.println("ERROR al guardar SolicitudDeEliminacion_D: " + e.getMessage());
             e.printStackTrace();
+        }finally {
+            em.close();
         }
     }
 
     public void resetearSolicitudesModificacion() {
+        EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
             em.createQuery("DELETE FROM SolicitudDeModificacion_D").executeUpdate();
@@ -259,10 +290,13 @@ public class DinamicoRepositorio {
         } catch (Exception e) {
             BDUtilsDinamico.rollback(em);
             System.err.println("ERROR al resetear agregador.Solicitudes De Modificacion: " + e.getMessage());
+        }finally {
+            em.close();
         }
     }
 
     public void resetearSolicitudesEliminacion() {
+        EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
             em.createQuery("DELETE FROM SolicitudDeEliminacion_D").executeUpdate();
@@ -272,6 +306,8 @@ public class DinamicoRepositorio {
         } catch (Exception e) {
             BDUtilsDinamico.rollback(em);
             System.err.println("ERROR al resetear agregador.Solicitudes De Eliminacion: " + e.getMessage());
+        }finally {
+            em.close();
         }
     }
 
@@ -288,33 +324,41 @@ public class DinamicoRepositorio {
     }
 
     public List<SolicitudDeModificacion_D> buscarSolModificacionEntidades() {
+        EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             TypedQuery<SolicitudDeModificacion_D> query = em.createQuery("SELECT sm FROM SolicitudDeModificacion_D sm", SolicitudDeModificacion_D.class);
             return query.getResultList();
         } catch (Exception e) {
             System.err.println("Error al obtener sol de modificación: " + e.getMessage());
             return new ArrayList<>();
+        }finally {
+            em.close();
         }
     }
 
     public List<SolicitudDeEliminacionDTO> buscarSolicitudesEliminacion() {
-        List<SolicitudDeEliminacion_D> solEliminaciones = this.buscarSolEliminacionEntidades();
-        List<SolicitudDeEliminacionDTO> dtos = new ArrayList<>();
-
-        for (SolicitudDeEliminacion_D sol : solEliminaciones) {
-            SolicitudDeEliminacionDTO dto = convertirEntidadSEliminacionADTO(sol);
-            dtos.add(dto);
-        }
-        return dtos;
+        return this.buscarSolEliminacionEntidades().stream()
+                .map(this::convertirEntidadSEliminacionADTO)
+                .filter(Objects::nonNull) // Filtrar conversiones nulas
+                .collect(Collectors.toList());
     }
 
     public List<SolicitudDeEliminacion_D> buscarSolEliminacionEntidades() {
+        EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             TypedQuery<SolicitudDeEliminacion_D> query = em.createQuery("SELECT se FROM SolicitudDeEliminacion_D se", SolicitudDeEliminacion_D.class);
-            return query.getResultList();
+            List<SolicitudDeEliminacion_D> resultados = query.getResultList();
+            for (SolicitudDeEliminacion_D sol : resultados) {
+                if (sol.getUsuario() != null) {
+                    Hibernate.initialize(sol.getUsuario());
+                }
+            }
+            return resultados;
         } catch (Exception e) {
             System.err.println("Error al obtener sol de eliminacion: " + e.getMessage());
             return new ArrayList<>();
+        }finally {
+            em.close();
         }
     }
 
