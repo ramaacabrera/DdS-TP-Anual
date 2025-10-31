@@ -25,6 +25,7 @@ public class CriterioDeTexto extends Criterio {
 
     public CriterioDeTexto() {}
 
+
     @Override
     public boolean cumpleConCriterio(Hecho hecho) {
         switch (tipoDeTexto) {

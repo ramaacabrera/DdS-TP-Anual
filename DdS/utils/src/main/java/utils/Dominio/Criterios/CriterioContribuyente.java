@@ -29,6 +29,14 @@ public class CriterioContribuyente extends Criterio {
         return Objects.equals(hecho.getContribuyente().getNombre(), this.nombreContribuyente);
     }
 
+    public String getNombreContribuyente() {
+        return this.nombreContribuyente;
+    };
+    
+    public void setNombreContribuyente(String nombreContribuyente) {
+        this.nombreContribuyente = nombreContribuyente;
+    }
+
     @Override
     public String getQueryCondition() {
         if (nombreContribuyente == null || nombreContribuyente.trim().isEmpty()) {

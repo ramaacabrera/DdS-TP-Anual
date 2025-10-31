@@ -6,6 +6,9 @@ import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 import utils.Persistencia.UsuarioRepositorio;
 import utils.Dominio.Usuario.*;
+import java.nio.charset.StandardCharsets;
+
+import java.net.URLEncoder;
 
 
 public class PostSignInHandler implements Handler {
@@ -21,8 +24,7 @@ public class PostSignInHandler implements Handler {
     public void handle(@NotNull Context ctx) {
         String usuario = ctx.formParam("usuario");
         if(usuarioRepositorio.buscarPorUsername(usuario) != null){
-            ctx.sessionAttribute("error", "Nombre de usuario invalido");
-            ctx.redirect("http://localhost:7070/sign-in");
+            ctx.redirect("http://localhost:7070/sign-in?error="+ URLEncoder.encode("Nombre de usuario invalido", StandardCharsets.UTF_8));
             return;
         }
         String nombre = ctx.formParam("nombre");
@@ -34,8 +36,7 @@ public class PostSignInHandler implements Handler {
         UserCreator creador = new UserCreator();
         int codigo = creador.crearUsuario(usuario, password, nombre, apellido, email);
         if(codigo != 204){
-            ctx.sessionAttribute("error", "No se pudo crear el usuario");
-            ctx.redirect("http://localhost:7070/sign-in");
+            ctx.redirect("http://localhost:7070/sign-in?error="+ URLEncoder.encode("No se pudo crear el usuario", StandardCharsets.UTF_8));
             return;
         }
 

@@ -1,5 +1,5 @@
 #titulo {
-    color: #F54927;
+    color: #1d7858;
 }
 
 /* Estructura general */
@@ -23,7 +23,7 @@ header {
 
 .error{
    text-align: center;
-    color: red;
+    color: #c50f15;
 }
 
 /* Main ocupa el espacio intermedio y centra su contenido */

@@ -24,7 +24,8 @@ public class SolicitudDeEliminacion_D {
 
     protected String justificacion;
 
-    @Column(name = "hecho_id",length = 36, updatable = false, nullable = true)
+    @Type(type = "uuid-char")
+    @Column(name = "hecho_id", length = 36 , updatable = false, nullable = false)
     private UUID hecho_id;
 
     @ManyToOne (cascade = CascadeType.ALL)

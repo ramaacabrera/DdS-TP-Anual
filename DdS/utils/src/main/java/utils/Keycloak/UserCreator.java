@@ -15,8 +15,8 @@ public class UserCreator {
     public UserCreator(){
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        this.urlServidor = config.getProperty("urlServidorSSO");
-        this.urlServidorAdmin = config.getProperty("urlServidorSSOAdmin");
+        this.urlServidor = "http://localhost:8080/realms/tpDDSI";
+        this.urlServidorAdmin = "http://localhost:8080/admin/realms/tpDDSI";
     }
 
     public int crearUsuario(String username, String clave, String nombre, String apellido, String email){

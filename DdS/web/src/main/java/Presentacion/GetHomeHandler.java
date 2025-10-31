@@ -15,6 +15,7 @@ import java.util.Map;
 import io.javalin.http.Handler;
 import utils.DTO.HechoDTO;
 import utils.DTO.PageDTO;
+import utils.Dominio.Usuario.Usuario;
 
 public class GetHomeHandler implements Handler {
     private String urlPublica;
@@ -34,7 +35,6 @@ public class GetHomeHandler implements Handler {
         PageDTO<HechoDTO> pageDto = null;
 
         try {
-
             Request request = new Request.Builder().url(urlBackend).get().build();
             Response response = client.newCall(request).execute();
             if (!response.isSuccessful()) {
@@ -63,6 +63,18 @@ public class GetHomeHandler implements Handler {
             String access_token = ctx.sessionAttribute("access_token");
             model.put("username", username);
             model.put("access_token", access_token);
+
+            //String urlUser = urlPublica+"/usuario/"+username;
+            Request requestUser = new Request.Builder().url(urlPublica+"/usuario/"+username).get().build();
+            try {
+                Response response = client.newCall(requestUser).execute();
+                Usuario user = mapper.readValue(response.body().string(), new TypeReference<Usuario>() {});
+                model.put("rolUsuario", user.getRol());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else{
+            model.put("rolUsuario", "VISITANTE");
         }
 
         ctx.render("inicio.ftl", model);

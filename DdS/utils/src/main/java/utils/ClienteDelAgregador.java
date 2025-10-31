@@ -78,7 +78,7 @@ public class ClienteDelAgregador {
                             List<SolicitudDeEliminacionDTO> solicitudes = controlador.obtenerSolicitudesEliminacion();
                             solicitudes.forEach(System.out::println);
                             SolicitudesEliminacionObtenidosPayload payload = new SolicitudesEliminacionObtenidosPayload(solicitudes);
-                            WsMessage<SolicitudesEliminacionObtenidosPayload> mensaje = new WsMessage<SolicitudesEliminacionObtenidosPayload>("solicitudesDeEliminacionObtenidos", payload);
+                            WsMessage<SolicitudesEliminacionObtenidosPayload> mensaje = new WsMessage<SolicitudesEliminacionObtenidosPayload>("solicitudesEliminacionObtenidos", payload);
 
                             webSocket.send(mapper.writeValueAsString(mensaje));
                         }

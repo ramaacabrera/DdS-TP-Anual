@@ -22,21 +22,6 @@ public class SolicitudEliminacionRepositorio {
         this.hechoRepositorio = hechoRepositorio;
     }
 
-    private Optional<SolicitudDeEliminacion> buscarSolicitudEliminacion() {
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            TypedQuery<SolicitudDeEliminacion> query = em.createQuery("SELECT s FROM SolicitudDeEliminacion s", SolicitudDeEliminacion.class);
-            query.setMaxResults(1);
-            SolicitudDeEliminacion solicitud = query.getSingleResult();
-            return Optional.ofNullable(solicitud);
-
-        } catch (javax.persistence.NoResultException e) {
-            return Optional.empty();
-        } finally {
-            em.close();
-        }
-    }
-
  public List<SolicitudDeEliminacion> buscarTodas() {
      EntityManager em = BDUtils.getEntityManager();
      try {
@@ -147,7 +132,12 @@ public class SolicitudEliminacionRepositorio {
         Optional<SolicitudDeEliminacion> resultadoBusqueda = this.buscarPorId(id);
         if (resultadoBusqueda.isPresent()) {
             SolicitudDeEliminacion solicitud = resultadoBusqueda.get();
+
+            // ✅ DEBUG: Ver estado actual
+            System.out.println("🔍 ESTADO ACTUAL - Padre: " + solicitud.getEstadoSolicitudEliminacion());
+
             EstadoSolicitudEliminacion estadoEnum = EstadoSolicitudEliminacion.valueOf(body.toUpperCase());
+
             if (estadoEnum == EstadoSolicitudEliminacion.ACEPTADA) {
                 solicitud.aceptarSolicitud();
             } else if (estadoEnum == EstadoSolicitudEliminacion.RECHAZADA) {
@@ -156,13 +146,18 @@ public class SolicitudEliminacionRepositorio {
                 return false;
             }
 
-            // agregador.Persistencia del cambio
+            // ✅ DEBUG: Ver estado después de modificar
+            System.out.println("🔍 ESTADO DESPUÉS - Padre: " + solicitud.getEstadoSolicitudEliminacion());
+
+            // Persistencia del cambio
             EntityManager em = BDUtils.getEntityManager();
             try {
                 BDUtils.comenzarTransaccion(em);
-                // em.merge actualiza el objeto modificado que ya fue cargado de la BD
                 em.merge(solicitud);
                 BDUtils.commit(em);
+
+                // ✅ DEBUG: Verificar que se guardó
+                System.out.println("✅ Transacción completada - Estado guardado: " + solicitud.getEstadoSolicitudEliminacion());
                 return true;
             } catch (Exception e) {
                 BDUtils.rollback(em);
@@ -172,7 +167,7 @@ public class SolicitudEliminacionRepositorio {
                 em.close();
             }
         }
-        return false; // No se encontró la solicitud
+        return false;
     }
 
     public Optional<SolicitudDeEliminacion> buscarPorId(UUID id) {

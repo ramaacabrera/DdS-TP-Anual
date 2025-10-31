@@ -15,8 +15,8 @@ public class GetSignInHandler implements Handler {
     @Override
     public void handle(@NotNull Context ctx){
         Map<String, Object> model = new HashMap<>();
-        model.put("baseAPIUrl", urlPublica);
-        String error = ctx.sessionAttribute("error");
+        model.put("baseAPIUrl", "http://localhost:8087");
+        String error = ctx.queryParam("error");
         if(error != null){
             model.put("error", error);
             ctx.sessionAttribute("error", null);

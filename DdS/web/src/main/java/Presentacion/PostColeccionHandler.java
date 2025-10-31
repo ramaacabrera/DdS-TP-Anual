@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
+import utils.Dominio.Criterios.TipoDeTexto;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -25,6 +26,7 @@ public class PostColeccionHandler implements Handler {
         Map<String, Object> bodyData = new HashMap<>();
         List<Map<String, String>> criteriosDePertenencia = new ArrayList<>();
         Map<String, String> map = new HashMap<>();
+        this.obtenerCriteriosDePertenencia(map, ctx);
         map.put("@type", ctx.formParam("criteriosDePertenencia"));
         map.put("categoria", "ejemplo");
         criteriosDePertenencia.add(map);
@@ -75,4 +77,56 @@ public class PostColeccionHandler implements Handler {
 
 
     }
+
+    public void obtenerCriteriosDePertenencia(Map<String, String> map, Context ctx) {
+        map.put("@type", ctx.formParam("criteriosDePertenencia"));
+        switch (ctx.formParam("criteriosDePertenencia").toString()) {
+            case "CriterioDeTexto":
+                switch(ctx.formParam("criterio.tipoDeTexto").toString()){
+                    case "titulo":
+                        map.put("tipoDeTexto", TipoDeTexto.TITULO.toString());
+                        break;
+                    case "descripcion":
+                        map.put("tipoDeTexto", TipoDeTexto.DESCRIPCION.toString());
+                        break;
+                    case "categoria":
+                        map.put("tipoDeTexto", TipoDeTexto.CATEGORIA.toString());
+                        break;
+                }
+                List<String> palabras = ctx.formParams("criterio.palabras[]");
+                String resultado = String.join(",", palabras);
+                map.put("palabras", resultado);
+                break;
+            case "CriterioFecha":
+                map.put("tipoFecha", ctx.formParams("criterio.tipoDeFecha").toString());
+                map.put("fechaInicio", ctx.formParams("criterio.fechaInicio").toString());
+                map.put("fechaFin", ctx.formParams("criterio.fechaFin").toString());
+                break;
+            case "CriterioEtiquetas":
+                List<String> etiquetas = ctx.formParams("criterio.etiquetas[]");
+                String resultado = String.join(",", etiquetas);
+                map.put("etiquetas", resultado);
+                break;
+            case "CriterioContribuyente":
+                map.put("nombreContribuyente", ctx.formParams("criterio.contribuyente").toString());
+                break;
+            case "CriterioUbicacion":
+                String jsonBody = String.format("""
+                    {
+                        "latitud": %s,
+                        "longitud": %s
+                    }
+                    """, ctx.formParams("criterio.ubicacion.latitud").toString(), ctx.formParams("criterio.ubicacion.longitud").toString());
+                //map.put("latitud", ctx.formParams("criterio.ubicacion.latitud").toString());
+                //map.put("longitud", ctx.formParams("criterio.ubicacion.longitud").toString());
+                map.put("ubicacion", jsonBody);
+                break;
+            case "CriterioTipoMultimedia":
+                map.put("tipoContenidoMultimedia", ctx.formParams("criterio.tipoMultimedia").toString());
+                break;
+            default:
+                break;
+        }
+    }
+
 }

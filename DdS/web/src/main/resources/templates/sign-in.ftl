@@ -12,7 +12,7 @@
                 <div class="error">${error}</div>
             </#if>
 
-            <form method="post" action="${baseAPIUrl}/sign-in" onsubmit="return validarPassword()">
+            <form method="post" action="${baseAPIUrl}/api/sign-in" onsubmit="return validarPassword()">
                 <input type="text" name="nombre" placeholder="Nombre" required>
                 <input type="text" name="apellido" placeholder="Apellido" required>
                 <input type="number" name="edad" placeholder="Edad" min="18" required>

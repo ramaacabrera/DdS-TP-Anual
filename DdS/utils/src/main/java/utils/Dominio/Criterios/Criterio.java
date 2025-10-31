@@ -15,7 +15,6 @@ import java.util.UUID;
         property = "@type"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = CriterioCategoria.class, name = "CriterioCategoria"),
         @JsonSubTypes.Type(value = CriterioContribuyente.class, name = "CriterioContribuyente"),
         @JsonSubTypes.Type(value = CriterioDeTexto.class, name = "CriterioDeTexto"),
         @JsonSubTypes.Type(value = CriterioEtiquetas.class, name = "CriterioEtiquetas"),

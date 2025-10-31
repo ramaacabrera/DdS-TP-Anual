@@ -69,7 +69,7 @@ public class MainWeb {
 
         app.get("/admin/solicitudes", new GetSolicitudesAdminHandler(urlAdmin));
         app.get("/admin/solicitudes/{tipo}/{id}", new GetSolicitudAdminHandler(urlAdmin));
-        app.put("/admin/solicitudes/{tipo}/{id}", new PutSolicitudEstadoHandler(urlAdmin));
+        app.patch("/admin/solicitudes/{tipo}/{id}", new PatchSolicitudEstadoHandler(urlAdmin));
 
 
     }

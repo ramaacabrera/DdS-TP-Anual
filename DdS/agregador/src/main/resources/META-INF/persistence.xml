@@ -12,7 +12,6 @@
         <class>utils.Dominio.HechosYColecciones.Etiqueta</class>
         <class>utils.Dominio.fuente.Fuente</class>
         <class>utils.Dominio.Usuario.Usuario</class>
-        <class>utils.Dominio.Criterios.CriterioCategoria</class>
         <class>utils.Dominio.Criterios.CriterioContribuyente</class>
         <class>utils.Dominio.Criterios.CriterioDeTexto</class>
         <class>utils.Dominio.Criterios.CriterioEtiquetas</class>

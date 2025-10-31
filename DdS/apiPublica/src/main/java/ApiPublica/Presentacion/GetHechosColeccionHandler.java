@@ -3,7 +3,6 @@ import io.javalin.http.Handler;
 import io.javalin.http.Context;
 import utils.Dominio.HechosYColecciones.Ubicacion;
 import utils.Dominio.Criterios.Criterio;
-import utils.Dominio.Criterios.CriterioCategoria;
 import utils.Dominio.Criterios.CriterioFecha;
 import utils.Dominio.Criterios.CriterioUbicacion;
 import utils.Dominio.HechosYColecciones.ModosDeNavegacion;
@@ -69,7 +68,7 @@ public class GetHechosColeccionHandler implements Handler {
             throw new RuntimeException("Error al parsear fechas. Formato esperado: yyyy-MM-dd", e);
         }
 
-        categoria.ifPresent(c -> criterios.add(new CriterioCategoria(c)));
+       // categoria.ifPresent(c -> criterios.add(new CriterioCategoria(c)));
 
         if (latitud.isPresent() && longitud.isPresent()) {
             try {

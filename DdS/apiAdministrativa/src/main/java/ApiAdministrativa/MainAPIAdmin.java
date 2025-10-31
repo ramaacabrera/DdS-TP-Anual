@@ -30,7 +30,7 @@ public class MainAPIAdmin {
         app.before(new ValidarAdminHandler(usuarioRepositorio));
 
 
-        app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio));
+        app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio, hechoRepositorio));
         app.put("/api/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio));
         app.delete("/api/colecciones/{id}", new DeleteColeccionesHandler(coleccionRepositorio));
 
@@ -38,7 +38,7 @@ public class MainAPIAdmin {
         app.delete("/api/colecciones/{id}/agregador.fuente", new DeleteFuenteHandler(coleccionRepositorio));
         app.put("/api/colecciones/{id}/algoritmo", new PutAlgoritmoConsensoHandler(coleccionRepositorio));
 
-        app.put("/api/solicitudes/{id}", new PutSolicitudEliminacionHandler(solicitudEliminacionRepositorio));
+        app.patch("/api/solicitudes/{id}", new PatchSolicitudEliminacionHandler(solicitudEliminacionRepositorio));
         app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(solicitudEliminacionRepositorio));
         app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(solicitudEliminacionRepositorio));
 

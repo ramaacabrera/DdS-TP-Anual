@@ -1,17 +1,19 @@
-<#macro quickNavCards>
+<#macro quickNavCards rolUsuario>
     <div class="home-quick-nav-section">
         <h2 class="home-section-title">Navegación Rápida</h2>
         <div class="home-quick-nav-cards">
-            <a href="/admin/solicitudes" class="home-nav-card">
-                <div class="home-nav-card-icon">📋</div>
-                <h3>Ver Solicitudes</h3>
-                <p>Consulta y gestiona las solicitudes pendientes</p>
-            </a>
-            <a href="/crear-coleccion" class="home-nav-card">
-                <div class="home-nav-card-icon">🗂️</div>
-                <h3>Crear Colección</h3>
-                <p>Organiza y agrupa hechos relacionados en colecciones temáticas</p>
-            </a>
+            <#if rolUsuario == "ADMINISTRADOR">
+                <a href="/admin/solicitudes" class="home-nav-card">
+                    <div class="home-nav-card-icon">📋</div>
+                    <h3>Ver Solicitudes</h3>
+                    <p>Consulta y gestiona las solicitudes pendientes</p>
+                </a>
+                <a href="/crear-coleccion" class="home-nav-card">
+                    <div class="home-nav-card-icon">🗂️</div>
+                    <h3>Crear Colección</h3>
+                    <p>Organiza y agrupa hechos relacionados en colecciones temáticas</p>
+                </a>
+            </#if>
             <a href="/hechos" class="home-nav-card">
                 <div class="home-nav-card-icon">📊</div>
                 <h3>Ver Hechos</h3>

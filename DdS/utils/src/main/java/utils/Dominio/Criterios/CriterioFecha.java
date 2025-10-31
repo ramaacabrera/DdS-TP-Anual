@@ -31,6 +31,11 @@ public class CriterioFecha extends Criterio {
     public Date getFechaFin() { return fechaFin; }
     public void setFechaInicio(Date fechaInicio) { this.fechaInicio = fechaInicio;  }
     public void setFechaFin(Date fechaFin) { this.fechaFin = fechaFin;  }
+
+    public String getTipoFecha() { return tipoFecha; }
+    public void setTipoFecha(String tipo){this.tipoFecha = tipo;}
+
+
 /// con before y after no se incluye la fecha limite y falla si alguna fecha es NULL
 
 //    public boolean cumpleConCriterio(Hecho hecho){

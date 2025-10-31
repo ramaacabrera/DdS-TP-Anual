@@ -28,10 +28,9 @@ public class SolicitudDeModificacion_D {
     protected UUID id_solicitud_modificacion;
 
     protected String justificacion;
-
-    /*@ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name = "hecho_id")
-    private Hecho_D hechoAsociado;*/
+    
+    @Type(type = "uuid-char")
+    @Column(name = "hecho_id", length = 36 , updatable = false, nullable = false)
     private UUID hecho_id;
 
     @ManyToOne (cascade = CascadeType.ALL)

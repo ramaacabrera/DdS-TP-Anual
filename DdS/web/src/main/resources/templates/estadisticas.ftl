@@ -3,7 +3,7 @@
 
 <#assign content>
     <div class="container">
-        <header class="header">
+        <header class="header-estadisticas">
             <h1>Dashboard de Estadísticas - Metamapa</h1>
             <p class="subtitle">Análisis de datos en tiempo real</p>
         </header>

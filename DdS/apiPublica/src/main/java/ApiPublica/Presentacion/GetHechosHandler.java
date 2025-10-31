@@ -69,7 +69,7 @@ public class GetHechosHandler implements Handler {
         // Categoria
         String categoria = ctx.queryParam("categoria");
         if (categoria != null && !categoria.trim().isEmpty()) {
-            criterios.add(new CriterioCategoria(categoria));
+            //criterios.add(new CriterioCategoria(categoria));
         }
 
         // Fechas Carga
