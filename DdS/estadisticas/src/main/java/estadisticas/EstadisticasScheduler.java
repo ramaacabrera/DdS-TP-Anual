@@ -12,7 +12,7 @@ public class EstadisticasScheduler {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-        scheduler.scheduleAtFixedRate(generador::actualizarEstadisticas, 1, 60, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(generador::actualizarEstadisticas, 1, 360, TimeUnit.SECONDS);
     }
 
 }

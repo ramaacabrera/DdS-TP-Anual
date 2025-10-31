@@ -1,11 +1,13 @@
 package utils.Persistencia;
 import org.hibernate.Hibernate;
+import org.hibernate.LazyInitializationException;
 import utils.DTO.PageDTO;
 import utils.Dominio.Criterios.Criterio;
 import utils.Dominio.HechosYColecciones.Coleccion;
 import utils.DTO.ColeccionDTO;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import utils.BDUtils;
@@ -155,32 +157,83 @@ public class ColeccionRepositorio {
         EntityManager em = BDUtils.getEntityManager();
         try {
             TypedQuery<Coleccion> query = em.createQuery("SELECT c FROM Coleccion c", Coleccion.class);
-            List<Coleccion> resultado = query.getResultList();
+            List<Coleccion> colecciones = query.getResultList();
 
-            for(Coleccion c : resultado){
-                Hibernate.initialize(c.getHechos());
-                Hibernate.initialize(c.getFuente());
-                Hibernate.initialize(c.getHechosConsensuados());
-                Hibernate.initialize(c.getCriteriosDePertenencia());
+            List<Coleccion> coleccionesNuevas = new ArrayList<>();
+            for (Coleccion coleccion : colecciones) {
+                Coleccion coleccionNueva = this.obtenerColeccion(coleccion);
+                if(coleccionNueva != null){
+                    coleccionesNuevas.add(coleccionNueva);
+                }
             }
-            return query.getResultList();
+
+            return coleccionesNuevas;
+
+        } catch (Exception e) {
+            return new ArrayList<>();
         } finally {
             em.close();
         }
     }
+    private Coleccion obtenerColeccion(Coleccion coleccion) {
+        inicializarRelacion(coleccion::getHechos, "hechos");
+        inicializarRelacion(coleccion::getHechosConsensuados, "hechosConsensuados");
+        inicializarRelacion(coleccion::getFuente, "fuentes");
+        inicializarRelacion(coleccion::getCriteriosDePertenencia, "criterios");
 
-    public Optional<Coleccion> buscarPorHandle(String handle) {
+        if (coleccion.getHechos() != null) {
+            for (Hecho hecho : coleccion.getHechos()) {
+                inicializarHechoCompletamente(hecho);
+            }
+        }
+
+        if (coleccion.getHechosConsensuados() != null) {
+            for (Hecho hecho : coleccion.getHechosConsensuados()) {
+                inicializarHechoCompletamente(hecho);
+            }
+        }
+
+        return coleccion;
+    }
+
+    private void inicializarHechoCompletamente(Hecho hecho) {
+        if (hecho == null) return;
+
+        try {
+            inicializarRelacion(hecho::getEtiquetas, "etiquetas");
+            inicializarRelacion(hecho::getContenidoMultimedia, "contenidoMultimedia");
+            inicializarRelacion(hecho::getUbicacion, "ubicacion");
+            inicializarRelacion(hecho::getContribuyente, "contribuyente");
+            inicializarRelacion(hecho::getFuente, "fuente");
+
+        } catch (Exception e) {
+        }
+    }
+
+    private <T> void inicializarRelacion(Supplier<T> relacionSupplier, String nombreRelacion) {
+        try {
+            T relacion = relacionSupplier.get();
+            if (relacion != null && !Hibernate.isInitialized(relacion)) {
+                Hibernate.initialize(relacion);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public Coleccion buscarPorHandle(String handle) {
         EntityManager em = BDUtils.getEntityManager();
         try {
             TypedQuery<Coleccion> query = em.createQuery(
                     "SELECT c FROM Coleccion c WHERE c.handle = :handleParam", Coleccion.class);
 
-            query.setParameter("handleParam", handle);
+            query.setParameter("handleParam", UUID.fromString(handle));
 
-            return Optional.of(query.getSingleResult());
+            Coleccion cole = query.getSingleResult();
+            cole = obtenerColeccion(cole);
+            return cole;
 
         } catch (NoResultException e) {
-            return Optional.empty();
+            return null;
         } finally {
             em.close();
         }

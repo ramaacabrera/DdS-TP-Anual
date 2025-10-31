@@ -18,6 +18,7 @@ import utils.Persistencia.SolicitudModificacionRepositorio;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class GetColeccionesHandler implements Handler {
 
@@ -43,7 +44,11 @@ public class GetColeccionesHandler implements Handler {
 
             String finalUrl = b.build().toString();
             Request request = new Request.Builder().url(finalUrl).get().build();
-            OkHttpClient client = new OkHttpClient();
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(60, TimeUnit.SECONDS)  // Timeout para establecer conexión
+                    .readTimeout(120, TimeUnit.SECONDS)     // Timeout para lectura de datos (el que te está fallando)
+                    .writeTimeout(60, TimeUnit.SECONDS)    // Timeout para escritura
+                    .build();
             PageDTO<Coleccion> resp;
             try (Response response = client.newCall(request).execute()) {
                 if (!response.isSuccessful()) {
