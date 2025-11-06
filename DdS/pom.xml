@@ -12,8 +12,8 @@
     <modules>
         <module>utils</module>
         <module>agregador</module>
-        <module>apiAdministrativa</module>
-        <module>apiPublica</module>
+        <module>gestorAdministrativo</module>
+        <module>gestorPublico</module>
         <module>cargadorEstatico</module>
         <module>cargadorDinamico</module>
         <module>cargadorDemo</module>

@@ -4,13 +4,13 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
     <persistence-unit name="dinamico-PU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>cargadorDinamico.Dominio.Usuario.Usuario_D</class>
-        <class>cargadorDinamico.Dominio.Solicitudes.SolicitudDeEliminacion_D</class>
-        <class>cargadorDinamico.Dominio.Solicitudes.SolicitudDeModificacion_D</class>
-        <class>cargadorDinamico.Dominio.HechosYColeccionesD.Hecho_D</class>
-        <class>cargadorDinamico.Dominio.HechosYColeccionesD.Etiqueta_D</class>
-        <class>cargadorDinamico.Dominio.HechosYColeccionesD.Ubicacion_D</class>
-        <class>cargadorDinamico.Dominio.HechosYColeccionesD.ContenidoMultimedia_D</class>
+        <class>DominioCargadorDinamico.Usuario.Usuario_D</class>
+        <class>DominioCargadorDinamico.Solicitudes.SolicitudDeEliminacion_D</class>
+        <class>DominioCargadorDinamico.Solicitudes.SolicitudDeModificacion_D</class>
+        <class>DominioCargadorDinamico.HechosYColeccionesD.Hecho_D</class>
+        <class>DominioCargadorDinamico.HechosYColeccionesD.Etiqueta_D</class>
+        <class>DominioCargadorDinamico.HechosYColeccionesD.Ubicacion_D</class>
+        <class>DominioCargadorDinamico.HechosYColeccionesD.ContenidoMultimedia_D</class>
 
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/dinamico_db?serverTimezone=America/Buenos_Aires"/>

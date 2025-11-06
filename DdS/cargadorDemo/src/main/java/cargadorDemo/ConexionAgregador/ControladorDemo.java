@@ -1,6 +1,6 @@
 package cargadorDemo.ConexionAgregador;
 
-import cargadorDemo.Presentacion.GetHechosHandler;
+import cargadorDemo.controller.GetHechosHandler;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeEliminacionDTO;
 import utils.DTO.SolicitudDeModificacionDTO;

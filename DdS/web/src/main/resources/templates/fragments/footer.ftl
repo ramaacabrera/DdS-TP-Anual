@@ -1,4 +1,4 @@
-<!-- lo borre) end main container -->
+<!-- lo borre) end gestorPublico container -->
 
 <footer class="site-footer">
     <div class="footer-inner">

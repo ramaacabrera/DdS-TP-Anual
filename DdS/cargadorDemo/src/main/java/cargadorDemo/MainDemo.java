@@ -4,7 +4,7 @@ import utils.Dominio.fuente.Fuente;
 import utils.Dominio.fuente.TipoDeFuente;
 import utils.ClienteDelAgregador;
 import utils.Conexiones.Cargador;
-import cargadorDemo.Presentacion.*;
+import cargadorDemo.controller.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import cargadorDemo.ConexionAgregador.ControladorDemo;
 import utils.LecturaConfig;
