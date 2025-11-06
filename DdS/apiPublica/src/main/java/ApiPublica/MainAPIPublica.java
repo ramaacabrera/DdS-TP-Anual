@@ -40,9 +40,6 @@ public class MainAPIPublica {
 
         app.post("/api/login", new PostLoginHandler(usuarioRepositorio, urlWeb, servidorSSO));
         app.post("/api/sign-in", new PostSignInHandler(usuarioRepositorio, urlWeb));
-        app.post("api/login-keycloak", new PostLoginKeyCloakHandler(usuarioRepositorio));
-        app.get("/auth/callback", ctx ->{
-        });
 
         app.get("/api/usuario/{username}",new GetUsuarioHandler(usuarioRepositorio));
     }

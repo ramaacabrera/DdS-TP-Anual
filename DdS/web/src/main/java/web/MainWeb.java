@@ -2,15 +2,10 @@ package web;
 
 import Presentacion.*;
 import io.javalin.Javalin;
-import org.json.JSONObject;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
 
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.Properties;
 
 public class MainWeb {
@@ -29,28 +24,7 @@ public class MainWeb {
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarAppWeb(Integer.parseInt(puerto), "/");
 
-        app.get("/", ctx ->{
-            ctx.redirect("/home");
-        });
-
-        app.get("/auth/callback", ctx -> {
-            String code = ctx.queryParam("code");
-
-            String body = "code=" + code;
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8087/api/login-keycloak"))
-                    .header("Content-Type", "application/x-www-form-urlencoded")
-                    .POST(HttpRequest.BodyPublishers.ofString(body))
-                    .build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            String responesbody = response.body();
-            JSONObject json = new JSONObject(responesbody);
-
-            ctx.sessionAttribute("username", json.getString("username"));
-            ctx.sessionAttribute("access_token", json.getString("access_token"));
-
+        app.get("/", ctx -> {
             ctx.redirect("/home");
         });
         app.get("/home", new GetHomeHandler(urlPublica));

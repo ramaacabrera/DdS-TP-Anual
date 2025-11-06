@@ -29,7 +29,7 @@ public class GetHomeHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) {
-        String urlBackend= urlPublica+"/hechos?pagina="+PAGE_DEFAULT+"&limite="+SIZE_MAP_LIMIT;
+        String urlBackend= urlPublica+"/hechos?page="+PAGE_DEFAULT+"&size="+SIZE_MAP_LIMIT;
 
         List<HechoDTO> hechos = Collections.emptyList();
         PageDTO<HechoDTO> pageDto = null;

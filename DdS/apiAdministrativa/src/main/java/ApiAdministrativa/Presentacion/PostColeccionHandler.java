@@ -35,8 +35,6 @@ public class PostColeccionHandler implements Handler {
 
             ColeccionDTO nueva = ctx.bodyAsClass(ColeccionDTO.class);
 
-            System.out.println("ColeccionDTO creada");
-
             Coleccion coleccion = new Coleccion(nueva);
             List<Criterio> criterios = coleccion.getCriteriosDePertenencia();
             List<Hecho> hechos = hechoRepositorio.getHechos();

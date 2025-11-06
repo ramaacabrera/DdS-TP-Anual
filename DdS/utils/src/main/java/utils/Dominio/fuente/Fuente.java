@@ -41,11 +41,6 @@ public class Fuente {
 
     }
 
-    public Fuente(String tipoDeFuente) {
-        this.tipoDeFuente = TipoDeFuente.valueOf(tipoDeFuente);
-        this.descriptor = tipoDeFuente;
-    }
-
     public Fuente(FuenteDTO fuenteDTO) {
         this.tipoDeFuente = fuenteDTO.getTipoDeFuente();
         this.descriptor = fuenteDTO.getRuta();

@@ -22,12 +22,6 @@ public class CriterioTipoMultimedia extends Criterio {
         return hecho.getContenidoMultimedia().stream().anyMatch(contenido -> contenido.getTipoContenido().equals(tipoContenidoMultimedia));
     }
 
-    public void setTipoContenidoMultimedia(TipoContenidoMultimedia tipoContenidoMultimedia) {
-        this.tipoContenidoMultimedia = tipoContenidoMultimedia;
-    }
-
-    public TipoContenidoMultimedia getTipoContenidoMultimedia() {return tipoContenidoMultimedia;}
-
     @Override
     public String getQueryCondition() {
         return "";//"h.contribuyente = " + contribuyente.getId_usuario();

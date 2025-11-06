@@ -2,21 +2,6 @@
     <div class="home-quick-nav-section">
         <h2 class="home-section-title">Navegación Rápida</h2>
         <div class="home-quick-nav-cards">
-            <a href="/hechos" class="home-nav-card">
-                <div class="home-nav-card-icon">📋</div>
-                <h3>Ver Hechos</h3>
-                <p>Explora todos los hechos registrados en formato de lista</p>
-            </a>
-            <a href="/colecciones" class="home-nav-card">
-                <div class="home-nav-card-icon">📚</div>
-                <h3>Ver Colecciones</h3>
-                <p>Accede a las colecciones de hechos creadas por nuestros administradores</p>
-            </a>
-            <a href="/estadisticas" class="home-nav-card">
-                <div class="home-nav-card-icon">📊</div>
-                <h3>Visualizador de Estadísticas</h3>
-                <p>Explora datos y estadisticas actualizadas sobre hechos reportados</p>
-            </a>
             <#if rolUsuario == "ADMINISTRADOR">
                 <a href="/admin/solicitudes" class="home-nav-card">
                     <div class="home-nav-card-icon">📋</div>
@@ -29,6 +14,16 @@
                     <p>Organiza y agrupa hechos relacionados en colecciones temáticas</p>
                 </a>
             </#if>
+            <a href="/hechos" class="home-nav-card">
+                <div class="home-nav-card-icon">📊</div>
+                <h3>Ver Hechos</h3>
+                <p>Explora todos los hechos registrados en formato de lista</p>
+            </a>
+            <a href="/colecciones" class="home-nav-card">
+                <div class="home-nav-card-icon">📚</div>
+                <h3>Ver Colecciones</h3>
+                <p>Accede a las colecciones de hechos creadas por nuestros administradores</p>
+            </a>
         </div>
     </div>
 </#macro>
