@@ -6,20 +6,22 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="gestorAdministrativo" />
+        <module name="gestorPublico" />
         <module name="estadisticas" />
         <module name="agregador" />
         <module name="web" />
         <module name="cargador-metamapa" />
         <module name="utils" />
         <module name="cargador-estatico" />
-        <module name="api-admin" />
         <module name="api-publica" />
         <module name="cargador-dinamico" />
         <module name="cargador-demo" />
-        <module name="apiPublica" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="api-admin" target="17" />
+      <module name="apiPublica" target="17" />
       <module name="pruebaclase1" target="1.8" />
       <module name="untitled" target="17" />
     </bytecodeTargetLevel>
