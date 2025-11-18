@@ -1,8 +1,8 @@
 package gestorAdministrativo;
 
 import gestorAdministrativo.controller.*;
-import gestorPublico.controller.*;
-import utils.Persistencia.*;
+import gestorAdministrativo.service.*;
+import gestorAdministrativo.repository.*;
 import io.javalin.Javalin;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
@@ -17,36 +17,37 @@ public class Application {
 
         System.out.println("Iniciando API Administrativa en el puerto " + puerto);
 
-        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("agregador-PU");
-        //EntityManager em = emf.createEntityManager();
-
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
+        // Repositorios
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(hechoRepositorio);
-        UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 
-        app.before(new ValidarAdminHandler(usuarioRepositorio));
+        // Services
+        ColeccionService coleccionService = new ColeccionService(coleccionRepositorio, hechoRepositorio);
+        SolicitudEliminacionService solicitudService = new SolicitudEliminacionService(solicitudEliminacionRepositorio);
 
+        // Controllers
+        ColeccionController coleccionController = new ColeccionController(coleccionService);
+        SolicitudController solicitudController = new SolicitudController(solicitudService);
 
-        app.post("/api/colecciones", new PostColeccionHandler(coleccionRepositorio, hechoRepositorio));
-        app.put("/api/colecciones/{id}", new PutColeccionHandler(coleccionRepositorio));
-        app.delete("/api/colecciones/{id}", new DeleteColeccionesHandler(coleccionRepositorio));
+        // Rutas con controllers
+        app.post("/api/colecciones", coleccionController.crearColeccion);
+        app.get("/api/colecciones", coleccionController.obtenerTodasLasColecciones);
+        app.get("/api/colecciones/{id}", coleccionController.obtenerColeccionPorId);
+        app.put("/api/colecciones/{id}", coleccionController.actualizarColeccion);
+        app.delete("/api/colecciones/{id}", coleccionController.eliminarColeccion);
 
-        app.post("/api/colecciones/{id}/agregador.fuente", new PostFuentesColeccionHandler(coleccionRepositorio));
-        app.delete("/api/colecciones/{id}/agregador.fuente", new DeleteFuenteHandler(coleccionRepositorio));
-        app.put("/api/colecciones/{id}/algoritmo", new PutAlgoritmoConsensoHandler(coleccionRepositorio));
+        // Rutas específicas
+        app.post("/api/colecciones/{id}/agregador.fuente", coleccionController.agregarFuente);
+        app.delete("/api/colecciones/{id}/agregador.fuente", coleccionController.borrarFuente);
+        app.put("/api/colecciones/{id}/algoritmo", coleccionController.actualizarAlgoritmoConsenso);
 
-        app.patch("/api/solicitudes/{id}", new PatchSolicitudEliminacionHandler(solicitudEliminacionRepositorio));
-        app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(solicitudEliminacionRepositorio));
-        app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(solicitudEliminacionRepositorio));
-
-       /* Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("Cerrando EntityManager de API Admin...");
-            if (em.isOpen()) em.close();
-            if (emf.isOpen()) emf.close();
-        }));*/
+        app.post("/api/solicitudes", solicitudController.crearSolicitud);
+        app.patch("/api/solicitudes/{id}", solicitudController.procesarSolicitud);
+        app.get("/api/solicitudes", solicitudController.obtenerSolicitudes);
+        app.get("/api/solicitudes/{id}", solicitudController.obtenerSolicitud);
     }
 }

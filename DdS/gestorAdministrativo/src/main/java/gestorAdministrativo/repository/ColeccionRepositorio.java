@@ -34,6 +34,7 @@ public class ColeccionRepositorio {
             em.close();
         }
     }
+
     private void gestionarTodasLasRelaciones(EntityManager em, Coleccion coleccion) {
         if (coleccion.getHechos() != null && !coleccion.getHechos().isEmpty()) {
             Set<Hecho> hechosGestionados = coleccion.getHechos().stream()

@@ -1,12 +1,12 @@
 package gestorAdministrativo.repository;
 
+import DominioGestorAdministrativo.DTO.Solicitudes.SolicitudDeEliminacionDTO;
 import org.hibernate.Hibernate;
 import utils.BDUtils;
-import utils.DTO.SolicitudDeEliminacionDTO;
-import utils.Dominio.HechosYColecciones.Hecho;
-import utils.Dominio.Solicitudes.EstadoSolicitudEliminacion;
-import utils.Dominio.Solicitudes.SolicitudDeEliminacion;
-import utils.Dominio.Usuario.Usuario;
+import DominioGestorAdministrativo.HechosYColecciones.Hecho;
+import DominioGestorAdministrativo.Solicitudes.EstadoSolicitudEliminacion;
+import DominioGestorAdministrativo.Solicitudes.SolicitudDeEliminacion;
+import DominioGestorAdministrativo.Usuario.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -22,41 +22,44 @@ public class SolicitudEliminacionRepositorio {
         this.hechoRepositorio = hechoRepositorio;
     }
 
- public List<SolicitudDeEliminacion> buscarTodas() {
-     EntityManager em = BDUtils.getEntityManager();
-     try {
-         TypedQuery<SolicitudDeEliminacion> query = em.createQuery(
-                 "SELECT s FROM SolicitudDeEliminacion s", SolicitudDeEliminacion.class);
+    public List<SolicitudDeEliminacion> buscarTodas() {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            TypedQuery<SolicitudDeEliminacion> query = em.createQuery(
+                    "SELECT s FROM SolicitudDeEliminacion s", SolicitudDeEliminacion.class);
 
-         List<SolicitudDeEliminacion> resultados = query.getResultList();
+            List<SolicitudDeEliminacion> resultados = query.getResultList();
 
-         // ✅ INICIALIZAR RELACIONES LAZY ANTES DE CERRAR LA SESIÓN
-         for (SolicitudDeEliminacion solicitud : resultados) {
-             // Inicializar el hecho asociado y sus relaciones
-             if (solicitud.getHechoAsociado() != null) {
-                 Hecho hecho = solicitud.getHechoAsociado();
-                 Hibernate.initialize(hecho.getContenidoMultimedia()); // ← ESTE ERA EL PROBLEMA
-                 Hibernate.initialize(hecho.getEtiquetas());
-                 Hibernate.initialize(hecho.getUbicacion());
-             }
+            // Inicializar relaciones LAZY
+            for (SolicitudDeEliminacion solicitud : resultados) {
+                if (solicitud.getHechoAsociado() != null) {
+                    Hecho hecho = solicitud.getHechoAsociado();
+                    Hibernate.initialize(hecho.getContenidoMultimedia());
+                    Hibernate.initialize(hecho.getEtiquetas());
+                    Hibernate.initialize(hecho.getUbicacion());
+                }
+                if (solicitud.getUsuario() != null) {
+                    Hibernate.initialize(solicitud.getUsuario());
+                }
+            }
 
-             // Inicializar el usuario si existe
-             if (solicitud.getUsuario() != null) {
-                 Hibernate.initialize(solicitud.getUsuario());
-             }
-         }
+            return resultados;
 
-         System.out.println("✅ Encontradas " + resultados.size() + " solicitudes de eliminación");
-         return resultados;
+        } catch (Exception e) {
+            System.err.println("❌ Error en buscarTodas: " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+    }
 
-     } catch (Exception e) {
-         System.err.println("❌ Error en buscarTodas: " + e.getMessage());
-         e.printStackTrace();
-         return new ArrayList<>();
-     } finally {
-         em.close();
-     }
- }
+    public void agregarSolicitudDeEliminacion(SolicitudDeEliminacionDTO solicitudDTO) {
+        // Convertir DTO a entidad y guardar
+        SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(solicitudDTO, hechoRepositorio);
+        this.agregarSolicitudDeEliminacion(solicitud);
+    }
+
     public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
         EntityManager em = BDUtils.getEntityManager();
         try {
@@ -66,7 +69,7 @@ public class SolicitudEliminacionRepositorio {
                 this.setearUsuario(solicitud, em);
             }
 
-            System.out.println("Agregando SolicitudDeEliminacion: "+solicitud);
+            System.out.println("Agregando SolicitudDeEliminacion: " + solicitud);
             em.merge(solicitud);
             BDUtils.commit(em);
         } catch (Exception e) {
@@ -119,13 +122,6 @@ public class SolicitudEliminacionRepositorio {
             }
             solicitud.setUsuario(usuarioExistente);
 
-    }
-
-
-    public void agregarSolicitudDeEliminacion(SolicitudDeEliminacionDTO solicitudDTO) {
-        // Convierte utils.DTO a Entidad y guarda
-        SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(solicitudDTO, hechoRepositorio);
-        this.agregarSolicitudDeEliminacion(solicitud);
     }
 
     public boolean actualizarEstadoSolicitudEliminacion(String body, UUID id) {

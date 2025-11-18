@@ -2,9 +2,9 @@ package gestorAdministrativo.repository;
 
 import org.hibernate.Hibernate;
 import utils.BDUtils;
-import utils.Dominio.Criterios.Criterio;
-import utils.Dominio.HechosYColecciones.Etiqueta;
-import utils.Dominio.HechosYColecciones.Hecho;
+import DominioGestorAdministrativo.Criterios.Criterio;
+import DominioGestorAdministrativo.HechosYColecciones.Etiqueta;
+import DominioGestorAdministrativo.HechosYColecciones.Hecho;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
