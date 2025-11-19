@@ -2,11 +2,11 @@ package repository;
 
 import org.hibernate.Hibernate;
 import utils.BDUtils;
-import utils.Dominio.Criterios.Criterio;
-import utils.Dominio.HechosYColecciones.Coleccion;
-import utils.Dominio.HechosYColecciones.Hecho;
-import utils.Dominio.HechosYColecciones.ModosDeNavegacion;
-import utils.Dominio.fuente.Fuente;
+import domain.Criterios.Criterio;
+import domain.HechosYColecciones.Coleccion;
+import domain.HechosYColecciones.Hecho;
+import domain.HechosYColecciones.ModosDeNavegacion;
+import domain.fuente.Fuente;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

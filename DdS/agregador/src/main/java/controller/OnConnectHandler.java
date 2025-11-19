@@ -2,13 +2,13 @@ package controller;
 
 import service.ConexionCargadorService;
 import repository.*;
-import utils.Dominio.fuente.Fuente;
+import domain.fuente.Fuente;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.websocket.WsConnectContext;
 import io.javalin.websocket.WsConnectHandler;
 import org.jetbrains.annotations.NotNull;
-import utils.DTO.ModelosMensajesDTO.IdCargadorPayload;
-import utils.DTO.ModelosMensajesDTO.WsMessage;
+import domain.DTO.ModelosMensajesDTO.IdCargadorPayload;
+import domain.DTO.ModelosMensajesDTO.WsMessage;
 
 public class OnConnectHandler implements WsConnectHandler {
     private final ConexionCargadorService conexionCargadorService;

@@ -4,24 +4,24 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
     <persistence-unit name="gestorPublico-PU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>utils.Dominio.HechosYColecciones.Hecho</class>
-        <class>utils.Dominio.HechosYColecciones.Ubicacion</class>
-        <class>utils.Dominio.HechosYColecciones.Coleccion</class>
-        <class>utils.Dominio.HechosYColecciones.ContenidoMultimedia</class>
-        <class>utils.Dominio.HechosYColecciones.HechoModificado</class>
-        <class>utils.Dominio.HechosYColecciones.Etiqueta</class>
-        <class>utils.Dominio.fuente.Fuente</class>
-        <class>utils.Dominio.Usuario.Usuario</class>
-        <class>utils.Dominio.Criterios.CriterioContribuyente</class>
-        <class>utils.Dominio.Criterios.CriterioDeTexto</class>
-        <class>utils.Dominio.Criterios.CriterioEtiquetas</class>
-        <class>utils.Dominio.Criterios.CriterioFecha</class>
-        <class>utils.Dominio.Criterios.CriterioTipoFuente</class>
-        <class>utils.Dominio.Criterios.CriterioTipoMultimedia</class>
-        <class>utils.Dominio.Criterios.CriterioUbicacion</class>
-        <class>utils.Dominio.Solicitudes.Solicitud</class>
-        <class>utils.Dominio.Solicitudes.SolicitudDeEliminacion</class>
-        <class>utils.Dominio.Solicitudes.SolicitudDeModificacion</class>
+        <class>domain.HechosYColecciones.Hecho</class>
+        <class>domain.HechosYColecciones.Ubicacion</class>
+        <class>domain.HechosYColecciones.Coleccion</class>
+        <class>domain.HechosYColecciones.ContenidoMultimedia</class>
+        <class>domain.HechosYColecciones.HechoModificado</class>
+        <class>domain.HechosYColecciones.Etiqueta</class>
+        <class>domain.fuente.Fuente</class>
+        <class>domain.Usuario.Usuario</class>
+        <class>domain.Criterios.CriterioContribuyente</class>
+        <class>domain.Criterios.CriterioDeTexto</class>
+        <class>domain.Criterios.CriterioEtiquetas</class>
+        <class>domain.Criterios.CriterioFecha</class>
+        <class>domain.Criterios.CriterioTipoFuente</class>
+        <class>domain.Criterios.CriterioTipoMultimedia</class>
+        <class>domain.Criterios.CriterioUbicacion</class>
+        <class>domain.Solicitudes.Solicitud</class>
+        <class>domain.Solicitudes.SolicitudDeEliminacion</class>
+        <class>domain.Solicitudes.SolicitudDeModificacion</class>
         <properties>
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/agregador_db?serverTimezone=America/Buenos_Aires"/>

@@ -4,11 +4,11 @@ import domain.DTO.ModelosMensajesDTO.IdCargadorPayload;
 import io.javalin.websocket.WsConnectContext;
 import org.jetbrains.annotations.NotNull;
 import repository.ConexionCargadorRepositorio;
-import utils.Dominio.fuente.Fuente;
+import domain.fuente.Fuente;
 import repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.websocket.WsContext;
-import utils.DTO.ModelosMensajesDTO.WsMessage;
+import domain.DTO.ModelosMensajesDTO.WsMessage;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;

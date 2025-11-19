@@ -8,7 +8,7 @@ import domain.Criterios.Criterio;
 import domain.fuente.Fuente;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import utils.DTO.ColeccionDTO;
+import domain.DTO.ColeccionDTO;
 
 import javax.persistence.*;
 import java.util.ArrayList;

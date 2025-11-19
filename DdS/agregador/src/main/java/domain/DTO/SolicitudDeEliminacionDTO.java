@@ -1,6 +1,6 @@
 package domain.DTO;
 
-import utils.Dominio.Solicitudes.EstadoSolicitudEliminacion;
+import domain.Solicitudes.EstadoSolicitudEliminacion;
 
 public class SolicitudDeEliminacionDTO extends SolicitudDTO {
     private EstadoSolicitudEliminacion estado;

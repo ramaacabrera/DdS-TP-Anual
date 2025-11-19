@@ -1,7 +1,7 @@
 package repository;
 
 import utils.BDUtils;
-import utils.Dominio.fuente.Fuente;
+import domain.fuente.Fuente;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

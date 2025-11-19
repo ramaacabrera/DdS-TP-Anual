@@ -1,7 +1,7 @@
 package domain.DTO;
 
-import utils.Dominio.HechosYColecciones.HechoModificado;
-import utils.Dominio.Solicitudes.EstadoSolicitudModificacion;
+import domain.HechosYColecciones.HechoModificado;
+import domain.Solicitudes.EstadoSolicitudModificacion;
 
 public class SolicitudDeModificacionDTO extends SolicitudDTO {
     private HechoModificado hechoModificado;

@@ -2,11 +2,11 @@ package repository;
 
 import org.hibernate.Hibernate;
 import utils.BDUtils;
-import utils.DTO.SolicitudDeEliminacionDTO;
-import utils.Dominio.HechosYColecciones.Hecho;
-import utils.Dominio.Solicitudes.EstadoSolicitudEliminacion;
-import utils.Dominio.Solicitudes.SolicitudDeEliminacion;
-import utils.Dominio.Usuario.Usuario;
+import domain.DTO.SolicitudDeEliminacionDTO;
+import domain.HechosYColecciones.Hecho;
+import domain.Solicitudes.EstadoSolicitudEliminacion;
+import domain.Solicitudes.SolicitudDeEliminacion;
+import domain.Usuario.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

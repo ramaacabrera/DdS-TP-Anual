@@ -1,9 +1,9 @@
 package repository;
 
 import utils.BDUtils;
-import utils.DTO.SolicitudDeModificacionDTO;
-import utils.Dominio.Solicitudes.EstadoSolicitudModificacion;
-import utils.Dominio.Solicitudes.SolicitudDeModificacion;
+import domain.DTO.SolicitudDeModificacionDTO;
+import domain.Solicitudes.EstadoSolicitudModificacion;
+import domain.Solicitudes.SolicitudDeModificacion;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

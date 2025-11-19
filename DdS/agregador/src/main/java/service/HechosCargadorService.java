@@ -7,8 +7,8 @@ import domain.DTO.ModelosMensajesDTO.WsMessage;
 import io.javalin.websocket.WsContext;
 import repository.ConexionCargadorRepositorio;
 import repository.FuenteRepositorio;
-import utils.Dominio.fuente.Fuente;
-import utils.Dominio.fuente.TipoDeFuente;
+import domain.fuente.Fuente;
+import domain.fuente.TipoDeFuente;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;

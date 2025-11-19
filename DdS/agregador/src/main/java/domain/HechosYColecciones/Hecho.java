@@ -4,7 +4,7 @@ import domain.Usuario.Usuario;
 import domain.fuente.Fuente;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import utils.DTO.HechoDTO;
+import domain.DTO.HechoDTO;
 
 import javax.persistence.*;
 import java.util.Date;

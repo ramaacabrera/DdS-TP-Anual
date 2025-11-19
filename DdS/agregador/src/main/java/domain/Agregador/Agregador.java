@@ -2,13 +2,13 @@ package domain.Agregador;
 
 import service.ConexionCargadorService;
 import service.HechosCargadorService;
-import utils.PaqueteNormalizador.MockNormalizador;
+import domain.PaqueteNormalizador.MockNormalizador;
 import repository.*;
-import utils.Dominio.fuente.Fuente;
+import domain.fuente.Fuente;
 import domain.Solicitudes.*;
 import domain.DTO.*;
-import utils.Dominio.HechosYColecciones.Coleccion;
-import utils.Dominio.HechosYColecciones.Hecho;
+import domain.HechosYColecciones.Coleccion;
+import domain.HechosYColecciones.Hecho;
 
 import java.util.ArrayList;
 import java.util.List;

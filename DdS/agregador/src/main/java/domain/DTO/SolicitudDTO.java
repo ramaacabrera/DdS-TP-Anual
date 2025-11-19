@@ -1,7 +1,7 @@
 package domain.DTO;
 
 
-import utils.Dominio.Usuario.Usuario;
+import domain.Usuario.Usuario;
 
 import java.util.UUID;
 

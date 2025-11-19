@@ -2,9 +2,9 @@ package repository;
 
 import org.hibernate.Hibernate;
 import utils.BDUtils;
-import utils.Dominio.Criterios.Criterio;
-import utils.Dominio.HechosYColecciones.Etiqueta;
-import utils.Dominio.HechosYColecciones.Hecho;
+import domain.Criterios.Criterio;
+import domain.HechosYColecciones.Etiqueta;
+import domain.HechosYColecciones.Hecho;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

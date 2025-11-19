@@ -1,8 +1,8 @@
 package repository;
 
 import utils.BDUtils;
-import utils.Dominio.Usuario.RolUsuario;
-import utils.Dominio.Usuario.Usuario;
+import domain.Usuario.RolUsuario;
+import domain.Usuario.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

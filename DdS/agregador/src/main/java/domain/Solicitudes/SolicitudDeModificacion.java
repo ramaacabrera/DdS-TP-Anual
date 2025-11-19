@@ -2,8 +2,8 @@ package domain.Solicitudes;
 
 import domain.HechosYColecciones.Hecho;
 import domain.HechosYColecciones.HechoModificado;
-import utils.DTO.SolicitudDeModificacionDTO;
-import utils.Persistencia.HechoRepositorio;
+import domain.DTO.SolicitudDeModificacionDTO;
+import repository.HechoRepositorio;
 
 import javax.persistence.*;
 import java.util.UUID;
