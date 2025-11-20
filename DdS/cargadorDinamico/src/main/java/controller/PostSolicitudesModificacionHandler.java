@@ -7,12 +7,13 @@ import domain.Solicitudes.SolicitudDeModificacion_D;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
+import service.SolicitudesModificacionService;
 
 public class PostSolicitudesModificacionHandler implements Handler {
-    private final DinamicoRepositorio repositorio;
+    private final SolicitudesModificacionService service;
 
-    public PostSolicitudesModificacionHandler(DinamicoRepositorio repositorio) {
-        this.repositorio = repositorio;
+    public PostSolicitudesModificacionHandler(SolicitudesModificacionService service) {
+        this.service = service;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class PostSolicitudesModificacionHandler implements Handler {
         entidad.setEstadoSolicitudModificacion(EstadoSolicitudModificacion_D.PENDIENTE);
         entidad.setHechoModificado(solicitudNueva.getHechoModificado());
 
-        repositorio.guardarSolicitudModificacion(entidad);
+        service.guardarSolicitudModificacion(entidad);
         context.status(201);
     }
 }

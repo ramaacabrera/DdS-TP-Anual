@@ -1,10 +1,10 @@
 import repository.DinamicoRepositorio;
 import controller.*;
 import service.*;
-import utils.Dominio.fuente.*;
+import domain.fuente.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javalin.Javalin;
-import utils.ClienteDelAgregador;
+import conexionAgregador.ClienteDelAgregador;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
 
@@ -25,7 +25,7 @@ public class Application {
         DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio();
         Fuente fuente = new Fuente(TipoDeFuente.DINAMICA, "DINAMICA");
 
-        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDinamica(new GetHechosDinamicoService(dinamicoRepositorio), new GetSolicitudesModificacionService(dinamicoRepositorio), new GetSolicitudesEliminacionService(dinamicoRepositorio)));
+        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDinamica(new HechosDinamicoService(dinamicoRepositorio), new SolicitudesModificacionService(dinamicoRepositorio), new SolicitudesEliminacionService(dinamicoRepositorio)));
         cliente.conectar(fuente);
 
         //app.get("/hechos", new GetHechosDinamicoHandler(dinamicoRepositorio));
@@ -33,9 +33,9 @@ public class Application {
         //app.get("/solicitudesEliminacion", new GetSolicitudesEliminacionHandler(dinamicoRepositorio));
 
 
-        app.post("/hechos", new PostHechosHandler(new PostHechosService(dinamicoRepositorio)));
-        app.post("/solicitudesModificacion", new PostSolicitudesModificacionHandler(new PostSolicitudesModificacionService(dinamicoRepositorio)));
-        app.post("/solicitudesEliminacion", new PostSolicitudesEliminacionHandler(new PostSolicitudesEliminacionService(dinamicoRepositorio)));
+        app.post("/hechos", new PostHechosHandler(new HechosDinamicoService(dinamicoRepositorio)));
+        app.post("/solicitudesModificacion", new PostSolicitudesModificacionHandler(new SolicitudesModificacionService(dinamicoRepositorio)));
+        app.post("/solicitudesEliminacion", new PostSolicitudesEliminacionHandler(new SolicitudesEliminacionService(dinamicoRepositorio)));
 
         // DEJO LOS POST PORQUE CREO QUE SE USAN PARA CREAR LOS HECHOS DESDE EL FRONT, LOS GET SE USAN MEDIANTE EL CLIENTEDELAGREGADOR
     }

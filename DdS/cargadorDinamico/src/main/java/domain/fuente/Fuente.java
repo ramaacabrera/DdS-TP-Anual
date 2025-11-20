@@ -1,9 +1,9 @@
 package domain.fuente;
 
-import utils.Dominio.fuente.TipoDeFuente;
+import domain.fuente.TipoDeFuente;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import utils.DTO.FuenteDTO;
+import domain.DinamicaDto.FuenteDTO;
 
 import javax.persistence.*;
 import java.util.Objects;

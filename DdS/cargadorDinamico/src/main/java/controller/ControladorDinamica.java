@@ -1,22 +1,22 @@
 package controller;
 
-import service.GetHechosDinamicoService;
-import service.GetSolicitudesEliminacionService;
-import service.GetSolicitudesModificacionService;
-import utils.DTO.HechoDTO;
-import utils.DTO.SolicitudDeEliminacionDTO;
-import utils.DTO.SolicitudDeModificacionDTO;
-import utils.Controladores.Controlador;
+import conexionAgregador.Controlador;
+import service.HechosDinamicoService;
+import service.SolicitudesEliminacionService;
+import service.SolicitudesModificacionService;
+import domain.DinamicaDto.SolicitudDeEliminacionDTO;
+import domain.DinamicaDto.SolicitudDeModificacionDTO;
+import domain.DinamicaDto.HechoDTO;
 
 import java.util.List;
 import java.util.UUID;
 
 public class ControladorDinamica implements Controlador {
-    GetHechosDinamicoService hechosService;
-    GetSolicitudesModificacionService modificacionService;
-    GetSolicitudesEliminacionService eliminacionService;
+    HechosDinamicoService hechosService;
+    SolicitudesModificacionService modificacionService;
+    SolicitudesEliminacionService eliminacionService;
 
-    public ControladorDinamica(GetHechosDinamicoService handlerNuevo, GetSolicitudesModificacionService modificacionHandlerNuevo, GetSolicitudesEliminacionService eliminacionHandlerNuevo) {
+    public ControladorDinamica(HechosDinamicoService handlerNuevo, SolicitudesModificacionService modificacionHandlerNuevo, SolicitudesEliminacionService eliminacionHandlerNuevo) {
         this.hechosService = handlerNuevo;
         this.modificacionService = modificacionHandlerNuevo;
         this.eliminacionService = eliminacionHandlerNuevo;

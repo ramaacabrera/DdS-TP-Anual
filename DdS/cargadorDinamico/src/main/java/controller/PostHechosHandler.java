@@ -6,13 +6,14 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 import domain.DinamicaDto.Hecho_D_DTO;
-import service.PostHechosService;
+import service.HechosDinamicoService;
+import service.HechosDinamicoService;
 
 public class PostHechosHandler implements Handler {
 
-    private final PostHechosService service;
+    private final HechosDinamicoService service;
 
-    public PostHechosHandler(PostHechosService service) {
+    public PostHechosHandler(HechosDinamicoService service) {
         this.service = service;
     }
 

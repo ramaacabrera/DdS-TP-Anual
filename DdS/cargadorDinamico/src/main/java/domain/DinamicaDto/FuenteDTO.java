@@ -2,7 +2,7 @@ package domain.DinamicaDto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import utils.Dominio.fuente.TipoDeFuente;
+import domain.fuente.TipoDeFuente;
 
 public class FuenteDTO {
     private TipoDeFuente tipoDeFuente;

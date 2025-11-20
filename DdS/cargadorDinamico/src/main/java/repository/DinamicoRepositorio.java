@@ -6,23 +6,23 @@ import domain.HechosYColeccionesD.*;
 import domain.Solicitudes.EstadoSolicitudEliminacion_D;
 import domain.Solicitudes.EstadoSolicitudModificacion_D;
 import org.hibernate.Hibernate;
-import utils.Dominio.Usuario.RolUsuario;
+import domain.Usuario.RolUsuario;
 import domain.Usuario.Usuario_D;
-import utils.Dominio.Solicitudes.EstadoSolicitudEliminacion;
-import utils.Dominio.Solicitudes.EstadoSolicitudModificacion;
-import utils.Dominio.fuente.Fuente;
-import utils.Dominio.fuente.TipoDeFuente;
-import utils.Dominio.HechosYColecciones.EstadoHecho;
-import utils.Dominio.HechosYColecciones.*;
+import domain.Solicitudes.EstadoSolicitudEliminacion;
+import domain.Solicitudes.EstadoSolicitudModificacion;
+import domain.fuente.Fuente;
+import domain.fuente.TipoDeFuente;
+import domain.HechosYColecciones.EstadoHecho;
+import domain.HechosYColecciones.*;
 
 
 import domain.Solicitudes.SolicitudDeEliminacion_D;
 import domain.Solicitudes.SolicitudDeModificacion_D;
 
-import utils.DTO.HechoDTO;
-import utils.DTO.SolicitudDeModificacionDTO;
-import utils.DTO.SolicitudDeEliminacionDTO;
-import utils.Dominio.Usuario.*;
+import domain.DinamicaDto.HechoDTO;
+import domain.DinamicaDto.SolicitudDeModificacionDTO;
+import domain.DinamicaDto.SolicitudDeEliminacionDTO;
+import domain.Usuario.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

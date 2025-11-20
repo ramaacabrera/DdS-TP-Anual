@@ -7,12 +7,13 @@ import domain.Solicitudes.SolicitudDeEliminacion_D;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
+import service.SolicitudesEliminacionService;
 
 public class PostSolicitudesEliminacionHandler implements Handler {
-    private final DinamicoRepositorio repositorio;
+    private final SolicitudesEliminacionService service;
 
-    public PostSolicitudesEliminacionHandler(DinamicoRepositorio repositorio) {
-        this.repositorio = repositorio;
+    public PostSolicitudesEliminacionHandler(SolicitudesEliminacionService service) {
+        this.service = service;
     }
 
     @Override
@@ -35,8 +36,7 @@ public class PostSolicitudesEliminacionHandler implements Handler {
         entidad.setUsuario(solicitudnueva.getUsuario());
         entidad.setEstadoSolicitudEliminacion(EstadoSolicitudEliminacion_D.PENDIENTE);
 
-        System.out.println("Creando solicitud: " + bodyString);
-        repositorio.guardarSolicitudEliminacion(entidad);
+        service.guardarSolicitudEliminacion(entidad);
         context.status(201);
     }
 }

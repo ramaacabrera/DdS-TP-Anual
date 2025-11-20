@@ -1,8 +1,8 @@
 package domain.DinamicaDto;
 
-import utils.Dominio.HechosYColecciones.*;
-import utils.Dominio.Usuario.Usuario;
-import utils.Dominio.fuente.Fuente;
+import domain.HechosYColecciones.*;
+import domain.Usuario.Usuario;
+import domain.fuente.Fuente;
 
 import java.util.Date;
 import java.util.List;
