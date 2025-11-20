@@ -4,57 +4,82 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="termino cargadorDinamico">
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/conexionAgregador/ClienteDelAgregador.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/conexionAgregador/Controlador.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Consenso/Absoluta.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Consenso/AlgoritmoConsenso.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Consenso/MayoriaSimple.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Consenso/MultiplesMenciones.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Criterios/Criterio.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Criterios/CriterioContribuyente.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Criterios/CriterioDeTexto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Criterios/CriterioEtiquetas.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Criterios/CriterioFecha.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Criterios/CriterioTipoFuente.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Criterios/CriterioTipoMultimedia.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Criterios/CriterioUbicacion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Criterios/TipoDeTexto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/HechosYColecciones/Coleccion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/HechosYColecciones/ContenidoMultimedia.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/HechosYColecciones/EstadoHecho.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/HechosYColecciones/Etiqueta.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/HechosYColecciones/Hecho.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/HechosYColecciones/HechoModificado.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/HechosYColecciones/ModosDeNavegacion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/HechosYColecciones/TipoAlgoritmoConsenso.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/HechosYColecciones/TipoContenidoMultimedia.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/HechosYColecciones/Ubicacion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Usuario/RolUsuario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/Usuario/Usuario.java" afterDir="false" />
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="termino cargadorEstatico">
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Consenso/Absoluta.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Consenso/AlgoritmoConsenso.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Consenso/MayoriaSimple.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Consenso/MultiplesMenciones.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/Criterio.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioContribuyente.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioDeTexto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioEtiquetas.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioFecha.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioTipoFuente.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioTipoMultimedia.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioUbicacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/TipoDeTexto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ColeccionDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/FuenteDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/HechoDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ModelosMensajesDTO/HechosObtenidosPayload.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ModelosMensajesDTO/IdCargadorPayload.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ModelosMensajesDTO/MensajeVacioPayload.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ModelosMensajesDTO/SolicitudesEliminacionObtenidosPayload.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ModelosMensajesDTO/SolicitudesModificacionObtenidosPayload.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ModelosMensajesDTO/WsMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/PageDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/SolicitudDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/SolicitudDeEliminacionDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/SolicitudDeModificacionDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/Coleccion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/ContenidoMultimedia.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/EstadoHecho.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/Etiqueta.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/Hecho.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/HechoModificado.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/ModosDeNavegacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/TipoAlgoritmoConsenso.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/TipoContenidoMultimedia.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/Ubicacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/PaqueteNormalizador/DesnormalizadorCategorias.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/PaqueteNormalizador/MockNormalizador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/PaqueteNormalizador/NormalizadorCategorias.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Solicitudes/EstadoSolicitudEliminacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Solicitudes/EstadoSolicitudModificacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Solicitudes/Solicitud.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Solicitudes/SolicitudDeEliminacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Solicitudes/SolicitudDeModificacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Usuario/RolUsuario.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Usuario/Usuario.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/fuente/Fuente.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/fuente/TipoDeFuente.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/repository/HechoRepositorio.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/service/ColeccionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/CSVLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/CSVLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/ConversorCSV.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/ConversorCSV.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/ColeccionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/DTO/ColeccionDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/FuenteDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/DTO/FuenteDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/HechoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/DTO/HechoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/ModelosMensajesDTO/HechosObtenidosPayload.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/DTO/ModelosMensajesDTO/HechosObtenidosPayload.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/ModelosMensajesDTO/IdCargadorPayload.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/DTO/ModelosMensajesDTO/IdCargadorPayload.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/ModelosMensajesDTO/MensajeVacioPayload.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/DTO/ModelosMensajesDTO/MensajeVacioPayload.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/ModelosMensajesDTO/SolicitudesEliminacionObtenidosPayload.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/ModelosMensajesDTO/SolicitudesModificacionObtenidosPayload.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/ModelosMensajesDTO/WsMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/DTO/ModelosMensajesDTO/WsMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/PageDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/DTO/PageDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/SolicitudDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/DTO/SolicitudDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/SolicitudDeEliminacionDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/DTO/SolicitudDeModificacionDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/fuente/Fuente.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/fuente/Fuente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/DominioCargadorEstatico/fuente/TipoDeFuente.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/domain/fuente/TipoDeFuente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/controller/ConexionEstatica.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/controller/ConexionEstatica.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/controller/ControladorEstatica.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/controller/ControladorEstatica.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/controller/GetHechosEstaticoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/service/HechosEstaticoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/controller/GetReprocesadoHechosEstaticoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/controller/GetReprocesadoHechosEstaticoHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetColeccionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetColeccionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetColeccionesHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetColeccionesHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetCrearColeccionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetCrearColeccionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetCrearHechoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetCrearHechoHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetEditarColeccionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetEditarColeccionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetEstadisticasHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetEstadisticasHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHechoEspecificoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetHechoEspecificoHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHechosColeccionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetHechosColeccionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHechosHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetHechosHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHomeHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetHomeHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetLogOutHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetLogOutHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetLoginHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetLoginHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetSignInHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetSignInHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetSolicitudAdminHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetSolicitudAdminHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetSolicitudEliminacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetSolicitudEliminacionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetSolicitudesAdminHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetSolicitudesAdminHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetSolicitudesEliminacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetSolicitudesEliminacionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/PatchSolicitudEstadoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/PatchSolicitudEstadoHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/PostColeccionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/PostColeccionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/PostLoginHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/PostLoginHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/PutSolicitudEstadoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/PutSolicitudEstadoHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/coleccion.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/coleccion.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -107,48 +132,48 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Agregador.executor": "Run",
-    "Application.ApiAdmin.executor": "Run",
-    "Application.ApiAdministrativa.executor": "Run",
-    "Application.ApiMock.executor": "Run",
-    "Application.ApiPublica.executor": "Run",
-    "Application.CargadorDinamico.executor": "Run",
-    "Application.CargadorEstatico.executor": "Run",
-    "Application.CargadorMetamapa.executor": "Run",
-    "Application.Web.executor": "Run",
-    "Application.estadisticas.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Migracion-MVC",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/Proyectos Intellij/DdS-TP-Anual/DdS/cargadorEstatico/src/main/java",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/agregador/untitled/src/main/java/com/metamapa/Main.java",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Agregador.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ApiAdmin.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ApiAdministrativa.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ApiMock.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ApiPublica.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CargadorDinamico.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CargadorEstatico.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CargadorMetamapa.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Web.executor&quot;: &quot;Run&quot;,
+    &quot;Application.estadisticas.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Migracion-MVC&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Proyectos Intellij/DdS-TP-Anual/DdS/web/src/main/java/domain&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/agregador/untitled/src/main/java/com/metamapa/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\java\domain" />
       <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\cargadorEstatico\src\main\java\domain" />
       <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\cargadorEstatico\src\main\java" />
       <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\cargadorDinamico\src\main\java\conexionAgregador" />
       <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\cargadorDinamico\src\main\java\domain" />
-      <recent name="C:\Users\Usuario\Documents\GitHub\DdS-TP-Anual\DdS\utils\src\main\resources\META-INF" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\helga\Bri\Diseño\DdS-TP-Anual\DdS\web\src\main\resources\public\img" />
@@ -158,12 +183,13 @@
       <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="domain.repository" />
       <recent name="" />
       <recent name="repository" />
       <recent name="domain.Usuario" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.CargadorEstatico">
+  <component name="RunManager" selected="Application.Web">
     <configuration name="Agregador" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Application" />
       <module name="agregador" />
@@ -216,7 +242,7 @@
     <configuration name="Web" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="web.MainWeb" />
+      <option name="MAIN_CLASS_NAME" value="Application" />
       <module name="web" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -271,7 +297,11 @@
       <workItem from="1763492927996" duration="9200000" />
       <workItem from="1763655118443" duration="93000" />
       <workItem from="1763655221838" duration="22000" />
-      <workItem from="1763655253851" duration="10271000" />
+      <workItem from="1763655253851" duration="14689000" />
+      <workItem from="1763675515652" duration="39000" />
+      <workItem from="1763675563752" duration="132000" />
+      <workItem from="1763675706794" duration="68000" />
+      <workItem from="1763675783834" duration="1300000" />
     </task>
     <task id="LOCAL-00001" summary="termine cargadorDemo, avanzo con cargadorDinamico (en proceso)">
       <option name="closed" value="true" />
@@ -289,7 +319,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763666379543</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="termino cargadorEstatico">
+      <option name="closed" value="true" />
+      <created>1763671177385</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1763671177385</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -298,7 +336,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="termine cargadorDemo, avanzo con cargadorDinamico (en proceso)" />
     <MESSAGE value="termino cargadorDinamico" />
-    <option name="LAST_COMMIT_MESSAGE" value="termino cargadorDinamico" />
+    <MESSAGE value="termino cargadorEstatico" />
+    <option name="LAST_COMMIT_MESSAGE" value="termino cargadorEstatico" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
