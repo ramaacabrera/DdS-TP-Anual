@@ -1,4 +1,4 @@
-package controller;
+package controller.hechos;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
@@ -6,6 +6,7 @@ import io.javalin.http.Handler;
 import io.javalin.rendering.template.TemplateUtil;
 import org.jetbrains.annotations.NotNull;
 import domain.HechosYColecciones.Hecho;
+import service.HechoService;
 
 
 import java.net.URI;
@@ -19,8 +20,10 @@ public class GetHechoEspecificoHandler implements Handler {
 
     private ObjectMapper mapper = new ObjectMapper();
     private final String urlPublica;
+    private final HechoService hechoService;
 
-    public GetHechoEspecificoHandler(String url) {
+    public GetHechoEspecificoHandler(String url,  HechoService hechoService) {
+        this.hechoService = hechoService;
         this.urlPublica = url;
     }
 
@@ -35,22 +38,7 @@ public class GetHechoEspecificoHandler implements Handler {
         }
 
         // 2. Buscar la entidad Hecho en la base de datos
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-        URI uri = null;
-        try{uri = new URI(urlPublica+"/hechos/" + hechoIdString);}
-        catch (URISyntaxException e) {
-            System.err.println("URI invalido "+e.getMessage());
-            throw new RuntimeException(e);
-        }
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri)
-                .GET()
-                .build();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        Hecho hecho = mapper.readValue(response.body(), new TypeReference<>() {
-        });
+        Hecho hecho = hechoService.obtenerHechoPorId(hechoIdString);
 
         //  Crear el modelo de datos para FreeMarker
         Map<String, Object> modelo = TemplateUtil.model("hecho", hecho);

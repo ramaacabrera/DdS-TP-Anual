@@ -1,12 +1,14 @@
-package controller;
+package controller.colecciones;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import domain.HechosYColecciones.Coleccion;
 import domain.HechosYColecciones.TipoAlgoritmoConsenso;
 import domain.fuente.TipoDeFuente;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
+import service.ColeccionService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +22,10 @@ public class GetEditarColeccionHandler implements Handler {
 
     private final String urlAdmin;
     private final ObjectMapper mapper = new ObjectMapper();
+    private final ColeccionService coleccionService;
 
-    public GetEditarColeccionHandler(String urlAdmin) {
+    public GetEditarColeccionHandler(String urlAdmin, ColeccionService coleccionService) {
+        this.coleccionService = coleccionService;
         this.urlAdmin = urlAdmin;
     }
 
@@ -31,38 +35,15 @@ public class GetEditarColeccionHandler implements Handler {
             String coleccionId = ctx.pathParam("id");
             System.out.println("Abriendo formulario de edición para colección ID: " + coleccionId);
 
-            // 1️ Traemos la colección desde la API administrativa
-            HttpClient httpClient = HttpClient.newHttpClient();
-            HttpRequest request;
-            if(!ctx.sessionAttributeMap().isEmpty()){
-                request = HttpRequest.newBuilder()
-                    .uri(new URI(urlAdmin + "/colecciones/" + coleccionId))
-                    .header("username", ctx.sessionAttribute("username"))
-                    .header("access_token", ctx.sessionAttribute("access_token"))
-                    .GET()
-                    .build();
-            } else{
-                request = HttpRequest.newBuilder()
-                        .uri(new URI(urlAdmin + "/colecciones/" + coleccionId))
-                        .header("username", ctx.sessionAttribute("username"))
-                        .header("access_token", ctx.sessionAttribute("access_token"))
-                        .GET()
-                        .build();
+            Coleccion coleccion;
+            try{
+                coleccion = coleccionService.obtenerColeccionPorId(coleccionId);
             }
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() != 200) {
-                ctx.status(response.statusCode())
-                        .result("Error al obtener la colección desde la API administrativa.");
-                return;
+            catch (Exception e){
+                throw new RuntimeException("Error al obtener coleccion por id");
             }
-
-            // 2️ Parseamos la respuesta JSON a un Map (para FreeMarker)
-            Map<String, Object> coleccion = mapper.readValue(response.body(), new TypeReference<>() {});
 
             // Valido que el usuario sea un admin
-
             if(ctx.sessionAttributeMap().isEmpty()){
                 ctx.status(500).result("Administrador no identificado");
             }
@@ -91,7 +72,6 @@ public class GetEditarColeccionHandler implements Handler {
             modelo.put("username", username);
             modelo.put("access_token", access_token);
 
-
             // Renderizamos el template
             ctx.render("editar-coleccion.ftl", modelo);
 
@@ -102,13 +82,3 @@ public class GetEditarColeccionHandler implements Handler {
         }
     }
 }
-
-
-
-/*Map<String, Object> modelo = new HashMap<>();
-        modelo.put("pageTitle", "Editar colección");
-        modelo.put("coleccion", coleccion);
-        modelo.put("algoritmosDisponibles", TipoAlgoritmoConsenso.values());
-        modelo.put("fuentes", TipoDeFuente.values());
-        modelo.put("urlAdmin", urlAdmin);
-*/

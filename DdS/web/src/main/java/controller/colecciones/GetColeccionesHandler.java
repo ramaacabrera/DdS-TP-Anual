@@ -1,4 +1,4 @@
-package controller;
+package controller.colecciones;
 
 
 import domain.HechosYColecciones.Coleccion;
@@ -6,7 +6,6 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 import service.ColeccionService;
-import domain.DTO.ColeccionDTO;
 import domain.DTO.PageDTO;
 
 import java.util.*;
@@ -28,21 +27,21 @@ public class GetColeccionesHandler implements Handler {
             int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
             int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
 
-            PageDTO<Coleccion> resp = coleccionService.listarColecciones(page,size);
+            PageDTO<Coleccion> coleccionesPage = coleccionService.listarColecciones(page,size);
 
-            int fromIndex = (resp.page - 1) * resp.size;                // 0-based
-            int toIndex = fromIndex + (resp.content != null ? resp.content.size() : 0);
+            int fromIndex = (coleccionesPage.page - 1) * coleccionesPage.size;                // 0-based
+            int toIndex = fromIndex + (coleccionesPage.content != null ? coleccionesPage.content.size() : 0);
 
             // Armar modelo para FreeMarker
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("pageTitle", "Colecciones");
-            modelo.put("total", resp.totalElements);
-            modelo.put("page", resp.page);
-            modelo.put("size", resp.size);
-            modelo.put("totalPages", resp.totalPages);
+            modelo.put("total", coleccionesPage.totalElements);
+            modelo.put("page", coleccionesPage.page);
+            modelo.put("size", coleccionesPage.size);
+            modelo.put("totalPages", coleccionesPage.totalPages);
             modelo.put("fromIndex", fromIndex);
             modelo.put("toIndex", toIndex);
-            modelo.put("colecciones", resp.content);
+            modelo.put("colecciones", coleccionesPage.content);
             modelo.put("urlAdmin", urlPublica);
 
             if(!ctx.sessionAttributeMap().isEmpty()){

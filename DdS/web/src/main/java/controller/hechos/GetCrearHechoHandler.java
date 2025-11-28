@@ -1,28 +1,25 @@
-package controller;
+package controller.hechos;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-import domain.HechosYColecciones.TipoAlgoritmoConsenso;
-import domain.fuente.TipoDeFuente;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetCrearColeccionHandler implements Handler {
-    private final String urlAdmin;
+public class GetCrearHechoHandler implements Handler {
 
-    public GetCrearColeccionHandler(String urlAdmin) {
-        this.urlAdmin = urlAdmin;
+    private final String urlPublica;
+
+    public GetCrearHechoHandler(String urlPublica) {
+        this.urlPublica = urlPublica;
     }
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
+        // Solo renderiza la plantilla con el formulario vacío
         Map<String, Object> modelo = new HashMap<>();
-        modelo.put("pageTitle", "Crear nueva colección");
-        modelo.put("urlAdmin", urlAdmin);
-        modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
-        modelo.put("fuentes", TipoDeFuente.values());
-
+        modelo.put("pageTitle", "Reportar un Hecho");
+        modelo.put("urlPublica", urlPublica);
         if(!ctx.sessionAttributeMap().isEmpty()){
             String username = ctx.sessionAttribute("username");
             System.out.println("Usuario: " + username);
@@ -30,7 +27,6 @@ public class GetCrearColeccionHandler implements Handler {
             modelo.put("username", username);
             modelo.put("access_token", access_token);
         }
-
-        ctx.render("crear-coleccion.ftl", modelo);
+        ctx.render("crear-hecho.ftl", modelo);
     }
 }

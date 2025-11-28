@@ -1,4 +1,4 @@
-package controller;
+package controller.login;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;

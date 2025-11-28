@@ -1,10 +1,11 @@
-package controller;
+package controller.colecciones;
 
 import com.google.gson.Gson;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 import domain.Criterios.TipoDeTexto;
+import service.ColeccionService;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -17,8 +18,12 @@ import java.util.Map;
 
 public class PostColeccionHandler implements Handler {
     private String urlAdmin;
+    private ColeccionService coleccionService;
 
-    public PostColeccionHandler(String urlAdmin){this.urlAdmin = urlAdmin;}
+    public PostColeccionHandler(String urlAdmin,  ColeccionService coleccionService) {
+        this.coleccionService = coleccionService;
+        this.urlAdmin = urlAdmin;
+    }
 
     @Override
     public void handle(@NotNull Context ctx) {
@@ -37,45 +42,16 @@ public class PostColeccionHandler implements Handler {
         //bodyData.put("criteriosDePertenencia", ctx.formParam("criteriosDePertenencia"));
         bodyData.put("fuentes", ctx.formParams("fuentes"));
 
-        System.out.println(bodyData);
-
-        String jsonBody = new Gson().toJson(bodyData);
-
-        System.out.println("Serializacion: " + jsonBody);
-
-        HttpClient httpClient = HttpClient.newHttpClient();
-        try{
-            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-                    .uri(new URI(urlAdmin + "/colecciones"))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody));
-
-            if (!ctx.sessionAttributeMap().isEmpty()) {
-                requestBuilder
-                        .header("username", ctx.sessionAttribute("username"))
-                        .header("access_token", ctx.sessionAttribute("access_token"));
-            }
-
-            HttpRequest request = requestBuilder.build();
-
-            System.out.println("Se armo la request");
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            System.out.println("Mandamos la request");
-
-            Map<String, Object> modelo = new HashMap<>();
-            if (response.statusCode() == 200) {
-                System.out.println("Coleccion creada");
-            } else {
-                System.out.println("Error al cargar coleccion");
-            }
-
-        } catch (Exception e){
-            System.out.println("Error al cargar coleccion");
+        if (!ctx.sessionAttributeMap().isEmpty()) {
+            bodyData.put("username", ctx.sessionAttribute("username"));
+            bodyData.put("access_token", ctx.sessionAttribute("access_token"));
         }
 
-
+        try {
+            coleccionService.crearColeccion(bodyData);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void obtenerCriteriosDePertenencia(Map<String, String> map, Context ctx) {

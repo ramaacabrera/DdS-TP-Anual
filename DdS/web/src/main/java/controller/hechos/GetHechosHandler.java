@@ -1,4 +1,4 @@
-package controller;
+package controller.hechos;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,45 +25,6 @@ public class GetHechosHandler implements Handler {
 
     public GetHechosHandler(String url) {
         this.urlPublica = url;
-    }
-
-    // --- Definición declarativa de filtros ---
-    public static class FilterDef {
-        private String key;
-        private String label;
-        private String type;
-        private List<String> options;
-
-        // Constructor vacío
-        public FilterDef() {
-            this.options = new ArrayList<>();
-        }
-
-        // Constructor con parámetros
-        public FilterDef(String key, String label, String type) {
-            this.key = key;
-            this.label = label;
-            this.type = type;
-            this.options = new ArrayList<>();
-        }
-
-        // GETTERS PÚBLICOS (crucial para FreeMarker)
-        public String getKey() { return key; }
-        public String getLabel() { return label; }
-        public String getType() { return type; }
-        public List<String> getOptions() { return options; }
-
-        // SETTERS PÚBLICOS (para poder asignar valores)
-        public void setKey(String key) { this.key = key; }
-        public void setLabel(String label) { this.label = label; }
-        public void setType(String type) { this.type = type; }
-        public void setOptions(List<String> options) { this.options = options; }
-
-        // Método helper para agregar opciones
-        public FilterDef addOption(String option) {
-            this.options.add(option);
-            return this;
-        }
     }
 
     @Override
@@ -230,6 +191,45 @@ public class GetHechosHandler implements Handler {
         } catch (Exception e) {
             System.err.println("Error normalizando fecha: " + raw + " - " + e.getMessage());
             return raw;
+        }
+    }
+
+    // --- Definición declarativa de filtros ---
+    public static class FilterDef {
+        private String key;
+        private String label;
+        private String type;
+        private List<String> options;
+
+        // Constructor vacío
+        public FilterDef() {
+            this.options = new ArrayList<>();
+        }
+
+        // Constructor con parámetros
+        public FilterDef(String key, String label, String type) {
+            this.key = key;
+            this.label = label;
+            this.type = type;
+            this.options = new ArrayList<>();
+        }
+
+        // GETTERS PÚBLICOS (crucial para FreeMarker)
+        public String getKey() { return key; }
+        public String getLabel() { return label; }
+        public String getType() { return type; }
+        public List<String> getOptions() { return options; }
+
+        // SETTERS PÚBLICOS (para poder asignar valores)
+        public void setKey(String key) { this.key = key; }
+        public void setLabel(String label) { this.label = label; }
+        public void setType(String type) { this.type = type; }
+        public void setOptions(List<String> options) { this.options = options; }
+
+        // Método helper para agregar opciones
+        public FilterDef addOption(String option) {
+            this.options.add(option);
+            return this;
         }
     }
 

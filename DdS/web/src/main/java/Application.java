@@ -1,7 +1,20 @@
 import controller.*;
+import controller.colecciones.*;
+import controller.estadisticas.GetEstadisticasHandler;
+import controller.hechos.GetCrearHechoHandler;
+import controller.hechos.GetHechoEspecificoHandler;
+import controller.hechos.GetHechosHandler;
+import controller.login.GetLogOutHandler;
+import controller.login.GetLoginHandler;
+import controller.login.GetSignInHandler;
+import controller.login.PostLoginHandler;
+import controller.solicitudes.GetSolicitudAdminHandler;
+import controller.solicitudes.GetSolicitudEliminacionHandler;
+import controller.solicitudes.GetSolicitudesAdminHandler;
+import controller.solicitudes.PatchSolicitudEstadoHandler;
 import io.javalin.Javalin;
 import service.ColeccionService;
-import domain.HechosYColecciones.Coleccion;
+import service.HechoService;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
 
@@ -26,7 +39,8 @@ public class Application {
 
         // services
 
-        ColeccionService coleccionService = new ColeccionService(urlPublica);
+        ColeccionService coleccionService = new ColeccionService(urlPublica, urlAdmin);
+        HechoService hechoService = new HechoService(urlPublica);
 
         app.get("/", ctx -> {
             ctx.redirect("/home");
@@ -39,7 +53,7 @@ public class Application {
 
         app.get("/logout", new GetLogOutHandler());
 
-        app.get("/hechos/{id}", new GetHechoEspecificoHandler(urlPublica)); //hecho especifico
+        app.get("/hechos/{id}", new GetHechoEspecificoHandler(urlPublica, hechoService)); //hecho especifico
 
         // Falta
         app.get("/hechos", new GetHechosHandler(urlPublica)); //home con hechos
@@ -62,11 +76,11 @@ public class Application {
         // Falta
         app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlPublica));
 
-        app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin));
+        app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin, coleccionService));
 
         app.get("/crear-coleccion", new GetCrearColeccionHandler(urlAdmin));
 
-        app.post("/colecciones", new PostColeccionHandler(urlAdmin));
+        app.post("/colecciones", new PostColeccionHandler(urlAdmin, coleccionService));
 
         // Falta organizar el tema de categorias y colecciones, y aplicar los estilos
         app.get("/estadisticas", new GetEstadisticasHandler(puertoEstadisticas));

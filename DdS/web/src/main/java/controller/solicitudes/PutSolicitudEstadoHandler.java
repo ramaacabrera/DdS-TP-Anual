@@ -1,20 +1,21 @@
-package controller;
+package controller.solicitudes;
+
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
-public class PatchSolicitudEstadoHandler implements Handler {
+public class PutSolicitudEstadoHandler implements Handler {
     private final String urlAdmin;
     private final OkHttpClient client = new OkHttpClient();
 
-    public PatchSolicitudEstadoHandler(String urlAdmin) {
+    public PutSolicitudEstadoHandler(String urlAdmin) {
         this.urlAdmin = urlAdmin;
     }
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        /* if (!esAdministrador(ctx)) {
+       /* if (!esAdministrador(ctx)) {
             ctx.status(403).result("No tiene permisos de administrador");
             return;
         }*/
@@ -27,20 +28,26 @@ public class PatchSolicitudEstadoHandler implements Handler {
         if ("eliminacion".equals(tipo)) {
             endpoint = "/api/solicitudes/" + id;
         } else if ("modificacion".equals(tipo)) {
-            endpoint = "/api/solicitudes-modificacion/" + id;
+            endpoint = "/api/solicitudes-modificacion/" + id; // Ajusta según tu API
         } else {
             ctx.status(400).result("Tipo de solicitud inválido");
             return;
         }
 
-        // Llamar a la API Admin para actualizar el estado con PATCH
+        // Llamar a la API Admin para actualizar el estado
         Request request = new Request.Builder()
                 .url(urlAdmin + endpoint)
-                .patch(RequestBody.create(accion, MediaType.parse("text/plain")))
+                .put(RequestBody.create(accion, MediaType.parse("text/plain")))
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
             ctx.status(response.code()).result(response.body().string());
         }
     }
+/*
+    private boolean esAdministrador(Context ctx) {
+        String username = ctx.sessionAttribute("username");
+        String role = ctx.sessionAttribute("role");
+        return "admin".equals(role) || (username != null && username.contains("admin"));
+    }*/
 }

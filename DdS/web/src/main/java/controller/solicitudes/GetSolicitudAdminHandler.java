@@ -1,4 +1,4 @@
-package controller;
+package controller.solicitudes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;

@@ -1,5 +1,4 @@
-package controller;
-import com.fasterxml.jackson.core.type.TypeReference;
+package controller.colecciones;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import domain.HechosYColecciones.Coleccion;
 import io.javalin.http.Context;
@@ -9,11 +8,6 @@ import service.ColeccionService;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 public class GetColeccionHandler implements Handler {
 

@@ -1,4 +1,4 @@
-package controller;
+package controller.solicitudes;
 
 public class GetSolicitudesEliminacionHandler {
 }

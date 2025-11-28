@@ -2,6 +2,7 @@ package service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import domain.DTO.PageDTO;
 import domain.HechosYColecciones.Coleccion;
 import okhttp3.HttpUrl;
@@ -15,6 +16,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -23,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class ColeccionService {
 
     private final String urlPublica;
+    private final String urlAdmin;
     private final ObjectMapper mapper = new ObjectMapper();
     private final OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)  // Timeout para establecer conexión
@@ -30,8 +33,9 @@ public class ColeccionService {
             .writeTimeout(60, TimeUnit.SECONDS)    // Timeout para escritura
             .build();
 
-    public ColeccionService(String urlPublica) {
+    public ColeccionService(String urlPublica, String urlAdmin) {
         this.urlPublica = urlPublica;
+        this.urlAdmin = urlAdmin;
     }
 
     public PageDTO<Coleccion> listarColecciones(int page, int size) {
@@ -73,4 +77,42 @@ public class ColeccionService {
         }
         return resp;
     }
+
+    public void crearColeccion(Map<String, Object> bodyData) {
+        System.out.println(bodyData);
+        String jsonBody = new Gson().toJson(bodyData);
+
+        System.out.println("Serializacion: " + jsonBody);
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+        try{
+            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+                    .uri(new URI(urlAdmin + "/colecciones"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody));
+
+            if (bodyData.containsKey("username") && bodyData.containsKey("access_token")) {
+                requestBuilder
+                        .header("username", bodyData.get("username").toString())
+                        .header("access_token", bodyData.get("access_token").toString());
+            }
+            HttpRequest request = requestBuilder.build();
+
+            System.out.println("Se armo la request");
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Mandamos la request");
+
+            Map<String, Object> modelo = new HashMap<>();
+            if (response.statusCode() != 200 || response.statusCode() != 201) {
+                throw new RuntimeException("Error al crear la coleccion, status code: " + response.statusCode());
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+
+
