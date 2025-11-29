@@ -1,27 +1,36 @@
-// gestorAdministrativo/controller/SolicitudController.java
 package gestorAdministrativo.controller;
 
 import DominioGestorAdministrativo.DTO.Solicitudes.SolicitudDTO;
 import DominioGestorAdministrativo.DTO.Solicitudes.SolicitudDeEliminacionDTO;
+import DominioGestorAdministrativo.DTO.Solicitudes.SolicitudDeModificacionDTO;
 import gestorAdministrativo.service.SolicitudEliminacionService;
+import gestorAdministrativo.service.SolicitudModificacionService;
 import io.javalin.http.Handler;
 
 import java.util.List;
 import java.util.UUID;
 
 public class SolicitudController {
-    private SolicitudEliminacionService solicitudService;
 
-    public SolicitudController(SolicitudEliminacionService solicitudService) {
-        this.solicitudService = solicitudService;
+    private SolicitudEliminacionService eliminacionService=null;
+    private SolicitudModificacionService modificacionService=null;
+
+    public SolicitudController(SolicitudEliminacionService eliminacionService, SolicitudModificacionService modificacionService) {
+        this.eliminacionService = eliminacionService;
+        this.modificacionService = modificacionService;
     }
 
     public Handler crearSolicitud = ctx -> {
         try {
             SolicitudDTO request = ctx.bodyAsClass(SolicitudDTO.class);
 
-            if (request.getID_HechoAsociado() == null) {
+            if (request.getHechoId() == null) {
                 ctx.status(400).json("El ID del hecho es requerido");
+                return;
+            }
+
+            if (request.getUsuarioId() == null) {
+                ctx.status(400).json("El ID del usuario es requerido");
                 return;
             }
 
@@ -30,16 +39,21 @@ public class SolicitudController {
                 return;
             }
 
-            solicitudService.crearSolicitudEliminacion(request);
+            eliminacionService.crearSolicitudEliminacion(request);
             ctx.status(201).json("Solicitud creada exitosamente");
 
+        } catch (IllegalArgumentException e) {
+            // Capturamos errores de validación lógica (ej. hecho no existe)
+            ctx.status(400).json(e.getMessage());
         } catch (Exception e) {
-            ctx.status(400).json("Error creando solicitud: " + e.getMessage());
+            e.printStackTrace();
+            ctx.status(500).json("Error interno creando solicitud: " + e.getMessage());
         }
     };
 
     public Handler procesarSolicitud = ctx -> {
         String idString = ctx.pathParam("id");
+        // Usamos la clase estática interna para mapear el JSON {"accion": "APROBADA"}
         ProcesarSolicitudDTO request = ctx.bodyAsClass(ProcesarSolicitudDTO.class);
 
         try {
@@ -50,24 +64,24 @@ public class SolicitudController {
                 return;
             }
 
-            boolean resultado = solicitudService.procesarSolicitud(id, request.getAccion());
+            boolean resultado = eliminacionService.procesarSolicitud(id, request.getAccion());
 
             if (resultado) {
                 ctx.status(200).json("Solicitud " + request.getAccion().toLowerCase() + " correctamente");
             } else {
-                ctx.status(404).json("Solicitud no encontrada");
+                ctx.status(404).json("Solicitud no encontrada o estado inválido");
             }
 
         } catch (IllegalArgumentException e) {
-            ctx.status(400).json("ID inválido: " + e.getMessage());
+            ctx.status(400).json("Error: " + e.getMessage());
         } catch (Exception e) {
-            ctx.status(400).json("Error procesando solicitud: " + e.getMessage());
+            ctx.status(500).json("Error procesando solicitud: " + e.getMessage());
         }
     };
 
     public Handler obtenerSolicitudes = ctx -> {
         try {
-            List<SolicitudDeEliminacionDTO> solicitudes = solicitudService.obtenerTodasLasSolicitudes();
+            List<SolicitudDeEliminacionDTO> solicitudes = eliminacionService.obtenerTodasLasSolicitudes();
             ctx.status(200).json(solicitudes);
         } catch (Exception e) {
             ctx.status(500).json("Error obteniendo solicitudes: " + e.getMessage());
@@ -79,7 +93,7 @@ public class SolicitudController {
 
         try {
             UUID id = UUID.fromString(idString);
-            var solicitud = solicitudService.obtenerSolicitudPorId(id);
+            var solicitud = eliminacionService.obtenerSolicitudPorId(id);
 
             if (solicitud.isPresent()) {
                 ctx.status(200).json(solicitud.get());
@@ -106,4 +120,58 @@ public class SolicitudController {
         public String getAccion() { return accion; }
         public void setAccion(String accion) { this.accion = accion; }
     }
+
+    public Handler crearSolicitudModificacion = ctx -> {
+        try {
+            SolicitudDeModificacionDTO request = ctx.bodyAsClass(SolicitudDeModificacionDTO.class);
+
+            if (request.getHechoId() == null || request.getUsuarioId() == null) {
+                ctx.status(400).json("Faltan datos (hechoId, usuarioId)");
+                return;
+            }
+
+            modificacionService.crearSolicitud(request);
+            ctx.status(201).json("Solicitud de modificación creada exitosamente");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.status(400).json("Error creando solicitud: " + e.getMessage());
+        }
+    };
+
+    public Handler procesarSolicitudModificacion = ctx -> {
+        String idString = ctx.pathParam("id");
+        ProcesarSolicitudDTO request = ctx.bodyAsClass(ProcesarSolicitudDTO.class);
+
+        try {
+            UUID id = UUID.fromString(idString);
+            boolean resultado = modificacionService.procesarSolicitud(id, request.getAccion());
+
+            if (resultado) {
+                ctx.status(200).json("Solicitud de modificación procesada");
+            } else {
+                ctx.status(404).json("Solicitud no encontrada");
+            }
+        } catch (Exception e) {
+            ctx.status(400).json("Error: " + e.getMessage());
+        }
+    };
+
+    public Handler obtenerSolicitudesModificacion = ctx -> {
+        try {
+            ctx.json(modificacionService.obtenerTodasLasSolicitudes());
+        } catch (Exception e) {
+            ctx.status(500).json(e.getMessage());
+        }
+    };
+
+    public Handler obtenerSolicitudModificacion = ctx -> {
+        try {
+            UUID id = UUID.fromString(ctx.pathParam("id"));
+            var sol = modificacionService.obtenerSolicitudPorId(id);
+            if(sol.isPresent()) ctx.json(sol.get()); else ctx.status(404);
+        } catch (Exception e) {
+            ctx.status(400).json("ID inválido");
+        }
+    };
 }

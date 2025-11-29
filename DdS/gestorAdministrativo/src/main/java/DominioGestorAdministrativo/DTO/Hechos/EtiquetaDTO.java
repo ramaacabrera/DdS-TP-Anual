@@ -14,8 +14,8 @@ public class EtiquetaDTO {
     }
 
     // Getters y Setters
-    public UUID getEtiquetaId() { return etiquetaId; }
-    public void setEtiquetaId(UUID etiquetaId) { this.etiquetaId = etiquetaId; }
+    public UUID getId() { return etiquetaId; }
+    public void setId(UUID etiquetaId) { this.etiquetaId = etiquetaId; }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }

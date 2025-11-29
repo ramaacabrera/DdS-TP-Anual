@@ -3,10 +3,8 @@ package DominioGestorAdministrativo.Criterios;
 import DominioGestorAdministrativo.HechosYColecciones.Hecho;
 import DominioGestorAdministrativo.HechosYColecciones.TipoContenidoMultimedia;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import java.util.HashMap;
 import java.util.Map;
 
 @Entity
@@ -22,17 +20,27 @@ public class CriterioTipoMultimedia extends Criterio {
 
     @Override
     public boolean cumpleConCriterio(Hecho hecho) {
-        return hecho.getContenidoMultimedia().stream().anyMatch(contenido -> contenido.getTipoContenido().equals(tipoContenidoMultimedia));
+        if (hecho.getContenidoMultimedia() == null) return false;
+        return hecho.getContenidoMultimedia().stream()
+                .anyMatch(contenido -> contenido.getTipoContenido().equals(tipoContenidoMultimedia));
     }
 
     @Override
     public String getQueryCondition() {
-        return "";//"h.contribuyente = " + contribuyente.getId_usuario();
+        return "EXISTS (SELECT m FROM h.contenidoMultimedia m WHERE m.tipoContenido = :tipoMultiParam)";
     }
 
     @Override
     @Transient
     public Map<String, Object> getQueryParameters() {
-        return Map.of();
+        Map<String, Object> params = new HashMap<>();
+        if (tipoContenidoMultimedia != null) {
+            params.put("tipoMultiParam", tipoContenidoMultimedia);
+        }
+        return params;
+    }
+
+    public TipoContenidoMultimedia getTipoContenidoMultimedia() {
+        return tipoContenidoMultimedia;
     }
 }

@@ -1,12 +1,8 @@
 package gestorAdministrativo.repository;
 
-import DominioGestorAdministrativo.DTO.Solicitudes.SolicitudDeEliminacionDTO;
-import org.hibernate.Hibernate;
 import utils.BDUtils;
-import DominioGestorAdministrativo.HechosYColecciones.Hecho;
 import DominioGestorAdministrativo.Solicitudes.EstadoSolicitudEliminacion;
 import DominioGestorAdministrativo.Solicitudes.SolicitudDeEliminacion;
-import DominioGestorAdministrativo.Usuario.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -16,197 +12,74 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class SolicitudEliminacionRepositorio {
-    private final HechoRepositorio hechoRepositorio;
 
-    public SolicitudEliminacionRepositorio(HechoRepositorio hechoRepositorio) {
-        this.hechoRepositorio = hechoRepositorio;
+    public SolicitudEliminacionRepositorio() {
+    }
+
+    public void guardar(SolicitudDeEliminacion solicitud) {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            BDUtils.comenzarTransaccion(em);
+
+            if (solicitud.getId() == null) {
+                em.persist(solicitud);
+            } else {
+                em.merge(solicitud);
+            }
+
+            BDUtils.commit(em);
+            System.out.println("✅ Solicitud guardada con éxito: " + solicitud.getId());
+        } catch (Exception e) {
+            BDUtils.rollback(em);
+            System.err.println("❌ Error guardando solicitud: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al guardar la solicitud", e);
+        } finally {
+            em.close();
+        }
+    }
+
+    public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
+        this.guardar(solicitud);
     }
 
     public List<SolicitudDeEliminacion> buscarTodas() {
         EntityManager em = BDUtils.getEntityManager();
         try {
-            TypedQuery<SolicitudDeEliminacion> query = em.createQuery(
-                    "SELECT s FROM SolicitudDeEliminacion s", SolicitudDeEliminacion.class);
+            String jpql = "SELECT DISTINCT s FROM SolicitudDeEliminacion s " +
+                    "LEFT JOIN FETCH s.usuario " +
+                    "LEFT JOIN FETCH s.hechoAsociado h " +
+                    "ORDER BY s.estado ASC";
 
-            List<SolicitudDeEliminacion> resultados = query.getResultList();
-
-            // Inicializar relaciones LAZY
-            for (SolicitudDeEliminacion solicitud : resultados) {
-                if (solicitud.getHechoAsociado() != null) {
-                    Hecho hecho = solicitud.getHechoAsociado();
-                    Hibernate.initialize(hecho.getContenidoMultimedia());
-                    Hibernate.initialize(hecho.getEtiquetas());
-                    Hibernate.initialize(hecho.getUbicacion());
-                }
-                if (solicitud.getUsuario() != null) {
-                    Hibernate.initialize(solicitud.getUsuario());
-                }
-            }
-
-            return resultados;
+            TypedQuery<SolicitudDeEliminacion> query = em.createQuery(jpql, SolicitudDeEliminacion.class);
+            return query.getResultList();
 
         } catch (Exception e) {
             System.err.println("❌ Error en buscarTodas: " + e.getMessage());
-            e.printStackTrace();
             return new ArrayList<>();
         } finally {
             em.close();
         }
     }
 
-    public void agregarSolicitudDeEliminacion(SolicitudDeEliminacionDTO solicitudDTO) {
-        // Convertir DTO a entidad y guardar
-        SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(solicitudDTO, hechoRepositorio);
-        this.agregarSolicitudDeEliminacion(solicitud);
-    }
-
-    public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            BDUtils.comenzarTransaccion(em);
-
-            if (solicitud.getUsuario() != null) {
-                this.setearUsuario(solicitud, em);
-            }
-
-            System.out.println("Agregando SolicitudDeEliminacion: " + solicitud);
-            em.merge(solicitud);
-            BDUtils.commit(em);
-        } catch (Exception e) {
-            BDUtils.rollback(em);
-            e.printStackTrace();
-        } finally {
-            em.close();
-        }
-    }
-
-    public void setearUsuario(SolicitudDeEliminacion solicitud, EntityManager em) {
-            Usuario usuarioExistente = null;
-
-            if (solicitud.getUsuario().getId_usuario() != null) {
-                usuarioExistente = em.find(Usuario.class, solicitud.getUsuario().getId_usuario());
-            }
-
-            if (usuarioExistente == null && solicitud.getUsuario().getUsername() != null) {
-                try {
-                    usuarioExistente = em.createQuery(
-                                    "SELECT u FROM Usuario u WHERE u.username = :username", Usuario.class)
-                            .setParameter("username", solicitud.getUsuario().getUsername())
-                            .getResultStream()
-                            .findFirst()
-                            .orElse(null);
-                } catch (Exception e) {
-                    System.out.println("⚠️ Error buscando usuario por username: " + e.getMessage());
-                }
-            }
-
-            if (usuarioExistente == null &&
-                    solicitud.getUsuario().getNombre() != null &&
-                    solicitud.getUsuario().getApellido() != null) {
-                try {
-                    usuarioExistente = em.createQuery(
-                                    "SELECT u FROM Usuario u WHERE u.nombre = :nombre AND u.apellido = :apellido", Usuario.class)
-                            .setParameter("nombre", solicitud.getUsuario().getNombre())
-                            .setParameter("apellido", solicitud.getUsuario().getApellido())
-                            .getResultStream()
-                            .findFirst()
-                            .orElse(null);
-                } catch (Exception e) {
-                    System.out.println("⚠️ Error buscando usuario por nombre/apellido: " + e.getMessage());
-                }
-            }
-
-            if (usuarioExistente == null) {
-                em.persist(solicitud.getUsuario()); // Persistir el nuevo usuario
-                usuarioExistente = solicitud.getUsuario();
-            }
-            solicitud.setUsuario(usuarioExistente);
-
-    }
-
-    public boolean actualizarEstadoSolicitudEliminacion(String body, UUID id) {
-        Optional<SolicitudDeEliminacion> resultadoBusqueda = this.buscarPorId(id);
-        if (resultadoBusqueda.isPresent()) {
-            SolicitudDeEliminacion solicitud = resultadoBusqueda.get();
-
-            // ✅ DEBUG: Ver estado actual
-            System.out.println("🔍 ESTADO ACTUAL - Padre: " + solicitud.getEstadoSolicitudEliminacion());
-
-            EstadoSolicitudEliminacion estadoEnum = EstadoSolicitudEliminacion.valueOf(body.toUpperCase());
-
-            if (estadoEnum == EstadoSolicitudEliminacion.ACEPTADA) {
-                solicitud.aceptarSolicitud();
-            } else if (estadoEnum == EstadoSolicitudEliminacion.RECHAZADA) {
-                solicitud.rechazarSolicitud();
-            } else {
-                return false;
-            }
-
-            // ✅ DEBUG: Ver estado después de modificar
-            System.out.println("🔍 ESTADO DESPUÉS - Padre: " + solicitud.getEstadoSolicitudEliminacion());
-
-            // Persistencia del cambio
-            EntityManager em = BDUtils.getEntityManager();
-            try {
-                BDUtils.comenzarTransaccion(em);
-                em.merge(solicitud);
-                BDUtils.commit(em);
-
-                // ✅ DEBUG: Verificar que se guardó
-                System.out.println("✅ Transacción completada - Estado guardado: " + solicitud.getEstadoSolicitudEliminacion());
-                return true;
-            } catch (Exception e) {
-                BDUtils.rollback(em);
-                e.printStackTrace();
-                return false;
-            } finally {
-                em.close();
-            }
-        }
-        return false;
-    }
-
     public Optional<SolicitudDeEliminacion> buscarPorId(UUID id) {
         EntityManager em = BDUtils.getEntityManager();
         try {
-            System.out.println("🔍 Buscando solicitud con ID: " + id);
+            String jpql = "SELECT DISTINCT s FROM SolicitudDeEliminacion s " +
+                    "LEFT JOIN FETCH s.usuario " +
+                    "LEFT JOIN FETCH s.hechoAsociado h " +
+                    "LEFT JOIN FETCH h.etiquetas " +
+                    "LEFT JOIN FETCH h.ubicacion " +
+                    "WHERE s.id = :id";
 
-            SolicitudDeEliminacion solicitud = em.find(SolicitudDeEliminacion.class, id);
+            TypedQuery<SolicitudDeEliminacion> query = em.createQuery(jpql, SolicitudDeEliminacion.class);
+            query.setParameter("id", id);
 
-            if (solicitud != null) {
-                System.out.println("✅ Solicitud encontrada: " + solicitud.getId());
+            return Optional.of(query.getSingleResult());
 
-                // ✅ INICIALIZAR TODAS LAS RELACIONES LAZY
-                if (solicitud.getHechoAsociado() != null) {
-                    Hecho hecho = solicitud.getHechoAsociado();
-
-                    // Inicializar todas las colecciones lazy del Hecho
-                    Hibernate.initialize(hecho.getEtiquetas());        // ← ESTE FALTABA
-                    Hibernate.initialize(hecho.getContenidoMultimedia());
-                    Hibernate.initialize(hecho.getUbicacion());
-
-                    // Si el hecho tiene usuario contribuyente, inicializarlo también
-                    if (hecho.getContribuyente() != null) {
-                        Hibernate.initialize(hecho.getContribuyente());
-                    }
-
-                    // Si el hecho tiene fuente, inicializarla
-                    if (hecho.getFuente() != null) {
-                        Hibernate.initialize(hecho.getFuente());
-                    }
-                }
-
-                // Inicializar el usuario de la solicitud
-                if (solicitud.getUsuario() != null) {
-                    Hibernate.initialize(solicitud.getUsuario());
-                }
-            } else {
-                System.out.println("❌ Solicitud NO encontrada con ID: " + id);
-            }
-
-            return Optional.ofNullable(solicitud);
+        } catch (javax.persistence.NoResultException e) {
+            return Optional.empty();
         } catch (Exception e) {
-            System.err.println("❌ Error en buscarPorId: " + e.getMessage());
             e.printStackTrace();
             return Optional.empty();
         } finally {
@@ -214,5 +87,41 @@ public class SolicitudEliminacionRepositorio {
         }
     }
 
+    public boolean actualizarEstadoSolicitudEliminacion(String accion, UUID id) {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            SolicitudDeEliminacion solicitud = em.find(SolicitudDeEliminacion.class, id);
 
+            if (solicitud == null) {
+                return false;
+            }
+
+            BDUtils.comenzarTransaccion(em);
+
+            EstadoSolicitudEliminacion nuevoEstado = EstadoSolicitudEliminacion.valueOf(accion.toUpperCase());
+
+            if (nuevoEstado == EstadoSolicitudEliminacion.ACEPTADA) {
+                solicitud.aceptarSolicitud();
+            } else if (nuevoEstado == EstadoSolicitudEliminacion.RECHAZADA) {
+                solicitud.rechazarSolicitud();
+            } else {
+                solicitud.setEstado(nuevoEstado);
+            }
+
+            BDUtils.commit(em);
+
+            return true;
+
+        } catch (IllegalArgumentException e) {
+            System.err.println("Estado inválido: " + accion);
+            BDUtils.rollback(em);
+            return false;
+        } catch (Exception e) {
+            BDUtils.rollback(em);
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
 }

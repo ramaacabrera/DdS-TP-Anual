@@ -1,23 +1,32 @@
 package DominioGestorAdministrativo.DTO.Solicitudes;
 
-import DominioGestorAdministrativo.DTO.Hechos.UsuarioDTO;
-
 import java.util.UUID;
 
 public class SolicitudDeModificacionDTO extends SolicitudDTO {
+    private UUID id;
+
     private HechoModificadoDTO hechoModificado;
     private EstadoSolicitudModificacionDTO estado;
 
     public SolicitudDeModificacionDTO() {}
 
-    public SolicitudDeModificacionDTO(UUID hechoAsociadoId, String justificacion, UsuarioDTO usuario,
+    public SolicitudDeModificacionDTO(UUID id, UUID hechoAsociadoId, String justificacion, UUID usuarioId,
                                       HechoModificadoDTO hechoModificado, EstadoSolicitudModificacionDTO estado) {
-        super(hechoAsociadoId, justificacion, usuario);
+
+        super();
+        this.id = id;
+        this.setHechoId(hechoAsociadoId);
+        this.setUsuarioId(usuarioId);
+        this.setJustificacion(justificacion);
+
         this.hechoModificado = hechoModificado;
         this.estado = estado;
     }
 
     // Getters y Setters
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
+
     public HechoModificadoDTO getHechoModificado() { return hechoModificado; }
     public void setHechoModificado(HechoModificadoDTO hechoModificado) { this.hechoModificado = hechoModificado; }
 

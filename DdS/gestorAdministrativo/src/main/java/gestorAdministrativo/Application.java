@@ -6,6 +6,7 @@ import gestorAdministrativo.repository.*;
 import io.javalin.Javalin;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
+import utils.Keycloak.TokenValidator;
 
 import java.util.Properties;
 
@@ -20,34 +21,71 @@ public class Application {
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
-        // Repositorios
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
-        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(hechoRepositorio);
+        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
+        SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio();
+        UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 
-        // Services
+        app.before("/api/*", ctx -> {
+            if (ctx.method().equals("OPTIONS")) {
+                return;
+            }
+
+            String username = ctx.header("username");
+            String accessToken = ctx.header("access_token");
+
+            if (accessToken == null || username == null) {
+                throw new io.javalin.http.UnauthorizedResponse("Faltan credenciales");
+            }
+
+            try {
+                TokenValidator validador = new TokenValidator();
+                validador.validar(accessToken);
+            } catch (Exception e) {
+                System.err.println("Token inválido: " + e.getMessage());
+                throw new io.javalin.http.UnauthorizedResponse("Token inválido");
+            }
+
+            if (usuarioRepositorio.buscarAdmin(username) == null) {
+                System.err.println("Usuario no es admin: " + username);
+                throw new io.javalin.http.ForbiddenResponse("No tienes permisos de administrador");
+            }
+
+            System.out.println("✅ Acceso autorizado para: " + username);
+        });
+
+        // 2. Services
         ColeccionService coleccionService = new ColeccionService(coleccionRepositorio, hechoRepositorio);
-        SolicitudEliminacionService solicitudService = new SolicitudEliminacionService(solicitudEliminacionRepositorio);
+        SolicitudEliminacionService solicitudEliminacionService = new SolicitudEliminacionService(solicitudEliminacionRepositorio, hechoRepositorio, usuarioRepositorio);
+        SolicitudModificacionService solicitudModificacionService = new SolicitudModificacionService(solicitudModificacionRepositorio, hechoRepositorio, usuarioRepositorio);
 
-        // Controllers
+        // 3. Controllers
         ColeccionController coleccionController = new ColeccionController(coleccionService);
-        SolicitudController solicitudController = new SolicitudController(solicitudService);
+        SolicitudController solicitudController = new SolicitudController(solicitudEliminacionService, solicitudModificacionService);
 
-        // Rutas con controllers
+        // RUTAS
+
+        // Rutas de Colecciones
         app.post("/api/colecciones", coleccionController.crearColeccion);
-        app.get("/api/colecciones", coleccionController.obtenerTodasLasColecciones);
-        app.get("/api/colecciones/{id}", coleccionController.obtenerColeccionPorId);
         app.put("/api/colecciones/{id}", coleccionController.actualizarColeccion);
         app.delete("/api/colecciones/{id}", coleccionController.eliminarColeccion);
 
-        // Rutas específicas
+        // Sub-rutas de Colecciones
         app.post("/api/colecciones/{id}/agregador.fuente", coleccionController.agregarFuente);
         app.delete("/api/colecciones/{id}/agregador.fuente", coleccionController.borrarFuente);
         app.put("/api/colecciones/{id}/algoritmo", coleccionController.actualizarAlgoritmoConsenso);
 
+        // Rutas Solicitud Eliminacion
         app.post("/api/solicitudes", solicitudController.crearSolicitud);
         app.patch("/api/solicitudes/{id}", solicitudController.procesarSolicitud);
         app.get("/api/solicitudes", solicitudController.obtenerSolicitudes);
         app.get("/api/solicitudes/{id}", solicitudController.obtenerSolicitud);
+
+        // Rutas Solicitud Modificacion
+        app.post("/api/solicitudes/modificacion", solicitudController.crearSolicitudModificacion);
+        app.patch("/api/solicitudes/modificacion/{id}", solicitudController.procesarSolicitudModificacion);
+        app.get("/api/solicitudes/modificacion", solicitudController.obtenerSolicitudesModificacion);
+        app.get("/api/solicitudes/modificacion/{id}", solicitudController.obtenerSolicitudModificacion);
     }
 }

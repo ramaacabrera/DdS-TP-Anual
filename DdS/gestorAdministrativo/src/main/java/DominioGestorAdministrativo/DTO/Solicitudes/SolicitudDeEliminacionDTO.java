@@ -1,20 +1,31 @@
 package DominioGestorAdministrativo.DTO.Solicitudes;
 
-import DominioGestorAdministrativo.DTO.Hechos.UsuarioDTO;
-
+import DominioGestorAdministrativo.DTO.Hechos.UsuarioDTO; // Asumo que tienes este DTO
+import DominioGestorAdministrativo.Solicitudes.EstadoSolicitudEliminacion;
 import java.util.UUID;
 
-public class SolicitudDeEliminacionDTO extends SolicitudDTO {
-    private EstadoSolicitudEliminacionDTO estado;
+public class SolicitudDeEliminacionDTO {
+    private UUID id;
+    private UUID hechoId;
+    private String justificacion;
+    private UsuarioDTO usuario;
+    private EstadoSolicitudEliminacion estado;
 
     public SolicitudDeEliminacionDTO() {}
 
-    public SolicitudDeEliminacionDTO(UUID hechoAsociadoId, String justificacion, UsuarioDTO usuario, EstadoSolicitudEliminacionDTO estado) {
-        super(hechoAsociadoId, justificacion, usuario);
-        this.estado = estado;
-    }
-
     // Getters y Setters
-    public EstadoSolicitudEliminacionDTO getEstado() { return estado; }
-    public void setEstado(EstadoSolicitudEliminacionDTO estado) { this.estado = estado; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
+
+    public UUID getHechoId() { return hechoId; }
+    public void setHechoId(UUID hechoId) { this.hechoId = hechoId; }
+
+    public String getJustificacion() { return justificacion; }
+    public void setJustificacion(String justificacion) { this.justificacion = justificacion; }
+
+    public UsuarioDTO getUsuario() { return usuario; }
+    public void setUsuario(UsuarioDTO usuario) { this.usuario = usuario; }
+
+    public EstadoSolicitudEliminacion getEstado() { return estado; }
+    public void setEstado(EstadoSolicitudEliminacion estado) { this.estado = estado; }
 }

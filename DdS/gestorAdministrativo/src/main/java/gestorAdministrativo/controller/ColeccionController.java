@@ -1,17 +1,18 @@
-// gestorAdministrativo/controller/ColeccionController.java
 package gestorAdministrativo.controller;
 
 import DominioGestorAdministrativo.DTO.Coleccion.ColeccionDTO;
+import DominioGestorAdministrativo.DTO.Hechos.FuenteDTO;
+import DominioGestorAdministrativo.HechosYColecciones.TipoAlgoritmoConsenso;
+import DominioGestorAdministrativo.fuente.Fuente;
+import DominioGestorAdministrativo.fuente.TipoDeFuente;
 import gestorAdministrativo.service.ColeccionService;
 import io.javalin.http.Handler;
-import utils.Dominio.HechosYColecciones.TipoAlgoritmoConsenso;
-import utils.Dominio.fuente.Fuente;
 
-import java.util.List;
 import java.util.UUID;
 
 public class ColeccionController {
-    private final ColeccionService coleccionService;
+    private ColeccionService coleccionService = null;
+
 
     public ColeccionController(ColeccionService coleccionService) {
         this.coleccionService = coleccionService;
@@ -26,17 +27,17 @@ public class ColeccionController {
                 return;
             }
 
-            ColeccionDTO response = coleccionService.crearColeccion(request);
+            ColeccionDTO response = this.coleccionService.crearColeccion(request);
             ctx.status(201).json(response);
 
         } catch (Exception e) {
+            e.printStackTrace();
             ctx.status(400).json("Error creando colección: " + e.getMessage());
         }
     };
 
     public Handler actualizarColeccion = ctx -> {
         String idString = ctx.pathParam("id");
-
         try {
             UUID id = UUID.fromString(idString);
             ColeccionDTO request = ctx.bodyAsClass(ColeccionDTO.class);
@@ -45,7 +46,7 @@ public class ColeccionController {
             ctx.status(200).json(response);
 
         } catch (IllegalArgumentException e) {
-            ctx.status(404).json("Colección no encontrada");
+            ctx.status(404).json("Colección no encontrada o ID inválido");
         } catch (Exception e) {
             ctx.status(400).json("Error actualizando colección: " + e.getMessage());
         }
@@ -53,7 +54,6 @@ public class ColeccionController {
 
     public Handler eliminarColeccion = ctx -> {
         String idString = ctx.pathParam("id");
-
         try {
             UUID id = UUID.fromString(idString);
             coleccionService.eliminarColeccion(id);
@@ -68,12 +68,11 @@ public class ColeccionController {
 
     public Handler agregarFuente = ctx -> {
         String idString = ctx.pathParam("id");
-
         try {
             UUID id = UUID.fromString(idString);
-            Fuente fuente = ctx.bodyAsClass(Fuente.class);
+            FuenteDTO fuenteDto = ctx.bodyAsClass(FuenteDTO.class);
 
-            ColeccionDTO response = coleccionService.agregarFuente(id, fuente);
+            ColeccionDTO response = coleccionService.agregarFuente(id, fuenteDto);
             ctx.status(200).json(response);
 
         } catch (IllegalArgumentException e) {
@@ -85,12 +84,22 @@ public class ColeccionController {
 
     public Handler borrarFuente = ctx -> {
         String idString = ctx.pathParam("id");
-
         try {
             UUID id = UUID.fromString(idString);
-            Fuente fuente = ctx.bodyAsClass(Fuente.class);
+            FuenteDTO fuenteDto = ctx.bodyAsClass(FuenteDTO.class);
 
-            ColeccionDTO response = coleccionService.eliminarFuente(id, fuente);
+            Fuente fuenteParaBorrar = new Fuente();
+            fuenteParaBorrar.setId(fuenteDto.getFuenteId());
+            if (fuenteDto.getDescriptor() != null) {
+                fuenteParaBorrar.setDescriptor(fuenteDto.getDescriptor());
+            }
+            if (fuenteDto.getTipoFuente() != null) {
+                try {
+                    fuenteParaBorrar.setTipoDeFuente(TipoDeFuente.valueOf(fuenteDto.getTipoFuente()));
+                } catch (Exception ignored) {}
+            }
+
+            ColeccionDTO response = coleccionService.eliminarFuente(id, fuenteParaBorrar);
             ctx.status(200).json(response);
 
         } catch (IllegalArgumentException e) {
@@ -102,7 +111,6 @@ public class ColeccionController {
 
     public Handler actualizarAlgoritmoConsenso = ctx -> {
         String idString = ctx.pathParam("id");
-
         try {
             UUID id = UUID.fromString(idString);
             TipoAlgoritmoConsenso algoritmo = ctx.bodyAsClass(TipoAlgoritmoConsenso.class);
@@ -114,31 +122,6 @@ public class ColeccionController {
             ctx.status(404).json("Colección no encontrada");
         } catch (Exception e) {
             ctx.status(400).json("Error actualizando algoritmo: " + e.getMessage());
-        }
-    };
-
-    // Handlers adicionales para GET
-    public Handler obtenerTodasLasColecciones = ctx -> {
-        try {
-            List<ColeccionDTO> colecciones = coleccionService.obtenerTodasLasColecciones();
-            ctx.status(200).json(colecciones);
-        } catch (Exception e) {
-            ctx.status(500).json("Error obteniendo colecciones: " + e.getMessage());
-        }
-    };
-
-    public Handler obtenerColeccionPorId = ctx -> {
-        String idString = ctx.pathParam("id");
-
-        try {
-            UUID id = UUID.fromString(idString);
-            ColeccionDTO coleccion = coleccionService.obtenerColeccionPorId(id);
-            ctx.status(200).json(coleccion);
-
-        } catch (IllegalArgumentException e) {
-            ctx.status(404).json("Colección no encontrada");
-        } catch (Exception e) {
-            ctx.status(500).json("Error obteniendo colección: " + e.getMessage());
         }
     };
 }

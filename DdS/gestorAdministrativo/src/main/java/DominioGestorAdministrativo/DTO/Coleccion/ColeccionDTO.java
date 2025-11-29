@@ -2,13 +2,14 @@ package DominioGestorAdministrativo.DTO.Coleccion;
 
 import DominioGestorAdministrativo.DTO.Criterios.CriterioDTO;
 import DominioGestorAdministrativo.DTO.Hechos.FuenteDTO;
+import DominioGestorAdministrativo.HechosYColecciones.TipoAlgoritmoConsenso;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class ColeccionDTO {
-    private UUID coleccionId;
+    private UUID coleccionId; // Se mapea al handle
     private String titulo;
     private String descripcion;
     private List<FuenteDTO> fuentes = new ArrayList<>();
@@ -26,7 +27,6 @@ public class ColeccionDTO {
         this.algoritmoDeConsenso = algoritmoDeConsenso;
     }
 
-    // Getters y Setters
     public UUID getColeccionId() { return coleccionId; }
     public void setColeccionId(UUID coleccionId) { this.coleccionId = coleccionId; }
 

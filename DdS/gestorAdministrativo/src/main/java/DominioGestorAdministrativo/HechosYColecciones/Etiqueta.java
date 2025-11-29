@@ -29,8 +29,8 @@ public class Etiqueta {
         this.nombre = nombre;
     }
 
-    public UUID getEtiqueta_id() { return id_etiqueta; }
-    public void setEtiqueta_id(UUID nuevoEtiqueta_id) { this.id_etiqueta = nuevoEtiqueta_id; }
+    public UUID getId() { return id_etiqueta; }
+    public void setId(UUID nuevoEtiqueta_id) { this.id_etiqueta = nuevoEtiqueta_id; }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nuevoNombre) { this.nombre = nuevoNombre; }

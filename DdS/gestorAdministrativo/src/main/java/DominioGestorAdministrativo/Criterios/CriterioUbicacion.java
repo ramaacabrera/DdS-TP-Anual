@@ -3,16 +3,14 @@ package DominioGestorAdministrativo.Criterios;
 import DominioGestorAdministrativo.HechosYColecciones.Hecho;
 import DominioGestorAdministrativo.HechosYColecciones.Ubicacion;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import java.util.HashMap;
 import java.util.Map;
 
 @Entity
 public class CriterioUbicacion extends Criterio {
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_ubicacion")
     private Ubicacion ubicacion;
 
@@ -23,25 +21,25 @@ public class CriterioUbicacion extends Criterio {
 
     @Override
     public boolean cumpleConCriterio(Hecho hecho){
-        return hecho.getUbicacion().equals(ubicacion);
+        if (hecho.getUbicacion() == null || this.ubicacion == null) return false;
+        return hecho.getUbicacion().getId_ubicacion().equals(ubicacion.getId_ubicacion());
     }
 
-    public Ubicacion getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(Ubicacion ubicacion) {
-        this.ubicacion = ubicacion;
-    }
+    public Ubicacion getUbicacion() { return ubicacion; }
+    public void setUbicacion(Ubicacion ubicacion) { this.ubicacion = ubicacion; }
 
     @Override
     public String getQueryCondition() {
-        return "h.id_ubicacion = " + ubicacion.getId_ubicacion();
+        return "h.ubicacion.id_ubicacion = :idUbicacionParam";
     }
 
     @Override
     @Transient
     public Map<String, Object> getQueryParameters() {
-        return Map.of();
+        Map<String, Object> params = new HashMap<>();
+        if (ubicacion != null) {
+            params.put("idUbicacionParam", ubicacion.getId_ubicacion());
+        }
+        return params;
     }
 }
