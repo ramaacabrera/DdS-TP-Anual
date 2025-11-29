@@ -1,0 +1,107 @@
+package agregador.service;
+
+import agregador.dto.Hechos.*; // Importa los DTOs anidados (FuenteDTO, etc)
+import agregador.domain.HechosYColecciones.*;
+import agregador.domain.Usuario.Usuario;
+import agregador.domain.fuente.Fuente;
+import agregador.domain.fuente.TipoDeFuente;
+import agregador.service.normalizacion.MockNormalizador;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
+public class ServicioNormalizacion {
+
+    private final MockNormalizador normalizador;
+
+    public ServicioNormalizacion(MockNormalizador normalizador) {
+        this.normalizador = normalizador;
+    }
+
+    public Hecho normalizar(HechoDTO hechoDTO) {
+        // 1. Convertimos DTO -> Entidad manualmente aquí (Patrón Mapper)
+        Hecho hechoSinNormalizar = convertirAEntidad(hechoDTO);
+
+        // 2. Ejecutamos la normalización sobre la entidad
+        return normalizador.normalizar(hechoSinNormalizar);
+    }
+
+    private Hecho convertirAEntidad(HechoDTO dto) {
+        if (dto == null) return null;
+
+        Hecho entidad = new Hecho();
+
+        if (dto.getHechoId() != null) {
+            entidad.setHecho_id(dto.getHechoId());
+        }
+        entidad.setTitulo(dto.getTitulo());
+        entidad.setDescripcion(dto.getDescripcion());
+        entidad.setCategoria(dto.getCategoria());
+        entidad.setFechaDeAcontecimiento(dto.getFechaDeAcontecimiento());
+        entidad.setFechaDeCarga(dto.getFechaDeCarga());
+        entidad.setEsEditable(dto.isEsEditable());
+
+        if (dto.getEstadoHecho() != null) {
+            try {
+                entidad.setEstadoHecho(EstadoHecho.valueOf(dto.getEstadoHecho().name()));
+            } catch (Exception e) {
+                entidad.setEstadoHecho(EstadoHecho.ACTIVO);
+            }
+        }
+
+        if (dto.getUbicacion() != null) {
+            UbicacionDTO uDto = dto.getUbicacion();
+            Ubicacion u = new Ubicacion(uDto.getLatitud(), uDto.getLongitud());
+            if (uDto.getUbicacionId() != null) {
+                u.setId_ubicacion(uDto.getUbicacionId());
+            }
+            entidad.setUbicacion(u);
+        }
+
+        if (dto.getFuente() != null) {
+            FuenteDTO fDto = dto.getFuente();
+            Fuente f = new Fuente();
+            if (fDto.getFuenteId() != null) f.setId(fDto.getFuenteId());
+            f.setDescriptor(fDto.getDescriptor());
+
+            if (fDto.getTipoFuente() != null) {
+                try {
+                    f.setTipoDeFuente(TipoDeFuente.valueOf(fDto.getTipoFuente()));
+                } catch (Exception ignored) {}
+            }
+            entidad.setFuente(f);
+        }
+
+        if (dto.getContribuyente() != null) {
+            UsuarioDTO uDto = dto.getContribuyente();
+            Usuario u = new Usuario();
+            if (uDto.getUsuarioId() != null) u.setId_usuario(uDto.getUsuarioId());
+            u.setUsername(uDto.getNombreUsuario());
+            u.setNombre(uDto.getNombre());
+            u.setApellido(uDto.getApellido());
+            entidad.setContribuyente(u);
+        }
+
+        if (dto.getEtiquetas() != null) {
+            entidad.setEtiquetas(dto.getEtiquetas().stream().map(eDto -> {
+                Etiqueta e = new Etiqueta();
+                if (eDto.getId() != null) e.setId(eDto.getId());
+                e.setNombre(eDto.getNombre());
+                return e;
+            }).collect(Collectors.toList()));
+        } else {
+            entidad.setEtiquetas(new ArrayList<>());
+        }
+
+        if (dto.getContenidoMultimedia() != null) {
+            entidad.setContenidoMultimedia(dto.getContenidoMultimedia().stream().map(mDto -> {
+                ContenidoMultimedia m = new ContenidoMultimedia();
+                return m;
+            }).collect(Collectors.toList()));
+        } else {
+            entidad.setContenidoMultimedia(new ArrayList<>());
+        }
+
+        return entidad;
+    }
+}

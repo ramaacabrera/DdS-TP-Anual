@@ -4,7 +4,6 @@ import agregador.domain.Usuario.Usuario;
 import agregador.domain.fuente.Fuente;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import agregador.domain.DTO.HechoDTO;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -83,7 +82,7 @@ public class HechoModificado {
         //this.hecho_id = -1;
     }
 
-    public HechoModificado(HechoDTO hechoDTO){
+    /*public HechoModificado(HechoModificadoDTO hechoDTO){
         this.titulo = hechoDTO.getTitulo();
         this.descripcion = hechoDTO.getDescripcion();
         this.categoria = hechoDTO.getCategoria();
@@ -97,7 +96,7 @@ public class HechoModificado {
         this.esEditable = hechoDTO.getEsEditable();
         this.contenidoMultimedia = hechoDTO.getContenidoMultimedia();
         //this.hecho_id = 0;
-    }
+    }*/
 
     // Getters
     public String getTitulo() {

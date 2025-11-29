@@ -3,6 +3,7 @@ package agregador.domain.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import agregador.domain.HechosYColecciones.Hecho;
+import agregador.domain.Usuario.RolUsuario;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 

@@ -1,5 +1,6 @@
 package agregador.domain.Criterios;
 
+import agregador.domain.Criterios.TipoDeTexto;
 import agregador.domain.HechosYColecciones.Hecho;
 
 import javax.persistence.ElementCollection;

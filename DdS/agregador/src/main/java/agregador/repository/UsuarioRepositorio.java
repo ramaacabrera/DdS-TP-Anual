@@ -1,75 +1,109 @@
 package agregador.repository;
 
-import utils.BDUtils;
 import agregador.domain.Usuario.RolUsuario;
 import agregador.domain.Usuario.Usuario;
+import agregador.utils.BDUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.UUID;
 
 public class UsuarioRepositorio {
+
     public UsuarioRepositorio(){}
 
-    public void guardar(Usuario usuario) {
+    public Usuario guardar(Usuario usuario) {
         EntityManager em = BDUtils.getEntityManager();
         try {
-            // Ejecutar la Transacción
             BDUtils.comenzarTransaccion(em);
-            em.merge(usuario);
+
+            Usuario usuarioGestionado;
+            // Si no tiene ID, es nuevo -> Persist
+            if (usuario.getId_usuario() == null) {
+                em.persist(usuario);
+                usuarioGestionado = usuario;
+            } else {
+                // Si tiene ID, es existente -> Merge
+                usuarioGestionado = em.merge(usuario);
+            }
+
             BDUtils.commit(em);
+            return usuarioGestionado;
 
         } catch (Exception e) {
-            BDUtils.rollback(em);
+            // Check de seguridad antes de rollback
+            if (em.getTransaction().isActive()) {
+                BDUtils.rollback(em);
+            }
             System.err.println("ERROR al guardar Usuario: " + e.getMessage());
             e.printStackTrace();
+
+            // CORRECCIÓN: Envolvemos en RuntimeException para no obligar a try-catch sucios arriba
+            throw new RuntimeException("Error guardando usuario en base de datos", e);
+        } finally {
+            em.close();
+        }
+    }
+
+    public Usuario buscarPorId(UUID id) {
+        if (id == null) return null;
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            return em.find(Usuario.class, id);
         } finally {
             em.close();
         }
     }
 
     public Usuario buscarPorUsername(String username){
+        if (username == null || username.trim().isEmpty()) return null;
+
         EntityManager em = BDUtils.getEntityManager();
         try {
-            // Consulta JPQL para buscar por un atributo específico
             TypedQuery<Usuario> query = em.createQuery(
                     "SELECT u FROM Usuario u WHERE u.username = :paramUsername", Usuario.class);
 
-            // Asignamos el valor al parámetro en la consulta
-            query.setParameter("paramUsername", username);
+            query.setParameter("paramUsername", username.trim());
 
-            // Intentamos obtener un único resultado.
-            // Si no se encuentra, getSingleResult() lanza una excepción NoResultException.
-            return query.getSingleResult();
+            return query.getResultStream().findFirst().orElse(null);
 
-        } catch (javax.persistence.NoResultException e) {
-            // Esto es normal si no se encuentra el hecho. Retornamos null.
-            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public Usuario buscarPorNombreYApellido(String nombre, String apellido) {
+        if (nombre == null || apellido == null) return null;
+
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            TypedQuery<Usuario> query = em.createQuery(
+                    "SELECT u FROM Usuario u WHERE u.nombre = :nombre AND u.apellido = :apellido", Usuario.class);
+
+            query.setParameter("nombre", nombre.trim());
+            query.setParameter("apellido", apellido.trim());
+
+            return query.getResultStream().findFirst().orElse(null);
         } finally {
             em.close();
         }
     }
 
     public Usuario buscarAdmin(String username){
+        if (username == null) return null;
+
         EntityManager em = BDUtils.getEntityManager();
         try {
-            // Consulta JPQL para buscar por un atributo específico
             TypedQuery<Usuario> query = em.createQuery(
-                    "SELECT u FROM Usuario u WHERE u.username = :paramUsername and u.rol = :paramRol", Usuario.class);
+                    "SELECT u FROM Usuario u WHERE u.username = :paramUsername AND u.rol = :paramRol", Usuario.class);
 
-            // Asignamos el valor al parámetro en la consulta
-            query.setParameter("paramUsername", username);
+            query.setParameter("paramUsername", username.trim());
             query.setParameter("paramRol", RolUsuario.ADMINISTRADOR);
 
-            // Intentamos obtener un único resultado.
-            // Si no se encuentra, getSingleResult() lanza una excepción NoResultException.
-            return query.getSingleResult();
+            return query.getResultStream().findFirst().orElse(null);
 
-        } catch (javax.persistence.NoResultException e) {
-            // Esto es normal si no se encuentra el hecho. Retornamos null.
-            return null;
         } finally {
             em.close();
         }
     }
-
 }

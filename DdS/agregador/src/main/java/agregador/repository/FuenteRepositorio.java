@@ -1,10 +1,9 @@
 package agregador.repository;
 
-import utils.BDUtils;
 import agregador.domain.fuente.Fuente;
+import agregador.utils.BDUtils;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.UUID;
 
@@ -12,67 +11,63 @@ public class FuenteRepositorio {
 
     public FuenteRepositorio() {}
 
-    public Fuente buscarPorRuta(String ruta) {
-        //EntityManager em = emf.createEntityManager();
-        System.out.println("Buscando fuente: " + ruta);
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            TypedQuery<Fuente> query = em.createQuery(
-                    "SELECT f FROM Fuente f WHERE f.descriptor = :rutaParam", Fuente.class);
-            query.setParameter("rutaParam", ruta);
-            System.out.println("Ya se busco");
-            return query.getSingleResult();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        } finally {
-            em.close();
-        }
-    }
-
     public Fuente buscarPorId(UUID id) {
+        if (id == null) return null;
         EntityManager em = BDUtils.getEntityManager();
-        try{
-            TypedQuery<Fuente> query = em.createQuery(
-                    "SELECT f FROM Fuente f WHERE f.id_fuente = :idParam", Fuente.class);
-            query.setParameter("idParam", id);
+        try {
+            return em.find(Fuente.class, id);
+        } finally {
+            em.close();
+        }
+    }
 
-            return query.getSingleResult();
-        } catch (NoResultException e) {
+    public Fuente buscarPorDescriptor(String descriptor) {
+        if (descriptor == null) return null;
+
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            TypedQuery<Fuente> query = em.createQuery(
+                    "SELECT f FROM Fuente f WHERE f.descriptor = :descParam", Fuente.class);
+            query.setParameter("descParam", descriptor);
+
+            return query.getResultStream().findFirst().orElse(null);
+
+        } catch (Exception e) {
+            System.err.println("Error buscando fuente: " + e.getMessage());
             return null;
         } finally {
             em.close();
         }
-
     }
 
-    /**
-     * Guarda o actualiza una entidad Fuente.
-     * @param fuente La entidad Fuente a persistir.
-     */
     public Fuente guardar(Fuente fuente) {
-        //EntityManager em = emf.createEntityManager();
         EntityManager em = BDUtils.getEntityManager();
-        BDUtils.comenzarTransaccion(em);
         try {
+            BDUtils.comenzarTransaccion(em);
             Fuente fuenteGestionada = em.merge(fuente);
             BDUtils.commit(em);
             return fuenteGestionada;
-        }
-        // Capturamos el error de unicidad (IntegrityConstraintViolationException)
-        catch (javax.persistence.PersistenceException e) {
+        } catch (Exception e) {
             BDUtils.rollback(em);
-
-            if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException) {
-                // El registro duplicado es lo esperado, no es un error fatal.
-                System.err.println("La Fuente ya existe en la DB.");
-
-                throw new RuntimeException("Duplicado de Fuente detectado.", e);
-            }
-            throw new RuntimeException("Fallo en la persistencia de Fuente.", e);
-        }
-        finally {
+            throw new RuntimeException("Error guardando fuente: " + e.getMessage(), e);
+        } finally {
             em.close();
         }
+    }
+
+    public Fuente obtenerOCrear(Fuente fuenteEntrante) {
+        if (fuenteEntrante == null) return null;
+
+        if (fuenteEntrante.getId() != null) {
+            Fuente existente = buscarPorId(fuenteEntrante.getId());
+            if (existente != null) return existente;
+        }
+
+        if (fuenteEntrante.getDescriptor() != null) {
+            Fuente existente = buscarPorDescriptor(fuenteEntrante.getDescriptor());
+            if (existente != null) return existente;
+        }
+
+        return guardar(fuenteEntrante);
     }
 }

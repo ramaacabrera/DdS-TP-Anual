@@ -1,19 +1,13 @@
 package agregador;
 
-import agregador.controller.OnCloseHandler;
-import agregador.controller.OnConnectHandler;
-import agregador.controller.OnMessageHandler;
-import agregador.domain.Agregador.AgregadorScheduler;
+import agregador.controller.*;
+import agregador.service.*;
 import agregador.repository.ConexionCargadorRepositorio;
-import agregador.service.HechosCargadorService;
-//import utils.Persistencia.*;
 import agregador.repository.*;
-import agregador.domain.PaqueteNormalizador.MockNormalizador;
-import agregador.domain.Agregador.Agregador;
-import agregador.service.ConexionCargadorService;
+import agregador.service.normalizacion.MockNormalizador;
 import io.javalin.Javalin;
-import utils.IniciadorApp;
-import utils.LecturaConfig;
+import agregador.utils.IniciadorApp;
+import agregador.utils.LecturaConfig;
 
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
@@ -29,20 +23,24 @@ public class Application {
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puertoAgregador, "/");
 
+        // Repositorios
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
-        SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio(hechoRepositorio);
-        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio(hechoRepositorio);
+        SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio();
+        SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
         FuenteRepositorio fuenteRepositorio = new FuenteRepositorio();
+        UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
         ConexionCargadorRepositorio  conexionCargadorRepositorio = new ConexionCargadorRepositorio();
 
-        MockNormalizador mockNormalizador = new MockNormalizador();
+        // Services
         ConexionCargadorService conexionCargadorService = new ConexionCargadorService(fuenteRepositorio, conexionCargadorRepositorio);
         HechosCargadorService hechosCargadorService = new HechosCargadorService(fuenteRepositorio, conexionCargadorRepositorio);
+        ServicioNormalizacion servNorm = new ServicioNormalizacion(new MockNormalizador());
+        MotorConsenso motorConsenso = new MotorConsenso(coleccionRepositorio);
+        GestorSolicitudes gestorSol = new GestorSolicitudes(solicitudEliminacionRepositorio, solicitudModificacionRepositorio, hechoRepositorio, usuarioRepositorio);
 
-        Agregador agregador = new Agregador(
-                hechoRepositorio, coleccionRepositorio, solicitudEliminacionRepositorio,
-                solicitudModificacionRepositorio, fuenteRepositorio, mockNormalizador, conexionCargadorService, hechosCargadorService);
+        AgregadorOrquestador agregador = new AgregadorOrquestador(hechoRepositorio, coleccionRepositorio, fuenteRepositorio,
+                servNorm, motorConsenso, gestorSol, hechosCargadorService);
         AgregadorScheduler agregadorScheduler = new AgregadorScheduler(agregador);
 
 

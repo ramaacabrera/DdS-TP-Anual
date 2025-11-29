@@ -1,54 +1,58 @@
 package agregador.repository;
 
 import io.javalin.websocket.WsContext;
-
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class ConexionCargadorRepositorio {
 
-    private final ConcurrentMap<UUID, WsContext> fuentes = new ConcurrentHashMap<>();
-    private final ConcurrentMap<String, UUID> sessionToFuenteMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, UUID> sesionesFuentes = new ConcurrentHashMap<>();
 
-    public ConcurrentMap<String, UUID> obtenerFuentesIDs() {
-        return this.sessionToFuenteMap;
-    }
+    private final ConcurrentMap<UUID, WsContext> fuentesContextos = new ConcurrentHashMap<>();
 
     public void registrarFuentePorSession(String sessionId, UUID fuenteId, WsContext ctx) {
-        sessionToFuenteMap.put(sessionId, fuenteId);
-        fuentes.put(fuenteId, ctx);
+        sesionesFuentes.put(sessionId, fuenteId);
+        fuentesContextos.put(fuenteId, ctx);
     }
 
     public UUID borrarFuentePorSession(String sessionId) {
-        UUID fuenteId = sessionToFuenteMap.remove(sessionId);
-        fuentes.remove(fuenteId);
+        UUID fuenteId = sesionesFuentes.remove(sessionId);
+
+        if (fuenteId != null) {
+            fuentesContextos.remove(fuenteId);
+        } else {
+            System.out.println("⚠️ Aviso: Se intentó borrar una sesión que no estaba registrada: " + sessionId);
+        }
+
         return fuenteId;
     }
 
     public Boolean borrarFuente(UUID idFuente) {
-        try{
-            // Remover de ambas estructuras
-            fuentes.remove(idFuente);
+        if (idFuente == null) return false;
 
-            // Buscar y remover del mapa de sesiones
-            sessionToFuenteMap.entrySet().removeIf(entry -> entry.getValue().equals(idFuente));
+        WsContext ctx = fuentesContextos.remove(idFuente);
+
+        if (ctx != null) {
+            sesionesFuentes.values().remove(idFuente);
             return true;
         }
-        catch(Exception e){
-            return false;
-        }
+        return false;
     }
 
     public UUID obtenerFuenteIdPorSession(String sessionId) {
-        return sessionToFuenteMap.get(sessionId);
+        return sesionesFuentes.get(sessionId);
+    }
+
+    public ConcurrentMap<String, UUID> obtenerFuentesIDs() {
+        return sesionesFuentes;
     }
 
     public ConcurrentMap<UUID, WsContext> obtenerFuentesCtxs() {
-        return this.fuentes;
+        return fuentesContextos;
     }
 
     public void agregarFuente(UUID idFuente, WsContext ctx) {
-        fuentes.put(idFuente, ctx);
+        fuentesContextos.put(idFuente, ctx);
     }
 }

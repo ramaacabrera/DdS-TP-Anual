@@ -1,6 +1,6 @@
 package agregador.service;
 
-import agregador.domain.DTO.ModelosMensajesDTO.IdCargadorPayload;
+import agregador.dto.ModelosMensajesDTO.IdCargadorPayload;
 import io.javalin.websocket.WsConnectContext;
 import org.jetbrains.annotations.NotNull;
 import agregador.repository.ConexionCargadorRepositorio;
@@ -8,7 +8,7 @@ import agregador.domain.fuente.Fuente;
 import agregador.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.websocket.WsContext;
-import agregador.domain.DTO.ModelosMensajesDTO.WsMessage;
+import agregador.dto.ModelosMensajesDTO.WsMessage;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
@@ -82,32 +82,28 @@ public class ConexionCargadorService {
     }
 
     public String nuevaConexion(String sessionId, Fuente nuevo, @NotNull WsConnectContext ctx) {
-
-        // ✅ Buscar o guardar fuente
-        Fuente fuentePersistida = fuenteRepositorio.buscarPorRuta(nuevo.getDescriptor());
-        if (fuentePersistida == null) {
-            System.out.println("➕ Guardando nueva fuente: " + nuevo.getDescriptor());
-            fuentePersistida = fuenteRepositorio.guardar(nuevo);
-        } else {
-            System.out.println("🔍 Fuente existente encontrada: " + fuentePersistida.getId());
-        }
-
-        // ✅ Registrar fuente con sessionId (usando el nuevo método)
-        this.registrarFuentePorSession(sessionId, fuentePersistida.getId(), ctx);
-
-        // ✅ Enviar ID al cliente
-        WsMessage<IdCargadorPayload> mensaje = new WsMessage<>("idCargador", new IdCargadorPayload(fuentePersistida.getId()));
-
         try {
+            Fuente fuentePersistida = fuenteRepositorio.buscarPorDescriptor(nuevo.getDescriptor());
+
+            if (fuentePersistida == null) {
+                System.out.println("➕ Guardando nueva fuente: " + nuevo.getDescriptor());
+                fuentePersistida = fuenteRepositorio.guardar(nuevo);
+            } else {
+                System.out.println("🔍 Fuente existente encontrada: " + fuentePersistida.getId());
+            }
+
+            this.registrarFuentePorSession(sessionId, fuentePersistida.getId(), ctx);
+
+            WsMessage<IdCargadorPayload> mensaje = new WsMessage<>("idCargador", new IdCargadorPayload(fuentePersistida.getId()));
             String message = mapper.writeValueAsString(mensaje);
-            System.out.println("🎯 Conexión establecida exitosamente - " +
-                    "Fuente: " + fuentePersistida.getId() + " - " +
-                    "Session: " + sessionId);
-            return (message);
-        }
-        catch (Exception e){
-            System.out.println("Error al guardar fuente: " + nuevo.getDescriptor());
-            return null;
+
+            System.out.println("🎯 Conexión establecida exitosamente - Session: " + sessionId);
+            return message;
+
+        } catch (Exception e) {
+            System.err.println("🔥 ERROR GRAVE EN NUEVA CONEXIÓN 🔥");
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
