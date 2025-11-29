@@ -2,26 +2,41 @@ package web.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import web.domain.hechosycolecciones.Hecho;
+import web.dto.HechoDTO;
+import web.dto.PageDTO;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class HechoService {
 
-    private ObjectMapper mapper = new ObjectMapper();
     private final String urlPublica;
+    private final OkHttpClient client;
+    private final ObjectMapper mapper;
 
 
-    public  HechoService(String urlPublica) {
+    public HechoService(String urlPublica) {
         this.urlPublica = urlPublica;
+        this.client = new OkHttpClient();
+        this.mapper = new ObjectMapper();
     }
 
     public Hecho obtenerHechoPorId(String hechoIdString) {
-        try{
+        try {
             HttpClient httpClient = HttpClient.newHttpClient();
 
             URI uri = null;
@@ -37,13 +52,90 @@ public class HechoService {
                     .build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            return mapper.readValue(response.body(), new TypeReference<>() {});
+            return mapper.readValue(response.body(), new TypeReference<>() {
+            });
 
-        }catch(Exception e){
+        } catch (Exception e) {
             System.err.println("Error al obtener el hecho" + e.getMessage());
             return null;
         }
+    }
 
+    public PageDTO<HechoDTO> buscarHechos(Map<String, String> filtros, int page, int size) throws IOException {
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(urlPublica + "/hechos").newBuilder()
+                .addQueryParameter("pagina", String.valueOf(page))
+                .addQueryParameter("limite", String.valueOf(size));
+
+        // Aplicar filtros dinámicos
+        filtros.forEach((key, value) -> {
+            if (value != null && !value.isBlank()) {
+                // Normalizamos fechas antes de enviar si la clave corresponde a una fecha
+                if (key.startsWith("fecha_")) {
+                    urlBuilder.addQueryParameter(key, normalizarFecha(value));
+                } else {
+                    urlBuilder.addQueryParameter(key, value);
+                }
+            }
+        });
+
+        String finalUrl = urlBuilder.build().toString();
+        System.out.println("📡 Consultando backend: " + finalUrl);
+
+        Request request = new Request.Builder().url(finalUrl).get().build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Error backend: " + response.code());
+            }
+            String body = Objects.requireNonNull(response.body()).string();
+            return mapper.readValue(body, new TypeReference<PageDTO<HechoDTO>>() {});
+        }
+    }
+
+    public List<String> obtenerCategorias() {
+        HttpUrl url = HttpUrl.parse(urlPublica + "/categoria");
+        if (url == null) return new ArrayList<>();
+
+        Request request = new Request.Builder().url(url).get().build();
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), new TypeReference<List<String>>() {});
+            }
+        } catch (IOException e) {
+            System.err.println("Error obteniendo categorías: " + e.getMessage());
+        }
+        return new ArrayList<>();
+    }
+
+
+    public String normalizarFecha(String raw) {
+        if (raw == null || raw.isBlank()) return raw;
+        try {
+            if (raw.matches("\\d{2}/\\d{2}/\\d{4}")) return raw;
+
+            if (raw.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat out = new SimpleDateFormat("dd/MM/yyyy");
+                return out.format(in.parse(raw));
+            }
+            return raw;
+        } catch (Exception e) {
+            return raw;
+        }
+    }
+
+    public String formatearFechaParaInput(String rawDate) {
+        if (rawDate == null || rawDate.isBlank()) return "";
+        try {
+            if (rawDate.matches("\\d{2}/\\d{2}/\\d{4}")) {
+                SimpleDateFormat in = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat out = new SimpleDateFormat("yyyy-MM-dd");
+                return out.format(in.parse(rawDate));
+            }
+            return rawDate;
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     public PageDTO<HechoDTO> obtenerHechos(Map<String, Object> queryParams) {

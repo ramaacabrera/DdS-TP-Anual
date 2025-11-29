@@ -23,7 +23,6 @@ public class GetHechoEspecificoHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        // 1. Obtener el ID del hecho de la URL (ruta: /hechos/{id})
         String hechoIdString = ctx.pathParam("id");
 
         if (hechoIdString == null || hechoIdString.trim().isEmpty()) {
@@ -31,10 +30,8 @@ public class GetHechoEspecificoHandler implements Handler {
             return;
         }
 
-        // 2. Buscar la entidad Hecho en la base de datos
         Hecho hecho = hechoService.obtenerHechoPorId(hechoIdString);
 
-        //  Crear el modelo de datos para FreeMarker
         Map<String, Object> modelo = TemplateUtil.model("hecho", hecho);
 
         if(!ctx.sessionAttributeMap().isEmpty()){
@@ -45,8 +42,6 @@ public class GetHechoEspecificoHandler implements Handler {
             modelo.put("access_token", access_token);
         }
 
-
-        //  Renderizar la plantilla (SSR)
         ctx.render("hecho-especifico.ftl", modelo);
     }
 }

@@ -93,8 +93,4 @@ public class GetEstadisticasHandler implements Handler {
             return false;
         }
     }
-
-    private String encodeURL(String text) {
-        return java.net.URLEncoder.encode(text, java.nio.charset.StandardCharsets.UTF_8);
-    }
 }
