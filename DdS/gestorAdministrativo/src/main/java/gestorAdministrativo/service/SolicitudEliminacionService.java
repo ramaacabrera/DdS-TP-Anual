@@ -1,9 +1,9 @@
 // gestorAdministrativo/service/SolicitudEliminacionService.java
 package gestorAdministrativo.service;
 
-import DominioGestorAdministrativo.DTO.Hechos.UsuarioDTO;
-import DominioGestorAdministrativo.DTO.Solicitudes.SolicitudDeEliminacionDTO;
-import DominioGestorAdministrativo.DTO.Solicitudes.SolicitudDTO;
+import gestorAdministrativo.DTO.Hechos.UsuarioDTO;
+import gestorAdministrativo.DTO.Solicitudes.SolicitudDeEliminacionDTO;
+import gestorAdministrativo.DTO.Solicitudes.SolicitudDTO;
 import DominioGestorAdministrativo.HechosYColecciones.Hecho;
 import DominioGestorAdministrativo.Usuario.Usuario;
 import gestorAdministrativo.repository.HechoRepositorio;

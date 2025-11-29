@@ -1,15 +1,16 @@
 package gestorAdministrativo.service;
 
 import DominioGestorAdministrativo.Criterios.*;
-import DominioGestorAdministrativo.DTO.Coleccion.ColeccionDTO;
-import DominioGestorAdministrativo.DTO.Coleccion.TipoAlgoritmoConsensoDTO;
-import DominioGestorAdministrativo.DTO.Criterios.*;
-import DominioGestorAdministrativo.DTO.Hechos.EtiquetaDTO;
-import DominioGestorAdministrativo.DTO.Hechos.FuenteDTO;
-import DominioGestorAdministrativo.DTO.Hechos.UbicacionDTO;
+import gestorAdministrativo.DTO.Coleccion.ColeccionDTO;
+import gestorAdministrativo.DTO.Coleccion.TipoAlgoritmoConsensoDTO;
+import gestorAdministrativo.DTO.Criterios.*;
+import gestorAdministrativo.DTO.Hechos.EtiquetaDTO;
+import gestorAdministrativo.DTO.Hechos.FuenteDTO;
+import gestorAdministrativo.DTO.Hechos.UbicacionDTO;
 import DominioGestorAdministrativo.HechosYColecciones.*;
 import DominioGestorAdministrativo.fuente.Fuente;
 import DominioGestorAdministrativo.fuente.TipoDeFuente;
+import gestorAdministrativo.DTO.Hechos.TipoContenidoMultimediaDTO;
 import gestorAdministrativo.repository.ColeccionRepositorio;
 import gestorAdministrativo.repository.HechoRepositorio;
 
@@ -341,27 +342,27 @@ public class ColeccionService {
         return dto;
     }
 
-    private DominioGestorAdministrativo.Criterios.TipoDeTexto convertirTipoTextoEnum(DominioGestorAdministrativo.DTO.Criterios.TipoDeTextoDTO dtoEnum) {
+    private DominioGestorAdministrativo.Criterios.TipoDeTexto convertirTipoTextoEnum(TipoDeTextoDTO dtoEnum) {
         return dtoEnum != null ? DominioGestorAdministrativo.Criterios.TipoDeTexto.valueOf(dtoEnum.name()) : null;
     }
-    private DominioGestorAdministrativo.DTO.Criterios.TipoDeTextoDTO convertirTipoTextoDTO(DominioGestorAdministrativo.Criterios.TipoDeTexto domainEnum) {
-        return domainEnum != null ? DominioGestorAdministrativo.DTO.Criterios.TipoDeTextoDTO.valueOf(domainEnum.name()) : null;
+    private TipoDeTextoDTO convertirTipoTextoDTO(DominioGestorAdministrativo.Criterios.TipoDeTexto domainEnum) {
+        return domainEnum != null ? TipoDeTextoDTO.valueOf(domainEnum.name()) : null;
     }
 
-    private DominioGestorAdministrativo.fuente.TipoDeFuente convertirTipoFuenteEnum(DominioGestorAdministrativo.DTO.Criterios.TipoDeFuenteDTO dtoEnum) {
+    private DominioGestorAdministrativo.fuente.TipoDeFuente convertirTipoFuenteEnum(TipoDeFuenteDTO dtoEnum) {
         return dtoEnum != null ? DominioGestorAdministrativo.fuente.TipoDeFuente.valueOf(dtoEnum.name()) : null;
     }
-    private DominioGestorAdministrativo.DTO.Criterios.TipoDeFuenteDTO convertirTipoFuenteDTO(DominioGestorAdministrativo.fuente.TipoDeFuente domainEnum) {
-        return domainEnum != null ? DominioGestorAdministrativo.DTO.Criterios.TipoDeFuenteDTO.valueOf(domainEnum.name()) : null;
+    private TipoDeFuenteDTO convertirTipoFuenteDTO(DominioGestorAdministrativo.fuente.TipoDeFuente domainEnum) {
+        return domainEnum != null ? TipoDeFuenteDTO.valueOf(domainEnum.name()) : null;
     }
 
-    private DominioGestorAdministrativo.HechosYColecciones.TipoContenidoMultimedia convertirTipoMultimediaEnum(DominioGestorAdministrativo.DTO.Hechos.TipoContenidoMultimediaDTO dtoEnum) {
+    private DominioGestorAdministrativo.HechosYColecciones.TipoContenidoMultimedia convertirTipoMultimediaEnum(TipoContenidoMultimediaDTO dtoEnum) {
         return dtoEnum != null ? DominioGestorAdministrativo.HechosYColecciones.TipoContenidoMultimedia.valueOf(dtoEnum.name()) : null;
     }
-    private DominioGestorAdministrativo.DTO.Hechos.TipoContenidoMultimediaDTO convertirTipoMultimediaDTO(DominioGestorAdministrativo.HechosYColecciones.TipoContenidoMultimedia domainEnum) {
-        return domainEnum != null ? DominioGestorAdministrativo.DTO.Hechos.TipoContenidoMultimediaDTO.valueOf(domainEnum.name()) : null;
+    private TipoContenidoMultimediaDTO convertirTipoMultimediaDTO(DominioGestorAdministrativo.HechosYColecciones.TipoContenidoMultimedia domainEnum) {
+        return domainEnum != null ? TipoContenidoMultimediaDTO.valueOf(domainEnum.name()) : null;
     }
-    private DominioGestorAdministrativo.HechosYColecciones.TipoAlgoritmoConsenso convertirAlgoritmo(DominioGestorAdministrativo.DTO.Coleccion.TipoAlgoritmoConsensoDTO dtoEnum) {
+    private DominioGestorAdministrativo.HechosYColecciones.TipoAlgoritmoConsenso convertirAlgoritmo(TipoAlgoritmoConsensoDTO dtoEnum) {
         if (dtoEnum == null) return null;
         return DominioGestorAdministrativo.HechosYColecciones.TipoAlgoritmoConsenso.valueOf(dtoEnum.name());
     }

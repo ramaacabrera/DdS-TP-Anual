@@ -1,7 +1,7 @@
 package gestorAdministrativo.controller;
 
-import DominioGestorAdministrativo.DTO.Coleccion.ColeccionDTO;
-import DominioGestorAdministrativo.DTO.Hechos.FuenteDTO;
+import gestorAdministrativo.DTO.Coleccion.ColeccionDTO;
+import gestorAdministrativo.DTO.Hechos.FuenteDTO;
 import DominioGestorAdministrativo.HechosYColecciones.TipoAlgoritmoConsenso;
 import DominioGestorAdministrativo.fuente.Fuente;
 import DominioGestorAdministrativo.fuente.TipoDeFuente;

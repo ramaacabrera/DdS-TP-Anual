@@ -34,7 +34,7 @@ public class ColeccionRepositorio {
         try {
             String jpql = "SELECT DISTINCT c FROM Coleccion c " +
                     "LEFT JOIN FETCH c.hechos " +
-                    "LEFT JOIN FETCH c.fuente " +
+                    "LEFT JOIN FETCH c.fuentes " +
                     "LEFT JOIN FETCH c.criteriosDePertenencia";
 
             TypedQuery<Coleccion> query = em.createQuery(jpql, Coleccion.class);
@@ -49,7 +49,7 @@ public class ColeccionRepositorio {
         try {
             String jpql = "SELECT DISTINCT c FROM Coleccion c " +
                     "LEFT JOIN FETCH c.hechos " +
-                    "LEFT JOIN FETCH c.fuente " +
+                    "LEFT JOIN FETCH c.fuentes " +
                     "WHERE c.handle = :handle";
 
             return em.createQuery(jpql, Coleccion.class)

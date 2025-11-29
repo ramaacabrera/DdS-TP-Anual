@@ -1,11 +1,9 @@
 package DominioGestorAdministrativo.HechosYColecciones;
 
-import DominioGestorAdministrativo.DTO.Solicitudes.HechoModificadoDTO;
 import DominioGestorAdministrativo.Usuario.Usuario;
 import DominioGestorAdministrativo.fuente.Fuente;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import DominioGestorAdministrativo.DTO.Solicitudes.HechoModificadoDTO;
 
 import javax.persistence.*;
 import java.util.Date;

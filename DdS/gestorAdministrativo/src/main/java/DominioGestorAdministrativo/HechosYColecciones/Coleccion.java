@@ -6,7 +6,6 @@ import DominioGestorAdministrativo.Consenso.MayoriaSimple;
 import DominioGestorAdministrativo.Consenso.MultiplesMenciones;
 import DominioGestorAdministrativo.Criterios.Criterio;
 import DominioGestorAdministrativo.fuente.Fuente;
-import DominioGestorAdministrativo.DTO.Coleccion.ColeccionDTO;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 

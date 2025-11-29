@@ -1,6 +1,9 @@
 package DominioGestorPublico.HechosYColecciones;
 
-import DominioGestorPublico.DTO.HechoDTO;
+import DominioGestorPublico.HechosYColecciones.ContenidoMultimedia;
+import DominioGestorPublico.HechosYColecciones.EstadoHecho;
+import DominioGestorPublico.HechosYColecciones.Etiqueta;
+import DominioGestorPublico.HechosYColecciones.Ubicacion;
 import DominioGestorPublico.Usuario.Usuario;
 import DominioGestorPublico.fuente.Fuente;
 import org.hibernate.annotations.GenericGenerator;
@@ -80,7 +83,7 @@ public class Hecho {
         //this.hecho_id = -1;
     }
 
-    public Hecho(HechoDTO hechoDTO){
+    /*public Hecho(HechoDTO hechoDTO){
         this.titulo = hechoDTO.getTitulo();
         this.descripcion = hechoDTO.getDescripcion();
         this.categoria = hechoDTO.getCategoria();
@@ -94,7 +97,7 @@ public class Hecho {
         this.esEditable = hechoDTO.getEsEditable();
         this.contenidoMultimedia = hechoDTO.getContenidoMultimedia();
         //this.hecho_id = 0;
-    }
+    }*/
 
     // Getters
     public String getTitulo() {
@@ -138,6 +141,8 @@ public class Hecho {
     public List<Etiqueta> getEtiquetas() {
         return etiquetas;
     }
+
+    public boolean getEsEditable() {return esEditable;}
 
     // Setters
 

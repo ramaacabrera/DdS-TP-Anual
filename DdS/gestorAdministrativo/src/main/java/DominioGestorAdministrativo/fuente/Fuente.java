@@ -2,7 +2,7 @@ package DominioGestorAdministrativo.fuente;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import DominioGestorAdministrativo.DTO.Hechos.FuenteDTO;
+import gestorAdministrativo.DTO.Hechos.FuenteDTO;
 
 import javax.persistence.*;
 import java.util.Objects;

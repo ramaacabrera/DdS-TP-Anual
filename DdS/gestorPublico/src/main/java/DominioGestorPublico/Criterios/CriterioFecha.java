@@ -1,5 +1,6 @@
 package DominioGestorPublico.Criterios;
 
+import DominioGestorPublico.Criterios.Criterio;
 import DominioGestorPublico.HechosYColecciones.Hecho;
 
 import javax.persistence.Entity;

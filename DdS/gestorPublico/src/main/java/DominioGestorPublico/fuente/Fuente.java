@@ -1,6 +1,6 @@
 package DominioGestorPublico.fuente;
 
-import DominioGestorPublico.DTO.FuenteDTO;
+import gestorPublico.DTO.Hechos.FuenteDTO;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -35,8 +35,8 @@ public class Fuente {
     }
 
     public Fuente(FuenteDTO fuenteDTO) {
-        this.tipoDeFuente = fuenteDTO.getTipoDeFuente();
-        this.descriptor = fuenteDTO.getRuta();
+        this.tipoDeFuente = TipoDeFuente.valueOf(fuenteDTO.getTipoFuente());
+        this.descriptor = fuenteDTO.getDescriptor();
 
     }
 

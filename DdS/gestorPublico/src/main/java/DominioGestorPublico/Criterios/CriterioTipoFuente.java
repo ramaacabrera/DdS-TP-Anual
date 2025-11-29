@@ -1,5 +1,6 @@
 package DominioGestorPublico.Criterios;
 
+import DominioGestorPublico.Criterios.Criterio;
 import DominioGestorPublico.HechosYColecciones.Hecho;
 import DominioGestorPublico.fuente.TipoDeFuente;
 
@@ -7,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Transient;
+import java.util.HashMap;
 import java.util.Map;
 
 @Entity
@@ -16,24 +18,29 @@ public class CriterioTipoFuente extends Criterio {
     private TipoDeFuente fuente;
 
     public CriterioTipoFuente() {}
-
     public CriterioTipoFuente(TipoDeFuente fuente) { this.fuente = fuente;}
 
     @Override
-    public boolean cumpleConCriterio(Hecho hecho) { return hecho.getFuente().equals(fuente);}
+    public boolean cumpleConCriterio(Hecho hecho) {
+        if (hecho.getFuente() == null || this.fuente == null) return false;
+        return hecho.getFuente().getTipoDeFuente().equals(fuente);
+    }
 
     public TipoDeFuente getFuente() { return fuente; }
-
     public void setFuente(TipoDeFuente fuente) {this.fuente = fuente;}
 
     @Override
     public String getQueryCondition() {
-        return "h.agregador.fuente = '" + fuente.toString() + "'";
+        return "h.fuente.tipoDeFuente = :tipoFuenteParam";
     }
 
     @Override
     @Transient
     public Map<String, Object> getQueryParameters() {
-        return Map.of();
+        Map<String, Object> params = new HashMap<>();
+        if (fuente != null) {
+            params.put("tipoFuenteParam", fuente);
+        }
+        return params;
     }
 }

@@ -1,9 +1,8 @@
 package gestorAdministrativo.service;
 
-import DominioGestorAdministrativo.DTO.Solicitudes.SolicitudDeModificacionDTO;
-import DominioGestorAdministrativo.DTO.Solicitudes.HechoModificadoDTO;
-import DominioGestorAdministrativo.DTO.Hechos.UsuarioDTO;
-import DominioGestorAdministrativo.DTO.Solicitudes.EstadoSolicitudModificacionDTO;
+import gestorAdministrativo.DTO.Solicitudes.SolicitudDeModificacionDTO;
+import gestorAdministrativo.DTO.Solicitudes.HechoModificadoDTO;
+import gestorAdministrativo.DTO.Solicitudes.EstadoSolicitudModificacionDTO;
 import DominioGestorAdministrativo.Solicitudes.EstadoSolicitudModificacion;
 import DominioGestorAdministrativo.Solicitudes.SolicitudDeModificacion;
 import DominioGestorAdministrativo.HechosYColecciones.Hecho;

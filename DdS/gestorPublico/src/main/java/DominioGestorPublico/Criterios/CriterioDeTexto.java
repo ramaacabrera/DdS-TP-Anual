@@ -1,5 +1,7 @@
 package DominioGestorPublico.Criterios;
 
+import DominioGestorPublico.Criterios.Criterio;
+import DominioGestorPublico.Criterios.TipoDeTexto;
 import DominioGestorPublico.HechosYColecciones.Hecho;
 
 import javax.persistence.ElementCollection;

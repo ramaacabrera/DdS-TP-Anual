@@ -1,6 +1,7 @@
 package DominioGestorPublico.Usuario;
 
 import DominioGestorPublico.HechosYColecciones.Hecho;
+import DominioGestorPublico.Usuario.RolUsuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;

@@ -4,7 +4,6 @@ import DominioGestorAdministrativo.Usuario.Usuario;
 import DominioGestorAdministrativo.fuente.Fuente;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import DominioGestorAdministrativo.DTO.Hechos.HechoDTO;
 
 import javax.persistence.*;
 import java.util.Date;

@@ -1,10 +1,14 @@
 package gestorPublico;
 
+import gestorPublico.service.ColeccionService;
+import gestorPublico.service.HechoService;
+import gestorPublico.service.SolicitudService;
+import gestorPublico.service.UsuarioService;
 import io.javalin.Javalin;
 import gestorPublico.controller.*;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
-import utils.Persistencia.*;
+import gestorPublico.repository.*;
 
 import java.util.Properties;
 
@@ -18,29 +22,43 @@ public class Application {
         String urlWeb = config.getProperty("urlWeb");
         String servidorSSO = config.getProperty("urlServidorSSO");
 
-        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("agregador-PU");
-        //EntityManager em = emf.createEntityManager();
-
-        IniciadorApp iniciador = new IniciadorApp();
-        Javalin app = iniciador.iniciarApp(puerto, "/");
-
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
         UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 
-        app.get("/api/hechos", new GetHechosHandler(hechoRepositorio));
-        app.get("/api/hechos/{id}", new GetHechoEspecificoHandler(hechoRepositorio));
-        app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(coleccionRepositorio));
-        app.get("/api/colecciones", new GetColeccionesHandler(coleccionRepositorio));
-        app.get("/api/colecciones/{id}", new GetColeccionHandler(coleccionRepositorio));
-        app.get("/api/categoria", new GetCategoriaHandler(hechoRepositorio));
-        app.post("/api/hechos", new PostHechoHandler(puertoDinamica));
-        app.post("/api/solicitudEliminacion", new PostSolicitudEliminacionHandler(puertoDinamica));
-        app.post("/api/solicitudModificacion", new PostSolicitudModificacionHandler(puertoDinamica));
+        // Service
+        HechoService hechoService = new HechoService(hechoRepositorio, puertoDinamica);
+        ColeccionService coleccionService = new ColeccionService(coleccionRepositorio);
+        SolicitudService solicitudService = new SolicitudService(puertoDinamica);
+        UsuarioService usuarioService = new UsuarioService(usuarioRepositorio, servidorSSO);
 
-        app.post("/api/login", new PostLoginHandler(usuarioRepositorio, urlWeb, servidorSSO));
-        app.post("/api/sign-in", new PostSignInHandler(usuarioRepositorio, urlWeb));
+        // Controller
+        HechoController hechoController = new HechoController(hechoService);
+        ColeccionController coleccionController = new ColeccionController(coleccionService);
+        SolicitudController solicitudController = new SolicitudController(solicitudService);
+        UsuarioController usuarioController = new UsuarioController(usuarioService);
 
-        app.get("/api/usuario/{username}",new GetUsuarioHandler(usuarioRepositorio));
+        IniciadorApp iniciador = new IniciadorApp();
+        Javalin app = iniciador.iniciarApp(puerto, "/");
+
+        // Rutas Hechos
+        app.get("/api/hechos", hechoController.obtenerHechos);
+        app.get("/api/hechos/{id}", hechoController.obtenerHechoPorId);
+        app.post("/api/hechos", hechoController.crearHecho);
+        app.get("/api/categoria", hechoController.buscarCategorias);
+
+        // Rutas Colecciones
+        app.get("/api/colecciones", coleccionController.obtenerColecciones);
+        app.get("/api/colecciones/{id}", coleccionController.obtenerColeccionPorId);
+        app.get("/api/colecciones/{id}/hechos", coleccionController.obtenerHechosDeColeccion);
+
+        // Rutas Solicitudes
+        app.post("/api/solicitudEliminacion", solicitudController.crearSolicitudEliminacion);
+        app.post("/api/solicitudModificacion", solicitudController.crearSolicitudModificacion);
+
+        // Rutas de Usuario / Auth
+        app.post("/api/login", usuarioController.login);
+        app.post("/api/sign-in", usuarioController.registrar);
+        app.get("/api/usuario/{username}", usuarioController.obtenerUsuario);
     }
 }

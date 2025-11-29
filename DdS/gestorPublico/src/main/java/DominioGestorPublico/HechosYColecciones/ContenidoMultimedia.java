@@ -1,5 +1,6 @@
 package DominioGestorPublico.HechosYColecciones;
 
+import DominioGestorPublico.HechosYColecciones.TipoContenidoMultimedia;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
