@@ -7,6 +7,8 @@ import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 import web.domain.normalizador.DesnormalizadorCategorias;
 import web.domain.normalizador.NormalizadorCategorias;
+import web.service.CategoriasService;
+import web.service.EstadisticasService;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -17,16 +19,12 @@ import java.util.*;
 
 public class GetEstadisticasHandler implements Handler {
 
-    private final HttpClient httpClient;
-    private final ObjectMapper mapper;
-    private final int puertoEstadisticas;
-    private final String baseUrl;
+    private final EstadisticasService estadisticasService;
+    private final CategoriasService categoriasService;
 
-    public GetEstadisticasHandler(String puertoEstadisticas) {
-        this.httpClient = HttpClient.newHttpClient();
-        this.mapper = new ObjectMapper();
-        this.puertoEstadisticas = Integer.parseInt(puertoEstadisticas);
-        this.baseUrl = "http://localhost:"+ puertoEstadisticas;
+    public GetEstadisticasHandler(EstadisticasService estadisticasService, CategoriasService categoriasService) {
+        this.estadisticasService = estadisticasService;
+        this.categoriasService = categoriasService;
     }
 
     @Override
@@ -35,30 +33,24 @@ public class GetEstadisticasHandler implements Handler {
             String uuidColeccion = ctx.queryParam("uuid");
 
             // Obtener estadísticas generales
-            Map<String, Object> statsGenerales = hacerConsulta("/api/estadisticas/categoriaMax");
-            Map<String, Object> statsUsuarios = hacerConsulta("/api/estadisticas/solicitudesSpam");
+            Map<String, Object> statsGenerales = estadisticasService.obtenerEstadisticasGenerales(); //hacerConsulta("/api/estadisticas/categoriaMax");
+            Map<String, Object> statsUsuarios = estadisticasService.obtenerEstadisticasUsuarios(); // hacerConsulta("/api/estadisticas/solicitudesSpam");
 
-            List<String> categoriasTotales = this.obtenerTodasLasCategorias();
-
-            //categoriasTotales.forEach(System.out::println);
+            List<String> categoriasTotales = categoriasService.obtenerCategorias();
 
             // Procesar categorías en paralelo
-            List<Map<String, Object>> statsCategoria = procesarCategorias(categoriasTotales);
+            List<Map<String, Object>> statsCategoria = categoriasService.procesarCategorias(categoriasTotales);
 
             Map<String, Object> modelo = new HashMap<>();
-            modelo.put("categoriaMax", obtenerValorConFallback(statsGenerales,
-                    Arrays.asList("categoria", "estadisticas_categoria_max_hechos"), "N/A"));
-            modelo.put("solicitudesSpam", obtenerValorConFallback(statsUsuarios,
-                    Arrays.asList("spam", "spamCount", "estadisticas_spam"), 0));
+            modelo.put("categoriaMax", obtenerValorConFallback(statsGenerales, Arrays.asList("categoria", "estadisticas_categoria_max_hechos"), "N/A"));
+            modelo.put("solicitudesSpam", obtenerValorConFallback(statsUsuarios, Arrays.asList("spam", "spamCount", "estadisticas_spam"), 0));
             modelo.put("categorias", statsCategoria);
-            modelo.put("baseUrl", baseUrl);
             modelo.put("totalCategorias", categoriasTotales.size());
 
             if (uuidColeccion != null && !uuidColeccion.trim().isEmpty() && esUUIDValido(uuidColeccion)) {
                 try {
-                    Map<String, Object> statsColeccion = hacerConsulta(
-                            "/api/estadisticas/provinciaMax/colecciones/" + uuidColeccion.trim()
-                    );
+                    Map<String, Object> statsColeccion = estadisticasService.obtenerEstadisticasColeccion(uuidColeccion);
+
                     modelo.put("uuidColeccion", uuidColeccion.trim());
                     modelo.put("statsColeccion", statsColeccion);
                     if (statsColeccion.containsKey("nombre")) {
@@ -88,105 +80,6 @@ public class GetEstadisticasHandler implements Handler {
                     "detalle", e.getMessage()
             ));
         }
-    }
-
-    private List<String> obtenerTodasLasCategorias(){
-        try {
-            URI uri = new URI(baseUrl + "/api/estadisticas/categorias");
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(uri)
-                    .GET()
-                    .timeout(java.time.Duration.ofSeconds(10))
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() != 200) {
-                throw new RuntimeException("HTTP " + response.statusCode() + " para /api/estadisticas/categorias");
-            }
-
-            Map<String, Object> respuesta = mapper.readValue(response.body(), new TypeReference<Map<String, Object>>() {});
-
-            if (respuesta.containsKey("categorias")) {
-                @SuppressWarnings("unchecked")
-                List<String> categorias = (List<String>) respuesta.get("categorias");
-                return categorias;
-            } else {
-                throw new RuntimeException("Formato de respuesta inesperado para categorías");
-            }
-
-        } catch (Exception e) {
-            System.err.println("Error obteniendo categorías: " + e.getMessage());
-            System.out.println("Usando categorías por defecto como fallback");
-            return Arrays.asList("Incendio", "Accidente", "Inundación");
-        }
-    }
-
-    private List<Map<String, Object>> procesarCategorias(List<String> categorias) {
-        List<Map<String, Object>> resultados = new ArrayList<>();
-
-        for (String categoria : categorias) {
-            try {
-                // NORMALIZAR la categoría antes de hacer las consultas
-                String categoriaNormalizada = NormalizadorCategorias.normalizar(categoria);
-
-                Map<String, Object> provincia = hacerConsulta(
-                        "/api/estadisticas/provinciaMax/categorias/" + encodeURL(categoriaNormalizada)
-                );
-                Map<String, Object> hora = hacerConsulta(
-                        "/api/estadisticas/horaMax/categorias/" + encodeURL(categoriaNormalizada)
-                );
-
-                Map<String, Object> categoriaData = new HashMap<>();
-                // Desnormalizar el nombre para mostrar
-                categoriaData.put("nombre", DesnormalizadorCategorias.desnormalizar(categoriaNormalizada));
-                categoriaData.put("provincia", obtenerValorConFallback(provincia,
-                        Arrays.asList("provincia", "estadisticasCategoria_provincia"), "N/A"));
-                categoriaData.put("hora", obtenerValorConFallback(hora,
-                        Arrays.asList("hora", "estadisticasCategoria_hora"), "N/A"));
-
-                resultados.add(categoriaData);
-            } catch (Exception e) {
-                System.err.println("❌ Error procesando categoría '" + categoria + "': " + e.getMessage());
-
-                Map<String, Object> categoriaData = new HashMap<>();
-                categoriaData.put("nombre", categoria); // Usar el original en caso de error
-                categoriaData.put("provincia", "Error");
-                categoriaData.put("hora", "Error");
-                categoriaData.put("error", e.getMessage());
-
-                resultados.add(categoriaData);
-            }
-        }
-        return resultados;
-    }
-
-    private Map<String, Object> hacerConsulta(String endpoint) throws Exception {
-        URI uri = new URI(baseUrl + endpoint);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri)
-                .GET()
-                .timeout(java.time.Duration.ofSeconds(10)) // Timeout para evitar bloqueos
-                .build();
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() != 200) {
-            throw new RuntimeException("HTTP " + response.statusCode() + " para " + endpoint);
-        }
-
-        return mapper.readValue(response.body(), new TypeReference<Map<String, Object>>() {});
-    }
-
-    private Object obtenerValorConFallback(Map<String, Object> map, List<String> keys, Object defaultValue) {
-        for (String key : keys) {
-            if (map.containsKey(key)) {
-                return map.get(key);
-            }
-        }
-        return defaultValue;
     }
 
     private boolean esUUIDValido(String uuid) {

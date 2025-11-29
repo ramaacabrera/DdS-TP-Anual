@@ -10,6 +10,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import web.dto.HechoDTO;
 import web.dto.PageDTO;
+import web.service.HechoService;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -17,14 +18,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class GetHechosHandler implements Handler {
-
-    private final String urlPublica;
-    private final OkHttpClient client = new OkHttpClient();
-    private final ObjectMapper mapper = new ObjectMapper();
     private final SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+    private final HechoService hechoService;
 
-    public GetHechosHandler(String url) {
-        this.urlPublica = url;
+    public GetHechosHandler(HechoService hechoService) {
+        this.hechoService = hechoService;
     }
 
     @Override
@@ -42,64 +40,28 @@ public class GetHechosHandler implements Handler {
                 ))
                 .collect(Collectors.toList());
 
-        // 2) Leer filtros y paginación desde la query
         String categoria = ctx.queryParam("categoria");
-        String fechaCargaDesde = ctx.queryParam("fecha_carga_desde");
-        String fechaCargaHasta = ctx.queryParam("fecha_carga_hasta");
-        String fechaAcontecimientoDesde = ctx.queryParam("fecha_acontecimiento_desde");
-        String fechaAcontecimientoHasta = ctx.queryParam("fecha_acontecimiento_hasta");
+        String textoBusqueda = ctx.queryParam("textoBusqueda");
+        String fechaCargaDesde = ctx.queryParam("fechaCargaDesde");
+        String fechaCargaHasta = ctx.queryParam("fechaCargaHasta");
+        String fechaAcontecimientoDesde = ctx.queryParam("fechaAcontecimientoDesde");
+        String fechaAcontecimientoHasta = ctx.queryParam("fechaAcontecimientoHasta");
         String latitud = ctx.queryParam("latitud");
         String longitud = ctx.queryParam("longitud");
-        String textoBusqueda = ctx.queryParam("textoBusqueda");
 
-        int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
-        int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("categoria", categoria);
+        queryParams.put("fecha_carga_desde", fechaCargaDesde);
+        queryParams.put("fecha_carga_hasta", fechaCargaHasta);
+        queryParams.put("fecha_acontecimiento_desde", fechaAcontecimientoDesde);
+        queryParams.put("fecha_acontecimiento_hasta", fechaAcontecimientoHasta);
+        queryParams.put("latitud", latitud);
+        queryParams.put("longitud", longitud);
+        queryParams.put("textoBusqueda", textoBusqueda);
+        queryParams.put("page", Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1)));
+        queryParams.put("size",Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10)));
 
-        // 3) Construir URL del backend con los nombres EXACTOS que recibe + paginación
-        HttpUrl.Builder b = HttpUrl.parse(urlPublica + "/hechos").newBuilder()
-                .addQueryParameter("pagina", String.valueOf(page))
-                .addQueryParameter("limite", String.valueOf(size));
-
-        // Agregar búsqueda general si existe
-        if (textoBusqueda != null && !textoBusqueda.isBlank()) {
-            b.addQueryParameter("textoBusqueda", textoBusqueda);
-        }
-
-        if (categoria != null && !categoria.isBlank())
-            b.addQueryParameter("categoria", categoria);
-
-        if (fechaCargaDesde != null && !fechaCargaDesde.isBlank())
-            b.addQueryParameter("fecha_carga_desde", normalizarFecha(fechaCargaDesde));
-        if (fechaCargaHasta != null && !fechaCargaHasta.isBlank())
-            b.addQueryParameter("fecha_carga_hasta", normalizarFecha(fechaCargaHasta));
-
-        if (fechaAcontecimientoDesde != null && !fechaAcontecimientoDesde.isBlank())
-            b.addQueryParameter("fecha_acontecimiento_desde", normalizarFecha(fechaAcontecimientoDesde));
-        if (fechaAcontecimientoHasta != null && !fechaAcontecimientoHasta.isBlank())
-            b.addQueryParameter("fecha_acontecimiento_hasta", normalizarFecha(fechaAcontecimientoHasta));
-
-        if (latitud != null && longitud != null && !latitud.isBlank() && !longitud.isBlank()) {
-            b.addQueryParameter("latitud", latitud);
-            b.addQueryParameter("longitud", longitud);
-        }
-
-        String finalUrl = b.build().toString();
-        System.out.println("📡 Consultando backend: " + finalUrl);
-
-        // 4) Ejecutar llamada HTTP al backend (espera PageDTO<HechoDTO>)
-        Request request = new Request.Builder().url(finalUrl).get().build();
-
-        PageDTO<HechoDTO> resp;
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new IOException("Error al llamar al backend: " + response.code() + " " + response.message());
-            }
-            String body = Objects.requireNonNull(response.body()).string();
-            resp = mapper.readValue(body, new TypeReference<PageDTO<HechoDTO>>() {});
-        }
-
-        String json = mapper.writeValueAsString(resp.content);
-        System.out.println("Lista en JSON:\n" + json);
+        PageDTO<HechoDTO> resp = hechoService.obtenerHechos(queryParams);
 
         // 5) Índices para “Mostrando X–Y”
         int fromIndex = (resp.page - 1) * resp.size;                // 0-based
@@ -110,7 +72,6 @@ public class GetHechosHandler implements Handler {
         model.put("baseHref", "/hechos");
         model.put("filters", filtersForTemplate); // ← Usar la versión convertida a Map
 
-// Agrega el parámetro de búsqueda general 'q' que falta
         model.put("filterValues", Map.of(
                 "textoBusqueda", textoBusqueda != null ? textoBusqueda : "",
                 "categoria", categoria != null ? categoria : "",
@@ -129,17 +90,6 @@ public class GetHechosHandler implements Handler {
         model.put("totalPages", resp.totalPages);
         model.put("fromIndex", fromIndex);
         model.put("toIndex", toIndex);
-
-//        Map<String, Object> model = new HashMap<>();
-//        //model.put("usuario", obtenerUsuarioSesion(ctx)); DEPENDE COMO MANEJEMOS LA SESION
-//        model.put("hechos", resp.content != null ? resp.content : Collections.emptyList());
-//        model.put("categorias", obtenerCategorias());
-//        model.put("fuentes", obtenerFuentes());
-//        model.put("colecciones", obtenerColecciones());
-//        model.put("paginaActual", 1);
-//        model.put("totalPaginas", 10);
-//        model.put("cargando", false);
-
 
         if(!ctx.sessionAttributeMap().isEmpty()){
             String username = ctx.sessionAttribute("username");
