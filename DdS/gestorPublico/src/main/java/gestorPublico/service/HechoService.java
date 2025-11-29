@@ -1,12 +1,12 @@
 package gestorPublico.service;
 
-import DominioGestorPublico.Criterios.*;
-import DominioGestorPublico.HechosYColecciones.Hecho;
-import DominioGestorPublico.HechosYColecciones.Ubicacion;
-import gestorPublico.DTO.FiltroHechosDTO;
+import gestorPublico.domain.Criterios.*;
+import gestorPublico.domain.HechosYColecciones.Hecho;
+import gestorPublico.domain.HechosYColecciones.Ubicacion;
+import gestorPublico.dto.FiltroHechosDTO;
 import gestorPublico.repository.HechoRepositorio;
-import gestorPublico.DTO.Hechos.HechoDTO;
-import gestorPublico.DTO.PageDTO;
+import gestorPublico.dto.Hechos.HechoDTO;
+import gestorPublico.dto.PageDTO;
 
 import java.net.URI;
 import java.net.http.HttpClient;

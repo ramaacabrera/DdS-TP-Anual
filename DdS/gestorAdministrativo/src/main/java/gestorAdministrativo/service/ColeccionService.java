@@ -1,16 +1,16 @@
 package gestorAdministrativo.service;
 
-import DominioGestorAdministrativo.Criterios.*;
-import gestorAdministrativo.DTO.Coleccion.ColeccionDTO;
-import gestorAdministrativo.DTO.Coleccion.TipoAlgoritmoConsensoDTO;
-import gestorAdministrativo.DTO.Criterios.*;
-import gestorAdministrativo.DTO.Hechos.EtiquetaDTO;
-import gestorAdministrativo.DTO.Hechos.FuenteDTO;
-import gestorAdministrativo.DTO.Hechos.UbicacionDTO;
-import DominioGestorAdministrativo.HechosYColecciones.*;
-import DominioGestorAdministrativo.fuente.Fuente;
-import DominioGestorAdministrativo.fuente.TipoDeFuente;
-import gestorAdministrativo.DTO.Hechos.TipoContenidoMultimediaDTO;
+import gestorAdministrativo.dto.Coleccion.ColeccionDTO;
+import gestorAdministrativo.dto.Coleccion.TipoAlgoritmoConsensoDTO;
+import gestorAdministrativo.dto.Criterios.*;
+import gestorAdministrativo.dto.Hechos.EtiquetaDTO;
+import gestorAdministrativo.dto.Hechos.FuenteDTO;
+import gestorAdministrativo.dto.Hechos.UbicacionDTO;
+import gestorAdministrativo.domain.Criterios.*;
+import gestorAdministrativo.domain.HechosYColecciones.*;
+import gestorAdministrativo.domain.fuente.Fuente;
+import gestorAdministrativo.domain.fuente.TipoDeFuente;
+import gestorAdministrativo.dto.Hechos.TipoContenidoMultimediaDTO;
 import gestorAdministrativo.repository.ColeccionRepositorio;
 import gestorAdministrativo.repository.HechoRepositorio;
 
@@ -198,7 +198,7 @@ public class ColeccionService {
         fuente.setDescriptor(dto.getDescriptor());
         if (dto.getTipoFuente() != null) {
             try {
-                fuente.setTipoDeFuente(DominioGestorAdministrativo.fuente.TipoDeFuente.valueOf(dto.getTipoFuente()));
+                fuente.setTipoDeFuente(TipoDeFuente.valueOf(dto.getTipoFuente()));
             } catch (IllegalArgumentException e) {
                 System.err.println("❌ Error: El tipo de fuente '" + dto.getTipoFuente() + "' no existe en el Enum.");
             }
@@ -342,28 +342,28 @@ public class ColeccionService {
         return dto;
     }
 
-    private DominioGestorAdministrativo.Criterios.TipoDeTexto convertirTipoTextoEnum(TipoDeTextoDTO dtoEnum) {
-        return dtoEnum != null ? DominioGestorAdministrativo.Criterios.TipoDeTexto.valueOf(dtoEnum.name()) : null;
+    private TipoDeTexto convertirTipoTextoEnum(TipoDeTextoDTO dtoEnum) {
+        return dtoEnum != null ? TipoDeTexto.valueOf(dtoEnum.name()) : null;
     }
-    private TipoDeTextoDTO convertirTipoTextoDTO(DominioGestorAdministrativo.Criterios.TipoDeTexto domainEnum) {
+    private TipoDeTextoDTO convertirTipoTextoDTO(TipoDeTexto domainEnum) {
         return domainEnum != null ? TipoDeTextoDTO.valueOf(domainEnum.name()) : null;
     }
 
-    private DominioGestorAdministrativo.fuente.TipoDeFuente convertirTipoFuenteEnum(TipoDeFuenteDTO dtoEnum) {
-        return dtoEnum != null ? DominioGestorAdministrativo.fuente.TipoDeFuente.valueOf(dtoEnum.name()) : null;
+    private TipoDeFuente convertirTipoFuenteEnum(TipoDeFuenteDTO dtoEnum) {
+        return dtoEnum != null ? TipoDeFuente.valueOf(dtoEnum.name()) : null;
     }
-    private TipoDeFuenteDTO convertirTipoFuenteDTO(DominioGestorAdministrativo.fuente.TipoDeFuente domainEnum) {
+    private TipoDeFuenteDTO convertirTipoFuenteDTO(TipoDeFuente domainEnum) {
         return domainEnum != null ? TipoDeFuenteDTO.valueOf(domainEnum.name()) : null;
     }
 
-    private DominioGestorAdministrativo.HechosYColecciones.TipoContenidoMultimedia convertirTipoMultimediaEnum(TipoContenidoMultimediaDTO dtoEnum) {
-        return dtoEnum != null ? DominioGestorAdministrativo.HechosYColecciones.TipoContenidoMultimedia.valueOf(dtoEnum.name()) : null;
+    private TipoContenidoMultimedia convertirTipoMultimediaEnum(TipoContenidoMultimediaDTO dtoEnum) {
+        return dtoEnum != null ? TipoContenidoMultimedia.valueOf(dtoEnum.name()) : null;
     }
-    private TipoContenidoMultimediaDTO convertirTipoMultimediaDTO(DominioGestorAdministrativo.HechosYColecciones.TipoContenidoMultimedia domainEnum) {
+    private TipoContenidoMultimediaDTO convertirTipoMultimediaDTO(TipoContenidoMultimedia domainEnum) {
         return domainEnum != null ? TipoContenidoMultimediaDTO.valueOf(domainEnum.name()) : null;
     }
-    private DominioGestorAdministrativo.HechosYColecciones.TipoAlgoritmoConsenso convertirAlgoritmo(TipoAlgoritmoConsensoDTO dtoEnum) {
+    private TipoAlgoritmoConsenso convertirAlgoritmo(TipoAlgoritmoConsensoDTO dtoEnum) {
         if (dtoEnum == null) return null;
-        return DominioGestorAdministrativo.HechosYColecciones.TipoAlgoritmoConsenso.valueOf(dtoEnum.name());
+        return TipoAlgoritmoConsenso.valueOf(dtoEnum.name());
     }
 }

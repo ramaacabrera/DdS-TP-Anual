@@ -1,7 +1,7 @@
 package gestorPublico.controller;
 
-import gestorPublico.DTO.LoginDTO;
-import gestorPublico.DTO.RegistroUsuarioDTO;
+import gestorPublico.dto.LoginDTO;
+import gestorPublico.dto.RegistroUsuarioDTO;
 import gestorPublico.service.UsuarioService;
 import io.javalin.http.Handler;
 

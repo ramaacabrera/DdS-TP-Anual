@@ -1,11 +1,11 @@
 package gestorPublico.service;
 
-import gestorPublico.DTO.LoginDTO;
-import gestorPublico.DTO.RegistroUsuarioDTO;
+import gestorPublico.dto.LoginDTO;
+import gestorPublico.dto.RegistroUsuarioDTO;
 import gestorPublico.repository.UsuarioRepositorio;
 import org.json.JSONObject;
-import DominioGestorPublico.Usuario.RolUsuario;
-import DominioGestorPublico.Usuario.Usuario;
+import gestorPublico.domain.Usuario.RolUsuario;
+import gestorPublico.domain.Usuario.Usuario;
 import utils.Keycloak.UserCreator;
 
 import java.net.URI;

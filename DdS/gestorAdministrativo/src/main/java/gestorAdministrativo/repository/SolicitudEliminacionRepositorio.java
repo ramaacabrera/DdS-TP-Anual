@@ -1,8 +1,8 @@
 package gestorAdministrativo.repository;
 
 import utils.BDUtils;
-import DominioGestorAdministrativo.Solicitudes.EstadoSolicitudEliminacion;
-import DominioGestorAdministrativo.Solicitudes.SolicitudDeEliminacion;
+import gestorAdministrativo.domain.Solicitudes.EstadoSolicitudEliminacion;
+import gestorAdministrativo.domain.Solicitudes.SolicitudDeEliminacion;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

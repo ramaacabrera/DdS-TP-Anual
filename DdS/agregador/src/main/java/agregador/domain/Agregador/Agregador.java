@@ -1,0 +1,143 @@
+package agregador.domain.Agregador;
+
+import agregador.domain.DTO.HechoDTO;
+import agregador.domain.DTO.SolicitudDeEliminacionDTO;
+import agregador.domain.DTO.SolicitudDeModificacionDTO;
+import agregador.domain.Solicitudes.SolicitudDeEliminacion;
+import agregador.domain.Solicitudes.SolicitudDeModificacion;
+import agregador.service.ConexionCargadorService;
+import agregador.service.HechosCargadorService;
+import agregador.domain.PaqueteNormalizador.MockNormalizador;
+import agregador.repository.*;
+import agregador.domain.fuente.Fuente;
+import cargadorDinamico.domain.Solicitudes.*;
+import cargadorDinamico.domain.DTO.*;
+import agregador.domain.HechosYColecciones.Coleccion;
+import agregador.domain.HechosYColecciones.Hecho;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Agregador {
+
+    private final HechoRepositorio hechoRepositorio;
+    private final ColeccionRepositorio coleccionRepositorio;
+    private final SolicitudEliminacionRepositorio solicitudEliminacionRepositorio;
+    private final SolicitudModificacionRepositorio solicitudModificacionRepositorio;
+    private final FuenteRepositorio fuenteRepositorio;
+    private final MockNormalizador normalizador;
+    private final DetectorDeSpam detectorDeSpam =  new DetectorDeSpam();
+    private final ConexionCargadorService conexionCargadorService;
+    private final HechosCargadorService hechosCargadorService;
+
+    public Agregador(HechoRepositorio hechoRepositorio, ColeccionRepositorio coleccionRepositorio, SolicitudEliminacionRepositorio solicitudEliminacionRepositorio,
+                     SolicitudModificacionRepositorio solicitudModificacionRepositorio, FuenteRepositorio fuenteRepositorio, MockNormalizador normalizador, ConexionCargadorService conexionCargadorService,  HechosCargadorService hechosCargadorService) {
+        this.hechoRepositorio = hechoRepositorio;
+        this.coleccionRepositorio = coleccionRepositorio;
+        this.solicitudEliminacionRepositorio = solicitudEliminacionRepositorio;
+        this.fuenteRepositorio = fuenteRepositorio;
+        this.normalizador = normalizador;
+        this.conexionCargadorService = conexionCargadorService;
+        this.solicitudModificacionRepositorio = solicitudModificacionRepositorio;
+        this.hechosCargadorService = hechosCargadorService;
+    }
+
+    public void iniciarBusquedaAgregador(){
+        hechosCargadorService.obtenerHechosNuevos();
+        hechosCargadorService.obtenerSolicitudes();
+    }
+
+    private Hecho normalizarHecho(HechoDTO hecho){
+        return normalizador.normalizar(new Hecho(hecho));
+    }
+
+    public void actualizarColecciones(List<Hecho> hechos){
+        System.out.println("-----------------------Actualizando Colecciones------------------------ ");
+
+        List<Coleccion> colecciones = coleccionRepositorio.obtenerTodas();
+        for(Coleccion coleccion : colecciones){
+            boolean hayQueActualizar = false;
+            for(Hecho hecho : hechos){
+                if(coleccion.cumpleCriterio(hecho)){
+                    coleccion.agregarHecho(hecho);
+                    hayQueActualizar = true;
+                }
+            }
+            if(!hayQueActualizar){
+                coleccionRepositorio.actualizar(coleccion);
+            }
+        }
+    }
+
+    public void actualizarHechosDesdeFuentes(List<HechoDTO> hechos) {
+        System.out.println("Hechos a procesar: " + hechos.size());
+        if(!hechos.isEmpty()) {
+            List<Hecho> hechosNormalizados = new ArrayList<>();
+            for (HechoDTO hechoDTO : hechos) {
+                try {
+                    Fuente fuenteTransitoria = hechoDTO.getFuente();
+
+                    Fuente fuentePersistida = this.fuenteRepositorio.buscarPorRuta(fuenteTransitoria.getDescriptor());
+
+                    if (fuentePersistida == null) {
+                        System.out.println("Fuente no encontrada en DB. Guardándola: " + fuenteTransitoria.getDescriptor());
+
+                        fuentePersistida = this.fuenteRepositorio.guardar(fuenteTransitoria);
+                    }
+
+                    hechoDTO.setFuente(fuentePersistida);
+
+                    Hecho hechoNormalizado = this.normalizarHecho(hechoDTO);
+                    hechoRepositorio.guardar(hechoNormalizado);
+                    hechosNormalizados.add(hechoNormalizado);
+                } catch (Exception e) {
+                    System.err.println("ERROR al procesar un hecho. Saltando el hecho. Causa: " + e.getMessage());
+                    e.printStackTrace();
+                }
+
+            }
+            this.actualizarColecciones(hechosNormalizados);
+        }
+    }
+
+    private Hecho buscarHechoSimilar(Hecho hechoNuevo) {
+        for (Hecho h : hechoRepositorio.buscarHechos(null)) {
+            if (h.tieneMismosAtributosQue(hechoNuevo)) {
+                return h;
+            }
+        }
+        return null;
+    }
+
+    public void agregarSolicitudes(List<SolicitudDeModificacionDTO> solicitudesDeModificacion, List<SolicitudDeEliminacionDTO> solicitudesDeEliminacion) {
+        solicitudesDeEliminacion.forEach(System.out::println);
+        for (SolicitudDeEliminacionDTO dto : solicitudesDeEliminacion) {
+            boolean esSpam = detectorDeSpam.esSpam(dto.getJustificacion());
+            SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion(dto, hechoRepositorio);
+            if (esSpam){
+                solicitud.rechazarSolicitud();
+                solicitud.setEsSpam(true);
+              }
+                solicitudEliminacionRepositorio.agregarSolicitudDeEliminacion(solicitud);
+        }
+        for (SolicitudDeModificacionDTO dto : solicitudesDeModificacion) {
+            boolean esSpam = detectorDeSpam.esSpam(dto.getJustificacion());
+            SolicitudDeModificacion solicitud = new SolicitudDeModificacion(dto, hechoRepositorio);
+            if (esSpam) {
+                solicitud.rechazarSolicitud();
+                solicitud.setEsSpam(true);
+            }
+            solicitudModificacionRepositorio.agregarSolicitudDeModificacion(solicitud);
+        }
+    }
+
+
+    public void ejecutarAlgoritmoDeConsenso() {
+        for (Coleccion coleccion : coleccionRepositorio.obtenerTodas()) {
+            boolean hayQueActualizar = coleccion.ejecutarAlgoritmoDeConsenso();
+            if(hayQueActualizar){
+                coleccionRepositorio.actualizar(coleccion);
+            }
+        }
+    }
+}

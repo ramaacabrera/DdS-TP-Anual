@@ -1,6 +1,6 @@
 package estadisticas.repository;
 
-import DominioEstadisticas.Estadisticas;
+import estadisticas.domain.Estadisticas;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

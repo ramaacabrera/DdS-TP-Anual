@@ -1,8 +1,8 @@
 package gestorAdministrativo.controller;
 
-import gestorAdministrativo.DTO.Solicitudes.SolicitudDTO;
-import gestorAdministrativo.DTO.Solicitudes.SolicitudDeEliminacionDTO;
-import gestorAdministrativo.DTO.Solicitudes.SolicitudDeModificacionDTO;
+import gestorAdministrativo.dto.Solicitudes.SolicitudDTO;
+import gestorAdministrativo.dto.Solicitudes.SolicitudDeEliminacionDTO;
+import gestorAdministrativo.dto.Solicitudes.SolicitudDeModificacionDTO;
 import gestorAdministrativo.service.SolicitudEliminacionService;
 import gestorAdministrativo.service.SolicitudModificacionService;
 import io.javalin.http.Handler;

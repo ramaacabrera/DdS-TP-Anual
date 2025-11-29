@@ -1,6 +1,6 @@
 package gestorPublico.repository;
 
-import DominioGestorPublico.Solicitudes.SolicitudDeModificacion;
+import gestorPublico.domain.Solicitudes.SolicitudDeModificacion;
 import utils.BDUtils;
 
 import javax.persistence.EntityManager;

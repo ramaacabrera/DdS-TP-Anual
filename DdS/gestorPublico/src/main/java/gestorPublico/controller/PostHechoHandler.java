@@ -30,9 +30,9 @@ public class PostHechoHandler implements Handler {
         context.status(response.statusCode()).result(response.body());
     }
 
-//    private final ControllerSubirHechos controller;
+//    private final ControllerSubirHechos cargadorDinamico.controller;
 //
-//    public PostHechoHandler(ControllerSubirHechos controllerNuevo) { controller = controllerNuevo; }
+//    public PostHechoHandler(ControllerSubirHechos controllerNuevo) { cargadorDinamico.controller = controllerNuevo; }
 //
 //    @Override
 //    public void handle(@NotNull Context context) throws Exception {
@@ -51,9 +51,9 @@ public class PostHechoHandler implements Handler {
 //        }
 //
 //        if (contribuyente != null) {
-//            controller.subirHecho(hecho, contribuyente);
+//            cargadorDinamico.controller.subirHecho(hecho, contribuyente);
 //        } else {
-//            controller.subirHecho(hecho);
+//            cargadorDinamico.controller.subirHecho(hecho);
 //        }
 //
 //        System.out.println("Creando hecho: " + bodyString);

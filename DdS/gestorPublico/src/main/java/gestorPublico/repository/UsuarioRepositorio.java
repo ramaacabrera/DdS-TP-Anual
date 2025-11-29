@@ -1,7 +1,7 @@
 package gestorPublico.repository;
 
-import DominioGestorPublico.Usuario.RolUsuario;
-import DominioGestorPublico.Usuario.Usuario;
+import gestorPublico.domain.Usuario.RolUsuario;
+import gestorPublico.domain.Usuario.Usuario;
 import utils.BDUtils;
 
 import javax.persistence.EntityManager;

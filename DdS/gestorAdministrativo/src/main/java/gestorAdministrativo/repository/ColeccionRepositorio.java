@@ -1,10 +1,7 @@
 package gestorAdministrativo.repository;
 
 import utils.BDUtils;
-import DominioGestorAdministrativo.HechosYColecciones.Coleccion;
-import utils.Dominio.HechosYColecciones.Hecho;
-import utils.Dominio.fuente.Fuente;
-import utils.Dominio.Criterios.Criterio;
+import gestorAdministrativo.domain.HechosYColecciones.Coleccion;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

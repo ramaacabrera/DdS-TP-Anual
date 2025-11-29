@@ -1,6 +1,6 @@
 package estadisticas;
 
-import DominioEstadisticas.EstadisticasScheduler;
+import estadisticas.domain.EstadisticasScheduler;
 import estadisticas.repository.ConexionAgregador;
 import estadisticas.repository.EstadisticasCategoriaRepositorio;
 import estadisticas.repository.EstadisticasColeccionRepositorio;

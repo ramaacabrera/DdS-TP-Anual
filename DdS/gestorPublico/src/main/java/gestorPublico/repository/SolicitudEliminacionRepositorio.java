@@ -1,7 +1,7 @@
 package gestorPublico.repository;
 
-import DominioGestorPublico.Solicitudes.EstadoSolicitudEliminacion;
-import DominioGestorPublico.Solicitudes.SolicitudDeEliminacion;
+import gestorPublico.domain.Solicitudes.EstadoSolicitudEliminacion;
+import gestorPublico.domain.Solicitudes.SolicitudDeEliminacion;
 import utils.BDUtils;
 
 import javax.persistence.EntityManager;

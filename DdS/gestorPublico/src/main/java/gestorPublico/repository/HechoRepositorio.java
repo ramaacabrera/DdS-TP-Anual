@@ -1,7 +1,7 @@
 package gestorPublico.repository;
 
-import DominioGestorPublico.Criterios.Criterio;
-import DominioGestorPublico.HechosYColecciones.Hecho;
+import gestorPublico.domain.Criterios.Criterio;
+import gestorPublico.domain.HechosYColecciones.Hecho;
 import utils.BDUtils;
 
 import javax.persistence.EntityManager;

@@ -1,7 +1,7 @@
 package gestorAdministrativo.repository;
 
 import utils.BDUtils;
-import DominioGestorAdministrativo.fuente.Fuente;
+import gestorAdministrativo.domain.fuente.Fuente;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

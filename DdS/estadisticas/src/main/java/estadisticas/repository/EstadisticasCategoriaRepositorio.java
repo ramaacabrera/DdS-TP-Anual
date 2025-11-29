@@ -1,6 +1,6 @@
 package estadisticas.repository;
 
-import DominioEstadisticas.EstadisticasCategoria;
+import estadisticas.domain.EstadisticasCategoria;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

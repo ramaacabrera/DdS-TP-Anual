@@ -1,7 +1,7 @@
 package gestorAdministrativo.repository;
 
 import utils.BDUtils;
-import DominioGestorAdministrativo.Solicitudes.SolicitudDeModificacion;
+import gestorAdministrativo.domain.Solicitudes.SolicitudDeModificacion;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

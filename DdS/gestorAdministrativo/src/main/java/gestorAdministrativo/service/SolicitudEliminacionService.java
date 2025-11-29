@@ -1,15 +1,15 @@
-// gestorAdministrativo/service/SolicitudEliminacionService.java
+// gestorAdministrativo/cargadorDinamico.service/SolicitudEliminacionService.java
 package gestorAdministrativo.service;
 
-import gestorAdministrativo.DTO.Hechos.UsuarioDTO;
-import gestorAdministrativo.DTO.Solicitudes.SolicitudDeEliminacionDTO;
-import gestorAdministrativo.DTO.Solicitudes.SolicitudDTO;
-import DominioGestorAdministrativo.HechosYColecciones.Hecho;
-import DominioGestorAdministrativo.Usuario.Usuario;
+import gestorAdministrativo.dto.Hechos.UsuarioDTO;
+import gestorAdministrativo.dto.Solicitudes.SolicitudDeEliminacionDTO;
+import gestorAdministrativo.dto.Solicitudes.SolicitudDTO;
+import gestorAdministrativo.domain.HechosYColecciones.Hecho;
+import gestorAdministrativo.domain.Usuario.Usuario;
 import gestorAdministrativo.repository.HechoRepositorio;
 import gestorAdministrativo.repository.SolicitudEliminacionRepositorio;
-import DominioGestorAdministrativo.Solicitudes.EstadoSolicitudEliminacion;
-import DominioGestorAdministrativo.Solicitudes.SolicitudDeEliminacion;
+import gestorAdministrativo.domain.Solicitudes.EstadoSolicitudEliminacion;
+import gestorAdministrativo.domain.Solicitudes.SolicitudDeEliminacion;
 import gestorAdministrativo.repository.UsuarioRepositorio;
 
 import java.util.List;

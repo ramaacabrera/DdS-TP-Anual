@@ -1,15 +1,17 @@
 package gestorPublico.service;
 
-import DominioGestorPublico.Criterios.*;
-import DominioGestorPublico.HechosYColecciones.Coleccion;
-import DominioGestorPublico.HechosYColecciones.Hecho;
-import DominioGestorPublico.HechosYColecciones.ModosDeNavegacion;
-import DominioGestorPublico.HechosYColecciones.Ubicacion;
-import gestorPublico.DTO.FiltroHechosDTO;
+import gestorPublico.domain.Criterios.Criterio;
+import gestorPublico.domain.Criterios.CriterioFecha;
+import gestorPublico.domain.Criterios.CriterioUbicacion;
+import gestorPublico.domain.HechosYColecciones.Coleccion;
+import gestorPublico.domain.HechosYColecciones.Hecho;
+import gestorPublico.domain.HechosYColecciones.ModosDeNavegacion;
+import gestorPublico.domain.HechosYColecciones.Ubicacion;
+import gestorPublico.dto.FiltroHechosDTO;
 import gestorPublico.repository.ColeccionRepositorio;
-import gestorPublico.DTO.Coleccion.ColeccionDTO;
-import gestorPublico.DTO.Hechos.HechoDTO;
-import gestorPublico.DTO.PageDTO;
+import gestorPublico.dto.Coleccion.ColeccionDTO;
+import gestorPublico.dto.Hechos.HechoDTO;
+import gestorPublico.dto.PageDTO;
 
 import java.util.*;
 import java.util.stream.Collectors;

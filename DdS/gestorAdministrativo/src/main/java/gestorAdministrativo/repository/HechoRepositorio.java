@@ -1,15 +1,12 @@
 package gestorAdministrativo.repository;
 
-import org.hibernate.Hibernate;
 import utils.BDUtils;
-import DominioGestorAdministrativo.Criterios.Criterio;
-import DominioGestorAdministrativo.HechosYColecciones.Etiqueta;
-import DominioGestorAdministrativo.HechosYColecciones.Hecho;
+import gestorAdministrativo.domain.Criterios.Criterio;
+import gestorAdministrativo.domain.HechosYColecciones.Hecho;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class HechoRepositorio {
 

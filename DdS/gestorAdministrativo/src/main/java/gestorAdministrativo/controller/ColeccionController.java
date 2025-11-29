@@ -1,10 +1,10 @@
 package gestorAdministrativo.controller;
 
-import gestorAdministrativo.DTO.Coleccion.ColeccionDTO;
-import gestorAdministrativo.DTO.Hechos.FuenteDTO;
-import DominioGestorAdministrativo.HechosYColecciones.TipoAlgoritmoConsenso;
-import DominioGestorAdministrativo.fuente.Fuente;
-import DominioGestorAdministrativo.fuente.TipoDeFuente;
+import gestorAdministrativo.dto.Coleccion.ColeccionDTO;
+import gestorAdministrativo.dto.Hechos.FuenteDTO;
+import gestorAdministrativo.domain.HechosYColecciones.TipoAlgoritmoConsenso;
+import gestorAdministrativo.domain.fuente.Fuente;
+import gestorAdministrativo.domain.fuente.TipoDeFuente;
 import gestorAdministrativo.service.ColeccionService;
 import io.javalin.http.Handler;
 

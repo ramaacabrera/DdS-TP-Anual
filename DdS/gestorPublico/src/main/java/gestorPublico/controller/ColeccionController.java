@@ -1,11 +1,11 @@
 package gestorPublico.controller;
 
-import gestorPublico.DTO.FiltroHechosDTO;
+import gestorPublico.dto.FiltroHechosDTO;
 import gestorPublico.service.ColeccionService;
 import io.javalin.http.Handler;
-import gestorPublico.DTO.Coleccion.ColeccionDTO;
-import gestorPublico.DTO.Hechos.HechoDTO;
-import gestorPublico.DTO.PageDTO;
+import gestorPublico.dto.Coleccion.ColeccionDTO;
+import gestorPublico.dto.Hechos.HechoDTO;
+import gestorPublico.dto.PageDTO;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

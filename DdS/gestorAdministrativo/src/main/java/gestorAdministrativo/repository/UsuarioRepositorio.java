@@ -1,12 +1,11 @@
 package gestorAdministrativo.repository;
 
 import utils.BDUtils;
-import DominioGestorAdministrativo.Usuario.RolUsuario;
-import DominioGestorAdministrativo.Usuario.Usuario;
+import gestorAdministrativo.domain.Usuario.RolUsuario;
+import gestorAdministrativo.domain.Usuario.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.List;
 import java.util.UUID;
 
 public class UsuarioRepositorio {
