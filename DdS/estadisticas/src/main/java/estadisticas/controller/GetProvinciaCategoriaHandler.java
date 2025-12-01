@@ -1,6 +1,6 @@
 package estadisticas.controller;
 
-import utils.PaqueteNormalizador.NormalizadorCategorias;
+import estadisticas.service.normalizador.NormalizadorCategorias;
 import estadisticas.repository.EstadisticasCategoriaRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;

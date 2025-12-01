@@ -1,10 +1,13 @@
 package cargadorEstatico.domain;
 
-import cargadorEstatico.domain.hechosycolecciones.Etiqueta;
+import cargadorEstatico.domain.HechosYColecciones.Etiqueta;
+import cargadorEstatico.dto.Hechos.EstadoHechoDTO;
+import cargadorEstatico.dto.Hechos.EtiquetaDTO;
+import cargadorEstatico.dto.Hechos.UbicacionDTO;
 import org.apache.commons.csv.CSVRecord;
-import cargadorEstatico.dto.HechoDTO;
-import cargadorEstatico.domain.hechosycolecciones.EstadoHecho;
-import cargadorEstatico.domain.hechosycolecciones.Ubicacion;
+import cargadorEstatico.dto.Hechos.HechoDTO;
+import cargadorEstatico.domain.HechosYColecciones.EstadoHecho;
+import cargadorEstatico.domain.HechosYColecciones.Ubicacion;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,10 +31,11 @@ public class ConversorCSV {
             System.out.println("Error al mapear fecha" + e.getMessage());
         }
         Date fechaDeCarga = new Date();
-        EstadoHecho estadoHecho = EstadoHecho.ACTIVO;
-        List<Etiqueta> etiquetas = new ArrayList<>();
+        EstadoHechoDTO estadoHecho = EstadoHechoDTO.ACTIVO;
+        List<EtiquetaDTO> etiquetas = new ArrayList<>();
         boolean esEditable = false;
-        return new HechoDTO(titulo, descripcion, categoria, ubicacion, fechaDeAcontecimiento, fechaDeCarga, null, estadoHecho, null, etiquetas, esEditable, null);
+        return new HechoDTO(titulo, descripcion, categoria, new UbicacionDTO(ubicacion.getId_ubicacion(),ubicacion.getLatitud(),ubicacion.getLongitud()),
+                fechaDeAcontecimiento, fechaDeCarga, null, estadoHecho, null, etiquetas, esEditable, null);
     }
 
 }

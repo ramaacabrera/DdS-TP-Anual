@@ -1,29 +1,24 @@
 package web.controller;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import io.javalin.rendering.template.TemplateUtil;
 import org.jetbrains.annotations.NotNull;
-import web.domain.hechosycolecciones.Hecho;
+import web.dto.Hechos.HechoDTO;
 import web.service.HechoService;
 
-
+import java.util.HashMap;
 import java.util.Map;
 
 public class GetHechoEspecificoHandler implements Handler {
 
-    private ObjectMapper mapper = new ObjectMapper();
-    private final String urlPublica;
     private final HechoService hechoService;
 
-    public GetHechoEspecificoHandler(String url,  HechoService hechoService) {
+    public GetHechoEspecificoHandler(HechoService hechoService) {
         this.hechoService = hechoService;
-        this.urlPublica = url;
     }
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        // 1. Obtener el ID del hecho de la URL (ruta: /hechos/{id})
         String hechoIdString = ctx.pathParam("id");
 
         if (hechoIdString == null || hechoIdString.trim().isEmpty()) {
@@ -31,22 +26,21 @@ public class GetHechoEspecificoHandler implements Handler {
             return;
         }
 
-        // 2. Buscar la entidad Hecho en la base de datos
-        Hecho hecho = hechoService.obtenerHechoPorId(hechoIdString);
+        HechoDTO hecho = hechoService.obtenerHechoPorId(hechoIdString);
 
-        //  Crear el modelo de datos para FreeMarker
-        Map<String, Object> modelo = TemplateUtil.model("hecho", hecho);
-
-        if(!ctx.sessionAttributeMap().isEmpty()){
-            String username = ctx.sessionAttribute("username");
-            System.out.println("Usuario: " + username);
-            String access_token = ctx.sessionAttribute("access_token");
-            modelo.put("username", username);
-            modelo.put("access_token", access_token);
+        if (hecho == null) {
+            ctx.status(404).result("Hecho no encontrado o servicio no disponible.");
+            return;
         }
 
+        Map<String, Object> modelo = new HashMap<>();
+        modelo.put("hecho", hecho);
 
-        //  Renderizar la plantilla (SSR)
+        if (!ctx.sessionAttributeMap().isEmpty()) {
+            modelo.put("username", ctx.sessionAttribute("username"));
+            modelo.put("access_token", ctx.sessionAttribute("access_token"));
+        }
+
         ctx.render("hecho-especifico.ftl", modelo);
     }
 }

@@ -7,25 +7,22 @@
     <groupId>com.metamapa</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-    <packaging>jar</packaging>
-    <modelVersion>4.0.0</modelVersion>
+  <packaging>jar</packaging>
+  <modelVersion>4.0.0</modelVersion>
 
   <artifactId>agregador</artifactId>
 
   <dependencies>
     <dependency>
-      <groupId>com.metamapa</groupId>
-      <artifactId>utils</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-
-    <!-- API Web -->
-    <dependency>
       <groupId>io.javalin</groupId>
       <artifactId>javalin</artifactId>
     </dependency>
 
-    <!-- Base de datos principal -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
@@ -35,68 +32,22 @@
       <artifactId>hibernate-entitymanager</artifactId>
     </dependency>
 
-    <!-- WebSockets -->
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy</artifactId>
+      <version>1.14.17</version>
+    </dependency>
+
     <dependency>
       <groupId>org.java-websocket</groupId>
       <artifactId>Java-WebSocket</artifactId>
     </dependency>
 
-    <!-- Scheduling -->
     <dependency>
-      <groupId>org.quartz-scheduler</groupId>
-      <artifactId>quartz</artifactId>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.15.2</version>
     </dependency>
 
-    <!-- Logging -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-    </dependency>
-    <!-- En la sección <dependencies> -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>5.9.2</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Mockito Inline (para mocking estático) -->
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-inline</artifactId>
-      <version>5.2.0</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-junit-jupiter</artifactId>
-      <version>4.11.0</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Byte Buddy (requerido por Mockito) -->
-    <dependency>
-      <groupId>net.bytebuddy</groupId>
-      <artifactId>byte-buddy</artifactId>
-      <version>1.14.4</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Byte Buddy Agent (para mocking estático) -->
-    <dependency>
-      <groupId>net.bytebuddy</groupId>
-      <artifactId>byte-buddy-agent</artifactId>
-      <version>1.14.4</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Para pruebas con base de datos -->
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>2.1.214</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 </project>

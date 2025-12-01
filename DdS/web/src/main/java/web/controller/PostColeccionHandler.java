@@ -3,7 +3,7 @@ package web.controller;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-import web.domain.criterios.TipoDeTexto;
+import web.domain.Criterios.TipoDeTexto;
 import web.service.ColeccionService;
 
 import java.util.ArrayList;

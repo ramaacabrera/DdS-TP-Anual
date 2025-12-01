@@ -1,6 +1,6 @@
 package cargadorEstatico.conexionAgregador;
 
-import cargadorEstatico.dto.HechoDTO;
+import cargadorEstatico.dto.Hechos.HechoDTO;
 import cargadorEstatico.dto.ModelosMensajesDTO.HechosObtenidosPayload;
 import cargadorEstatico.dto.ModelosMensajesDTO.IdCargadorPayload;
 import cargadorEstatico.dto.ModelosMensajesDTO.WsMessage;

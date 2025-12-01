@@ -1,27 +1,36 @@
 package cargadorDemo.dto;
 
-import cargadorDinamico.domain.HechosYColecciones.HechoModificado;
-import cargadorDinamico.domain.Solicitudes.EstadoSolicitudModificacion;
+
+import java.util.UUID;
 
 public class SolicitudDeModificacionDTO extends SolicitudDTO {
-    private HechoModificado hechoModificado;
-    private EstadoSolicitudModificacion estadoSolicitudModificacion;
+    private UUID id;
+
+    private HechoModificadoDTO hechoModificado;
+    private EstadoSolicitudModificacionDTO estado;
 
     public SolicitudDeModificacionDTO() {}
 
-   public HechoModificado getHechoModificado() {
-        return hechoModificado;
-    }
+    public SolicitudDeModificacionDTO(UUID id, UUID hechoAsociadoId, String justificacion, UUID usuarioId,
+                                      HechoModificadoDTO hechoModificado, EstadoSolicitudModificacionDTO estado) {
 
-    public void setHechoModificado(HechoModificado hechoModificado) {
+        super();
+        this.id = id;
+        this.setHechoId(hechoAsociadoId);
+        this.setUsuarioId(usuarioId);
+        this.setJustificacion(justificacion);
+
         this.hechoModificado = hechoModificado;
+        this.estado = estado;
     }
 
-    public EstadoSolicitudModificacion getEstadoSolicitudModificacion() {
-        return estadoSolicitudModificacion;
-    }
+    // Getters y Setters
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
 
-    public void setEstadoSolicitudModificacion(EstadoSolicitudModificacion estadoSolicitudModificacion) {
-        this.estadoSolicitudModificacion = estadoSolicitudModificacion;
-    }
+    public HechoModificadoDTO getHechoModificado() { return hechoModificado; }
+    public void setHechoModificado(HechoModificadoDTO hechoModificado) { this.hechoModificado = hechoModificado; }
+
+    public EstadoSolicitudModificacionDTO getEstado() { return estado; }
+    public void setEstado(EstadoSolicitudModificacionDTO estado) { this.estado = estado; }
 }

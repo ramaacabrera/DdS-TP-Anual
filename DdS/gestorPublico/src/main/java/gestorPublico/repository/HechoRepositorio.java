@@ -2,7 +2,7 @@ package gestorPublico.repository;
 
 import gestorPublico.domain.Criterios.Criterio;
 import gestorPublico.domain.HechosYColecciones.Hecho;
-import utils.BDUtils;
+import gestorPublico.utils.BDUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -21,7 +21,7 @@ public class HechoRepositorio {
             StringBuilder queryString = new StringBuilder(
                     "SELECT DISTINCT h FROM Hecho h " +
                             "LEFT JOIN FETCH h.etiquetas " +
-                            "LEFT JOIN FETCH h.contenidoMultimedia " +
+                            "LEFT JOIN h.contenidoMultimedia " +
                             "LEFT JOIN FETCH h.ubicacion " +
                             "LEFT JOIN FETCH h.contribuyente " +
                             "LEFT JOIN FETCH h.fuente " +
@@ -32,7 +32,6 @@ public class HechoRepositorio {
                 for (Criterio criterio : criterios) {
                     String condition = criterio.getQueryCondition();
                     if (condition != null && !condition.trim().isEmpty()) {
-                        // Asumimos que tus criterios usan el alias 'h' para referirse al Hecho
                         queryString.append(" AND ").append(condition);
                     }
                 }
@@ -40,7 +39,6 @@ public class HechoRepositorio {
 
             TypedQuery<Hecho> query = em.createQuery(queryString.toString(), Hecho.class);
 
-            // 3. Establecemos los valores de los parámetros
             if (criterios != null) {
                 for (Criterio criterio : criterios) {
                     Map<String, Object> params = criterio.getQueryParameters();
@@ -50,7 +48,15 @@ public class HechoRepositorio {
                 }
             }
 
-            return query.getResultList();
+            List<Hecho> resultados = query.getResultList();
+
+            for (Hecho h : resultados) {
+                if (h.getContenidoMultimedia() != null) {
+                    h.getContenidoMultimedia().size();
+                }
+            }
+
+            return resultados;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,7 +67,6 @@ public class HechoRepositorio {
     }
 
     public List<Hecho> getHechos() {
-        // Reutilizamos la lógica optimizada pasando null (sin criterios = traer todo)
         return buscarHechos(null);
     }
 
@@ -70,17 +75,24 @@ public class HechoRepositorio {
         try {
             String jpql = "SELECT DISTINCT h FROM Hecho h " +
                     "LEFT JOIN FETCH h.etiquetas " +
-                    "LEFT JOIN FETCH h.contenidoMultimedia " +
+                    "LEFT JOIN h.contenidoMultimedia " +
                     "LEFT JOIN FETCH h.ubicacion " +
                     "LEFT JOIN FETCH h.contribuyente " +
-                    "WHERE h.id = :id";
+                    "WHERE h.hecho_id = :id";
 
             TypedQuery<Hecho> query = em.createQuery(jpql, Hecho.class);
             query.setParameter("id", id);
 
-            return query.getSingleResult();
+            Hecho resultado = query.getSingleResult();
+
+            // Inicializar manualmente
+            if (resultado.getContenidoMultimedia() != null) {
+                resultado.getContenidoMultimedia().size();
+            }
+
+            return resultado;
+
         } catch (Exception e) {
-            // Si no encuentra nada o falla, retorna null
             return null;
         } finally {
             em.close();
@@ -154,20 +166,6 @@ public class HechoRepositorio {
         }
     }
 
-    private <T> T gestionarRelacion(EntityManager em, T entidad) {
-        if (entidad == null) return null;
-
-        Object id = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entidad);
-        if (id != null) {
-            T existente = em.find((Class<T>) entidad.getClass(), id);
-            if (existente != null) {
-                return existente;
-            }
-        }
-
-        return em.merge(entidad);
-    }
-
     public void actualizar(Hecho hecho) {
         this.guardar(hecho);
     }
@@ -179,12 +177,10 @@ public class HechoRepositorio {
             TypedQuery<String> query = em.createQuery(jpql, String.class);
             return query.getResultList();
         } catch (Exception e) {
-            BDUtils.rollback(em);
             e.printStackTrace();
             return new ArrayList<>();
         } finally {
             em.close();
         }
-
     }
 }

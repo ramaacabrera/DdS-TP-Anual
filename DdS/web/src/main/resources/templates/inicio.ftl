@@ -25,7 +25,7 @@
                 <#list hechos as hecho>
                 <#if hecho.ubicacion?? && hecho.ubicacion.latitud?? && hecho.ubicacion.longitud??>
                 {
-                    id: "${hecho.hecho_id}",
+                    id: "${hecho.hechoId}",
                     titulo: "${hecho.titulo?js_string}",
                     lat: ${hecho.ubicacion.latitud?string?replace(",", ".")},
                     lon: ${hecho.ubicacion.longitud?string?replace(",", ".")}

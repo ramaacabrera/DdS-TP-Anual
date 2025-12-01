@@ -1,6 +1,6 @@
 package web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import web.domain.hechosycolecciones.Coleccion;
+import web.domain.HechosYColecciones.Coleccion;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;

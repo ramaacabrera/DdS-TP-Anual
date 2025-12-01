@@ -72,7 +72,7 @@
     </div>
 </#macro>
 <#macro actionButtons hecho>
-    <div class="action-buttons-group" data-hecho-id="${hecho.hecho_id?html}">
+    <div class="action-buttons-group" data-hecho-id="${hecho.hechoId?html}">
         <!-- Compartir: chain -->
         <button class="icon-btn" data-action="share" aria-label="Compartir hecho" title="Compartir">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

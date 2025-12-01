@@ -1,4 +1,4 @@
-package utils;
+package estadisticas.utils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -10,7 +10,7 @@ public class BDUtils {
 
     static {
         try {
-            factory = Persistence.createEntityManagerFactory("agregador-PU");
+            factory = Persistence.createEntityManagerFactory("servicioEstadisticas-PU");
         } catch (Exception e) {
             throw new RuntimeException("Error inicializando EntityManagerFactory", e);
         }

@@ -1,6 +1,5 @@
 package gestorAdministrativo.dto.Solicitudes;
 
-import DominioGestorAdministrativo.DTO.Hechos.*;
 import gestorAdministrativo.dto.Hechos.*;
 
 import java.util.Date;

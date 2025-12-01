@@ -1,6 +1,6 @@
 package cargadorEstatico.dto.ModelosMensajesDTO;
 
-import cargadorEstatico.dto.HechoDTO;
+import cargadorEstatico.dto.Hechos.HechoDTO;
 
 import java.util.List;
 

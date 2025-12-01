@@ -6,7 +6,7 @@ import cargadorEstatico.service.HechosEstaticoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import cargadorEstatico.conexionAgregador.ClienteDelAgregador;
 import cargadorEstatico.controller.ControladorEstatica;
-import utils.LecturaConfig;
+import cargadorEstatico.utils.LecturaConfig;
 
 import java.io.IOException;
 import java.nio.file.Files;

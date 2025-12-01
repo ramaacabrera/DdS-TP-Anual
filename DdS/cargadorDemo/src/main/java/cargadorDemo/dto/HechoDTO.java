@@ -1,7 +1,7 @@
 package cargadorDemo.dto;
 
 import cargadorDemo.domain.HechosYColecciones.*;
-import cargadorDinamico.domain.Usuario.Usuario;
+import cargadorDemo.domain.Usuario.Usuario;
 import cargadorDemo.domain.fuente.Fuente;
 
 import java.util.Date;

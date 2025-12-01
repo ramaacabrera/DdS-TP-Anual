@@ -1,6 +1,6 @@
 package web.dto.ModelosMensajesDTO;
 
-import web.dto.SolicitudDeEliminacionDTO;
+import web.dto.Solicitudes.SolicitudDeEliminacionDTO;
 
 import java.util.List;
 

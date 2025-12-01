@@ -1,6 +1,6 @@
 package cargadorEstatico.conexionAgregador;
 
-import cargadorEstatico.dto.HechoDTO;
+import cargadorEstatico.dto.Hechos.HechoDTO;
 
 import java.util.List;
 import java.util.UUID;

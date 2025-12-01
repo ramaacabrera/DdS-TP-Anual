@@ -1,7 +1,7 @@
 package cargadorEstatico.controller;
 
 import cargadorEstatico.conexionAgregador.Controlador;
-import cargadorEstatico.dto.HechoDTO;
+import cargadorEstatico.dto.Hechos.HechoDTO;
 import cargadorEstatico.service.HechosEstaticoService;
 
 import java.util.List;

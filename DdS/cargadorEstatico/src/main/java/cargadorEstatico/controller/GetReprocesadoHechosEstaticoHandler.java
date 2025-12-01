@@ -1,10 +1,11 @@
 package cargadorEstatico.controller;
 
 import cargadorEstatico.domain.fuente.Fuente;
+import cargadorEstatico.dto.Hechos.FuenteDTO;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-import cargadorEstatico.dto.HechoDTO;
+import cargadorEstatico.dto.Hechos.HechoDTO;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,7 +39,7 @@ public class GetReprocesadoHechosEstaticoHandler implements Handler {
 
         try {
             List<HechoDTO> hechos = this.obtenerHechosDeArchivo(nombreArchivo);
-            hechos.forEach(hecho->hecho.setFuente(this.fuente));
+            hechos.forEach(hecho->hecho.setFuente(new FuenteDTO(fuente.getId(),fuente.getTipoDeFuente().toString(),fuente.getDescriptor())));
             context.json(hechos);
             context.status(200);
         } catch (IOException e) {

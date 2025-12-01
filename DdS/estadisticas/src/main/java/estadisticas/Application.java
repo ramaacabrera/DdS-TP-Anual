@@ -8,8 +8,8 @@ import estadisticas.repository.EstadisticasRepositorio;
 import estadisticas.controller.*;
 import estadisticas.service.GeneradorEstadisticas;
 import io.javalin.Javalin;
-import utils.IniciadorApp;
-import utils.LecturaConfig;
+import estadisticas.utils.IniciadorApp;
+import estadisticas.utils.LecturaConfig;
 
 import java.util.Properties;
 

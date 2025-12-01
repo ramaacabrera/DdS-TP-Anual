@@ -1,8 +1,8 @@
 package cargadorEstatico.domain.fuente;
 
+import cargadorEstatico.domain.fuente.TipoDeFuente;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import cargadorEstatico.dto.FuenteDTO;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -31,12 +31,6 @@ public class Fuente {
     public Fuente(TipoDeFuente tipoDeFuente, String descriptorNuevo /*, int idNuevo*/) {
         this.tipoDeFuente = tipoDeFuente;
         this.descriptor = descriptorNuevo;
-
-    }
-
-    public Fuente(FuenteDTO fuenteDTO) {
-        this.tipoDeFuente = fuenteDTO.getTipoDeFuente();
-        this.descriptor = fuenteDTO.getRuta();
 
     }
 

@@ -1,6 +1,6 @@
 package gestorAdministrativo.repository;
 
-import utils.BDUtils;
+import gestorAdministrativo.utils.BDUtils;
 import gestorAdministrativo.domain.Criterios.Criterio;
 import gestorAdministrativo.domain.HechosYColecciones.Hecho;
 

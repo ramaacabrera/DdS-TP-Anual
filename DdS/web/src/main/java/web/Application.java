@@ -42,7 +42,7 @@ public class Application {
 
         app.get("/logout", new GetLogOutHandler());
 
-        app.get("/hechos/{id}", new GetHechoEspecificoHandler(urlPublica, hechoService)); //hecho especifico
+        app.get("/hechos/{id}", new GetHechoEspecificoHandler(hechoService)); //hecho especifico
 
         // Falta
         app.get("/hechos", new GetHechosHandler(urlPublica)); //home con hechos

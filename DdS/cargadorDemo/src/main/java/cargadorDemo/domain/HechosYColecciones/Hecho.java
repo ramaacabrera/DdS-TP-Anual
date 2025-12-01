@@ -2,8 +2,8 @@ package cargadorDemo.domain.HechosYColecciones;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import utils.DTO.HechoDTO;
-import cargadorDinamico.domain.Usuario.Usuario;
+import cargadorDemo.dto.HechoDTO;
+import cargadorDemo.domain.Usuario.Usuario;
 import cargadorDemo.domain.fuente.Fuente;
 
 import javax.persistence.*;

@@ -1,16 +1,15 @@
-package utils;
+package estadisticas.utils;
 
 import freemarker.template.TemplateException;
 import io.javalin.Javalin;
-import io.javalin.rendering.template.JavalinFreemarker;
 import io.javalin.http.staticfiles.Location;
-import org.eclipse.jetty.websocket.api.WebSocketPolicy;
+import io.javalin.rendering.template.JavalinFreemarker;
 
 import java.time.Duration;
 
 public class IniciadorApp {
 
-    public io.javalin.Javalin iniciarApp(int puerto, String recursoEstatico) {
+    public Javalin iniciarApp(int puerto, String recursoEstatico) {
         return Javalin.create(javalinConfig -> {
             javalinConfig.plugins.enableCors(cors -> {
                 cors.add(it -> it.anyHost());
@@ -23,7 +22,7 @@ public class IniciadorApp {
         }).start(puerto);
     };
 
-    public io.javalin.Javalin iniciarAppWeb(int puerto, String recursoEstatico) {
+    public Javalin iniciarAppWeb(int puerto, String recursoEstatico) {
         return Javalin.create(javalinConfig -> {
             javalinConfig.plugins.enableCors(cors -> {
                 cors.add(it -> it.anyHost());

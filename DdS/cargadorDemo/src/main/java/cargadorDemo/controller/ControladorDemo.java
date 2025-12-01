@@ -1,10 +1,10 @@
 package cargadorDemo.controller;
 
 import cargadorDemo.service.GetHechosService;
-import utils.DTO.HechoDTO;
-import utils.DTO.SolicitudDeEliminacionDTO;
-import utils.DTO.SolicitudDeModificacionDTO;
-import utils.Controladores.Controlador;
+import cargadorDemo.dto.HechoDTO;
+import cargadorDemo.dto.SolicitudDeEliminacionDTO;
+import cargadorDemo.dto.SolicitudDeModificacionDTO;
+import cargadorDemo.controller.Controlador;
 
 import java.util.List;
 import java.util.UUID;

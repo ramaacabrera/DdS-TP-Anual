@@ -1,4 +1,4 @@
-package utils.PaqueteNormalizador;
+package estadisticas.service.normalizador;
 
 import java.util.Locale;
 

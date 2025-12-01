@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import web.dto.PageDTO;
-import web.domain.hechosycolecciones.Coleccion;
+import web.domain.HechosYColecciones.Coleccion;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

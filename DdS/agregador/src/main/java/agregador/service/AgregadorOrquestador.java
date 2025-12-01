@@ -90,11 +90,24 @@ public class AgregadorOrquestador {
         Fuente fuentePersistida = fuenteRepositorio.buscarPorDescriptor(fuenteDto.getDescriptor());
 
         if (fuentePersistida == null) {
-            System.out.println("Fuente no encontrada: " + fuenteDto.getDescriptor());
-            throw new Exception("Fuente no encontrada: " + fuenteDto.getDescriptor());
+            System.out.println("🆕 Fuente nueva detectada: " + fuenteDto.getDescriptor() + ". Creándola en BD...");
+
+            Fuente nuevaFuente = new Fuente();
+            nuevaFuente.setDescriptor(fuenteDto.getDescriptor());
+
+            if (fuenteDto.getTipoFuente() != null) {
+                try {
+                    nuevaFuente.setTipoDeFuente(agregador.domain.fuente.TipoDeFuente.valueOf(fuenteDto.getTipoFuente()));
+                } catch (IllegalArgumentException e) {
+                    System.err.println("⚠️ Tipo de fuente desconocido: " + fuenteDto.getTipoFuente() + ". Se usará ESTATICA por defecto.");
+                }
+            }
+            fuentePersistida = fuenteRepositorio.guardar(nuevaFuente);
         }
 
-        fuenteDto.setFuenteId(fuentePersistida.getId());
+        if (fuentePersistida != null) {
+            fuenteDto.setFuenteId(fuentePersistida.getId());
+        }
     }
 
     public void actualizarColeccionesConNuevosHechos(List<Hecho> nuevosHechos) {

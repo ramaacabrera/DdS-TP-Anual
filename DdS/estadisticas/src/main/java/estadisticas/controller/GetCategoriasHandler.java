@@ -4,7 +4,7 @@ import estadisticas.repository.EstadisticasCategoriaRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-import utils.PaqueteNormalizador.NormalizadorCategorias;
+import estadisticas.service.normalizador.NormalizadorCategorias;
 
 import java.util.*;
 import java.util.stream.Collectors;

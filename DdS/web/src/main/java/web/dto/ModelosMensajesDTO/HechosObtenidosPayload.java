@@ -1,6 +1,6 @@
 package web.dto.ModelosMensajesDTO;
 
-import web.dto.HechoDTO;
+import web.dto.Hechos.HechoDTO;
 
 import java.util.List;
 

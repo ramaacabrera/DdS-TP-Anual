@@ -8,8 +8,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
-import web.domain.solicitudes.SolicitudDeEliminacion;
-import web.domain.solicitudes.SolicitudDeModificacion;
+import web.domain.Solicitudes.SolicitudDeEliminacion;
+import web.domain.Solicitudes.SolicitudDeModificacion;
 
 import java.io.IOException;
 import java.util.ArrayList;

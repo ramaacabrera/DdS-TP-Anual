@@ -2,7 +2,7 @@ package gestorPublico.repository;
 
 import gestorPublico.domain.Usuario.RolUsuario;
 import gestorPublico.domain.Usuario.Usuario;
-import utils.BDUtils;
+import gestorPublico.utils.BDUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

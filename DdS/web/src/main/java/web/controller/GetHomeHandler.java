@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import io.javalin.http.Handler;
-import web.dto.HechoDTO;
+import web.dto.Hechos.HechoDTO;
 import web.dto.PageDTO;
-import web.domain.usuario.Usuario;
+import web.domain.Usuario.Usuario;
 
 public class GetHomeHandler implements Handler {
     private String urlPublica;

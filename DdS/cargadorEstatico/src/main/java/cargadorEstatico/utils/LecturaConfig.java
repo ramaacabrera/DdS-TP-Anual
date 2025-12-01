@@ -1,4 +1,4 @@
-package utils;
+package cargadorEstatico.utils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

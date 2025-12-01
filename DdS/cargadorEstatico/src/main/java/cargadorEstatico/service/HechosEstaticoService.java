@@ -2,7 +2,8 @@ package cargadorEstatico.service;
 
 import cargadorEstatico.controller.ConexionEstatica;
 import cargadorEstatico.domain.fuente.Fuente;
-import cargadorEstatico.dto.HechoDTO;
+import cargadorEstatico.dto.Hechos.FuenteDTO;
+import cargadorEstatico.dto.Hechos.HechoDTO;
 
 import java.io.*;
 import java.nio.file.*;
@@ -39,7 +40,7 @@ public class HechosEstaticoService {
 
                 List<HechoDTO> hechos = conexion.obtenerHechos();
                 fuente.setDescriptor(nombreArchivo);
-                hechos.forEach(hecho -> {hecho.setFuente(fuente);});
+                hechos.forEach(hecho -> {hecho.setFuente(new FuenteDTO(fuente.getId(),fuente.getTipoDeFuente().toString(),fuente.getDescriptor()));});
                 hechosTotales.addAll(hechos); // o tus criterios
 
                 procesados.add(nombreArchivo); // marcar como procesado
@@ -52,7 +53,7 @@ public class HechosEstaticoService {
             System.err.println("Error al leer archivos CSV: " + e.getMessage());
         }
 
-        hechosTotales.forEach(hecho->hecho.setFuente(this.fuente));
+        hechosTotales.forEach(hecho->hecho.setFuente(new FuenteDTO(fuente.getId(),fuente.getTipoDeFuente().toString(),fuente.getDescriptor())));
 
         return hechosTotales;
     }

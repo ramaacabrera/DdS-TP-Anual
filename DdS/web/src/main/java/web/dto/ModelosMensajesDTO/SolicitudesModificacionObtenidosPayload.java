@@ -1,6 +1,6 @@
 package web.dto.ModelosMensajesDTO;
 
-import web.dto.SolicitudDeModificacionDTO;
+import web.dto.Solicitudes.SolicitudDeModificacionDTO;
 
 import java.util.List;
 

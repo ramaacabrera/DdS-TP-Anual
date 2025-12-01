@@ -2,8 +2,8 @@ package web.controller;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-import web.domain.hechosycolecciones.TipoAlgoritmoConsenso;
-import web.domain.fuente.TipoDeFuente;
+import web.domain.HechosYColecciones.TipoAlgoritmoConsenso;
+import web.domain.Fuente.TipoDeFuente;
 
 import java.util.HashMap;
 import java.util.Map;

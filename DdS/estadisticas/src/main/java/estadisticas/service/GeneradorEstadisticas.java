@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import estadisticas.repository.ConexionAgregador;
 import estadisticas.repository.BDUtilsEstadisticas;
-import utils.PaqueteNormalizador.NormalizadorCategorias;
+import estadisticas.service.normalizador.NormalizadorCategorias;
 
 import javax.persistence.EntityManager;
 import java.net.URI;
