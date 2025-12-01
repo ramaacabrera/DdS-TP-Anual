@@ -52,7 +52,7 @@ public class Application {
         app.get("/logout", new GetLogOutHandler());
 
         //hechos
-        app.get("/hechos/{id}", new GetHechoEspecificoHandler(urlPublica, hechoService)); //hecho especifico
+        app.get("/hechos/{id}", new GetHechoEspecificoHandler(hechoService)); //hecho especifico
         app.get("/hechos", new GetHechosHandler(hechoService)); //home con hechos
         app.get("/crear", new GetCrearHechoHandler(urlPublica)); // Para mostrar el formulario de creación
 

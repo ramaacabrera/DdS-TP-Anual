@@ -93,4 +93,22 @@ public class GetEstadisticasHandler implements Handler {
             return false;
         }
     }
+
+    private Object obtenerValorConFallback(Map<String, Object> map, List<String> possibleKeys, Object defaultValue){
+        if (map == null || map.isEmpty() || possibleKeys == null || possibleKeys.isEmpty()) {
+            return defaultValue;
+        }
+
+        for (String key : possibleKeys) {
+            if (map.containsKey(key)) {
+                Object value = map.get(key);
+
+                if (value != null) {
+                    return value;
+                }
+            }
+        }
+
+        return defaultValue;
+    }
 }

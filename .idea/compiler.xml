@@ -6,16 +6,20 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="cargadorDinamico" />
+        <module name="cargador-estatico" />
+        <module name="cargadorMetamapa" />
+        <module name="api-publica" />
+        <module name="cargador-dinamico" />
+        <module name="cargadorEstatico" />
         <module name="gestorAdministrativo" />
         <module name="gestorPublico" />
         <module name="estadisticas" />
         <module name="agregador" />
         <module name="web" />
+        <module name="cargadorDemo" />
         <module name="cargador-metamapa" />
         <module name="utils" />
-        <module name="cargador-estatico" />
-        <module name="api-publica" />
-        <module name="cargador-dinamico" />
         <module name="cargador-demo" />
       </profile>
     </annotationProcessing>
