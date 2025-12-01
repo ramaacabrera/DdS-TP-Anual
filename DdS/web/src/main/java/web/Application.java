@@ -2,8 +2,7 @@ package web;
 
 import web.controller.*;
 import io.javalin.Javalin;
-import web.service.ColeccionService;
-import web.service.HechoService;
+import web.service.*;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
 
@@ -21,7 +20,7 @@ public class Application {
         String urlPublica = config.getProperty("urlPublica");
         String urlAdmin = config.getProperty("urlAdmin");
         //si hacemos la pag de las estadisticas
-        String puertoEstadisticas = config.getProperty("puertoEstadisticas");
+        String urlEstadisticas = config.getProperty("urlEstadisticas");
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarAppWeb(Integer.parseInt(puerto), "/");
@@ -30,11 +29,21 @@ public class Application {
 
         ColeccionService coleccionService = new ColeccionService(urlPublica, urlAdmin);
         HechoService hechoService = new HechoService(urlPublica);
+        EstadisticasService estadisticasService = new EstadisticasService(urlEstadisticas);
+        CategoriasService categoriasService = new CategoriasService(urlEstadisticas);
+        SolicitudService solicitudService = new SolicitudService(urlAdmin);
+
+        // controllers
+
+        ColeccionController coleccionController = new ColeccionController(coleccionService);
 
         app.get("/", ctx -> {
             ctx.redirect("/home");
         });
+
         app.get("/home", new GetHomeHandler(urlPublica));
+
+        //login
         app.get("/login", new GetLoginHandler(urlPublica));
         app.post("/login", new PostLoginHandler(urlPublica));
 
@@ -42,40 +51,30 @@ public class Application {
 
         app.get("/logout", new GetLogOutHandler());
 
-        app.get("/hechos/{id}", new GetHechoEspecificoHandler(hechoService)); //hecho especifico
-
-        // Falta
-        app.get("/hechos", new GetHechosHandler(urlPublica)); //home con hechos
-
-        // Falta
-        //app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
-
+        //hechos
+        app.get("/hechos/{id}", new GetHechoEspecificoHandler(urlPublica, hechoService)); //hecho especifico
+        app.get("/hechos", new GetHechosHandler(hechoService)); //home con hechos
         app.get("/crear", new GetCrearHechoHandler(urlPublica)); // Para mostrar el formulario de creación
 
         // Falta
         app.get("/hechos/{id}/eliminar", new GetSolicitudEliminacionHandler(urlPublica));
-
-        app.get("/colecciones", new GetColeccionesHandler(urlPublica, coleccionService));
-
-        app.get("/colecciones/{id}", new GetColeccionHandler(urlPublica, coleccionService));
-
         // Falta
         //app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
-
         // Falta
         app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlPublica));
 
-        app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin, coleccionService));
-
-        app.get("/crear-coleccion", new GetCrearColeccionHandler(urlAdmin));
-
-        app.post("/colecciones", new PostColeccionHandler(urlAdmin, coleccionService));
+        app.get("/colecciones", coleccionController.listarColecciones);
+        app.get("/colecciones/{id}", coleccionController.obtenerColeccionPorId);
+        app.get("/editar-coleccion/{id}", coleccionController.obtenerPageEditarColeccion);
+        app.get("/crear-coleccion", coleccionController.obtenerPageCrearColeccion);
+        app.post("/colecciones", coleccionController.crearColeccion);
+        //app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
 
         // Falta organizar el tema de categorias y colecciones, y aplicar los estilos
-        app.get("/estadisticas", new GetEstadisticasHandler(puertoEstadisticas));
+        app.get("/estadisticas", new GetEstadisticasHandler(estadisticasService, categoriasService));
 
-        app.get("/admin/solicitudes", new GetSolicitudesAdminHandler(urlAdmin));
-        app.get("/admin/solicitudes/{tipo}/{id}", new GetSolicitudAdminHandler(urlAdmin));
+        app.get("/admin/solicitudes", new GetSolicitudesAdminHandler(solicitudService));
+        app.get("/admin/solicitudes/{tipo}/{id}", new GetSolicitudAdminHandler(solicitudService));
         app.patch("/admin/solicitudes/{tipo}/{id}", new PatchSolicitudEstadoHandler(urlAdmin));
 
 

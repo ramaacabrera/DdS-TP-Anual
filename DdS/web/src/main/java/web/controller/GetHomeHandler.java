@@ -23,7 +23,7 @@ public class GetHomeHandler implements Handler {
     private final ObjectMapper mapper = new ObjectMapper();
 
     private static final int PAGE_DEFAULT = 1;
-    private static final int SIZE_MAP_LIMIT = 50;
+    private static final int SIZE_MAP_LIMIT = 15;
 
     public GetHomeHandler(String urlPublica) {this.urlPublica = urlPublica;}
 
