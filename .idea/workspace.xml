@@ -4,82 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="termino cargadorEstatico">
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Consenso/Absoluta.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Consenso/AlgoritmoConsenso.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Consenso/MayoriaSimple.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Consenso/MultiplesMenciones.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/Criterio.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioContribuyente.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioDeTexto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioEtiquetas.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioFecha.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioTipoFuente.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioTipoMultimedia.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/CriterioUbicacion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Criterios/TipoDeTexto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ColeccionDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/FuenteDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/HechoDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ModelosMensajesDTO/HechosObtenidosPayload.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ModelosMensajesDTO/IdCargadorPayload.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ModelosMensajesDTO/MensajeVacioPayload.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ModelosMensajesDTO/SolicitudesEliminacionObtenidosPayload.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ModelosMensajesDTO/SolicitudesModificacionObtenidosPayload.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/ModelosMensajesDTO/WsMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/PageDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/SolicitudDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/SolicitudDeEliminacionDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/DTO/SolicitudDeModificacionDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/Coleccion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/ContenidoMultimedia.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/EstadoHecho.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/Etiqueta.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/Hecho.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/HechoModificado.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/ModosDeNavegacion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/TipoAlgoritmoConsenso.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/TipoContenidoMultimedia.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/HechosYColecciones/Ubicacion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/PaqueteNormalizador/DesnormalizadorCategorias.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/PaqueteNormalizador/MockNormalizador.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/PaqueteNormalizador/NormalizadorCategorias.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Solicitudes/EstadoSolicitudEliminacion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Solicitudes/EstadoSolicitudModificacion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Solicitudes/Solicitud.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Solicitudes/SolicitudDeEliminacion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Solicitudes/SolicitudDeModificacion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Usuario/RolUsuario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/Usuario/Usuario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/fuente/Fuente.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/fuente/TipoDeFuente.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/domain/repository/HechoRepositorio.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/service/ColeccionService.java" afterDir="false" />
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="ordenamiento de mvc de web casi terminado">
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/ColeccionController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetColeccionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetColeccionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetColeccionesHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetColeccionesHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetCrearColeccionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetCrearColeccionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetCrearHechoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetCrearHechoHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetEditarColeccionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetEditarColeccionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetEstadisticasHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetEstadisticasHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHechoEspecificoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetHechoEspecificoHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHechosColeccionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetHechosColeccionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHechosHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetHechosHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHomeHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetHomeHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetLogOutHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetLogOutHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetLoginHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetLoginHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetSignInHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetSignInHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetSolicitudAdminHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetSolicitudAdminHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetSolicitudEliminacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetSolicitudEliminacionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetSolicitudesAdminHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetSolicitudesAdminHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetSolicitudesEliminacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/GetSolicitudesEliminacionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/PatchSolicitudEstadoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/PatchSolicitudEstadoHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/PostColeccionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/PostColeccionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/PostLoginHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/PostLoginHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/PutSolicitudEstadoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/controller/PutSolicitudEstadoHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/coleccion.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/coleccion.ftl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetColeccionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetColeccionesHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetCrearColeccionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetEditarColeccionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/PostColeccionHandler.java" beforeDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -168,6 +101,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="web.service" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\java\domain" />
       <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\cargadorEstatico\src\main\java\domain" />
@@ -189,7 +125,7 @@
       <recent name="domain.Usuario" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Web">
+  <component name="RunManager" selected="Application.ApiPublica">
     <configuration name="Agregador" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Application" />
       <module name="agregador" />
@@ -301,7 +237,13 @@
       <workItem from="1763675515652" duration="39000" />
       <workItem from="1763675563752" duration="132000" />
       <workItem from="1763675706794" duration="68000" />
-      <workItem from="1763675783834" duration="1300000" />
+      <workItem from="1763675783834" duration="1402000" />
+      <workItem from="1763699270071" duration="2831000" />
+      <workItem from="1763747949443" duration="2144000" />
+      <workItem from="1763985775733" duration="2002000" />
+      <workItem from="1764360900637" duration="5273000" />
+      <workItem from="1764454397100" duration="4415000" />
+      <workItem from="1764606448295" duration="1957000" />
     </task>
     <task id="LOCAL-00001" summary="termine cargadorDemo, avanzo con cargadorDinamico (en proceso)">
       <option name="closed" value="true" />
@@ -327,7 +269,39 @@
       <option name="project" value="LOCAL" />
       <updated>1763671177385</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="empiezo a ordenar componente web, creo ColeccionService">
+      <option name="closed" value="true" />
+      <created>1763677185386</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1763677185386</updated>
+    </task>
+    <task id="LOCAL-00005" summary="avanzo en ordenar web, creo hechoService">
+      <option name="closed" value="true" />
+      <created>1764366417025</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1764366417025</updated>
+    </task>
+    <task id="LOCAL-00006" summary="ordenamiento de mvc de web casi terminado">
+      <option name="closed" value="true" />
+      <created>1764458569107</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1764458569107</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Changes by idiart, ordenamiento de mvc de web casi terminado">
+      <option name="closed" value="true" />
+      <created>1764458671133</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1764458671133</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -337,7 +311,11 @@
     <MESSAGE value="termine cargadorDemo, avanzo con cargadorDinamico (en proceso)" />
     <MESSAGE value="termino cargadorDinamico" />
     <MESSAGE value="termino cargadorEstatico" />
-    <option name="LAST_COMMIT_MESSAGE" value="termino cargadorEstatico" />
+    <MESSAGE value="empiezo a ordenar componente web, creo ColeccionService" />
+    <MESSAGE value="avanzo en ordenar web, creo hechoService" />
+    <MESSAGE value="ordenamiento de mvc de web casi terminado" />
+    <MESSAGE value="Changes by idiart, ordenamiento de mvc de web casi terminado" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes by idiart, ordenamiento de mvc de web casi terminado" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

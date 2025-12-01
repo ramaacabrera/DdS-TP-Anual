@@ -33,45 +33,40 @@ public class Application {
         CategoriasService categoriasService = new CategoriasService(urlEstadisticas);
         SolicitudService solicitudService = new SolicitudService(urlAdmin);
 
+        // controllers
+
+        ColeccionController coleccionController = new ColeccionController(coleccionService);
+
         app.get("/", ctx -> {
             ctx.redirect("/home");
         });
+
         app.get("/home", new GetHomeHandler(urlPublica));
+
+        //login
         app.get("/login", new GetLoginHandler(urlPublica));
         app.post("/login", new PostLoginHandler(urlPublica));
-
         app.get("/sign-in", new GetSignInHandler(urlPublica));
-
         app.get("/logout", new GetLogOutHandler());
 
+        //hechos
         app.get("/hechos/{id}", new GetHechoEspecificoHandler(urlPublica, hechoService)); //hecho especifico
-
-        // Falta
         app.get("/hechos", new GetHechosHandler(hechoService)); //home con hechos
-
-        // Falta
-        //app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
-
         app.get("/crear", new GetCrearHechoHandler(urlPublica)); // Para mostrar el formulario de creación
 
         // Falta
         app.get("/hechos/{id}/eliminar", new GetSolicitudEliminacionHandler(urlPublica));
-
-        app.get("/colecciones", new GetColeccionesHandler(urlPublica, coleccionService));
-
-        app.get("/colecciones/{id}", new GetColeccionHandler(urlPublica, coleccionService));
-
         // Falta
         //app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
-
         // Falta
         app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlPublica));
 
-        app.get("/editar-coleccion/{id}", new GetEditarColeccionHandler(urlAdmin, coleccionService));
-
-        app.get("/crear-coleccion", new GetCrearColeccionHandler(urlAdmin));
-
-        app.post("/colecciones", new PostColeccionHandler(urlAdmin, coleccionService));
+        app.get("/colecciones", coleccionController.listarColecciones);
+        app.get("/colecciones/{id}", coleccionController.obtenerColeccionPorId);
+        app.get("/editar-coleccion/{id}", coleccionController.obtenerPageEditarColeccion);
+        app.get("/crear-coleccion", coleccionController.obtenerPageCrearColeccion);
+        app.post("/colecciones", coleccionController.crearColeccion);
+        //app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
 
         // Falta organizar el tema de categorias y colecciones, y aplicar los estilos
         app.get("/estadisticas", new GetEstadisticasHandler(estadisticasService, categoriasService));
