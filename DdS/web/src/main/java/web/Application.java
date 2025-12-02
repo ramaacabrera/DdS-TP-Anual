@@ -36,6 +36,8 @@ public class Application {
         // controllers
 
         ColeccionController coleccionController = new ColeccionController(coleccionService);
+        HechoController hechoController = new HechoController(hechoService);
+        SolicitudController solicitudController = new SolicitudController(solicitudService);
 
         app.get("/", ctx -> {
             ctx.redirect("/home");
@@ -46,23 +48,15 @@ public class Application {
         //login
         app.get("/login", new GetLoginHandler(urlPublica));
         app.post("/login", new PostLoginHandler(urlPublica));
-
         app.get("/sign-in", new GetSignInHandler(urlPublica));
-
         app.get("/logout", new GetLogOutHandler());
 
         //hechos
-        app.get("/hechos/{id}", new GetHechoEspecificoHandler(hechoService)); //hecho especifico
-        app.get("/hechos", new GetHechosHandler(hechoService)); //home con hechos
-        app.get("/crear", new GetCrearHechoHandler(urlPublica)); // Para mostrar el formulario de creación
+        app.get("/hechos/{id}", hechoController.obtenerHechoPorId); //hecho especifico
+        app.get("/hechos", hechoController.listarHechos); //home con hechos
+        app.get("/crear", hechoController.obtenerPageCrearHecho); // Para mostrar el formulario de creación
 
-        // Falta
-        app.get("/hechos/{id}/eliminar", new GetSolicitudEliminacionHandler(urlPublica));
-        // Falta
-        //app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
-        // Falta
-        app.get("/api/solicitudes/{id}", new GetSolicitudEliminacionHandler(urlPublica));
-
+        //colecciones
         app.get("/colecciones", coleccionController.listarColecciones);
         app.get("/colecciones/{id}", coleccionController.obtenerColeccionPorId);
         app.get("/editar-coleccion/{id}", coleccionController.obtenerPageEditarColeccion);
@@ -70,12 +64,19 @@ public class Application {
         app.post("/colecciones", coleccionController.crearColeccion);
         //app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
 
+
         // Falta organizar el tema de categorias y colecciones, y aplicar los estilos
         app.get("/estadisticas", new GetEstadisticasHandler(estadisticasService, categoriasService));
 
-        app.get("/admin/solicitudes", new GetSolicitudesAdminHandler(solicitudService));
-        app.get("/admin/solicitudes/{tipo}/{id}", new GetSolicitudAdminHandler(solicitudService));
-        app.patch("/admin/solicitudes/{tipo}/{id}", new PatchSolicitudEstadoHandler(urlAdmin));
+        //solicitudes
+
+        app.get("/hechos/{id}/eliminar", solicitudController.obtenerFormsEliminarSolicitud);
+        //app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
+        app.get("/api/solicitudes/{id}", solicitudController.obtenerFormsEliminarSolicitud);
+
+        app.get("/admin/solicitudes", solicitudController.listarSolicitudes);
+        app.get("/admin/solicitudes/{tipo}/{id}", solicitudController.obtenerSolicitud);
+        app.patch("/admin/solicitudes/{tipo}/{id}", solicitudController.actualizarEstadoSolicitud);
 
 
     }

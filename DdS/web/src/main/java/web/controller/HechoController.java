@@ -1,28 +1,25 @@
 package web.controller;
 
-import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import web.dto.Hechos.HechoDTO;
 import web.dto.PageDTO;
 import web.service.HechoService;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class GetHechosHandler implements Handler {
+public class HechoController {
 
-    private final HechoService hechoService;
+    private HechoService hechoService;
 
-    public GetHechosHandler(HechoService hechoService) {
+    public HechoController(HechoService hechoService) {
         this.hechoService = hechoService;
     }
 
-    @Override
-    public void handle(Context ctx) throws IOException {
+
+    public Handler listarHechos = ctx -> {
         // 1) Construir la definición visual de los filtros (para el sidebar)
-        List<FilterDef> filters = buildFilters();
+        List<HechoController.FilterDef> filters = buildFilters();
 
         List<Map<String, Object>> filtersForTemplate = filters.stream()
                 .map(filter -> Map.of(
@@ -111,7 +108,48 @@ public class GetHechosHandler implements Handler {
 
         // 7) Renderizar
         ctx.render("home.ftl", model);
-    }
+    };
+
+
+    public Handler obtenerHechoPorId = ctx -> {
+        String hechoIdString = ctx.pathParam("id");
+
+        if (hechoIdString == null || hechoIdString.trim().isEmpty()) {
+            ctx.status(400).result("Error 400: ID de hecho no proporcionado.");
+            return;
+        }
+
+        HechoDTO hecho = hechoService.obtenerHechoPorId(hechoIdString);
+
+        if (hecho == null) {
+            ctx.status(404).result("Hecho no encontrado o servicio no disponible.");
+            return;
+        }
+
+        Map<String, Object> modelo = new HashMap<>();
+        modelo.put("hecho", hecho);
+
+        if (!ctx.sessionAttributeMap().isEmpty()) {
+            modelo.put("username", ctx.sessionAttribute("username"));
+            modelo.put("access_token", ctx.sessionAttribute("access_token"));
+        }
+
+        ctx.render("hecho-especifico.ftl", modelo);
+    };
+
+    public Handler obtenerPageCrearHecho = ctx -> {
+        // Solo renderiza la plantilla con el formulario vacío
+        Map<String, Object> modelo = new HashMap<>();
+        modelo.put("pageTitle", "Reportar un Hecho");
+        if(!ctx.sessionAttributeMap().isEmpty()){
+            String username = ctx.sessionAttribute("username");
+            System.out.println("Usuario: " + username);
+            String access_token = ctx.sessionAttribute("access_token");
+            modelo.put("username", username);
+            modelo.put("access_token", access_token);
+        }
+        ctx.render("crear-hecho.ftl", modelo);
+    };
 
     // --- Helpers Internos ---
 
@@ -120,11 +158,11 @@ public class GetHechosHandler implements Handler {
         return hechoService.formatearFechaParaInput(rawDate);
     }
 
-    private List<FilterDef> buildFilters() {
-        List<FilterDef> list = new ArrayList<>();
+    private List<HechoController.FilterDef> buildFilters() {
+        List<HechoController.FilterDef> list = new ArrayList<>();
 
         // Categoría (Obtenida dinámicamente del servicio)
-        FilterDef cat = new FilterDef("categoria", "Categoría", "select");
+        HechoController.FilterDef cat = new HechoController.FilterDef("categoria", "Categoría", "select");
         List<String> categorias = hechoService.obtenerCategorias();
         if (categorias != null) {
             cat.setOptions(categorias);
@@ -132,16 +170,16 @@ public class GetHechosHandler implements Handler {
         list.add(cat);
 
         // Fechas de carga
-        list.add(new FilterDef("fecha_carga_desde", "Fecha carga desde", "date"));
-        list.add(new FilterDef("fecha_carga_hasta", "Fecha carga hasta", "date"));
+        list.add(new HechoController.FilterDef("fecha_carga_desde", "Fecha carga desde", "date"));
+        list.add(new HechoController.FilterDef("fecha_carga_hasta", "Fecha carga hasta", "date"));
 
         // Fechas de acontecimiento
-        list.add(new FilterDef("fecha_acontecimiento_desde", "Acontecimiento desde", "date"));
-        list.add(new FilterDef("fecha_acontecimiento_hasta", "Acontecimiento hasta", "date"));
+        list.add(new HechoController.FilterDef("fecha_acontecimiento_desde", "Acontecimiento desde", "date"));
+        list.add(new HechoController.FilterDef("fecha_acontecimiento_hasta", "Acontecimiento hasta", "date"));
 
         // Coordenadas
-        list.add(new FilterDef("latitud", "Latitud", "search"));
-        list.add(new FilterDef("longitud", "Longitud", "search"));
+        list.add(new HechoController.FilterDef("latitud", "Latitud", "search"));
+        list.add(new HechoController.FilterDef("longitud", "Longitud", "search"));
 
         return list;
     }
@@ -160,11 +198,24 @@ public class GetHechosHandler implements Handler {
             this.options = new ArrayList<>();
         }
 
-        public String getKey() { return key; }
-        public String getLabel() { return label; }
-        public String getType() { return type; }
-        public List<String> getOptions() { return options; }
+        public String getKey() {
+            return key;
+        }
 
-        public void setOptions(List<String> options) { this.options = options; }
+        public String getLabel() {
+            return label;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public List<String> getOptions() {
+            return options;
+        }
+
+        public void setOptions(List<String> options) {
+            this.options = options;
+        }
     }
 }

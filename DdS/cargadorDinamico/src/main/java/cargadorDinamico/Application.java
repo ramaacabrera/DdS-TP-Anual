@@ -30,11 +30,6 @@ public class Application {
         ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDinamica(new HechosDinamicoService(dinamicoRepositorio), new SolicitudesModificacionService(dinamicoRepositorio), new SolicitudesEliminacionService(dinamicoRepositorio)));
         cliente.conectar(fuente);
 
-        //app.get("/hechos", new GetHechosDinamicoHandler(dinamicoRepositorio));
-        //app.get("/solicitudesModificacion", new GetSolicitudesModificacionHandler(dinamicoRepositorio));
-        //app.get("/solicitudesEliminacion", new GetSolicitudesEliminacionHandler(dinamicoRepositorio));
-
-
         app.post("/hechos", new PostHechosHandler(new HechosDinamicoService(dinamicoRepositorio)));
         app.post("/solicitudesModificacion", new PostSolicitudesModificacionHandler(new SolicitudesModificacionService(dinamicoRepositorio)));
         app.post("/solicitudesEliminacion", new PostSolicitudesEliminacionHandler(new SolicitudesEliminacionService(dinamicoRepositorio)));
