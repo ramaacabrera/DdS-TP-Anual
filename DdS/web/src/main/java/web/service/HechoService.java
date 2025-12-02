@@ -1,4 +1,5 @@
 package web.service;
+package cargadorDinamico.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import cargadorDinamico.service.HechosDinamicoService;
 
 public class HechoService {
 
@@ -54,6 +57,11 @@ public class HechoService {
             return null;
         }
     }
+
+    public boolean actualizarHecho(String idString, HechoDTO dto) {
+        return hechosDinamicoService.actualizarHecho(idString, dto);
+    }
+
 
 
     public PageDTO<HechoDTO> buscarHechos(Map<String, String> filtros, int page, int size) throws IOException {

@@ -1,18 +1,26 @@
 package cargadorDinamico.service;
 
 import cargadorDinamico.domain.DinamicaDto.Hecho_D_DTO;
+import cargadorDinamico.domain.HechosYColecciones.Hecho;
 import cargadorDinamico.repository.DinamicoRepositorio;
 import cargadorDinamico.domain.DinamicaDto.HechoDTO;
 import cargadorDinamico.domain.fuente.Fuente;
 import cargadorDinamico.domain.fuente.TipoDeFuente;
+import cargadorDinamico.domain.*;
+import cargadorDinamico.repository.HechoRepositorio;
+
 
 import java.util.List;
+import java.util.UUID;
 
 public class HechosDinamicoService {
     private final DinamicoRepositorio repositorio;
+    private final HechoRepositorio hechoRepositorio;
 
-    public HechosDinamicoService(DinamicoRepositorio repositorioNuevo) {
+    public HechosDinamicoService(DinamicoRepositorio repositorioNuevo, HechoRepositorio hechoRepositorio)
+    {
         this.repositorio = repositorioNuevo;
+        this.hechoRepositorio = hechoRepositorio;
     }
 
     public List<HechoDTO> obtenerHechos(){
@@ -33,4 +41,27 @@ public class HechosDinamicoService {
         }
     }
 
+    public boolean actualizarHecho(String idString, Hecho_D_DTO hechoActualizado) {
+        UUID id;
+
+        try {
+            id = UUID.fromString(idString);
+        } catch (IllegalArgumentException e) {
+            return false;   // ID inválido
+        }
+
+        Hecho hechoExistente = hechoRepositorio.buscarPorId(id);
+
+        if (hechoExistente == null) {
+            return false;   // no existe
+        }
+
+        // ACTUALIZACIÓN
+        hechoExistente.setTitulo(hechoActualizado.getTitulo());
+        hechoExistente.setDescripcion(hechoActualizado.getDescripcion());
+
+        hechoRepositorio.actualizar(hechoExistente);
+        return true;  // ← importante
+    }
 }
+

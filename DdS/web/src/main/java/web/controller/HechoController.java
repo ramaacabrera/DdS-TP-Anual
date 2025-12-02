@@ -151,6 +151,22 @@ public class HechoController {
         ctx.render("crear-hecho.ftl", modelo);
     };
 
+    public Handler actualizarHecho = ctx -> {
+
+        String id = ctx.pathParam("id");
+        HechoDTO dto = ctx.bodyAsClass(HechoDTO.class);
+
+        boolean actualizado = hechoService.actualizarHecho(id, dto);
+
+        if (!actualizado) {
+            ctx.status(404).result("Hecho no encontrado");
+            return;
+        }
+
+        ctx.status(200).result("Hecho actualizado correctamente");
+    };
+
+
     // --- Helpers Internos ---
 
     private String formatDateForInput(String rawDate) {

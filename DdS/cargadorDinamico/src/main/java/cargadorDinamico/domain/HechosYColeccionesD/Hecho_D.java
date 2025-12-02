@@ -120,4 +120,16 @@ public class Hecho_D {
     public void setEsEditable (Boolean esEditableNuevo) {esEditable = esEditableNuevo; }
     public void setContenidoMultimedia(List<ContenidoMultimedia_D> contenidoNuevo) {contenidoMultimedia = contenidoNuevo;}
 
+    public void actualizarDesdeDTO(Hecho_D_DTO dto) {
+        this.titulo = dto.getTitulo();
+        this.descripcion = dto.getDescripcion();
+        this.categoria = dto.getCategoria();
+        this.fechaDeAcontecimiento = dto.getFechaDeAcontecimiento();
+        this.fechaDeCarga = dto.getFechaDeCarga();
+        this.estadoHecho = dto.getEstadoHecho();
+        this.contribuyente = dto.getContribuyente();
+        this.ubicacion = dto.getUbicacion();
+        this.etiquetas = dto.getEtiquetas();
+        this.contenidoMultimedia = dto.getContenidoMultimedia();
+    }
 }

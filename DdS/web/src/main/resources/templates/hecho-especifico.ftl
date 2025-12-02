@@ -18,7 +18,9 @@
             <h1 class="main-title">${hecho.titulo?default("Hecho sin Título")?html}</h1>
             <span class="tag tag-title">${hecho.categoria?default("Sin Categoría")?html}</span>
         </div>
-        <@cmp.actionButtons hecho=hecho />
+         <@cmp.actionButtons hecho=hecho
+                 <a href="/hechos/${hecho.id}/editar" class="btn">✏Editar</a>
+                 />
     </div>
 
     <hr class="separator" style="border: 1px solid #eee; margin-bottom: 20px;">
