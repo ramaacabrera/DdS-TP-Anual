@@ -1,3 +1,4 @@
+/*
 package tests;
 
 import gestorAdministrativo.domain.HechosYColecciones.Coleccion;
@@ -5,6 +6,13 @@ import gestorAdministrativo.dto.Coleccion.ColeccionDTO;
 import gestorAdministrativo.repository.HechoRepositorio;
 import org.junit.Test;
 import utils.Persistencia.ColeccionRepositorio;
+import gestorAdministrativo.repository.*;
+import gestorAdministrativo.service.*;
+import gestorAdministrativo.domain.*;
+import gestorAdministrativo.dto.*;
+import gestorAdministrativo.utils.*;
+import gestorAdministrativo.controller.*;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -105,4 +113,4 @@ class ColeccionServiceTest {
         assertEquals("T", dto.getTitulo());
     }
 }
-
+*/

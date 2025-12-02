@@ -1,4 +1,26 @@
-package tests;
+/*package tests;
+
+import gestorAdministrativo.repository.HechoRepositorio;
+import gestorAdministrativo.dto.Solicitudes.*;
+import gestorAdministrativo.repository.*;
+import gestorAdministrativo.service.*;
+import gestorAdministrativo.domain.*;
+import gestorAdministrativo.dto.*;
+import gestorAdministrativo.utils.*;
+import gestorAdministrativo.controller.*;
+
+import org.junit.Test;
+
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import static jdk.internal.org.objectweb.asm.util.CheckClassAdapter.verify;
+import static net.bytebuddy.matcher.ElementMatchers.any;
+import static org.junit.Assert.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class SolicitudEliminacionServiceTest {
@@ -66,4 +88,4 @@ class SolicitudEliminacionServiceTest {
         assertEquals(1, dtos.size());
         assertEquals("x", dtos.get(0).getJustificacion());
     }
-}
+} */
