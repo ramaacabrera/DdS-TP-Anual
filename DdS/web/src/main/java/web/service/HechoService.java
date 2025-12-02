@@ -1,5 +1,4 @@
 package web.service;
-package cargadorDinamico.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +8,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import web.dto.Hechos.HechoDTO;
 import web.dto.PageDTO;
+import web.service.Normalizador.DesnormalizadorCategorias;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import cargadorDinamico.service.HechosDinamicoService;
+import static web.service.Normalizador.DesnormalizadorCategorias.desnormalizar;
+
 
 public class HechoService {
 
@@ -58,12 +59,6 @@ public class HechoService {
         }
     }
 
-    public boolean actualizarHecho(String idString, HechoDTO dto) {
-        return hechosDinamicoService.actualizarHecho(idString, dto);
-    }
-
-
-
     public PageDTO<HechoDTO> buscarHechos(Map<String, String> filtros, int page, int size) throws IOException {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(urlPublica + "/hechos").newBuilder()
                 .addQueryParameter("pagina", String.valueOf(page))
@@ -97,7 +92,8 @@ public class HechoService {
         Request request = new Request.Builder().url(url).get().build();
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
-                return mapper.readValue(response.body().string(), new TypeReference<List<String>>() {});
+                List<String> categorias= mapper.readValue(response.body().string(), new TypeReference<List<String>>() {});
+                return categorias.stream().map(DesnormalizadorCategorias::desnormalizar).toList();
             }
         } catch (IOException e) {
             System.err.println("Error obteniendo categorías: " + e.getMessage());

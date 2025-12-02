@@ -1,19 +1,11 @@
 package web.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 import web.service.CategoriasService;
 import web.service.EstadisticasService;
-import web.domain.Normalizador.DesnormalizadorCategorias;
-import web.domain.Normalizador.NormalizadorCategorias;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.*;
 
 

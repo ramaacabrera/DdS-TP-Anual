@@ -62,6 +62,17 @@
                         <div class="list column gap-16">
                             <#import "fragments/components.ftl" as cmp>
                             <#list hechos as h>
+                                <#assign imagenUrl = "">
+
+                                <#if h.contenidoMultimedia?has_content>
+                                    <#list h.contenidoMultimedia as media>
+                                        <#if (media.tipoContenido!"")?string?upper_case == "IMAGEN">
+                                            <#assign imagenUrl = media.contenido>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </#if>
+
                                 <@cmp.hechoCard
                                 id=h.hechoId
                                 titulo=h.titulo
@@ -70,8 +81,10 @@
                                 categoria=h.categoria!""
                                 ubicacion=h.ubicacion!""
                                 etiquetas=h.etiquetas![]
+                                imagen=imagenUrl
                                 verHref="/hechos/${h.hechoId}"
-                                editarHref="/editar-hecho/${h.hechoId}" />
+                                editarHref="/editar-hecho/${h.hechoId}"
+                                />
                             </#list>
                         </div>
                     <#else>

@@ -1,4 +1,4 @@
-package web.domain.Normalizador;
+package web.service.Normalizador;
 
 import java.text.Normalizer;
 import java.util.Locale;

@@ -2,8 +2,8 @@ package web.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import web.domain.Normalizador.DesnormalizadorCategorias;
-import web.domain.Normalizador.NormalizadorCategorias;
+import web.service.Normalizador.DesnormalizadorCategorias;
+import web.service.Normalizador.NormalizadorCategorias;
 
 import java.net.URI;
 import java.net.http.HttpClient;

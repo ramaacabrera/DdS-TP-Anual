@@ -59,15 +59,22 @@
 
 <#macro hero hecho>
     <div class="hero">
-        <#if hecho.getContenidoMultimedia()?? && (hecho.getContenidoMultimedia()?size > 0)>
-            <#assign primerMedia = hecho.getContenidoMultimedia()[0]>
-            <#if (primerMedia.getTipoContenido()?upper_case == "IMAGEN") && primerMedia.contenido?has_content>
-                <img src="${primerMedia.contenido?html}" alt="Imagen principal del hecho" style="width:100%; height:100%; object-fit:cover;">
-            <#else>
-                <div class="hero-default"> <img src="/img/noimg-default.png"alt="Sin imagen principal"></div>
-            </#if>
+        <#assign imagenEncontrada = "">
+        <#if hecho.contenidoMultimedia?has_content>
+            <#list hecho.contenidoMultimedia as media>
+                <#if (media.tipoContenido!"")?string?upper_case == "IMAGEN">
+                    <#assign imagenEncontrada = media.contenido>
+                    <#break>
+                </#if>
+            </#list>
+        </#if>
+
+        <#if imagenEncontrada?has_content>
+            <img src="${imagenEncontrada}" alt="Imagen principal del hecho" style="width:100%; height:100%; object-fit:cover;">
         <#else>
-            <div class="hero-default"> <img src="/img/noimg-default.png"alt="Sin imagen principal"></div>
+            <div class="hero-default">
+                <img src="/img/noimg-default.png" alt="Sin imagen principal">
+            </div>
         </#if>
     </div>
 </#macro>
@@ -114,28 +121,61 @@
 
 <#macro mediaGrid hecho>
     <div class="media-grid">
-        <#if hecho.getContenidoMultimedia()?? && (hecho.getContenidoMultimedia()?size > 0)>
-            <#list hecho.getContenidoMultimedia() as media>
-                <div class="media-item">
-                    <#if media.getTipoContenido()?upper_case == "IMAGEN">
-                        <img src="${media.contenido?html}" alt="Media" style="width:100%; height:100%; object-fit:cover;">
-                    <#elseif media.getTipoContenido()?upper_case == "AUDIO">
-                        <div style="padding:10px; font-size:0.9rem; color:var(--muted-color);">
-                            🎧 <a href="${media.contenido?html}" target="_blank" rel="noopener">Audio</a>
+        <#if hecho.contenidoMultimedia?has_content>
+
+            <#list hecho.contenidoMultimedia as media>
+                <#assign tipo = (media.tipoContenido!"")?string?upper_case>
+
+                <div class="media-card">
+                    <#if tipo == "IMAGEN">
+                        <div class="media-img-wrapper">
+                            <a href="${media.contenido}" target="_blank" title="Ver imagen completa">
+                                <img src="${media.contenido}" alt="Imagen adjunta" class="media-img" loading="lazy">
+                            </a>
                         </div>
-                    <#elseif media.getTipoContenido()?upper_case == "VIDEO">
-                        <div style="padding:10px; font-size:0.9rem; color:var(--muted-color);">
-                            📹 <a href="${media.contenido?html}" target="_blank" rel="noopener">Video</a>
+                        <div style="padding: 10px; font-size: 0.85rem; color: #666; text-align: center;">
+                            🔍 Clic para ampliar
                         </div>
+
+                    <#elseif tipo == "VIDEO">
+                        <div class="media-video-wrapper">
+                            <video controls style="width: 100%; height: 100%;">
+                                <source src="${media.contenido}" type="video/mp4">
+                                <source src="${media.contenido}" type="video/webm">
+                                Tu navegador no soporta la reproducción de video.
+                            </video>
+                        </div>
+
+                    <#elseif tipo == "AUDIO">
+                        <div class="media-audio-wrapper">
+                            <div class="audio-icon">🎧</div>
+                            <audio controls style="width: 100%; margin-top: 10px;">
+                                <source src="${media.contenido}" type="audio/mpeg">
+                                <source src="${media.contenido}" type="audio/ogg">
+                                Tu navegador no soporta el elemento de audio.
+                            </audio>
+                        </div>
+                        <div style="padding: 10px; text-align: center; background: #fff;">
+                            <span style="font-size: 0.85rem; color: #666;">Archivo de Audio</span>
+                        </div>
+
                     <#else>
-                        <div style="padding:10px; font-size:0.9rem; color:var(--muted-color);">
-                            📎 <a href="${media.contenido?html}" target="_blank" rel="noopener">Archivo</a>
+                        <div class="media-file-wrapper">
+                            <span style="font-size: 2.5rem; margin-bottom: 10px;">📎</span>
+                            <span style="color: #4b5563; font-weight: 500; margin-bottom: 5px;">Documento Adjunto</span>
+                            <a href="${media.contenido}" target="_blank" class="btn-download">
+                                Descargar
+                            </a>
                         </div>
                     </#if>
                 </div>
             </#list>
+
         <#else>
-            <div style="grid-column:1 / -1; color:#999;">No hay contenido multimedia adjunto.</div>
+            <div class="empty-state">
+                <div style="font-size: 2rem; margin-bottom: 10px;">📂</div>
+                <p>No hay contenido multimedia adjunto a este registro.</p>
+            </div>
         </#if>
     </div>
 </#macro>
@@ -287,9 +327,22 @@
 </#macro>
 
 <#-- CARD DE HECHO -------------------------------------------------------->
-<#macro hechoCard id titulo resumen fecha categoria ubicacion etiquetas verHref editarHref>
+<#macro hechoCard id titulo resumen fecha categoria ubicacion etiquetas verHref editarHref imagen="">
     <article class="card card-hecho">
-        <div class="card-media skeleton">IMAGEN</div>
+
+        <div class="card-media" style="height: 200px; overflow: hidden; background-color: #f0f2f5; position: relative;">
+            <#if imagen?has_content>
+                <img src="${imagen}" alt="${titulo?html}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
+            <#else>
+                <div class="skeleton" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #999;">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                </div>
+            </#if>
+        </div>
 
         <div class="card-body">
             <div class="row space-between align-center">
@@ -301,10 +354,11 @@
             </div>
 
             <#if resumen?has_content>
-                <p class="muted">${resumen?html}</p>
+                <p class="muted" style="margin: 10px 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                    ${resumen?html}
+                </p>
             </#if>
 
-            <!-- Información de metadata - Solo fecha y categoría -->
             <div class="card-meta">
                 <#if fecha??>
                     <div class="meta-item">
@@ -336,11 +390,10 @@
                 </#if>
             </div>
 
-            <!-- Etiquetas -->
             <#if etiquetas?? && (etiquetas?size > 0)>
                 <div class="card-tags">
                     <#list etiquetas as e>
-                        <span class="tag">${e?html}</span>
+                        <span class="tag">${(e.nombre!e)?html}</span>
                     </#list>
                 </div>
             </#if>

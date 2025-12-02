@@ -1,6 +1,4 @@
-package gestorPublico.dto.Hechos; // O el paquete correcto donde lo tengas
-
-// Imports de tus Entidades de Dominio (Ajusta los paquetes si es necesario)
+package gestorPublico.dto.Hechos;
 import gestorPublico.domain.HechosYColecciones.Hecho;
 import gestorPublico.domain.HechosYColecciones.Ubicacion;
 
@@ -95,6 +93,13 @@ public class HechoDTO {
         if (hecho.getContenidoMultimedia() != null) {
             this.contenidoMultimedia = hecho.getContenidoMultimedia().stream().map(m -> {
                 ContenidoMultimediaDTO dto = new ContenidoMultimediaDTO();
+                dto.setContenidoId(m.getId_contenido());
+                dto.setContenido(m.getContenido());
+                if (m.getTipoContenido() != null) {
+                    try {
+                        dto.setTipoContenido(TipoContenidoMultimediaDTO.valueOf(m.getTipoContenido().name()));
+                    } catch (Exception e) {}
+                }
                 return dto;
             }).collect(Collectors.toList());
         } else {

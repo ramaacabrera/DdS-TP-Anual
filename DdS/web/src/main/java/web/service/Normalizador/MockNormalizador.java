@@ -1,4 +1,4 @@
-package web.domain.Normalizador;
+package web.service.Normalizador;
 import utils.Dominio.HechosYColecciones.Hecho;
 
 public class MockNormalizador {
