@@ -7,6 +7,7 @@ import gestorPublico.dto.FiltroHechosDTO;
 import gestorPublico.repository.HechoRepositorio;
 import gestorPublico.dto.Hechos.HechoDTO;
 import gestorPublico.dto.PageDTO;
+import gestorPublico.service.Normalizador.NormalizadorCategorias;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -85,6 +86,11 @@ public class HechoService {
         if (f.textoBusqueda != null && !f.textoBusqueda.trim().isEmpty()) {
             List<String> palabras = Arrays.asList(f.textoBusqueda.trim().split("\\s+"));
             criterios.add(new CriterioDeTexto(palabras, TipoDeTexto.BUSQUEDA));
+        }
+
+        if (f.categoria != null && !f.categoria.trim().isEmpty()){
+            String categoria = NormalizadorCategorias.normalizar(f.categoria);
+            criterios.add(new CriterioDeTexto(categoria.lines().toList(), TipoDeTexto.CATEGORIA));
         }
 
         if (f.fechaCargaDesde != null || f.fechaCargaHasta != null) {
