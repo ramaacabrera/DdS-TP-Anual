@@ -54,8 +54,12 @@ public class GestorSolicitudes {
 
             // 3. Buscar y setear el Hecho real
             if (dto.getHechoId() != null) {
+                System.out.println("Tenemos hecho con id");
                 Hecho hecho = hechoRepositorio.buscarPorId(dto.getHechoId());
+                System.out.println("Encontramos el hecho: ");
+                System.out.println(hecho);
                 solicitud.setHechoAsociado(hecho);
+                System.out.println("seteamos el hecho");
             }
 
             /*if (dto.getUsuario().getUsuarioId() != null) {
