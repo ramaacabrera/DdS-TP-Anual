@@ -28,25 +28,36 @@ public class PostLoginHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx){
-        String username = ctx.formParam("usuario");
+        String bodyString = ctx.body();
+        JSONObject requestBody = new JSONObject(bodyString);
+
+        String username = requestBody.optString("usuario", "");
+        String password = requestBody.optString("password", "");
+
+        // Validar que se recibieron los parámetros
+        if (username.isEmpty() || password.isEmpty()) {
+            ctx.status(400).json(Map.of("error", "Se requieren usuario y password"));
+            return;
+        }
+
         Usuario usuario = usuarioRepositorio.buscarPorUsername(username);
         if(usuario == null){
-            //ctx.sessionAttribute("error", "Usuario no existe");
-            //ctx.redirect("http://localhost:7070/login");
             System.out.println("Usuario no encontrado");
             ctx.status(401).json(Map.of("error", "El usuario no existe"));
             return;
         }
-        String password = ctx.formParam("password");
-        String body = "client_id=miapp-backend" +
+
+        // Crear el body para el SSO en formato x-www-form-urlencoded (esto es para Keycloak)
+        String ssoBody = "client_id=miapp-backend" +
                 "&client_secret=AZAGxoNbaW0aRksB3YWPG7Qj05tKJhr5" +
-                "&username=" + URLEncoder.encode(username, StandardCharsets.UTF_8) +
-                "&password=" + URLEncoder.encode(password, StandardCharsets.UTF_8) +
+                "&username=" + java.net.URLEncoder.encode(username, java.nio.charset.StandardCharsets.UTF_8) +
+                "&password=" + java.net.URLEncoder.encode(password, java.nio.charset.StandardCharsets.UTF_8) +
                 "&grant_type=password";
+
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(servidorSSO + "/protocol/openid-connect/token"))
                 .header("Content-Type", "application/x-www-form-urlencoded")
-                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .POST(HttpRequest.BodyPublishers.ofString(ssoBody))
                 .build();
         HttpClient client = HttpClient.newHttpClient();
         try {

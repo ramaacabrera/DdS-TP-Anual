@@ -77,7 +77,7 @@ public class UsuarioService {
         UserCreator creador = new UserCreator();
         int codigo = creador.crearUsuario(dto.usuario, dto.password, dto.nombre, dto.apellido, dto.email);
 
-        if (codigo != 201 && codigo != 204) { // 201 Created es lo estándar, 204 a veces
+        if (codigo != 201 && codigo != 204) {
             throw new RuntimeException("Error al crear usuario en Keycloak. Código: " + codigo);
         }
 
@@ -86,7 +86,7 @@ public class UsuarioService {
         nuevoUsuario.setApellido(dto.apellido);
         nuevoUsuario.setEdad(dto.edad);
         nuevoUsuario.setUsername(dto.usuario);
-        nuevoUsuario.setRol(RolUsuario.CONTRIBUYENTE); // Rol por defecto
+        nuevoUsuario.setRol(RolUsuario.CONTRIBUYENTE);
 
         usuarioRepositorio.guardar(nuevoUsuario);
     }
