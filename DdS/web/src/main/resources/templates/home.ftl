@@ -9,7 +9,7 @@
             <div class="search-hero">
                 <div class="box">
                     <h2 class="section-title">Buscador de Hechos</h2>
-<!-- 🔗 Botón para ir a las colecciones -->
+                    <!-- 🔗 Botón para ir a las colecciones -->
                     <div class="search-container">
                         <div class="search-input-group">
                             <input type="search"

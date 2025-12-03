@@ -33,7 +33,7 @@ public class CriterioUbicacion extends Criterio {
 
     @Override
     public String getQueryCondition() {
-        return "h.ubicacion.id_ubicacion = :idUbicacionParam";
+        return "h.ubicacion.descripcion = "+ ubicacion.getDescripcion();
     }
 
     @Override

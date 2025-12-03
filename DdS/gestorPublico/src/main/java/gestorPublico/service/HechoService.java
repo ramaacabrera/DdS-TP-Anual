@@ -101,8 +101,8 @@ public class HechoService {
             criterios.add(new CriterioFecha(f.fechaAcontecimientoDesde, f.fechaAcontecimientoHasta, "fechaDeAcontecimiento"));
         }
 
-        if (f.latitud != null && f.longitud != null) {
-            criterios.add(new CriterioUbicacion(new Ubicacion(f.latitud, f.longitud,"")));
+        if (f.descripcion != null && !f.descripcion.equals("")) {
+            criterios.add(new CriterioUbicacion(new Ubicacion(0, 0,f.descripcion)));
         }
 
         if (f.contribuyente != null && !f.contribuyente.trim().isEmpty()) {

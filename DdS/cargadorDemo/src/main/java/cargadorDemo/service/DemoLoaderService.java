@@ -166,7 +166,7 @@ public class DemoLoaderService implements FuenteExternaConexion {
                 try {
                     double lat = Double.parseDouble(ubicacionStr.split("Lat:")[1].split(",")[0].trim());
                     double lon = Double.parseDouble(ubicacionStr.split("Lon:")[1].trim());
-                    ubicacion = new Ubicacion(lat, lon); // Usar el constructor con 3 parámetros si existe
+                    ubicacion = new Ubicacion(lat, lon,""); // Usar el constructor con 3 parámetros si existe
                     // O new Ubicacion(lat, lon) si el de 3 no existe
                 } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                     System.err.println("ConexionDemo: Error al parsear Lat/Lon para ubicación: " + ubicacionStr + ". Usando como texto simple.");

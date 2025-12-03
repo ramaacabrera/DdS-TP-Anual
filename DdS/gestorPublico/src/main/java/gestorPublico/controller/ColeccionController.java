@@ -63,12 +63,7 @@ public class ColeccionController {
             filtro.fechaAcontecimientoDesde = parseFecha(ctx.queryParam("fecha_acontecimiento_desde"), fmt);
             filtro.fechaAcontecimientoHasta = parseFecha(ctx.queryParam("fecha_acontecimiento_hasta"), fmt);
 
-            String lat = ctx.queryParam("latitud");
-            String lon = ctx.queryParam("longitud");
-            if (lat != null && lon != null) {
-                filtro.latitud = Integer.parseInt(lat);
-                filtro.longitud = Integer.parseInt(lon);
-            }
+            filtro.descripcion = ctx.queryParam("descripcion");
 
             List<HechoDTO> hechos = coleccionService.obtenerHechosDeColeccion(id, filtro, modoNavegacion);
 

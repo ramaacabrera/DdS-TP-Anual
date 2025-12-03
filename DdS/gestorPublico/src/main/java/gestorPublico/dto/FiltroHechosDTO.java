@@ -8,8 +8,7 @@ public class FiltroHechosDTO {
     public Date fechaCargaHasta;
     public Date fechaAcontecimientoDesde;
     public Date fechaAcontecimientoHasta;
-    public Integer latitud;
-    public Integer longitud;
+    public String descripcion;
     public String contribuyente;
     public String textoBusqueda;
     public int pagina = 1;

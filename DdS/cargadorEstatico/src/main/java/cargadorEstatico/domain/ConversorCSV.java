@@ -22,7 +22,7 @@ public class ConversorCSV {
         String categoria = record.get("Categoría");
         double latitud = Double.parseDouble(record.get("Latitud"));
         double longitud = Double.parseDouble(record.get("Longitud"));
-        Ubicacion ubicacion = new Ubicacion(latitud, longitud);
+        Ubicacion ubicacion = new Ubicacion(latitud, longitud,"");
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         Date fechaDeAcontecimiento = null;
         try{
@@ -34,7 +34,7 @@ public class ConversorCSV {
         EstadoHechoDTO estadoHecho = EstadoHechoDTO.ACTIVO;
         List<EtiquetaDTO> etiquetas = new ArrayList<>();
         boolean esEditable = false;
-        return new HechoDTO(titulo, descripcion, categoria, new UbicacionDTO(ubicacion.getId_ubicacion(),ubicacion.getLatitud(),ubicacion.getLongitud()),
+        return new HechoDTO(titulo, descripcion, categoria, new UbicacionDTO(ubicacion.getId_ubicacion(),ubicacion.getLatitud(),ubicacion.getLongitud(), ""),
                 fechaDeAcontecimiento, fechaDeCarga, null, estadoHecho, null, etiquetas, esEditable, null);
     }
 

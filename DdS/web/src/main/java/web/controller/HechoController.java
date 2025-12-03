@@ -18,7 +18,6 @@ public class HechoController {
         this.hechoService = hechoService;
     }
 
-
     public Handler listarHechos = ctx -> {
         // 1) Construir la definición visual de los filtros (para el sidebar)
         List<HechoController.FilterDef> filters = buildFilters();
@@ -35,12 +34,13 @@ public class HechoController {
         // 2) Leer parámetros de la URL (Query Params)
         String categoria = ctx.queryParam("categoria");
         String textoBusqueda = ctx.queryParam("textoBusqueda");
+
+        // Fechas
         String fechaCargaDesde = ctx.queryParam("fecha_carga_desde");
         String fechaCargaHasta = ctx.queryParam("fecha_carga_hasta");
         String fechaAcontecimientoDesde = ctx.queryParam("fecha_acontecimiento_desde");
         String fechaAcontecimientoHasta = ctx.queryParam("fecha_acontecimiento_hasta");
-        String latitud = ctx.queryParam("latitud");
-        String longitud = ctx.queryParam("longitud");
+        String descripcion = ctx.queryParam("descripcion");
 
         // Paginación (Default: Página 1, Tamaño 10)
         int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
@@ -54,8 +54,7 @@ public class HechoController {
         queryParams.put("fecha_carga_hasta", fechaCargaHasta);
         queryParams.put("fecha_acontecimiento_desde", fechaAcontecimientoDesde);
         queryParams.put("fecha_acontecimiento_hasta", fechaAcontecimientoHasta);
-        queryParams.put("latitud", latitud);
-        queryParams.put("longitud", longitud);
+        queryParams.put("descripcion", descripcion);
 
         // 4) Llamar al servicio (Lógica de negocio/HTTP)
         PageDTO<HechoDTO> resp = hechoService.buscarHechos(queryParams, page, size);
@@ -66,10 +65,7 @@ public class HechoController {
 
         if (resp.content != null && !resp.content.isEmpty()) {
             // Backend pagina desde 1.
-            // Ejemplo: Pag 1, Size 10 -> (1-1)*10 + 1 = 1.
             fromIndex = ((long) (resp.page - 1) * resp.size) + 1;
-
-            // Fin: Inicio + Cantidad actual - 1
             toIndex = fromIndex + resp.content.size() - 1;
         }
 
@@ -79,7 +75,6 @@ public class HechoController {
         model.put("filters", filtersForTemplate);
 
         // Valores actuales para rellenar el formulario (Input values)
-        // Importante: Formateamos las fechas para que el input type="date" las acepte (yyyy-MM-dd)
         model.put("filterValues", Map.of(
                 "textoBusqueda", textoBusqueda != null ? textoBusqueda : "",
                 "categoria", categoria != null ? categoria : "",
@@ -87,8 +82,7 @@ public class HechoController {
                 "fecha_carga_hasta", formatDateForInput(fechaCargaHasta),
                 "fecha_acontecimiento_desde", formatDateForInput(fechaAcontecimientoDesde),
                 "fecha_acontecimiento_hasta", formatDateForInput(fechaAcontecimientoHasta),
-                "latitud", latitud != null ? latitud : "",
-                "longitud", longitud != null ? longitud : ""
+                "descripcion", descripcion != null ? descripcion : ""
         ));
 
         // Datos principales
@@ -181,9 +175,7 @@ public class HechoController {
         list.add(new HechoController.FilterDef("fecha_acontecimiento_desde", "Acontecimiento desde", "date"));
         list.add(new HechoController.FilterDef("fecha_acontecimiento_hasta", "Acontecimiento hasta", "date"));
 
-        // Coordenadas
-        list.add(new HechoController.FilterDef("latitud", "Latitud", "search"));
-        list.add(new HechoController.FilterDef("longitud", "Longitud", "search"));
+        list.add(new HechoController.FilterDef("descripcion", "Ubicación (Descripción)", "search"));
 
         return list;
     }

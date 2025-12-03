@@ -36,12 +36,7 @@ public class HechoController {
             filtro.fechaAcontecimientoDesde = parseFecha(ctx.queryParam("fecha_acontecimiento_desde"), formato);
             filtro.fechaAcontecimientoHasta = parseFecha(ctx.queryParam("fecha_acontecimiento_hasta"), formato);
 
-            String lat = ctx.queryParam("latitud");
-            String lon = ctx.queryParam("longitud");
-            if (lat != null && lon != null) {
-                filtro.latitud = Integer.parseInt(lat);
-                filtro.longitud = Integer.parseInt(lon);
-            }
+            filtro.descripcion = ctx.queryParam("descripcion");
 
             filtro.pagina = ctx.queryParamAsClass("pagina", Integer.class).getOrDefault(1);
             filtro.limite = ctx.queryParamAsClass("limite", Integer.class).getOrDefault(10);

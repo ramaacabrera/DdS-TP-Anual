@@ -35,9 +35,11 @@ public class Ubicacion {
     public double getLatitud() { return latitud; }
     public double getLongitud() { return longitud; }
     public UUID getId_ubicacion() {return id_ubicacion;}
+    public String getDescripcion() {return descripcion;}
 
     public void setLatitud(double latitud) { this.latitud = latitud; }
     public void setLongitud(double longitud) { this.longitud = longitud; }
     public void setId_ubicacion(UUID id_ubicacion) {this.id_ubicacion = id_ubicacion;}
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 }
 
