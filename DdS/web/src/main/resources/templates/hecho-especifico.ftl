@@ -76,7 +76,7 @@
                 <#if hecho.contribuyente??>
                     ${hecho.contribuyente.nombre?default("Anónimo")?html}
                 <#else>
-                    Fuente Externa
+                    Anónimo
                 </#if>
             </p>
         </div>
