@@ -126,7 +126,7 @@ public class Hecho_D {
         this.categoria = dto.getCategoria();
         this.fechaDeAcontecimiento = dto.getFechaDeAcontecimiento();
         this.fechaDeCarga = dto.getFechaDeCarga();
-        this.estadoHecho = dto.getEstadoHecho();
+        //this.estadoHecho = dto.getEstadoHecho();
         this.contribuyente = dto.getContribuyente();
         this.ubicacion = dto.getUbicacion();
         this.etiquetas = dto.getEtiquetas();

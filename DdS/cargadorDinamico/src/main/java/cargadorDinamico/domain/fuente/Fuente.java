@@ -32,20 +32,20 @@ public class Fuente {
 
     @Enumerated(EnumType.STRING)
     private TipoDeFuente tipoDeFuente;
-    @Column(name = "ruta", nullable = false, unique = true)
-    private String ruta;
+    @Column(name = "descriptor", nullable = false, unique = true)
+    private String descriptor;
 
     public Fuente() {}
 
-    public Fuente(TipoDeFuente tipoDeFuente, String ruta /*, int idNuevo*/) {
+    public Fuente(TipoDeFuente tipoDeFuente, String descriptor /*, int idNuevo*/) {
         this.tipoDeFuente = tipoDeFuente;
-        this.ruta = ruta;
+        this.descriptor = descriptor;
 
     }
 
     public Fuente(FuenteDTO fuenteDTO) {
         this.tipoDeFuente = fuenteDTO.getTipoDeFuente();
-        this.ruta = fuenteDTO.getRuta();
+        this.descriptor = fuenteDTO.getDescriptor();
 
     }
 
@@ -57,12 +57,12 @@ public class Fuente {
         this.tipoDeFuente = tipoDeFuente;
     }
 
-    public String getRuta() {
-        return ruta;
+    public String getDescriptor() {
+        return descriptor;
     }
 
-    public void setRuta(String ruta) {
-        this.ruta = ruta;
+    public void setDescriptor(String descriptor) {
+        this.descriptor = descriptor;
     }
 
     public UUID getId() {return id_fuente;}
@@ -72,7 +72,7 @@ public class Fuente {
     public String toString() {
         return "Fuente{" +
                 "tipoDeFuente=" + tipoDeFuente +
-                ", ruta='" + ruta +
+                ", descriptor='" + descriptor +
                 '}';
     }
 
@@ -82,11 +82,11 @@ public class Fuente {
         if (o == null || getClass() != o.getClass()) return false;
         Fuente fuente = (Fuente) o;
         return Objects.equals(tipoDeFuente, fuente.tipoDeFuente) &&
-                Objects.equals(ruta, fuente.ruta);
+                Objects.equals(descriptor, fuente.descriptor);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tipoDeFuente, ruta);
+        return Objects.hash(tipoDeFuente, descriptor);
     }
 }

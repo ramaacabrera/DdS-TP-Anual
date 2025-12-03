@@ -2,6 +2,7 @@ package cargadorDinamico;
 
 import cargadorDinamico.repository.DinamicoRepositorio;
 import cargadorDinamico.controller.*;
+import cargadorDinamico.repository.HechoRepositorio;
 import cargadorDinamico.service.*;
 import cargadorDinamico.domain.fuente.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,8 +18,8 @@ public class Application {
 
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        int puerto = Integer.parseInt(config.getProperty("puertoDinamico"));
-        String urlAgregador = config.getProperty("urlAgregador");
+        int puerto = Integer.parseInt(config.getProperty("PUERTO_DINAMICO"));
+        String urlAgregador = config.getProperty("URL_AGREGADOR");
 
         System.out.println("Iniciando servidor Javalin en el puerto "+puerto);
         IniciadorApp iniciador = new IniciadorApp();
@@ -26,13 +27,18 @@ public class Application {
 
         DinamicoRepositorio dinamicoRepositorio = new DinamicoRepositorio();
         Fuente fuente = new Fuente(TipoDeFuente.DINAMICA, "DINAMICA");
+        HechoRepositorio hechoRepositorio = new HechoRepositorio();
 
-        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDinamica(new HechosDinamicoService(dinamicoRepositorio), new SolicitudesModificacionService(dinamicoRepositorio), new SolicitudesEliminacionService(dinamicoRepositorio)));
+        HechosDinamicoService hechosDinamicoService = new HechosDinamicoService(dinamicoRepositorio, hechoRepositorio);
+        SolicitudesModificacionService solicitudesModificacionService = new SolicitudesModificacionService(dinamicoRepositorio);
+        SolicitudesEliminacionService solicitudesEliminacionService = new SolicitudesEliminacionService(dinamicoRepositorio);
+
+        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDinamica(hechosDinamicoService, solicitudesModificacionService, solicitudesEliminacionService));
         cliente.conectar(fuente);
 
-        app.post("/hechos", new PostHechosHandler(new HechosDinamicoService(dinamicoRepositorio)));
-        app.post("/solicitudesModificacion", new PostSolicitudesModificacionHandler(new SolicitudesModificacionService(dinamicoRepositorio)));
-        app.post("/solicitudesEliminacion", new PostSolicitudesEliminacionHandler(new SolicitudesEliminacionService(dinamicoRepositorio)));
+        app.post("/hechos", new PostHechosHandler(hechosDinamicoService));
+        app.post("/solicitudesModificacion", new PostSolicitudesModificacionHandler(solicitudesModificacionService));
+        app.post("/solicitudesEliminacion", new PostSolicitudesEliminacionHandler(solicitudesEliminacionService));
 
         // DEJO LOS POST PORQUE CREO QUE SE USAN PARA CREAR LOS HECHOS DESDE EL FRONT, LOS GET SE USAN MEDIANTE EL CLIENTEDELAGREGADOR
     }

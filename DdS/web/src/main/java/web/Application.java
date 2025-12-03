@@ -14,19 +14,17 @@ public class Application {
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
 
-        String puerto = config.getProperty("puertoWeb");
+        String puerto = config.getProperty("PUERTO_WEB");
         System.out.println("Iniciando servidor Web en el puerto "+puerto);
 
-        String urlPublica = config.getProperty("urlPublica");
-        String urlAdmin = config.getProperty("urlAdmin");
-        //si hacemos la pag de las estadisticas
-        String urlEstadisticas = config.getProperty("urlEstadisticas");
+        String urlPublica = config.getProperty("URL_PUBLICA");
+        String urlAdmin = config.getProperty("URL_ADMINISTRATIVO");
+        String urlEstadisticas = config.getProperty("URL_ESTADISTICAS");
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarAppWeb(Integer.parseInt(puerto), "/");
 
         // services
-
         ColeccionService coleccionService = new ColeccionService(urlPublica, urlAdmin);
         HechoService hechoService = new HechoService(urlPublica);
         EstadisticasService estadisticasService = new EstadisticasService(urlEstadisticas);
@@ -34,7 +32,6 @@ public class Application {
         SolicitudService solicitudService = new SolicitudService(urlAdmin);
 
         // controllers
-
         ColeccionController coleccionController = new ColeccionController(coleccionService);
         HechoController hechoController = new HechoController(hechoService);
         SolicitudController solicitudController = new SolicitudController(solicitudService);
@@ -42,7 +39,6 @@ public class Application {
         app.get("/", ctx -> {
             ctx.redirect("/home");
         });
-
         app.get("/home", new GetHomeHandler(urlPublica));
 
         //login

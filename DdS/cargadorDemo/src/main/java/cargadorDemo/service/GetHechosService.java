@@ -3,9 +3,9 @@ package cargadorDemo.service;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-import utils.Conexiones.Cargador;
-import utils.Conexiones.FuenteExternaConexion;
-import utils.DTO.HechoDTO;
+import cargadorDemo.domain.Conexiones.Cargador;
+import cargadorDemo.domain.Conexiones.FuenteExternaConexion;
+import cargadorDemo.dto.HechoDTO;
 import cargadorDemo.domain.fuente.Fuente;
 import cargadorDemo.domain.fuente.TipoDeFuente;
 

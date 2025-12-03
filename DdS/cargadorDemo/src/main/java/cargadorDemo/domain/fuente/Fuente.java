@@ -2,7 +2,7 @@ package cargadorDemo.domain.fuente;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import utils.DTO.FuenteDTO;
+import cargadorDemo.dto.FuenteDTO;
 
 import javax.persistence.*;
 import java.util.Objects;
