@@ -52,7 +52,7 @@ public class SolicitudService {
     }
 
     public List<SolicitudDeEliminacion> obtenerSolicitudesEliminacion() {
-        String apiUrl = urlAdmin + "api/solicitudes";
+        String apiUrl = urlAdmin + "/api/solicitudes";
         System.out.println("DEBUG: Intentando obtener solicitudes de: " + apiUrl);
 
         Request request = new Request.Builder()
