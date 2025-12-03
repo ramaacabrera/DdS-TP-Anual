@@ -12,7 +12,7 @@ public class FuenteDTO {
 
     @JsonCreator
     public FuenteDTO(@JsonProperty("tipoDeFuente") TipoDeFuente tipoDeFuente,
-                     @JsonProperty("ruta") String descriptorNuevo) {
+                     @JsonProperty("descriptor") String descriptorNuevo) {
         this.tipoDeFuente = tipoDeFuente;
         this.descriptor = descriptorNuevo;
     }
@@ -27,13 +27,13 @@ public class FuenteDTO {
         this.tipoDeFuente = tipoDeFuente;
     }
 
-    @JsonProperty("ruta")
-    public String getRuta() {
+    @JsonProperty("descriptor")
+    public String getDescriptor() {
         return descriptor;
     }
 
-    @JsonProperty("ruta")
-    public void setRuta(String descriptorNuevo) {
+    @JsonProperty("descriptor")
+    public void setDescriptor(String descriptorNuevo) {
         this.descriptor = descriptorNuevo;
     }
 }

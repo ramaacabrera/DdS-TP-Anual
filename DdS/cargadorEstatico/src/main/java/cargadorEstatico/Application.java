@@ -20,8 +20,8 @@ public class Application {
         // lectura archivo de configuraciones
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        String fileServer = config.getProperty("fileServer");
-        String urlAgregador = config.getProperty("urlAgregador");
+        String fileServer = config.getProperty("FILE_SERVER");
+        String urlAgregador = config.getProperty("URL_AGREGADOR");
 
         Path carpeta = Paths.get(fileServer);
         String pathGuia = carpeta.resolve("guia.csv").toString();

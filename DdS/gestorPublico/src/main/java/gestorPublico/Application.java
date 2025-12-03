@@ -16,20 +16,18 @@ public class Application {
     public static void main(String[] args) throws InterruptedException {
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        int puerto = Integer.parseInt(config.getProperty("puertoApiPublica"));
-        int puertoDinamica = Integer.parseInt(config.getProperty("puertoDinamico"));
-
-        String urlWeb = config.getProperty("urlWeb");
-        String servidorSSO = config.getProperty("urlServidorSSO");
+        int puerto = Integer.parseInt(config.getProperty("PUERTO_GESTOR_PUBLICO"));
+        String urlDinamica = config.getProperty("URL_DINAMICA");
+        String servidorSSO = config.getProperty("URL_SERVIDOR_SSO");
 
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
         UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 
         // Service
-        HechoService hechoService = new HechoService(hechoRepositorio, puertoDinamica);
+        HechoService hechoService = new HechoService(hechoRepositorio, urlDinamica);
         ColeccionService coleccionService = new ColeccionService(coleccionRepositorio);
-        SolicitudService solicitudService = new SolicitudService(puertoDinamica);
+        SolicitudService solicitudService = new SolicitudService(urlDinamica);
         UsuarioService usuarioService = new UsuarioService(usuarioRepositorio, servidorSSO);
 
         // Controller

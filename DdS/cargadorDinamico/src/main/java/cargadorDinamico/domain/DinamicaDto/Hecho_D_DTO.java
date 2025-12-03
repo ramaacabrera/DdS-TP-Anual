@@ -39,7 +39,7 @@ public class Hecho_D_DTO {
     public String getCategoria() { return categoria;}
     public Ubicacion_D getUbicacion() { return ubicacion;}
     public Date getFechaDeAcontecimiento() { return fechaDeAcontecimiento;}
-    //public Date getFechaDeCarga() { return fechaDeCarga;}
+    public Date getFechaDeCarga() { return fechaDeCarga;}
     public Usuario_D getContribuyente() { return contribuyente;}
     public List<Etiqueta_D> getEtiquetas() { return etiquetas;}
     public List<ContenidoMultimedia_D> getContenidoMultimedia() { return contenidoMultimedia; }

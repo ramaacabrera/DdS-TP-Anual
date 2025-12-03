@@ -2,10 +2,10 @@ package cargadorDemo;
 
 import cargadorDemo.service.DemoLoaderService;
 import cargadorDemo.service.GetHechosService;
-import utils.Dominio.fuente.Fuente;
-import utils.Dominio.fuente.TipoDeFuente;
-import utils.ClienteDelAgregador;
-import utils.Conexiones.Cargador;
+import cargadorDemo.domain.fuente.Fuente;
+import cargadorDemo.domain.fuente.TipoDeFuente;
+import cargadorDemo.conexionAgregador.ClienteDelAgregador;
+import cargadorDemo.domain.Conexiones.Cargador;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import cargadorDemo.controller.ControladorDemo;
 import utils.LecturaConfig;
@@ -18,8 +18,8 @@ public class Application {
 
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        String urlMock = config.getProperty("urlMock");
-        String urlAgregador = config.getProperty("urlAgregador");
+        String urlMock = config.getProperty("URL_MOCK");
+        String urlAgregador = config.getProperty("URL_AGREGADOR");
 
         Cargador cargadorDemo = new Cargador();
         cargadorDemo.agregarConexion(new DemoLoaderService(urlMock));

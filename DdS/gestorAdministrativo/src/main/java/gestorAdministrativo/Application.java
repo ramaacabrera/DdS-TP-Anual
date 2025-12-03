@@ -14,7 +14,7 @@ public class Application {
     public static void main(String[] args) throws InterruptedException {
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        int puerto = Integer.parseInt(config.getProperty("puertoApiAdmin"));
+        int puerto = Integer.parseInt(config.getProperty("PUERTO_GESTOR_ADMINISTRATIVO"));
 
         System.out.println("Iniciando API Administrativa en el puerto " + puerto);
 

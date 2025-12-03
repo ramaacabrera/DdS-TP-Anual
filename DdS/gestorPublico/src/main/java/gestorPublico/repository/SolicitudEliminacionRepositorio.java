@@ -17,6 +17,7 @@ public class SolicitudEliminacionRepositorio {
     }
 
     public void guardar(SolicitudDeEliminacion solicitud) {
+        System.out.println("llegue al repo del service de la api publica");
         EntityManager em = BDUtils.getEntityManager();
         try {
             BDUtils.comenzarTransaccion(em);

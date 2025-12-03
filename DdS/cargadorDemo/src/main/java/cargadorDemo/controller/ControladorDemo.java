@@ -2,8 +2,6 @@ package cargadorDemo.controller;
 
 import cargadorDemo.service.GetHechosService;
 import cargadorDemo.dto.HechoDTO;
-import cargadorDemo.dto.SolicitudDeEliminacionDTO;
-import cargadorDemo.dto.SolicitudDeModificacionDTO;
 import cargadorDemo.controller.Controlador;
 
 import java.util.List;
@@ -22,18 +20,7 @@ public class ControladorDemo implements Controlador {
     }
 
     @Override
-    public List<SolicitudDeModificacionDTO> obtenerSolicitudesModificacion() {
-        return List.of();
-    }
-
-
-    @Override
     public void guardarId(UUID id) {
 
-    }
-
-    @Override
-    public List<SolicitudDeEliminacionDTO> obtenerSolicitudesEliminacion() {
-        return List.of();
     }
 }

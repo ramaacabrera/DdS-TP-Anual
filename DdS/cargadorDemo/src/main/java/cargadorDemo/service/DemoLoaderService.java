@@ -1,8 +1,8 @@
 package cargadorDemo.service;
 
 import cargadorDemo.domain.HechosYColecciones.Etiqueta;
-import utils.Conexiones.FuenteExternaConexion;
-import utils.DTO.HechoDTO;
+import cargadorDemo.domain.Conexiones.FuenteExternaConexion;
+import cargadorDemo.dto.HechoDTO;
 import cargadorDemo.domain.HechosYColecciones.ContenidoMultimedia;
 import cargadorDemo.domain.HechosYColecciones.EstadoHecho;
 import cargadorDemo.domain.HechosYColecciones.Ubicacion;

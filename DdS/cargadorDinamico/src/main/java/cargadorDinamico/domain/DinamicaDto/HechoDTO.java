@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class HechoDTO {
-    private UUID hecho_id;
+    private UUID hechoId;
     private String titulo;
     private String descripcion;
     private String categoria;
@@ -43,7 +43,7 @@ public class HechoDTO {
     }
 
     public HechoDTO(Hecho hecho){
-        this.hecho_id = hecho.getHecho_id();
+        this.hechoId = hecho.getHecho_id();
         this.titulo = hecho.getTitulo();
         this.descripcion = hecho.getDescripcion();
         this.categoria = hecho.getCategoria();
@@ -58,7 +58,7 @@ public class HechoDTO {
         this.contenidoMultimedia = hecho.getContenidoMultimedia();
     }
 
-    public UUID getHecho_id() {return hecho_id;}
+    public UUID getHecho_id() {return hechoId;}
     public String getTitulo() { return titulo;}
     public String getDescripcion() { return descripcion;}
     public String getCategoria() { return categoria;}
@@ -72,7 +72,7 @@ public class HechoDTO {
     public boolean getEsEditable() { return esEditable;}
     public List<ContenidoMultimedia> getContenidoMultimedia() { return contenidoMultimedia; }
 
-    public void setHecho_id(UUID hecho_id) {this.hecho_id = hecho_id;}
+    public void setHecho_id(UUID hecho_id) {this.hechoId = hecho_id;}
     public void setTitulo(String titulo){ this.titulo = titulo;}
     public void setDescripcion(String descripcion){ this.descripcion = descripcion;}
     public void setCategoria(String categoria){ this.categoria = categoria;}

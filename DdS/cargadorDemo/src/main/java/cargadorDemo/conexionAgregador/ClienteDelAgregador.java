@@ -1,14 +1,13 @@
-package cargadorDinamico.conexionAgregador;
+package cargadorDemo.conexionAgregador;
 
+import cargadorDemo.controller.Controlador;
+import cargadorDemo.dto.*;
+import cargadorDemo.dto.ModelosMensajesDTO.*;
+import cargadorDemo.domain.fuente.Fuente;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
-import cargadorDinamico.domain.DinamicaDto.HechoDTO;
-import cargadorDinamico.domain.DinamicaDto.ModelosMensajesDTO.*;
-import cargadorDinamico.domain.DinamicaDto.SolicitudDeEliminacionDTO;
-import cargadorDinamico.domain.DinamicaDto.SolicitudDeModificacionDTO;
-import cargadorDinamico.domain.fuente.Fuente;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -62,24 +61,8 @@ public class ClienteDelAgregador {
                     switch (type) {
                         case "obtenerHechos" -> {
                             List<HechoDTO> hechos = controlador.obtenerHechos();
-                            System.out.println(mapper.writeValueAsString(hechos));
                             HechosObtenidosPayload payload = new HechosObtenidosPayload(hechos);
                             WsMessage<HechosObtenidosPayload> mensaje = new WsMessage<HechosObtenidosPayload>("hechosObtenidos", payload);
-
-                            webSocket.send(mapper.writeValueAsString(mensaje));
-                        }
-                        case "obtenerSolicitudesModificacion" -> {
-                            List<SolicitudDeModificacionDTO> solicitudes = controlador.obtenerSolicitudesModificacion();
-                            SolicitudesModificacionObtenidosPayload payload = new SolicitudesModificacionObtenidosPayload(solicitudes);
-                            WsMessage<SolicitudesModificacionObtenidosPayload> mensaje = new WsMessage<SolicitudesModificacionObtenidosPayload>("solicitudesModificacionObtenidos", payload);
-
-                            webSocket.send(mapper.writeValueAsString(mensaje));
-                        }
-                        case "obtenerSolicitudesEliminacion" -> {
-                            List<SolicitudDeEliminacionDTO> solicitudes = controlador.obtenerSolicitudesEliminacion();
-                            solicitudes.forEach(System.out::println);
-                            SolicitudesEliminacionObtenidosPayload payload = new SolicitudesEliminacionObtenidosPayload(solicitudes);
-                            WsMessage<SolicitudesEliminacionObtenidosPayload> mensaje = new WsMessage<SolicitudesEliminacionObtenidosPayload>("solicitudesEliminacionObtenidos", payload);
 
                             webSocket.send(mapper.writeValueAsString(mensaje));
                         }

@@ -4,6 +4,8 @@ package agregador.dto.Hechos; // O el paquete correcto donde lo tengas
 import agregador.domain.HechosYColecciones.Hecho;
 import agregador.domain.HechosYColecciones.Ubicacion;
 import agregador.dto.Hechos.FuenteDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,8 +13,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class HechoDTO {
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private UUID hechoId;
+
     private String titulo;
     private String descripcion;
     private String categoria;
@@ -56,7 +61,7 @@ public class HechoDTO {
             this.fuente.setFuenteId(hecho.getFuente().getId());
             this.fuente.setDescriptor(hecho.getFuente().getDescriptor());
             if (hecho.getFuente().getTipoDeFuente() != null) {
-                this.fuente.setTipoFuente(hecho.getFuente().getTipoDeFuente().name());
+                this.fuente.setTipoDeFuente(hecho.getFuente().getTipoDeFuente());
             }
         }
 

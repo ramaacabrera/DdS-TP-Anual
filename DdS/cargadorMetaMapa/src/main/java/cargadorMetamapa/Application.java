@@ -23,9 +23,9 @@ public class Application {
         Properties config = lector.leerConfig();
 
         // Asumiendo que has agregado estos puertos a tu config.properties
-        int puertoMetamapa = Integer.parseInt(config.getProperty("puertoMetamapa"));
-        String urlMetamapa = config.getProperty("urlMetamapaExterna"); // URL de la otra instancia Metamapa
-        String urlAgregador = config.getProperty("urlAgregador");
+        int puertoMetamapa = Integer.parseInt(config.getProperty("PUERTO_METAMAPA"));
+        String urlMetamapa = config.getProperty("URL_METAMAPA_EXTERNO"); // URL de la otra instancia Metamapa
+        String urlAgregador = config.getProperty("URL_AGREGADOR");
 
         // 1. Inicialización del agregador.Cargador con la CONEXIÓN ESPECÍFICA
         Cargador cargadorMetamapa = new Cargador();

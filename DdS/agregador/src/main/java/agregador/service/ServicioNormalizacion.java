@@ -51,7 +51,7 @@ public class ServicioNormalizacion {
 
         if (dto.getUbicacion() != null) {
             UbicacionDTO uDto = dto.getUbicacion();
-            Ubicacion u = new Ubicacion(uDto.getLatitud(), uDto.getLongitud());
+            Ubicacion u = new Ubicacion(uDto.getLatitud(), uDto.getLongitud(),uDto.getDescripcion());
             if (uDto.getUbicacionId() != null) {
                 u.setId_ubicacion(uDto.getUbicacionId());
             }
@@ -64,9 +64,9 @@ public class ServicioNormalizacion {
             if (fDto.getFuenteId() != null) f.setId(fDto.getFuenteId());
             f.setDescriptor(fDto.getDescriptor());
 
-            if (fDto.getTipoFuente() != null) {
+            if (fDto.getTipoDeFuente() != null) {
                 try {
-                    f.setTipoDeFuente(TipoDeFuente.valueOf(fDto.getTipoFuente()));
+                    f.setTipoDeFuente(fDto.getTipoDeFuente());
                 } catch (Exception ignored) {}
             }
             entidad.setFuente(f);

@@ -30,7 +30,6 @@ public class Fuente {
     public Fuente(TipoDeFuente tipoDeFuente, String descriptorNuevo /*, int idNuevo*/) {
         this.tipoDeFuente = tipoDeFuente;
         this.descriptor = descriptorNuevo;
-
     }
 
     public TipoDeFuente getTipoDeFuente() {

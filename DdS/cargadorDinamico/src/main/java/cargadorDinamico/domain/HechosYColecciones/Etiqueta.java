@@ -19,8 +19,8 @@ public class Etiqueta {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Type(type = "uuid-char")
-    @Column(name = "id_etiqueta", length = 36 , updatable = false, nullable = false)
-    private UUID id_etiqueta;
+    @Column(name = "etiquetaId", length = 36 , updatable = false, nullable = false)
+    private UUID etiquetaId;
     private String nombre;
 
     public Etiqueta() {}
@@ -29,8 +29,8 @@ public class Etiqueta {
         this.nombre = nombre;
     }
 
-    public UUID getEtiqueta_id() { return id_etiqueta; }
-    public void setEtiqueta_id(UUID nuevoEtiqueta_id) { this.id_etiqueta = nuevoEtiqueta_id; }
+    public UUID getEtiquetaId() { return etiquetaId; }
+    public void setEtiquetaId(UUID nuevoEtiqueta_id) { this.etiquetaId = nuevoEtiqueta_id; }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nuevoNombre) { this.nombre = nuevoNombre; }

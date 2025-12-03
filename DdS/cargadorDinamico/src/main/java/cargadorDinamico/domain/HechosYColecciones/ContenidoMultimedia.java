@@ -18,8 +18,8 @@ public class ContenidoMultimedia {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Type(type = "uuid-char")
-    @Column(name = "id_contenido", length = 36 , updatable = false, nullable = false)
-    private UUID id_contenido;
+    @Column(name = "contenidoId", length = 36 , updatable = false, nullable = false)
+    private UUID contenidoId;
 
     @Enumerated(EnumType.STRING)
     private TipoContenidoMultimedia tipoContenido;
@@ -39,7 +39,7 @@ public class ContenidoMultimedia {
     public ContenidoMultimedia(){}
 
     // GETTERS
-    public UUID getId_contenido() {return id_contenido;}
+    public UUID getContenidoId() {return contenidoId;}
 
     public TipoContenidoMultimedia getTipoContenido() {return tipoContenido;}
 
@@ -48,7 +48,7 @@ public class ContenidoMultimedia {
     public Hecho getHecho() {return hecho;}
 
     // SETTERS
-    public void setId_contenido(UUID id_contenido_) {this.id_contenido = id_contenido_;}
+    public void setContenidoId(UUID id_contenido) {this.contenidoId = id_contenido;}
 
     public void setTipoContenido(TipoContenidoMultimedia tipoContenido_) {this.tipoContenido = tipoContenido_;}
 

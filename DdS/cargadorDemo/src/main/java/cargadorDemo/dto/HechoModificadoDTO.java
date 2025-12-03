@@ -1,5 +1,12 @@
 package cargadorDemo.dto;
 
+import cargadorDemo.domain.HechosYColecciones.ContenidoMultimedia;
+import cargadorDemo.domain.HechosYColecciones.EstadoHecho;
+import cargadorDemo.domain.HechosYColecciones.Etiqueta;
+import cargadorDemo.domain.HechosYColecciones.Ubicacion;
+import cargadorDemo.domain.Usuario.Usuario;
+import cargadorDemo.domain.fuente.Fuente;
+
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -9,15 +16,15 @@ public class HechoModificadoDTO {
     private String titulo;
     private String descripcion;
     private String categoria;
-    private UbicacionDTO ubicacion;
+    private Ubicacion ubicacion;
     private Date fechaDeAcontecimiento;
     private Date fechaDeCarga;
-    private FuenteDTO fuente;
-    private EstadoHechoDTO estadoHecho;
-    private UsuarioDTO contribuyente;
-    private List<EtiquetaDTO> etiquetas;
+    private Fuente fuente;
+    private EstadoHecho estadoHecho;
+    private Usuario contribuyente;
+    private List<Etiqueta> etiquetas;
     private boolean esEditable;
-    private List<ContenidoMultimediaDTO> contenidoMultimedia;
+    private List<ContenidoMultimedia> contenidoMultimedia;
 
     public HechoModificadoDTO() {}
 
@@ -33,7 +40,7 @@ public class HechoModificadoDTO {
         this.estadoHecho = hechoDTO.getEstadoHecho();
         this.contribuyente = hechoDTO.getContribuyente();
         this.etiquetas = hechoDTO.getEtiquetas();
-        this.esEditable = hechoDTO.isEsEditable();
+        this.esEditable = hechoDTO.getEsEditable();
         this.contenidoMultimedia = hechoDTO.getContenidoMultimedia();
     }
 
@@ -50,8 +57,8 @@ public class HechoModificadoDTO {
     public String getCategoria() { return categoria; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
 
-    public UbicacionDTO getUbicacion() { return ubicacion; }
-    public void setUbicacion(UbicacionDTO ubicacion) { this.ubicacion = ubicacion; }
+    public Ubicacion getUbicacion() { return ubicacion; }
+    public void setUbicacion(Ubicacion ubicacion) { this.ubicacion = ubicacion; }
 
     public Date getFechaDeAcontecimiento() { return fechaDeAcontecimiento; }
     public void setFechaDeAcontecimiento(Date fechaDeAcontecimiento) { this.fechaDeAcontecimiento = fechaDeAcontecimiento; }
@@ -59,21 +66,21 @@ public class HechoModificadoDTO {
     public Date getFechaDeCarga() { return fechaDeCarga; }
     public void setFechaDeCarga(Date fechaDeCarga) { this.fechaDeCarga = fechaDeCarga; }
 
-    public FuenteDTO getFuente() { return fuente; }
-    public void setFuente(FuenteDTO fuente) { this.fuente = fuente; }
+    public Fuente getFuente() { return fuente; }
+    public void setFuente(Fuente fuente) { this.fuente = fuente; }
 
-    public EstadoHechoDTO getEstadoHecho() { return estadoHecho; }
-    public void setEstadoHecho(EstadoHechoDTO estadoHecho) { this.estadoHecho = estadoHecho; }
+    public EstadoHecho getEstadoHecho() { return estadoHecho; }
+    public void setEstadoHecho(EstadoHecho estadoHecho) { this.estadoHecho = estadoHecho; }
 
-    public UsuarioDTO getContribuyente() { return contribuyente; }
-    public void setContribuyente(UsuarioDTO contribuyente) { this.contribuyente = contribuyente; }
+    public Usuario getContribuyente() { return contribuyente; }
+    public void setContribuyente(Usuario contribuyente) { this.contribuyente = contribuyente; }
 
-    public List<EtiquetaDTO> getEtiquetas() { return etiquetas; }
-    public void setEtiquetas(List<EtiquetaDTO> etiquetas) { this.etiquetas = etiquetas; }
+    public List<Etiqueta> getEtiquetas() { return etiquetas; }
+    public void setEtiquetas(List<Etiqueta> etiquetas) { this.etiquetas = etiquetas; }
 
     public boolean isEsEditable() { return esEditable; }
     public void setEsEditable(boolean esEditable) { this.esEditable = esEditable; }
 
-    public List<ContenidoMultimediaDTO> getContenidoMultimedia() { return contenidoMultimedia; }
-    public void setContenidoMultimedia(List<ContenidoMultimediaDTO> contenidoMultimedia) { this.contenidoMultimedia = contenidoMultimedia; }
+    public List<ContenidoMultimedia> getContenidoMultimedia() { return contenidoMultimedia; }
+    public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoMultimedia) { this.contenidoMultimedia = contenidoMultimedia; }
 }

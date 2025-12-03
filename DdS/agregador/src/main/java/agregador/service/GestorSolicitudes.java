@@ -54,18 +54,22 @@ public class GestorSolicitudes {
 
             // 3. Buscar y setear el Hecho real
             if (dto.getHechoId() != null) {
+                System.out.println("Tenemos hecho con id");
                 Hecho hecho = hechoRepositorio.buscarPorId(dto.getHechoId());
+                System.out.println("Encontramos el hecho: ");
+                System.out.println(hecho);
                 solicitud.setHechoAsociado(hecho);
+                System.out.println("seteamos el hecho");
             }
 
-            if (dto.getUsuario().getUsuarioId() != null) {
+            /*if (dto.getUsuario().getUsuarioId() != null) {
                 Usuario u = usuarioRepositorio.buscarPorId(dto.getUsuario().getUsuarioId());
                 if (u != null) {
                     solicitud.setUsuario(u);
                 } else {
                     System.out.println("⚠️ Usuario no encontrado para solicitud: " + dto.getUsuario().getUsuarioId());
                 }
-            }
+            }*/
 
             // 5. Verificar Spam
             if (detectorDeSpam.esSpam(dto.getJustificacion())) {

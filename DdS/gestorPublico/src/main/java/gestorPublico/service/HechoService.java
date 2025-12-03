@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 
 public class HechoService {
     private final HechoRepositorio hechoRepositorio;
-    private final int puertoDinamica;
+    private final String urlDinamica;
 
-    public HechoService(HechoRepositorio hechoRepositorio, int puertoDinamicaNuevo) {
+    public HechoService(HechoRepositorio hechoRepositorio, String urlDinamica) {
         this.hechoRepositorio = hechoRepositorio;
-        this.puertoDinamica = puertoDinamicaNuevo;
+        this.urlDinamica = urlDinamica;
     }
 
     public PageDTO<HechoDTO> buscarHechos(FiltroHechosDTO filtro) {
@@ -64,7 +64,7 @@ public class HechoService {
             HttpClient httpClient = HttpClient.newHttpClient();
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:" + puertoDinamica + "/hechos"))
+                    .uri(new URI(urlDinamica + "/hechos"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(bodyJson))
                     .build();
@@ -102,7 +102,7 @@ public class HechoService {
         }
 
         if (f.latitud != null && f.longitud != null) {
-            criterios.add(new CriterioUbicacion(new Ubicacion(f.latitud, f.longitud)));
+            criterios.add(new CriterioUbicacion(new Ubicacion(f.latitud, f.longitud,"")));
         }
 
         if (f.contribuyente != null && !f.contribuyente.trim().isEmpty()) {

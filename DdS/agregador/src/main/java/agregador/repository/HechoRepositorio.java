@@ -5,6 +5,7 @@ import agregador.domain.HechosYColecciones.Hecho;
 import agregador.utils.BDUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,35 +67,51 @@ public class HechoRepositorio {
     }
 
     public Hecho buscarPorId(UUID id) {
+        System.out.println("entramos a la f buscar por id- ID: " + id);
         EntityManager em = BDUtils.getEntityManager();
         try {
+            // Primero traer el hecho con algunas relaciones
             String jpql = "SELECT DISTINCT h FROM Hecho h " +
-                    "LEFT JOIN FETCH h.etiquetas " +
-                    "LEFT JOIN FETCH h.contenidoMultimedia " +
                     "LEFT JOIN FETCH h.ubicacion " +
                     "LEFT JOIN FETCH h.contribuyente " +
                     "WHERE h.id = :id";
 
+            System.out.println("JPQL: " + jpql);
+
             TypedQuery<Hecho> query = em.createQuery(jpql, Hecho.class);
             query.setParameter("id", id);
 
-            return query.getSingleResult();
+            Hecho hecho = query.getSingleResult();
+
+            // Luego inicializar las colecciones manualmente
+            if (hecho != null) {
+                // Inicializar etiquetas
+                hecho.getEtiquetas().size();
+                // Inicializar contenidoMultimedia
+                hecho.getContenidoMultimedia().size();
+            }
+
+            return hecho;
+        } catch (NoResultException e) {
+            System.out.println("⚠️ NO se encontró ningún Hecho con ID: " + id);
+            return null;
         } catch (Exception e) {
-            // Si no encuentra nada o falla, retorna null
+            System.out.println("❌ Error en buscarPorId: " + e.getClass().getName());
+            e.printStackTrace();
             return null;
         } finally {
             em.close();
         }
     }
 
-    public Hecho buscarPorId(String idString) {
+    /*public Hecho buscarPorId(String idString) {
         try {
             return buscarPorId(UUID.fromString(idString));
         } catch (IllegalArgumentException e) {
             System.err.println("ID inválido: " + idString);
             return null;
         }
-    }
+    }*/
 
     public void guardar(Hecho hecho) {
         EntityManager em = BDUtils.getEntityManager();

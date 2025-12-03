@@ -13,7 +13,7 @@ import java.util.Map;
 public class CriterioUbicacion extends Criterio {
 
     @OneToOne
-    @JoinColumn(name = "id_ubicacion")
+    @JoinColumn(name = "ubicacionId")
     private Ubicacion ubicacion;
 
     public CriterioUbicacion() {}
@@ -36,7 +36,7 @@ public class CriterioUbicacion extends Criterio {
 
     @Override
     public String getQueryCondition() {
-        return "h.id_ubicacion = " + ubicacion.getId_ubicacion();
+        return "h.ubicacionId = " + ubicacion.getUbicacionId();
     }
 
     @Override

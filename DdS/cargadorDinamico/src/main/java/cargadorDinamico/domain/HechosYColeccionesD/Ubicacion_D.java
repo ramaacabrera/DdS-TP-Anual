@@ -19,16 +19,18 @@ public class Ubicacion_D {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Type(type = "uuid-char")
-    @Column(name = "id_ubicacion", length = 36, updatable = false, nullable = false)
-    private UUID id_ubicacion;
+    @Column(name = "ubicacionId", length = 36, updatable = false, nullable = false)
+    private UUID ubicacionId;
 
     private double latitud;
     private double longitud;
+    private String descripcion;
 
     // Constructor 1: Para Latitud y Longitud, con una descripción por defecto
-    public Ubicacion_D(double latitud, double longitud) {
+    public Ubicacion_D(double latitud, double longitud, String descripcion) {
         this.latitud = latitud;
         this.longitud = longitud;
+        this.descripcion = descripcion;
     }
 
     public Ubicacion_D() {}
@@ -36,11 +38,13 @@ public class Ubicacion_D {
     // Getters
     public double getLatitud() { return latitud; }
     public double getLongitud() { return longitud; }
-    public UUID getId_ubicacion() {return id_ubicacion;}
+    public UUID getUbicacionId() {return ubicacionId;}
+    public String getDescripcion() {return descripcion;}
 
     // Setters (si son necesarios, para modificar después de la creación)
     public void setLatitud(double latitud) { this.latitud = latitud; }
     public void setLongitud(double longitud) { this.longitud = longitud; }
-    public void setId_ubicacion(UUID id_ubicacion) {this.id_ubicacion = id_ubicacion;}
+    public void setUbicacionId(UUID id_ubicacion) {this.ubicacionId = id_ubicacion;}
+    public void setDescripcion(String descripcion) {this.descripcion = descripcion;}
 }
 

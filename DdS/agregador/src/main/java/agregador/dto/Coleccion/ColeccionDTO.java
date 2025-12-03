@@ -52,7 +52,7 @@ public class ColeccionDTO {
                 dto.setFuenteId(f.getId());
                 dto.setDescriptor(f.getDescriptor());
                 if (f.getTipoDeFuente() != null) {
-                    dto.setTipoFuente(f.getTipoDeFuente().name());
+                    dto.setTipoDeFuente(f.getTipoDeFuente());
                 }
                 return dto;
             }).collect(Collectors.toList());

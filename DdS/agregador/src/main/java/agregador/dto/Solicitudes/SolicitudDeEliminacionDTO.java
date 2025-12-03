@@ -2,11 +2,14 @@ package agregador.dto.Solicitudes;
 
 import agregador.domain.Solicitudes.EstadoSolicitudEliminacion;
 import agregador.dto.Hechos.UsuarioDTO;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
 
 public class SolicitudDeEliminacionDTO {
     private UUID id;
+
+    @JsonProperty("id_HechoAsociado")
     private UUID hechoId;
     private String justificacion;
     private UsuarioDTO usuario;

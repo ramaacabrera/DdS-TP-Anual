@@ -6,24 +6,26 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class SolicitudService {
-    private final int puertoDinamica;
+    private final String urlDinamica;
     private final HttpClient httpClient;
 
-    public SolicitudService(int puertoDinamica) {
-        this.puertoDinamica = puertoDinamica;
+    public SolicitudService(String urlDinamica) {
+        this.urlDinamica = urlDinamica;
         this.httpClient = HttpClient.newHttpClient();
     }
 
     public HttpResponse<String> enviarSolicitudEliminacion(String bodyJson) {
         try {
+            System.out.println("llegue al try del service de la api publica");
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:" + puertoDinamica + "/solicitudesEliminacion"))
+                    .uri(new URI(urlDinamica + "/solicitudesEliminacion"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(bodyJson))
                     .build();
 
             return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception e) {
+            System.out.println("llegue al catch del service de la api publica");
             throw new RuntimeException("Error comunicando con servicio dinámico: " + e.getMessage(), e);
         }
     }
@@ -31,7 +33,7 @@ public class SolicitudService {
     public HttpResponse<String> enviarSolicitudModificacion(String bodyJson) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:" + puertoDinamica + "/solicitudesModificacion"))
+                    .uri(new URI(urlDinamica + "/solicitudesModificacion"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(bodyJson))
                     .build();

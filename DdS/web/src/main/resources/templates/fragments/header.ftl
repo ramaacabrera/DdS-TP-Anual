@@ -172,6 +172,7 @@
         <a href="/" class="brand"></a>
         <nav class="site-nav">
             <div>
+                <a href="/home" class="nav-link">Inicio</a>
                 <a href="/hechos" class="nav-link">Explorar</a>
                 <a href="/crear" class="nav-link">Reportar</a>
                 <a href="/estadisticas" class="nav-link">Estadísticas</a>

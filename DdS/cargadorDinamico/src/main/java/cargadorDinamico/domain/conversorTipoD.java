@@ -133,7 +133,8 @@ public interface conversorTipoD {
         if (ubicacionD.getLatitud() != -999.0 && ubicacionD.getLongitud() != -999.0) {
             return new Ubicacion(
                     ubicacionD.getLatitud(),
-                    ubicacionD.getLongitud()
+                    ubicacionD.getLongitud(),
+                    ubicacionD.getDescripcion()
             );
         }
         return null;

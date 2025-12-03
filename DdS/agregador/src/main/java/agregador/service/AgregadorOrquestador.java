@@ -95,11 +95,11 @@ public class AgregadorOrquestador {
             Fuente nuevaFuente = new Fuente();
             nuevaFuente.setDescriptor(fuenteDto.getDescriptor());
 
-            if (fuenteDto.getTipoFuente() != null) {
+            if (fuenteDto.getTipoDeFuente() != null) {
                 try {
-                    nuevaFuente.setTipoDeFuente(agregador.domain.fuente.TipoDeFuente.valueOf(fuenteDto.getTipoFuente()));
+                    nuevaFuente.setTipoDeFuente(fuenteDto.getTipoDeFuente());
                 } catch (IllegalArgumentException e) {
-                    System.err.println("⚠️ Tipo de fuente desconocido: " + fuenteDto.getTipoFuente() + ". Se usará ESTATICA por defecto.");
+                    System.err.println("⚠️ Tipo de fuente desconocido: " + fuenteDto.getTipoDeFuente() + ". Se usará ESTATICA por defecto.");
                 }
             }
             fuentePersistida = fuenteRepositorio.guardar(nuevaFuente);

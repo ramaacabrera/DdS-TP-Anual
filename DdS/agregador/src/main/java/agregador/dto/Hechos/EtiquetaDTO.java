@@ -1,9 +1,15 @@
 package agregador.dto.Hechos;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.UUID;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EtiquetaDTO {
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private UUID etiquetaId;
+
     private String nombre;
 
     public EtiquetaDTO() {}

@@ -18,7 +18,7 @@ public class Application {
     public static void main(String[] args){
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        int puerto =  Integer.parseInt(config.getProperty("puertoEstadisticas"));
+        int puerto =  Integer.parseInt(config.getProperty("PUERTO_ESTADISTICAS"));
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
