@@ -1,7 +1,7 @@
 <#assign pageTitle = "Crear Colección">
 <#assign additionalCss = ["/css/styleCrearColeccion.css"]>
 <#assign content>
-    <div class="container">
+<div class="container">
         <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
             <a href="/" class="header-link back-link">&larr; Volver al inicio</a>
         </div>
@@ -42,17 +42,31 @@
             <!-- Criterios -->
             <div class="form-section">
                 <h3 class="form-section-title">Criterios de pertenencia</h3>
-                <div class="form-group">
-                    <label for="tipoCriterio" class="form-label">Tipo de criterio</label>
-                    <select id="tipoCriterio" name="criteriosDePertenencia" class="form-select" onchange="mostrarCampoCriterio()">
-                        <option value="CriterioDeTexto">Texto</option>
-                        <option value="CriterioTipoMultimedia">Tipo Multimedia</option>
-                        <option value="CriterioEtiquetas">Etiquetas</option>
-                        <option value="CriterioFecha">Fecha</option>
-                        <option value="CriterioUbicacion">Ubicación</option>
-                        <option value="CriterioContribuyente">Contribuyente</option>
-                    </select>
-                    <div id="campoCriterio"></div>
+
+                <!-- Contenedor para los criterios agregados -->
+                <div id="criterios-agregados" class="criterios-container">
+                    <!-- Aquí se mostrarán los criterios agregados -->
+                </div>
+
+                <!-- Formulario para agregar nuevo criterio -->
+                <div class="nuevo-criterio-card">
+                    <h4 class="form-subtitle">Agregar nuevo criterio</h4>
+                    <div class="form-group">
+                        <label for="tipoCriterio" class="form-label">Tipo de criterio</label>
+                        <select id="tipoCriterio" class="form-select">
+                            <option value="">Seleccione un tipo</option>
+                            <option value="CriterioDeTexto">Texto</option>
+                            <option value="CriterioTipoMultimedia">Tipo Multimedia</option>
+                            <option value="CriterioEtiquetas">Etiquetas</option>
+                            <option value="CriterioFecha">Fecha</option>
+                            <option value="CriterioUbicacion">Ubicación</option>
+                            <option value="CriterioContribuyente">Contribuyente</option>
+                        </select>
+                        <div id="campoCriterio" class="campo-criterio-dinamico"></div>
+                        <button type="button" id="btn-agregar-criterio" class="btn btn-secondary" style="margin-top: 10px;" disabled>
+                            + Agregar criterio
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -101,104 +115,6 @@
     </div>
 </#assign>
 
-<script>
-    function mostrarCampoCriterio() {
-        const tipo = document.getElementById("tipoCriterio").value;
-        const campoDiv = document.getElementById("campoCriterio");
-
-        // Limpiar contenido anterior
-        campoDiv.innerHTML = "";
-
-        switch (tipo) {
-            case "CriterioDeTexto":
-                campoDiv.innerHTML = `
-                    <label class="form-label">Palabras clave:</label>
-                    <div id="lista-palabras">
-                        <input type="text" name="criterio.palabras[]" class="form-input palabra-input" placeholder="Ej: contaminación" required>
-                    </div>
-                    <button type="button" class="btn btn-secondary" onclick="agregarPalabra()">Agregar otra palabra</button>
-                    <label for="tipoMultimedia" class="form-label">Tipo de texto:</label>
-                    <select id="tipoMultimedia" name="criterio.tipoDeTexto" class="form-select" required>
-                        <option value="titulo">Titulo</option>
-                        <option value="descripcion">Descripcion</option>
-                        <option value="categoria">Categoria</option>
-                    </select>
-                `;
-                break;
-            case "CriterioEtiquetas":
-                campoDiv.innerHTML = `
-                    <label class="form-label">Palabras clave:</label>
-                    <div id="lista-palabras">
-                        <input type="text" name="criterio.etiquetas[]" class="form-input palabra-input" placeholder="Ej: contaminación" required>
-                    </div>
-                    <button type="button" class="btn btn-secondary" onclick="agregarPalabra()">Agregar otra etiqueta</button>
-                `;
-                break;
-
-            case "CriterioTipoMultimedia":
-                campoDiv.innerHTML = `
-                <label for="tipoMultimedia" class="form-label">Tipo de archivo:</label>
-                <select id="tipoMultimedia" name="criterio.tipoMultimedia" class="form-select" required>
-                    <option value="imagen">Imagen</option>
-                    <option value="video">Video</option>
-                    <option value="audio">Audio</option>
-                </select>
-            `;
-                break;
-
-            case "CriterioFecha":
-                campoDiv.innerHTML = `
-                <label for="fechaInicio" class="form-label">Desde:</label>
-                <input type="date" id="fechaInicio" name="criterio.fechaInicio" class="form-input" required>
-                <label for="fechaFin" class="form-label">Hasta:</label>
-                <input type="date" id="fechaFin" name="criterio.fechaFin" class="form-input" required>
-                <label for="tipoDeFecha" class="form-label">Tipo de fecha:</label>
-                <select id="tipoDeFecha" name="criterio.tipoDeFecha" class="form-select" required>
-                    <option value="fechaDelAcontecimiento">Fecha del acontecimiento</option>
-                    <option value="fechaDeCarga">Fecha de carga</option>
-                </select>
-            `;
-                break;
-
-            case "CriterioUbicacion":
-                campoDiv.innerHTML = `
-                <label class="form-label">Ubicación</label>
-            <div class="form-group">
-                <input type="number" step="any" id="latitud" name="criterio.ubicacion.latitud" class="form-input" placeholder="Latitud" required>
-                <input type="number" step="any" id="longitud" name="criterio.ubicacion.longitud" class="form-input" placeholder="Longitud" required>
-            </div>
-            `;
-                break;
-
-            case "CriterioContribuyente":
-                campoDiv.innerHTML = `
-                <label for="contribuyente" class="form-label">Nombre del contribuyente:</label>
-                <input type="text" id="contribuyente" name="criterio.contribuyente" class="form-input" required>
-            `;
-                break;
-
-            default:
-                campoDiv.innerHTML = "";
-        }
-    }
-</script>
-
-<script>
-    function agregarPalabra() {
-        const contenedor = document.getElementById("lista-palabras");
-        const nuevoInput = document.createElement("div");
-        nuevoInput.classList.add("input-dinamico");
-        nuevoInput.innerHTML = `
-        <input type="text" name="criterio.palabras[]" class="form-input palabra-input" placeholder="Otra palabra" required>
-        <button type="button" class="btn btn-danger btn-eliminar" onclick="eliminarPalabra(this)">✖</button>
-    `;
-        contenedor.appendChild(nuevoInput);
-    }
-
-    function eliminarPalabra(boton) {
-        boton.parentElement.remove();
-    }
-</script>
+<script src="/js/crear-coleccion.js"></script>
 
 <#include "layout.ftl">
-

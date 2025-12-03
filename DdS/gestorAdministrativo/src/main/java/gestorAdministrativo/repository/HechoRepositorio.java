@@ -17,8 +17,8 @@ public class HechoRepositorio {
         try {
             StringBuilder queryString = new StringBuilder(
                     "SELECT DISTINCT h FROM Hecho h " +
-                            "LEFT JOIN FETCH h.etiquetas " +
-                            "LEFT JOIN FETCH h.contenidoMultimedia " +
+                            "LEFT JOIN h.etiquetas " +
+                            "LEFT JOIN h.contenidoMultimedia " +
                             "LEFT JOIN FETCH h.ubicacion " +
                             "LEFT JOIN FETCH h.contribuyente " +
                             "LEFT JOIN FETCH h.fuente " +

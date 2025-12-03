@@ -10,7 +10,7 @@ import java.util.Map;
 @Entity
 public class CriterioUbicacion extends Criterio {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_ubicacion")
     private Ubicacion ubicacion;
 

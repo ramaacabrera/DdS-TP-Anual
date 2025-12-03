@@ -1,0 +1,283 @@
+let contadorCriterios = 0;
+
+function mostrarCampoCriterio() {
+    const tipo = document.getElementById("tipoCriterio").value;
+    const campoDiv = document.getElementById("campoCriterio");
+    const btnAgregar = document.getElementById("btn-agregar-criterio");
+
+    campoDiv.innerHTML = "";
+    btnAgregar.disabled = !tipo;
+
+    if (!tipo) return;
+
+    switch (tipo) {
+        case "CriterioDeTexto":
+            campoDiv.innerHTML = `
+                <label class="form-label">Palabras clave:</label>
+                <div id="lista-palabras-temporal" class="palabras-container">
+                    <div class="input-palabra-group">
+                        <input type="text" class="form-input palabra-input-temporal" placeholder="Ej: contaminación" required>
+                        <button type="button" class="btn btn-danger btn-eliminar" onclick="eliminarInputTemporal(this)" style="display:none;">✖</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-outline-secondary" onclick="agregarInputTemporal('palabras')" style="margin-top: 10px;">+ Agregar otra palabra</button>
+                <label for="tipoTexto" class="form-label" style="margin-top: 15px;">Tipo de texto:</label>
+                <select id="tipoTexto" class="form-select" required>
+                    <option value="TITULO">Título</option>
+                    <option value="DESCRIPCION">Descripción</option>
+                    <option value="CATEGORIA">Categoría</option>
+                    <option value="BUSQUEDA">Busqueda</option>
+                </select>
+            `;
+            break;
+
+        case "CriterioEtiquetas":
+            campoDiv.innerHTML = `
+                <label class="form-label">Etiquetas:</label>
+                <div id="lista-etiquetas-temporal" class="palabras-container">
+                    <div class="input-palabra-group">
+                        <input type="text" class="form-input palabra-input-temporal" placeholder="Ej: contaminación" required>
+                        <button type="button" class="btn btn-danger btn-eliminar" onclick="eliminarInputTemporal(this)" style="display:none;">✖</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-outline-secondary" onclick="agregarInputTemporal('etiquetas')" style="margin-top: 10px;">+ Agregar otra etiqueta</button>
+            `;
+            break;
+
+        case "CriterioTipoMultimedia":
+            campoDiv.innerHTML = `
+                <label for="tipoMultimedia" class="form-label">Tipo de archivo:</label>
+                <select id="tipoMultimedia" class="form-select" required>
+                    <option value="IMAGEN">Imagen</option>
+                    <option value="VIDEO">Video</option>
+                    <option value="AUDIO">Audio</option>
+                </select>
+            `;
+            break;
+
+        case "CriterioFecha":
+            campoDiv.innerHTML = `
+                <label for="fechaInicio" class="form-label">Desde:</label>
+                <input type="date" id="fechaInicio" class="form-input" required>
+                <label for="fechaFin" class="form-label">Hasta:</label>
+                <input type="date" id="fechaFin" class="form-input" required>
+                <label for="tipoDeFecha" class="form-label">Tipo de fecha:</label>
+                <select id="tipoDeFecha" class="form-select" required>
+                    <option value="fechaDelAcontecimiento">Fecha del acontecimiento</option>
+                    <option value="fechaDeCarga">Fecha de carga</option>
+                </select>
+            `;
+            break;
+
+        case "CriterioUbicacion":
+            campoDiv.innerHTML = `
+                <label class="form-label">Ubicación</label>
+                <div class="form-group">
+                    <input type="number" step="any" id="latitud" class="form-input" placeholder="Latitud" required>
+                    <input type="number" step="any" id="longitud" class="form-input" placeholder="Longitud" required>
+                </div>
+            `;
+            break;
+
+        case "CriterioContribuyente":
+            campoDiv.innerHTML = `
+                <label for="contribuyente" class="form-label">Nombre del contribuyente:</label>
+                <input type="text" id="contribuyente" class="form-input" required>
+            `;
+            break;
+    }
+}
+
+function agregarInputTemporal(tipoInput) {
+    const contenedorId = tipoInput === 'palabras' ? 'lista-palabras-temporal' : 'lista-etiquetas-temporal';
+    const placeholder = tipoInput === 'palabras' ? 'Otra palabra clave' : 'Otra etiqueta';
+
+    const contenedor = document.getElementById(contenedorId);
+    const inputsExistentes = contenedor.querySelectorAll('.input-palabra-group');
+
+    if (inputsExistentes.length === 1) {
+        const primerBoton = inputsExistentes[0].querySelector('.btn-eliminar');
+        primerBoton.style.display = 'inline-block';
+    }
+
+    const nuevoInput = document.createElement("div");
+    nuevoInput.classList.add("input-palabra-group");
+    nuevoInput.innerHTML = `
+        <input type="text" class="form-input palabra-input-temporal" placeholder="${placeholder}" required>
+        <button type="button" class="btn btn-danger btn-eliminar" onclick="eliminarInputTemporal(this)">✖</button>
+    `;
+    contenedor.appendChild(nuevoInput);
+}
+
+function eliminarInputTemporal(boton) {
+    const grupoInput = boton.parentElement;
+    const contenedor = grupoInput.parentElement;
+    const gruposRestantes = contenedor.querySelectorAll('.input-palabra-group');
+
+    if (gruposRestantes.length === 2) {
+        const primerGrupo = gruposRestantes[0];
+        const primerBoton = primerGrupo.querySelector('.btn-eliminar');
+        primerBoton.style.display = 'none';
+    }
+
+    grupoInput.remove();
+}
+
+function agregarCriterio() {
+    const tipo = document.getElementById("tipoCriterio").value;
+    if (!tipo) return;
+
+    const criterioId = "criterio_" + contadorCriterios;
+    contadorCriterios++;
+    const criteriosContainer = document.getElementById("criterios-agregados");
+
+    let criterioHTML = '';
+    let camposHTML = '';
+
+    switch (tipo) {
+        case "CriterioDeTexto":
+            const palabrasInputs = document.querySelectorAll('#lista-palabras-temporal .palabra-input-temporal');
+            const palabras = Array.from(palabrasInputs).map(input => input.value).filter(val => val.trim() !== '');
+            const tipoTexto = document.getElementById('tipoTexto').value;
+
+            camposHTML = palabras.map(palabra =>
+                '<input type="hidden" name="criterios[' + criterioId + '].palabras" value="' + palabra + '">'
+            ).join('');
+            camposHTML += '<input type="hidden" name="criterios[' + criterioId + '].tipoDeTexto" value="' + tipoTexto + '">';
+
+            criterioHTML = `
+                <div class="criterio-card">
+                    <div class="criterio-header">
+                        <span class="criterio-tipo">Criterio de Texto</span>
+                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
+                    </div>
+                    <div><strong>Palabras:</strong> ${palabras.join(', ')}</div>
+                    <div><strong>Tipo de texto:</strong> ${tipoTexto}</div>
+                    ${camposHTML}
+                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+                </div>
+            `;
+            break;
+
+        case "CriterioEtiquetas":
+            const etiquetasInputs = document.querySelectorAll('#lista-etiquetas-temporal .palabra-input-temporal');
+            const etiquetas = Array.from(etiquetasInputs).map(input => input.value).filter(val => val.trim() !== '');
+
+            camposHTML = etiquetas.map(etiqueta =>
+                '<input type="hidden" name="criterios[' + criterioId + '].etiquetas" value="' + etiqueta + '">'
+            ).join('');
+
+            criterioHTML = `
+                <div class="criterio-card">
+                    <div class="criterio-header">
+                        <span class="criterio-tipo">Criterio de Etiquetas</span>
+                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
+                    </div>
+                    <div><strong>Etiquetas:</strong> ${etiquetas.join(', ')}</div>
+                    ${camposHTML}
+                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+                </div>
+            `;
+            break;
+
+        case "CriterioTipoMultimedia":
+            const tipoMultimedia = document.getElementById('tipoMultimedia').value;
+            camposHTML = '<input type="hidden" name="criterios[' + criterioId + '].tipoContenidoMultimedia" value="' + tipoMultimedia + '">';
+
+            criterioHTML = `
+                <div class="criterio-card">
+                    <div class="criterio-header">
+                        <span class="criterio-tipo">Criterio de Tipo Multimedia</span>
+                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
+                    </div>
+                    <div><strong>Tipo:</strong> ${tipoMultimedia}</div>
+                    ${camposHTML}
+                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+                </div>
+            `;
+            break;
+
+        case "CriterioFecha":
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const fechaFin = document.getElementById('fechaFin').value;
+            const tipoDeFecha = document.getElementById('tipoDeFecha').value;
+
+            camposHTML = '<input type="hidden" name="criterios[' + criterioId + '].fechaInicio" value="' + fechaInicio + '">';
+            camposHTML += '<input type="hidden" name="criterios[' + criterioId + '].fechaFin" value="' + fechaFin + '">';
+            camposHTML += '<input type="hidden" name="criterios[' + criterioId + '].tipoFecha" value="' + tipoDeFecha + '">';
+
+            criterioHTML = `
+                <div class="criterio-card">
+                    <div class="criterio-header">
+                        <span class="criterio-tipo">Criterio de Fecha</span>
+                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
+                    </div>
+                    <div><strong>Desde:</strong> ${fechaInicio}</div>
+                    <div><strong>Hasta:</strong> ${fechaFin}</div>
+                    <div><strong>Tipo de fecha:</strong> ${tipoDeFecha}</div>
+                    ${camposHTML}
+                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+                </div>
+            `;
+            break;
+
+        case "CriterioUbicacion":
+            const latitud = document.getElementById('latitud').value;
+            const longitud = document.getElementById('longitud').value;
+
+            camposHTML = '<input type="hidden" name="criterios[' + criterioId + '].ubicacion.latitud" value="' + latitud + '">';
+            camposHTML += '<input type="hidden" name="criterios[' + criterioId + '].ubicacion.longitud" value="' + longitud + '">';
+
+            criterioHTML = `
+                <div class="criterio-card">
+                    <div class="criterio-header">
+                        <span class="criterio-tipo">Criterio de Ubicación</span>
+                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
+                    </div>
+                    <div><strong>Latitud:</strong> ${latitud}</div>
+                    <div><strong>Longitud:</strong> ${longitud}</div>
+                    ${camposHTML}
+                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+                </div>
+            `;
+            break;
+
+        case "CriterioContribuyente":
+            const contribuyente = document.getElementById('contribuyente').value;
+            camposHTML = '<input type="hidden" name="criterios[' + criterioId + '].nombreContribuyente" value="' + contribuyente + '">';
+
+            criterioHTML = `
+                <div class="criterio-card">
+                    <div class="criterio-header">
+                        <span class="criterio-tipo">Criterio de Contribuyente</span>
+                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
+                    </div>
+                    <div><strong>Contribuyente:</strong> ${contribuyente}</div>
+                    ${camposHTML}
+                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+                </div>
+            `;
+            break;
+    }
+
+    criteriosContainer.insertAdjacentHTML('beforeend', criterioHTML);
+
+    // Limpiar el formulario temporal
+    document.getElementById("tipoCriterio").value = "";
+    document.getElementById("campoCriterio").innerHTML = "";
+    document.getElementById("btn-agregar-criterio").disabled = true;
+}
+
+function eliminarCriterio(criterioId) {
+    const criterioElement = document.querySelector('[id="' + criterioId + '"]') ||
+        document.querySelector('input[name*="' + criterioId + '"]')?.closest('.criterio-card');
+    if (criterioElement) {
+        criterioElement.remove();
+    }
+}
+
+// Inicializar eventos
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('tipoCriterio').addEventListener('change', mostrarCampoCriterio);
+    document.getElementById('btn-agregar-criterio').addEventListener('click', agregarCriterio);
+});

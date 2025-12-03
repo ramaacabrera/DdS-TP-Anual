@@ -1,8 +1,25 @@
 package gestorAdministrativo.dto.Criterios;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import java.util.Map;
 import java.util.UUID;
 
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "@type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = CriterioDeTextoDTO.class, name = "CriterioDeTexto"),
+        @JsonSubTypes.Type(value = CriterioContribuyenteDTO.class, name = "CriterioContribuyente"),
+        @JsonSubTypes.Type(value = CriterioEtiquetasDTO.class, name = "CriterioEtiquetas"),
+        @JsonSubTypes.Type(value = CriterioFechaDTO.class, name = "CriterioFecha"),
+        @JsonSubTypes.Type(value = CriterioTipoFuenteDTO.class, name = "CriterioTipoFuente"),
+        @JsonSubTypes.Type(value = CriterioTipoMultimediaDTO.class, name = "CriterioTipoMultimedia"),
+        @JsonSubTypes.Type(value = CriterioUbicacionDTO.class, name = "CriterioUbicacion")
+})
 public abstract class CriterioDTO {
     private UUID criterioId;
     private String tipoCriterio;

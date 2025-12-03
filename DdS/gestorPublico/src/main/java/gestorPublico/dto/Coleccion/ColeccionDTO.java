@@ -10,10 +10,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ColeccionDTO {
-    private UUID coleccionId;
+    private UUID handle;
     private String titulo;
     private String descripcion;
-    private List<FuenteDTO> fuentes = new ArrayList<>();
+    private List<FuenteDTO> fuente = new ArrayList<>();
     private List<CriterioDTO> criteriosDePertenencia = new ArrayList<>();
     private TipoAlgoritmoConsensoDTO algoritmoDeConsenso;
 
@@ -23,7 +23,7 @@ public class ColeccionDTO {
                         List<CriterioDTO> criteriosDePertenencia, TipoAlgoritmoConsensoDTO algoritmoDeConsenso) {
         this.titulo = titulo;
         this.descripcion = descripcion;
-        this.fuentes = fuentes;
+        this.fuente = fuentes;
         this.criteriosDePertenencia = criteriosDePertenencia;
         this.algoritmoDeConsenso = algoritmoDeConsenso;
     }
@@ -31,7 +31,7 @@ public class ColeccionDTO {
     public ColeccionDTO(Coleccion coleccion) {
         if (coleccion == null) return;
 
-        this.coleccionId = coleccion.getHandle();
+        this.handle = coleccion.getHandle();
         this.titulo = coleccion.getTitulo();
         this.descripcion = coleccion.getDescripcion();
 
@@ -46,12 +46,12 @@ public class ColeccionDTO {
 
         // Mapeo de Fuentes
         if (coleccion.getFuente() != null) {
-            this.fuentes = coleccion.getFuente().stream().map(f -> {
+            this.fuente = coleccion.getFuente().stream().map(f -> {
                 FuenteDTO dto = new FuenteDTO();
-                dto.setFuenteId(f.getId());
+                dto.setId(f.getId());
                 dto.setDescriptor(f.getDescriptor());
                 if (f.getTipoDeFuente() != null) {
-                    dto.setTipoFuente(f.getTipoDeFuente().name());
+                    dto.setTipoDeFuente(f.getTipoDeFuente().name());
                 }
                 return dto;
             }).collect(Collectors.toList());
@@ -65,8 +65,8 @@ public class ColeccionDTO {
     }
 
     // Getters y Setters
-    public UUID getColeccionId() { return coleccionId; }
-    public void setColeccionId(UUID coleccionId) { this.coleccionId = coleccionId; }
+    public UUID getHandle() { return handle; }
+    public void setHandle(UUID coleccionId) { this.handle = coleccionId; }
 
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
@@ -74,8 +74,8 @@ public class ColeccionDTO {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public List<FuenteDTO> getFuentes() { return fuentes; }
-    public void setFuentes(List<FuenteDTO> fuentes) { this.fuentes = fuentes; }
+    public List<FuenteDTO> getFuente() { return fuente; }
+    public void setFuente(List<FuenteDTO> fuentes) { this.fuente = fuentes; }
 
     public List<CriterioDTO> getCriteriosDePertenencia() { return criteriosDePertenencia; }
     public void setCriteriosDePertenencia(List<CriterioDTO> criteriosDePertenencia) {

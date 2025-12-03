@@ -1,7 +1,11 @@
 package gestorPublico.repository;
 
+import gestorPublico.domain.Criterios.Criterio;
+import gestorPublico.domain.Criterios.CriterioDeTexto;
+import gestorPublico.domain.Criterios.CriterioEtiquetas;
 import gestorPublico.domain.HechosYColecciones.Coleccion;
 import gestorPublico.utils.BDUtils;
+import org.hibernate.Hibernate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -53,6 +57,22 @@ public class ColeccionRepositorio {
 
             query.setFirstResult(offset);
             query.setMaxResults(limite);
+
+            List<Coleccion> colecciones = query.getResultList();
+            for(Coleccion coleccion : colecciones){
+                Hibernate.initialize(coleccion.getHechos());
+                Hibernate.initialize(coleccion.getHechosConsensuados());
+                Hibernate.initialize(coleccion.getFuente());
+                Hibernate.initialize(coleccion.getCriteriosDePertenencia());
+                for(Criterio criterio : coleccion.getCriteriosDePertenencia()){
+                    if(criterio instanceof CriterioEtiquetas){
+                        Hibernate.initialize(((CriterioEtiquetas) criterio).getEtiquetas());
+                    }
+                    if(criterio instanceof CriterioDeTexto){
+                        Hibernate.initialize(((CriterioDeTexto) criterio).getPalabras());
+                    }
+                }
+            }
 
             return query.getResultList();
         } catch (Exception e) {

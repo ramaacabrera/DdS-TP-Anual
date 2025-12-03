@@ -20,7 +20,10 @@ public class ColeccionController {
 
     public Handler crearColeccion = ctx -> {
         try {
+            System.out.println("Creando coleccion");
             ColeccionDTO request = ctx.bodyAsClass(ColeccionDTO.class);
+
+            System.out.println("DTO creado: " + request.toString());
 
             if (request.getTitulo() == null || request.getTitulo().trim().isEmpty()) {
                 ctx.status(400).json("El título es requerido");

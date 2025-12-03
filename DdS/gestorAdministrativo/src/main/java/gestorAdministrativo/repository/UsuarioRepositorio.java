@@ -85,6 +85,7 @@ public class UsuarioRepositorio {
     public Usuario buscarAdmin(String username){
         EntityManager em = BDUtils.getEntityManager();
         try {
+            System.out.println("Buscando admin");
             TypedQuery<Usuario> query = em.createQuery(
                     "SELECT u FROM Usuario u WHERE u.username = :paramUsername AND u.rol = :paramRol", Usuario.class);
 
