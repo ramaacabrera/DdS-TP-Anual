@@ -1,23 +1,31 @@
 package web.service;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
+//import utils.Dominio.HechosYColecciones.Hecho;
+import web.domain.HechosYColecciones.Hecho;
+import web.domain.HechosYColecciones.HechoModificado;
 import web.domain.Solicitudes.SolicitudDeEliminacion;
 import web.domain.Solicitudes.SolicitudDeModificacion;
+import web.dto.Hechos.HechoDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class SolicitudService {
     private final String urlAdmin;
     private final OkHttpClient client;
     private final ObjectMapper mapper;
+    private final HechoService hechoService;
+    //private final SolicitudRepositorio solicitudRepo;
 
-    public SolicitudService(String urlAdmin) {
+    public SolicitudService(String urlAdmin, HechoService hechoService) {
         this.urlAdmin = urlAdmin;
+        this.hechoService = hechoService;
+        //this.solicitudRepo = solicitudRepo;
         this.client = new OkHttpClient();
         this.mapper = new ObjectMapper();
     }
@@ -114,6 +122,41 @@ public class SolicitudService {
     public int actualizarEstadoSolicitud(String id, String tipo, String accion){
         String esModificacion = tipo.equals("modificacion")?"modificacion/":"";
         String url = urlAdmin + "/api/solicitudes/"+ esModificacion + id;
+        if (tipo.equals("modificacion") && accion.equals("ACEPTADA")) {
+
+            // 1. Traer solicitud
+            SolicitudDeModificacion solicitud = obtenerSolicitudModificacion(id);
+            if(solicitud == null) return 404;
+
+            // 2. Traer el hecho original
+            UUID idHecho = solicitud.getHechoModificado().getHecho_id();
+            HechoDTO original = hechoService.obtenerHechoPorId(String.valueOf(idHecho));
+
+            // 3. Tomar el hecho modificado desde la solicitud
+            HechoModificado nuevo = solicitud.getHechoModificado();
+
+            // 4. Aplicar cambios (solo campos editables)
+            original.setTitulo(nuevo.getTitulo());
+            original.setDescripcion(nuevo.getDescripcion());
+            original.setCategoria(nuevo.getCategoria());
+            //original.setUbicacion(nuevo.getUbicacion());
+            original.setFechaDeAcontecimiento(nuevo.getFechaDeAcontecimiento());
+            original.setFechaDeCarga(nuevo.getFechaDeCarga());
+            //original.setFuente(nuevo.getFuente());
+            //original.setEstadoHecho(nuevo.getEstadoHecho());
+            //original.setContribuyente(nuevo.getContribuyente());
+            //original.setEtiquetas(nuevo.getEtiquetas());
+            //original.setContenidoMultimedia(nuevo.getContenidoMultimedia());
+
+
+
+            // 5. Persistir
+            hechoService.actualizarHecho(original);
+
+            // 6. Cambiar estado
+            //solicitud.setEstado("ACEPTADA");
+            //solicitudRepo.actualizar(solicitud);
+        }
 
         try {
             String jsonBody = mapper.writeValueAsString(Map.of("accion", accion));

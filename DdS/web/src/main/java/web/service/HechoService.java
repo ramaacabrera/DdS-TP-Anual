@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static web.service.Normalizador.DesnormalizadorCategorias.desnormalizar;
-
 
 public class HechoService {
 
@@ -99,6 +97,10 @@ public class HechoService {
             System.err.println("Error obteniendo categorías: " + e.getMessage());
         }
         return new ArrayList<>();
+    }
+
+    public void actualizarHecho(HechoDTO hecho) {
+        System.out.println("DEBUG: actualizando hecho ");
     }
 
 
