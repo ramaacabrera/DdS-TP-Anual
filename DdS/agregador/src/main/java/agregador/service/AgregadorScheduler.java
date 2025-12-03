@@ -17,7 +17,7 @@ public class AgregadorScheduler {
 
         scheduler.scheduleAtFixedRate(() -> {
             agregador.iniciarBusquedaAgregador();
-        }, 1, 6, TimeUnit.SECONDS);
+        }, 1, 30, TimeUnit.SECONDS);
 
         long delayInicial = calcularDelayHastaHora(2);
         scheduler.scheduleAtFixedRate(() -> {

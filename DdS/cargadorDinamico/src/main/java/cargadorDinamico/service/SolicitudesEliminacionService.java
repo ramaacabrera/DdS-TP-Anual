@@ -18,6 +18,7 @@ public class SolicitudesEliminacionService {
     }
 
     public void guardarSolicitudEliminacion(SolicitudDeEliminacion_D entidad) {
+        System.out.println("Solicitudes Eliminacion Service");
         repositorio.guardarSolicitudEliminacion(entidad);
     }
 }

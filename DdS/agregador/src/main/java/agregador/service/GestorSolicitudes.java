@@ -58,14 +58,14 @@ public class GestorSolicitudes {
                 solicitud.setHechoAsociado(hecho);
             }
 
-            if (dto.getUsuario().getUsuarioId() != null) {
+            /*if (dto.getUsuario().getUsuarioId() != null) {
                 Usuario u = usuarioRepositorio.buscarPorId(dto.getUsuario().getUsuarioId());
                 if (u != null) {
                     solicitud.setUsuario(u);
                 } else {
                     System.out.println("⚠️ Usuario no encontrado para solicitud: " + dto.getUsuario().getUsuarioId());
                 }
-            }
+            }*/
 
             // 5. Verificar Spam
             if (detectorDeSpam.esSpam(dto.getJustificacion())) {

@@ -17,11 +17,16 @@ public class SolicitudController {
         try {
             String body = ctx.body();
 
+            System.out.println(body);
+
             HttpResponse<String> response = solicitudService.enviarSolicitudEliminacion(body);
+
+            System.out.println(response);
 
             ctx.status(response.statusCode()).result(response.body());
 
         } catch (Exception e) {
+            System.out.println("hubo un error");
             e.printStackTrace();
             ctx.status(500).json("Error interno al procesar solicitud: " + e.getMessage());
         }

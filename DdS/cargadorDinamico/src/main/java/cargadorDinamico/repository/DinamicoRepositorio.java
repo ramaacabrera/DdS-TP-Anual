@@ -272,6 +272,8 @@ public class DinamicoRepositorio {
     }
 
     public void guardarSolicitudEliminacion(SolicitudDeEliminacion_D solicitud) {
+        System.out.println("Llega a Dinamico Repositorio");
+
         EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
