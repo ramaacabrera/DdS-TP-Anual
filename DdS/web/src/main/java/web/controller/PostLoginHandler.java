@@ -27,11 +27,16 @@ public class PostLoginHandler implements Handler {
         String password = ctx.formParam("password");
         String redirectUrl = ctx.formParam("redirectUrl");
 
+        // Crear el objeto JSON para el cuerpo de la petición
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("usuario", usuario);
+        requestBody.put("password", password);
+
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8087/api/login"))
-                .POST(HttpRequest.BodyPublishers.ofString("usuario=" + usuario +"&password=" + password))
-                .header("Content-Type", "application/x-www-form-urlencoded")
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+                .header("Content-Type", "application/json") // Cambiado a application/json
                 .build();
 
         try{

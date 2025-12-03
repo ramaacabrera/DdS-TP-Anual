@@ -15,7 +15,7 @@ public class GetLoginHandler implements Handler {
     @Override
     public void handle(@NotNull Context ctx){
         Map<String, Object> model = new HashMap<>();
-        model.put("baseApiUrl", "http://localhost:8087/api");
+        model.put("baseAPIUrl", "http://localhost:8087/api");
         //model.put("baseAPIUrl", urlPublica);
         String error = ctx.sessionAttribute("error");
         if(error != null){
