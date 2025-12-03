@@ -50,7 +50,7 @@ public class HechoDTO {
         // Fuente
         if (hecho.getFuente() != null) {
             this.fuente = new FuenteDTO();
-            this.fuente.setId(hecho.getFuente().getId());
+            this.fuente.setFuenteId(hecho.getFuente().getId());
             this.fuente.setDescriptor(hecho.getFuente().getDescriptor());
             if (hecho.getFuente().getTipoDeFuente() != null) {
                 this.fuente.setTipoDeFuente(hecho.getFuente().getTipoDeFuente().name());

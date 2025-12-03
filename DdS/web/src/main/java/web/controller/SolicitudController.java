@@ -8,6 +8,7 @@ import okhttp3.Response;
 import web.domain.Solicitudes.SolicitudDeEliminacion;
 import web.domain.Solicitudes.SolicitudDeModificacion;
 import web.service.SolicitudService;
+import web.utils.ViewUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,17 +47,9 @@ public class SolicitudController {
         // Obtener solicitudes de modificación (si las tienes)
         List<SolicitudDeModificacion> solicitudesModificacion = solicitudService.obtenerSolicitudesModificacion();
 
-        Map<String, Object> model = new HashMap<>();
+        Map<String, Object> model = ViewUtil.baseModel(ctx);
         model.put("solicitudesEliminacion", solicitudesEliminacion);
         model.put("solicitudesModificacion", solicitudesModificacion);
-
-        // Agregar datos de sesión si existen
-        if(!ctx.sessionAttributeMap().isEmpty()){
-            String username = ctx.sessionAttribute("username");
-            String access_token = ctx.sessionAttribute("access_token");
-            model.put("username", username);
-            model.put("access_token", access_token);
-        }
 
         ctx.render("solicitudes.ftl", model);
     };
@@ -68,7 +61,7 @@ public class SolicitudController {
         String id = ctx.pathParam("id");
         String tipo = ctx.pathParam("tipo"); // "eliminacion" o "modificacion"
 
-        Map<String, Object> model = new HashMap<>();
+        Map<String, Object> model = ViewUtil.baseModel(ctx);
         boolean encontrado = false;
 
         // Lógica de selección según el tipo
@@ -98,12 +91,6 @@ public class SolicitudController {
             return;
         }
 
-        // Agregar datos de sesión para el Navbar/Header
-        if (!ctx.sessionAttributeMap().isEmpty()) {
-            model.put("username", ctx.sessionAttribute("username"));
-            model.put("access_token", ctx.sessionAttribute("access_token"));
-        }
-
         ctx.render("solicitud-detalle.ftl", model);
     };
 
@@ -112,17 +99,9 @@ public class SolicitudController {
             String hechoId = ctx.pathParam("id");
             System.out.println("Solicitando formulario de eliminación para hecho ID: " + hechoId);
 
-            Map<String, Object> modelo = new HashMap<>();
+            Map<String, Object> modelo = ViewUtil.baseModel(ctx);
             modelo.put("pageTitle", "Solicitar Eliminación");
             modelo.put("hechoId", hechoId);
-
-            if(!ctx.sessionAttributeMap().isEmpty()){
-                String username = ctx.sessionAttribute("username");
-                System.out.println("Usuario: " + username);
-                String access_token = ctx.sessionAttribute("access_token");
-                modelo.put("username", username);
-                modelo.put("access_token", access_token);
-            }
 
             ctx.render("crear-solicitud-eliminacion.ftl", modelo);
 

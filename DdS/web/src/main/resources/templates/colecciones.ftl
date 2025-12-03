@@ -6,11 +6,11 @@
     </div>
 
     <h1 class="main-title">Listado de Colecciones</h1>
-
-    <div class="form-actions" style="margin-bottom: 20px;">
-        <a href="/crear-coleccion" class="btn btn-primary">➕ Nueva Colección</a>
-    </div>
-
+    <#if rolUsuario == "ADMINISTRADOR">
+        <div class="form-actions" style="margin-bottom: 20px;">
+            <a href="/crear-coleccion" class="btn btn-primary">➕ Nueva Colección</a>
+        </div>
+    </#if>
     <#if colecciones?? && (colecciones?size > 0)>
         <div class="list column gap-16">
             <#list colecciones as c>
@@ -22,7 +22,7 @@
                     <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
                         <a href="/colecciones/${c.handle!''}" class="btn btn-secondary btn-sm">👁️ Ver Detalle</a>
 
-                        <#if rolUsuario = "ADMINISTRADOR">
+                        <#if rolUsuario == "ADMINISTRADOR">
                             <a href="/editar-coleccion/${c.handle!''}" class="btn btn-sm btn-outline">✏️ Editar</a>
 
                             <!-- Botón de Eliminar - Versión más simple -->

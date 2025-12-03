@@ -51,24 +51,22 @@
         }
 
         try {
-            const response = await fetch('/login', {  // Usar /login, no ${baseAPIUrl}/login
+            const response = await fetch('/login', {
                 method: 'POST',
-                body: new URLSearchParams(formData)  // Esto envía como application/x-www-form-urlencoded
+                body: new URLSearchParams(formData)
             });
 
-            if (response.redirected) {
-                // Si hay redirección, seguirla
-                window.location.href = response.url;
-            } else if (response.ok) {
-                const resultado = await response.json();
-                // Manejar respuesta JSON si es el caso
+            const resultado = await response.json();
+            if (response.ok) {
+                // Si el login fue correcto
                 mostrarExito("Inicio de sesión exitoso");
+
                 setTimeout(() => {
-                    window.location.href = '/home';
+                    window.location.href ='/home';
                 }, 1000);
             } else {
-                const errorData = await response.json();
-                mostrarError(errorData.error || "Credenciales incorrectas");
+                // Si hubo error (credenciales mal, etc)
+                mostrarError(resultado.error || "Credenciales incorrectas");
             }
 
         } catch (e) {
@@ -90,10 +88,17 @@
     }
 
     // Permitir Enter
-    document.getElementById('loginForm').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            enviarLogin();
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginForm = document.getElementById('loginForm');
+
+        // Verificamos que exista para evitar errores si cambiamos de página
+        if (loginForm) {
+            loginForm.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    enviarLogin();
+                }
+            });
         }
     });
 </script>

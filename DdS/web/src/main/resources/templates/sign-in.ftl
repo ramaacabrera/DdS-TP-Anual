@@ -95,7 +95,7 @@
 
         try {
             // Enviar como JSON
-            const response = await fetch('${baseAPIUrl}/api/sign-in', {
+            const response = await fetch('${baseAPIUrl}/sign-in', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -113,7 +113,7 @@
 
                 // Redirigir después de 2 segundos
                 setTimeout(() => {
-                    window.location.href = '${baseAPIUrl}/home';
+                    window.location.href = '/home';
                 }, 2000);
             } else {
                 // Mostrar mensaje de error del servidor

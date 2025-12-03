@@ -16,6 +16,7 @@ import io.javalin.http.Handler;
 import web.dto.Hechos.HechoDTO;
 import web.dto.PageDTO;
 import web.domain.Usuario.Usuario;
+import web.utils.ViewUtil;
 
 public class GetHomeHandler implements Handler {
     private String urlPublica;
@@ -49,7 +50,7 @@ public class GetHomeHandler implements Handler {
         }
 
 
-        Map<String, Object> model = new HashMap<>();
+        Map<String, Object> model = ViewUtil.baseModel(ctx);
         model.put("hechos", hechos);
 
         model.put("total", pageDto != null ? pageDto.totalElements : 0);
@@ -57,27 +58,6 @@ public class GetHomeHandler implements Handler {
         model.put("size", SIZE_MAP_LIMIT);
         model.put("totalPages", pageDto != null ? pageDto.totalPages : 1);
 
-        if(!ctx.sessionAttributeMap().isEmpty()){
-            String username = ctx.sessionAttribute("username");
-            System.out.println("Usuario: " + username);
-            String access_token = ctx.sessionAttribute("access_token");
-            model.put("username", username);
-            model.put("access_token", access_token);
-
-            //String urlUser = urlPublica+"/usuario/"+username;
-            Request requestUser = new Request.Builder().url(urlPublica+"/usuario/"+username).get().build();
-            try {
-                Response response = client.newCall(requestUser).execute();
-                Usuario user = mapper.readValue(response.body().string(), new TypeReference<Usuario>() {});
-                model.put("rolUsuario", user.getRol());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } else{
-            model.put("rolUsuario", "VISITANTE");
-        }
-
         ctx.render("inicio.ftl", model);
-
     }
 }
