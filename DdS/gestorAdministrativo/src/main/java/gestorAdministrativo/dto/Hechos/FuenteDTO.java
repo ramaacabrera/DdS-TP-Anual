@@ -14,6 +14,10 @@ public class FuenteDTO {
         this.tipoFuente = tipoFuente;
         this.descriptor = descriptor;
     }
+    public FuenteDTO(String tipoFuente){
+        this.tipoFuente = tipoFuente;
+        this.descriptor = UUID.randomUUID().toString();
+    }
 
     // Getters y Setters
     public UUID getFuenteId() { return fuenteId; }

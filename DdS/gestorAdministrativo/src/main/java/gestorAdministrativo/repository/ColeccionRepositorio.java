@@ -1,5 +1,6 @@
 package gestorAdministrativo.repository;
 
+import gestorAdministrativo.domain.HechosYColecciones.Ubicacion;
 import gestorAdministrativo.utils.BDUtils;
 import gestorAdministrativo.domain.HechosYColecciones.Coleccion;
 

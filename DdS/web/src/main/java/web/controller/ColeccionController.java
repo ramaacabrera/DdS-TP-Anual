@@ -1,14 +1,27 @@
 package web.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.gson.Gson;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import okhttp3.Request;
+import okhttp3.Response;
+import utils.Dominio.HechosYColecciones.Ubicacion;
+import utils.Dominio.Usuario.Usuario;
 import web.domain.Criterios.TipoDeTexto;
 import web.domain.Fuente.TipoDeFuente;
 import web.domain.HechosYColecciones.Coleccion;
 import web.domain.HechosYColecciones.TipoAlgoritmoConsenso;
+import web.domain.Usuario.RolUsuario;
 import web.dto.PageDTO;
 import web.service.ColeccionService;
+import web.service.UsuarioService;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +30,11 @@ import java.util.Map;
 public class ColeccionController {
 
     private ColeccionService coleccionService;
+    private UsuarioService usuarioService;
 
-    public ColeccionController(ColeccionService coleccionService) {
+    public ColeccionController(ColeccionService coleccionService, UsuarioService usuarioService) {
         this.coleccionService = coleccionService;
+        this.usuarioService = usuarioService;
     }
 
     public Handler listarColecciones = ctx -> {
@@ -51,6 +66,12 @@ public class ColeccionController {
                 String access_token = ctx.sessionAttribute("access_token");
                 modelo.put("username", username);
                 modelo.put("access_token", access_token);
+
+                RolUsuario rol = usuarioService.obtenerRol(username);
+
+                modelo.put("rolUsuario", rol);
+            } else{
+                modelo.put("rolUsuario", "VISITANTE");
             }
 
             // Renderizar plantilla
@@ -149,24 +170,21 @@ public class ColeccionController {
     };
 
     public Handler crearColeccion = ctx -> {
+        System.out.println("ColeccionHandler");
         Map<String, Object> bodyData = new HashMap<>();
-        List<Map<String, String>> criteriosDePertenencia = new ArrayList<>();
-        Map<String, String> map = new HashMap<>();
-        this.obtenerCriteriosDePertenencia(map, ctx);
-        map.put("@type", ctx.formParam("criteriosDePertenencia"));
-        map.put("categoria", "ejemplo");
-        criteriosDePertenencia.add(map);
+
+        System.out.println("Formulario: " + ctx.formParamMap());
+        List<Map<String, Object>> criteriosDePertenencia = new ArrayList<>();
+        this.extraerCriterios(ctx.formParamMap(), criteriosDePertenencia);
         bodyData.put("titulo", ctx.formParam("titulo"));
         bodyData.put("descripcion", ctx.formParam("descripcion"));
         bodyData.put("algoritmoDeConsenso", ctx.formParam("algoritmo"));
-        bodyData.put("criteriosDePertenencia", criteriosDePertenencia);
-        //bodyData.put("criteriosDePertenencia", ctx.formParam("criteriosDePertenencia"));
         bodyData.put("fuentes", ctx.formParams("fuentes"));
+        bodyData.put("criteriosDePertenencia", criteriosDePertenencia);
+        bodyData.put("username", ctx.sessionAttributeMap().get("username"));
+        bodyData.put("access_token", ctx.sessionAttributeMap().get("access_token"));
 
-        if (!ctx.sessionAttributeMap().isEmpty()) {
-            bodyData.put("username", ctx.sessionAttribute("username"));
-            bodyData.put("access_token", ctx.sessionAttribute("access_token"));
-        }
+        System.out.println(bodyData);
 
         try {
             coleccionService.crearColeccion(bodyData);
@@ -175,55 +193,47 @@ public class ColeccionController {
         }
     };
 
-    private void obtenerCriteriosDePertenencia(Map<String, String> map, Context ctx) {
-        map.put("@type", ctx.formParam("criteriosDePertenencia"));
-        String resultado = "";
-        switch (ctx.formParam("criteriosDePertenencia").toString()) {
-            case "CriterioDeTexto":
-                switch(ctx.formParam("criterio.tipoDeTexto").toString()){
-                    case "titulo":
-                        map.put("tipoDeTexto", TipoDeTexto.TITULO.toString());
-                        break;
-                    case "descripcion":
-                        map.put("tipoDeTexto", TipoDeTexto.DESCRIPCION.toString());
-                        break;
-                    case "categoria":
-                        map.put("tipoDeTexto", TipoDeTexto.CATEGORIA.toString());
-                        break;
+    public void extraerCriterios(Map<String, List<String>> mapBody, List<Map<String, Object>> criteriosDePertenencia) {
+        for(Map.Entry<String, List<String>> entry : mapBody.entrySet()){
+            if(entry.getKey().startsWith("criterios[")){
+                // Extraer el ID del criterio y el campo
+                String key = entry.getKey();
+                String criterioId = key.substring(key.indexOf('[') + 1, key.indexOf(']'));
+                String campo = key.substring(key.indexOf('.') + 1);
+
+                // Buscar o crear el criterio en la lista
+                Map<String, Object> criterio = criteriosDePertenencia.stream()
+                        .filter(c -> c.get("_id").equals(criterioId))
+                        .findFirst()
+                        .orElseGet(() -> {
+                            Map<String, Object> nuevoCriterio = new HashMap<>();
+                            nuevoCriterio.put("_id", criterioId);
+                            criteriosDePertenencia.add(nuevoCriterio);
+                            return nuevoCriterio;
+                        });
+
+                // Agregar el campo al criterio
+                if(campo.equals("palabras") || campo.equals("etiquetas")) {
+                    criterio.put(campo, entry.getValue());
+                } else{
+                    criterio.put(campo, entry.getValue().get(0));
                 }
-                List<String> palabras = ctx.formParams("criterio.palabras[]");
-                resultado = String.join(",", palabras);
-                map.put("palabras", resultado);
-                break;
-            case "CriterioFecha":
-                map.put("tipoFecha", ctx.formParams("criterio.tipoDeFecha").toString());
-                map.put("fechaInicio", ctx.formParams("criterio.fechaInicio").toString());
-                map.put("fechaFin", ctx.formParams("criterio.fechaFin").toString());
-                break;
-            case "CriterioEtiquetas":
-                List<String> etiquetas = ctx.formParams("criterio.etiquetas[]");
-                resultado = String.join(",", etiquetas);
-                map.put("etiquetas", resultado);
-                break;
-            case "CriterioContribuyente":
-                map.put("nombreContribuyente", ctx.formParams("criterio.contribuyente").toString());
-                break;
-            case "CriterioUbicacion":
-                String jsonBody = String.format("""
-                    {
-                        "latitud": %s,
-                        "longitud": %s
-                    }
-                    """, ctx.formParams("criterio.ubicacion.latitud").toString(), ctx.formParams("criterio.ubicacion.longitud").toString());
-                //map.put("latitud", ctx.formParams("criterio.ubicacion.latitud").toString());
-                //map.put("longitud", ctx.formParams("criterio.ubicacion.longitud").toString());
-                map.put("ubicacion", jsonBody);
-                break;
-            case "CriterioTipoMultimedia":
-                map.put("tipoContenidoMultimedia", ctx.formParams("criterio.tipoMultimedia").toString());
-                break;
-            default:
-                break;
+            }
+        };
+
+        // Remover el campo _id temporal y limpiar la estructura
+        for (Map<String, Object> criterio : criteriosDePertenencia) {
+            criterio.remove("_id");
+            if(criterio.get("@type").equals("CriterioUbicacion")){
+                double latitud = Double.parseDouble(criterio.get("ubicacion.latitud").toString());
+                double longitud = Double.parseDouble(criterio.get("ubicacion.longitud").toString());
+                Ubicacion ubicacion = new Ubicacion(latitud, longitud);
+                criterio.put("ubicacion", ubicacion);
+                criterio.remove("ubicacion.latitud");
+                criterio.remove("ubicacion.longitud");
+            }
         }
+
+        System.out.println("Criterios extraidos: " + criteriosDePertenencia);
     }
 }

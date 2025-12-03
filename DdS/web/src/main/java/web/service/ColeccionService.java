@@ -37,6 +37,7 @@ public class ColeccionService {
     }
 
     public PageDTO<Coleccion> listarColecciones(int page, int size) {
+        System.out.println("Pidiendo colecciones a: " + urlPublica);
         HttpUrl.Builder b = HttpUrl.parse(urlPublica + "/colecciones").newBuilder()
                 .addQueryParameter("pagina", String.valueOf(page))
                 .addQueryParameter("limite", String.valueOf(size));
@@ -78,21 +79,31 @@ public class ColeccionService {
 
     public void crearColeccion(Map<String, Object> bodyData) {
         System.out.println(bodyData);
+        String username = null;
+        String access_token = null;
+        if(bodyData.containsKey("username") && bodyData.containsKey("access_token")){
+            username = bodyData.get("username").toString();
+            access_token = bodyData.get("access_token").toString();
+            bodyData.remove("username");
+            bodyData.remove("access_token");
+        }
         String jsonBody = new Gson().toJson(bodyData);
 
         System.out.println("Serializacion: " + jsonBody);
 
+        System.out.println("Mandando a: " + urlAdmin);
         HttpClient httpClient = HttpClient.newHttpClient();
         try{
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-                    .uri(new URI(urlAdmin + "/colecciones"))
+                    .uri(new URI("http://localhost:8081/api/colecciones"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody));
 
-            if (bodyData.containsKey("username") && bodyData.containsKey("access_token")) {
+            if (username != null && access_token != null) {
                 requestBuilder
-                        .header("username", bodyData.get("username").toString())
-                        .header("access_token", bodyData.get("access_token").toString());
+                        .header("username", username)
+                        .header("access_token", access_token);
+
             }
             HttpRequest request = requestBuilder.build();
 
@@ -103,8 +114,10 @@ public class ColeccionService {
             System.out.println("Mandamos la request");
 
             Map<String, Object> modelo = new HashMap<>();
-            if (response.statusCode() != 200 || response.statusCode() != 201) {
+            if (response.statusCode() != 201) {
                 throw new RuntimeException("Error al crear la coleccion, status code: " + response.statusCode());
+            } else{
+                System.out.println("Coleccion creada");
             }
 
         } catch (Exception e) {

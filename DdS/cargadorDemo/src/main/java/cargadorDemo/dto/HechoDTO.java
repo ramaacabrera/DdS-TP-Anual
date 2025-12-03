@@ -58,6 +58,10 @@ public class HechoDTO {
         this.contenidoMultimedia = hecho.getContenidoMultimedia();
     }
 
+    public boolean isEsEditable(){
+        return true;
+    }
+
     public UUID getHecho_id() {return hecho_id;}
     public String getTitulo() { return titulo;}
     public String getDescripcion() { return descripcion;}

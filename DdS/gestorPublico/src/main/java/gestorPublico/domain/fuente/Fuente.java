@@ -35,7 +35,7 @@ public class Fuente {
     }
 
     public Fuente(FuenteDTO fuenteDTO) {
-        this.tipoDeFuente = TipoDeFuente.valueOf(fuenteDTO.getTipoFuente());
+        this.tipoDeFuente = TipoDeFuente.valueOf(fuenteDTO.getTipoDeFuente());
         this.descriptor = fuenteDTO.getDescriptor();
 
     }

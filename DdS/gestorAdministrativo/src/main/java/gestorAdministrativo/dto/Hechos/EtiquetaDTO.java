@@ -12,6 +12,9 @@ public class EtiquetaDTO {
         this.etiquetaId = etiquetaId;
         this.nombre = nombre;
     }
+    public EtiquetaDTO(String nombre){
+        this.nombre = nombre;
+    }
 
     // Getters y Setters
     public UUID getId() { return etiquetaId; }
