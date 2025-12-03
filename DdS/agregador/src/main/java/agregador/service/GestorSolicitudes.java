@@ -24,10 +24,6 @@ public class GestorSolicitudes {
     private final UsuarioRepositorio usuarioRepositorio;
     private final DetectorDeSpam detectorDeSpam;
 
-    // Necesitas un repo de usuarios o estrategia para asignarlos si vienen solo con ID en el DTO
-    // Por ahora, asumiré que el DTO trae el ID y buscamos el hecho.
-    // Para el usuario, si el DTO no trae el objeto completo, quizás debas buscarlo o crearlo.
-
     public GestorSolicitudes(SolicitudEliminacionRepositorio elimRepo, SolicitudModificacionRepositorio modRepo,
                              HechoRepositorio hechoRepositorio, UsuarioRepositorio usuarioRepositorioNuevo) {
         this.elimRepo = elimRepo;
@@ -46,40 +42,30 @@ public class GestorSolicitudes {
         if (dtos == null) return;
 
         for (SolicitudDeEliminacionDTO dto : dtos) {
-            // 1. Crear instancia vacía
-            SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion();
+            try {
+                SolicitudDeEliminacion solicitud = new SolicitudDeEliminacion();
 
-            // 2. Mapear datos básicos
-            solicitud.setJustificacion(dto.getJustificacion());
+                solicitud.setJustificacion(dto.getJustificacion());
 
-            // 3. Buscar y setear el Hecho real
-            if (dto.getHechoId() != null) {
-                System.out.println("Tenemos hecho con id");
-                Hecho hecho = hechoRepositorio.buscarPorId(dto.getHechoId());
-                System.out.println("Encontramos el hecho: ");
-                System.out.println(hecho);
-                solicitud.setHechoAsociado(hecho);
-                System.out.println("seteamos el hecho");
-            }
-
-            /*if (dto.getUsuario().getUsuarioId() != null) {
-                Usuario u = usuarioRepositorio.buscarPorId(dto.getUsuario().getUsuarioId());
-                if (u != null) {
-                    solicitud.setUsuario(u);
-                } else {
-                    System.out.println("⚠️ Usuario no encontrado para solicitud: " + dto.getUsuario().getUsuarioId());
+                if (dto.getHechoId() != null) {
+                    System.out.println("Tenemos hecho con id");
+                    Hecho hecho = hechoRepositorio.buscarPorId(dto.getHechoId());
+                    System.out.println("Encontramos el hecho: ");
+                    System.out.println(hecho);
+                    solicitud.setHechoAsociado(hecho);
+                    System.out.println("seteamos el hecho");
                 }
-            }*/
 
-            // 5. Verificar Spam
-            if (detectorDeSpam.esSpam(dto.getJustificacion())) {
-                solicitud.rechazarSolicitud();
-                solicitud.setEsSpam(true);
-                System.out.println("Spam detectado en solicitud eliminación.");
+                if (detectorDeSpam.esSpam(dto.getJustificacion())) {
+                    solicitud.rechazarSolicitud();
+                    solicitud.setEsSpam(true);
+                    System.out.println("Spam detectado en solicitud eliminación.");
+                }
+
+                elimRepo.agregarSolicitudDeEliminacion(solicitud);
+            } catch (Exception e) {
+                System.err.println("Error procesando solicitud de eliminación: " + e.getMessage());
             }
-
-            // 6. Guardar
-            elimRepo.agregarSolicitudDeEliminacion(solicitud);
         }
     }
 
@@ -87,35 +73,37 @@ public class GestorSolicitudes {
         if (dtos == null) return;
 
         for (SolicitudDeModificacionDTO dto : dtos) {
-            SolicitudDeModificacion solicitud = new SolicitudDeModificacion();
+            try{
+                SolicitudDeModificacion solicitud = new SolicitudDeModificacion();
 
-            solicitud.setJustificacion(dto.getJustificacion());
+                solicitud.setJustificacion(dto.getJustificacion());
 
-            if (dto.getHechoId() != null) {
-                Hecho hecho = hechoRepositorio.buscarPorId(dto.getHechoId());
-                solicitud.setHechoAsociado(hecho);
+                if (dto.getHechoId() != null) {
+                    Hecho hecho = hechoRepositorio.buscarPorId(dto.getHechoId());
+                    solicitud.setHechoAsociado(hecho);
+                }
+
+                if (dto.getUsuarioId() != null) {
+                    Usuario u = new Usuario();
+                    u.setId_usuario(dto.getUsuarioId());
+                    solicitud.setUsuario(u);
+                }
+
+                if (dto.getHechoModificado() != null) {
+                    HechoModificado cambios = mapHechoModificado(dto.getHechoModificado());
+                    solicitud.setHechoModificado(cambios);
+                }
+
+                if (detectorDeSpam.esSpam(dto.getJustificacion())) {
+                    solicitud.rechazarSolicitud();
+                    solicitud.setEsSpam(true);
+                    System.out.println("Spam detectado en solicitud modificación.");
+                }
+
+                modRepo.agregarSolicitudDeModificacion(solicitud);
+            } catch (Exception e) {
+                System.err.println("Error procesando solicitud de modificación: " + e.getMessage());
             }
-
-            if (dto.getUsuarioId() != null) {
-                Usuario u = new Usuario();
-                u.setId_usuario(dto.getUsuarioId());
-                solicitud.setUsuario(u);
-            }
-
-            if (dto.getHechoModificado() != null) {
-                HechoModificado cambios = mapHechoModificado(dto.getHechoModificado());
-                solicitud.setHechoModificado(cambios);
-            }
-
-            // 6. Verificar Spam
-            if (detectorDeSpam.esSpam(dto.getJustificacion())) {
-                solicitud.rechazarSolicitud();
-                solicitud.setEsSpam(true);
-                System.out.println("Spam detectado en solicitud modificación.");
-            }
-
-            // 7. Guardar
-            modRepo.agregarSolicitudDeModificacion(solicitud);
         }
     }
 

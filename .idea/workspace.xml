@@ -4,31 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="comento pruebas xq hay errores con dependencias y versiones">
-      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/ServicioGeoref.java" afterDir="false" />
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="Agrego funcionalidad de descripcion dentro de la Ubicacion y el agregador la pone al momento de subir los hechos">
+      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/AgregadorOrquestadorTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/ConexionCargadorServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/GestorSolicitudesTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/HechosCargadorServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/NormalizadorCategoriasTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/ServicioGeorefTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/ServicioNormalizacionTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/Criterios/CriterioUbicacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/Criterios/CriterioUbicacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/dto/Hechos/UbicacionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/dto/Hechos/UbicacionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/AgregadorOrquestador.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/AgregadorOrquestador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/ConexionCargadorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/ConexionCargadorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/GestorSolicitudes.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/GestorSolicitudes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/ServicioGeoref.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/ServicioGeoref.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/utils/BDUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/utils/BDUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/tests/ConexionCargadorServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/tests/HechosCargadorServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/tests/ServicioNormalizacionTest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDemo/src/main/java/cargadorDemo/domain/HechosYColecciones/Ubicacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDemo/src/main/java/cargadorDemo/domain/HechosYColecciones/Ubicacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDemo/src/main/java/cargadorDemo/dto/UbicacionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDemo/src/main/java/cargadorDemo/dto/UbicacionDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDemo/src/main/java/cargadorDemo/service/DemoLoaderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDemo/src/main/java/cargadorDemo/service/DemoLoaderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/domain/ConversorCSV.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/domain/ConversorCSV.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/domain/HechosYColecciones/Ubicacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/domain/HechosYColecciones/Ubicacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/dto/Hechos/UbicacionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/dto/Hechos/UbicacionDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/dto/Hechos/UbicacionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/dto/Hechos/UbicacionDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/ColeccionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/ColeccionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/HechoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/HechoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/domain/Criterios/CriterioUbicacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/domain/Criterios/CriterioUbicacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/domain/HechosYColecciones/Ubicacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/domain/HechosYColecciones/Ubicacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/FiltroHechosDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/FiltroHechosDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/Hechos/UbicacionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/Hechos/UbicacionDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/ColeccionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/ColeccionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/HechoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/HechoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/dto/Hechos/UbicacionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/dto/Hechos/UbicacionDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/home.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/home.ftl" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -94,48 +88,57 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Agregador.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiAdmin.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiAdministrativa.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiMock.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiPublica.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Application.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CargadorDinamico.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CargadorEstatico.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CargadorMetamapa.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Web.executor&quot;: &quot;Run&quot;,
-    &quot;Application.cargadorEstatico.Application.executor&quot;: &quot;Run&quot;,
-    &quot;Application.estadisticas.executor&quot;: &quot;Run&quot;,
-    &quot;Application.gestorPublico.Application.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/idiar/IdeaProjects/Diseño-TP/DdS/gestorPublico/src/main/java/gestorPublico/service&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/agregador/untitled/src/main/java/com/metamapa/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Agregador.executor": "Run",
+    "Application.ApiAdmin.executor": "Run",
+    "Application.ApiAdministrativa.executor": "Run",
+    "Application.ApiMock.executor": "Run",
+    "Application.ApiPublica.executor": "Run",
+    "Application.Application.executor": "Run",
+    "Application.CargadorDinamico.executor": "Run",
+    "Application.CargadorEstatico.executor": "Run",
+    "Application.CargadorMetamapa.executor": "Run",
+    "Application.Web.executor": "Run",
+    "Application.cargadorEstatico.Application.executor": "Run",
+    "Application.estadisticas.executor": "Run",
+    "Application.gestorPublico.Application.executor": "Run",
+    "JUnit.AgregadorOrquestadorTest.executor": "Run",
+    "JUnit.ConexionCargadorServiceTest.executor": "Run",
+    "JUnit.GestorSolicitudesTest.executor": "Run",
+    "JUnit.GestorSolicitudesTest.testProcesarEliminacionSpam.executor": "Run",
+    "JUnit.HechosCargadorServiceTest.executor": "Run",
+    "JUnit.NormalizadorCategoriasTest.executor": "Run",
+    "JUnit.ServicioGeorefTest.executor": "Run",
+    "JUnit.ServicioNormalizacionTest.executor": "Run",
+    "JUnit.java in agregador.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/idiar/IdeaProjects/Diseño-TP/DdS/gestorPublico/src/main/java/gestorPublico/service",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/agregador/untitled/src/main/java/com/metamapa/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\idiar\IdeaProjects\DdS-TP-Anual\DdS\cargadorDinamico\src\main\java\cargadorDinamico" />
@@ -149,6 +152,7 @@
       <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\resources\public\img" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="agregador.service" />
       <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -159,7 +163,7 @@
       <recent name="agregador.utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.CargadorEstatico">
+  <component name="RunManager" selected="Application.Agregador">
     <configuration name="Agregador" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="agregador.Application" />
       <module name="agregador" />
@@ -181,19 +185,6 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="gestorPublico.Application" />
       <module name="gestorPublico" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="gestorAdministrativo.Application" />
-      <module name="gestorAdministrativo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="gestorAdministrativo.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -234,19 +225,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="cargadorEstatico.Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="cargadorEstatico.Application" />
-      <module name="cargadorEstatico" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="cargadorEstatico.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="estadisticas" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -256,15 +234,70 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="gestorPublico.Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="gestorPublico.Application" />
-      <module name="gestorPublico" />
+    <configuration name="ConexionCargadorServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="agregador" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="gestorPublico.*" />
+          <option name="PATTERN" value="agregador.service.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="PACKAGE_NAME" value="agregador.service" />
+      <option name="MAIN_CLASS_NAME" value="agregador.service.ConexionCargadorServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NormalizadorCategoriasTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="agregador" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="agregador.service.normalizacion.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="agregador.service.normalizacion" />
+      <option name="MAIN_CLASS_NAME" value="agregador.service.normalizacion.NormalizadorCategoriasTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServicioGeorefTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="agregador" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="agregador.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="agregador.service" />
+      <option name="MAIN_CLASS_NAME" value="agregador.service.ServicioGeorefTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServicioNormalizacionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="agregador" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="agregador.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="agregador.service" />
+      <option name="MAIN_CLASS_NAME" value="agregador.service.ServicioNormalizacionTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="java in agregador" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="agregador" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/DdS/agregador/src/test/java" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -279,15 +312,19 @@
       <item itemvalue="Application.DemoMockServer" />
       <item itemvalue="Application.Web" />
       <item itemvalue="Application.estadisticas" />
-      <item itemvalue="Application.cargadorEstatico.Application" />
-      <item itemvalue="Application.gestorPublico.Application" />
-      <item itemvalue="Application.Application" />
+      <item itemvalue="JUnit.ConexionCargadorServiceTest" />
+      <item itemvalue="JUnit.NormalizadorCategoriasTest" />
+      <item itemvalue="JUnit.ServicioGeorefTest" />
+      <item itemvalue="JUnit.ServicioNormalizacionTest" />
+      <item itemvalue="JUnit.java in agregador" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.cargadorEstatico.Application" />
-        <item itemvalue="Application.gestorPublico.Application" />
-        <item itemvalue="Application.Application" />
+        <item itemvalue="JUnit.java in agregador" />
+        <item itemvalue="JUnit.ServicioNormalizacionTest" />
+        <item itemvalue="JUnit.ServicioGeorefTest" />
+        <item itemvalue="JUnit.NormalizadorCategoriasTest" />
+        <item itemvalue="JUnit.ConexionCargadorServiceTest" />
       </list>
     </recent_temporary>
   </component>
@@ -378,7 +415,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764785795508</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Agrego funcionalidad de descripcion dentro de la Ubicacion y el agregador la pone al momento de subir los hechos">
+      <option name="closed" value="true" />
+      <created>1764795595399</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1764795595399</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -401,7 +446,8 @@
     <MESSAGE value="termino cargadorEstatico" />
     <MESSAGE value="comento pruebas xq hay errores con dependencias y versiones" />
     <MESSAGE value="Arreglo filtrado por Categorias" />
-    <option name="LAST_COMMIT_MESSAGE" value="Arreglo filtrado por Categorias" />
+    <MESSAGE value="Agrego funcionalidad de descripcion dentro de la Ubicacion y el agregador la pone al momento de subir los hechos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Agrego funcionalidad de descripcion dentro de la Ubicacion y el agregador la pone al momento de subir los hechos" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

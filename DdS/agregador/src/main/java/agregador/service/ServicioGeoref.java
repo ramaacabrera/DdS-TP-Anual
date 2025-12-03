@@ -15,9 +15,14 @@ public class ServicioGeoref {
     private final HttpClient httpClient;
     private final ObjectMapper mapper;
 
-    public ServicioGeoref() {
-        this.httpClient = HttpClient.newHttpClient();
-        this.mapper = new ObjectMapper();
+    public ServicioGeoref(HttpClient client, ObjectMapper mapper) {
+        if(client == null || mapper == null) {
+            this.httpClient = HttpClient.newHttpClient();
+            this.mapper = new ObjectMapper();
+        } else {
+            this.httpClient = client;
+            this.mapper = mapper;
+        }
     }
 
     public String obtenerDescripcionPorCoordenadas(double latitud, double longitud) {

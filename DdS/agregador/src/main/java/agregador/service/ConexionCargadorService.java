@@ -102,7 +102,6 @@ public class ConexionCargadorService {
 
         } catch (Exception e) {
             System.err.println("🔥 ERROR GRAVE EN NUEVA CONEXIÓN 🔥");
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

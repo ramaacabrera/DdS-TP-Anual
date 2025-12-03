@@ -6,19 +6,14 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 public class BDUtils {
-    private static final EntityManagerFactory factory;
+    private static EntityManagerFactory factory;
 
-    static {
-        try {
-            factory = Persistence.createEntityManagerFactory("agregador-PU");
-        } catch (Exception e) {
-            throw new RuntimeException("Error inicializando EntityManagerFactory", e);
-        }
-    }
-
+    // Una especie de Singleton para que no moleste con los tests
     public static EntityManager getEntityManager() {
-        EntityManager em = factory.createEntityManager();
-        return em;
+        if (factory == null || !factory.isOpen()) {
+            factory = javax.persistence.Persistence.createEntityManagerFactory("agregador-PU");
+        }
+        return factory.createEntityManager();
     }
 
     public static void comenzarTransaccion(EntityManager em) {

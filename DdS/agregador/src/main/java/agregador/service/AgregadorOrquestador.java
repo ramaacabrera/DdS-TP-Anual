@@ -45,7 +45,7 @@ public class AgregadorOrquestador {
         this.motorConsenso = motorConsenso;
         this.gestorSolicitudes = gestorSolicitudes;
         this.hechosCargadorService = hechosCargadorService;
-        this.servicioGeoref = new ServicioGeoref();
+        this.servicioGeoref = new ServicioGeoref(null,null);
     }
 
 
