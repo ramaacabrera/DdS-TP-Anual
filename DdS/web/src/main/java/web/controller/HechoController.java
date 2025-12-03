@@ -11,8 +11,10 @@ import java.util.stream.Collectors;
 public class HechoController {
 
     private HechoService hechoService;
+    private String urlPublica;
 
-    public HechoController(HechoService hechoService) {
+    public HechoController(String urlPublica, HechoService hechoService) {
+        this.urlPublica = urlPublica;
         this.hechoService = hechoService;
     }
 
@@ -141,6 +143,7 @@ public class HechoController {
         // Solo renderiza la plantilla con el formulario vacío
         Map<String, Object> modelo = new HashMap<>();
         modelo.put("pageTitle", "Reportar un Hecho");
+        modelo.put("urlPublica", urlPublica);
         if(!ctx.sessionAttributeMap().isEmpty()){
             String username = ctx.sessionAttribute("username");
             System.out.println("Usuario: " + username);

@@ -62,6 +62,7 @@ public class ClienteDelAgregador {
                     switch (type) {
                         case "obtenerHechos" -> {
                             List<HechoDTO> hechos = controlador.obtenerHechos();
+                            System.out.println(mapper.writeValueAsString(hechos));
                             HechosObtenidosPayload payload = new HechosObtenidosPayload(hechos);
                             WsMessage<HechosObtenidosPayload> mensaje = new WsMessage<HechosObtenidosPayload>("hechosObtenidos", payload);
 

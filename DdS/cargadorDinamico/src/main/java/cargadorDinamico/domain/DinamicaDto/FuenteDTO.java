@@ -27,12 +27,12 @@ public class FuenteDTO {
         this.tipoDeFuente = tipoDeFuente;
     }
 
-    @JsonProperty("ruta")
+    @JsonProperty("descriptor")
     public String getDescriptor() {
         return descriptor;
     }
 
-    @JsonProperty("ruta")
+    @JsonProperty("descriptor")
     public void setDescriptor(String descriptorNuevo) {
         this.descriptor = descriptorNuevo;
     }

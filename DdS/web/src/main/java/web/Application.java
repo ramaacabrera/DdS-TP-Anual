@@ -33,7 +33,7 @@ public class Application {
 
         // controllers
         ColeccionController coleccionController = new ColeccionController(coleccionService);
-        HechoController hechoController = new HechoController(hechoService);
+        HechoController hechoController = new HechoController(urlPublica, hechoService);
         SolicitudController solicitudController = new SolicitudController(solicitudService);
 
         app.get("/", ctx -> {

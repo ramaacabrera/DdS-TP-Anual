@@ -1,4 +1,6 @@
 <script src="/js/crear-hecho.js" defer></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 <#assign pageTitle = "Reportar un Hecho">
 <#assign content>
@@ -9,7 +11,7 @@
     <h1 class="main-title">Reportar un Hecho</h1>
 
     <script>
-        const URL_PUBLICA = '${urlPublica!"http://localhost:8087"}';
+        const URL_PUBLICA = '${urlPublica}';
     </script>
 
     <form id="form-crear-hecho" class="form-container" method="POST" action="/api/hechos" enctype="multipart/form-data">
@@ -54,19 +56,20 @@
         <div class="form-section">
             <h3 class="form-section-title">📍 Ubicación</h3>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="latitud" class="form-label">Latitud *</label>
-                    <input type="number" id="latitud" name="ubicacion.latitud" class="form-input" step="any" required
-                           placeholder="Ej: -34,6037">
-                </div>
+            <p class="form-help" style="margin-bottom: 10px;">
+                Haga clic en el mapa para marcar la ubicación exacta.
+            </p>
 
-                <div class="form-group">
-                    <label for="longitud" class="form-label">Longitud *</label>
-                    <input type="number" id="longitud" name="ubicacion.longitud" class="form-input" step="any" required
-                           placeholder="Ej: -58,3816">
-                </div>
+            <div id="mapa-selector" style="height: 300px; width: 100%; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 15px; z-index: 1;"></div>
+
+            <div class="form-group">
+                <label for="descripcionUbicacion" class="form-label">Descripción de la ubicación *</label>
+                <input type="text" id="descripcionUbicacion" name="ubicacion.descripcion" class="form-input" required
+                       placeholder="Ej:Avenida Sarmiento 1233, Barracas. Frente a la estación de tren, casa de rejas blancas...">
             </div>
+
+            <input type="hidden" id="latitud" name="ubicacion.latitud" required>
+            <input type="hidden" id="longitud" name="ubicacion.longitud" required>
         </div>
 
         <!-- Fecha del acontecimiento -->

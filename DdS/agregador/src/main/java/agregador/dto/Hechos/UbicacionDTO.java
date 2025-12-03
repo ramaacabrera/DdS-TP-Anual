@@ -6,13 +6,15 @@ public class UbicacionDTO {
     private UUID ubicacionId;
     private double latitud;
     private double longitud;
+    private String descripcion;
 
     public UbicacionDTO() {}
 
-    public UbicacionDTO(UUID ubicacionId, double latitud, double longitud) {
+    public UbicacionDTO(UUID ubicacionId, double latitud, double longitud, String descripcion) {
         this.ubicacionId = ubicacionId;
         this.latitud = latitud;
         this.longitud = longitud;
+        this.descripcion = descripcion;
     }
 
     // Getters y Setters
@@ -24,4 +26,7 @@ public class UbicacionDTO {
 
     public double getLongitud() { return longitud; }
     public void setLongitud(double longitud) { this.longitud = longitud; }
+
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 }

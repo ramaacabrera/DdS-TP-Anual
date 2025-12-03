@@ -102,7 +102,7 @@ public class HechoService {
         }
 
         if (f.latitud != null && f.longitud != null) {
-            criterios.add(new CriterioUbicacion(new Ubicacion(f.latitud, f.longitud)));
+            criterios.add(new CriterioUbicacion(new Ubicacion(f.latitud, f.longitud,"")));
         }
 
         if (f.contribuyente != null && !f.contribuyente.trim().isEmpty()) {
