@@ -1,6 +1,7 @@
 // gestorAdministrativo/cargadorDinamico.service/SolicitudEliminacionService.java
 package gestorAdministrativo.service;
 
+import gestorAdministrativo.domain.HechosYColecciones.EstadoHecho;
 import gestorAdministrativo.dto.Hechos.UsuarioDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDeEliminacionDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDTO;
@@ -34,10 +35,47 @@ public class SolicitudEliminacionService {
 
             boolean actualizado = solicitudRepositorio.actualizarEstadoSolicitudEliminacion(accion, solicitudId);
 
-            if (actualizado && estado == EstadoSolicitudEliminacion.ACEPTADA) {
-                var solicitud = solicitudRepositorio.buscarPorId(solicitudId);
-                if (solicitud.isPresent() && solicitud.get().getHechoAsociado() != null) {
-                    hechoRepositorio.eliminar(solicitud.get().getHechoAsociado());
+            if (actualizado) {
+                System.out.println("✅ Estado de solicitud actualizado a: " + accion);
+
+                // Obtener la solicitud completa
+                Optional<SolicitudDeEliminacion> optSolicitud = solicitudRepositorio.buscarPorId(solicitudId);
+
+                if (optSolicitud.isPresent()) {
+                    SolicitudDeEliminacion solicitud = optSolicitud.get();
+                    System.out.println("Solicitud encontrada: " + solicitud.getId());
+
+                    // CORRECCIÓN: getHechoAsociado() devuelve Hecho, no UUID
+                    Hecho hecho = solicitud.getHechoAsociado();
+
+                    if (hecho != null) {
+                        UUID hechoId = hecho.getHecho_id();
+                        System.out.println("Hecho asociado ID: " + hechoId);
+                        System.out.println("Hecho asociado: " + hecho.getTitulo());
+                        System.out.println("Estado actual del hecho: " + hecho.getEstadoHecho());
+
+                        if (estado == EstadoSolicitudEliminacion.ACEPTADA) {
+                            // Cambiar estado del hecho a OCULTO
+                            hecho.setEstadoHecho(EstadoHecho.OCULTO);
+                            hechoRepositorio.guardar(hecho);
+                            System.out.println("✅ Hecho " + hechoId + " cambiado a estado: OCULTO");
+
+                        } else if (estado == EstadoSolicitudEliminacion.RECHAZADA) {
+                            // Asegurar que el hecho esté ACTIVO
+                            hecho.setEstadoHecho(EstadoHecho.ACTIVO);
+                            hechoRepositorio.guardar(hecho);
+                            System.out.println("✅ Hecho " + hechoId + " mantenido como ACTIVO");
+                        }
+
+                        // Verificación después de guardar
+                        Hecho hechoVerificado = hechoRepositorio.buscarPorId(hechoId);
+                        System.out.println("Estado verificado después de guardar: " +
+                                (hechoVerificado != null ? hechoVerificado.getEstadoHecho() : "null"));
+                    } else {
+                        System.err.println("⚠️ Solicitud sin hecho asociado");
+                    }
+                } else {
+                    System.err.println("⚠️ Solicitud no encontrada después de actualizar");
                 }
             }
             return actualizado;

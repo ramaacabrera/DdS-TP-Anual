@@ -1,6 +1,7 @@
 package gestorPublico.service;
 
 import gestorPublico.domain.Criterios.*;
+import gestorPublico.domain.HechosYColecciones.EstadoHecho;
 import gestorPublico.domain.HechosYColecciones.Hecho;
 import gestorPublico.domain.HechosYColecciones.Ubicacion;
 import gestorPublico.dto.FiltroHechosDTO;
@@ -30,7 +31,11 @@ public class HechoService {
 
         List<Hecho> todosLosHechos = hechoRepositorio.buscarHechos(criterios);
 
-        int total = todosLosHechos.size();
+        List<Hecho> hechosActivos = todosLosHechos.stream()
+                .filter(hecho -> hecho.getEstadoHecho() == EstadoHecho.ACTIVO) // ¡FILTRO AQUÍ!
+                .collect(Collectors.toList());
+
+        int total = hechosActivos.size();
         int totalPages = (int) Math.ceil(total / (double) filtro.limite);
 
         if (filtro.pagina > totalPages && totalPages > 0) filtro.pagina = totalPages;
@@ -43,7 +48,7 @@ public class HechoService {
         if (fromIndex >= total) {
             hechosPaginados = new ArrayList<>();
         } else {
-            hechosPaginados = todosLosHechos.subList(fromIndex, toIndex);
+            hechosPaginados = hechosActivos.subList(fromIndex, toIndex);
         }
 
         List<HechoDTO> hechosDTO = hechosPaginados.stream()

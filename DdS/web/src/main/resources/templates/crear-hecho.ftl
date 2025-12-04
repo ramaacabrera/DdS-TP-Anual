@@ -130,14 +130,16 @@
 
             <div class="form-group">
                 <label for="multimedia" class="form-label">Archivos multimedia</label>
+
                 <input type="file" id="multimedia" name="archivosMultimedia" class="form-input" multiple
                        accept="image/*,video/*,audio/*">
-                <small class="form-help">Formatos aceptados: imágenes, videos, audio</small>
+                <small class="form-help">Puede seleccionar varios archivos. Formatos: imágenes, videos, audio.</small>
             </div>
 
-            <div id="preview-container" class="preview-container" style="display: none;">
-                <h4 class="preview-title">Vista previa:</h4>
-                <div id="preview-grid" class="preview-grid"></div>
+            <div id="preview-container" class="preview-container" style="display: none; margin-top: 15px;">
+                <h4 class="preview-title">Archivos seleccionados:</h4>
+                <div id="preview-grid" class="preview-grid" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                </div>
             </div>
         </div>
 
