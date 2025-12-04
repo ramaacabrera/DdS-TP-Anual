@@ -85,6 +85,19 @@ function mostrarCampoCriterio() {
                 <input type="text" id="contribuyente" class="form-input" required>
             `;
             break;
+
+        case "CriterioTipoFuente":
+            campoDiv.innerHTML = `
+                <label for="tipoFuente" class="form-label">Tipo de fuente:</label>
+                <select id="tipoFuente" class="form-select" required>
+                    <option value="">Seleccione un tipo de fuente</option>
+                    <option value="ESTATICA">💾 Estática</option>
+                    <option value="DINAMICA">⚡ Dinámica</option>
+                    <option value="METAMAPA">🗺️ Metamapa</option>
+                    <option value="DEMO">🧪 Demo</option>
+                </select>
+            `;
+            break;
     }
 }
 
@@ -253,6 +266,30 @@ function agregarCriterio() {
                         <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
                     </div>
                     <div><strong>Contribuyente:</strong> ${contribuyente}</div>
+                    ${camposHTML}
+                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+                </div>
+            `;
+            break;
+
+        case "CriterioTipoFuente":
+            const tipoFuente = document.getElementById('tipoFuente').value;
+            const tipoFuenteTexto = {
+                'ESTATICA': '💾 Estática',
+                'DINAMICA': '⚡ Dinámica',
+                'METAMAPA': '🗺️ Metamapa',
+                'DEMO': '🧪 Demo'
+            }[tipoFuente] || tipoFuente;
+
+            camposHTML = '<input type="hidden" name="criterios[' + criterioId + '].fuente" value="' + tipoFuente + '">';
+
+            criterioHTML = `
+                <div class="criterio-card">
+                    <div class="criterio-header">
+                        <span class="criterio-tipo">Criterio de Tipo de Fuente</span>
+                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
+                    </div>
+                    <div><strong>Tipo de fuente:</strong> ${tipoFuenteTexto}</div>
                     ${camposHTML}
                     <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
                 </div>

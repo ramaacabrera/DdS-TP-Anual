@@ -75,6 +75,9 @@
                             <#elseif c.etiquetas??>
                                 <span style="font-size: 1.2em; margin-right: 8px;">🏷️</span>
                                 <strong>Etiquetas</strong>
+                            <#elseif c.fuente??>
+                                <span style="font-size: 1.2em; margin-right: 8px;">🗄️</span>
+                                <strong>Fuente</strong>
                             <#else>
                                 <span style="font-size: 1.2em; margin-right: 8px;">⚙️</span>
                             </#if>
@@ -158,6 +161,25 @@
                                     <div><em>Sin etiquetas específicas</em></div>
                                 </#if>
 
+                            <#-- CRITERIO TIPO DE FUENTE -->
+                            <#elseif c.fuente??>
+                                <div>Tipo de fuente requerida:</div>
+                                    <div style="margin-top: 5px;">
+                                        <div style="font-weight: bold; color: #1976d2;">
+                                            <#-- Mostrar el tipo de fuente con icono correspondiente -->
+                                            <#if c.fuente == 'ESTATICA'>
+                                                <span style="font-size: 1.1em; margin-right: 6px;">💾</span> ESTÁTICA
+                                            <#elseif c.fuente == 'DINAMICA'>
+                                                <span style="font-size: 1.1em; margin-right: 6px;">⚡</span> DINÁMICA
+                                            <#elseif c.fuente == 'METAMAPA'>
+                                                <span style="font-size: 1.1em; margin-right: 6px;">🗺️</span> METAMAPA
+                                            <#elseif c.fuente == 'DEMO'>
+                                                <span style="font-size: 1.1em; margin-right: 6px;">🧪</span> DEMO
+                                            <#else>
+                                                ${(c.fuente)!?html}
+                                            </#if>
+                                        </div>
+                                </div>
                             <#-- TIPO DESCONOCIDO -->
                             <#else>
                                 <div><em>Criterio sin detalles específicos</em></div>

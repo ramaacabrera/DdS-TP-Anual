@@ -61,6 +61,7 @@
                             <option value="CriterioFecha">Fecha</option>
                             <option value="CriterioUbicacion">Ubicación</option>
                             <option value="CriterioContribuyente">Contribuyente</option>
+                            <option value="CriterioTipoFuente">Tipo de Fuente</option>
                         </select>
                         <div id="campoCriterio" class="campo-criterio-dinamico"></div>
                         <button type="button" id="btn-agregar-criterio" class="btn btn-secondary" style="margin-top: 10px;" disabled>

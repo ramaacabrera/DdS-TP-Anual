@@ -9,6 +9,13 @@
     margin-bottom: 8px;
 }
 
+option[value="ESTATICA"]::before,
+option[value="DINAMICA"]::before,
+option[value="METAMAPA"]::before,
+option[value="DEMO"]::before {
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif;
+}
+
 .palabra-input {
     flex: 1;
 }
