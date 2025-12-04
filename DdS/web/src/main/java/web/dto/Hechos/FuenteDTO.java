@@ -1,8 +1,11 @@
 package web.dto.Hechos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.UUID;
 
 public class FuenteDTO {
+    @JsonProperty("id")
     private UUID fuenteId;
     private String tipoDeFuente;
     private String descriptor;

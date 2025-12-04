@@ -1,9 +1,11 @@
 package web.dto.Hechos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.UUID;
 
 public class UbicacionDTO {
-
+    @JsonProperty("id_ubicacion")
     private UUID ubicacionId;
     private double latitud;
     private double longitud;
