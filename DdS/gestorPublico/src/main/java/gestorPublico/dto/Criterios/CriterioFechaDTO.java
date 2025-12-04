@@ -1,5 +1,7 @@
 package gestorPublico.dto.Criterios;
 
+import gestorPublico.domain.Criterios.CriterioFecha;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,12 @@ public class CriterioFechaDTO extends CriterioDTO {
 
     public CriterioFechaDTO() {
         super(null, "CRITERIO_FECHA");
+    }
+    public CriterioFechaDTO(CriterioFecha c){
+        super(c.getId(), "CRITERIO_FECHA");
+        this.fechaFin = c.getFechaFin();
+        this.fechaInicio = c.getFechaInicio();
+        this.tipoFecha = c.getTipoFecha();
     }
 
     public CriterioFechaDTO(UUID criterioId, Date fechaInicio, Date fechaFin, String tipoFecha) {

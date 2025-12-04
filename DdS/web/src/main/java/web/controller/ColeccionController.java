@@ -8,6 +8,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import utils.Dominio.HechosYColecciones.Ubicacion;
 import utils.Dominio.Usuario.Usuario;
+import web.domain.Criterios.Criterio;
 import web.domain.Criterios.TipoDeTexto;
 import web.domain.Fuente.TipoDeFuente;
 import web.domain.HechosYColecciones.Coleccion;
@@ -16,6 +17,7 @@ import web.domain.Usuario.RolUsuario;
 import web.dto.PageDTO;
 import web.service.ColeccionService;
 import web.service.UsuarioService;
+import web.utils.ViewUtil;
 
 import java.io.IOException;
 import java.net.URI;
@@ -50,7 +52,7 @@ public class ColeccionController {
             int toIndex = fromIndex + (coleccionesPage.content != null ? coleccionesPage.content.size() : 0);
 
             // Armar modelo para FreeMarker
-            Map<String, Object> modelo = new HashMap<>();
+            Map<String, Object> modelo = ViewUtil.baseModel(ctx);
             modelo.put("pageTitle", "Colecciones");
             modelo.put("total", coleccionesPage.totalElements);
             modelo.put("page", coleccionesPage.page);
@@ -59,20 +61,6 @@ public class ColeccionController {
             modelo.put("fromIndex", fromIndex);
             modelo.put("toIndex", toIndex);
             modelo.put("colecciones", coleccionesPage.content);
-
-            if(!ctx.sessionAttributeMap().isEmpty()){
-                String username = ctx.sessionAttribute("username");
-                System.out.println("Usuario: " + username);
-                String access_token = ctx.sessionAttribute("access_token");
-                modelo.put("username", username);
-                modelo.put("access_token", access_token);
-
-                RolUsuario rol = usuarioService.obtenerRol(username);
-
-                modelo.put("rolUsuario", rol);
-            } else{
-                modelo.put("rolUsuario", "VISITANTE");
-            }
 
             // Renderizar plantilla
             ctx.render("colecciones.ftl", modelo);
@@ -88,18 +76,10 @@ public class ColeccionController {
             String coleccionId = ctx.pathParam("id");
             Coleccion coleccion = coleccionService.obtenerColeccionPorId(coleccionId);
 
-            Map<String, Object> modelo = new HashMap<>();
+            Map<String, Object> modelo = ViewUtil.baseModel(ctx);
             modelo.put("pageTitle", "Detalle de Colección");
             modelo.put("coleccion", coleccion);
             modelo.put("coleccionId", coleccionId);
-
-            if(!ctx.sessionAttributeMap().isEmpty()){
-                String username = ctx.sessionAttribute("username");
-                System.out.println("Usuario: " + username);
-                String access_token = ctx.sessionAttribute("access_token");
-                modelo.put("username", username);
-                modelo.put("access_token", access_token);
-            }
 
             // 4 Renderizamos la vista
             ctx.render("coleccion.ftl", modelo);
@@ -112,18 +92,10 @@ public class ColeccionController {
     };
 
     public Handler obtenerPageCrearColeccion  = ctx -> {
-        Map<String, Object> modelo = new HashMap<>();
+        Map<String, Object> modelo = ViewUtil.baseModel(ctx);
         modelo.put("pageTitle", "Crear nueva colección");
         modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
         modelo.put("fuentes", TipoDeFuente.values());
-
-        if(!ctx.sessionAttributeMap().isEmpty()){
-            String username = ctx.sessionAttribute("username");
-            System.out.println("Usuario: " + username);
-            String access_token = ctx.sessionAttribute("access_token");
-            modelo.put("username", username);
-            modelo.put("access_token", access_token);
-        }
 
         ctx.render("crear-coleccion.ftl", modelo);
     };
@@ -145,22 +117,16 @@ public class ColeccionController {
                 ctx.status(500).result("Administrador no identificado");
             }
 
-            String username = ctx.sessionAttribute("username");
-            String access_token = ctx.sessionAttribute("access_token");
-
             // 3️ Armamos el modelo para la vista
-            Map<String, Object> modelo = new HashMap<>();
+            Map<String, Object> modelo = ViewUtil.baseModel(ctx);
             modelo.put("pageTitle", "Editar colección");
             modelo.put("coleccion", coleccion);
-            modelo.put("coleccionId", coleccionId);
+            modelo.put("COLECCION_ID", coleccionId);
             modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
             modelo.put("fuentes", TipoDeFuente.values());
 
-            modelo.put("username", username);
-            modelo.put("access_token", access_token);
-
             // Renderizamos el template
-            ctx.render("editar-coleccion.ftl", modelo);
+            ctx.render("editar-coleccion.ftlh", modelo);
 
         } catch (Exception e) {
             System.err.println(" ERROR en GetEditarColeccionHandler: " + e.getMessage());
@@ -236,4 +202,19 @@ public class ColeccionController {
 
         System.out.println("Criterios extraidos: " + criteriosDePertenencia);
     }
+    public Handler editarColeccion = ctx -> {
+        String id = ctx.pathParam("id");
+        System.out.println("PUT COLECCION: " + id);
+    };
+    public Handler eliminarColeccion = ctx -> {
+        String id = ctx.pathParam("id");
+        System.out.println("Coleccion a eliminar: " + id);
+        Map<String, Object> bodyData = new HashMap<>();
+        bodyData.put("id", id);
+        if(!ctx.sessionAttributeMap().isEmpty()){
+            bodyData.put("username", ctx.sessionAttribute("username"));
+            bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+        }
+        coleccionService.eliminarColeccion(bodyData);
+    };
 }

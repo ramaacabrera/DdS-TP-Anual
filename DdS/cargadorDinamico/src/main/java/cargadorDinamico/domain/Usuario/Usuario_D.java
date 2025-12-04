@@ -28,28 +28,15 @@ public class Usuario_D {
     private List<Hecho_D> hechosSubidos = new ArrayList<Hecho_D>();
 
     private String username;
-
-    @JsonProperty
-    private Integer edad;
-    @JsonProperty
-    private String nombre;
-    @JsonProperty
-    private String apellido;
     public void Contribuyente() {}
 
     @Enumerated(EnumType.STRING)
     private RolUsuario rol;
 
-    public Integer getEdad() { return edad; }
-    public String getNombre() { return nombre; }
-    public String getApellido() { return apellido; }
     public UUID getId_usuario() {return id_usuario;}
     public RolUsuario getRol() {return rol;}
     public String getUsername(){return username;}
 
-    public void setEdad(Integer edad) { this.edad = edad; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-    public void setApellido(String apellido) { this.apellido = apellido; }
     public void setRol(RolUsuario rol) { this.rol = rol; }
     public void setId_usuario(UUID id_usuario) {this.id_usuario = id_usuario; }
     public void setUsername(String username) { this.username = username; }

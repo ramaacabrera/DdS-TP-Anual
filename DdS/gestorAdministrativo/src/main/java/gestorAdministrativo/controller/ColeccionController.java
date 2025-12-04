@@ -21,7 +21,10 @@ public class ColeccionController {
     public Handler crearColeccion = ctx -> {
         try {
             System.out.println("Creando coleccion");
+            System.out.println(ctx.body());
             ColeccionDTO request = ctx.bodyAsClass(ColeccionDTO.class);
+
+            System.out.println(request.getCriteriosDePertenencia().size());
 
             System.out.println("DTO creado: " + request.toString());
 
@@ -31,6 +34,7 @@ public class ColeccionController {
             }
 
             ColeccionDTO response = this.coleccionService.crearColeccion(request);
+            System.out.println(response.getCriteriosDePertenencia().size());
             ctx.status(201).json(response);
 
         } catch (Exception e) {
@@ -56,6 +60,7 @@ public class ColeccionController {
     };
 
     public Handler eliminarColeccion = ctx -> {
+        System.out.println("Comenzando a borrar");
         String idString = ctx.pathParam("id");
         try {
             UUID id = UUID.fromString(idString);

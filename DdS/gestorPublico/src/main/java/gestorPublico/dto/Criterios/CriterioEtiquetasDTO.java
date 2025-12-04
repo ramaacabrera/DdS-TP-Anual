@@ -1,5 +1,7 @@
 package gestorPublico.dto.Criterios;
 
+import gestorPublico.domain.Criterios.CriterioEtiquetas;
+import gestorPublico.domain.HechosYColecciones.Etiqueta;
 import gestorPublico.dto.Hechos.EtiquetaDTO;
 
 import java.util.ArrayList;
@@ -12,6 +14,19 @@ public class CriterioEtiquetasDTO extends CriterioDTO {
 
     public CriterioEtiquetasDTO() {
         super(null, "CRITERIO_ETIQUETAS");
+    }
+    public CriterioEtiquetasDTO(CriterioEtiquetas c){
+        super(c.getId(), "CRITERIO_ETIQUETAS");
+        this.etiquetas = this.convertirEtiquetas(c.getEtiquetas());
+    }
+
+    public List<EtiquetaDTO> convertirEtiquetas(List<Etiqueta> lista){
+        List<EtiquetaDTO> etiquetas = new ArrayList<>();
+        for(Etiqueta e : lista){
+            EtiquetaDTO dto = new EtiquetaDTO(e);
+            etiquetas.add(dto);
+        }
+        return etiquetas;
     }
 
     public CriterioEtiquetasDTO(UUID criterioId, List<EtiquetaDTO> etiquetas) {

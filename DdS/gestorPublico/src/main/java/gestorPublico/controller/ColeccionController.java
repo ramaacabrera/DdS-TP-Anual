@@ -35,18 +35,23 @@ public class ColeccionController {
     };
 
     public Handler obtenerColeccionPorId = ctx -> {
+        System.out.println("Obteniendo coleccion");
+        System.out.println("Coleccion recibida: " + ctx.pathParam("id"));
         try {
             UUID id = UUID.fromString(ctx.pathParam("id"));
             ColeccionDTO coleccion = coleccionService.obtenerColeccionPorId(id);
+            System.out.println("Coleccion a enviar: " + coleccion.toString());
 
             if (coleccion != null) {
                 ctx.status(200).json(coleccion);
             } else {
+                System.out.println("No se encontro");
                 ctx.status(404).json("Colección no encontrada");
             }
         } catch (IllegalArgumentException e) {
             ctx.status(400).json("ID inválido");
         }
+        System.out.println("Finalizo la busqueda");
     };
 
     public Handler obtenerHechosDeColeccion = ctx -> {

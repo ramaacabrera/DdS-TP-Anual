@@ -5,6 +5,7 @@ import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 import web.service.CategoriasService;
 import web.service.EstadisticasService;
+import web.utils.ViewUtil;
 
 import java.util.*;
 
@@ -33,7 +34,7 @@ public class GetEstadisticasHandler implements Handler {
             // Procesar categorías en paralelo
             List<Map<String, Object>> statsCategoria = categoriasService.procesarCategorias(categoriasTotales);
 
-            Map<String, Object> modelo = new HashMap<>();
+            Map<String, Object> modelo = ViewUtil.baseModel(ctx);
             modelo.put("categoriaMax", obtenerValorConFallback(statsGenerales, Arrays.asList("categoria", "estadisticas_categoria_max_hechos"), "N/A"));
             modelo.put("solicitudesSpam", obtenerValorConFallback(statsUsuarios, Arrays.asList("spam", "spamCount", "estadisticas_spam"), 0));
             modelo.put("categorias", statsCategoria);
@@ -52,14 +53,6 @@ public class GetEstadisticasHandler implements Handler {
                     System.err.println("Error obteniendo stats de colección " + uuidColeccion + ": " + e.getMessage());
                     modelo.put("uuidColeccion", uuidColeccion.trim());
                 }
-            }
-
-            if(!ctx.sessionAttributeMap().isEmpty()){
-                String username = ctx.sessionAttribute("username");
-                System.out.println("Usuario: " + username);
-                String access_token = ctx.sessionAttribute("access_token");
-                modelo.put("username", username);
-                modelo.put("access_token", access_token);
             }
 
             ctx.render("estadisticas.ftl", modelo);

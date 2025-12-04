@@ -11,6 +11,7 @@ public class GetLogOutHandler implements Handler {
     public void handle(@NotNull Context ctx) {
         ctx.sessionAttribute("username", null);
         ctx.sessionAttribute("access_token", null);
+        ctx.sessionAttribute("rolUsuario", null);
         ctx.status(200);
     }
 }

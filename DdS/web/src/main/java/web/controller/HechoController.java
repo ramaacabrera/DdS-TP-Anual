@@ -4,6 +4,7 @@ import io.javalin.http.Handler;
 import web.dto.Hechos.HechoDTO;
 import web.dto.PageDTO;
 import web.service.HechoService;
+import web.utils.ViewUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -70,7 +71,7 @@ public class HechoController {
         }
 
         // 6) Preparar el Modelo para FreeMarker
-        Map<String, Object> model = new HashMap<>();
+        Map<String, Object> model = ViewUtil.baseModel(ctx);
         model.put("baseHref", "/hechos");
         model.put("filters", filtersForTemplate);
 
@@ -94,14 +95,6 @@ public class HechoController {
         model.put("fromIndex", fromIndex);
         model.put("toIndex", toIndex);
 
-        // Datos de Sesión (Navbar)
-        if (!ctx.sessionAttributeMap().isEmpty()) {
-            String username = ctx.sessionAttribute("username");
-            String accessToken = ctx.sessionAttribute("access_token");
-            model.put("username", username);
-            model.put("access_token", accessToken);
-        }
-
         // 7) Renderizar
         ctx.render("home.ftl", model);
     };
@@ -122,29 +115,17 @@ public class HechoController {
             return;
         }
 
-        Map<String, Object> modelo = new HashMap<>();
+        Map<String, Object> modelo = ViewUtil.baseModel(ctx);
         modelo.put("hecho", hecho);
-
-        if (!ctx.sessionAttributeMap().isEmpty()) {
-            modelo.put("username", ctx.sessionAttribute("username"));
-            modelo.put("access_token", ctx.sessionAttribute("access_token"));
-        }
 
         ctx.render("hecho-especifico.ftl", modelo);
     };
 
     public Handler obtenerPageCrearHecho = ctx -> {
         // Solo renderiza la plantilla con el formulario vacío
-        Map<String, Object> modelo = new HashMap<>();
+        Map<String, Object> modelo = ViewUtil.baseModel(ctx);
         modelo.put("pageTitle", "Reportar un Hecho");
         modelo.put("urlPublica", urlPublica);
-        if(!ctx.sessionAttributeMap().isEmpty()){
-            String username = ctx.sessionAttribute("username");
-            System.out.println("Usuario: " + username);
-            String access_token = ctx.sessionAttribute("access_token");
-            modelo.put("username", username);
-            modelo.put("access_token", access_token);
-        }
         ctx.render("crear-hecho.ftl", modelo);
     };
 

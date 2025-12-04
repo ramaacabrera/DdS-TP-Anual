@@ -60,18 +60,7 @@ public class ColeccionRepositorio {
 
             List<Coleccion> colecciones = query.getResultList();
             for(Coleccion coleccion : colecciones){
-                Hibernate.initialize(coleccion.getHechos());
-                Hibernate.initialize(coleccion.getHechosConsensuados());
-                Hibernate.initialize(coleccion.getFuente());
-                Hibernate.initialize(coleccion.getCriteriosDePertenencia());
-                for(Criterio criterio : coleccion.getCriteriosDePertenencia()){
-                    if(criterio instanceof CriterioEtiquetas){
-                        Hibernate.initialize(((CriterioEtiquetas) criterio).getEtiquetas());
-                    }
-                    if(criterio instanceof CriterioDeTexto){
-                        Hibernate.initialize(((CriterioDeTexto) criterio).getPalabras());
-                    }
-                }
+                this.inicializarColeccion(coleccion);
             }
 
             return query.getResultList();
@@ -85,19 +74,37 @@ public class ColeccionRepositorio {
 
     public Coleccion buscarPorHandle(String handle) {
         EntityManager em = BDUtils.getEntityManager();
+        System.out.println("ID de la coleccion: " + handle);
         try {
             String jpql = "SELECT DISTINCT c FROM Coleccion c " +
-                    "LEFT JOIN FETCH c.hechos " +
-                    "LEFT JOIN FETCH c.fuentes " +
                     "WHERE c.handle = :handle";
 
-            return em.createQuery(jpql, Coleccion.class)
+            Coleccion coleccion = em.createQuery(jpql, Coleccion.class)
                     .setParameter("handle", UUID.fromString(handle))
                     .getSingleResult();
+
+            this.inicializarColeccion(coleccion);
+
+            return coleccion;
         } catch (Exception e) {
             return null;
         } finally {
             em.close();
+        }
+    }
+
+    public void inicializarColeccion(Coleccion coleccion){
+        Hibernate.initialize(coleccion.getHechos());
+        Hibernate.initialize(coleccion.getHechosConsensuados());
+        Hibernate.initialize(coleccion.getFuente());
+        Hibernate.initialize(coleccion.getCriteriosDePertenencia());
+        for(Criterio criterio : coleccion.getCriteriosDePertenencia()){
+            if(criterio instanceof CriterioEtiquetas){
+                Hibernate.initialize(((CriterioEtiquetas) criterio).getEtiquetas());
+            }
+            if(criterio instanceof CriterioDeTexto){
+                Hibernate.initialize(((CriterioDeTexto) criterio).getPalabras());
+            }
         }
     }
 

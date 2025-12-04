@@ -1,5 +1,7 @@
 package gestorPublico.dto.Criterios;
 
+import gestorPublico.domain.Criterios.CriterioContribuyente;
+
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,6 +15,10 @@ public class CriterioContribuyenteDTO extends CriterioDTO {
     public CriterioContribuyenteDTO(UUID criterioId, String nombreContribuyente) {
         super(criterioId, "CRITERIO_CONTRIBUYENTE");
         this.nombreContribuyente = nombreContribuyente;
+    }
+    public CriterioContribuyenteDTO(CriterioContribuyente c) {
+        super(c.getId(), "CRITERIO_CONTRIBUYENTE");
+        this.nombreContribuyente = c.getNombreContribuyente();
     }
 
     // Getters y Setters

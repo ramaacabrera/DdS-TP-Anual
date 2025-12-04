@@ -1,5 +1,7 @@
 package gestorPublico.dto.Hechos;
 
+import gestorPublico.domain.HechosYColecciones.Etiqueta;
+
 import java.util.UUID;
 
 public class EtiquetaDTO {
@@ -11,6 +13,10 @@ public class EtiquetaDTO {
     public EtiquetaDTO(UUID etiquetaId, String nombre) {
         this.etiquetaId = etiquetaId;
         this.nombre = nombre;
+    }
+    public EtiquetaDTO(Etiqueta e){
+        this.etiquetaId = e.getId();
+        this.nombre = e.getNombre();
     }
 
     // Getters y Setters

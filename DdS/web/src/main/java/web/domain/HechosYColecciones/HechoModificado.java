@@ -192,5 +192,4 @@ public class HechoModificado {
     public boolean esIgualAotro(Hecho otroHecho) {
         return this.titulo.equalsIgnoreCase(otroHecho.getTitulo());
     }
-    //"dos hechos son iguales si tienen el mismo titulo"
 }

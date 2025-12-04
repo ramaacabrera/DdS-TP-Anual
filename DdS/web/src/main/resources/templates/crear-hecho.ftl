@@ -11,10 +11,45 @@
     <h1 class="main-title">Reportar un Hecho</h1>
 
     <script>
+        // Pasamos variables de FreeMarker a JavaScript globalmente
         const URL_PUBLICA = '${urlPublica}';
+        // Si username existe, lo ponemos entre comillas, si no, queda string vacío
+        const CURRENT_USER = "${username!}";
     </script>
 
     <form id="form-crear-hecho" class="form-container" method="POST" action="/api/hechos" enctype="multipart/form-data">
+
+        <!-- Información del contribuyente -->
+        <div class="form-section">
+            <h3 class="form-section-title">👤 Información del contribuyente</h3>
+
+            <#if access_token??>
+                <div style="background-color: #e8f5e9; padding: 15px; border-radius: 8px; border: 1px solid #c8e6c9; margin-bottom: 15px;">
+                    <p style="margin: 0; color: #2e7d32; font-weight: 500;">
+                        <span style="font-size: 1.2em;">👋</span> Estás reportando como <strong>${username}</strong>
+                    </p>
+                    <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #1b5e20;">
+                        Este hecho quedará registrado a tu nombre.
+                    </p>
+                </div>
+
+                <div class="form-checkbox-group">
+                    <input type="checkbox" id="anonimo" name="anonimo" class="form-checkbox">
+                    <label for="anonimo" class="form-checkbox-label">Prefiero reportar de forma <strong>anónima</strong></label>
+                </div>
+
+            <#else>
+                <div style="background-color: #fff3e0; padding: 15px; border-radius: 8px; border: 1px solid #ffe0b2; margin-bottom: 15px;">
+                    <p style="margin: 0; color: #e65100; font-weight: 500;">
+                        <span style="font-size: 1.2em;">🕵️</span> Estás reportando de forma <strong>anónima</strong>
+                    </p>
+                    <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #ef6c00;">
+                        Si deseas que este reporte se asocie a tu perfil debes
+                        <a href="/login" style="color: #e65100; text-decoration: underline; font-weight: bold;">iniciar sesión aquí</a>.
+                    </p>
+                </div>
+            </#if>
+        </div>
 
         <!-- Título -->
         <div class="form-group">
@@ -76,22 +111,6 @@
         <div class="form-group">
             <label for="fechaAcontecimiento" class="form-label">Fecha del acontecimiento *</label>
             <input type="datetime-local" id="fechaAcontecimiento" name="fechaDeAcontecimiento" class="form-input" required>
-        </div>
-
-        <!-- Información del contribuyente -->
-        <div class="form-section">
-            <h3 class="form-section-title">👤 Información del contribuyente (opcional)</h3>
-
-            <div class="form-group">
-                <label for="nombreContribuyente" class="form-label">Nombre</label>
-                <input type="text" id="nombreContribuyente" name="contribuyente.nombre" class="form-input"
-                       placeholder="Su nombre (opcional)">
-            </div>
-
-            <div class="form-checkbox-group">
-                <input type="checkbox" id="anonimo" name="anonimo" class="form-checkbox">
-                <label for="anonimo" class="form-checkbox-label">Enviar de forma anónima</label>
-            </div>
         </div>
 
         <!-- Etiquetas -->

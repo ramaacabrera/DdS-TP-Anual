@@ -76,9 +76,7 @@ public class ServicioNormalizacion {
             UsuarioDTO uDto = dto.getContribuyente();
             Usuario u = new Usuario();
             if (uDto.getUsuarioId() != null) u.setId_usuario(uDto.getUsuarioId());
-            u.setUsername(uDto.getNombreUsuario());
-            u.setNombre(uDto.getNombre());
-            u.setApellido(uDto.getApellido());
+            u.setUsername(uDto.getUsername());
             entidad.setContribuyente(u);
         }
 

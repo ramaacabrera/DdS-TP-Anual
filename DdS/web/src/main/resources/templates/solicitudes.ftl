@@ -108,13 +108,6 @@
                 <span class="estado-badge estado-${estado?lower_case}">
                     ${obtenerTextoEstado(estado)}
                 </span>
-                <span class="fecha">
-                    <#if solicitud.fechaCreacion??>
-                        ${solicitud.fechaCreacion?string("dd/MM/yyyy HH:mm")}
-                    <#else>
-                        Sin fecha
-                    </#if>
-                </span>
             </div>
         </div>
 

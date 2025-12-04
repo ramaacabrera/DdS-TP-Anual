@@ -60,6 +60,7 @@ public class ColeccionService {
     }
 
     public Coleccion obtenerColeccionPorId(String id) {
+        System.out.println("Pidiendo coleccion al back: " + urlPublica);
         String url = HttpUrl.parse(urlPublica + "/colecciones/"+ id).newBuilder().build().toString();
         Request request = new Request.Builder().url(url).get().build();
 
@@ -113,11 +114,55 @@ public class ColeccionService {
 
             System.out.println("Mandamos la request");
 
-            Map<String, Object> modelo = new HashMap<>();
             if (response.statusCode() != 201) {
                 throw new RuntimeException("Error al crear la coleccion, status code: " + response.statusCode());
             } else{
                 System.out.println("Coleccion creada");
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void eliminarColeccion( Map<String, Object> bodyData){
+        System.out.println(bodyData);
+        String username = null;
+        String access_token = null;
+        if(bodyData.containsKey("username") && bodyData.containsKey("access_token")){
+            username = bodyData.get("username").toString();
+            access_token = bodyData.get("access_token").toString();
+            bodyData.remove("username");
+            bodyData.remove("access_token");
+        }
+        String id = bodyData.get("id").toString();
+
+        System.out.println("Mandando a: " + urlAdmin);
+        HttpClient httpClient = HttpClient.newHttpClient();
+        try{
+            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+                    .uri(new URI("http://localhost:8081/api/colecciones/"+id))
+                    .header("Content-Type", "application/json")
+                    .DELETE();
+
+            if (username != null && access_token != null) {
+                requestBuilder
+                        .header("username", username)
+                        .header("access_token", access_token);
+
+            }
+            HttpRequest request = requestBuilder.build();
+
+            System.out.println("Se armo la request");
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Mandamos la request");
+
+            if (response.statusCode() != 200) {
+                throw new RuntimeException("Error al eliminar la coleccion, status code: " + response.statusCode());
+            } else{
+                System.out.println("Coleccion eliminada");
             }
 
         } catch (Exception e) {

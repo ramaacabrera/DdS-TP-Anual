@@ -4,14 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="Agrego el endpoint de Exportar las estadisticas como CSV">
-      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/controller/GetEstadisticasCSVHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/utils/EstadisticasCSVTransformer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/EstadisticasCategoriaRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/EstadisticasCategoriaRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/EstadisticasColeccionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/EstadisticasColeccionRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/EstadisticasRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/EstadisticasRepositorio.java" afterDir="false" />
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO">
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/editar-hecho.ftl" beforeDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -31,9 +25,6 @@
         <option value="Class" />
       </list>
     </option>
-  </component>
-  <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/main" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -92,15 +83,6 @@
     &quot;Application.cargadorEstatico.Application.executor&quot;: &quot;Run&quot;,
     &quot;Application.estadisticas.executor&quot;: &quot;Run&quot;,
     &quot;Application.gestorPublico.Application.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AgregadorOrquestadorTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ConexionCargadorServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.GestorSolicitudesTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.GestorSolicitudesTest.testProcesarEliminacionSpam.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.HechosCargadorServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.NormalizadorCategoriasTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ServicioGeorefTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ServicioNormalizacionTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.java in agregador.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
@@ -141,7 +123,6 @@
       <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\resources\public\img" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="agregador.service" />
       <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -152,7 +133,7 @@
       <recent name="agregador.utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.estadisticas">
+  <component name="RunManager" selected="Application.ApiPublica">
     <configuration name="Agregador" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="agregador.Application" />
       <module name="agregador" />
@@ -174,6 +155,19 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="gestorPublico.Application" />
       <module name="gestorPublico" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="gestorAdministrativo.Application" />
+      <module name="gestorAdministrativo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="gestorAdministrativo.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -214,6 +208,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="cargadorEstatico.Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="cargadorEstatico.Application" />
+      <module name="cargadorEstatico" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cargadorEstatico.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="estadisticas" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -223,70 +230,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ConexionCargadorServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="agregador" />
+    <configuration name="gestorPublico.Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="gestorPublico.Application" />
+      <module name="gestorPublico" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="agregador.service.*" />
+          <option name="PATTERN" value="gestorPublico.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="agregador.service" />
-      <option name="MAIN_CLASS_NAME" value="agregador.service.ConexionCargadorServiceTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="NormalizadorCategoriasTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="agregador" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="agregador.service.normalizacion.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="agregador.service.normalizacion" />
-      <option name="MAIN_CLASS_NAME" value="agregador.service.normalizacion.NormalizadorCategoriasTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ServicioGeorefTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="agregador" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="agregador.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="agregador.service" />
-      <option name="MAIN_CLASS_NAME" value="agregador.service.ServicioGeorefTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ServicioNormalizacionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="agregador" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="agregador.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="agregador.service" />
-      <option name="MAIN_CLASS_NAME" value="agregador.service.ServicioNormalizacionTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="java in agregador" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="agregador" />
-      <option name="TEST_OBJECT" value="directory" />
-      <dir value="$PROJECT_DIR$/DdS/agregador/src/test/java" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -301,19 +253,15 @@
       <item itemvalue="Application.DemoMockServer" />
       <item itemvalue="Application.Web" />
       <item itemvalue="Application.estadisticas" />
-      <item itemvalue="JUnit.ConexionCargadorServiceTest" />
-      <item itemvalue="JUnit.NormalizadorCategoriasTest" />
-      <item itemvalue="JUnit.ServicioGeorefTest" />
-      <item itemvalue="JUnit.ServicioNormalizacionTest" />
-      <item itemvalue="JUnit.java in agregador" />
+      <item itemvalue="Application.cargadorEstatico.Application" />
+      <item itemvalue="Application.gestorPublico.Application" />
+      <item itemvalue="Application.Application" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.java in agregador" />
-        <item itemvalue="JUnit.ServicioNormalizacionTest" />
-        <item itemvalue="JUnit.ServicioGeorefTest" />
-        <item itemvalue="JUnit.NormalizadorCategoriasTest" />
-        <item itemvalue="JUnit.ConexionCargadorServiceTest" />
+        <item itemvalue="Application.cargadorEstatico.Application" />
+        <item itemvalue="Application.gestorPublico.Application" />
+        <item itemvalue="Application.Application" />
       </list>
     </recent_temporary>
   </component>
@@ -355,7 +303,6 @@
       <workItem from="1764540043385" duration="2484000" />
       <workItem from="1764612673437" duration="9875000" />
       <workItem from="1764704190273" duration="10607000" />
-      <workItem from="1764872896723" duration="3124000" />
     </task>
     <task id="LOCAL-00001" summary="termine cargadorDemo, avanzo con cargadorDinamico (en proceso)">
       <option name="closed" value="true" />
@@ -397,31 +344,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764715788877</updated>
     </task>
-    <task id="LOCAL-00006" summary="Arreglo filtrado por Categorias">
+    <task id="LOCAL-00006" summary="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO">
       <option name="closed" value="true" />
-      <created>1764785795508</created>
+      <created>1764805426699</created>
       <option name="number" value="00006" />
       <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1764785795508</updated>
+      <updated>1764805426699</updated>
     </task>
-    <task id="LOCAL-00007" summary="Agrego funcionalidad de descripcion dentro de la Ubicacion y el agregador la pone al momento de subir los hechos">
-      <option name="closed" value="true" />
-      <created>1764795595399</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1764795595399</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Agrego los Test de los servicios del agregador funcionando">
-      <option name="closed" value="true" />
-      <created>1764803879672</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1764803879672</updated>
-    </task>
-    <option name="localTasksCounter" value="9" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -443,11 +374,8 @@
     <MESSAGE value="termino cargadorDinamico" />
     <MESSAGE value="termino cargadorEstatico" />
     <MESSAGE value="comento pruebas xq hay errores con dependencias y versiones" />
-    <MESSAGE value="Arreglo filtrado por Categorias" />
-    <MESSAGE value="Agrego funcionalidad de descripcion dentro de la Ubicacion y el agregador la pone al momento de subir los hechos" />
-    <MESSAGE value="Agrego los Test de los servicios del agregador funcionando" />
-    <MESSAGE value="Agrego el endpoint de Exportar las estadisticas como CSV" />
-    <option name="LAST_COMMIT_MESSAGE" value="Agrego el endpoint de Exportar las estadisticas como CSV" />
+    <MESSAGE value="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO" />
+    <option name="LAST_COMMIT_MESSAGE" value="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

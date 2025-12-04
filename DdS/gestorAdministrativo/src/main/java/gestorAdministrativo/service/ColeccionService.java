@@ -85,8 +85,11 @@ public class ColeccionService {
     }
 
     public void eliminarColeccion(UUID id) {
-        Coleccion coleccion = coleccionRepositorio.buscarPorHandle(id.toString());
-        if (coleccion == null) throw new IllegalArgumentException("Colección no encontrada");
+        Coleccion coleccion = coleccionRepositorio.buscar(id.toString());
+        if (coleccion == null) {
+            System.out.println("Coleccion no encontrada");
+            throw new IllegalArgumentException("Colección no encontrada");
+        }
         coleccionRepositorio.eliminar(coleccion);
     }
 
@@ -250,6 +253,10 @@ public class ColeccionService {
                 entidad = new CriterioTipoMultimedia(
                         convertirTipoMultimediaEnum(multiDTO.getTipoContenidoMultimedia())
                 );
+            }
+            else if(dto instanceof CriterioContribuyenteDTO){
+                CriterioContribuyenteDTO contrDTO = (CriterioContribuyenteDTO) dto;
+                entidad = new CriterioContribuyente(contrDTO.getNombreContribuyente());
             }
 
             if (entidad != null) {

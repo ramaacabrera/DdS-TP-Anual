@@ -62,8 +62,8 @@
         <div class="card">
             <p class="card-subtitle">📍 UBICACIÓN</p>
             <p>
-                <#if hecho.ubicacion??>
-                    Lat: ${hecho.ubicacion.latitud?string("#.#####")}, Lon: ${hecho.ubicacion.longitud?string("#.#####")}
+                <#if hecho.ubicacion.descripcion??>
+                    ${hecho.ubicacion.descripcion}
                 <#else>
                     No especificada
                 </#if>
@@ -74,7 +74,7 @@
             <p class="card-subtitle">👤 CONTRIBUYENTE</p>
             <p>
                 <#if hecho.contribuyente??>
-                    ${hecho.contribuyente.nombre?default("Anónimo")?html}
+                    ${hecho.contribuyente.username?default("Anónimo")?html}
                 <#else>
                     Anónimo
                 </#if>

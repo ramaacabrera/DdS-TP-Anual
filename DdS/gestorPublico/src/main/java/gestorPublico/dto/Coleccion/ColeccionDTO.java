@@ -1,7 +1,9 @@
 package gestorPublico.dto.Coleccion;
 
+import gestorPublico.domain.Criterios.*;
 import gestorPublico.domain.HechosYColecciones.Coleccion; // Importar la entidad
-import gestorPublico.dto.Criterios.CriterioDTO;
+import gestorPublico.domain.HechosYColecciones.TipoAlgoritmoConsenso;
+import gestorPublico.dto.Criterios.*;
 import gestorPublico.dto.Hechos.FuenteDTO;
 
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class ColeccionDTO {
         // Mapeo de Algoritmo (Enum)
         if (coleccion.getAlgoritmoDeConsenso() != null) {
             try {
-                this.algoritmoDeConsenso = TipoAlgoritmoConsensoDTO.valueOf(coleccion.getAlgoritmoDeConsenso().name());
+                this.algoritmoDeConsenso = this.convertirAlgoritmo(coleccion.getAlgoritmoDeConsenso());
             } catch (Exception e) {
                 // Si no coincide el nombre, se deja null
             }
@@ -61,8 +63,61 @@ public class ColeccionDTO {
         // sin acoplar demasiadas clases. Por ahora inicializamos la lista vacía.
         // Si necesitas mostrar los criterios en el listado público, deberías usar un "Mapper" externo
         // o inyectar la lógica de conversión, pero para listados generales suele dejarse vacío por rendimiento.
-        this.criteriosDePertenencia = new ArrayList<>();
+        this.criteriosDePertenencia = convertirDTO(coleccion.getCriteriosDePertenencia());
     }
+
+    private TipoAlgoritmoConsensoDTO convertirAlgoritmo(TipoAlgoritmoConsenso t){
+        switch (t){
+            case ABSOLUTA:
+                return TipoAlgoritmoConsensoDTO.ABSOLUTA;
+            case MAYORIASIMPLE:
+                return TipoAlgoritmoConsensoDTO.MAYORIASIMPLE;
+            case MULTIPLESMENCIONES:
+                return TipoAlgoritmoConsensoDTO.MULTIPLESMENCIONES;
+            default:
+                return null;
+        }
+    }
+
+    private List<CriterioDTO> convertirDTO(List<Criterio> criterios) {
+        return criterios.stream()
+                .map(this::convertirUno)
+                .collect(Collectors.toList());
+    }
+
+
+    public CriterioDTO convertirUno(Criterio criterio){
+        if (criterio instanceof CriterioDeTexto)
+            return new CriterioDeTextoDTO((CriterioDeTexto) criterio);
+
+
+        if (criterio instanceof CriterioContribuyente)
+            return new CriterioContribuyenteDTO((CriterioContribuyente) criterio);
+
+
+        if (criterio instanceof CriterioEtiquetas)
+            return new CriterioEtiquetasDTO((CriterioEtiquetas) criterio);
+
+
+        if (criterio instanceof CriterioFecha)
+            return new CriterioFechaDTO((CriterioFecha) criterio);
+
+
+        if (criterio instanceof CriterioTipoFuente)
+            return new CriterioTipoFuenteDTO((CriterioTipoFuente) criterio);
+
+
+        if (criterio instanceof CriterioTipoMultimedia)
+            return new CriterioTipoMultimediaDTO((CriterioTipoMultimedia) criterio);
+
+
+        if (criterio instanceof CriterioUbicacion)
+            return new CriterioUbicacionDTO((CriterioUbicacion) criterio);
+
+
+        throw new IllegalArgumentException("Tipo de criterio desconocido: " + criterio.getClass());
+    }
+
 
     // Getters y Setters
     public UUID getHandle() { return handle; }

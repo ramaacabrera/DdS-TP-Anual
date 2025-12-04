@@ -8,6 +8,8 @@ import cargadorDinamico.domain.fuente.Fuente;
 import cargadorDinamico.domain.fuente.TipoDeFuente;
 import cargadorDinamico.domain.*;
 import cargadorDinamico.repository.HechoRepositorio;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 import java.util.List;
@@ -28,12 +30,19 @@ public class HechosDinamicoService {
         repositorio.resetearHechos();
         dtos.forEach(dto -> {
            dto.setFuente(new Fuente(TipoDeFuente.DINAMICA, "fuenteDinamica"));
+            try {
+                System.out.println("Mando hecho a agregador: "+new ObjectMapper().writeValueAsString(dto));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         });
+
         return dtos;
     }
 
     public void guardarHecho(Hecho_D_DTO nueva) {
         try {
+            System.out.println("Guardo hecho en dinamica: " + new ObjectMapper().writeValueAsString(nueva));
             repositorio.guardarHecho(nueva);
         }
         catch (Exception e) {

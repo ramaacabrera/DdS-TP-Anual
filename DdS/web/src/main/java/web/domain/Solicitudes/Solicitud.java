@@ -1,5 +1,6 @@
 package web.domain.Solicitudes;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import web.domain.HechosYColecciones.Hecho;
 import web.domain.Usuario.Usuario;
 import org.hibernate.annotations.GenericGenerator;
@@ -25,9 +26,10 @@ public abstract class Solicitud {
 
     protected Boolean esSpam = false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hecho_id")
-    protected Hecho hechoAsociado;
+ //   @ManyToOne(fetch = FetchType.LAZY)
+  //  @JoinColumn(name = "hecho_id")
+    @JsonProperty("hechoId")
+    protected UUID hechoAsociado;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
@@ -46,8 +48,8 @@ public abstract class Solicitud {
     public Boolean getEsSpam() { return esSpam; }
     public void setEsSpam(Boolean esSpam) { this.esSpam = esSpam; }
 
-    public Hecho getHechoAsociado() { return hechoAsociado; }
-    public void setHechoAsociado(Hecho hechoAsociado) { this.hechoAsociado = hechoAsociado; }
+    public UUID getHechoAsociado() { return hechoAsociado; }
+    public void setHechoAsociado(UUID hechoAsociado) { this.hechoAsociado = hechoAsociado; }
 
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }

@@ -2,21 +2,22 @@ package web.controller;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-
-
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.json.JSONObject;
 import org.jetbrains.annotations.NotNull;
-
-import java.net.http.HttpResponse;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PostLoginHandler implements Handler {
     private String urlPublica;
+
     public PostLoginHandler(String urlPublica) {
         this.urlPublica = urlPublica;
     }
@@ -25,9 +26,7 @@ public class PostLoginHandler implements Handler {
     public void handle(@NotNull Context ctx) {
         String usuario = ctx.formParam("usuario");
         String password = ctx.formParam("password");
-        String redirectUrl = ctx.formParam("redirectUrl");
 
-        // Crear el objeto JSON para el cuerpo de la petición
         JSONObject requestBody = new JSONObject();
         requestBody.put("usuario", usuario);
         requestBody.put("password", password);
@@ -36,32 +35,58 @@ public class PostLoginHandler implements Handler {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8087/api/login"))
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
-                .header("Content-Type", "application/json") // Cambiado a application/json
+                .header("Content-Type", "application/json")
                 .build();
 
-        try{
+        try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-
             JSONObject json = new JSONObject(response.body());
 
             if (response.statusCode() == 200) {
-
                 String accessToken = json.getString("access_token");
-                String username = json.getString("username");
+                DecodedJWT jwt = JWT.decode(accessToken);
+
+                String usernameReal = "Usuario";
+                if (!jwt.getClaim("preferred_username").isMissing()) {
+                    usernameReal = jwt.getClaim("preferred_username").asString();
+                } else if (!jwt.getClaim("username").isMissing()) {
+                    usernameReal = jwt.getClaim("username").asString();
+                }
+
+                List<String> roles = null;
+                if (!jwt.getClaim("realm_access").isMissing()) {
+                    Map<String, Object> realmAccess = jwt.getClaim("realm_access").asMap();
+                    roles = (List<String>) realmAccess.get("roles");
+                }
 
                 ctx.sessionAttribute("access_token", accessToken);
-                ctx.sessionAttribute("username", username);
+                ctx.sessionAttribute("username", usernameReal);
 
-                ctx.redirect("/home");
+                String rolPrincipal = null;
+                if (roles != null) {
+                    if (roles.contains("administrador")) {
+                        rolPrincipal = "ADMINISTRADOR";
+                    } else if (roles.contains("contribuyente")) {
+                        rolPrincipal = "CONTRIBUYENTE";
+                    }
+                }
+                ctx.sessionAttribute("rolUsuario", rolPrincipal);
+                System.out.println("PostLogin rolUsuario:" + rolPrincipal);
+
+                // Respuesta exitosa JSON
+                ctx.json(Map.of("status", "ok", "redirect", "/home"));
+
             } else {
-                Map<String, Object> model = new HashMap<>();
-                model.put("error", json.getString("error"));
-                ctx.render("login.ftl", model);
+                String errorMsg = json.has("error") ? json.getString("error") : "Credenciales inválidas";
+
+                // Devolvemos un 401 (Unauthorized) y el mensaje en JSON
+                ctx.status(401).json(Map.of("error", errorMsg));
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            // CORRECCIÓN 3: Devolver JSON también en caso de excepción
+            ctx.status(500).json(Map.of("error", "Error interno del servidor"));
         }
-
     }
 }

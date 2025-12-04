@@ -59,6 +59,8 @@ public class Application {
         app.get("/editar-coleccion/{id}", coleccionController.obtenerPageEditarColeccion);
         app.get("/crear-coleccion", coleccionController.obtenerPageCrearColeccion);
         app.post("/colecciones", coleccionController.crearColeccion);
+        app.put("/colecciones/{id}", coleccionController.editarColeccion);
+        app.delete("/colecciones/{id}", coleccionController.eliminarColeccion);
         //app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
 
 
