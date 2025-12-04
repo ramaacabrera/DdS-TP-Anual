@@ -54,11 +54,19 @@ public class SolicitudService {
 
     public SolicitudDeEliminacion obtenerSolicitudEliminacion(String id, String username, String token) {
         try {
-            HttpRequest request = buildRequestGET("/api/solicitudes/" + id, username, token);
+            HttpRequest request = buildRequestGET("api/solicitudes/" + id, username, token);
+            System.out.println("Obtener solicitud de eliminacion 1: " + request);
+
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200)
+            System.out.println("Obtener solicitud de eliminacion2: ");
+
+
+            if (response.statusCode() == 200) {
+                System.out.println("Obtener solicitud de eliminacion2: ");
+
                 return mapper.readValue(response.body(), SolicitudDeEliminacion.class);
+            }
 
             System.err.println("Error obteniendo solicitud eliminación: " + response.statusCode());
             return null;
@@ -70,7 +78,7 @@ public class SolicitudService {
 
     public SolicitudDeModificacion obtenerSolicitudModificacion(String id, String username, String token) {
         try {
-            HttpRequest request = buildRequestGET("/api/solicitudes/modificacion/" + id, username, token);
+            HttpRequest request = buildRequestGET("api/solicitudes/modificacion/" + id, username, token);
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200)
@@ -87,12 +95,20 @@ public class SolicitudService {
 
     public List<SolicitudDeEliminacion> obtenerSolicitudesEliminacion(String username, String token) {
         try {
-            HttpRequest request = buildRequestGET("/api/solicitudes", username, token);
-            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpRequest request = buildRequestGET("api/solicitudes", username, token);
+            System.out.println("Obtener solicitud de eliminacion (lista) 1: " + request);
 
-            if (response.statusCode() == 200)
+            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Obtener solicitud de eliminacion (lista) 2: " );
+
+
+            if (response.statusCode() == 200) {
+                System.out.println("Obtener solicitud de eliminacion (lista) 3: " );
+
                 return mapper.readValue(response.body(),
-                        new TypeReference<List<SolicitudDeEliminacion>>() {});
+                        new TypeReference<List<SolicitudDeEliminacion>>() {
+                        });
+            }
 
             System.err.println("Error obteniendo solicitudes eliminación: " + response.statusCode());
             return List.of();
@@ -104,7 +120,7 @@ public class SolicitudService {
 
     public List<SolicitudDeModificacion> obtenerSolicitudesModificacion(String username, String token) {
         try {
-            HttpRequest request = buildRequestGET("/api/solicitudes-modificacion", username, token);
+            HttpRequest request = buildRequestGET("api/solicitudes-modificacion", username, token);
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200)

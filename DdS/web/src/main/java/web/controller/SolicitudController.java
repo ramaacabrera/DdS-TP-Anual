@@ -30,7 +30,7 @@ public class SolicitudController {
             String token = ctx.sessionAttribute("access_token");
 
             if (username == null || token == null) {
-                ctx.redirect("/admin/login");
+                ctx.redirect("/login");
                 return;
             }
 
