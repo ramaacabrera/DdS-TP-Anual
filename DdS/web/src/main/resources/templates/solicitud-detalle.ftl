@@ -110,11 +110,20 @@
 
     <!-- Script para pasar variables del backend al frontend -->
     <script>
+
         // Variables globales disponibles para el JS externo
         window.solicitudData = {
             id: '${solicitud.id_solicitud!"0"}', // Cambiado a id_solicitud
             tipo: '${tipo!"eliminacion"}' // 'eliminacion' o 'modificacion'
         };
+
+        function procesarSolicitud(accion) {
+            fetch(window.location.pathname, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ accion })
+            }).then(() => window.location.href="/admin/solicitudes");
+        }
 
         // Funciones directas sin confirmación
         function aceptarSolicitud() {
