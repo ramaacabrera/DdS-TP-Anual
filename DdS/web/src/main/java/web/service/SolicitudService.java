@@ -7,127 +7,132 @@ import web.domain.Solicitudes.SolicitudDeEliminacion;
 import web.domain.Solicitudes.SolicitudDeModificacion;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class SolicitudService {
+
     private final String urlAdmin;
-    private final OkHttpClient client;
-    private final ObjectMapper mapper;
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final HttpClient http = HttpClient.newHttpClient();
 
     public SolicitudService(String urlAdmin) {
         this.urlAdmin = urlAdmin;
-        this.client = new OkHttpClient();
-        this.mapper = new ObjectMapper();
     }
 
-    public SolicitudDeEliminacion obtenerSolicitudEliminacion(String id) {
-        String url = urlAdmin + "/api/solicitudes/" + id;
+    private HttpRequest buildRequestGET(String endpoint, String username, String token) throws Exception {
+        HttpRequest.Builder builder = HttpRequest.newBuilder()
+                .uri(new URI(urlAdmin + endpoint))
+                .GET();
 
-        return executeRequest(url, SolicitudDeEliminacion.class);
-    }
-
-    public SolicitudDeModificacion obtenerSolicitudModificacion(String id) {
-        String url = urlAdmin + "/api/solicitudes/modificacion/" + id;
-
-        return executeRequest(url, SolicitudDeModificacion.class);
-    }
-
-    private <T> T executeRequest(String url, Class<T> valueType) {
-        Request request = new Request.Builder().url(url).get().build();
-
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful() && response.body() != null) {
-                String body = response.body().string();
-                return mapper.readValue(body, valueType);
-            } else {
-                System.err.println("Error API Admin (" + response.code() + ") en URL: " + url);
-                return null;
-            }
-        } catch (IOException e) {
-            System.err.println("Excepción conectando al Admin: " + e.getMessage());
-            return null;
+        if (username != null && token != null) {
+            builder.header("username", username);
+            builder.header("access_token", token);
         }
+
+        return builder.build();
     }
 
-    public List<SolicitudDeEliminacion> obtenerSolicitudesEliminacion() {
-        String apiUrl = urlAdmin + "/api/solicitudes";
-        System.out.println("DEBUG: Intentando obtener solicitudes de: " + apiUrl);
+    private HttpRequest buildRequestPATCH(String endpoint, String json, String username, String token) throws Exception {
+        HttpRequest.Builder builder = HttpRequest.newBuilder()
+                .uri(new URI(urlAdmin + endpoint))
+                .header("Content-Type", "application/json")
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(json));
 
-        Request request = new Request.Builder()
-                .url(apiUrl)
-                .get()
-                .build();
+        if (username != null && token != null) {
+            builder.header("username", username);
+            builder.header("access_token", token);
+        }
 
+        return builder.build();
+    }
+
+    public SolicitudDeEliminacion obtenerSolicitudEliminacion(String id, String username, String token) {
         try {
-            Response response = client.newCall(request).execute();
-            System.out.println("DEBUG: Código de respuesta de la API Admin: " + response.code());
+            HttpRequest request = buildRequestGET("/api/solicitudes/" + id, username, token);
+            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.isSuccessful()) {
-                String body = response.body().string();
-                System.out.println("DEBUG: Cuerpo de respuesta (JSON recibido): " + (body.length() > 200 ? body.substring(0, 200) + "..." : body));
+            if (response.statusCode() == 200)
+                return mapper.readValue(response.body(), SolicitudDeEliminacion.class);
 
-                // Manejo de errores de Deserialización
-                try {
-                    List<SolicitudDeEliminacion> lista = mapper.readValue(body, new TypeReference<List<SolicitudDeEliminacion>>() {});
-                    System.out.println("DEBUG: Solicitudes encontradas (Deserializadas): " + lista.size());
-                    return lista;
-                } catch (Exception e) {
-                    System.err.println("❌ ERROR CRÍTICO AL DESERIALIZAR JSON de la API Admin: " + e.getMessage());
-                    e.printStackTrace();
-                    return new ArrayList<>(); // Retorna lista vacía si falla el JSON
-                }
-            } else {
-                System.err.println("❌ Error HTTP en la API Admin: " + response.code() + " - Mensaje: " + response.message());
-                return new ArrayList<>(); // Retorna lista vacía si falla la red
-            }
+            System.err.println("Error obteniendo solicitud eliminación: " + response.statusCode());
+            return null;
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public List<SolicitudDeModificacion> obtenerSolicitudesModificacion() {
+    public SolicitudDeModificacion obtenerSolicitudModificacion(String id, String username, String token) {
         try {
-            String urlCompleta = urlAdmin + "api/solicitudes";
-            System.out.println("=== DEBUG HTTP REQUEST ===");
-            System.out.println("🔍 URL Admin base: " + urlAdmin);
-            System.out.println("🔍 URL completa: " + urlCompleta);
+            HttpRequest request = buildRequestGET("/api/solicitudes/modificacion/" + id, username, token);
+            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
-            Request request = new Request.Builder()
-                    .url(urlAdmin + "/api/solicitudes-modificacion") // Ajusta el endpoint
-                    .get()
-                    .build();
+            if (response.statusCode() == 200)
+                return mapper.readValue(response.body(), SolicitudDeModificacion.class);
 
-            try (Response response = client.newCall(request).execute()) {
-                if (response.isSuccessful()) {
-                    String body = response.body().string();
-                    return mapper.readValue(body, new TypeReference<List<SolicitudDeModificacion>>() {});
-                }
-            }
+            System.err.println("Error obteniendo solicitud modificación: " + response.statusCode());
+            return null;
+
         } catch (Exception e) {
-            System.err.println("Error obteniendo solicitudes de modificación: " + e.getMessage());
+            throw new RuntimeException(e);
         }
-        return new ArrayList<>();
     }
 
-    public int actualizarEstadoSolicitud(String id, String tipo, String accion){
-        String esModificacion = tipo.equals("modificacion")?"modificacion/":"";
-        String url = urlAdmin + "/api/solicitudes/"+ esModificacion + id;
 
+    public List<SolicitudDeEliminacion> obtenerSolicitudesEliminacion(String username, String token) {
         try {
-            String jsonBody = mapper.writeValueAsString(Map.of("accion", accion));
+            HttpRequest request = buildRequestGET("/api/solicitudes", username, token);
+            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
-            RequestBody body = RequestBody.create(jsonBody, MediaType.parse("application/json"));
+            if (response.statusCode() == 200)
+                return mapper.readValue(response.body(),
+                        new TypeReference<List<SolicitudDeEliminacion>>() {});
 
-            Request request = new Request.Builder().url(url).patch(body).build();
+            System.err.println("Error obteniendo solicitudes eliminación: " + response.statusCode());
+            return List.of();
 
-            try (Response response = client.newCall(request).execute()) {
-                return response.code();
-            }
         } catch (Exception e) {
-            System.err.println("Error actualizando estado de solicitud: " + e.getMessage());
-            return 500;
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<SolicitudDeModificacion> obtenerSolicitudesModificacion(String username, String token) {
+        try {
+            HttpRequest request = buildRequestGET("/api/solicitudes-modificacion", username, token);
+            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200)
+                return mapper.readValue(response.body(),
+                        new TypeReference<List<SolicitudDeModificacion>>() {});
+
+            System.err.println("Error obteniendo solicitudes modificación: " + response.statusCode());
+            return List.of();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int actualizarEstadoSolicitud(String id, String tipo, String accion, String username, String token) {
+        try {
+            String esMod = tipo.equals("modificacion") ? "modificacion/" : "";
+            String endpoint = "/api/solicitudes/" + esMod + id;
+
+            String json = mapper.writeValueAsString(Map.of("accion", accion));
+
+            HttpRequest request = buildRequestPATCH(endpoint, json, username, token);
+            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return response.statusCode();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

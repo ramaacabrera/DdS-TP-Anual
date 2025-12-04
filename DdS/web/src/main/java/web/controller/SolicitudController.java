@@ -22,82 +22,96 @@ public class SolicitudController {
         this.solicitudService = solicitudService;
     }
 
-    public Handler actualizarEstadoSolicitud = ctx -> {
-        /* if (!esAdministrador(ctx)) {
-            ctx.status(403).result("No tiene permisos de administrador");
-            return;
-        }*/
-
-        String id = ctx.pathParam("id");
-        String tipo = ctx.pathParam("tipo");
-        String accion = ctx.body(); // "ACEPTADA" o "RECHAZADA"
-
-        try {
-            solicitudService.actualizarEstadoSolicitud(id, tipo, accion);
-            ctx.status(200).result("Solicitud actualizada correctamente");
-        }catch (Exception e){
-            ctx.status(400).result("Error al actualizar solicitud");
-        }
-    };
-
     public Handler listarSolicitudes = ctx -> {
-        // Obtener solicitudes de eliminación
-        List<SolicitudDeEliminacion> solicitudesEliminacion = solicitudService.obtenerSolicitudesEliminacion();
+        try {
+            System.out.println("Listando todas las solicitudes");
 
-        // Obtener solicitudes de modificación (si las tienes)
-        List<SolicitudDeModificacion> solicitudesModificacion = solicitudService.obtenerSolicitudesModificacion();
+            String username = ctx.sessionAttribute("username");
+            String token = ctx.sessionAttribute("access_token");
 
-        Map<String, Object> model = ViewUtil.baseModel(ctx);
-        model.put("solicitudesEliminacion", solicitudesEliminacion);
-        model.put("solicitudesModificacion", solicitudesModificacion);
+            if (username == null || token == null) {
+                ctx.redirect("/admin/login");
+                return;
+            }
 
-        ctx.render("solicitudes.ftl", model);
+            Map<String, Object> modelo = ViewUtil.baseModel(ctx);
+            modelo.put("pageTitle", "Solicitudes");
+
+            modelo.put("solicitudesEliminacion",
+                    solicitudService.obtenerSolicitudesEliminacion(username, token));
+
+            modelo.put("solicitudesModificacion",
+                    solicitudService.obtenerSolicitudesModificacion(username, token));
+
+            ctx.render("solicitudes.ftl", modelo);
+
+        } catch (Exception e) {
+            System.err.println("Error listarSolicitudes: " + e.getMessage());
+            ctx.status(500).result("Error al cargar solicitudes: " + e.getMessage());
+        }
     };
 
     public Handler obtenerSolicitud = ctx -> {
-        // Validación de permisos (si la descomentas luego)
-        /* if (!esAdministrador(ctx)) { ... } */
+        try {
+            String id = ctx.pathParam("id");
+            String tipo = ctx.pathParam("tipo");
 
-        String id = ctx.pathParam("id");
-        String tipo = ctx.pathParam("tipo"); // "eliminacion" o "modificacion"
+            String username = ctx.sessionAttribute("username");
+            String token = ctx.sessionAttribute("access_token");
 
-        Map<String, Object> model = ViewUtil.baseModel(ctx);
-        boolean encontrado = false;
-
-        // Lógica de selección según el tipo
-        if ("eliminacion".equals(tipo)) {
-            SolicitudDeEliminacion solicitud = solicitudService.obtenerSolicitudEliminacion(id);
-            if (solicitud != null) {
-                model.put("solicitud", solicitud);
-                model.put("tipo", "eliminacion");
-                model.put("hecho", solicitud.getHechoAsociado());
-                encontrado = true;
+            if (username == null || token == null) {
+                ctx.redirect("/admin/login");
+                return;
             }
-        } else if ("modificacion".equals(tipo)) {
-            SolicitudDeModificacion solicitud = solicitudService.obtenerSolicitudModificacion(id);
-            if (solicitud != null) {
-                model.put("solicitud", solicitud);
-                model.put("tipo", "modificacion");
-                model.put("hecho", solicitud.getHechoAsociado());
-                encontrado = true;
+
+            Map<String, Object> modelo = ViewUtil.baseModel(ctx);
+            modelo.put("pageTitle", "Detalle de solicitud");
+
+            if ("eliminacion".equals(tipo)) {
+
+                SolicitudDeEliminacion sol =
+                        solicitudService.obtenerSolicitudEliminacion(id, username, token);
+
+                if (sol == null) {
+                    ctx.status(404).result("Solicitud no encontrada");
+                    return;
+                }
+
+                modelo.put("solicitud", sol);
+                modelo.put("tipo", "eliminacion");
+                modelo.put("hecho", sol.getHechoAsociado());
             }
-        } else {
-            ctx.status(400).result("Tipo de solicitud inválido (use 'eliminacion' o 'modificacion')");
-            return;
-        }
+            else if ("modificacion".equals(tipo)) {
 
-        if (!encontrado) {
-            ctx.status(404).result("Solicitud no encontrada en el sistema administrativo");
-            return;
-        }
+                SolicitudDeModificacion sol =
+                        solicitudService.obtenerSolicitudModificacion(id, username, token);
 
-        ctx.render("solicitud-detalle.ftl", model);
+                if (sol == null) {
+                    ctx.status(404).result("Solicitud no encontrada");
+                    return;
+                }
+
+                modelo.put("solicitud", sol);
+                modelo.put("tipo", "modificacion");
+                modelo.put("hecho", sol.getHechoAsociado());
+            }
+            else {
+                ctx.status(400).result("Tipo inválido");
+                return;
+            }
+
+            ctx.render("solicitud-detalle.ftl", modelo);
+
+        } catch (Exception e) {
+            System.err.println("Error obtenerSolicitud: " + e.getMessage());
+            ctx.status(500).result("Error al cargar la solicitud: " + e.getMessage());
+        }
     };
+
 
     public Handler obtenerFormsEliminarSolicitud = ctx -> {
         try {
             String hechoId = ctx.pathParam("id");
-            System.out.println("Solicitando formulario de eliminación para hecho ID: " + hechoId);
 
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);
             modelo.put("pageTitle", "Solicitar Eliminación");
@@ -106,10 +120,37 @@ public class SolicitudController {
             ctx.render("crear-solicitud-eliminacion.ftl", modelo);
 
         } catch (Exception e) {
-            System.err.println("ERROR en GetSolicitudEliminacionHandler: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).result("Error al cargar el formulario: " + e.getMessage());
+            System.err.println("Error obtenerFormsEliminarSolicitud: " + e.getMessage());
+            ctx.status(500).result("Error al cargar formulario: " + e.getMessage());
         }
     };
 
+    public Handler actualizarEstadoSolicitud = ctx -> {
+        try {
+            String id = ctx.pathParam("id");
+            String tipo = ctx.pathParam("tipo");
+            String nuevoEstado = ctx.body(); // "ACEPTADA" o "RECHAZADA"
+
+            // Obtener datos de sesión igual que en Colecciones
+            String username = ctx.sessionAttribute("username");
+            String token    = ctx.sessionAttribute("access_token");
+
+            if (username == null || token == null) {
+                ctx.status(401).result("Sesión expirada. Inicie sesión nuevamente.");
+                return;
+            }
+
+            int status = solicitudService.actualizarEstadoSolicitud(id, tipo, nuevoEstado, username, token);
+
+            if (status >= 200 && status < 300) {
+                ctx.status(200).result("Solicitud actualizada");
+            } else {
+                ctx.status(500).result("Error del servidor administrativo: HTTP " + status);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error actualizarEstadoSolicitud: " + e.getMessage());
+            ctx.status(500).result("Error al actualizar: " + e.getMessage());
+        }
+    };
 }
