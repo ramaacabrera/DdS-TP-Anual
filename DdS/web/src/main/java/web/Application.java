@@ -66,6 +66,9 @@ public class Application {
 
         // Falta organizar el tema de categorias y colecciones, y aplicar los estilos
         app.get("/estadisticas", new GetEstadisticasHandler(estadisticasService, categoriasService));
+        app.get("/estadisticas/descargar", new GetDescargarEstadisticasHandler(estadisticasService));
+        app.get("/api/estadisticas/provinciaMax/categorias/{categoria}", new GetBusquedaAPIHandler(categoriasService, GetBusquedaAPIHandler.TipoBusqueda.PROVINCIA));
+        app.get("/api/estadisticas/horaMax/categorias/{categoria}", new GetBusquedaAPIHandler(categoriasService, GetBusquedaAPIHandler.TipoBusqueda.HORA));
 
         //solicitudes
 

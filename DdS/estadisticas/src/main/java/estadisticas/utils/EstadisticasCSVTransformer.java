@@ -12,7 +12,7 @@ public class EstadisticasCSVTransformer {
                                                 List<EstadisticasColeccion> colecciones) {
         StringBuilder csv = new StringBuilder();
 
-        csv.append("\uFEFF");
+        csv.append("sep=;\n");
 
         csv.append("--- REPORTE GENERAL DE ESTADISTICAS ---\n");
         csv.append("ID Reporte;Fecha Generacion;Spam Detectado;Categoria Mas Frecuente\n");

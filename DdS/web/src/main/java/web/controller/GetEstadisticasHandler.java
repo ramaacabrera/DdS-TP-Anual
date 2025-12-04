@@ -1,5 +1,7 @@
 package web.controller;
 
+import web.service.Normalizador.DesnormalizadorCategorias;
+
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +37,11 @@ public class GetEstadisticasHandler implements Handler {
             List<Map<String, Object>> statsCategoria = categoriasService.procesarCategorias(categoriasTotales);
 
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);
-            modelo.put("categoriaMax", obtenerValorConFallback(statsGenerales, Arrays.asList("categoria", "estadisticas_categoria_max_hechos"), "N/A"));
+            Object rawValue = obtenerValorConFallback(statsGenerales, Arrays.asList("categoria", "estadisticas_categoria_max_hechos"), "N/A");
+            String categoriaString = (rawValue != null) ? rawValue.toString() : "N/A";
+            String categoriaFormateada = "N/A".equals(categoriaString) ? "N/A" : DesnormalizadorCategorias.desnormalizar(categoriaString);
+
+            modelo.put("categoriaMax", categoriaFormateada);
             modelo.put("solicitudesSpam", obtenerValorConFallback(statsUsuarios, Arrays.asList("spam", "spamCount", "estadisticas_spam"), 0));
             modelo.put("categorias", statsCategoria);
             modelo.put("totalCategorias", categoriasTotales.size());

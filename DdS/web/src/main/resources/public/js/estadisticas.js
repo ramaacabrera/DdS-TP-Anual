@@ -35,48 +35,71 @@ async function cargarEstadisticasGenerales() {
     }
 }
 
-// Buscar estadísticas por categoría
 async function buscarCategoria() {
-    const categoria = document.getElementById("categoria-select").value.trim()
+    const input = document.getElementById('categoria-select');
+    const resultsContainer = document.getElementById('categoria-results');
+    const categoria = input.value.trim();
 
     if (!categoria) {
-        showError("categoria-results", "Por favor ingresa una categoría")
-        return
+        alert("Por favor ingrese una categoría");
+        return;
     }
 
-    showLoading()
-    const resultsContainer = document.getElementById("categoria-results")
-    const API_BASE_URL = 'http://localhost:8088/api/estadisticas';
+    // Mostrar estado de carga
+    resultsContainer.innerHTML = '<div class="spinner" style="border-width: 2px; width: 30px; height: 30px;"></div>';
 
     try {
-        // Obtener provincia máxima
-        const provinciaResponse = await fetch(`${API_BASE_URL}/provinciaMax/categorias/${encodeURIComponent(categoria)}`)
-        const provinciaData = await provinciaResponse.json()
+        // Codificamos la categoría para URL
+        const encodedCat = encodeURIComponent(categoria);
 
-        // Obtener hora máxima
-        const horaResponse = await fetch(`${API_BASE_URL}/horaMax/categorias/${encodeURIComponent(categoria)}`)
-        const horaData = await horaResponse.json()
+        // Hacemos las dos peticiones en paralelo
+        const [resProvincia, resHora] = await Promise.all([
+            fetch(`/api/estadisticas/provinciaMax/categorias/${encodedCat}`),
+            fetch(`/api/estadisticas/horaMax/categorias/${encodedCat}`)
+        ]);
 
-        if (provinciaResponse.ok && horaResponse.ok) {
-            resultsContainer.innerHTML = `
-                <div class="result-item">
-                    <span class="result-label">Provincia con más hechos:</span>
-                    <span class="result-value">${provinciaData.provincia || provinciaData.estadisticasCategoria_provincia || "N/A"}</span>
+        const dataProvincia = await resProvincia.json();
+        const dataHora = await resHora.json();
+
+        // Valores por defecto si hay error
+        const provinciaVal = dataProvincia.provincia || "N/A";
+        const horaVal = dataHora.hora ? `${dataHora.hora}:00 hs` : "N/A";
+
+        // --- AQUÍ ESTÁ EL CAMBIO DE DISEÑO ---
+        // Generamos un HTML ordenado con Grid y estilos limpios
+        resultsContainer.innerHTML = `
+            <div class="result-success-container">
+                <div class="result-header">
+                    <h3>Resultados para: <strong>${categoria}</strong></h3>
                 </div>
-                <div class="result-item">
-                    <span class="result-label">Hora con más hechos:</span>
-                    <span class="result-value">${horaData.hora || horaData.estadisticasCategoria_hora || "N/A"}:00 hs</span>
+                <div class="result-grid">
+                    <div class="result-stat">
+                        <span class="result-label">Provincia más activa</span>
+                        <span class="result-value" style="color: var(--brand-dark);">${provinciaVal}</span>
+                    </div>
+                    <div class="result-stat">
+                        <span class="result-label">Hora pico</span>
+                        <span class="result-value" style="color: var(--brand-primary);">${horaVal}</span>
+                    </div>
                 </div>
-            `
-        } else {
-            showError("categoria-results", "No se encontraron datos para esta categoría")
-        }
+            </div>
+        `;
+
     } catch (error) {
-        showError("categoria-results", "Categoria Invalida: " + error.message)
-    } finally {
-        hideLoading()
+        console.error(error);
+        resultsContainer.innerHTML = `
+            <div style="color: #e57373; text-align: center;">
+                <p>No se encontraron datos para "${categoria}"</p>
+            </div>
+        `;
     }
 }
+
+document.getElementById('categoria-select').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        buscarCategoria();
+    }
+});
 
 // Buscar estadísticas por colección
 async function buscarColeccion() {

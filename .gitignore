@@ -16,3 +16,6 @@ dds/web/target
 .idea/
 *.iml
 target/
+
+workspace.xml
+.idea/workspace.xml

@@ -6,10 +6,13 @@ import web.service.Normalizador.DesnormalizadorCategorias;
 import web.service.Normalizador.NormalizadorCategorias;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CategoriasService {
     private final HttpClient httpClient;
@@ -22,10 +25,9 @@ public class CategoriasService {
         this.urlEstadisticas = urlEstadisticas;
     }
 
-
     public List<String> obtenerCategorias(){
         try {
-            URI uri = new URI(urlEstadisticas);
+            URI uri = new URI(urlEstadisticas + "/categorias");
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(uri)
@@ -36,7 +38,8 @@ public class CategoriasService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                throw new RuntimeException("HTTP " + response.statusCode() + " para /api/estadisticas/categorias");
+                // Logueamos la URL para debug
+                throw new RuntimeException("HTTP " + response.statusCode() + " consultando: " + uri);
             }
 
             Map<String, Object> respuesta = mapper.readValue(response.body(), new TypeReference<Map<String, Object>>() {});
@@ -46,14 +49,49 @@ public class CategoriasService {
                 List<String> categorias = (List<String>) respuesta.get("categorias");
                 return categorias;
             } else {
-                throw new RuntimeException("Formato de respuesta inesperado para categorías");
+                return new ArrayList<>();
             }
 
         } catch (Exception e) {
             System.err.println("Error obteniendo categorías: " + e.getMessage());
-            System.out.println("Usando categorías por defecto como fallback");
+            System.out.println("Usando fallback de categorías.");
             return Arrays.asList("Incendio", "Accidente", "Inundación");
         }
+    }
+
+    public List<Map<String, Object>> procesarCategorias(List<String> categorias) {
+        return categorias.parallelStream().map(this::obtenerDetalleCategoria).collect(Collectors.toList());
+    }
+
+    private Map<String, Object> obtenerDetalleCategoria(String categoria) {
+        Map<String, Object> categoriaData = new HashMap<>();
+        categoriaData.put("nombre", categoria);
+
+        try {
+            String categoriaNormalizada = NormalizadorCategorias.normalizar(categoria);
+
+            categoriaData.put("nombre", DesnormalizadorCategorias.desnormalizar(categoriaNormalizada));
+
+            Map<String, Object> provincia = hacerConsulta(
+                    "/provinciaMax/categorias/" + encodeURL(categoriaNormalizada)
+            );
+
+            Map<String, Object> hora = hacerConsulta(
+                    "/horaMax/categorias/" + encodeURL(categoriaNormalizada)
+            );
+
+            categoriaData.put("provincia", obtenerValorConFallback(provincia,
+                    Arrays.asList("provincia", "estadisticasCategoria_provincia"), "N/A"));
+
+            categoriaData.put("hora", obtenerValorConFallback(hora,
+                    Arrays.asList("hora", "estadisticasCategoria_hora"), "N/A"));
+
+        } catch (Exception e) {
+            System.err.println("❌ Error procesando categoría '" + categoria + "': " + e.getMessage());
+            categoriaData.put("provincia", "N/A");
+            categoriaData.put("hora", "N/A");
+        }
+        return categoriaData;
     }
 
     private Map<String, Object> hacerConsulta(String endpoint) throws Exception {
@@ -62,58 +100,20 @@ public class CategoriasService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
                 .GET()
-                .timeout(java.time.Duration.ofSeconds(10)) // Timeout para evitar bloqueos
+                .timeout(java.time.Duration.ofSeconds(5))
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
-            throw new RuntimeException("HTTP " + response.statusCode() + " para " + endpoint);
+            throw new RuntimeException("HTTP " + response.statusCode() + " para " + uri);
         }
 
         return mapper.readValue(response.body(), new TypeReference<Map<String, Object>>() {});
     }
 
-    public List<Map<String, Object>> procesarCategorias(List<String> categorias) {
-        List<Map<String, Object>> resultados = new ArrayList<>();
-
-        for (String categoria : categorias) {
-            try {
-                // NORMALIZAR la categoría antes de hacer las consultas
-                String categoriaNormalizada = NormalizadorCategorias.normalizar(categoria);
-
-                Map<String, Object> provincia = hacerConsulta(
-                        "/api/estadisticas/provinciaMax/categorias/" + encodeURL(categoriaNormalizada)
-                );
-                Map<String, Object> hora = hacerConsulta(
-                        "/api/estadisticas/horaMax/categorias/" + encodeURL(categoriaNormalizada)
-                );
-
-                Map<String, Object> categoriaData = new HashMap<>();
-                // Desnormalizar el nombre para mostrar
-                categoriaData.put("nombre", DesnormalizadorCategorias.desnormalizar(categoriaNormalizada));
-                categoriaData.put("provincia", obtenerValorConFallback(provincia,
-                        Arrays.asList("provincia", "estadisticasCategoria_provincia"), "N/A"));
-                categoriaData.put("hora", obtenerValorConFallback(hora,
-                        Arrays.asList("hora", "estadisticasCategoria_hora"), "N/A"));
-
-                resultados.add(categoriaData);
-            } catch (Exception e) {
-                System.err.println("❌ Error procesando categoría '" + categoria + "': " + e.getMessage());
-
-                Map<String, Object> categoriaData = new HashMap<>();
-                categoriaData.put("nombre", categoria); // Usar el original en caso de error
-                categoriaData.put("provincia", "Error");
-                categoriaData.put("hora", "Error");
-                categoriaData.put("error", e.getMessage());
-
-                resultados.add(categoriaData);
-            }
-        }
-        return resultados;
-    }
-
     private Object obtenerValorConFallback(Map<String, Object> map, List<String> keys, Object defaultValue) {
+        if (map == null) return defaultValue;
         for (String key : keys) {
             if (map.containsKey(key)) {
                 return map.get(key);
@@ -123,6 +123,27 @@ public class CategoriasService {
     }
 
     private String encodeURL(String text) {
-        return java.net.URLEncoder.encode(text, java.nio.charset.StandardCharsets.UTF_8);
+        return URLEncoder.encode(text, StandardCharsets.UTF_8);
+    }
+
+    public Map<String, Object> buscarProvinciaPorCategoria(String categoria) {
+        try {
+            String catNormalizada = NormalizadorCategorias.normalizar(categoria);
+            // Llamamos al microservicio
+            return hacerConsulta("/provinciaMax/categorias/" + encodeURL(catNormalizada));
+        } catch (Exception e) {
+            System.err.println("Error buscando provincia: " + e.getMessage());
+            return Map.of("provincia", "N/A");
+        }
+    }
+
+    public Map<String, Object> buscarHoraPorCategoria(String categoria) {
+        try {
+            String catNormalizada = NormalizadorCategorias.normalizar(categoria);
+            return hacerConsulta("/horaMax/categorias/" + encodeURL(catNormalizada));
+        } catch (Exception e) {
+            System.err.println("Error buscando hora: " + e.getMessage());
+            return Map.of("hora", "N/A");
+        }
     }
 }
