@@ -75,11 +75,6 @@
                     </#if>
                 </p>
             </div>
-            <div class="solicitud-meta">
-                <span class="estado-badge estado-${estado?lower_case}">
-                    ${obtenerTextoEstado(estado)}
-                </span>
-            </div>
         </div>
 
         <div class="solicitud-body" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color);">
@@ -117,15 +112,6 @@
                 ">
                     Ver Detalles
                 </a>
-                <#if estado == "PENDIENTE">
-                    <span class="pending-badge" style="
-                        color: #856404;
-                        font-weight: 600;
-                        font-size: 0.9rem;
-                    ">
-                        ⏳ Pendiente de revisión
-                    </span>
-                </#if>
             </div>
         </div>
     </div>

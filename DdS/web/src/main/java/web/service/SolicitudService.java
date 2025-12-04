@@ -138,7 +138,7 @@ public class SolicitudService {
     public int actualizarEstadoSolicitud(String id, String tipo, String accion, String username, String token) {
         try {
             String esMod = tipo.equals("modificacion") ? "modificacion/" : "";
-            String endpoint = "/api/solicitudes/" + esMod + id;
+            String endpoint = "api/solicitudes/" + esMod + id;
 
             String json = mapper.writeValueAsString(Map.of("accion", accion));
 

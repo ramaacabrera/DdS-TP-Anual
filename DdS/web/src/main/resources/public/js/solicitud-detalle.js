@@ -1,32 +1,61 @@
+const solicitudId = window.solicitudData?.id;
+const tipoSolicitud = window.solicitudData?.tipo;
+
+const getEndpoint = () => {
+    if (tipoSolicitud === 'eliminacion') {
+        return `/admin/solicitudes/eliminacion/${solicitudId}`;
+    } else if (tipoSolicitud === 'modificacion') {
+        return `/admin/solicitudes/modificacion/${solicitudId}`;
+    }
+    throw new Error('Tipo de solicitud no válido');
+};
 async function procesarSolicitud(accion) {
-    const { id, tipo } = window.solicitudData;
-
-    console.log(`🎯 Procesando solicitud: ${id}, tipo: ${tipo}, acción: ${accion}`);
-
     try {
-        const response = await fetch(`/api/solicitudes/${tipo}/${id}`, {
+        if (!solicitudId) {
+            alert('ID de solicitud no disponible');
+            return;
+        }
+
+        // Confirmación antes de proceder
+        const confirmMessage = accion === 'ACEPTADA'
+            ? '¿Estás seguro de aceptar esta solicitud? Esta acción cambiará el estado del hecho a "OCULTO" si es una eliminación.'
+            : '¿Estás seguro de rechazar esta solicitud?';
+
+        if (!confirm(confirmMessage)) {
+            return;
+        }
+
+        // Usar la ruta que tienes configurada en application.js
+        const endpoint = `/admin/solicitudes/${tipoSolicitud}/${solicitudId}`;
+
+        console.log('Enviando PATCH a:', endpoint, 'con acción:', accion);
+
+        const response = await fetch(endpoint, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ estado: accion })
+            body: JSON.stringify({ accion: accion }) // Enviar como objeto JSON
         });
 
-        console.log(`📡 Response status: ${response.status}`);
-
         if (response.ok) {
-            const result = await response.text();
-            console.log(`✅ Solicitud ${accion.toLowerCase()} correctamente:`, result);
             alert(`Solicitud ${accion.toLowerCase()} correctamente`);
-            // Recargar la página para ver el cambio de estado
-            window.location.reload();
+            window.location.href = '/admin/solicitudes';
         } else {
             const errorText = await response.text();
-            console.error(`❌ Error al procesar solicitud: ${response.status}`, errorText);
-            alert(`Error: ${errorText}`);
+            alert(`Error ${response.status}: ${errorText}`);
         }
     } catch (error) {
-        console.error('❌ Error de red:', error);
-        alert('Error de conexión. Intente nuevamente.');
+        console.error('Error:', error);
+        alert('Error al procesar la solicitud. Intente nuevamente.');
     }
 }
+
+// Funciones específicas para cada acción
+    function aceptarSolicitud() {
+      procesarSolicitud('ACEPTADA');
+    }
+
+    function rechazarSolicitud() {
+      procesarSolicitud('RECHAZADA');
+    }
