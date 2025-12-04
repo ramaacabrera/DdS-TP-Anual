@@ -1,7 +1,7 @@
 <#assign pageTitle = "Crear Colección">
 <#assign additionalCss = ["/css/styleCrearColeccion.css"]>
 <#assign content>
-<div class="container">
+    <div class="container">
         <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
             <a href="/" class="header-link back-link">&larr; Volver al inicio</a>
         </div>
@@ -113,6 +113,14 @@
                 ❌ Error al crear la colección. Intente nuevamente.
             </div>
         </form>
+        <div id="modal-exito" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-icon">✅</div>
+                <h2 class="modal-title">¡Colección creada con éxito!</h2>
+                <p class="modal-message">La colección ha sido creada exitosamente. Serás redirigido en 3 segundos...</p>
+                <button id="btn-redirigir" class="modal-button">Ir a Colecciones</button>
+            </div>
+        </div>
     </div>
 </#assign>
 
