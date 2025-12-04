@@ -30,7 +30,7 @@ public class Application {
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
 
         HechosDinamicoService hechosDinamicoService = new HechosDinamicoService(dinamicoRepositorio, hechoRepositorio);
-        SolicitudesModificacionService solicitudesModificacionService = new SolicitudesModificacionService(dinamicoRepositorio);
+        SolicitudesModificacionService solicitudesModificacionService = new SolicitudesModificacionService(dinamicoRepositorio, hechoRepositorio);
         SolicitudesEliminacionService solicitudesEliminacionService = new SolicitudesEliminacionService(dinamicoRepositorio);
 
         ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDinamica(hechosDinamicoService, solicitudesModificacionService, solicitudesEliminacionService));
