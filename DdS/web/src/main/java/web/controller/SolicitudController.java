@@ -15,10 +15,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class SolicitudController {
 
@@ -131,46 +129,132 @@ public class SolicitudController {
             String id = ctx.pathParam("id");
             String tipo = ctx.pathParam("tipo");
 
+            System.out.println("Obteniendo solicitud detalle ID: " + id + ", tipo: " + tipo);
+
             String username = ctx.sessionAttribute("username");
             String token = ctx.sessionAttribute("access_token");
 
             if (username == null || token == null) {
-                ctx.redirect("/admin/login");
+                ctx.redirect("/login");
                 return;
             }
 
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);
-            modelo.put("pageTitle", "Detalle de solicitud");
+            modelo.put("pageTitle", "Detalle de Solicitud");
+            modelo.put("tipo", tipo);
 
             if ("eliminacion".equals(tipo)) {
-
-                SolicitudDeEliminacion sol =
-                        solicitudService.obtenerSolicitudEliminacion(id, username, token);
+                SolicitudDeEliminacion sol = solicitudService.obtenerSolicitudEliminacion(id, username, token);
 
                 if (sol == null) {
                     ctx.status(404).result("Solicitud no encontrada");
                     return;
                 }
 
-                modelo.put("solicitud", sol);
-                modelo.put("tipo", "eliminacion");
-                modelo.put("hecho", sol.getHechoAsociado());
-            }
-            else if ("modificacion".equals(tipo)) {
+                // Convertir la solicitud a un Map para poder agregar campos extras
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, Object> solicitudData = mapper.convertValue(sol, Map.class);
 
-                SolicitudDeModificacion sol =
-                        solicitudService.obtenerSolicitudModificacion(id, username, token);
+                // Obtener datos del hecho
+                Map<String, Object> hechoData = new HashMap<>();
+                if (sol.getHechoAsociado() != null) {
+                    try {
+                        String hechoIdStr = sol.getHechoAsociado().toString();
+                        System.out.println("Buscando hecho para detalle: " + hechoIdStr);
+
+                        HttpClient client = HttpClient.newHttpClient();
+                        String urlCompleta = "http://localhost:8087/api/hechos/" + hechoIdStr;
+                        System.out.println("URL del hecho: " + urlCompleta);
+
+                        HttpRequest request = HttpRequest.newBuilder()
+                                .uri(new URI(urlCompleta))
+                                .GET()
+                                .build();
+
+                        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                        System.out.println("Response status: " + response.statusCode());
+
+                        if (response.statusCode() == 200) {
+                            hechoData = mapper.readValue(response.body(), Map.class);
+                            System.out.println("Datos del hecho obtenidos: " + hechoData.keySet());
+
+                            // Formatear la fecha si existe
+                            if (hechoData.containsKey("fechaDeCarga")) {
+                                Object fechaObj = hechoData.get("fechaDeCarga");
+                                if (fechaObj != null) {
+                                    try {
+                                        if (fechaObj instanceof Number) {
+                                            // Si es un número (timestamp), convertirlo a fecha formateada
+                                            long timestamp = ((Number) fechaObj).longValue();
+                                            Date fecha = new Date(timestamp);
+                                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                                            hechoData.put("fechaDeCargaFormateada", sdf.format(fecha));
+                                        } else if (fechaObj instanceof String) {
+                                            // Si ya es string, dejarlo como está
+                                            hechoData.put("fechaDeCargaFormateada", fechaObj.toString());
+                                        }
+                                    } catch (Exception e) {
+                                        System.err.println("Error formateando fecha: " + e.getMessage());
+                                        hechoData.put("fechaDeCargaFormateada", "Fecha inválida");
+                                    }
+                                }
+                            }
+                        } else {
+                            System.err.println("Error obteniendo hecho: " + response.statusCode());
+                            hechoData.put("titulo", "Error al cargar el hecho");
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error obteniendo hecho para detalle: " + e.getMessage());
+                        e.printStackTrace();
+                        hechoData.put("titulo", "Error de conexión");
+                    }
+                } else {
+                    hechoData.put("titulo", "Sin hecho asociado");
+                }
+
+                modelo.put("solicitud", solicitudData);
+                modelo.put("hecho", hechoData);
+
+            } else if ("modificacion".equals(tipo)) {
+                // Similar para modificación
+                SolicitudDeModificacion sol = solicitudService.obtenerSolicitudModificacion(id, username, token);
 
                 if (sol == null) {
                     ctx.status(404).result("Solicitud no encontrada");
                     return;
                 }
 
-                modelo.put("solicitud", sol);
-                modelo.put("tipo", "modificacion");
-                modelo.put("hecho", sol.getHechoAsociado());
-            }
-            else {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, Object> solicitudData = mapper.convertValue(sol, Map.class);
+
+                Map<String, Object> hechoData = new HashMap<>();
+                if (sol.getHechoAsociado() != null) {
+                    try {
+                        String hechoIdStr = sol.getHechoAsociado().toString();
+                        HttpClient client = HttpClient.newHttpClient();
+                        String urlCompleta = "http://localhost:8087/api/hechos/" + hechoIdStr;
+
+                        HttpRequest request = HttpRequest.newBuilder()
+                                .uri(new URI(urlCompleta))
+                                .GET()
+                                .build();
+
+                        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                        if (response.statusCode() == 200) {
+                            hechoData = mapper.readValue(response.body(), Map.class);
+                        } else {
+                            hechoData.put("titulo", "Error al cargar el hecho");
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error obteniendo hecho para detalle (mod): " + e.getMessage());
+                        hechoData.put("titulo", "Error de conexión");
+                    }
+                }
+
+                modelo.put("solicitud", solicitudData);
+                modelo.put("hecho", hechoData);
+            } else {
                 ctx.status(400).result("Tipo inválido");
                 return;
             }
@@ -179,6 +263,7 @@ public class SolicitudController {
 
         } catch (Exception e) {
             System.err.println("Error obtenerSolicitud: " + e.getMessage());
+            e.printStackTrace();
             ctx.status(500).result("Error al cargar la solicitud: " + e.getMessage());
         }
     };
