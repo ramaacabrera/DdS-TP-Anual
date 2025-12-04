@@ -77,7 +77,6 @@ public class GeneradorEstadisticas {
 
             System.out.println("Guardando Estadisticas con ID: " + nuevasEstadisticas.getEstadisticas_id());
 
-            // USAR MERGE() en lugar de persist() para entidades con ID pre-asignado
             Estadisticas estadisticasGuardadas = em.merge(nuevasEstadisticas);
             this.estadisticasActual = estadisticasGuardadas;
 
@@ -113,13 +112,13 @@ public class GeneradorEstadisticas {
                 System.out.println("Procesando categoría: " + categoria + " → Provincia: " + provincia + " (hora: " + hora + ")");
 
                 EstadisticasCategoria estadisticaCategoria = new EstadisticasCategoria(
-                        estadisticasActual,  // Relación directa - entidad managed
-                        categoria,           // Campo directo
-                        provincia,           // Campo directo
-                        hora                 // Campo directo
+                        estadisticasActual,
+                        categoria,
+                        provincia,
+                        hora
                 );
 
-                em.merge(estadisticaCategoria); // Usar merge
+                em.merge(estadisticaCategoria);
                 System.out.println("✅ Categoría guardada: " + categoria + " con estadisticas_id: " + estadisticasActual.getEstadisticas_id());
             }
 
@@ -136,7 +135,6 @@ public class GeneradorEstadisticas {
         Map<String, Map<String, Object>> datosCategorias = new HashMap<>();
 
         try {
-            // Obtener coordenadas por categoría
             Map<String, Map<String, Object>> coordenadasPorCategoria = conexionAgregador.obtenerCoordenadasPorCategoria();
             Map<String, Integer> horasPorCategoria = conexionAgregador.obtenerHorasPicoPorCategoria();
 
@@ -148,14 +146,18 @@ public class GeneradorEstadisticas {
 
                 Integer hora = horasPorCategoria.getOrDefault(categoriaOriginal, 0);
 
-                // Determinar provincia usando la coordenada más frecuente (primera de la lista)
                 String provincia = "N/A";
                 if (coordenadas != null && !coordenadas.isEmpty()) {
-                    Map<String, Double> coord = coordenadas.get(0); // La más frecuente por ORDER BY COUNT DESC
+                    Map<String, Double> coord = coordenadas.get(0);
                     Double latitud = coord.get("latitud");
                     Double longitud = coord.get("longitud");
 
                     provincia = llamarAPIProvincia(latitud, longitud);
+
+                    if (provincia.startsWith("Error") || provincia.contains("N/A") || provincia.contains("no encontrada")) {
+                        System.out.println("⚠️ API Falló para categoría " + categoriaOriginal + ". Usando Fallback Local.");
+                        provincia = obtenerProvinciaPorCoordenadas(latitud, longitud);
+                    }
                 }
 
                 // Crear mapa de datos para esta categoría
@@ -195,10 +197,10 @@ public class GeneradorEstadisticas {
                 System.out.println("Procesando colección: " + nombre + " → Provincia: " + provincia);
 
                 EstadisticasColeccion estadisticaColeccion = new EstadisticasColeccion(
-                        estadisticasActual,  // Relación directa - entidad managed
-                        coleccionId,         // Campo directo
-                        nombre,              // Campo directo
-                        provincia            // Campo directo
+                        estadisticasActual,
+                        coleccionId,
+                        nombre,
+                        provincia
                 );
 
                 em.merge(estadisticaColeccion); // Usar merge
@@ -251,11 +253,10 @@ public class GeneradorEstadisticas {
             Double longitud = coordenada.get("longitud");
 
             String provincia = llamarAPIProvincia(latitud, longitud);
-            System.out.println("Coordenadas: " + latitud + ", " + longitud + " → " + provincia);
 
-            if (provincia.startsWith("Error") || provincia.equals("N/A")) {
-                fallidas++;
+            if (provincia.startsWith("Error") || provincia.contains("N/A") || provincia.contains("no encontrada")) {
                 provincia = obtenerProvinciaPorCoordenadas(latitud, longitud);
+                fallidas++;
             } else {
                 exitosas++;
             }
@@ -263,29 +264,48 @@ public class GeneradorEstadisticas {
             conteoProvincias.put(provincia, conteoProvincias.getOrDefault(provincia, 0) + 1);
         }
 
-        System.out.println("Llamadas a API - Exitosas: " + exitosas + ", Fallidas: " + fallidas);
+        System.out.println("Llamadas a API - Exitosas: " + exitosas + ", Fallidas (usaron fallback): " + fallidas);
 
         return conteoProvincias.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
-                .orElse("Buenos Aires");
+                .orElse("Desconocida");
     }
+
+    private static final String[] LUGARES = {
+            "Uruguay", "Chile", "Bolivia", "Paraguay", "Brasil",
+            "CABA", "Buenos Aires", "Catamarca", "Chaco", "Chubut", "Córdoba", "Corrientes",
+            "Entre Ríos", "Formosa", "Jujuy", "La Pampa", "La Rioja", "Mendoza", "Misiones",
+            "Neuquén", "Río Negro", "Salta", "San Juan", "San Luis", "Santa Cruz", "Santa Fe",
+            "Santiago del Estero", "Tierra del Fuego", "Tucumán"
+    };
+
+    private static final double[][] CENTROS = {
+            {-32.8, -56.0}, {-33.5, -70.9}, {-19.6, -65.8}, {-23.3, -58.2}, {-24.9, -53.4}, // Países
+            {-34.6, -58.4}, {-36.7, -60.6}, {-28.5, -65.8}, {-26.4, -60.8}, {-43.8, -68.5}, {-32.1, -63.8}, {-28.8, -57.8}, // Provincias
+            {-32.1, -59.2}, {-24.9, -59.9}, {-23.3, -65.8}, {-37.1, -65.4}, {-29.7, -67.2}, {-34.6, -68.6}, {-26.9, -54.7},
+            {-38.6, -70.1}, {-40.3, -66.9}, {-24.3, -64.8}, {-30.9, -68.9}, {-33.8, -66.0}, {-48.8, -70.0}, {-30.7, -60.9},
+            {-27.8, -63.3}, {-54.2, -67.8}, {-26.9, -65.4}
+    };
 
     private String obtenerProvinciaPorCoordenadas(Double latitud, Double longitud) {
         if (latitud == null || longitud == null) return "Desconocida";
 
-        if (latitud < -40) return "Tierra del Fuego";
-        if (latitud < -45) return "Santa Cruz";
-        if (latitud < -50) return "Chubut";
-        if (longitud < -65 && latitud > -30) return "Mendoza";
-        if (longitud < -60 && latitud > -35) return "Córdoba";
-        if (longitud < -58 && latitud > -35) return "Santa Fe";
-        if (longitud < -57 && latitud > -35) return "Entre Ríos";
-        if (latitud > -35 && latitud < -34 && longitud > -59 && longitud < -58) {
-            return "Buenos Aires";
+        String mejorLugar = "Desconocida";
+        double menorDistancia = Double.MAX_VALUE;
+
+        for (int i = 0; i < LUGARES.length; i++) {
+            double distLat = latitud - CENTROS[i][0];
+            double distLon = longitud - CENTROS[i][1];
+            double distancia = (distLat * distLat) + (distLon * distLon);
+
+            if (distancia < menorDistancia) {
+                menorDistancia = distancia;
+                mejorLugar = LUGARES[i];
+            }
         }
 
-        return "Buenos Aires";
+        return (menorDistancia > 50.0) ? "Fuera de Rango" : mejorLugar;
     }
 
     private String llamarAPIProvincia(Double latitud, Double longitud) {
@@ -296,11 +316,9 @@ public class GeneradorEstadisticas {
                 return "Coordenadas inválidas";
             }
 
-            // Usar el endpoint principal con parámetros optimizados
             String url = "https://apis.datos.gob.ar/georef/api/v2.0/ubicacion?lat=" + latitud +
                     "&lon=" + longitud + "&aplanar=true&campos=estandar";
 
-            System.out.println("Consultando API: " + url);
             String resultado = llamarURL(url);
 
             if (!resultado.startsWith("Error")) {
@@ -346,12 +364,10 @@ public class GeneradorEstadisticas {
             if (!ubicacion.isMissingNode()) {
                 String nombreProvincia = ubicacion.path("provincia_nombre").asText();
                 if (!nombreProvincia.isEmpty()) {
-                    System.out.println("✅ Provincia encontrada: " + nombreProvincia);
                     return nombreProvincia;
                 }
             }
 
-            System.out.println("❌ No se pudo encontrar la provincia en la respuesta JSON");
             return "N/A - Provincia no encontrada";
 
         } catch (Exception e) {

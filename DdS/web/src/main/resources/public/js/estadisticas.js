@@ -1,37 +1,43 @@
 // Utilidades
 function showLoading() {
-    document.getElementById("loading-overlay").classList.add("active")
+    const overlay = document.getElementById("loading-overlay");
+    if (overlay) overlay.classList.add("active");
 }
 
 function hideLoading() {
-    document.getElementById("loading-overlay").classList.remove("active")
+    const overlay = document.getElementById("loading-overlay");
+    if (overlay) overlay.classList.remove("active");
 }
 
 function showError(containerId, message) {
-    const container = document.getElementById(containerId)
-    container.innerHTML = `<p class="error-message">Error: ${message}</p>`
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.innerHTML = `<p class="error-message" style="color: #d32f2f;">Error: ${message}</p>`;
+    }
 }
 
-// Cargar estadísticas generales al inicio
 async function cargarEstadisticasGenerales() {
-    const API_BASE_URL = 'http://localhost:8088/api/estadisticas';
+    const API_BASE_URL = '/api/estadisticas';
     try {
-        // Cargar spam
-        const spamResponse = await fetch(`${API_BASE_URL}/solicitudesSpam`)
+        const spamResponse = await fetch(`${API_BASE_URL}/solicitudesSpam`);
         if (spamResponse.ok) {
-            const spamData = await spamResponse.json()
-            document.getElementById("spam-count").textContent = spamData.spam || spamData.estadisticas_spam || 0
+            const spamData = await spamResponse.json();
+            const spamElement = document.getElementById("spam-count");
+            if (spamElement) {
+                spamElement.textContent = spamData.spam || spamData.estadisticas_spam || 0;
+            }
         }
 
-        // Cargar categoría máxima
-        const categoriaResponse = await fetch(`${API_BASE_URL}/categoriaMax`)
+        const categoriaResponse = await fetch(`${API_BASE_URL}/categoriaMax`);
         if (categoriaResponse.ok) {
-            const categoriaData = await categoriaResponse.json()
-            document.getElementById("categoria-max").textContent =
-                categoriaData.categoria || categoriaData.estadisticas_categoria_max_hechos || "N/A"
+            const categoriaData = await categoriaResponse.json();
+            const catElement = document.getElementById("categoria-max");
+            if (catElement) {
+                catElement.textContent = categoriaData.categoria || categoriaData.estadisticas_categoria_max_hechos || "N/A";
+            }
         }
     } catch (error) {
-        console.error("Error cargando estadísticas generales:", error)
+        console.error("Error cargando estadísticas generales:", error);
     }
 }
 
@@ -45,28 +51,32 @@ async function buscarCategoria() {
         return;
     }
 
-    // Mostrar estado de carga
-    resultsContainer.innerHTML = '<div class="spinner" style="border-width: 2px; width: 30px; height: 30px;"></div>';
+    resultsContainer.innerHTML = '<div class="spinner" style="border-width: 2px; width: 30px; height: 30px; margin: 10px auto; display:block;"></div>';
 
     try {
-        // Codificamos la categoría para URL
         const encodedCat = encodeURIComponent(categoria);
 
-        // Hacemos las dos peticiones en paralelo
         const [resProvincia, resHora] = await Promise.all([
             fetch(`/api/estadisticas/provinciaMax/categorias/${encodedCat}`),
             fetch(`/api/estadisticas/horaMax/categorias/${encodedCat}`)
         ]);
 
-        const dataProvincia = await resProvincia.json();
-        const dataHora = await resHora.json();
+        if (resProvincia.status === 404 && resHora.status === 404) {
+            mostrarMensajeSinResultados(resultsContainer, categoria);
+            return;
+        }
 
-        // Valores por defecto si hay error
-        const provinciaVal = dataProvincia.provincia || "N/A";
-        const horaVal = dataHora.hora ? `${dataHora.hora}:00 hs` : "N/A";
+        const dataProvincia = resProvincia.ok ? await resProvincia.json() : {};
+        const dataHora = resHora.ok ? await resHora.json() : {};
 
-        // --- AQUÍ ESTÁ EL CAMBIO DE DISEÑO ---
-        // Generamos un HTML ordenado con Grid y estilos limpios
+        const provinciaVal = dataProvincia.provincia || null;
+        const horaVal = (dataHora.hora !== undefined && dataHora.hora !== null) ? dataHora.hora : null;
+
+        if (!provinciaVal && horaVal === null) {
+            mostrarMensajeSinResultados(resultsContainer, categoria);
+            return;
+        }
+
         resultsContainer.innerHTML = `
             <div class="result-success-container">
                 <div class="result-header">
@@ -75,136 +85,100 @@ async function buscarCategoria() {
                 <div class="result-grid">
                     <div class="result-stat">
                         <span class="result-label">Provincia más activa</span>
-                        <span class="result-value" style="color: var(--brand-dark);">${provinciaVal}</span>
+                        <span class="result-value" style="color: var(--brand-dark);">${provinciaVal || "N/A"}</span>
                     </div>
                     <div class="result-stat">
                         <span class="result-label">Hora pico</span>
-                        <span class="result-value" style="color: var(--brand-primary);">${horaVal}</span>
+                        <span class="result-value" style="color: var(--brand-primary);">${horaVal !== null ? horaVal + ":00 hs" : "N/A"}</span>
                     </div>
                 </div>
             </div>
         `;
 
     } catch (error) {
-        console.error(error);
+        console.error("Error en búsqueda:", error);
         resultsContainer.innerHTML = `
-            <div style="color: #e57373; text-align: center;">
-                <p>No se encontraron datos para "${categoria}"</p>
+            <div style="color: #e57373; text-align: center; margin-top: 10px;">
+                <p>Ocurrió un error de conexión. Intente nuevamente.</p>
             </div>
         `;
     }
 }
 
-document.getElementById('categoria-select').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        buscarCategoria();
-    }
-});
+function mostrarMensajeSinResultados(container, categoria) {
+    container.innerHTML = `
+        <div style="text-align: center; padding: 1rem; color: #d32f2f; background-color: #ffebee; border-radius: 8px; margin-top: 10px;">
+            <p style="margin: 0;">No se han encontrado resultados para la categoria <strong>${categoria}</strong></p>
+        </div>
+    `;
+}
 
-// Buscar estadísticas por colección
+const catInput = document.getElementById('categoria-select');
+if (catInput) {
+    catInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            buscarCategoria();
+        }
+    });
+}
+
 async function buscarColeccion() {
-    const coleccion = document.getElementById("coleccion-select").value.trim()
+    const input = document.getElementById("coleccion-select");
+    const coleccion = input.value.trim();
 
     if (!coleccion) {
-        showError("coleccion-results", "Por favor ingresa un ID de colección")
-        return
+        showError("coleccion-results", "Por favor ingresa un ID de colección");
+        return;
     }
 
-    showLoading()
-    const API_BASE_URL = 'http://localhost:8088/api/estadisticas';
-    const resultsContainer = document.getElementById("coleccion-results")
+    showLoading();
+    const API_BASE_URL = '/api/estadisticas';
+    const resultsContainer = document.getElementById("coleccion-results");
 
     try {
-        const response = await fetch(`${API_BASE_URL}/provinciaMax/colecciones/${encodeURIComponent(coleccion)}`)
-        const data = await response.json()
+        const response = await fetch(`${API_BASE_URL}/provinciaMax/colecciones/${encodeURIComponent(coleccion)}`);
 
         if (response.ok) {
-            resultsContainer.innerHTML = `
-                <div class="result-item">
-                    <span class="result-label">Provincia con más hechos:</span>
-                    <span class="result-value">${data.provincia || data.estadisticasColeccion_provincia || "N/A"}</span>
-                </div>
-            `
+            const data = await response.json();
+            if(data.nombre || data.provincia) {
+                resultsContainer.innerHTML = `
+                    <div class="result-success-container" style="margin-top: 10px;">
+                        <div class="result-grid">
+                            <div class="result-stat">
+                                <span class="result-label">Colección</span>
+                                <span class="result-value" style="font-size: 1rem;">${data.nombre || "Desconocida"}</span>
+                            </div>
+                            <div class="result-stat">
+                                <span class="result-label">Provincia frecuente</span>
+                                <span class="result-value" style="color: var(--brand-dark);">${data.provincia || "N/A"}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                throw new Error("Empty data");
+            }
         } else {
-            showError("coleccion-results", "No se encontraron datos para esta colección")
+            throw new Error("Not found");
         }
     } catch (error) {
-        showError("coleccion-results", "Error al buscar la colección: " + error.message)
+        resultsContainer.innerHTML = `
+            <div style="text-align: center; padding: 1rem; color: #d32f2f; background-color: #ffebee; border-radius: 8px; margin-top: 10px;">
+                <p style="margin: 0;">No se encontraron datos para la colección "<strong>${coleccion}</strong>"</p>
+            </div>
+        `;
     } finally {
-        hideLoading()
+        hideLoading();
     }
 }
 
-// Cargar todas las categorías (ejemplo con categorías comunes)
-// async function cargarTodasCategorias() {
-//     const container = document.getElementById("todas-categorias")
-//     showLoading()
-//
-//     try {
-//         const response = await fetch(`${API_BASE_URL}/categorias`)
-//         if (response.ok) {
-//             const data = await response.json()
-//
-//             if (data.categorias && data.categorias.length > 0) {
-//                 const resultados = await Promise.all(
-//                     data.categorias.map(async (categoria) => {
-//                         try {
-//                             const [provinciaRes, horaRes] = await Promise.all([
-//                                 fetch(`${API_BASE_URL}/provinciaMax/categorias/${encodeURIComponent(categoria)}`),
-//                                 fetch(`${API_BASE_URL}/horaMax/categorias/${encodeURIComponent(categoria)}`),
-//                             ])
-//
-//                             const provinciaData = await provinciaRes.json()
-//                             const horaData = await horaRes.json()
-//
-//                             return {
-//                                 categoria,
-//                                 provincia: provinciaData.provincia || provinciaData.estadisticasCategoria_provincia || "N/A",
-//                                 hora: horaData.hora || horaData.estadisticasCategoria_hora || "N/A",
-//                             }
-//                         } catch {
-//                             return { categoria, provincia: "Error", hora: "Error" }
-//                         }
-//                     })
-//                 )
-//
-//                 container.innerHTML = resultados
-//                     .map((cat) => `
-//                         <div class="categoria-card">
-//                             <h3>${cat.categoria}</h3>
-//                             <div class="categoria-info">
-//                                 <div class="info-row">
-//                                     <span class="result-label">Provincia:</span>
-//                                     <span class="result-value">${cat.provincia}</span>
-//                                 </div>
-//                                 <div class="info-row">
-//                                     <span class="result-label">Hora pico:</span>
-//                                     <span class="result-value">${cat.hora}:00 hs</span>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     `).join("")
-//             } else {
-//                 container.innerHTML = '<p class="placeholder-text">No se encontraron categorías disponibles</p>'
-//             }
-//         }
-//     } catch (error) {
-//         container.innerHTML = '<p class="error-message">Error al cargar las categorías</p>'
-//     } finally {
-//         hideLoading()
-//     }
-// }
-
-// Permitir buscar con Enter
 document.addEventListener("DOMContentLoaded", () => {
-    cargarEstadisticasGenerales()
-    //cargarTodasCategorias()
+    cargarEstadisticasGenerales();
 
-    document.getElementById("categoria-select").addEventListener("keypress", (e) => {
-        if (e.key === "Enter") buscarCategoria()
-    })
-
-    document.getElementById("coleccion-select").addEventListener("keypress", (e) => {
-        if (e.key === "Enter") buscarColeccion()
-    })
-})
+    const colInput = document.getElementById("coleccion-select");
+    if (colInput) {
+        colInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") buscarColeccion();
+        });
+    }
+});

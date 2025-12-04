@@ -38,7 +38,6 @@ public class CategoriasService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                // Logueamos la URL para debug
                 throw new RuntimeException("HTTP " + response.statusCode() + " consultando: " + uri);
             }
 
@@ -129,11 +128,10 @@ public class CategoriasService {
     public Map<String, Object> buscarProvinciaPorCategoria(String categoria) {
         try {
             String catNormalizada = NormalizadorCategorias.normalizar(categoria);
-            // Llamamos al microservicio
             return hacerConsulta("/provinciaMax/categorias/" + encodeURL(catNormalizada));
         } catch (Exception e) {
-            System.err.println("Error buscando provincia: " + e.getMessage());
-            return Map.of("provincia", "N/A");
+            System.err.println("Error buscando provincia (posible 404): " + e.getMessage());
+            return Collections.emptyMap();
         }
     }
 
@@ -142,8 +140,8 @@ public class CategoriasService {
             String catNormalizada = NormalizadorCategorias.normalizar(categoria);
             return hacerConsulta("/horaMax/categorias/" + encodeURL(catNormalizada));
         } catch (Exception e) {
-            System.err.println("Error buscando hora: " + e.getMessage());
-            return Map.of("hora", "N/A");
+            System.err.println("Error buscando hora (posible 404): " + e.getMessage());
+            return Collections.emptyMap();
         }
     }
 }

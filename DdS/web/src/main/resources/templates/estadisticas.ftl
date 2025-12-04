@@ -112,7 +112,7 @@
         <div class="spinner"></div>
     </div>
 
-    <script src="/js/estadisticas.js"></script>
+    <script src="/js/estadisticas.js?v=3"></script>
 
     <style>
         #coleccion-card-container:empty {

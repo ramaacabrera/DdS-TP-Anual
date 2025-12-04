@@ -83,7 +83,6 @@
                                 etiquetas=h.etiquetas![]
                                 imagen=imagenUrl
                                 verHref="/hechos/${h.hechoId}"
-                                editarHref="/editar-hecho/${h.hechoId}"
                                 />
                             </#list>
                         </div>
