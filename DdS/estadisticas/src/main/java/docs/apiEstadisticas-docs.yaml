@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
   title: API de Estadísticas
-  description: API para obtener estadísticas relacionadas con colecciones, categorías, provincias y análisis de solicitudes
-  version: 1.0.0
+  description: API para obtener estadísticas relacionadas con colecciones, categorías, provincias, análisis de solicitudes y exportación de reportes.
+  version: 1.1.0
 
 servers:
   - url: http://localhost:8088/api/estadisticas
@@ -43,40 +43,19 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "UUID de colección inválido"
-                  status:
-                    type: integer
-                    example: 400
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Colección no encontrada
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Colección no encontrada"
-                  status:
-                    type: integer
-                    example: 404
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Error interno del servidor
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Error interno del servidor"
-                  detalle:
-                    type: string
-                    example: "Mensaje de error específico"
+                $ref: '#/components/schemas/DetailedErrorResponse'
 
   /categoriaMax:
     get:
@@ -101,14 +80,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Categoría no encontrada"
-                  status:
-                    type: integer
-                    example: 404
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Error interno del servidor
 
@@ -146,14 +118,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Categoría no especificada"
-                  status:
-                    type: integer
-                    example: 400
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: No se encontraron datos para la categoría
           content:
@@ -172,14 +137,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Error interno del servidor"
-                  detalle:
-                    type: string
-                    example: "Mensaje de error específico"
+                $ref: '#/components/schemas/DetailedErrorResponse'
 
   /horaMax/categorias/{categoria}:
     get:
@@ -218,14 +176,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Categoría no especificada"
-                  status:
-                    type: integer
-                    example: 400
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: No se encontraron datos para la categoría
           content:
@@ -244,14 +195,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Error interno del servidor"
-                  detalle:
-                    type: string
-                    example: "Mensaje de error específico"
+                $ref: '#/components/schemas/DetailedErrorResponse'
 
   /solicitudesSpam:
     get:
@@ -278,14 +222,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Cantidad de Spam no encontrada"
-                  status:
-                    type: integer
-                    example: 404
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Error interno del servidor
 
@@ -321,27 +258,48 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "No se encontraron categorías en las estadísticas"
-                  status:
-                    type: integer
-                    example: 404
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Error interno del servidor
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Error interno del servidor"
-                  detalle:
-                    type: string
-                    example: "Mensaje de error específico"
+                $ref: '#/components/schemas/DetailedErrorResponse'
+
+  /exportar:
+    get:
+      summary: Exportar Estadísticas a CSV
+      description: Genera y descarga un archivo en formato CSV conteniendo el reporte completo.
+      operationId: exportarEstadisticasCSV
+      tags:
+        - Exportación
+      responses:
+        '200':
+          description: Archivo CSV generado exitosamente
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              description: Indica descarga como archivo adjunto.
+              schema:
+                type: string
+                example: attachment; filename="reporte.csv"
+        '404':
+          description: No hay estadísticas disponibles
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "No hay estadísticas generadas aún."
+        '500':
+          description: Error al generar el archivo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailedErrorResponse'
 
 components:
   schemas:
@@ -360,49 +318,8 @@ components:
         detalle:
           type: string
 
-  parameters:
-    ColeccionUUIDPathParam:
-      name: coleccion
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: UUID de la colección
-      example: "123e4567-e89b-12d3-a456-426614174000"
-    CategoriaPathParam:
-      name: categoria
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Nombre de la categoría
-      example: "tecnologia"
-
 tags:
   - name: Estadísticas
     description: Endpoints para consultar estadísticas del sistema
-
-x-handlers-info:
-  GetProvinciaColeccionHandler:
-    repository: EstadisticasColeccionRepositorio
-    method: buscarProvinciaYNombreColeccion
-    param-type: UUID
-  GetCategoriaMaxHandler:
-    repository: EstadisticasRepositorio
-    method: buscarCategoria_max_hechos
-  GetProvinciaCategoriaHandler:
-    repository: EstadisticasCategoriaRepositorio
-    method: buscarProvinciaCategoria
-  GetHoraMaxCategoriaHandler:
-    repository: EstadisticasCategoriaRepositorio
-    method: buscarHoraCategoria
-    response-format: "hora en formato numérico (0-23)"
-  GetSolicitudesSpamHandler:
-    repository: EstadisticasRepositorio
-    method: buscarSpam
-    response-format: "cantidad total como entero largo"
-  GetCategoriasHandler:
-    repository: EstadisticasCategoriaRepositorio
-    method: obtenerTodasLasCategorias
-    response-includes: "lista de strings, total y timestamp"
+  - name: Exportación
+    description: Endpoints para descarga de reportes

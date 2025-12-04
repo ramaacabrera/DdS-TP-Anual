@@ -4,19 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO">
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetBusquedaAPIHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetDescargarEstadisticasHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="Actualizo la pantalla de estadisticas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/utils/EstadisticasCSVTransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/utils/EstadisticasCSVTransformer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetEstadisticasHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetEstadisticasHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/CategoriasService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/CategoriasService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/EstadisticasService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/EstadisticasService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleEstadisticas.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleEstadisticas.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/estadisticas.js" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/estadisticas.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/estadisticas.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/estadisticas.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/docs/apiEstadisticas-docs.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/docs/apiEstadisticas-docs.yaml" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -363,7 +353,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764805426699</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Actualizo la pantalla de estadisticas">
+      <option name="closed" value="true" />
+      <created>1764880780947</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1764880780947</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -386,7 +384,8 @@
     <MESSAGE value="termino cargadorEstatico" />
     <MESSAGE value="comento pruebas xq hay errores con dependencias y versiones" />
     <MESSAGE value="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO" />
-    <option name="LAST_COMMIT_MESSAGE" value="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO" />
+    <MESSAGE value="Actualizo la pantalla de estadisticas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Actualizo la pantalla de estadisticas" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
