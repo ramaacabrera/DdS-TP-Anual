@@ -1,5 +1,6 @@
 package web.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -10,6 +11,11 @@ import web.domain.Solicitudes.SolicitudDeModificacion;
 import web.service.SolicitudService;
 import web.utils.ViewUtil;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +30,7 @@ public class SolicitudController {
 
     public Handler listarSolicitudes = ctx -> {
         try {
-            System.out.println("Listando todas las solicitudes");
+            System.out.println("Listando SOLO solicitudes de eliminación");
 
             String username = ctx.sessionAttribute("username");
             String token = ctx.sessionAttribute("access_token");
@@ -35,18 +41,87 @@ public class SolicitudController {
             }
 
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);
-            modelo.put("pageTitle", "Solicitudes");
+            modelo.put("pageTitle", "Solicitudes de Eliminación");
 
-            modelo.put("solicitudesEliminacion",
-                    solicitudService.obtenerSolicitudesEliminacion(username, token));
+            // 1. Obtener solicitudes de eliminación
+            List<SolicitudDeEliminacion> solicitudesElim =
+                    solicitudService.obtenerSolicitudesEliminacion(username, token);
 
-            modelo.put("solicitudesModificacion",
-                    solicitudService.obtenerSolicitudesModificacion(username, token));
+            System.out.println("Número de solicitudes eliminación: " + solicitudesElim.size());
+
+            // 2. Crear lista simplificada
+            List<Map<String, Object>> solicitudesSimplificadas = new ArrayList<>();
+
+            for (SolicitudDeEliminacion solicitud : solicitudesElim) {
+                Map<String, Object> solicitudData = new HashMap<>();
+
+                // Datos básicos obligatorios
+                solicitudData.put("id", solicitud.getId() != null ? solicitud.getId().toString() : "");
+                solicitudData.put("justificacion", solicitud.getJustificacion() != null ? solicitud.getJustificacion() : "Sin justificación");
+                solicitudData.put("estado", solicitud.getEstado() != null ? solicitud.getEstado() : "PENDIENTE");
+
+                // Usuario - simplificado
+                if (solicitud.getUsuario() != null) {
+                    Map<String, String> usuarioMap = new HashMap<>();
+                    usuarioMap.put("username", solicitud.getUsuario().getUsername() != null ? solicitud.getUsuario().getUsername() : "Usuario");
+                    solicitudData.put("usuario", usuarioMap);
+                } else {
+                    solicitudData.put("usuario", null);
+                }
+
+                // Hecho - manejar el título
+                String hechoTitulo = "Sin título";
+                String hechoIdStr = null;
+
+                if (solicitud.getHechoAsociado() != null) {
+                    hechoIdStr = solicitud.getHechoAsociado().toString();
+                    solicitudData.put("hechoId", hechoIdStr);
+
+                    // Solo intentar obtener el título si el hecho existe
+                    try {
+                        // Verificar si el hecho existe primero
+                        HttpClient client = HttpClient.newHttpClient();
+                        HttpRequest request = HttpRequest.newBuilder()
+                                .uri(new URI("http://localhost:8087/api/hechos/" + hechoIdStr))
+                                .GET()
+                                .build();
+
+                        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                        if (response.statusCode() == 200) {
+                            ObjectMapper mapper = new ObjectMapper();
+                            Map<String, Object> hechoData = mapper.readValue(response.body(), Map.class);
+                            hechoTitulo = (String) hechoData.getOrDefault("titulo", "Sin título");
+                        } else {
+                            hechoTitulo = "Hecho eliminado o no encontrado";
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error obteniendo hecho ID " + hechoIdStr + ": " + e.getMessage());
+                        hechoTitulo = "Error cargando";
+                    }
+                } else {
+                    hechoTitulo = "Sin hecho asociado";
+                }
+
+                solicitudData.put("hechoTitulo", hechoTitulo);
+                solicitudesSimplificadas.add(solicitudData);
+
+                // Debug
+                System.out.println("Solicitud procesada: ID=" + solicitudData.get("id") +
+                        ", Estado=" + solicitudData.get("estado") +
+                        ", Título hecho=" + hechoTitulo);
+            }
+
+            modelo.put("solicitudesEliminacion", solicitudesSimplificadas);
+
+            // Para modificación, simplemente lista vacía por ahora
+            modelo.put("solicitudesModificacion", new ArrayList<>());
 
             ctx.render("solicitudes.ftl", modelo);
 
         } catch (Exception e) {
             System.err.println("Error listarSolicitudes: " + e.getMessage());
+            e.printStackTrace();
             ctx.status(500).result("Error al cargar solicitudes: " + e.getMessage());
         }
     };
