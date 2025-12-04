@@ -38,6 +38,7 @@ public class Application {
         app.get("/api/estadisticas/solicitudesSpam", new GetSolicitudesSpamHandler(estadisticasRepositorio));
         app.get("/api/estadisticas/categorias", new GetCategoriasHandler(estadisticasCategoriaRepositorio));
 
-
+        // Exportador a CSV
+        app.get("/api/estadisticas/exportar", new GetEstadisticasCSVHandler(estadisticasRepositorio, estadisticasCategoriaRepositorio, estadisticasColeccionRepositorio));
     }
 }

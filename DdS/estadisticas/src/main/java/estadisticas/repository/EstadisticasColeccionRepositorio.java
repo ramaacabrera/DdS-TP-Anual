@@ -1,6 +1,7 @@
 package estadisticas.repository;
 
 import estadisticas.domain.EstadisticasColeccion;
+import estadisticas.domain.Estadisticas;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -32,7 +33,7 @@ public class EstadisticasColeccionRepositorio {
             EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
             TypedQuery<EstadisticasColeccion> query = em.createQuery(
-                    "SELECT e FROM EstadisticasColeccion e WHERE e.id.coleccion_id = :handleParam", EstadisticasColeccion.class);
+                    "SELECT e FROM EstadisticasColeccion e WHERE e.coleccionId = :handleParam", EstadisticasColeccion.class);
 
             query.setParameter("handleParam", handle);
 
@@ -77,4 +78,16 @@ public class EstadisticasColeccionRepositorio {
             em.close();
         }
     }
+    public List<EstadisticasColeccion> buscarPorEstadisticaPadre(Estadisticas estadistica) {
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
+        try {
+            TypedQuery<EstadisticasColeccion> query = em.createQuery(
+                    "SELECT ec FROM EstadisticasColeccion ec WHERE ec.estadisticas = :estadistica",
+                    EstadisticasColeccion.class);
+            query.setParameter("estadistica", estadistica);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
     }
+}

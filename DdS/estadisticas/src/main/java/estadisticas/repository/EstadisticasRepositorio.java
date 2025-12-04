@@ -94,4 +94,23 @@ public class EstadisticasRepositorio {
             em.close();
         }
     }
+
+    public Optional<Estadisticas> obtenerUltimaEstadistica() {
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
+        try {
+            TypedQuery<Estadisticas> query = em.createQuery(
+                    "SELECT e FROM Estadisticas e WHERE e.estadisticas_fecha = (SELECT MAX(e1.estadisticas_fecha) FROM Estadisticas e1)",
+                    Estadisticas.class);
+
+            query.setMaxResults(1);
+            List<Estadisticas> resultados = query.getResultList();
+
+            return resultados.isEmpty() ? Optional.empty() : Optional.of(resultados.get(0));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        } finally {
+            em.close();
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package estadisticas.repository;
 
 import estadisticas.domain.EstadisticasCategoria;
+import estadisticas.domain.Estadisticas;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -92,6 +93,19 @@ public class EstadisticasCategoriaRepositorio {
         } catch (Exception e) {
             System.err.println("Error buscando hora para categoría '" + categoria + "': " + e.getMessage());
             return Optional.empty();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<EstadisticasCategoria> buscarPorEstadisticaPadre(Estadisticas estadistica) {
+        EntityManager em = BDUtilsEstadisticas.getEntityManager();
+        try {
+            TypedQuery<EstadisticasCategoria> query = em.createQuery(
+                    "SELECT ec FROM EstadisticasCategoria ec WHERE ec.estadisticas = :estadistica",
+                    EstadisticasCategoria.class);
+            query.setParameter("estadistica", estadistica);
+            return query.getResultList();
         } finally {
             em.close();
         }
