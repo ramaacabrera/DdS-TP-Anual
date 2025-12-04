@@ -61,16 +61,25 @@ public class ColeccionService {
         //Coleccion coleccionExistente = coleccionRepositorio.buscarPorHandle(id.toString());
         Coleccion coleccionExistente = coleccionRepositorio.buscar(id.toString());
 
+        System.out.println("Coleccion encontrada");
+
+        for(Fuente fuente : coleccionExistente.getFuente()){
+            System.out.println("Fuente encontrada: " + fuente.getId() + " " + fuente.getDescriptor() + " " + fuente.getTipoDeFuente());
+        }
+
         if (coleccionExistente == null) {
             throw new IllegalArgumentException("Colección no encontrada con ID: " + id);
         }
 
-        System.out.println("Coleccion encontrada");
-
         boolean criteriosCambiaron = false;
 
         if (dto.getTitulo() != null) coleccionExistente.setTitulo(dto.getTitulo());
+
+        System.out.println("Coleccion service 1");
+
         if (dto.getDescripcion() != null) coleccionExistente.setDescripcion(dto.getDescripcion());
+
+        System.out.println("Coleccion service 2");
 
         if (dto.getCriteriosDePertenencia() != null) {
             List<Criterio> nuevosCriterios = mapCriteriosToEntity(dto.getCriteriosDePertenencia());
@@ -78,12 +87,17 @@ public class ColeccionService {
             criteriosCambiaron = true;
         }
 
+        System.out.println("Coleccion service 3");
+
         if (criteriosCambiaron) {
             List<Hecho> nuevosHechos = hechoRepositorio.buscarHechos(coleccionExistente.getCriteriosDePertenencia());
             coleccionExistente.setHechos(nuevosHechos);
         }
+        System.out.println("Coleccion service 4");
 
         coleccionRepositorio.guardar(coleccionExistente);
+
+        System.out.println("Coleccion service 5");
         return convertirADTO(coleccionExistente);
     }
 
@@ -144,16 +158,22 @@ public class ColeccionService {
     private ColeccionDTO convertirADTO(Coleccion coleccion) {
         ColeccionDTO dto = new ColeccionDTO();
 
+        System.out.println("ConversorDTO 1");
+
         dto.setColeccionId(coleccion.getHandle());
+        System.out.println("ConversorDTO 2");
         dto.setTitulo(coleccion.getTitulo());
+        System.out.println("ConversorDTO 3");
         dto.setDescripcion(coleccion.getDescripcion());
-
+        System.out.println("ConversorDTO 4");
         dto.setFuentes(mapFuentesToDTO(coleccion.getFuente()));
+        System.out.println("ConversorDTO 5");
         dto.setCriteriosDePertenencia(mapCriteriosToDTO(coleccion.getCriteriosDePertenencia()));
-
+        System.out.println("ConversorDTO 6");
         if (coleccion.getAlgoritmoDeConsenso() != null) {
             dto.setAlgoritmoDeConsenso(TipoAlgoritmoConsensoDTO.valueOf(coleccion.getAlgoritmoDeConsenso().name()));
         }
+        System.out.println("ConversorDTO 7");
 
         return dto;
     }
@@ -180,19 +200,31 @@ public class ColeccionService {
         }).collect(Collectors.toList());
     }
 
-    private List<FuenteDTO> mapFuentesToDTO(List<Fuente> entidades) {
+        private List<FuenteDTO> mapFuentesToDTO(List<Fuente> entidades) {
+        System.out.println("Se estan mapeando");
+        if(entidades == null){
+            System.out.println("No hay fuentes");
+        }
+        System.out.println("Mapeando fuentes: " + entidades.size());
+        if(entidades == null){
+            System.out.println("No hay fuentes");
+        }
         if (entidades == null) return new ArrayList<>();
-
-        return entidades.stream().map(f -> {
-            FuenteDTO dto = new FuenteDTO();
-            dto.setFuenteId(f.getId());
-            dto.setDescriptor(f.getDescriptor());
-            if (f.getTipoDeFuente() != null) {
-                dto.setTipoFuente(f.getTipoDeFuente().name());
+            System.out.println("Mapeando fuentes 2");
+            for(Fuente fuente : entidades){
+                System.out.println("Fuente: " + fuente.getTipoDeFuente().name() + fuente.getDescriptor() + fuente.getId());
             }
-            return dto;
-        }).collect(Collectors.toList());
-    }
+
+            return entidades.stream().map(f -> {
+                FuenteDTO dto = new FuenteDTO();
+                dto.setFuenteId(f.getId());
+                dto.setDescriptor(f.getDescriptor());
+                if (f.getTipoDeFuente() != null) {
+                    dto.setTipoFuente(f.getTipoDeFuente().name());
+                }
+                return dto;
+            }).collect(Collectors.toList());
+        }
 
     private Fuente mapFuenteToEntity(FuenteDTO dto) {
         if (dto == null) return null;

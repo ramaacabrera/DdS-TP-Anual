@@ -53,7 +53,13 @@ public class ColeccionController {
 
             System.out.println("Coleccion dto creada");
 
+            for(FuenteDTO fuente : request.getFuentes()){
+                System.out.println("Fuentes del dto: " + fuente.getTipoFuente() + " " + fuente.getDescriptor() + " " + fuente.getFuenteId());
+            }
+
             ColeccionDTO response = coleccionService.actualizarColeccion(id, request);
+
+            System.out.println("Se actualizo exitosamente");
             ctx.status(200).json(response);
 
         } catch (IllegalArgumentException e) {

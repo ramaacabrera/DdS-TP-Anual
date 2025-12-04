@@ -5,6 +5,7 @@ import cargadorDinamico.domain.DinamicaDto.Hecho_D_DTO;
 import cargadorDinamico.domain.HechosYColeccionesD.*;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudEliminacion_D;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudModificacion_D;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.Hibernate;
 import cargadorDinamico.domain.Usuario.RolUsuario;
 import cargadorDinamico.domain.Usuario.Usuario_D;
@@ -36,8 +37,10 @@ public class DinamicoRepositorio {
     public DinamicoRepositorio() {}
 
     public void guardarHecho(Hecho_D hecho) {
+
         EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
+            System.out.println("Guardo hecho en dinamica: " + new ObjectMapper().writeValueAsString(hecho));
             BDUtilsDinamico.comenzarTransaccion(em);
             em.merge(hecho); // Usamos persist para insertar nuevo
             BDUtilsDinamico.commit(em);
@@ -222,9 +225,9 @@ public class DinamicoRepositorio {
             BDUtilsDinamico.comenzarTransaccion(em);
 
             //em.createQuery("DELETE FROM HechoDXEtiquetaD").executeUpdate();
+            em.createQuery("DELETE FROM ContenidoMultimedia_D").executeUpdate();
             em.createQuery("DELETE FROM Hecho_D").executeUpdate();
             em.createQuery("DELETE FROM Etiqueta_D").executeUpdate();
-            em.createQuery("DELETE FROM ContenidoMultimedia_D").executeUpdate();
             //em.createQuery("DELETE FROM Usuario_D").executeUpdate();
             em.createQuery("DELETE FROM Ubicacion_D").executeUpdate();
 

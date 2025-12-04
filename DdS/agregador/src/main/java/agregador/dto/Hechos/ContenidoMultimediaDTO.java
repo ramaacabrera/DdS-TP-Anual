@@ -1,11 +1,15 @@
 package agregador.dto.Hechos;
 
-import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.UUID;
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ContenidoMultimediaDTO {
     private UUID contenidoId;
     private TipoContenidoMultimediaDTO tipoContenido;
     private String contenido;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private UUID hechoId;
 
     public ContenidoMultimediaDTO() {}

@@ -20,8 +20,8 @@
                         Solicitud de Modificación
                     </#if>
                 </h1>
-                <span class="estado-badge estado-${(solicitud.estadoSolicitudEliminacion!solicitud.estadoSolicitudModificacion!'PENDIENTE')?lower_case}">
-                    ${(solicitud.estadoSolicitudEliminacion!solicitud.estadoSolicitudModificacion!'PENDIENTE')}
+                <span class="estado-badge estado-${(solicitud.estado!solicitud.estado!'PENDIENTE')?lower_case}">
+                    ${(solicitud.estado!solicitud.estado!'PENDIENTE')}
                 </span>
             </div>
         </div>
@@ -66,8 +66,8 @@
             <div class="card">
                 <p class="card-subtitle">ESTADO ACTUAL</p>
                 <p>
-                    <span class="estado-badge estado-${(solicitud.estadoSolicitudEliminacion!solicitud.estadoSolicitudModificacion!'PENDIENTE')?lower_case}">
-                        ${(solicitud.estadoSolicitudEliminacion!solicitud.estadoSolicitudModificacion!'PENDIENTE')}
+                    <span class="estado-badge estado-${(solicitud.estado!solicitud.estado!'PENDIENTE')?lower_case}">
+                        ${(solicitud.estado!solicitud.estado!'PENDIENTE')}
                     </span>
                 </p>
             </div>
@@ -82,7 +82,7 @@
         </div>
 
         <!-- Acciones (solo si está pendiente) -->
-        <#if (solicitud.estadoSolicitudEliminacion!solicitud.estadoSolicitudModificacion!'PENDIENTE') == 'PENDIENTE'>
+        <#if (solicitud.estado!solicitud.estado!'PENDIENTE') == 'PENDIENTE'>
             <div class="acciones-container">
                 <h3>Acciones</h3>
                 <div class="acciones-botones">

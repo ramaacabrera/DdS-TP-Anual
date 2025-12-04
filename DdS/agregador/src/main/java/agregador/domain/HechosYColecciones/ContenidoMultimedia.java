@@ -27,7 +27,7 @@ public class ContenidoMultimedia {
 
     @ManyToOne
     @JoinColumn(name = "hecho_id")
-    private Hecho hecho;
+    private Hecho hechoId;
 
     @JsonCreator
     public ContenidoMultimedia(@JsonProperty("tipoContenido") TipoContenidoMultimedia tipo,
@@ -45,7 +45,7 @@ public class ContenidoMultimedia {
 
     public String getContenido() {return contenido;}
 
-    public Hecho getHecho() {return hecho;}
+    public Hecho getHechoId() {return hechoId;}
 
     // SETTERS
     public void setId_contenido(UUID id_contenido_) {this.id_contenido = id_contenido_;}
@@ -54,5 +54,5 @@ public class ContenidoMultimedia {
 
     public void setContenido(String contenido_) {this.contenido = contenido_;}
 
-    public void setHecho(Hecho hecho_) {this.hecho = hecho_;}
+    public void setHechoId(Hecho hecho_) {this.hechoId = hecho_;}
 }

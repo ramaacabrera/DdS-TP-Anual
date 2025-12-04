@@ -52,7 +52,7 @@ public class Hecho_D {
 
     private boolean esEditable;
 
-    @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "hechoId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContenidoMultimedia_D> contenidoMultimedia;
 
     public Hecho_D() {}
@@ -70,6 +70,11 @@ public class Hecho_D {
         this.etiquetas = hechoDTO.getEtiquetas();
         this.esEditable = true;
         this.contenidoMultimedia = hechoDTO.getContenidoMultimedia();
+        if (this.contenidoMultimedia != null) {
+            for (ContenidoMultimedia_D media : this.contenidoMultimedia) {
+                media.setHechoId(this);
+            }
+        }
     }
 
     // Getters

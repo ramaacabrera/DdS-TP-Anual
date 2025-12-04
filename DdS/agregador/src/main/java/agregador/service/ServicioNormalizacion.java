@@ -94,6 +94,8 @@ public class ServicioNormalizacion {
         if (dto.getContenidoMultimedia() != null) {
             entidad.setContenidoMultimedia(dto.getContenidoMultimedia().stream().map(mDto -> {
                 ContenidoMultimedia m = new ContenidoMultimedia();
+                m.setContenido(mDto.getContenido());
+                m.setTipoContenido(TipoContenidoMultimedia.valueOf(mDto.getTipoContenido().toString()));
                 return m;
             }).collect(Collectors.toList()));
         } else {

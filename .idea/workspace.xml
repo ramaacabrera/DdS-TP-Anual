@@ -4,9 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="Actualizo la pantalla de estadisticas">
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/docs/apiEstadisticas-docs.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/docs/apiEstadisticas-docs.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/ContenidoMultimedia.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/ContenidoMultimedia.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/Hecho.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/Hecho.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/HechoModificado.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/HechoModificado.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/dto/Hechos/ContenidoMultimediaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/dto/Hechos/ContenidoMultimediaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/repository/HechoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/repository/HechoRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/AgregadorOrquestador.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/AgregadorOrquestador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/ServicioNormalizacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/ServicioNormalizacion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/domain/HechosYColeccionesD/ContenidoMultimedia_D.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/domain/HechosYColeccionesD/ContenidoMultimedia_D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/domain/HechosYColeccionesD/Hecho_D.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/domain/HechosYColeccionesD/Hecho_D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/repository/DinamicoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/repository/DinamicoRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/HechoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/HechoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/utils/ViewUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/utils/ViewUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/componentes.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/componentes.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/crear-hecho.js" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/crear-hecho.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-hecho.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-hecho.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -181,8 +197,8 @@
       </method>
     </configuration>
     <configuration name="CargadorDinamico" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="cargadorDemo.Application" />
-      <module name="cargadorDemo" />
+      <option name="MAIN_CLASS_NAME" value="cargadorDinamico.Application" />
+      <module name="cargador-dinamico" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -353,15 +369,7 @@
       <option name="project" value="LOCAL" />
       <updated>1764805426699</updated>
     </task>
-    <task id="LOCAL-00007" summary="Actualizo la pantalla de estadisticas">
-      <option name="closed" value="true" />
-      <created>1764880780947</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1764880780947</updated>
-    </task>
-    <option name="localTasksCounter" value="8" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -384,8 +392,7 @@
     <MESSAGE value="termino cargadorEstatico" />
     <MESSAGE value="comento pruebas xq hay errores con dependencias y versiones" />
     <MESSAGE value="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO" />
-    <MESSAGE value="Actualizo la pantalla de estadisticas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Actualizo la pantalla de estadisticas" />
+    <option name="LAST_COMMIT_MESSAGE" value="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

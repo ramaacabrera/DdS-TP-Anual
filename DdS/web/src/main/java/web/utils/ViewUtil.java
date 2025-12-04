@@ -10,7 +10,7 @@ public class ViewUtil {
 
         String rol = ctx.sessionAttribute("rolUsuario");
         if(rol == null){
-            rol = "ADMINISTRADOR";
+            rol = "VISITANTE";
         }
         Map<String, Object> model = new HashMap<>();
         model.put("username", ctx.sessionAttribute("username"));

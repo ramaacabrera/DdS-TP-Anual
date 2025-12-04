@@ -1,5 +1,6 @@
 package web.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
 import okhttp3.MediaType;
@@ -118,7 +119,7 @@ public class SolicitudController {
             ctx.render("solicitudes.ftl", modelo);
 
         } catch (Exception e) {
-            System.err.println("Error listarSolicitudes: " + e.getMessage());
+            System.err.println("Error listando Solicitudes: " + e.getMessage());
             e.printStackTrace();
             ctx.status(500).result("Error al cargar solicitudes: " + e.getMessage());
         }
@@ -154,6 +155,17 @@ public class SolicitudController {
                 // Convertir la solicitud a un Map para poder agregar campos extras
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, Object> solicitudData = mapper.convertValue(sol, Map.class);
+
+                // Obtener el estado como String del ENUM
+                String estadoStr = "PENDIENTE";
+                if (sol.getEstado() != null) {
+                    estadoStr = sol.getEstado().name(); // Esto convierte el ENUM a String: "ACEPTADA", "RECHAZADA", "PENDIENTE"
+                    System.out.println("Estado obtenido (ENUM): " + sol.getEstado() + ", como String: " + estadoStr);
+                }
+
+                solicitudData.put("estado", estadoStr);
+
+                System.out.println("DEBUG - Campo 'estado' agregado como String: " + solicitudData.get("estado"));
 
                 // Obtener datos del hecho
                 Map<String, Object> hechoData = new HashMap<>();
@@ -289,11 +301,50 @@ public class SolicitudController {
         try {
             String id = ctx.pathParam("id");
             String tipo = ctx.pathParam("tipo");
-            String nuevoEstado = ctx.body(); // "ACEPTADA" o "RECHAZADA"
 
-            // Obtener datos de sesión igual que en Colecciones
+            // Parsear el cuerpo JSON
+            String body = ctx.body();
+            System.out.println("Body recibido: " + body);
+
+            // Si el body está vacío o no es JSON válido
+            if (body == null || body.trim().isEmpty()) {
+                ctx.status(400).result("Cuerpo de solicitud vacío");
+                return;
+            }
+
+            // Intentar parsear como JSON
+            String nuevoEstado;
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode jsonNode = mapper.readTree(body);
+
+                // Intentar obtener la propiedad "accion"
+                if (jsonNode.has("accion")) {
+                    nuevoEstado = jsonNode.get("accion").asText();
+                } else if (jsonNode.isTextual()) {
+                    // Si es solo texto (para compatibilidad)
+                    nuevoEstado = jsonNode.asText();
+                } else {
+                    ctx.status(400).result("Propiedad 'accion' no encontrada en JSON");
+                    return;
+                }
+            } catch (Exception e) {
+                // Si falla el parseo JSON, tratar el body como texto plano
+                System.out.println("No es JSON válido, tratando como texto: " + body);
+                nuevoEstado = body.trim();
+            }
+
+            System.out.println("ID: " + id + ", Tipo: " + tipo + ", Nuevo estado: " + nuevoEstado);
+
+            // Validar el estado
+            if (!"ACEPTADA".equals(nuevoEstado) && !"RECHAZADA".equals(nuevoEstado)) {
+                ctx.status(400).result("Estado no válido. Use 'ACEPTADA' o 'RECHAZADA'");
+                return;
+            }
+
+            // Obtener datos de sesión
             String username = ctx.sessionAttribute("username");
-            String token    = ctx.sessionAttribute("access_token");
+            String token = ctx.sessionAttribute("access_token");
 
             if (username == null || token == null) {
                 ctx.status(401).result("Sesión expirada. Inicie sesión nuevamente.");
@@ -305,11 +356,12 @@ public class SolicitudController {
             if (status >= 200 && status < 300) {
                 ctx.status(200).result("Solicitud actualizada");
             } else {
-                ctx.status(500).result("Error del servidor administrativo: HTTP " + status);
+                ctx.status(status).result("Error del servidor administrativo: HTTP " + status);
             }
 
         } catch (Exception e) {
             System.err.println("Error actualizarEstadoSolicitud: " + e.getMessage());
+            e.printStackTrace();
             ctx.status(500).result("Error al actualizar: " + e.getMessage());
         }
     };

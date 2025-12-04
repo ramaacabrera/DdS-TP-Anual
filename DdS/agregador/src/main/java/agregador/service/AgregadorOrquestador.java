@@ -12,6 +12,7 @@ import agregador.repository.ColeccionRepositorio;
 import agregador.repository.FuenteRepositorio;
 import agregador.repository.HechoRepositorio;
 import agregador.utils.BDUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +69,7 @@ public class AgregadorOrquestador {
         for (HechoDTO dto : hechosDTO) {
             enriquecerUbicacion(dto);
             try {
+                System.out.println("Procesando DTO: " + new ObjectMapper().writeValueAsString(dto));
                 gestionarFuente(dto);
 
                 Hecho hechoNormalizado = servicioNormalizacion.normalizar(dto);

@@ -59,7 +59,7 @@ public class HechoModificado {
 
     private boolean esEditable;
 
-    @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "hechoId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContenidoMultimedia> contenidoMultimedia;
 
     public HechoModificado() {}
