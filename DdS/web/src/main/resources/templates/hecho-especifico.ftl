@@ -85,7 +85,7 @@
             <p class="card-subtitle">🔗 FUENTE</p>
             <p>
                 <#if hecho.fuente??>
-                    ${hecho.fuente.tipoFuente?default("Metamapa Local")?html}
+                    ${hecho.fuente.descriptor?default("Metamapa Local")?html}
                 <#else>
                     Fuente Desconocida
                 </#if>

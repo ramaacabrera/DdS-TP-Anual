@@ -7,6 +7,8 @@ import utils.IniciadorApp;
 import utils.LecturaConfig;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class Application {
@@ -20,6 +22,13 @@ public class Application {
         String urlPublica = config.getProperty("URL_PUBLICA");
         String urlAdmin = config.getProperty("URL_ADMINISTRATIVO");
         String urlEstadisticas = config.getProperty("URL_ESTADISTICAS");
+        String cloudinaryUrl = config.getProperty("CLOUDINARY_URL");
+        String cloudinaryPreset = config.getProperty("CLOUDINARY_PRESET");
+
+
+        Map<String, Object> dataCloud = new HashMap<String, Object>();
+        dataCloud.put("cloudinaryUrl", cloudinaryUrl);
+        dataCloud.put("cloudinaryPreset", cloudinaryPreset);
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarAppWeb(Integer.parseInt(puerto), "/");
@@ -34,7 +43,7 @@ public class Application {
 
         // controllers
         ColeccionController coleccionController = new ColeccionController(coleccionService, usuarioService);
-        HechoController hechoController = new HechoController(urlPublica, hechoService);
+        HechoController hechoController = new HechoController(urlPublica, hechoService, dataCloud);
         SolicitudController solicitudController = new SolicitudController(solicitudService);
 
         app.get("/", ctx -> {

@@ -118,14 +118,12 @@ public class HechoRepositorio {
         try {
             BDUtils.comenzarTransaccion(em);
 
-            if (hecho.getHecho_id() == null && hecho.getTitulo() != null) {
-                Hecho existente = buscarPorTituloInterno(em, hecho.getTitulo());
-                if (existente != null) {
-                    hecho.setHecho_id(existente.getHecho_id());
-                }
+            hecho.setHecho_id(null);
+            if (hecho.getHecho_id() == null) {
+                em.persist(hecho);
+            } else {
+                em.merge(hecho);
             }
-
-            em.merge(hecho);
 
             BDUtils.commit(em);
         } catch (Exception e) {

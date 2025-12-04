@@ -107,13 +107,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // SUBMIT DEL FORMULARIO
     if (form) {
         form.addEventListener('submit', async function(e) {
-            e.preventDefault();
 
-            const descUbicacionInput = document.getElementById('descripcionUbicacion');
-            if (!descUbicacionInput || !descUbicacionInput.value.trim()) {
-                alert("Por favor, ingrese una descripción para la ubicación.");
-                return;
-            }
+            e.preventDefault();
 
             const btnEnviar = document.getElementById('btn-enviar');
             const mensajeExito = document.getElementById('mensaje-exito');
@@ -127,6 +122,39 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
+                const inputMultimedia = document.getElementById('multimedia');
+                const urlsMultimedia = []; // Aquí guardaremos los resultados
+
+                if (inputMultimedia && inputMultimedia.files.length > 0) {
+
+                    // Creamos una promesa por cada archivo para subirlos en paralelo
+                    const uploadPromises = Array.from(inputMultimedia.files).map(file => {
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('upload_preset', CLOUDINARY_PRESET);
+
+                        // Usamos 'auto' en la URL para que detecte si es video o imagen
+                        return fetch(CLOUDINARY_URL, {
+                            method: 'POST',
+                            body: formData
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.secure_url) {
+                                    return {
+                                        url: data.secure_url,
+                                        tipo: data.resource_type // 'image' o 'video'
+                                    };
+                                } else {
+                                    throw new Error('Error subiendo a Cloudinary');
+                                }
+                            });
+                    });
+
+                    // Esperamos a que TODOS se suban
+                    const resultados = await Promise.all(uploadPromises);
+                    urlsMultimedia.push(...resultados);
+                }
                 const categoriaVal = selectCategoria.value;
                 const otraCatVal = inputOtraCategoria ? inputOtraCategoria.value.trim() : '';
 
@@ -153,16 +181,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     ubicacion: {
                         latitud: parseFloat(document.getElementById('latitud').value),
                         longitud: parseFloat(document.getElementById('longitud').value),
-                        descripcion: descUbicacionInput.value
+                        descripcion: null
                     },
                     fechaDeAcontecimiento: new Date(document.getElementById('fechaAcontecimiento').value).toISOString(),
+
+                    contenidoMultimedia: urlsMultimedia.map(item => ({
+                        contenido: item.url,
+                        tipoContenido: obtenerTipoEnum(item.tipo) // Guardamos si es video o imagen
+                    })),
 
                     // Asignamos el valor calculado arriba
                     contribuyente: contribuyenteData,
 
                     etiquetas: document.getElementById('etiquetas').value ?
                         document.getElementById('etiquetas').value.split(',').map(tag => ({ nombre: tag.trim() })) : [],
-                    contenidoMultimedia: []
                 };
 
                 // Debug para ver qué se envía (puedes quitarlo luego)
@@ -197,3 +229,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Lógica para convertir respuesta de Cloudinary a tu Enum Java
+function obtenerTipoEnum(data) {
+    // 1. Caso IMAGEN
+    if (data.resource_type === 'image') {
+        return 'IMAGEN';
+    }
+
+    // 2. Caso VIDEO o AUDIO (Cloudinary agrupa ambos como 'video')
+    if (data.resource_type === 'video') {
+        // Verificamos si es audio mirando la propiedad is_audio o la extensión
+        const esAudio = data.is_audio === true ||
+            ['mp3', 'wav', 'ogg', 'aac', 'm4a', 'flac'].includes(data.format);
+
+        if (esAudio) {
+            return 'AUDIO';
+        } else {
+            return 'VIDEO';
+        }
+    }
+
+    // Default por si llega 'raw' (archivos zip, doc, etc), lo tratamos como IMAGEN o null según tu lógica
+    return 'IMAGEN';
+}

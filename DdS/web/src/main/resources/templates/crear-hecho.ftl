@@ -11,10 +11,10 @@
     <h1 class="main-title">Reportar un Hecho</h1>
 
     <script>
-        // Pasamos variables de FreeMarker a JavaScript globalmente
         const URL_PUBLICA = '${urlPublica}';
-        // Si username existe, lo ponemos entre comillas, si no, queda string vacío
         const CURRENT_USER = "${username!}";
+        const CLOUDINARY_URL = '${cloudinaryUrl}';
+        const CLOUDINARY_PRESET = '${cloudinaryPreset}';
     </script>
 
     <form id="form-crear-hecho" class="form-container" method="POST" action="/api/hechos" enctype="multipart/form-data">
@@ -97,11 +97,11 @@
 
             <div id="mapa-selector" style="height: 300px; width: 100%; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 15px; z-index: 1;"></div>
 
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label for="descripcionUbicacion" class="form-label">Descripción de la ubicación *</label>
                 <input type="text" id="descripcionUbicacion" name="ubicacion.descripcion" class="form-input" required
                        placeholder="Ej:Avenida Sarmiento 1233, Barracas. Frente a la estación de tren, casa de rejas blancas...">
-            </div>
+            </div>-->
 
             <input type="hidden" id="latitud" name="ubicacion.latitud" required>
             <input type="hidden" id="longitud" name="ubicacion.longitud" required>

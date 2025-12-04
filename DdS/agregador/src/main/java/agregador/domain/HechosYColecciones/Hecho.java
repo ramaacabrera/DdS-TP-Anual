@@ -57,7 +57,7 @@ public class Hecho {
 
     private boolean esEditable;
 
-    @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "hechoId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContenidoMultimedia> contenidoMultimedia;
 
     public Hecho() {}
@@ -167,7 +167,15 @@ public class Hecho {
 
     public void setHecho_id (UUID id) {hecho_id = id;}
 
-    public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoNuevo) {contenidoMultimedia = contenidoNuevo;}
+    public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoNuevo) {
+        this.contenidoMultimedia = contenidoNuevo;
+
+        if (contenidoNuevo != null) {
+            for (ContenidoMultimedia media : contenidoNuevo) {
+                media.setHechoId(this);
+            }
+        };
+    }
 
     public boolean esEditable() {
         return esEditable;

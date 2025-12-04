@@ -1,5 +1,6 @@
 package cargadorDinamico.domain.HechosYColeccionesD;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -26,7 +27,8 @@ public class ContenidoMultimedia_D {
 
     @ManyToOne
     @JoinColumn(name = "hecho_id")
-    private Hecho_D hecho;
+    @JsonIgnore
+    private Hecho_D hechoId;
 
     @JsonCreator
     public ContenidoMultimedia_D(@JsonProperty("tipoContenido") TipoContenidoMultimedia_D tipo,
@@ -44,7 +46,7 @@ public class ContenidoMultimedia_D {
 
     public String getContenido() {return contenido;}
 
-    public Hecho_D getHecho() {return hecho;}
+    public Hecho_D getHechoId() {return hechoId;}
 
     // SETTERS
     public void setId_contenido(UUID id_contenido_) {this.id_contenido = id_contenido_;}
@@ -53,5 +55,5 @@ public class ContenidoMultimedia_D {
 
     public void setContenido(String contenido_) {this.contenido = contenido_;}
 
-    public void setHecho(Hecho_D hecho_) {this.hecho = hecho_;}
+    public void setHechoId(Hecho_D hecho_) {this.hechoId = hecho_;}
 }

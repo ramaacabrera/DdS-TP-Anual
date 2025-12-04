@@ -13,10 +13,12 @@ public class HechoController {
 
     private HechoService hechoService;
     private String urlPublica;
+    private Map<String, Object> dataCloud;
 
-    public HechoController(String urlPublica, HechoService hechoService) {
+    public HechoController(String urlPublica, HechoService hechoService, Map<String, Object> dataCloud) {
         this.urlPublica = urlPublica;
         this.hechoService = hechoService;
+        this.dataCloud = dataCloud;
     }
 
     public Handler listarHechos = ctx -> {
@@ -126,6 +128,8 @@ public class HechoController {
         Map<String, Object> modelo = ViewUtil.baseModel(ctx);
         modelo.put("pageTitle", "Reportar un Hecho");
         modelo.put("urlPublica", urlPublica);
+        modelo.put("cloudinaryUrl", dataCloud.get("cloudinaryUrl"));
+        modelo.put("cloudinaryPreset", dataCloud.get("cloudinaryPreset"));
         ctx.render("crear-hecho.ftl", modelo);
     };
 

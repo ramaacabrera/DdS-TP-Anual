@@ -243,10 +243,12 @@ h1 {
     color: white;
 }
 .description-text {
-    white-space: pre-wrap; /* Mantiene saltos de línea del texto de Java */
-    line-height: 1.6;
-    margin-top: 15px;
     overflow: auto; /* Asegura que la descripción no se salga */
+}
+
+.description-text p {
+    overflow: auto; /* Asegura que la descripción no se salga */
+    margin: 2px !important;
 }
 
 /* Tabs */
