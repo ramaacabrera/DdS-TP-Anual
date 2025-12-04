@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+    // --- 1. LÓGICA DEL MAPA (Sin cambios) ---
     const defaultLat = -34.6037;
     const defaultLng = -58.3816;
-
     const map = L.map('mapa-selector').setView([defaultLat, defaultLng], 13);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -12,25 +13,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
 
     function updateInputs(lat, lng) {
-        // Verifica que los elementos existan antes de asignar
         const elLat = document.getElementById('latitud');
         const elLng = document.getElementById('longitud');
         if(elLat) elLat.value = lat;
         if(elLng) elLng.value = lng;
     }
-
     updateInputs(defaultLat, defaultLng);
 
     marker.on('dragend', function(e) {
         const position = marker.getLatLng();
         updateInputs(position.lat, position.lng);
     });
-
     map.on('click', function(e) {
         marker.setLatLng(e.latlng);
         updateInputs(e.latlng.lat, e.latlng.lng);
     });
-
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(function(position) {
             const lat = position.coords.latitude;
@@ -42,18 +39,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ==========================================
-    // 2. LÓGICA DEL FORMULARIO
+    // 2. LÓGICA DEL FORMULARIO Y MULTIMEDIA
     // ==========================================
     const form = document.getElementById('form-crear-hecho');
     const selectCategoria = document.getElementById('categoria');
     const grupoOtraCategoria = document.getElementById('otra-categoria-group');
     const inputOtraCategoria = document.getElementById('otraCategoria');
-    // El checkbox puede no existir si el usuario no está logueado
     const checkboxAnonimo = document.getElementById('anonimo');
     const inputMultimedia = document.getElementById('multimedia');
     const previewContainer = document.getElementById('preview-container');
     const previewGrid = document.getElementById('preview-grid');
     const btnCancelar = document.getElementById('btn-cancelar');
+
+    // === NUEVO: Array para mantener los archivos en memoria ===
+    let archivosSeleccionados = [];
 
     // Toggle "Otra categoría"
     if (selectCategoria && grupoOtraCategoria) {
@@ -69,31 +68,73 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Preview Multimedia
+    // === NUEVO: Lógica de selección y borrado de archivos ===
     if (inputMultimedia) {
-        inputMultimedia.addEventListener('change', function() {
-            if (previewGrid) {
-                previewGrid.innerHTML = '';
-                if (this.files.length > 0) {
-                    previewContainer.style.display = 'block';
-                    Array.from(this.files).forEach(file => {
-                        const div = document.createElement('div');
-                        div.className = 'preview-item';
-                        if (file.type.startsWith('image/')) {
-                            const img = document.createElement('img');
-                            img.src = URL.createObjectURL(file);
-                            div.appendChild(img);
-                        } else {
-                            div.innerHTML = '📎 ' + file.name;
-                        }
-                        previewGrid.appendChild(div);
-                    });
-                } else {
-                    previewContainer.style.display = 'none';
-                }
-            }
+        inputMultimedia.addEventListener('change', function(e) {
+            const nuevosArchivos = Array.from(e.target.files);
+
+            // Agregamos los nuevos archivos al array existente
+            archivosSeleccionados = [...archivosSeleccionados, ...nuevosArchivos];
+
+            // Actualizamos la vista
+            actualizarVistaPrevia();
+
+            // Importante: Limpiamos el input para permitir seleccionar el mismo archivo nuevamente si se desea
+            // o para que el evento 'change' se dispare de nuevo al agregar más.
+            inputMultimedia.value = '';
         });
     }
+
+    function actualizarVistaPrevia() {
+        if (!previewGrid) return;
+        previewGrid.innerHTML = ''; // Limpiar HTML actual
+
+        if (archivosSeleccionados.length > 0) {
+            previewContainer.style.display = 'block';
+
+            archivosSeleccionados.forEach((file, index) => {
+                const div = document.createElement('div');
+                div.className = 'preview-item';
+
+                // Botón de eliminar
+                const btnRemove = document.createElement('button');
+                btnRemove.className = 'btn-remove-file';
+                btnRemove.innerHTML = '×';
+                btnRemove.onclick = function() { eliminarArchivo(index); };
+                div.appendChild(btnRemove);
+
+                // Contenido visual
+                if (file.type.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    div.appendChild(img);
+                } else if (file.type.startsWith('video/')) {
+                    const video = document.createElement('video');
+                    video.src = URL.createObjectURL(file);
+                    video.style.width = '100%';
+                    video.style.height = '80px';
+                    div.appendChild(video);
+                } else {
+                    const span = document.createElement('div');
+                    span.innerHTML = '📎 <br>' + (file.name.length > 10 ? file.name.substring(0,10)+'...' : file.name);
+                    span.style.paddingTop = '20px';
+                    div.appendChild(span);
+                }
+
+                previewGrid.appendChild(div);
+            });
+        } else {
+            previewContainer.style.display = 'none';
+        }
+    }
+
+    // Función global o dentro del scope para borrar
+    window.eliminarArchivo = function(index) {
+        // Elimina el archivo del array por índice
+        archivosSeleccionados.splice(index, 1);
+        actualizarVistaPrevia();
+    };
+
 
     // Botón Cancelar
     if (btnCancelar) {
@@ -104,10 +145,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // SUBMIT DEL FORMULARIO
+    // === SUBMIT DEL FORMULARIO ===
     if (form) {
         form.addEventListener('submit', async function(e) {
-
             e.preventDefault();
 
             const btnEnviar = document.getElementById('btn-enviar');
@@ -122,18 +162,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
-                const inputMultimedia = document.getElementById('multimedia');
-                const urlsMultimedia = []; // Aquí guardaremos los resultados
+                const urlsMultimedia = [];
 
-                if (inputMultimedia && inputMultimedia.files.length > 0) {
+                // === CAMBIO: Usamos 'archivosSeleccionados' en lugar del input directo ===
+                if (archivosSeleccionados.length > 0) {
 
-                    // Creamos una promesa por cada archivo para subirlos en paralelo
-                    const uploadPromises = Array.from(inputMultimedia.files).map(file => {
+                    const uploadPromises = archivosSeleccionados.map(file => {
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('upload_preset', CLOUDINARY_PRESET);
 
-                        // Usamos 'auto' en la URL para que detecte si es video o imagen
                         return fetch(CLOUDINARY_URL, {
                             method: 'POST',
                             body: formData
@@ -143,36 +181,28 @@ document.addEventListener('DOMContentLoaded', function() {
                                 if (data.secure_url) {
                                     return {
                                         url: data.secure_url,
-                                        tipo: data.resource_type // 'image' o 'video'
+                                        tipo: obtenerTipoEnum(data)
                                     };
                                 } else {
-                                    throw new Error('Error subiendo a Cloudinary');
+                                    throw new Error('Error subiendo a Cloudinary: ' + (data.error ? data.error.message : 'Desconocido'));
                                 }
                             });
                     });
 
-                    // Esperamos a que TODOS se suban
                     const resultados = await Promise.all(uploadPromises);
                     urlsMultimedia.push(...resultados);
                 }
+
                 const categoriaVal = selectCategoria.value;
                 const otraCatVal = inputOtraCategoria ? inputOtraCategoria.value.trim() : '';
 
-                // LÓGICA DE CONTRIBUYENTE
                 let contribuyenteData = null;
-
-                // 1. Si hay un usuario logueado (CURRENT_USER viene del FTL)
                 if (CURRENT_USER && CURRENT_USER !== "") {
-                    // 2. Verificamos si marcó "Anónimo" (si el checkbox existe y está marcado)
                     const esAnonimo = checkboxAnonimo && checkboxAnonimo.checked;
-
                     if (!esAnonimo) {
-                        // Enviamos el objeto con el nombre de usuario
                         contribuyenteData = { username: CURRENT_USER };
                     }
-                    // Si esAnonimo es true, contribuyenteData se queda como null
                 }
-                // Si no hay CURRENT_USER (usuario no logueado), contribuyenteData queda null
 
                 const hechoData = {
                     titulo: document.getElementById('titulo').value,
@@ -184,21 +214,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         descripcion: null
                     },
                     fechaDeAcontecimiento: new Date(document.getElementById('fechaAcontecimiento').value).toISOString(),
-
                     contenidoMultimedia: urlsMultimedia.map(item => ({
                         contenido: item.url,
-                        tipoContenido: obtenerTipoEnum(item.tipo) // Guardamos si es video o imagen
+                        tipoContenido: item.tipo
                     })),
-
-                    // Asignamos el valor calculado arriba
                     contribuyente: contribuyenteData,
-
                     etiquetas: document.getElementById('etiquetas').value ?
                         document.getElementById('etiquetas').value.split(',').map(tag => ({ nombre: tag.trim() })) : [],
                 };
-
-                // Debug para ver qué se envía (puedes quitarlo luego)
-                console.log("Enviando JSON:", hechoData);
 
                 const response = await fetch(URL_PUBLICA + '/hechos', {
                     method: 'POST',
@@ -208,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (response.ok) {
                     if (mensajeExito) mensajeExito.style.display = 'block';
-                    setTimeout(() => { window.location.href = '/'; }, 2000);
+                    // setTimeout(() => { window.location.href = '/'; }, 2000);
                 } else {
                     const text = await response.text();
                     throw new Error(`Error ${response.status}: ${text}`);
@@ -230,26 +253,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Lógica para convertir respuesta de Cloudinary a tu Enum Java
+// Función auxiliar (asegúrate de que esté disponible)
 function obtenerTipoEnum(data) {
-    // 1. Caso IMAGEN
-    if (data.resource_type === 'image') {
-        return 'IMAGEN';
-    }
-
-    // 2. Caso VIDEO o AUDIO (Cloudinary agrupa ambos como 'video')
+    if (data.resource_type === 'image') return 'IMAGEN';
     if (data.resource_type === 'video') {
-        // Verificamos si es audio mirando la propiedad is_audio o la extensión
-        const esAudio = data.is_audio === true ||
-            ['mp3', 'wav', 'ogg', 'aac', 'm4a', 'flac'].includes(data.format);
-
-        if (esAudio) {
-            return 'AUDIO';
-        } else {
-            return 'VIDEO';
-        }
+        const esAudio = data.is_audio === true || ['mp3', 'wav', 'ogg', 'aac', 'm4a', 'flac'].includes(data.format);
+        return esAudio ? 'AUDIO' : 'VIDEO';
     }
-
-    // Default por si llega 'raw' (archivos zip, doc, etc), lo tratamos como IMAGEN o null según tu lógica
     return 'IMAGEN';
 }
