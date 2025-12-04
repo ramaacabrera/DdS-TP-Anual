@@ -82,11 +82,14 @@ public class ColeccionService {
         System.out.println(bodyData);
         String username = null;
         String access_token = null;
-        if(bodyData.containsKey("username") && bodyData.containsKey("access_token")){
+        String rolUsuario = null;
+        if(bodyData.containsKey("username") && bodyData.containsKey("access_token") && bodyData.containsKey("rolUsuario")){
             username = bodyData.get("username").toString();
             access_token = bodyData.get("access_token").toString();
+            rolUsuario = bodyData.get("rolUsuario").toString();
             bodyData.remove("username");
             bodyData.remove("access_token");
+            bodyData.remove("rolUsuario");
         }
         String jsonBody = new Gson().toJson(bodyData);
 
@@ -100,10 +103,11 @@ public class ColeccionService {
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody));
 
-            if (username != null && access_token != null) {
+            if (username != null && access_token != null && rolUsuario != null) {
                 requestBuilder
                         .header("username", username)
-                        .header("access_token", access_token);
+                        .header("access_token", access_token)
+                        .header("rolUsuario", rolUsuario);
 
             }
             HttpRequest request = requestBuilder.build();
@@ -129,11 +133,14 @@ public class ColeccionService {
         System.out.println(bodyData);
         String username = null;
         String access_token = null;
-        if(bodyData.containsKey("username") && bodyData.containsKey("access_token")){
+        String rolUsuario = null;
+        if(bodyData.containsKey("username") && bodyData.containsKey("access_token") && bodyData.containsKey("rolUsuario")){
             username = bodyData.get("username").toString();
             access_token = bodyData.get("access_token").toString();
+            rolUsuario = bodyData.get("rolUsuario").toString();
             bodyData.remove("username");
             bodyData.remove("access_token");
+            bodyData.remove("rolUsuario");
         }
         String id = bodyData.get("id").toString();
 
@@ -148,7 +155,8 @@ public class ColeccionService {
             if (username != null && access_token != null) {
                 requestBuilder
                         .header("username", username)
-                        .header("access_token", access_token);
+                        .header("access_token", access_token)
+                        .header("rolUsuario", rolUsuario);
 
             }
             HttpRequest request = requestBuilder.build();
@@ -171,13 +179,17 @@ public class ColeccionService {
     }
 
     public void actualizarColeccion(String id, Map<String, Object> bodyData){
+        System.out.println(bodyData);
         String username = null;
         String access_token = null;
-        if(bodyData.containsKey("username") && bodyData.containsKey("access_token")){
+        String rolUsuario = null;
+        if(bodyData.containsKey("username") && bodyData.containsKey("access_token") && bodyData.containsKey("rolUsuario")){
             username = bodyData.get("username").toString();
             access_token = bodyData.get("access_token").toString();
+            rolUsuario = bodyData.get("rolUsuario").toString();
             bodyData.remove("username");
             bodyData.remove("access_token");
+            bodyData.remove("rolUsuario");
         }
 
         String jsonBody = new Gson().toJson(bodyData);
@@ -195,7 +207,8 @@ public class ColeccionService {
             if (username != null && access_token != null) {
                 requestBuilder
                         .header("username", username)
-                        .header("access_token", access_token);
+                        .header("access_token", access_token)
+                        .header("rolUsuario", rolUsuario);
 
             }
             HttpRequest request = requestBuilder.build();

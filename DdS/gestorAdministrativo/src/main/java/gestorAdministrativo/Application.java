@@ -34,8 +34,9 @@ public class Application {
 
             String username = ctx.header("username");
             String accessToken = ctx.header("access_token");
+            String rolUsuario = ctx.header("rolUsuario");
 
-            if (accessToken == null || username == null) {
+            if (accessToken == null || username == null ||  rolUsuario == null) {
                 throw new io.javalin.http.UnauthorizedResponse("Faltan credenciales");
             }
 
@@ -47,7 +48,9 @@ public class Application {
                 throw new io.javalin.http.UnauthorizedResponse("Token inválido");
             }
 
-            if (usuarioRepositorio.buscarAdmin(username) == null) {
+            System.out.println("role "+rolUsuario);
+
+            if (!rolUsuario.equals("ADMINISTRADOR")) {
                 System.err.println("Usuario no es admin: " + username);
                 throw new io.javalin.http.ForbiddenResponse("No tienes permisos de administrador");
             }

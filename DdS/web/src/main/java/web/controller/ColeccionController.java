@@ -151,6 +151,7 @@ public class ColeccionController {
         bodyData.put("criteriosDePertenencia", criteriosDePertenencia);
         bodyData.put("username", ctx.sessionAttributeMap().get("username"));
         bodyData.put("access_token", ctx.sessionAttributeMap().get("access_token"));
+        bodyData.put("rolUsuario", ctx.sessionAttribute("rolUsuario"));
 
         System.out.println(bodyData);
 
@@ -230,6 +231,7 @@ public class ColeccionController {
         bodyData.put("coleccionId", id);
         bodyData.put("username", ctx.sessionAttribute("username"));
         bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+        bodyData.put("rolUsuario", ctx.sessionAttributeMap().get("rolUsuario"));
 
         System.out.println(bodyData);
 
@@ -312,6 +314,7 @@ public class ColeccionController {
         if(!ctx.sessionAttributeMap().isEmpty()){
             bodyData.put("username", ctx.sessionAttribute("username"));
             bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+            bodyData.put("rolUsuario", ctx.sessionAttributeMap().get("rolUsuario"));
         }
         coleccionService.eliminarColeccion(bodyData);
     };
