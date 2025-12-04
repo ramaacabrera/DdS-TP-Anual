@@ -23,7 +23,7 @@ public class CriterioContribuyente extends Criterio {
         if (hecho.getContribuyente() == null || this.nombreContribuyente == null) {
             return false;
         }
-        return Objects.equals(hecho.getContribuyente().getNombre(), this.nombreContribuyente);
+        return Objects.equals(hecho.getContribuyente().getUsername(), this.nombreContribuyente);
     }
 
     public String getNombreContribuyente() {

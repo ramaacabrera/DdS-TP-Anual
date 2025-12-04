@@ -82,9 +82,6 @@ public class UsuarioService {
         }
 
         Usuario nuevoUsuario = new Usuario();
-        nuevoUsuario.setNombre(dto.nombre);
-        nuevoUsuario.setApellido(dto.apellido);
-        nuevoUsuario.setEdad(dto.edad);
         nuevoUsuario.setUsername(dto.usuario);
         nuevoUsuario.setRol(RolUsuario.CONTRIBUYENTE);
 

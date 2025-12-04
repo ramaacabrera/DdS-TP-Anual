@@ -42,15 +42,16 @@ public class HechoDTO {
         if (hecho.getUbicacion() != null) {
             Ubicacion u = hecho.getUbicacion();
             this.ubicacion = new UbicacionDTO();
-            this.ubicacion.setId_ubicacion(u.getId_ubicacion());
+            this.ubicacion.setUbicacionId(u.getId_ubicacion());
             this.ubicacion.setLatitud(u.getLatitud());
             this.ubicacion.setLongitud(u.getLongitud());
+            this.ubicacion.setDescripcion(u.getDescripcion());
         }
 
         // Fuente
         if (hecho.getFuente() != null) {
             this.fuente = new FuenteDTO();
-            this.fuente.setId(hecho.getFuente().getId());
+            this.fuente.setFuenteId(hecho.getFuente().getId());
             this.fuente.setDescriptor(hecho.getFuente().getDescriptor());
             if (hecho.getFuente().getTipoDeFuente() != null) {
                 this.fuente.setTipoDeFuente(hecho.getFuente().getTipoDeFuente().name());
@@ -70,9 +71,7 @@ public class HechoDTO {
         if (hecho.getContribuyente() != null) {
             this.contribuyente = new UsuarioDTO();
             this.contribuyente.setId(hecho.getContribuyente().getId_usuario());
-            this.contribuyente.setNombre(hecho.getContribuyente().getNombre());
-            this.contribuyente.setApellido(hecho.getContribuyente().getApellido());
-            this.contribuyente.setNombreUsuario(hecho.getContribuyente().getUsername());
+            this.contribuyente.setUsername(hecho.getContribuyente().getUsername());
         }
 
         // 3. Mapeo de Listas (Streams)

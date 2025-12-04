@@ -33,7 +33,7 @@ public class CriterioUbicacionDTO extends CriterioDTO {
 
     @Override
     public String getQueryCondition() {
-        return "h.id_ubicacion = " + ubicacion.getId_ubicacion();
+        return "h.id_ubicacion = " + ubicacion.getUbicacionId();
     }
 
     @Override

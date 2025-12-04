@@ -78,9 +78,7 @@ public class HechoDTO {
         if (hecho.getContribuyente() != null) {
             this.contribuyente = new UsuarioDTO();
             this.contribuyente.setId(hecho.getContribuyente().getId_usuario());
-            this.contribuyente.setNombre(hecho.getContribuyente().getNombre());
-            this.contribuyente.setApellido(hecho.getContribuyente().getApellido());
-            this.contribuyente.setNombreUsuario(hecho.getContribuyente().getUsername());
+            this.contribuyente.setUsername(hecho.getContribuyente().getUsername());
         }
 
         // 3. Mapeo de Listas (Streams)

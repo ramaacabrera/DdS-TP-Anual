@@ -1,11 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // ==========================================
-    // 1. LÓGICA DEL MAPA (Leaflet)
-    // ==========================================
     const defaultLat = -34.6037;
     const defaultLng = -58.3816;
 
-    // Inicializar mapa
     const map = L.map('mapa-selector').setView([defaultLat, defaultLng], 13);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -15,16 +11,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
 
-    // Función auxiliar para actualizar inputs ocultos
     function updateInputs(lat, lng) {
-        document.getElementById('latitud').value = lat;
-        document.getElementById('longitud').value = lng;
+        // Verifica que los elementos existan antes de asignar
+        const elLat = document.getElementById('latitud');
+        const elLng = document.getElementById('longitud');
+        if(elLat) elLat.value = lat;
+        if(elLng) elLng.value = lng;
     }
 
-    // Inicializar
     updateInputs(defaultLat, defaultLng);
 
-    // Eventos del mapa
     marker.on('dragend', function(e) {
         const position = marker.getLatLng();
         updateInputs(position.lat, position.lng);
@@ -52,8 +48,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectCategoria = document.getElementById('categoria');
     const grupoOtraCategoria = document.getElementById('otra-categoria-group');
     const inputOtraCategoria = document.getElementById('otraCategoria');
+    // El checkbox puede no existir si el usuario no está logueado
     const checkboxAnonimo = document.getElementById('anonimo');
-    const inputNombre = document.getElementById('nombreContribuyente');
     const inputMultimedia = document.getElementById('multimedia');
     const previewContainer = document.getElementById('preview-container');
     const previewGrid = document.getElementById('preview-grid');
@@ -70,14 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 inputOtraCategoria.required = false;
                 inputOtraCategoria.value = '';
             }
-        });
-    }
-
-    // Toggle Anónimo
-    if (checkboxAnonimo && inputNombre) {
-        checkboxAnonimo.addEventListener('change', function() {
-            inputNombre.disabled = this.checked;
-            if (this.checked) inputNombre.value = '';
         });
     }
 
@@ -121,11 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // Referencia al campo de descripción de ubicación
-            // Asegúrate de que el ID coincida con el de tu HTML (ej: 'descripcionUbicacion')
             const descUbicacionInput = document.getElementById('descripcionUbicacion');
-
-            // Validación extra (por si acaso el required de HTML falla)
             if (!descUbicacionInput || !descUbicacionInput.value.trim()) {
                 alert("Por favor, ingrese una descripción para la ubicación.");
                 return;
@@ -146,31 +130,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 const categoriaVal = selectCategoria.value;
                 const otraCatVal = inputOtraCategoria ? inputOtraCategoria.value.trim() : '';
 
-                // CONSTRUCCIÓN DEL JSON
+                // LÓGICA DE CONTRIBUYENTE
+                let contribuyenteData = null;
+
+                // 1. Si hay un usuario logueado (CURRENT_USER viene del FTL)
+                if (CURRENT_USER && CURRENT_USER !== "") {
+                    // 2. Verificamos si marcó "Anónimo" (si el checkbox existe y está marcado)
+                    const esAnonimo = checkboxAnonimo && checkboxAnonimo.checked;
+
+                    if (!esAnonimo) {
+                        // Enviamos el objeto con el nombre de usuario
+                        contribuyenteData = { username: CURRENT_USER };
+                    }
+                    // Si esAnonimo es true, contribuyenteData se queda como null
+                }
+                // Si no hay CURRENT_USER (usuario no logueado), contribuyenteData queda null
+
                 const hechoData = {
                     titulo: document.getElementById('titulo').value,
                     descripcion: document.getElementById('descripcion').value,
                     categoria: (categoriaVal === 'Otro' && otraCatVal) ? otraCatVal : categoriaVal,
-
-                    // --- AQUÍ ESTÁ EL CAMBIO IMPORTANTE ---
                     ubicacion: {
                         latitud: parseFloat(document.getElementById('latitud').value),
                         longitud: parseFloat(document.getElementById('longitud').value),
-                        // Agregamos la descripción que faltaba:
                         descripcion: descUbicacionInput.value
                     },
-                    // --------------------------------------
-
                     fechaDeAcontecimiento: new Date(document.getElementById('fechaAcontecimiento').value).toISOString(),
-                    contribuyente: checkboxAnonimo.checked ? null : {
-                        nombre: inputNombre.value || ""
-                    },
+
+                    // Asignamos el valor calculado arriba
+                    contribuyente: contribuyenteData,
+
                     etiquetas: document.getElementById('etiquetas').value ?
                         document.getElementById('etiquetas').value.split(',').map(tag => ({ nombre: tag.trim() })) : [],
-
-                    // ADVERTENCIA: Esto sigue vacío porque JSON no soporta archivos directamente
                     contenidoMultimedia: []
                 };
+
+                // Debug para ver qué se envía (puedes quitarlo luego)
+                console.log("Enviando JSON:", hechoData);
 
                 const response = await fetch(URL_PUBLICA + '/hechos', {
                     method: 'POST',
@@ -182,7 +178,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (mensajeExito) mensajeExito.style.display = 'block';
                     setTimeout(() => { window.location.href = '/'; }, 2000);
                 } else {
-                    throw new Error(`Error ${response.status}: ${await response.text()}`);
+                    const text = await response.text();
+                    throw new Error(`Error ${response.status}: ${text}`);
                 }
 
             } catch (error) {

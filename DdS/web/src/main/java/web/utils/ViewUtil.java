@@ -17,7 +17,7 @@ public class ViewUtil {
         model.put("access_token", ctx.sessionAttribute("access_token"));
         model.put("rolUsuario", rol);
 
-        System.out.println("baseModel: " + ctx.sessionAttribute("rolUsuario"));
+        System.out.println("baseModel: " + rol);
         return model;
     }
 }

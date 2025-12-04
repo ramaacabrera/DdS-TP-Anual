@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class UbicacionDTO {
 
-    private UUID id_ubicacion;
+    private UUID ubicacionId;
     private double latitud;
     private double longitud;
     private String descripcion; // Nuevo campo agregado
@@ -14,7 +14,7 @@ public class UbicacionDTO {
     public UbicacionDTO() {}
 
     public UbicacionDTO(UUID id_ubicacion, double latitud, double longitud, String descripcion) {
-        this.id_ubicacion = id_ubicacion;
+        this.ubicacionId = id_ubicacion;
         this.latitud = latitud;
         this.longitud = longitud;
         this.descripcion = descripcion;
@@ -23,17 +23,17 @@ public class UbicacionDTO {
         this.descripcion = u.getDescripcion();
         this.latitud = u.getLatitud();
         this.longitud = u.getLongitud();
-        this.id_ubicacion = u.getId_ubicacion();
+        this.ubicacionId = u.getId_ubicacion();
     }
 
     // --- Getters y Setters ---
 
-    public UUID getId_ubicacion() {
-        return id_ubicacion;
+    public UUID getUbicacionId() {
+        return ubicacionId;
     }
 
-    public void setId_ubicacion(UUID id_ubicacion) {
-        this.id_ubicacion = id_ubicacion;
+    public void setUbicacionId(UUID id_ubicacion) {
+        this.ubicacionId = id_ubicacion;
     }
 
     public double getLatitud() {

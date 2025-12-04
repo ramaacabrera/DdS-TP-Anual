@@ -49,7 +49,7 @@ public class ColeccionDTO {
         if (coleccion.getFuente() != null) {
             this.fuente = coleccion.getFuente().stream().map(f -> {
                 FuenteDTO dto = new FuenteDTO();
-                dto.setId(f.getId());
+                dto.setFuenteId(f.getId());
                 dto.setDescriptor(f.getDescriptor());
                 if (f.getTipoDeFuente() != null) {
                     dto.setTipoDeFuente(f.getTipoDeFuente().name());
