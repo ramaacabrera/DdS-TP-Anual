@@ -22,7 +22,7 @@ public class Hecho {
     )
     @Type(type = "uuid-char")
     @Column(name = "hecho_id", length = 36 , updatable = false, nullable = false)
-    private UUID hecho_id;
+    private UUID hechoId;
 
     private String titulo;
     private String descripcion;
@@ -101,7 +101,7 @@ public class Hecho {
         return titulo;
     }
 
-    public UUID getHecho_id() {return hecho_id;}
+    public UUID getHechoId() {return hechoId;}
 
     public String getDescripcion() {
         return descripcion;
@@ -165,7 +165,7 @@ public class Hecho {
 
     public void setEsEditable(Boolean esEditableNuevo) {esEditable = esEditableNuevo;}
 
-    public void setHecho_id (UUID id) {hecho_id = id;}
+    public void setHecho_id (UUID id) {hechoId = id;}
 
     public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoNuevo) {contenidoMultimedia = contenidoNuevo;}
 

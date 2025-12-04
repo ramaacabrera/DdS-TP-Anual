@@ -30,7 +30,7 @@ public class HechoDTO {
     public HechoDTO(Hecho hecho) {
         if (hecho == null) return;
 
-        this.hechoId = hecho.getHecho_id();
+        this.hechoId = hecho.getHechoId();
         this.titulo = hecho.getTitulo();
         this.descripcion = hecho.getDescripcion();
         this.categoria = hecho.getCategoria();

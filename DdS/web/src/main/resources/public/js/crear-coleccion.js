@@ -318,3 +318,129 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('tipoCriterio').addEventListener('change', mostrarCampoCriterio);
     document.getElementById('btn-agregar-criterio').addEventListener('click', agregarCriterio);
 });
+
+
+// Función para mostrar el modal de éxito
+function mostrarModalExito() {
+    const modal = document.getElementById('modal-exito');
+    const btnRedirigir = document.getElementById('btn-redirigir');
+
+    // Mostrar modal
+    modal.classList.add('active');
+
+    // Configurar redirección automática después de 3 segundos
+    let contador = 3;
+    const intervalo = setInterval(() => {
+        contador--;
+        if (contador <= 0) {
+            clearInterval(intervalo);
+            window.location.href = '/colecciones';
+        }
+    }, 1000);
+
+    // Configurar botón de redirección manual
+    btnRedirigir.onclick = function() {
+        clearInterval(intervalo);
+        window.location.href = '/colecciones';
+    };
+
+    // Cerrar modal con ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            modal.classList.remove('active');
+            window.location.href = '/colecciones';
+        }
+    });
+
+    // Cerrar modal haciendo click fuera
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            window.location.href = '/colecciones';
+        }
+    };
+}
+
+// Manejar el envío del formulario con AJAX
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar eventos existentes
+    document.getElementById('tipoCriterio').addEventListener('change', mostrarCampoCriterio);
+    document.getElementById('btn-agregar-criterio').addEventListener('click', agregarCriterio);
+
+    // Cancelar button
+    document.getElementById('btn-cancelar').addEventListener('click', function() {
+        if (confirm('¿Seguro que deseas cancelar? Los datos no guardados se perderán.')) {
+            window.location.href = '/colecciones';
+        }
+    });
+
+    // Manejar envío del formulario
+    const form = document.getElementById('form-crear-coleccion');
+    const mensajeExito = document.getElementById('mensaje-exito');
+    const mensajeError = document.getElementById('mensaje-error');
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault(); // Prevenir envío tradicional
+
+        // Ocultar mensajes anteriores
+        mensajeExito.style.display = 'none';
+        mensajeError.style.display = 'none';
+
+        // Validación básica
+        if (!form.checkValidity()) {
+            alert('Por favor, complete todos los campos requeridos.');
+            return;
+        }
+
+        // Deshabilitar botón para evitar múltiples envíos
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creando...';
+
+        try {
+            // Preparar datos del formulario
+            const formData = new FormData(form);
+
+            // Enviar datos
+            const response = await fetch('/colecciones', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                // Éxito: mostrar modal
+                mostrarModalExito();
+
+                // Opcional: limpiar formulario después de éxito
+                setTimeout(() => {
+                    form.reset();
+                    document.getElementById('criterios-agregados').innerHTML = '';
+                    contadorCriterios = 0;
+                }, 100);
+
+            } else {
+                // Error
+                const errorData = await response.json();
+                mensajeError.textContent = errorData.message || '❌ Error al crear la colección. Intente nuevamente.';
+                mensajeError.style.display = 'block';
+
+                // Scroll al mensaje de error
+                mensajeError.scrollIntoView({ behavior: 'smooth' });
+
+                // Re-habilitar botón
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            mensajeError.textContent = '❌ Error de conexión. Verifique su internet e intente nuevamente.';
+            mensajeError.style.display = 'block';
+
+            // Re-habilitar botón
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
+    });
+});

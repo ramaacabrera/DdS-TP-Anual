@@ -3,6 +3,7 @@ package gestorAdministrativo.repository;
 import gestorAdministrativo.domain.Criterios.Criterio;
 import gestorAdministrativo.domain.Criterios.CriterioDeTexto;
 import gestorAdministrativo.domain.Criterios.CriterioEtiquetas;
+import gestorAdministrativo.domain.HechosYColecciones.Hecho;
 import gestorAdministrativo.domain.HechosYColecciones.Ubicacion;
 import gestorAdministrativo.utils.BDUtils;
 import gestorAdministrativo.domain.HechosYColecciones.Coleccion;
@@ -51,25 +52,6 @@ public class ColeccionRepositorio {
         System.out.println("Coleccion a borrar: " + handle);
         try {
             String jpql = "SELECT DISTINCT c FROM Coleccion c " +
-                    "LEFT JOIN FETCH c.hechos " +
-                    "LEFT JOIN FETCH c.fuentes " +
-                    "WHERE c.handle = :handle";
-
-            return em.createQuery(jpql, Coleccion.class)
-                    .setParameter("handle", UUID.fromString(handle))
-                    .getSingleResult();
-        } catch (Exception e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
-
-    public Coleccion buscar(String handle){
-        EntityManager em = BDUtils.getEntityManager();
-        System.out.println("Coleccion a borrar: " + handle);
-        try {
-            String jpql = "SELECT DISTINCT c FROM Coleccion c " +
                     "LEFT JOIN c.hechos " +
                     "LEFT JOIN c.fuentes " +
                     "WHERE c.handle = :handle";
@@ -90,6 +72,10 @@ public class ColeccionRepositorio {
 
     private void inicializarColeccion(Coleccion coleccion){
         Hibernate.initialize(coleccion.getHechos());
+        for(Hecho hecho : coleccion.getHechos()){
+            Hibernate.initialize(hecho.getEtiquetas());
+            Hibernate.initialize(hecho.getContenidoMultimedia());
+        }
         Hibernate.initialize(coleccion.getHechosConsensuados());
         Hibernate.initialize(coleccion.getFuente());
         Hibernate.initialize(coleccion.getCriteriosDePertenencia());
