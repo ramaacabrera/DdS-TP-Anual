@@ -13,7 +13,7 @@
             const COLECCION_ID = '${COLECCION_ID}';
         </script>
 
-        <form id="form-editar-coleccion" class="form-container" method="POST" action="/colecciones/${COLECCION_ID}">
+        <form id="form-editar-coleccion" class="form-container">
             <!-- Título -->
             <div class="form-group">
                 <label for="titulo" class="form-label">Título *</label>

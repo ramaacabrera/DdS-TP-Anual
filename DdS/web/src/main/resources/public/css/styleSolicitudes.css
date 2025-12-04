@@ -595,6 +595,79 @@
     font-size: 0.9rem;
 }
 
+.contenedor-solicitudes {
+    margin-top: 20px;
+}
+
+.lista-solicitudes {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.solicitud-card {
+    display: block;
+    padding: 16px 20px;
+    border-radius: 10px;
+    background: var(--card-bg, #ffffff);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    border: 1px solid rgba(0,0,0,0.07);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.solicitud-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+}
+
+.solicitud-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.estado {
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.estado-pendiente {
+    background: #fff4c2;
+    color: #9a7b00;
+}
+
+.estado-aceptada {
+    background: #d3ffd8;
+    color: #116d1a;
+}
+
+.estado-rechazada {
+    background: #ffd2d2;
+    color: #8a1a1a;
+}
+
+.solicitud-body {
+    margin-bottom: 12px;
+}
+
+.solicitud-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-detalles {
+    color: var(--primary, #0057d8);
+    font-weight: 600;
+}
+.btn-detalles:hover {
+    text-decoration: underline;
+}
+
 @media (max-width: 480px) {
     .solicitudes-title {
         font-size: 1.75rem;

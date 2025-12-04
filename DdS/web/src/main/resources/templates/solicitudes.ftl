@@ -6,12 +6,11 @@
 <#assign content>
     <div class="container">
 
-
         <div class="header">
             <a href="/home" class="header-link back-link">&larr; Volver al Inicio</a>
         </div>
 
-        <h1 class="main-title">Solicitudes Pendientes</h1>
+        <h1 class="main-title">Solicitudes de Eliminación</h1>
 
         <!-- Resumen de solicitudes -->
         <div class="grid-metadata" style="margin-bottom: 30px;">
@@ -21,84 +20,56 @@
                     ${solicitudesEliminacion?size}
                 </p>
             </div>
-            <div class="card">
-                <p class="card-subtitle">✏️ SOLICITUDES DE MODIFICACIÓN</p>
-                <p style="font-size: 1.5rem; font-weight: bold; color: var(--primary-color);">
-                    ${solicitudesModificacion?size}
-                </p>
+        </div>
+
+        <!-- Línea divisoria gris -->
+        <hr style="border: none; height: 1px; background-color: var(--border-color); margin: 30px 0;">
+
+        <!-- Lista de solicitudes -->
+        <#if solicitudesEliminacion?size gt 0>
+            <div class="list column gap-16">
+                <#list solicitudesEliminacion as solicitud>
+                    <@solicitudCard solicitud=solicitud />
+                </#list>
             </div>
-        </div>
-
-        <!-- Tabs para diferentes tipos de solicitudes -->
-        <div class="tabs-nav">
-            <button class="tab-btn active" onclick="showTab('eliminacion', this)">Eliminación (${solicitudesEliminacion?size})</button>
-            <button class="tab-btn" onclick="showTab('modificacion', this)">Modificación (${solicitudesModificacion?size})</button>
-        </div>
-
-        <!-- Solicitudes de Eliminación -->
-        <div id="eliminacion" class="tab-content active">
-            <#if solicitudesEliminacion?size gt 0>
-                <div class="list column gap-16">
-                    <#list solicitudesEliminacion as solicitud>
-                        <@solicitudCard
-                        solicitud=solicitud
-                        tipo="eliminacion"
-                        estado=solicitud.estadoSolicitudEliminacion! />
-                    </#list>
-                </div>
-            <#else>
-                <div class="empty-state">
-                    <div class="empty-state-icon">✅</div>
-                    <h3>No hay solicitudes de eliminación pendientes</h3>
-                    <p>Todas las solicitudes han sido procesadas</p>
-                </div>
-            </#if>
-        </div>
-
-        <!-- Solicitudes de Modificación -->
-        <div id="modificacion" class="tab-content" style="display:none;">
-            <#if solicitudesModificacion?size gt 0>
-                <div class="list column gap-16">
-                    <#list solicitudesModificacion as solicitud>
-                        <@solicitudCard
-                        solicitud=solicitud
-                        tipo="modificacion"
-                        estado=solicitud.estadoSolicitudModificacion! />
-                    </#list>
-                </div>
-            <#else>
-                <div class="empty-state">
-                    <div class="empty-state-icon">✅</div>
-                    <h3>No hay solicitudes de modificación pendientes</h3>
-                    <p>Todas las solicitudes han sido procesadas</p>
-                </div>
-            </#if>
-        </div>
+        <#else>
+            <div class="empty-state">
+                <div class="empty-state-icon">✅</div>
+                <h3>No hay solicitudes pendientes</h3>
+                <p>Todas las solicitudes han sido procesadas</p>
+            </div>
+        </#if>
     </div>
 </#assign>
 
-<#-- Macro para tarjeta de solicitud -->
-<#macro solicitudCard solicitud tipo estado>
-    <div class="solicitud-card">
+<!-- MACRO para tarjeta de solicitud -->
+<#macro solicitudCard solicitud>
+    <#assign estado = solicitud.estadoSolicitudEliminacion!"PENDIENTE">
+
+    <div class="solicitud-card" style="
+        background: var(--bg-white);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+    ">
         <div class="solicitud-header">
             <div class="solicitud-info">
                 <h3 class="solicitud-titulo">
-                    <#if tipo == "eliminacion">
-                        🗑️ Solicitud de Eliminación
-                    <#else>
-                        ✏️ Solicitud de Modificación
-                    </#if>
+                    🗑️ Solicitud de Eliminación
                     <small style="color: var(--muted-color); font-weight: normal;">
-                        #${solicitud.id?substring(0, 8)}
+                        #${solicitud.id?substring(0, 36)}
                     </small>
                 </h3>
                 <p class="solicitud-hecho">
-                    <strong>Hecho:</strong> ${solicitud.hechoAsociado.titulo!""}
+                    <strong>Hecho:</strong> ${solicitud.hechoTitulo!"Sin título"}
                 </p>
                 <p class="solicitud-usuario">
                     <strong>Usuario:</strong>
                     <#if solicitud.usuario??>
-                        ${solicitud.usuario.nombre!""} ${solicitud.usuario.apellido!""}
+                        ${solicitud.usuario.username!""}
                     <#else>
                         Anónimo
                     </#if>
@@ -111,18 +82,49 @@
             </div>
         </div>
 
-        <div class="solicitud-body">
+        <div class="solicitud-body" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color);">
             <div class="justificacion">
                 <strong>Justificación:</strong>
-                <p>${solicitud.justificacion!"Sin justificación"}</p>
+                <p style="
+                    margin: 8px 0 0 0;
+                    padding: 12px;
+                    background: var(--bg-light);
+                    border-radius: 6px;
+                    border-left: 4px solid var(--primary-color);
+                    line-height: 1.5;
+                    white-space: pre-wrap;
+                ">
+                    ${solicitud.justificacion!"Sin justificación"}
+                </p>
             </div>
 
-            <div class="solicitud-actions">
-                <a href="/admin/solicitudes/${tipo}/${solicitud.id}" class="btn btn-primary">
+            <div class="solicitud-actions" style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 16px;
+            ">
+                <a href="/admin/solicitudes/eliminacion/${solicitud.id}" class="btn btn-primary" style="
+                    display: inline-block;
+                    padding: 8px 16px;
+                    background: var(--primary-color);
+                    color: white;
+                    border-radius: 6px;
+                    text-decoration: none;
+                    font-weight: 500;
+                    transition: var(--transition);
+                    border: 1px solid transparent;
+                ">
                     Ver Detalles
                 </a>
                 <#if estado == "PENDIENTE">
-                    <span class="pending-badge">⏳ Pendiente de revisión</span>
+                    <span class="pending-badge" style="
+                        color: #856404;
+                        font-weight: 600;
+                        font-size: 0.9rem;
+                    ">
+                        ⏳ Pendiente de revisión
+                    </span>
                 </#if>
             </div>
         </div>
@@ -130,34 +132,20 @@
 </#macro>
 
 <#function obtenerTextoEstado estado>
-    <#switch estado>
-        <#case "PENDIENTE">
-            <#return "Pendiente">
-        <#case "ACEPTADA">
-            <#return "Aceptada">
-        <#case "RECHAZADA">
-            <#return "Rechazada">
-        <#default>
-            <#return estado>
-    </#switch>
+    <#if estado??>
+        <#switch estado>
+            <#case "PENDIENTE">
+                <#return "Pendiente">
+            <#case "ACEPTADA">
+                <#return "Aceptada">
+            <#case "RECHAZADA">
+                <#return "Rechazada">
+            <#default>
+                <#return estado>
+        </#switch>
+    <#else>
+        <#return "Desconocido">
+    </#if>
 </#function>
-
-<script>
-    function showTab(tabName, element) {
-        // Ocultar todos los tabs
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.style.display = 'none';
-        });
-
-        // Remover clase active de todos los botones
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-
-        // Mostrar tab seleccionado y activar botón
-        document.getElementById(tabName).style.display = 'block';
-        element.classList.add('active');
-    }
-</script>
 
 <#include "layout.ftl">

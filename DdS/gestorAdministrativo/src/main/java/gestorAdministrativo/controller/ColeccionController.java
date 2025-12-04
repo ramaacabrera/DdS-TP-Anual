@@ -45,9 +45,13 @@ public class ColeccionController {
 
     public Handler actualizarColeccion = ctx -> {
         String idString = ctx.pathParam("id");
+        System.out.println("Actualizando coleccion: " + idString);
         try {
             UUID id = UUID.fromString(idString);
+            System.out.println("Creando dto");
             ColeccionDTO request = ctx.bodyAsClass(ColeccionDTO.class);
+
+            System.out.println("Coleccion dto creada");
 
             ColeccionDTO response = coleccionService.actualizarColeccion(id, request);
             ctx.status(200).json(response);

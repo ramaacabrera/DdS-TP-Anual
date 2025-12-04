@@ -58,11 +58,14 @@ public class ColeccionService {
     }
 
     public ColeccionDTO actualizarColeccion(UUID id, ColeccionDTO dto) {
-        Coleccion coleccionExistente = coleccionRepositorio.buscarPorHandle(id.toString());
+        //Coleccion coleccionExistente = coleccionRepositorio.buscarPorHandle(id.toString());
+        Coleccion coleccionExistente = coleccionRepositorio.buscar(id.toString());
 
         if (coleccionExistente == null) {
             throw new IllegalArgumentException("Colección no encontrada con ID: " + id);
         }
+
+        System.out.println("Coleccion encontrada");
 
         boolean criteriosCambiaron = false;
 

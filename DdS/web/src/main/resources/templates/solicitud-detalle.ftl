@@ -31,21 +31,17 @@
             <h3 class="card-subtitle">INFORMACIÓN DEL HECHO</h3>
             <div class="grid-metadata">
                 <div class="info-item">
-                    <strong>Título:</strong> ${hecho.titulo!""}
+                    <strong>Título:</strong> ${hecho.titulo!"No disponible"}
                 </div>
                 <div class="info-item">
-                    <strong>Categoría:</strong> ${hecho.categoria!""}
+                    <strong>Categoría:</strong> ${hecho.categoria!"No disponible"}
                 </div>
                 <div class="info-item">
                     <strong>Fecha de carga:</strong>
-                    <#if hecho.fechaDeCarga??>
-                        ${hecho.fechaDeCarga?string("dd/MM/yyyy HH:mm")}
-                    <#else>
-                        Sin fecha
-                    </#if>
+                    ${hecho.fechaDeCargaFormateada!"Sin fecha"}
                 </div>
                 <div class="info-item">
-                    <strong>Estado:</strong> ${hecho.estadoHecho!""}
+                    <strong>Estado:</strong> ${hecho.estadoHecho!"No disponible"}
                 </div>
             </div>
         </div>
@@ -56,20 +52,13 @@
                 <p class="card-subtitle">SOLICITANTE</p>
                 <p>
                     <#if solicitud.usuario??>
-                        ${solicitud.usuario.nombre!""} ${solicitud.usuario.apellido!""}
+                        <#if solicitud.usuario?is_hash>
+                            ${solicitud.usuario.nombre!""} ${solicitud.usuario.apellido!""}
+                        <#else>
+                            ${solicitud.usuario!""}
+                        </#if>
                     <#else>
                         Anónimo
-                    </#if>
-                </p>
-            </div>
-
-            <div class="card">
-                <p class="card-subtitle">FECHA DE SOLICITUD</p>
-                <p>
-                    <#if solicitud.fechaCreacion??>
-                        ${solicitud.fechaCreacion?string("dd/MM/yyyy HH:mm")}
-                    <#else>
-                        Sin fecha
                     </#if>
                 </p>
             </div>
@@ -110,11 +99,10 @@
 
     <!-- Script para pasar variables del backend al frontend -->
     <script>
-
         // Variables globales disponibles para el JS externo
         window.solicitudData = {
-            id: '${solicitud.id_solicitud!"0"}', // Cambiado a id_solicitud
-            tipo: '${tipo!"eliminacion"}' // 'eliminacion' o 'modificacion'
+            id: '${solicitud.id!"0"}',
+            tipo: '${tipo!"eliminacion"}'
         };
 
         function procesarSolicitud(accion) {
@@ -137,3 +125,4 @@
 </#assign>
 
 <#include "layout.ftl">
+

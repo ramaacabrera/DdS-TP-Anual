@@ -169,6 +169,53 @@ public class ColeccionService {
             throw new RuntimeException(e);
         }
     }
+
+    public void actualizarColeccion(String id, Map<String, Object> bodyData){
+        String username = null;
+        String access_token = null;
+        if(bodyData.containsKey("username") && bodyData.containsKey("access_token")){
+            username = bodyData.get("username").toString();
+            access_token = bodyData.get("access_token").toString();
+            bodyData.remove("username");
+            bodyData.remove("access_token");
+        }
+
+        String jsonBody = new Gson().toJson(bodyData);
+
+        System.out.println("JSON que se va a enviar: " + jsonBody);
+
+        System.out.println("Mandando a: " + urlAdmin);
+        HttpClient httpClient = HttpClient.newHttpClient();
+        try{
+            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+                    .uri(new URI("http://localhost:8081/api/colecciones/"+id))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(jsonBody));
+
+            if (username != null && access_token != null) {
+                requestBuilder
+                        .header("username", username)
+                        .header("access_token", access_token);
+
+            }
+            HttpRequest request = requestBuilder.build();
+
+            System.out.println("Se armo la request");
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Mandamos la request");
+
+            if (response.statusCode() != 200) {
+                throw new RuntimeException("Error al actualizar la coleccion, status code: " + response.statusCode());
+            } else{
+                System.out.println("Coleccion actualizada");
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 
 
