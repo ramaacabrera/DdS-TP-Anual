@@ -80,28 +80,46 @@
 </#macro>
 <#macro actionButtons hecho>
     <div class="action-buttons-group" data-hecho-id="${hecho.hechoId?html}">
-        <!-- Compartir: chain -->
         <button class="icon-btn" data-action="share" aria-label="Compartir hecho" title="Compartir">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M10.59 13.41a1 1 0 001.41 0l4.59-4.59a3 3 0 10-4.24-4.24l-1.3 1.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M13.41 10.59a1 1 0 00-1.41 0L7.41 15.18a3 3 0 104.24 4.24l1.3-1.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </button>
-
-        <!-- Editar: lápiz -->
-        <button class="icon-btn" data-action="edit" aria-label="Solicitar modificación" title="Solicitar modificación">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M3 21l3-1 11-11 1-3-3 1L4 20z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M14 6l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Cuerpo principal del avión -->
+                <path d="M21 4L10.5 14.5M21 4l-7 17-4-9-9-4 17-7z"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"/>
+                <!-- Detalle interior (opcional) -->
+            <path d="M3 19l9-4"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                  stroke-linecap="round"
+                  opacity="0.7"/>
             </svg>
         </button>
 
         <!-- Eliminar: tacho de basura  -->
         <button class="icon-btn danger" data-action="delete" aria-label="Solicitar eliminación" title="Solicitar eliminación">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M3 6h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M8 6v14a1 1 0 001 1h6a1 1 0 001-1V6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Cuerpo de la papelera -->
+                <path d="M5 8h14v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8Z"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linejoin="round"/>
+                <!-- Tapa -->
+                <path d="M4 6h16"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"/>
+                <!-- Asa -->
+                <path d="M9 6V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"/>
+                <!-- Líneas de contenido -->
+                <path d="M10 11v6M14 11v6"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"/>
             </svg>
         </button>
     </div>
@@ -327,7 +345,7 @@
 </#macro>
 
 <#-- CARD DE HECHO -------------------------------------------------------->
-<#macro hechoCard id titulo resumen fecha categoria ubicacion etiquetas verHref editarHref imagen="">
+<#macro hechoCard id titulo resumen fecha categoria ubicacion etiquetas verHref imagen="">
     <article class="card card-hecho">
 
         <div class="card-media" style="height: 200px; overflow: hidden; background-color: #f0f2f5; position: relative;">
@@ -349,7 +367,6 @@
                 <h3 class="card-title" title="${titulo?html}">${titulo?html}</h3>
                 <div class="row gap-8">
                     <a href="${verHref}" class="btn btn-sm">Ver</a>
-                    <a href="${editarHref}" class="btn btn-sm btn-ghost">Editar</a>
                 </div>
             </div>
 
