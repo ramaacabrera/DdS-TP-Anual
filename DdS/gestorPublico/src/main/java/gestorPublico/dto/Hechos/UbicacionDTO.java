@@ -28,11 +28,11 @@ public class UbicacionDTO {
 
     // --- Getters y Setters ---
 
-    public UUID getUbicacionId() {
+    public UUID getId_ubicacion() {
         return ubicacionId;
     }
 
-    public void setUbicacionId(UUID id_ubicacion) {
+    public void setId_ubicacion(UUID id_ubicacion) {
         this.ubicacionId = id_ubicacion;
     }
 

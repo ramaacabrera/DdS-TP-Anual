@@ -16,8 +16,8 @@ public class FuenteDTO {
     }
 
     // Getters y Setters
-    public UUID getFuenteId() { return fuenteId; }
-    public void setFuenteId(UUID fuenteId) { this.fuenteId = fuenteId; }
+    public UUID getId() { return fuenteId; }
+    public void setId(UUID fuenteId) { this.fuenteId = fuenteId; }
 
     public String getTipoDeFuente() { return tipoDeFuente; }
     public void setTipoDeFuente(String tipoFuente) { this.tipoDeFuente = tipoFuente; }

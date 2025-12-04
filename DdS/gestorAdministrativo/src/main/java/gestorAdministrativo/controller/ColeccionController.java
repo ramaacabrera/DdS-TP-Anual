@@ -60,6 +60,7 @@ public class ColeccionController {
     };
 
     public Handler eliminarColeccion = ctx -> {
+        System.out.println("Comenzando a borrar");
         String idString = ctx.pathParam("id");
         try {
             UUID id = UUID.fromString(idString);

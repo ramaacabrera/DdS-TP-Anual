@@ -44,10 +44,30 @@ public class ColeccionRepositorio {
 
     public Coleccion buscarPorHandle(String handle) {
         EntityManager em = BDUtils.getEntityManager();
+        System.out.println("Coleccion a borrar: " + handle);
         try {
             String jpql = "SELECT DISTINCT c FROM Coleccion c " +
                     "LEFT JOIN FETCH c.hechos " +
                     "LEFT JOIN FETCH c.fuentes " +
+                    "WHERE c.handle = :handle";
+
+            return em.createQuery(jpql, Coleccion.class)
+                    .setParameter("handle", UUID.fromString(handle))
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public Coleccion buscar(String handle){
+        EntityManager em = BDUtils.getEntityManager();
+        System.out.println("Coleccion a borrar: " + handle);
+        try {
+            String jpql = "SELECT DISTINCT c FROM Coleccion c " +
+                    "LEFT JOIN c.hechos " +
+                    "LEFT JOIN c.fuentes " +
                     "WHERE c.handle = :handle";
 
             return em.createQuery(jpql, Coleccion.class)

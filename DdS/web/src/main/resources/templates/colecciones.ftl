@@ -27,7 +27,7 @@
 
                             <!-- Botón de Eliminar - Versión más simple -->
                             <button
-                                onclick="confirmarEliminacion('${c.handle!''}', '${(c.titulo!"")?js_string}')"
+                                onclick="confirmarEliminacion('${c.handle!''}', '${(c.titulo!'')?js_string}')"
                                 class="btn btn-sm btn-danger">
                                 🗑️ Eliminar
                             </button>
@@ -57,6 +57,18 @@
     </div>
 </div>
 
+<!-- Modal de éxito -->
+<div id="modalExito" class="modal" style="display:none;">
+    <div class="modal-content" style="text-align: center; padding: 40px;">
+        <div style="font-size: 48px; margin-bottom: 20px;">✅</div>
+        <h3 style="color: #28a745; margin-bottom: 15px;">¡Éxito!</h3>
+        <p id="mensajeExito" style="margin-bottom: 25px;">La colección se eliminó correctamente.</p>
+        <button onclick="recargarPagina()" class="btn btn-primary" style="margin: 0 auto;">
+            Aceptar
+        </button>
+    </div>
+</div>
+
 <script>
     let coleccionAEliminar = null;
     let tituloColeccion = '';
@@ -65,7 +77,6 @@
 coleccionAEliminar = handle;
 tituloColeccion = titulo || 'Sin título';
 
-// Usar concatenación de strings en lugar de template literal
 var mensaje = '¿Estás seguro de que querés eliminar la colección "<strong>' +
                      (titulo || 'Sin título') +
                      '</strong>"?<br><small>Esta acción no se puede deshacer.</small>';
@@ -81,53 +92,93 @@ tituloColeccion = '';
 }
 
     function eliminarColeccion() {
-if (!coleccionAEliminar) return;
+        if (!coleccionAEliminar) return;
 
-// Mostrar loading
-var botonEliminar = event.target;
-botonEliminar.disabled = true;
-botonEliminar.innerHTML = 'Eliminando...';
+        // Obtener el título del mensaje de confirmación
+        var titulo = tituloColeccion;
 
-// Realizar petición DELETE
-fetch('/api/colecciones/' + coleccionAEliminar, {
-method: 'DELETE',
-headers: {
-'Content-Type': 'application/json'
-}
+        // Mostrar loading
+        var botonEliminar = event.target;
+        var textoOriginal = botonEliminar.innerHTML;
+        botonEliminar.disabled = true;
+        botonEliminar.innerHTML = '🗑️ Eliminando...';
+
+        // Realizar petición DELETE
+        fetch('/colecciones/' + coleccionAEliminar, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         })
-.then(function(response) {
-if (response.ok) {
-// Recargar la página después de eliminar
+            .then(function(response) {
+                if (response.ok) {
+                    // Cerrar modal de confirmación
+                    document.getElementById('modalConfirmacion').style.display = 'none';
+
+                    // Mostrar modal de éxito
+                    document.getElementById('mensajeExito').textContent =
+                        'La colección "' + (titulo || '') + '" se eliminó correctamente.';
+                    document.getElementById('modalExito').style.display = 'flex';
+
+                    // Limpiar variables
+                    coleccionAEliminar = null;
+                    tituloColeccion = '';
+
+                } else {
+                    return response.json().then(function(data) {
+                        throw new Error(data.message || 'Error al eliminar la colección');
+                    });
+                }
+            })
+            .catch(function(error) {
+                // Mostrar error
+                alert('❌ Error: ' + error.message);
+                // Restaurar botón
+                botonEliminar.disabled = false;
+                botonEliminar.innerHTML = textoOriginal;
+            });
+    }
+
+    function recargarPagina() {
+// Cerrar modal de éxito y recargar
+document.getElementById('modalExito').style.display = 'none';
 window.location.reload();
-} else {
-return response.json().then(function(data) {
-throw new Error(data.message || 'Error al eliminar');
-});
-}
-})
-.catch(function(error) {
-alert('Error: ' + error.message);
-botonEliminar.disabled = false;
-            botonEliminar.innerHTML = 'Eliminar';
-        })
-.finally(function() {
-cerrarModal();
-});
 }
 
-// Cerrar modal al hacer clic fuera
-document.getElementById('modalConfirmacion').addEventListener('click', function(e) {
+    // Función para cerrar ambos modales al hacer clic fuera
+    function setupModalClicks() {
+const modals = document.querySelectorAll('.modal');
+modals.forEach(function(modal) {
+modal.addEventListener('click', function(e) {
 if (e.target === this) {
+if (this.id === 'modalConfirmacion') {
 cerrarModal();
+} else if (this.id === 'modalExito') {
+recargarPagina();
 }
-    });
+                }
+            });
+        });
+    }
 
     // Cerrar con Escape
     document.addEventListener('keydown', function(e) {
 if (e.key === 'Escape') {
+const modalConfirmacion = document.getElementById('modalConfirmacion');
+const modalExito = document.getElementById('modalExito');
+
+if (modalConfirmacion.style.display === 'flex') {
 cerrarModal();
+} else if (modalExito.style.display === 'flex') {
+recargarPagina();
 }
+        }
     });
+
+    // Inicializar eventos cuando el DOM esté cargado
+    document.addEventListener('DOMContentLoaded', function() {
+setupModalClicks();
+});
 </script>
 
 <style>
@@ -143,6 +194,7 @@ display: flex;
 align-items: center;
 justify-content: center;
 z-index: 1000;
+animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
@@ -152,6 +204,13 @@ border-radius: 8px;
 max-width: 500px;
 width: 90%;
 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+animation: slideIn 0.3s ease;
+}
+
+/* Estilos específicos para modal de éxito */
+#modalExito .modal-content {
+background: #f8fff8;
+border: 1px solid #d4edda;
 }
 
 .btn-danger {
@@ -179,6 +238,44 @@ color: white;
 .btn-sm {
 padding: 6px 12px;
 font-size: 14px;
+}
+
+.btn-primary {
+background-color: #007bff;
+color: white;
+border: 1px solid #007bff;
+}
+
+.btn-primary:hover {
+background-color: #0056b3;
+border-color: #0056b3;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+
+@keyframes slideIn {
+from {
+opacity: 0;
+transform: translateY(-20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+/* Estilo para mensaje de éxito */
+.mensaje-exito {
+color: #155724;
+background-color: #d4edda;
+border: 1px solid #c3e6cb;
+border-radius: 4px;
+padding: 10px;
+margin: 10px 0;
 }
 </style>
 </#assign>

@@ -8,6 +8,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import utils.Dominio.HechosYColecciones.Ubicacion;
 import utils.Dominio.Usuario.Usuario;
+import web.domain.Criterios.Criterio;
 import web.domain.Criterios.TipoDeTexto;
 import web.domain.Fuente.TipoDeFuente;
 import web.domain.HechosYColecciones.Coleccion;
@@ -120,12 +121,12 @@ public class ColeccionController {
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);
             modelo.put("pageTitle", "Editar colección");
             modelo.put("coleccion", coleccion);
-            modelo.put("coleccionId", coleccionId);
+            modelo.put("COLECCION_ID", coleccionId);
             modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
             modelo.put("fuentes", TipoDeFuente.values());
 
             // Renderizamos el template
-            ctx.render("editar-coleccion.ftl", modelo);
+            ctx.render("editar-coleccion.ftlh", modelo);
 
         } catch (Exception e) {
             System.err.println(" ERROR en GetEditarColeccionHandler: " + e.getMessage());
@@ -201,4 +202,19 @@ public class ColeccionController {
 
         System.out.println("Criterios extraidos: " + criteriosDePertenencia);
     }
+    public Handler editarColeccion = ctx -> {
+        String id = ctx.pathParam("id");
+        System.out.println("PUT COLECCION: " + id);
+    };
+    public Handler eliminarColeccion = ctx -> {
+        String id = ctx.pathParam("id");
+        System.out.println("Coleccion a eliminar: " + id);
+        Map<String, Object> bodyData = new HashMap<>();
+        bodyData.put("id", id);
+        if(!ctx.sessionAttributeMap().isEmpty()){
+            bodyData.put("username", ctx.sessionAttribute("username"));
+            bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+        }
+        coleccionService.eliminarColeccion(bodyData);
+    };
 }
