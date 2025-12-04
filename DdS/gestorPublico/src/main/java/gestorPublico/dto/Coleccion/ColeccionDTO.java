@@ -2,9 +2,11 @@ package gestorPublico.dto.Coleccion;
 
 import gestorPublico.domain.Criterios.*;
 import gestorPublico.domain.HechosYColecciones.Coleccion; // Importar la entidad
+import gestorPublico.domain.HechosYColecciones.Hecho;
 import gestorPublico.domain.HechosYColecciones.TipoAlgoritmoConsenso;
 import gestorPublico.dto.Criterios.*;
 import gestorPublico.dto.Hechos.FuenteDTO;
+import gestorPublico.dto.Hechos.HechoDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ public class ColeccionDTO {
     private List<FuenteDTO> fuente = new ArrayList<>();
     private List<CriterioDTO> criteriosDePertenencia = new ArrayList<>();
     private TipoAlgoritmoConsensoDTO algoritmoDeConsenso;
+    private List<HechoDTO> hechos = new ArrayList<>();
 
     public ColeccionDTO() {}
 
@@ -59,11 +62,18 @@ public class ColeccionDTO {
             }).collect(Collectors.toList());
         }
 
-        // NOTA: El mapeo de Criterios (Lista polimórfica) es complejo para hacerlo dentro del constructor del DTO
-        // sin acoplar demasiadas clases. Por ahora inicializamos la lista vacía.
-        // Si necesitas mostrar los criterios en el listado público, deberías usar un "Mapper" externo
-        // o inyectar la lógica de conversión, pero para listados generales suele dejarse vacío por rendimiento.
+        this.hechos = convertirHechos(coleccion.getHechos());
+
         this.criteriosDePertenencia = convertirDTO(coleccion.getCriteriosDePertenencia());
+    }
+
+    private List<HechoDTO> convertirHechos(List<Hecho> hechos){
+        List<HechoDTO> dto = new ArrayList<>();
+        for(Hecho h : hechos){
+            HechoDTO hdto = new HechoDTO(h);
+            dto.add(hdto);
+        }
+        return dto;
     }
 
     private TipoAlgoritmoConsensoDTO convertirAlgoritmo(TipoAlgoritmoConsenso t){
@@ -131,6 +141,9 @@ public class ColeccionDTO {
 
     public List<FuenteDTO> getFuente() { return fuente; }
     public void setFuente(List<FuenteDTO> fuentes) { this.fuente = fuentes; }
+
+    public List<HechoDTO> getHechos(){return hechos;}
+    public void setHechos(List<HechoDTO> hechos){this.hechos = hechos;}
 
     public List<CriterioDTO> getCriteriosDePertenencia() { return criteriosDePertenencia; }
     public void setCriteriosDePertenencia(List<CriterioDTO> criteriosDePertenencia) {

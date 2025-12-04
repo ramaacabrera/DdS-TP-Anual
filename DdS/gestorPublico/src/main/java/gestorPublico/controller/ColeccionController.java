@@ -41,6 +41,7 @@ public class ColeccionController {
             UUID id = UUID.fromString(ctx.pathParam("id"));
             ColeccionDTO coleccion = coleccionService.obtenerColeccionPorId(id);
             System.out.println("Coleccion a enviar: " + coleccion.toString());
+            System.out.println("Cantidad de hechos del dto: " + coleccion.getHechos().size());
 
             if (coleccion != null) {
                 ctx.status(200).json(coleccion);

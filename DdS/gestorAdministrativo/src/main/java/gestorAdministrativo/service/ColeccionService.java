@@ -58,8 +58,7 @@ public class ColeccionService {
     }
 
     public ColeccionDTO actualizarColeccion(UUID id, ColeccionDTO dto) {
-        //Coleccion coleccionExistente = coleccionRepositorio.buscarPorHandle(id.toString());
-        Coleccion coleccionExistente = coleccionRepositorio.buscar(id.toString());
+        Coleccion coleccionExistente = coleccionRepositorio.buscarPorHandle(id.toString());
 
         System.out.println("Coleccion encontrada");
 
@@ -102,7 +101,7 @@ public class ColeccionService {
     }
 
     public void eliminarColeccion(UUID id) {
-        Coleccion coleccion = coleccionRepositorio.buscar(id.toString());
+        Coleccion coleccion = coleccionRepositorio.buscarPorHandle(id.toString());
         if (coleccion == null) {
             System.out.println("Coleccion no encontrada");
             throw new IllegalArgumentException("Colección no encontrada");

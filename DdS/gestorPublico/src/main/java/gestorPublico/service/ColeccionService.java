@@ -46,6 +46,7 @@ public class ColeccionService {
 
     public ColeccionDTO obtenerColeccionPorId(UUID id) {
         Coleccion coleccion = coleccionRepositorio.buscarPorHandle(id.toString());
+        System.out.println("Cantidad de hechos: " + coleccion.getHechos().size());
         System.out.println("Cantidad de criterios: " + coleccion.getCriteriosDePertenencia().size());
         if (coleccion == null) return null;
         return new ColeccionDTO(coleccion);

@@ -4,6 +4,7 @@ import gestorPublico.domain.Criterios.Criterio;
 import gestorPublico.domain.Criterios.CriterioDeTexto;
 import gestorPublico.domain.Criterios.CriterioEtiquetas;
 import gestorPublico.domain.HechosYColecciones.Coleccion;
+import gestorPublico.domain.HechosYColecciones.Hecho;
 import gestorPublico.utils.BDUtils;
 import org.hibernate.Hibernate;
 
@@ -95,6 +96,10 @@ public class ColeccionRepositorio {
 
     public void inicializarColeccion(Coleccion coleccion){
         Hibernate.initialize(coleccion.getHechos());
+        for(Hecho hecho : coleccion.getHechos()){
+            Hibernate.initialize(hecho.getEtiquetas());
+            Hibernate.initialize(hecho.getContenidoMultimedia());
+        }
         Hibernate.initialize(coleccion.getHechosConsensuados());
         Hibernate.initialize(coleccion.getFuente());
         Hibernate.initialize(coleccion.getCriteriosDePertenencia());
