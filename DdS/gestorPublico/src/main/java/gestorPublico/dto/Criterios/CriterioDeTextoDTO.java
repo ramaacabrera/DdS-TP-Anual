@@ -1,5 +1,8 @@
 package gestorPublico.dto.Criterios;
 
+import gestorPublico.domain.Criterios.CriterioDeTexto;
+import gestorPublico.domain.Criterios.TipoDeTexto;
+
 import java.util.*;
 
 public class CriterioDeTextoDTO extends CriterioDTO {
@@ -14,6 +17,26 @@ public class CriterioDeTextoDTO extends CriterioDTO {
         super(criterioId, "CRITERIO_TEXTO");
         this.palabras = palabras;
         this.tipoDeTexto = tipoDeTexto;
+    }
+    public CriterioDeTextoDTO(CriterioDeTexto c){
+        super(c.getId(), "CRITERIO_TEXTO");
+        this.palabras = c.getPalabras();
+        this.tipoDeTexto = this.convertirTipoDeTexto(c.getTipoDeTexto());
+    }
+
+    public TipoDeTextoDTO convertirTipoDeTexto(TipoDeTexto t){
+        switch (t){
+            case TITULO:
+                return TipoDeTextoDTO.TITULO;
+            case DESCRIPCION:
+                return TipoDeTextoDTO.DESCRIPCION;
+            case BUSQUEDA:
+                return TipoDeTextoDTO.DESCRIPCION;
+            case CATEGORIA:
+                return TipoDeTextoDTO.CATEGORIA;
+            default:
+                return null;
+        }
     }
 
     // Getters y Setters

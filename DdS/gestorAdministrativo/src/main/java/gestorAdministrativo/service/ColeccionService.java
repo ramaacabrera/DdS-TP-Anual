@@ -251,6 +251,10 @@ public class ColeccionService {
                         convertirTipoMultimediaEnum(multiDTO.getTipoContenidoMultimedia())
                 );
             }
+            else if(dto instanceof CriterioContribuyenteDTO){
+                CriterioContribuyenteDTO contrDTO = (CriterioContribuyenteDTO) dto;
+                entidad = new CriterioContribuyente(contrDTO.getNombreContribuyente());
+            }
 
             if (entidad != null) {
                 listaEntidades.add(entidad);

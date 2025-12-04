@@ -60,6 +60,7 @@ public class ColeccionService {
     }
 
     public Coleccion obtenerColeccionPorId(String id) {
+        System.out.println("Pidiendo coleccion al back: " + urlPublica);
         String url = HttpUrl.parse(urlPublica + "/colecciones/"+ id).newBuilder().build().toString();
         Request request = new Request.Builder().url(url).get().build();
 

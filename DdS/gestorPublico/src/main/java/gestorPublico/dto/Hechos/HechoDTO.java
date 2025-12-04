@@ -42,7 +42,7 @@ public class HechoDTO {
         if (hecho.getUbicacion() != null) {
             Ubicacion u = hecho.getUbicacion();
             this.ubicacion = new UbicacionDTO();
-            this.ubicacion.setUbicacionId(u.getId_ubicacion());
+            this.ubicacion.setId_ubicacion(u.getId_ubicacion());
             this.ubicacion.setLatitud(u.getLatitud());
             this.ubicacion.setLongitud(u.getLongitud());
         }
@@ -50,7 +50,7 @@ public class HechoDTO {
         // Fuente
         if (hecho.getFuente() != null) {
             this.fuente = new FuenteDTO();
-            this.fuente.setFuenteId(hecho.getFuente().getId());
+            this.fuente.setId(hecho.getFuente().getId());
             this.fuente.setDescriptor(hecho.getFuente().getDescriptor());
             if (hecho.getFuente().getTipoDeFuente() != null) {
                 this.fuente.setTipoDeFuente(hecho.getFuente().getTipoDeFuente().name());

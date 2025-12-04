@@ -1,5 +1,7 @@
 package gestorPublico.dto.Hechos;
 
+import gestorPublico.domain.HechosYColecciones.Ubicacion;
+
 import java.util.UUID;
 
 public class UbicacionDTO {
@@ -17,14 +19,20 @@ public class UbicacionDTO {
         this.longitud = longitud;
         this.descripcion = descripcion;
     }
+    public UbicacionDTO(Ubicacion u){
+        this.descripcion = u.getDescripcion();
+        this.latitud = u.getLatitud();
+        this.longitud = u.getLongitud();
+        this.id_ubicacion = u.getId_ubicacion();
+    }
 
     // --- Getters y Setters ---
 
-    public UUID getUbicacionId() {
+    public UUID getId_ubicacion() {
         return id_ubicacion;
     }
 
-    public void setUbicacionId(UUID id_ubicacion) {
+    public void setId_ubicacion(UUID id_ubicacion) {
         this.id_ubicacion = id_ubicacion;
     }
 

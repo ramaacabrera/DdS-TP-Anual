@@ -1,5 +1,5 @@
 package gestorPublico.dto.Criterios;
 
 public enum TipoDeFuenteDTO {
-    ESTATICA,DINAMICA,PROXY
+    ESTATICA,DINAMICA,METAMAPA,DEMO
 }
