@@ -1,6 +1,8 @@
 package web.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -205,7 +207,103 @@ public class ColeccionController {
     public Handler editarColeccion = ctx -> {
         String id = ctx.pathParam("id");
         System.out.println("PUT COLECCION: " + id);
+        System.out.println(ctx.body());
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(ctx.body());
+
+        JsonNode criteriosNode = rootNode.get("criteriosDePertenencia");
+
+        Map<String, Object> bodyData = new HashMap<>();
+        List<Map<String, Object>> criteriosDePertenencia = new ArrayList<>();
+        this.extraer(criteriosNode, criteriosDePertenencia);
+
+        bodyData.put("criteriosDePertenencia", criteriosDePertenencia);
+        bodyData.put("titulo", rootNode.get("titulo").asText());
+        bodyData.put("descripcion", rootNode.get("descripcion").asText());
+        bodyData.put("algoritmoDeConsenso", rootNode.get("algoritmoDeConsenso").asText());
+        List<String> fuentes = new ArrayList<>();
+        for(JsonNode fuente : rootNode.get("fuentes")){
+            fuentes.add(fuente.asText());
+        }
+        bodyData.put("fuentes", fuentes);
+        bodyData.put("coleccionId", id);
+        bodyData.put("username", ctx.sessionAttribute("username"));
+        bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+
+        System.out.println(bodyData);
+
+        coleccionService.actualizarColeccion(id, bodyData);
+
     };
+
+    private void extraer(JsonNode body, List<Map<String, Object>> criterios){
+        for(JsonNode criterio : body){
+            Map<String, Object> map = new HashMap<>();
+            System.out.println(criterio);
+            map.put("@type", criterio.get("@type").asText());
+            switch (criterio.get("@type").asText()){
+                case "CriterioDeTexto":
+                    map.put("tipoDeTexto", criterio.get("tipoDeTexto").asText());
+                    List<String> palabras = new ArrayList<>();
+                    JsonNode palabrasNode = criterio.get("palabras");
+                    for(JsonNode palabra : palabrasNode){
+                       palabras.add(palabra.asText());
+                    }
+                    map.put("palabras", palabras);
+                    break;
+                case "CriterioTipoMultimedia":
+                    map.put("tipoContenidoMultimedia",criterio.get("tipoContenidoMultimedia").asText());
+                    break;
+                case "CriterioEtiquetas":
+                    List<Map<String, String>> etiquetas = new ArrayList<>();
+                    JsonNode etiquetasNode = criterio.get("etiquetas");
+                    for(JsonNode etiqueta : etiquetasNode){
+                        Map<String, String> etiquetaMap = new HashMap<>();
+                        etiquetaMap.put("nombre", etiqueta.get("nombre").asText());
+                        etiquetas.add(etiquetaMap);
+                    }
+                    map.put("etiquetas", etiquetas);
+                    break;
+                case "CriterioFecha":
+                    JsonNode fechaInicioNode = criterio.get("fechaInicio");
+                    if (fechaInicioNode != null) {
+                        map.put("fechaInicio", fechaInicioNode.asLong());
+                    }
+
+                    JsonNode fechaFinNode = criterio.get("fechaFin");
+                    if (fechaFinNode != null) {
+                        map.put("fechaFin", fechaFinNode.asLong());
+                    }
+
+                    map.put("tipoFecha", criterio.get("tipoFecha").asText());
+                    break;
+                case "CriterioUbicacion":
+                    JsonNode ubicacionNode = criterio.get("ubicacion");
+                    if (ubicacionNode != null) {
+                        Map<String, Object> ubicacionMap = new HashMap<>();
+
+                        JsonNode latitudNode = ubicacionNode.get("latitud");
+                        if (latitudNode != null) {
+                            ubicacionMap.put("latitud", latitudNode.asDouble());
+                        }
+
+                        JsonNode longitudNode = ubicacionNode.get("longitud");
+                        if (longitudNode != null) {
+                            ubicacionMap.put("longitud", longitudNode.asDouble());
+                        }
+
+                        map.put("ubicacion", ubicacionMap);
+                    }
+                    break;
+                case "CriterioContribuyente":
+                    map.put("nombreContribuyente",criterio.get("nombreContribuyente").asText());
+                    break;
+            }
+            criterios.add(map);
+        }
+    }
+
     public Handler eliminarColeccion = ctx -> {
         String id = ctx.pathParam("id");
         System.out.println("Coleccion a eliminar: " + id);
