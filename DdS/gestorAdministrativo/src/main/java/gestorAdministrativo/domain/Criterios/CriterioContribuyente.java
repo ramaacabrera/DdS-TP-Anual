@@ -34,7 +34,7 @@ public class CriterioContribuyente extends Criterio {
         if (nombreContribuyente == null || nombreContribuyente.trim().isEmpty()) {
             return "1=1";
         }
-        return "LOWER(h.contribuyente.nombre) LIKE LOWER(:nombreContrib)";
+        return "LOWER(h.contribuyente.username) LIKE LOWER(:nombreContrib)";
     }
 
     @Override

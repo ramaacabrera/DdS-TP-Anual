@@ -24,7 +24,7 @@ public class CriterioContribuyenteDTO extends CriterioDTO {
         if (nombreContribuyente == null || nombreContribuyente.trim().isEmpty()) {
             return "1=1";
         }
-        return "h.contribuyente in (SELECT u.id_usuario FROM Usuario u WHERE u.nombre LIKE '%" +
+        return "h.contribuyente in (SELECT u.id_usuario FROM Usuario u WHERE u.username LIKE '%" +
                 nombreContribuyente + "%')";
     }
 

@@ -1,8 +1,12 @@
 package gestorAdministrativo.repository;
 
+import gestorAdministrativo.domain.Criterios.Criterio;
+import gestorAdministrativo.domain.Criterios.CriterioDeTexto;
+import gestorAdministrativo.domain.Criterios.CriterioEtiquetas;
 import gestorAdministrativo.domain.HechosYColecciones.Ubicacion;
 import gestorAdministrativo.utils.BDUtils;
 import gestorAdministrativo.domain.HechosYColecciones.Coleccion;
+import org.hibernate.Hibernate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -70,13 +74,32 @@ public class ColeccionRepositorio {
                     "LEFT JOIN c.fuentes " +
                     "WHERE c.handle = :handle";
 
-            return em.createQuery(jpql, Coleccion.class)
+            Coleccion coleccion = em.createQuery(jpql, Coleccion.class)
                     .setParameter("handle", UUID.fromString(handle))
                     .getSingleResult();
+
+            this.inicializarColeccion(coleccion);
+
+            return coleccion;
         } catch (Exception e) {
             return null;
         } finally {
             em.close();
+        }
+    }
+
+    private void inicializarColeccion(Coleccion coleccion){
+        Hibernate.initialize(coleccion.getHechos());
+        Hibernate.initialize(coleccion.getHechosConsensuados());
+        Hibernate.initialize(coleccion.getFuente());
+        Hibernate.initialize(coleccion.getCriteriosDePertenencia());
+        for(Criterio criterio : coleccion.getCriteriosDePertenencia()){
+            if(criterio instanceof CriterioEtiquetas){
+                Hibernate.initialize(((CriterioEtiquetas) criterio).getEtiquetas());
+            }
+            if(criterio instanceof CriterioDeTexto){
+                Hibernate.initialize(((CriterioDeTexto) criterio).getPalabras());
+            }
         }
     }
 
