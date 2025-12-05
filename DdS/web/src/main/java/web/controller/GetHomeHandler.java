@@ -24,7 +24,7 @@ public class GetHomeHandler implements Handler {
     private final ObjectMapper mapper = new ObjectMapper();
 
     private static final int PAGE_DEFAULT = 1;
-    private static final int SIZE_MAP_LIMIT = 15;
+    private static final int SIZE_MAP_LIMIT = 100;
 
     public GetHomeHandler(String urlPublica) {this.urlPublica = urlPublica;}
 
@@ -44,6 +44,7 @@ public class GetHomeHandler implements Handler {
 
             pageDto = mapper.readValue(response.body().string(), new TypeReference<PageDTO<HechoDTO>>() {});
             hechos = pageDto.content != null ? pageDto.content : Collections.emptyList();
+            System.out.println(pageDto.content.size());
 
         } catch (Exception e) {
             System.err.println("Error de red/IO al consultar el backend: " + e.getMessage());

@@ -266,8 +266,7 @@ public class ColeccionController {
                     JsonNode ubicacionNode = criterio.get("ubicacion");
                     if (ubicacionNode != null) {
                         Map<String, Object> ubicacionMap = new HashMap<>();
-                        if (ubicacionNode.get("latitud") != null) ubicacionMap.put("latitud", ubicacionNode.get("latitud").asDouble());
-                        if (ubicacionNode.get("longitud") != null) ubicacionMap.put("longitud", ubicacionNode.get("longitud").asDouble());
+                        ubicacionMap.put("descripcion", ubicacionNode.get("descripcion").asText());
                         map.put("ubicacion", ubicacionMap);
                     }
                     break;
