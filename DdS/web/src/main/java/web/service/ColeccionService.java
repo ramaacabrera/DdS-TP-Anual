@@ -28,7 +28,7 @@ public class ColeccionService {
     private final OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)  // Timeout para establecer conexión
             .readTimeout(120, TimeUnit.SECONDS)     // Timeout para lectura de datos (el que te está fallando)
-            .writeTimeout(60, TimeUnit.SECONDS)    // Timeout para escritura
+            .writeTimeout(60, TimeUnit.SECONDS)    // Timeout para escrituraa
             .build();
 
     public ColeccionService(String urlPublica, String urlAdmin) {
