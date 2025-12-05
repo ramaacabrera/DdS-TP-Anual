@@ -30,15 +30,18 @@ public class CriterioUbicacion extends Criterio {
 
     @Override
     public String getQueryCondition() {
-        return "h.ubicacion.id_ubicacion = :idUbicacionParam";
+        return "h.ubicacion.descripcion LIKE :descripcionUbicacionParam";
     }
 
     @Override
     @Transient
     public Map<String, Object> getQueryParameters() {
         Map<String, Object> params = new HashMap<>();
-        if (ubicacion != null) {
-            params.put("idUbicacionParam", ubicacion.getId_ubicacion());
+        if (ubicacion != null && ubicacion.getDescripcion() != null) {
+            // Para búsqueda parcial
+            params.put("descripcionUbicacionParam", "%" + ubicacion.getDescripcion() + "%");
+            // Para búsqueda exacta (sin %)
+            // params.put("descripcionUbicacionParam", ubicacion.getDescripcion());
         }
         return params;
     }
