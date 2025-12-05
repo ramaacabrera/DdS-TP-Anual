@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/controller/ColeccionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/controller/ColeccionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/FuenteRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/FuenteRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/HechoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/HechoRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/ColeccionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/ColeccionService.java" afterDir="false" />
-    </list>
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="Cambios en el gestorAdministrativo" />
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
     <list id="055ec5c7-b461-43de-ab28-b66172740804" name="Changes by helga" comment="" />
@@ -308,7 +301,7 @@
       <workItem from="1764540043385" duration="2484000" />
       <workItem from="1764612673437" duration="9875000" />
       <workItem from="1764704190273" duration="10607000" />
-      <workItem from="1764895871086" duration="2287000" />
+      <workItem from="1764895871086" duration="2768000" />
     </task>
     <task id="LOCAL-00001" summary="termine cargadorDemo, avanzo con cargadorDinamico (en proceso)">
       <option name="closed" value="true" />
@@ -358,7 +351,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764805426699</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Cambios en el gestorAdministrativo">
+      <option name="closed" value="true" />
+      <created>1764898504273</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1764898504274</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -381,7 +382,8 @@
     <MESSAGE value="termino cargadorEstatico" />
     <MESSAGE value="comento pruebas xq hay errores con dependencias y versiones" />
     <MESSAGE value="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO" />
-    <option name="LAST_COMMIT_MESSAGE" value="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO" />
+    <MESSAGE value="Cambios en el gestorAdministrativo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cambios en el gestorAdministrativo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
