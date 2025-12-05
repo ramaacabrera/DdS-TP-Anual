@@ -1,11 +1,13 @@
 package gestorPublico.controller;
 
 import gestorPublico.dto.FiltroHechosDTO;
+import gestorPublico.service.FuenteService;
 import gestorPublico.service.HechoService;
 import io.javalin.http.Handler;
 import io.javalin.http.BadRequestResponse;
 import gestorPublico.dto.Hechos.HechoDTO;
 import gestorPublico.dto.PageDTO;
+import gestorPublico.dto.Hechos.FuenteDTO;
 
 import java.net.http.HttpResponse;
 import java.text.ParseException;
@@ -17,9 +19,11 @@ import java.util.UUID;
 public class HechoController {
 
     private HechoService hechoService = null;
+    private FuenteService fuenteService = null;
 
-    public HechoController(HechoService hechoService) {
+    public HechoController(HechoService hechoService, FuenteService fuenteService) {
         this.hechoService = hechoService;
+        this.fuenteService = fuenteService;
     }
 
     public Handler obtenerHechos = ctx -> {
@@ -107,4 +111,13 @@ public class HechoController {
             throw new BadRequestResponse("Formato de fecha inválido (dd/MM/yyyy): " + fechaStr);
         }
     }
+
+    public Handler obtenerTodasLasFuentes = ctx -> {
+        try {
+            List<FuenteDTO> fuentes = fuenteService.obtenerTodasLasFuentes();
+            ctx.status(200).json(fuentes);
+        } catch (Exception e) {
+            ctx.status(500).json("Error obteniendo fuentes: " + e.getMessage());
+        }
+    };
 }

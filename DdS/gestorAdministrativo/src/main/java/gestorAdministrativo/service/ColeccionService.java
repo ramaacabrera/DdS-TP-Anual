@@ -54,19 +54,28 @@ public class ColeccionService {
             coleccion.setCriteriosDePertenencia(mapCriteriosToEntity(dto.getCriteriosDePertenencia()));
         }
 
-        List<Hecho> hechosQueCumplen;
+        List<Fuente> fuentesReales = new ArrayList<>();
 
         if (dto.getFuentes() != null && !dto.getFuentes().isEmpty()) {
-            List<Fuente> fuentes = mapFuentesToEntity(dto.getFuentes());
-            coleccion.setFuente(fuentes);
+            for (FuenteDTO fDto : dto.getFuentes()) {
+                if (fDto.getFuenteId() != null) {
+                    Fuente fuenteReal = fuenteRepositorio.buscarPorId(fDto.getFuenteId());
+                    if (fuenteReal != null) {
+                        fuentesReales.add(fuenteReal);
+                    } else {
+                        System.err.println("Advertencia: Se intentó asociar una fuente inexistente ID: " + fDto.getFuenteId());
+                    }
+                }
+            }
 
-            hechosQueCumplen = hechoRepositorio.buscarHechos(coleccion.getCriteriosDePertenencia(), fuentes);
+            coleccion.setFuente(fuentesReales);
+
+            List<Hecho> hechosQueCumplen = hechoRepositorio.buscarHechos(coleccion.getCriteriosDePertenencia(), fuentesReales);
+            coleccion.setHechos(hechosQueCumplen);
 
         } else {
-            hechosQueCumplen = hechoRepositorio.buscarHechos(coleccion.getCriteriosDePertenencia(), null);
+            coleccion.setHechos(hechoRepositorio.buscarHechos(coleccion.getCriteriosDePertenencia(), null));
         }
-
-        coleccion.setHechos(hechosQueCumplen);
         coleccionRepositorio.guardar(coleccion);
 
         return convertirADTO(coleccion);
@@ -214,31 +223,32 @@ public class ColeccionService {
         }).collect(Collectors.toList());
     }
 
-        private List<FuenteDTO> mapFuentesToDTO(List<Fuente> entidades) {
+    private List<FuenteDTO> mapFuentesToDTO(List<Fuente> entidades) {
         System.out.println("Se estan mapeando");
-        if(entidades == null){
-            System.out.println("No hay fuentes");
-        }
-        System.out.println("Mapeando fuentes: " + entidades.size());
-        if(entidades == null){
-            System.out.println("No hay fuentes");
-        }
-        if (entidades == null) return new ArrayList<>();
-            System.out.println("Mapeando fuentes 2");
-            for(Fuente fuente : entidades){
-                System.out.println("Fuente: " + fuente.getTipoDeFuente().name() + fuente.getDescriptor() + fuente.getId());
-            }
 
-            return entidades.stream().map(f -> {
-                FuenteDTO dto = new FuenteDTO();
-                dto.setFuenteId(f.getId());
-                dto.setDescriptor(f.getDescriptor());
-                if (f.getTipoDeFuente() != null) {
-                    dto.setTipoFuente(f.getTipoDeFuente().name());
-                }
-                return dto;
-            }).collect(Collectors.toList());
+        if (entidades == null) {
+            System.out.println("No hay fuentes (es null)");
+            return new ArrayList<>();
         }
+
+        System.out.println("Mapeando fuentes: " + entidades.size());
+
+        for(Fuente fuente : entidades){
+            String nombreTipo = (fuente.getTipoDeFuente() != null) ? fuente.getTipoDeFuente().name() : "NULO";
+            System.out.println("Fuente: " + nombreTipo + " - " + fuente.getDescriptor() + " - " + fuente.getId());
+        }
+
+        return entidades.stream().map(f -> {
+            FuenteDTO dto = new FuenteDTO();
+            dto.setFuenteId(f.getId());
+            dto.setDescriptor(f.getDescriptor());
+
+            if (f.getTipoDeFuente() != null) {
+                dto.setTipoFuente(f.getTipoDeFuente().name());
+            }
+            return dto;
+        }).collect(Collectors.toList());
+    }
 
     private Fuente mapFuenteToEntity(FuenteDTO dto) {
         if (dto == null) return null;

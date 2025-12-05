@@ -1,9 +1,6 @@
 package gestorPublico;
 
-import gestorPublico.service.ColeccionService;
-import gestorPublico.service.HechoService;
-import gestorPublico.service.SolicitudService;
-import gestorPublico.service.UsuarioService;
+import gestorPublico.service.*;
 import io.javalin.Javalin;
 import gestorPublico.controller.*;
 import utils.IniciadorApp;
@@ -23,15 +20,17 @@ public class Application {
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
         UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
+        FuenteRepositorio fuenteRepositorio = new FuenteRepositorio();
 
         // Service
         HechoService hechoService = new HechoService(hechoRepositorio, urlDinamica);
         ColeccionService coleccionService = new ColeccionService(coleccionRepositorio);
         SolicitudService solicitudService = new SolicitudService(urlDinamica);
         UsuarioService usuarioService = new UsuarioService(usuarioRepositorio, servidorSSO);
+        FuenteService fuenteService = new FuenteService(fuenteRepositorio);
 
         // Controller
-        HechoController hechoController = new HechoController(hechoService);
+        HechoController hechoController = new HechoController(hechoService, fuenteService);
         ColeccionController coleccionController = new ColeccionController(coleccionService);
         SolicitudController solicitudController = new SolicitudController(solicitudService);
         UsuarioController usuarioController = new UsuarioController(usuarioService);
@@ -44,6 +43,7 @@ public class Application {
         app.get("/api/hechos/{id}", hechoController.obtenerHechoPorId);
         app.post("/api/hechos", hechoController.crearHecho);
         app.get("/api/categoria", hechoController.buscarCategorias);
+        app.get("/api/fuentes", hechoController.obtenerTodasLasFuentes);
 
         // Rutas Colecciones
         app.get("/api/colecciones", coleccionController.obtenerColecciones);

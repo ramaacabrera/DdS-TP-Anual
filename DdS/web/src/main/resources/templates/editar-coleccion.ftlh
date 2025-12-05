@@ -14,19 +14,16 @@
         </script>
 
         <form id="form-editar-coleccion" class="form-container">
-            <!-- Título -->
             <div class="form-group">
                 <label for="titulo" class="form-label">Título *</label>
                 <input type="text" id="titulo" name="titulo" class="form-input" value="${coleccion.titulo!''}" required>
             </div>
 
-            <!-- Descripción -->
             <div class="form-group">
                 <label for="descripcion" class="form-label">Descripción *</label>
                 <textarea id="descripcion" name="descripcion" class="form-textarea" rows="4" required>${coleccion.descripcion!''}</textarea>
             </div>
 
-            <!-- Algoritmo -->
             <div class="form-group">
                 <label for="algoritmo" class="form-label">Algoritmo de consenso *</label>
                 <select id="algoritmo" name="algoritmo" class="form-select" required>
@@ -38,11 +35,9 @@
                 </select>
             </div>
 
-            <!-- Criterios -->
             <div class="form-section">
                 <h3 class="form-section-title">Criterios de pertenencia</h3>
 
-                <!-- Contenedor para los criterios existentes (pre-cargados) -->
                 <div id="criterios-agregados" class="criterios-container">
                     <#if coleccion.criteriosDePertenencia?? && (coleccion.criteriosDePertenencia?size > 0)>
                         <#list coleccion.criteriosDePertenencia as criterio>
@@ -55,7 +50,7 @@
                                 </div>
 
                                 <#if criterio.tipoDeTexto??>
-                                <#assign tipo = "CriterioDeTexto">
+                                    <#assign tipo = "CriterioDeTexto">
                                     <div><strong>Palabras:</strong> ${(criterio.palabras?join(', '))!''}</div>
                                     <div><strong>Tipo de texto:</strong> ${(criterio.tipoDeTexto)!''}</div>
                                     <#if criterio.palabras??>
@@ -66,7 +61,7 @@
                                     <input type="hidden" name="criterios[${criterioId}].tipoDeTexto" value="${(criterio.tipoDeTexto)!''}">
 
                                 <#elseif criterio.etiquetas??>
-                                <#assign tipo = "CriterioEtiquetas">
+                                    <#assign tipo = "CriterioEtiquetas">
                                     <div><strong>Etiquetas:</strong>
                                         <#if criterio.etiquetas??>
                                             ${criterio.etiquetas?map(e -> e.nombre)?join(', ')}
@@ -79,29 +74,24 @@
                                     </#if>
 
                                 <#elseif criterio.tipoContenidoMultimedia??>
-                                <#assign tipo = "CriterioTipoMultimedia">
+                                    <#assign tipo = "CriterioTipoMultimedia">
                                     <div><strong>Tipo:</strong> ${(criterio.tipoContenidoMultimedia)!''}</div>
                                     <input type="hidden" name="criterios[${criterioId}].tipoContenidoMultimedia" value="${(criterio.tipoContenidoMultimedia)!''}">
 
                                 <#elseif criterio.tipoFecha??>
-                                <#assign tipo = "CriterioFecha">
-                                    <#-- Fecha de inicio -->
+                                    <#assign tipo = "CriterioFecha">
+                                    <#assign fechaInicioStr = ''>
                                     <#if criterio.fechaInicio??>
-                                        <#-- Convertir a timestamp (long) y luego a datetime -->
                                         <#assign fechaInicioTimestamp = criterio.fechaInicio?long>
                                         <#assign fechaInicioDate = fechaInicioTimestamp?number_to_datetime>
                                         <#assign fechaInicioStr = fechaInicioDate?string('yyyy-MM-dd')>
-                                    <#else>
-                                        <#assign fechaInicioStr = ''>
                                     </#if>
 
-                                    <#-- Fecha de fin -->
+                                    <#assign fechaFinStr = ''>
                                     <#if criterio.fechaFin??>
                                         <#assign fechaFinTimestamp = criterio.fechaFin?long>
                                         <#assign fechaFinDate = fechaFinTimestamp?number_to_datetime>
                                         <#assign fechaFinStr = fechaFinDate?string('yyyy-MM-dd')>
-                                    <#else>
-                                        <#assign fechaFinStr = ''>
                                     </#if>
 
                                     <div><strong>Desde:</strong> ${fechaInicioStr}</div>
@@ -112,14 +102,14 @@
                                     <input type="hidden" name="criterios[${criterioId}].tipoFecha" value="${(criterio.tipoFecha)!''}">
 
                                 <#elseif criterio.ubicacion??>
-                                <#assign tipo = "CriterioUbicacion">
+                                    <#assign tipo = "CriterioUbicacion">
                                     <#if criterio.ubicacion??>
                                         <div><strong>Descripcion:</strong> ${(criterio.ubicacion.descripcion)!''}</div>
                                         <input type="hidden" name="criterios[${criterioId}].ubicacion.descripcion" value="${(criterio.ubicacion.descripcion)!''}">
                                     </#if>
 
                                 <#elseif criterio.nombreContribuyente??>
-                                <#assign tipo = "CriterioContribuyente">
+                                    <#assign tipo = "CriterioContribuyente">
                                     <div><strong>Contribuyente:</strong> ${(criterio.nombreContribuyente)!''}</div>
                                     <input type="hidden" name="criterios[${criterioId}].nombreContribuyente" value="${(criterio.nombreContribuyente)!''}">
                                 <#elseif criterio.fuente??>
@@ -133,7 +123,6 @@
                     </#if>
                 </div>
 
-                <!-- Formulario para agregar nuevo criterio (igual que en creación) -->
                 <div class="nuevo-criterio-card">
                     <h4 class="form-subtitle">Agregar nuevo criterio</h4>
                     <div class="form-group">
@@ -155,13 +144,43 @@
                 </div>
             </div>
 
-            <!-- Botones -->
+            <div class="form-section">
+                <h3 class="form-section-title">Fuentes asociadas</h3>
+                <label for="fuentes" class="form-label">Seleccioná una o más fuentes:</label><br>
+                <select id="fuentes" name="fuentes" multiple class="form-select" size="6">
+                    <#if listaFuentes?? && listaFuentes?size != 0>
+                        <#list listaFuentes as f>
+                            <#if f.fuenteId?? && f.descriptor??>
+
+                                <#assign selected = false>
+                                <#if coleccion.fuentes??>
+                                    <#list coleccion.fuentes as colFuente>
+                                        <#if colFuente.id?? && colFuente.id?string == f.fuenteId?string>
+                                            <#assign selected = true>
+                                        </#if>
+                                    </#list>
+                                </#if>
+
+                                <option value="${f.fuenteId}" <#if selected>selected</#if>>
+                                    ${f.descriptor}
+                                    <#if f.tipoDeFuente??>
+                                        <small>(${f.tipoDeFuente})</small>
+                                    </#if>
+                                </option>
+                            </#if>
+                        </#list>
+                    <#else>
+                        <option disabled>No hay fuentes disponibles</option>
+                    </#if>
+                </select>
+                <small style="color: #666; margin-top: 5px; display: block;">Mantén presionada la tecla Ctrl (o Cmd) para seleccionar varias.</small>
+            </div>
+
             <div class="form-actions">
                 <button type="button" id="btn-cancelar" class="btn btn-secondary">Cancelar</button>
                 <button type="submit" class="btn btn-primary">Guardar cambios</button>
             </div>
 
-            <!-- Mensajes -->
             <div id="mensaje-exito" class="mensaje mensaje-exito" style="display:none;">
                 ✅ Colección actualizada correctamente.
             </div>

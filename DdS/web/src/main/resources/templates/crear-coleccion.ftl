@@ -17,19 +17,16 @@
         </script>
 
         <form id="form-crear-coleccion" class="form-container" method="POST" action="/colecciones">
-            <!-- Título -->
             <div class="form-group">
                 <label for="titulo" class="form-label">Título *</label>
                 <input type="text" id="titulo" name="titulo" class="form-input" required placeholder="Ej: Colección de reportes ambientales">
             </div>
 
-            <!-- Descripción -->
             <div class="form-group">
                 <label for="descripcion" class="form-label">Descripción *</label>
                 <textarea id="descripcion" name="descripcion" class="form-textarea" rows="4" required placeholder="Describa brevemente la colección..."></textarea>
             </div>
 
-            <!-- Algoritmo -->
             <div class="form-group">
                 <label for="algoritmo" class="form-label">Algoritmo de consenso *</label>
                 <select id="algoritmo" name="algoritmo" class="form-select" required>
@@ -39,16 +36,12 @@
                 </select>
             </div>
 
-            <!-- Criterios -->
             <div class="form-section">
                 <h3 class="form-section-title">Criterios de pertenencia</h3>
 
-                <!-- Contenedor para los criterios agregados -->
                 <div id="criterios-agregados" class="criterios-container">
-                    <!-- Aquí se mostrarán los criterios agregados -->
                 </div>
 
-                <!-- Formulario para agregar nuevo criterio -->
                 <div class="nuevo-criterio-card">
                     <h4 class="form-subtitle">Agregar nuevo criterio</h4>
                     <div class="form-group">
@@ -71,13 +64,42 @@
                 </div>
             </div>
 
-            <!-- Botones -->
+            <div class="form-section">
+                <h3 class="form-section-title">Fuentes</h3>
+                <label for="fuentes" class="form-label">Seleccioná una o más fuentes:</label><br>
+                <select id="fuentes" name="fuentes" multiple class="form-select" size="6">
+                    <#if listaFuentes?? && listaFuentes?size != 0>
+                        <#list listaFuentes as f>
+                            <option value="${f.fuenteId}">
+                                ${f.descriptor} <small>(${f.tipoDeFuente!"Indefinido"})</small>
+                            </option>
+                        </#list>
+                    <#else>
+                        <option disabled>No hay fuentes disponibles</option>
+                    </#if>
+                </select>
+                <small style="color: #666; margin-top: 5px; display: block;">Mantén presionada la tecla Ctrl (o Cmd) para seleccionar varias.</small>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Hechos incluidos en la colección</h3>
+                <div id="lista-hechos" class="lista-vacia">
+                    <p class="texto-placeholder">Aún no hay hechos asociados.</p>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Hechos consensuados</h3>
+                <div id="lista-consensuados" class="lista-vacia">
+                    <p class="texto-placeholder">Aún no hay hechos consensuados.</p>
+                </div>
+            </div>
+
             <div class="form-actions">
                 <button type="button" id="btn-cancelar" class="btn btn-secondary">Cancelar</button>
                 <button type="submit" class="btn btn-primary">Crear Colección</button>
             </div>
 
-            <!-- Mensajes -->
             <div id="mensaje-exito" class="mensaje mensaje-exito" style="display:none;">
                 ✅ Colección creada exitosamente.
             </div>

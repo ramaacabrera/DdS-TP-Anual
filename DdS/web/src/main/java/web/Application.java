@@ -40,9 +40,10 @@ public class Application {
         CategoriasService categoriasService = new CategoriasService(urlEstadisticas);
         SolicitudService solicitudService = new SolicitudService(urlAdmin);
         UsuarioService usuarioService = new UsuarioService(urlPublica);
+        FuenteService fuenteService = new FuenteService(urlPublica);
 
         // controllers
-        ColeccionController coleccionController = new ColeccionController(coleccionService, usuarioService);
+        ColeccionController coleccionController = new ColeccionController(coleccionService, usuarioService, fuenteService);
         HechoController hechoController = new HechoController(urlPublica, hechoService, dataCloud);
         SolicitudController solicitudController = new SolicitudController(solicitudService);
 

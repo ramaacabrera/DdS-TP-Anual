@@ -79,52 +79,68 @@ public class ColeccionService {
     }
 
     public void crearColeccion(Map<String, Object> bodyData) {
-        System.out.println(bodyData);
-        String username = null;
-        String access_token = null;
-        String rolUsuario = null;
-        if(bodyData.containsKey("username") && bodyData.containsKey("access_token") && bodyData.containsKey("rolUsuario")){
-            username = bodyData.get("username").toString();
-            access_token = bodyData.get("access_token").toString();
-            rolUsuario = bodyData.get("rolUsuario").toString();
-            bodyData.remove("username");
-            bodyData.remove("access_token");
-            bodyData.remove("rolUsuario");
-        }
+        System.out.println("--- INICIO CREAR COLECCION (Service) ---");
+
+        // 1. Extraer credenciales de forma segura
+        // Usamos String.valueOf para evitar NullPointerException si el valor es null,
+        // pero verificamos nulos después.
+        String username = bodyData.get("username") != null ? bodyData.get("username").toString() : null;
+        String accessToken = bodyData.get("access_token") != null ? bodyData.get("access_token").toString() : null;
+        String rolUsuario = bodyData.get("rolUsuario") != null ? bodyData.get("rolUsuario").toString() : null;
+
+        // 2. Limpiar el body para que no viajen estos datos en el JSON
+        bodyData.remove("username");
+        bodyData.remove("access_token");
+        bodyData.remove("rolUsuario");
+
+        // 3. Serializar
         String jsonBody = new Gson().toJson(bodyData);
+        System.out.println("JSON a enviar: " + jsonBody);
 
-        System.out.println("Serializacion: " + jsonBody);
+        // 4. Construir URL evitando doble barra "//"
+        String baseUrl = urlAdmin.endsWith("/") ? urlAdmin : urlAdmin + "/";
+        String finalUrl = baseUrl + "api/colecciones";
+        System.out.println("URL Destino: " + finalUrl);
 
-        System.out.println("Mandando a: " + urlAdmin);
         HttpClient httpClient = HttpClient.newHttpClient();
-        try{
+
+        try {
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8081/api/colecciones"))
+                    .uri(new URI(finalUrl))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody));
 
-            if (username != null && access_token != null && rolUsuario != null) {
+            // 5. Validación explícita de credenciales
+            if (username != null && accessToken != null && rolUsuario != null) {
+                System.out.println("✅ Agregando Headers de Seguridad:");
+                System.out.println("   -> username: " + username);
+                System.out.println("   -> rolUsuario: " + rolUsuario);
+                System.out.println("   -> access_token: [PRESENTE]");
+
                 requestBuilder
                         .header("username", username)
-                        .header("access_token", access_token)
-                        .header("rolUsuario", rolUsuario);
-
+                        .header("access_token", accessToken)
+                        .header("rol_usuario", rolUsuario);
+            } else {
+                System.err.println("⚠️ ALERTA: Faltan credenciales, se enviará petición anónima (probablemente falle con 401).");
+                System.err.println("   Status: User=" + (username!=null) + ", Token=" + (accessToken!=null) + ", Rol=" + (rolUsuario!=null));
             }
+
             HttpRequest request = requestBuilder.build();
-
-            System.out.println("Se armo la request");
-
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Mandamos la request");
+            System.out.println("Respuesta del servidor: " + response.statusCode());
 
             if (response.statusCode() != 201) {
+                // Imprimimos el cuerpo del error para saber qué dice el backend
+                System.err.println("Cuerpo del error: " + response.body());
                 throw new RuntimeException("Error al crear la coleccion, status code: " + response.statusCode());
-            } else{
-                System.out.println("Coleccion creada");
+            } else {
+                System.out.println("✅ Colección creada exitosamente");
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -208,7 +224,7 @@ public class ColeccionService {
                 requestBuilder
                         .header("username", username)
                         .header("access_token", access_token)
-                        .header("rolUsuario", rolUsuario);
+                        .header("rol_usuario", rolUsuario);
 
             }
             HttpRequest request = requestBuilder.build();

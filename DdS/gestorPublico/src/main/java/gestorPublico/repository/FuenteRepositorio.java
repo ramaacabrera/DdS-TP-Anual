@@ -5,6 +5,8 @@ import gestorPublico.domain.fuente.Fuente;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class FuenteRepositorio {
@@ -69,5 +71,19 @@ public class FuenteRepositorio {
         }
 
         return guardar(fuenteEntrante);
+    }
+
+    public List<Fuente> obtenerTodas() {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            String jpql = "SELECT f FROM Fuente f";
+            TypedQuery<Fuente> query = em.createQuery(jpql, Fuente.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
     }
 }

@@ -18,6 +18,7 @@ public class ContenidoMultimedia {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Type(type = "uuid-char")
+    @JsonProperty("contenidoId")
     @Column(name = "id_contenido", length = 36 , updatable = false, nullable = false)
     private UUID id_contenido;
 
