@@ -26,6 +26,7 @@ public class Application {
         SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
         SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio();
         UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
+        FuenteRepositorio fuenteRepositorio = new FuenteRepositorio();
 
         app.before("/api/*", ctx -> {
             if (ctx.method().equals("OPTIONS")) {
@@ -59,7 +60,7 @@ public class Application {
         });
 
         // 2. Services
-        ColeccionService coleccionService = new ColeccionService(coleccionRepositorio, hechoRepositorio);
+        ColeccionService coleccionService = new ColeccionService(coleccionRepositorio, hechoRepositorio, fuenteRepositorio);
         SolicitudEliminacionService solicitudEliminacionService = new SolicitudEliminacionService(solicitudEliminacionRepositorio, hechoRepositorio, usuarioRepositorio);
         SolicitudModificacionService solicitudModificacionService = new SolicitudModificacionService(solicitudModificacionRepositorio, hechoRepositorio, usuarioRepositorio);
 
@@ -78,6 +79,7 @@ public class Application {
         app.post("/api/colecciones/{id}/agregador.fuente", coleccionController.agregarFuente);
         app.delete("/api/colecciones/{id}/agregador.fuente", coleccionController.borrarFuente);
         app.put("/api/colecciones/{id}/algoritmo", coleccionController.actualizarAlgoritmoConsenso);
+        app.get("/api/fuentes", coleccionController.obtenerTodasLasFuentes);
 
         // Rutas Solicitud Eliminacion
         app.post("/api/solicitudes", solicitudController.crearSolicitud);

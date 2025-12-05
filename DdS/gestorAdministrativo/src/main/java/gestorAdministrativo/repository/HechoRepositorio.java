@@ -1,5 +1,6 @@
 package gestorAdministrativo.repository;
 
+import gestorAdministrativo.domain.fuente.Fuente;
 import gestorAdministrativo.utils.BDUtils;
 import gestorAdministrativo.domain.Criterios.Criterio;
 import gestorAdministrativo.domain.HechosYColecciones.Hecho;
@@ -45,6 +46,59 @@ public class HechoRepositorio {
                         query.setParameter(param.getKey(), param.getValue());
                     }
                 }
+            }
+
+            return query.getResultList();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+    }
+
+    // En HechoRepositorio.java
+
+    public List<Hecho> buscarHechos(List<Criterio> criterios, List<Fuente> fuentesFiltro) {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            StringBuilder queryString = new StringBuilder(
+                    "SELECT DISTINCT h FROM Hecho h " +
+                            "LEFT JOIN h.etiquetas " +
+                            "LEFT JOIN h.contenidoMultimedia " +
+                            "LEFT JOIN FETCH h.ubicacion " +
+                            "LEFT JOIN FETCH h.contribuyente " +
+                            "LEFT JOIN FETCH h.fuente " +
+                            "WHERE 1=1"
+            );
+
+            if (criterios != null && !criterios.isEmpty()) {
+                for (Criterio criterio : criterios) {
+                    String condition = criterio.getQueryCondition();
+                    if (condition != null && !condition.trim().isEmpty()) {
+                        queryString.append(" AND ").append(condition);
+                    }
+                }
+            }
+
+            if (fuentesFiltro != null && !fuentesFiltro.isEmpty()) {
+                queryString.append(" AND h.fuente IN :listaFuentes ");
+            }
+
+            TypedQuery<Hecho> query = em.createQuery(queryString.toString(), Hecho.class);
+
+            if (criterios != null) {
+                for (Criterio criterio : criterios) {
+                    Map<String, Object> params = criterio.getQueryParameters();
+                    for (Map.Entry<String, Object> param : params.entrySet()) {
+                        query.setParameter(param.getKey(), param.getValue());
+                    }
+                }
+            }
+
+            if (fuentesFiltro != null && !fuentesFiltro.isEmpty()) {
+                query.setParameter("listaFuentes", fuentesFiltro);
             }
 
             return query.getResultList();

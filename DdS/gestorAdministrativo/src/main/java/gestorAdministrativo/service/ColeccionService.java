@@ -13,6 +13,7 @@ import gestorAdministrativo.domain.fuente.TipoDeFuente;
 import gestorAdministrativo.dto.Hechos.TipoContenidoMultimediaDTO;
 import gestorAdministrativo.repository.ColeccionRepositorio;
 import gestorAdministrativo.repository.HechoRepositorio;
+import gestorAdministrativo.repository.FuenteRepositorio;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +23,25 @@ import java.util.stream.Collectors;
 public class ColeccionService {
     private final ColeccionRepositorio coleccionRepositorio;
     private final HechoRepositorio hechoRepositorio;
+    private final FuenteRepositorio fuenteRepositorio;
 
-    public ColeccionService(ColeccionRepositorio coleccionRepositorio, HechoRepositorio hechoRepositorio) {
+    public ColeccionService(ColeccionRepositorio coleccionRepositorio,
+                            HechoRepositorio hechoRepositorio,
+                            FuenteRepositorio fuenteRepositorio) {
         this.coleccionRepositorio = coleccionRepositorio;
         this.hechoRepositorio = hechoRepositorio;
+        this.fuenteRepositorio = fuenteRepositorio;
+    }
+
+    public List<FuenteDTO> obtenerTodasLasFuentes() {
+        List<Fuente> fuentes = fuenteRepositorio.obtenerTodas();
+        return mapFuentesToDTO(fuentes);
     }
 
     public ColeccionDTO crearColeccion(ColeccionDTO dto) {
         System.out.println("Iniciando creación de colección...");
 
         Coleccion coleccion = new Coleccion();
-
         coleccion.setTitulo(dto.getTitulo());
         coleccion.setDescripcion(dto.getDescripcion());
 
@@ -43,15 +52,20 @@ public class ColeccionService {
         if (dto.getCriteriosDePertenencia() != null) {
             coleccion.setCriteriosDePertenencia(mapCriteriosToEntity(dto.getCriteriosDePertenencia()));
         }
-        if (dto.getFuentes() != null) {
-            coleccion.setFuente(mapFuentesToEntity(dto.getFuentes()));
+
+        List<Hecho> hechosQueCumplen;
+
+        if (dto.getFuentes() != null && !dto.getFuentes().isEmpty()) {
+            List<Fuente> fuentes = mapFuentesToEntity(dto.getFuentes());
+            coleccion.setFuente(fuentes);
+
+            hechosQueCumplen = hechoRepositorio.buscarHechos(coleccion.getCriteriosDePertenencia(), fuentes);
+
+        } else {
+            hechosQueCumplen = hechoRepositorio.buscarHechos(coleccion.getCriteriosDePertenencia(), null);
         }
 
-        if (coleccion.getCriteriosDePertenencia() != null && !coleccion.getCriteriosDePertenencia().isEmpty()) {
-            List<Hecho> hechosQueCumplen = hechoRepositorio.buscarHechos(coleccion.getCriteriosDePertenencia());
-            coleccion.setHechos(hechosQueCumplen);
-        }
-
+        coleccion.setHechos(hechosQueCumplen);
         coleccionRepositorio.guardar(coleccion);
 
         return convertirADTO(coleccion);

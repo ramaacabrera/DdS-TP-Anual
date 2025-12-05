@@ -8,6 +8,7 @@ import gestorAdministrativo.domain.fuente.TipoDeFuente;
 import gestorAdministrativo.service.ColeccionService;
 import io.javalin.http.Handler;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ColeccionController {
@@ -17,6 +18,15 @@ public class ColeccionController {
     public ColeccionController(ColeccionService coleccionService) {
         this.coleccionService = coleccionService;
     }
+
+    public Handler obtenerTodasLasFuentes = ctx -> {
+        try {
+            List<FuenteDTO> fuentes = coleccionService.obtenerTodasLasFuentes();
+            ctx.status(200).json(fuentes);
+        } catch (Exception e) {
+            ctx.status(500).json("Error obteniendo fuentes: " + e.getMessage());
+        }
+    };
 
     public Handler crearColeccion = ctx -> {
         try {
