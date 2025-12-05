@@ -125,10 +125,7 @@
                             <#-- CRITERIO UBICACIÓN -->
                             <#elseif c.ubicacion??>
                                 <div>Ubicación específica:</div>
-                                <div style="margin-top: 5px;">
-                                    <div>Latitud: <strong>${(c.ubicacion.latitud)!?html}</strong></div>
-                                    <div>Longitud: <strong>${(c.ubicacion.longitud)!?html}</strong></div>
-                                </div>
+                                <div><strong>${(c.ubicacion.descripcion)!?html}</strong></div>
 
                             <#-- CRITERIO DE TEXTO -->
                             <#elseif c.tipoDeTexto??>

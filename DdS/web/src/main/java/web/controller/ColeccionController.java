@@ -8,7 +8,7 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import okhttp3.Request;
 import okhttp3.Response;
-import utils.Dominio.HechosYColecciones.Ubicacion;
+import web.domain.HechosYColecciones.Ubicacion;
 import utils.Dominio.Usuario.Usuario;
 import web.domain.Criterios.Criterio;
 import web.domain.Criterios.TipoDeTexto;
@@ -147,7 +147,6 @@ public class ColeccionController {
         bodyData.put("titulo", ctx.formParam("titulo"));
         bodyData.put("descripcion", ctx.formParam("descripcion"));
         bodyData.put("algoritmoDeConsenso", ctx.formParam("algoritmo"));
-        bodyData.put("fuentes", ctx.formParams("fuentes"));
         bodyData.put("criteriosDePertenencia", criteriosDePertenencia);
         bodyData.put("username", ctx.sessionAttributeMap().get("username"));
         bodyData.put("access_token", ctx.sessionAttributeMap().get("access_token"));
@@ -194,12 +193,9 @@ public class ColeccionController {
         for (Map<String, Object> criterio : criteriosDePertenencia) {
             criterio.remove("_id");
             if(criterio.get("@type").equals("CriterioUbicacion")){
-                double latitud = Double.parseDouble(criterio.get("ubicacion.latitud").toString());
-                double longitud = Double.parseDouble(criterio.get("ubicacion.longitud").toString());
-                Ubicacion ubicacion = new Ubicacion(latitud, longitud);
+                Ubicacion ubicacion = new Ubicacion(0, 0, criterio.get("ubicacion.descripcion").toString());
                 criterio.put("ubicacion", ubicacion);
-                criterio.remove("ubicacion.latitud");
-                criterio.remove("ubicacion.longitud");
+                criterio.remove("ubicacion.descripcion");
             }
         }
 
@@ -223,11 +219,6 @@ public class ColeccionController {
         bodyData.put("titulo", rootNode.get("titulo").asText());
         bodyData.put("descripcion", rootNode.get("descripcion").asText());
         bodyData.put("algoritmoDeConsenso", rootNode.get("algoritmoDeConsenso").asText());
-        List<String> fuentes = new ArrayList<>();
-        for(JsonNode fuente : rootNode.get("fuentes")){
-            fuentes.add(fuente.asText());
-        }
-        bodyData.put("fuentes", fuentes);
         bodyData.put("coleccionId", id);
         bodyData.put("username", ctx.sessionAttribute("username"));
         bodyData.put("access_token", ctx.sessionAttribute("access_token"));
@@ -285,15 +276,7 @@ public class ColeccionController {
                     if (ubicacionNode != null) {
                         Map<String, Object> ubicacionMap = new HashMap<>();
 
-                        JsonNode latitudNode = ubicacionNode.get("latitud");
-                        if (latitudNode != null) {
-                            ubicacionMap.put("latitud", latitudNode.asDouble());
-                        }
-
-                        JsonNode longitudNode = ubicacionNode.get("longitud");
-                        if (longitudNode != null) {
-                            ubicacionMap.put("longitud", longitudNode.asDouble());
-                        }
+                        ubicacionMap.put("descripcion", ubicacionNode.get("descripcion").asText());
 
                         map.put("ubicacion", ubicacionMap);
                     }

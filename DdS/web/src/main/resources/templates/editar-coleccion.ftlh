@@ -114,16 +114,17 @@
                                 <#elseif criterio.ubicacion??>
                                 <#assign tipo = "CriterioUbicacion">
                                     <#if criterio.ubicacion??>
-                                        <div><strong>Latitud:</strong> ${(criterio.ubicacion.latitud)!''}</div>
-                                        <div><strong>Longitud:</strong> ${(criterio.ubicacion.longitud)!''}</div>
-                                        <input type="hidden" name="criterios[${criterioId}].ubicacion.latitud" value="${(criterio.ubicacion.latitud)!''}">
-                                        <input type="hidden" name="criterios[${criterioId}].ubicacion.longitud" value="${(criterio.ubicacion.longitud)!''}">
+                                        <div><strong>Descripcion:</strong> ${(criterio.ubicacion.descripcion)!''}</div>
+                                        <input type="hidden" name="criterios[${criterioId}].ubicacion.descripcion" value="${(criterio.ubicacion.descripcion)!''}">
                                     </#if>
 
                                 <#elseif criterio.nombreContribuyente??>
                                 <#assign tipo = "CriterioContribuyente">
                                     <div><strong>Contribuyente:</strong> ${(criterio.nombreContribuyente)!''}</div>
                                     <input type="hidden" name="criterios[${criterioId}].nombreContribuyente" value="${(criterio.nombreContribuyente)!''}">
+                                <#elseif criterio.fuente??>
+                                    <div><strong>Tipo De Fuente:</strong> ${(criterio.fuente)!''}</div>
+                                    <input type="hidden" name="criterios[${criterioId}].fuente" value="${(criterio.fuente)!''}">
                                 </#if>
 
                                 <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
@@ -152,58 +153,6 @@
                         </button>
                     </div>
                 </div>
-            </div>
-
-            <!-- Fuentes -->
-            <div class="form-section">
-                <h3 class="form-section-title">Fuentes asociadas</h3>
-                <label for="fuentes" class="form-label">Seleccioná una o más fuentes:</label><br>
-                <select id="fuentes" name="fuentes" multiple class="form-select" size="4">
-                    <#list fuentes as fuente>
-                        <option value="${fuente}"
-                                <#if coleccion.fuentes?has_content && coleccion.fuentes?map(f -> f.tipoDeFuente)?seq_contains(fuente)>selected</#if>>
-                            ${fuente?capitalize}
-                        </option>
-                    </#list>
-                </select>
-            </div>
-
-            <!-- Hechos asociados (solo lectura) -->
-            <div class="form-section">
-                <h3 class="form-section-title">Hechos asociados</h3>
-                <#if coleccion.hechos?? && (coleccion.hechos?size > 0)>
-                    <div id="lista-hechos" class="lista-hechos">
-                        <#list coleccion.hechos as hecho>
-                            <div class="hecho-card">
-                                <strong>${(hecho.titulo)!''}</strong>
-                                <p>${(hecho.descripcion)!?truncate(100, '...')}</p>
-                            </div>
-                        </#list>
-                    </div>
-                <#else>
-                    <div id="lista-hechos" class="lista-vacia">
-                        <p class="texto-placeholder">No hay hechos asociados aún.</p>
-                    </div>
-                </#if>
-            </div>
-
-            <!-- Hechos consensuados (solo lectura) -->
-            <div class="form-section">
-                <h3 class="form-section-title">Hechos consensuados</h3>
-                <#if coleccion.hechosConsensuados?? && (coleccion.hechosConsensuados?size > 0)>
-                    <div id="lista-consensuados" class="lista-hechos">
-                        <#list coleccion.hechosConsensuados as hecho>
-                            <div class="hecho-card">
-                                <strong>${(hecho.titulo)!''}</strong>
-                                <p>${(hecho.descripcion)!?truncate(100, '...')}</p>
-                            </div>
-                        </#list>
-                    </div>
-                <#else>
-                    <div id="lista-consensuados" class="lista-vacia">
-                        <p class="texto-placeholder">No hay hechos consensuados aún.</p>
-                    </div>
-                </#if>
             </div>
 
             <!-- Botones -->

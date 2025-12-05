@@ -1,6 +1,9 @@
 package gestorAdministrativo.controller;
 
+import gestorAdministrativo.domain.Criterios.Criterio;
 import gestorAdministrativo.dto.Coleccion.ColeccionDTO;
+import gestorAdministrativo.dto.Criterios.CriterioDTO;
+import gestorAdministrativo.dto.Criterios.CriterioUbicacionDTO;
 import gestorAdministrativo.dto.Hechos.FuenteDTO;
 import gestorAdministrativo.domain.HechosYColecciones.TipoAlgoritmoConsenso;
 import gestorAdministrativo.domain.fuente.Fuente;
@@ -37,6 +40,11 @@ public class ColeccionController {
             System.out.println(request.getCriteriosDePertenencia().size());
 
             System.out.println("DTO creado: " + request.toString());
+            for(CriterioDTO c : request.getCriteriosDePertenencia()){
+                if(c instanceof CriterioUbicacionDTO){
+                    System.out.println("Ubicacion: " + ((CriterioUbicacionDTO) c).getUbicacion().getDescripcion());
+                }
+            }
 
             if (request.getTitulo() == null || request.getTitulo().trim().isEmpty()) {
                 ctx.status(400).json("El título es requerido");

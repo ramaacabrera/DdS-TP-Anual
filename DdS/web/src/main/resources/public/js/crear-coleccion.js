@@ -71,11 +71,10 @@ function mostrarCampoCriterio() {
 
         case "CriterioUbicacion":
             campoDiv.innerHTML = `
-                <label class="form-label">Ubicación</label>
-                <div class="form-group">
-                    <input type="number" step="any" id="latitud" class="form-input" placeholder="Latitud" required>
-                    <input type="number" step="any" id="longitud" class="form-input" placeholder="Longitud" required>
-                </div>
+                <label for="descripcionUbicacion" class="form-label">Descripción de la ubicación:</label>
+                <textarea id="descripcionUbicacion" class="form-input" rows="3" required
+                          placeholder=" Ej: Argentina o Argentina, Buenos Aires"></textarea>
+                <small class="form-text">Ingrese una descripción textual de la ubicación</small>
             `;
             break;
 
@@ -235,11 +234,14 @@ function agregarCriterio() {
             break;
 
         case "CriterioUbicacion":
-            const latitud = document.getElementById('latitud').value;
-            const longitud = document.getElementById('longitud').value;
+            const descripcionUbicacion = document.getElementById('descripcionUbicacion').value.trim();
 
-            camposHTML = '<input type="hidden" name="criterios[' + criterioId + '].ubicacion.latitud" value="' + latitud + '">';
-            camposHTML += '<input type="hidden" name="criterios[' + criterioId + '].ubicacion.longitud" value="' + longitud + '">';
+            if (!descripcionUbicacion) {
+                alert('Por favor, ingrese una descripción de la ubicación');
+                return;
+            }
+
+            camposHTML = '<input type="hidden" name="criterios[' + criterioId + '].ubicacion.descripcion" value="' + descripcionUbicacion + '">';
 
             criterioHTML = `
                 <div class="criterio-card">
@@ -247,8 +249,7 @@ function agregarCriterio() {
                         <span class="criterio-tipo">Criterio de Ubicación</span>
                         <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
                     </div>
-                    <div><strong>Latitud:</strong> ${latitud}</div>
-                    <div><strong>Longitud:</strong> ${longitud}</div>
+                    <div><strong>Descripción:</strong> ${descripcionUbicacion}</div>
                     ${camposHTML}
                     <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
                 </div>

@@ -511,9 +511,10 @@
             case "CriterioUbicacion":
                 campoDiv.innerHTML = `
                     <div class="form-group">
-                        <label class="form-label">Ubicación</label>
-                        <input type="number" step="any" id="latitud" class="form-input" placeholder="Latitud" required style="margin-bottom: 10px;">
-                        <input type="number" step="any" id="longitud" class="form-input" placeholder="Longitud" required>
+                        <label for="descripcionUbicacion" class="form-label">Descripción de la ubicación:</label>
+                        <textarea id="descripcionUbicacion" class="form-textarea" rows="3" required
+                                      placeholder="Ej: Argentina o Argentina, Buenos Aires"></textarea>
+                        <small class="form-text">Ingrese una descripción textual de la ubicación</small>
                     </div>
                 `;
                 console.log('✓ Campos de CriterioUbicacion renderizados');
@@ -786,29 +787,31 @@
                 break;
 
             case "CriterioUbicacion":
-                const latitud = document.getElementById('latitud').value;
-                const longitud = document.getElementById('longitud').value;
+                const descripcionUbicacion = document.getElementById('descripcionUbicacion').value.trim();
 
-                if (!latitud || !longitud) {
-                    alert('Debe ingresar latitud y longitud');
+                if (!descripcionUbicacion) {
+                    alert('Por favor, ingrese una descripción de la ubicación');
                     return;
                 }
 
                 // Crear objeto criterio
-                nuevoCriterio.ubicacion = {
-                    latitud: parseFloat(latitud),
-                    longitud: parseFloat(longitud)
+                nuevoCriterio = {
+                    '@type': 'CriterioUbicacion',
+                    ubicacion: {
+                        descripcion: descripcionUbicacion
+                    }
                 };
 
-                // Crear HTML para mostrar (SIN inputs hidden)
+                // Crear HTML para mostrar
+                let ubicacionHTML = `<div><strong>Descripción:</strong> ${descripcionUbicacion}</div>`;
+
                 criterioHTML = `
                     <div class="criterio-card" id="${criterioId}">
                         <div class="criterio-header">
                             <span class="criterio-tipo">Criterio de Ubicación</span>
                             <button type="button" class="btn-eliminar-criterio">Eliminar</button>
                         </div>
-                        <div><strong>Latitud:</strong> ${latitud}</div>
-                        <div><strong>Longitud:</strong> ${longitud}</div>
+                        ${ubicacionHTML}
                     </div>
                 `;
                 break;
@@ -862,35 +865,41 @@
             titulo: document.getElementById("titulo").value,
             descripcion: document.getElementById("descripcion").value,
             algoritmoDeConsenso: document.getElementById("algoritmo").value,
-            fuentes: Array.from(document.getElementById("fuentes").selectedOptions).map(o => o.value),
             criteriosDePertenencia: []
         };
 
-        // PRIMERO: Agregar criterios existentes NO EDITADOS (con inputs hidden)
-        const criteriosConHidden = document.querySelectorAll('.criterio-card input[type="hidden"][name*="criterios["]');
-        const criteriosProcesados = new Set();
+        // Obtener TODOS los criterios cards (existentes y nuevos)
+        const criteriosCards = document.querySelectorAll('.criterio-card');
+        console.log('Total criterios cards encontrados:', criteriosCards.length);
 
-        criteriosConHidden.forEach(input => {
-            const card = input.closest('.criterio-card');
-            if (!card) return;
-
+        criteriosCards.forEach((card, index) => {
+            const criterio = {};
             const cardId = card.id;
-            if (criteriosProcesados.has(cardId)) return;
+            console.log('Procesando card:', cardId);
 
-            // Verificar si este card ya tiene campos editables
-            const tieneEditables = card.querySelector('.palabra-input-editable, .etiqueta-input-editable, .fecha-desde-editable');
-            if (!tieneEditables) {
-                // Es un criterio existente NO EDITADO
-                const criterio = {};
-                const hiddenInputs = card.querySelectorAll('input[type="hidden"]');
+            // Verificar si es un criterio con inputs hidden (existentes no editados)
+            const hiddenInputs = card.querySelectorAll('input[type="hidden"]');
+            const tieneEditables = card.querySelector('.palabra-input-editable, .etiqueta-input-editable, .fecha-desde-editable, .descripcion-ubicacion-editable');
 
+            // CASO 1: Criterios existentes NO EDITADOS (con inputs hidden)
+            if (hiddenInputs.length > 0 && !tieneEditables) {
+                console.log('Card con inputs hidden (no editado):', cardId);
+
+                // Buscar el tipo del criterio
+                let tipoCriterio = '';
+                const tipoElement = card.querySelector('input[name*="@type"]');
+                if (tipoElement) {
+                    tipoCriterio = tipoElement.value;
+                    criterio['@type'] = tipoCriterio;
+                }
+
+                // Procesar todos los inputs hidden
                 hiddenInputs.forEach(hidden => {
                     const name = hidden.name;
                     const value = hidden.value;
 
-                    // Parsear estructura
                     if (name.includes('@type')) {
-                        criterio['@type'] = value;
+                        // Ya lo procesamos arriba
                     } else if (name.includes('.palabras')) {
                         if (!criterio.palabras) criterio.palabras = [];
                         criterio.palabras.push(value);
@@ -907,131 +916,121 @@
                         criterio.fechaFin = new Date(value).getTime();
                     } else if (name.includes('.tipoFecha')) {
                         criterio.tipoFecha = value;
-                    } else if (name.includes('.ubicacion.latitud')) {
+                    } else if (name.includes('.ubicacion.descripcion')) {
                         if (!criterio.ubicacion) criterio.ubicacion = {};
-                        criterio.ubicacion.latitud = parseFloat(value);
-                    } else if (name.includes('.ubicacion.longitud')) {
-                        if (!criterio.ubicacion) criterio.ubicacion = {};
-                        criterio.ubicacion.longitud = parseFloat(value);
+                        criterio.ubicacion.descripcion = value;
                     } else if (name.includes('.nombreContribuyente')) {
                         criterio.nombreContribuyente = value;
+                    } else if (name.includes('.fuente')) {
+                        criterio.fuente = value;
                     }
                 });
 
-                if (Object.keys(criterio).length > 0) {
-                    data.criteriosDePertenencia.push(criterio);
-                    criteriosProcesados.add(cardId);
-                    console.log('✓ Criterio existente no editado recolectado:', criterio['@type']);
-                }
-            }
-        });
+            // CASO 2: Criterios EDITADOS (con campos editables)
+            } else if (tieneEditables) {
+                console.log('Card con campos editables:', cardId);
 
-        // SEGUNDO: Agregar criterios existentes EDITADOS
-        const criteriosCards = document.querySelectorAll('.criterio-card');
-
-        criteriosCards.forEach((card, index) => {
-            const cardId = card.id;
-            if (criteriosProcesados.has(cardId)) return; // Ya procesado
-
-            // Verificar si tiene campos editables
-            const tieneEditables = card.querySelector('.palabra-input-editable, .etiqueta-input-editable, .fecha-desde-editable');
-            if (!tieneEditables) return; // Ya fue procesado o es nuevo
-
-            const criterio = {};
-
-            // Determinar tipo de criterio
-            const tipoElement = card.querySelector('.criterio-tipo');
-            if (!tipoElement) return;
-
-            const tipoTexto = tipoElement.textContent.trim();
-
-            if (tipoTexto.includes('Texto')) {
-                // Criterio de texto editable
-                const palabrasInputs = card.querySelectorAll('.palabra-input-editable');
-                const palabras = Array.from(palabrasInputs).map(input => input.value.trim()).filter(val => val);
-                const tipoSelect = card.querySelector('.tipo-texto-editable');
-
-                if (palabras.length > 0) {
-                    criterio['@type'] = 'CriterioDeTexto';
-                    criterio.palabras = palabras;
-                    if (tipoSelect) criterio.tipoDeTexto = tipoSelect.value;
+                // Determinar tipo de criterio por el texto del tipo
+                const tipoElement = card.querySelector('.criterio-tipo');
+                if (!tipoElement) {
+                    console.warn('No se encontró tipo en card:', cardId);
+                    return;
                 }
 
-            } else if (tipoTexto.includes('Etiquetas')) {
-                // Criterio de etiquetas editable
-                const etiquetasInputs = card.querySelectorAll('.etiqueta-input-editable');
-                const etiquetas = Array.from(etiquetasInputs).map(input => input.value.trim()).filter(val => val);
+                const tipoTexto = tipoElement.textContent.trim();
+                console.log('Tipo detectado:', tipoTexto);
 
-                if (etiquetas.length > 0) {
-                    criterio['@type'] = 'CriterioEtiquetas';
-                    criterio.etiquetas = etiquetas.map(nombre => ({ nombre }));
-                }
+                if (tipoTexto.includes('Texto')) {
+                    // Criterio de texto editable
+                    const palabrasInputs = card.querySelectorAll('.palabra-input-editable');
+                    const palabras = Array.from(palabrasInputs).map(input => input.value.trim()).filter(val => val);
+                    const tipoSelect = card.querySelector('.tipo-texto-editable');
 
-            } else if (tipoTexto.includes('Fecha')) {
-                // Criterio de fecha editable
-                const fechaInicio = card.querySelector('.fecha-desde-editable')?.value;
-                const fechaFin = card.querySelector('.fecha-hasta-editable')?.value;
-                const tipoFecha = card.querySelector('.tipo-fecha-editable')?.value;
+                    if (palabras.length > 0) {
+                        criterio['@type'] = 'CriterioDeTexto';
+                        criterio.palabras = palabras;
+                        if (tipoSelect) criterio.tipoDeTexto = tipoSelect.value;
+                    }
 
-                if (fechaInicio && fechaFin) {
-                    criterio['@type'] = 'CriterioFecha';
-                    criterio.fechaInicio = new Date(fechaInicio).getTime();
-                    criterio.fechaFin = new Date(fechaFin).getTime();
-                    if (tipoFecha) criterio.tipoFecha = tipoFecha;
-                }
+                } else if (tipoTexto.includes('Etiquetas')) {
+                    // Criterio de etiquetas editable
+                    const etiquetasInputs = card.querySelectorAll('.etiqueta-input-editable');
+                    const etiquetas = Array.from(etiquetasInputs).map(input => input.value.trim()).filter(val => val);
 
-            } else if (tipoTexto.includes('Ubicación')) {
-                // Criterio de ubicación editable
-                const latitud = card.querySelector('.latitud-editable')?.value;
-                const longitud = card.querySelector('.longitud-editable')?.value;
+                    if (etiquetas.length > 0) {
+                        criterio['@type'] = 'CriterioEtiquetas';
+                        criterio.etiquetas = etiquetas.map(nombre => ({ nombre }));
+                    }
 
-                if (latitud && longitud) {
-                    criterio['@type'] = 'CriterioUbicacion';
-                    criterio.ubicacion = {
-                        latitud: parseFloat(latitud),
-                        longitud: parseFloat(longitud)
-                    };
-                }
+                } else if (tipoTexto.includes('Fecha')) {
+                    // Criterio de fecha editable
+                    const fechaInicio = card.querySelector('.fecha-desde-editable')?.value;
+                    const fechaFin = card.querySelector('.fecha-hasta-editable')?.value;
+                    const tipoFecha = card.querySelector('.tipo-fecha-editable')?.value;
 
-            } else if (tipoTexto.includes('Contribuyente')) {
-                // Criterio de contribuyente editable
-                const contribuyente = card.querySelector('.contribuyente-editable')?.value;
+                    if (fechaInicio && fechaFin) {
+                        criterio['@type'] = 'CriterioFecha';
+                        criterio.fechaInicio = new Date(fechaInicio).getTime();
+                        criterio.fechaFin = new Date(fechaFin).getTime();
+                        if (tipoFecha) criterio.tipoFecha = tipoFecha;
+                    }
 
-                if (contribuyente && contribuyente.trim()) {
-                    criterio['@type'] = 'CriterioContribuyente';
-                    criterio.nombreContribuyente = contribuyente.trim();
-                }
+                } else if (tipoTexto.includes('Ubicación')) {
+                    // Criterio de ubicación editable
+                    const descripcionElement = card.querySelector('.descripcion-ubicacion-editable');
+                    const descripcion = descripcionElement?.value.trim();
 
-            } else if (tipoTexto.includes('Multimedia')) {
-                // Criterio de multimedia editable
-                const tipoMultimedia = card.querySelector('.tipo-multimedia-editable')?.value;
+                    if (descripcion) {
+                        criterio['@type'] = 'CriterioUbicacion';
+                        criterio.ubicacion = {
+                            descripcion: descripcion
+                        };
 
-                if (tipoMultimedia) {
-                    criterio['@type'] = 'CriterioTipoMultimedia';
-                    criterio.tipoContenidoMultimedia = tipoMultimedia;
+                    }
+
+                } else if (tipoTexto.includes('Contribuyente')) {
+                    // Criterio de contribuyente editable
+                    const contribuyente = card.querySelector('.contribuyente-editable')?.value;
+
+                    if (contribuyente && contribuyente.trim()) {
+                        criterio['@type'] = 'CriterioContribuyente';
+                        criterio.nombreContribuyente = contribuyente.trim();
+                    }
+
+                } else if (tipoTexto.includes('Multimedia')) {
+                    // Criterio de multimedia editable
+                    const tipoMultimedia = card.querySelector('.tipo-multimedia-editable')?.value;
+
+                    if (tipoMultimedia) {
+                        criterio['@type'] = 'CriterioTipoMultimedia';
+                        criterio.tipoContenidoMultimedia = tipoMultimedia;
+                    }
                 }
             }
 
-            if (Object.keys(criterio).length > 0) {
+            // CASO 3: Criterios NUEVOS (agregados durante la edición)
+            // Estos ya están en el array nuevosCriterios, se agregarán después
+
+            // Solo agregar el criterio si tiene propiedades
+            if (Object.keys(criterio).length > 0 && criterio['@type']) {
+                console.log('✓ Criterio agregado:', criterio['@type'], criterio);
                 data.criteriosDePertenencia.push(criterio);
-                console.log('✓ Criterio existente editado recolectado:', criterio['@type']);
+            } else {
+                console.warn('⚠ Card sin criterio válido:', cardId);
             }
         });
 
-        // TERCERO: Agregar los nuevos criterios (filtrando los nulos que fueron eliminados)
-        const nuevosCriteriosFiltrados = nuevosCriterios.filter(c => c !== null);
+        // Agregar los nuevos criterios (filtrando los nulos que fueron eliminados)
+        const nuevosCriteriosFiltrados = nuevosCriterios.filter(c => c !== null && c['@type']);
         data.criteriosDePertenencia = data.criteriosDePertenencia.concat(nuevosCriteriosFiltrados);
 
-        console.log('Resumen:');
-        console.log('- Criterios existentes no editados:', criteriosProcesados.size);
-        console.log('- Criterios existentes editados:', data.criteriosDePertenencia.length - nuevosCriteriosFiltrados.length - criteriosProcesados.size);
-        console.log('- Nuevos criterios:', nuevosCriteriosFiltrados.length);
-        console.log('- Total criterios a enviar:', data.criteriosDePertenencia.length);
+        console.log('Resumen final:');
+        console.log('- Total criterios recolectados:', data.criteriosDePertenencia.length);
+        console.log('- Nuevos criterios agregados:', nuevosCriteriosFiltrados.length);
+        console.log('Datos a enviar:', JSON.stringify(data, null, 2));
 
         const username = window.USERNAME || '';
         const accessToken = window.ACCESS_TOKEN || '';
-
-        console.log('Datos a enviar:', JSON.stringify(data, null, 2));
 
         try {
             console.log("Coleccion a editar: " + COLECCION_ID_EDITAR);

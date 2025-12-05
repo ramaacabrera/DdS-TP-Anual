@@ -42,6 +42,7 @@ public class ColeccionService {
         System.out.println("Iniciando creación de colección...");
 
         Coleccion coleccion = new Coleccion();
+
         coleccion.setTitulo(dto.getTitulo());
         coleccion.setDescripcion(dto.getDescripcion());
 

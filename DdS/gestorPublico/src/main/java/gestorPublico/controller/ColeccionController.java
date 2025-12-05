@@ -22,7 +22,9 @@ public class ColeccionController {
     }
 
     public Handler obtenerColecciones = ctx -> {
+        System.out.println("Obteniendo colecciones");
         try {
+
             int pagina = ctx.queryParamAsClass("pagina", Integer.class).getOrDefault(1);
             int limite = ctx.queryParamAsClass("limite", Integer.class).getOrDefault(10);
 

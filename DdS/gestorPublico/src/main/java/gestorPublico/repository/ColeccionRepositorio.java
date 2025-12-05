@@ -3,6 +3,7 @@ package gestorPublico.repository;
 import gestorPublico.domain.Criterios.Criterio;
 import gestorPublico.domain.Criterios.CriterioDeTexto;
 import gestorPublico.domain.Criterios.CriterioEtiquetas;
+import gestorPublico.domain.Criterios.CriterioUbicacion;
 import gestorPublico.domain.HechosYColecciones.Coleccion;
 import gestorPublico.domain.HechosYColecciones.Hecho;
 import gestorPublico.utils.BDUtils;
@@ -109,6 +110,9 @@ public class ColeccionRepositorio {
             }
             if(criterio instanceof CriterioDeTexto){
                 Hibernate.initialize(((CriterioDeTexto) criterio).getPalabras());
+            }
+            if(criterio instanceof CriterioUbicacion){
+                Hibernate.initialize(((CriterioUbicacion) criterio).getUbicacion());
             }
         }
     }

@@ -71,34 +71,6 @@
                 </div>
             </div>
 
-            <!-- Fuentes -->
-            <div class="form-section">
-                <h3 class="form-section-title">Fuentes</h3>
-                <label for="fuentes" class="form-label">Seleccioná una o más fuentes:</label><br>
-                <select id="fuentes" name="fuentes" multiple class="form-select" size="4">
-                    <#list fuentes as fuente>
-                        <option value="${fuente}">${fuente?capitalize}</option>
-                    </#list>
-                </select>
-            </div>
-
-            <!-- Listas iniciales -->
-            <div class="form-section">
-                <h3 class="form-section-title">Hechos incluidos en la colección</h3>
-                <div id="lista-hechos" class="lista-vacia">
-                    <p class="texto-placeholder">Aún no hay hechos asociados.</p>
-                    <!-- Acá se cargan los hechos cuando se agreguen -->
-                </div>
-            </div>
-
-            <div class="form-section">
-                <h3 class="form-section-title">Hechos consensuados</h3>
-                <div id="lista-consensuados" class="lista-vacia">
-                    <p class="texto-placeholder">Aún no hay hechos consensuados.</p>
-                    <!-- Acá se miuestran los hechos filtrados por el algoritmo de consenso -->
-                </div>
-            </div>
-
             <!-- Botones -->
             <div class="form-actions">
                 <button type="button" id="btn-cancelar" class="btn btn-secondary">Cancelar</button>
