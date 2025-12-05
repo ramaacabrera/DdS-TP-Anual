@@ -24,12 +24,16 @@ public class Ubicacion {
 
     private double latitud;
     private double longitud;
+    private String descripcion;
 
     public Ubicacion(){}
 
     public Ubicacion(double latitud, double longitud) {
         this.latitud = latitud;
         this.longitud = longitud;
+    }
+    public Ubicacion(String descripcion){
+        this.descripcion = descripcion;
     }
 
     public double getLatitud() { return latitud; }

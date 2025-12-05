@@ -47,10 +47,18 @@ public class ColeccionService {
             coleccion.setFuente(mapFuentesToEntity(dto.getFuentes()));
         }
 
+        for(Criterio c : coleccion.getCriteriosDePertenencia()){
+            if(c instanceof CriterioUbicacion){
+                System.out.println("Ubicacion: " + ((CriterioUbicacion) c).getUbicacion().getDescripcion());
+            }
+        }
+
+
         if (coleccion.getCriteriosDePertenencia() != null && !coleccion.getCriteriosDePertenencia().isEmpty()) {
             List<Hecho> hechosQueCumplen = hechoRepositorio.buscarHechos(coleccion.getCriteriosDePertenencia());
             coleccion.setHechos(hechosQueCumplen);
         }
+
 
         coleccionRepositorio.guardar(coleccion);
 
@@ -371,6 +379,7 @@ public class ColeccionService {
         }
         u.setLatitud(dto.getLatitud());
         u.setLongitud(dto.getLongitud());
+        u.setDescripcion(dto.getDescripcion());
         return u;
     }
 

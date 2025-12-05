@@ -27,7 +27,11 @@ public class ColeccionService {
         if (pagina < 1) pagina = 1;
         if (limite < 1) limite = 10;
 
+        System.out.println("======= Contando colecciones");
+
         long totalRegistros = coleccionRepositorio.contarTodas();
+
+        System.out.println("====== Termine de contar");
 
         int totalPages = (int) Math.ceil(totalRegistros / (double) limite);
 
@@ -35,11 +39,16 @@ public class ColeccionService {
             return new PageDTO<>(new ArrayList<>(), pagina, limite, totalPages, (int) totalRegistros);
         }
 
+        System.out.println("======= Obtengo paginado");
+
         List<Coleccion> coleccionesPaginadas = coleccionRepositorio.obtenerPaginadas(pagina, limite);
 
+        System.out.println("======== Convierto las colecciones a DTO");
         List<ColeccionDTO> dtos = coleccionesPaginadas.stream()
                 .map(ColeccionDTO::new)
                 .collect(Collectors.toList());
+
+        System.out.println("======== Termine");
 
         return new PageDTO<>(dtos, pagina, limite, totalPages, (int) totalRegistros);
     }
