@@ -33,15 +33,17 @@ public class CriterioUbicacion extends Criterio {
 
     @Override
     public String getQueryCondition() {
-        return "h.ubicacion.descripcion LIKE '%"+ ubicacion.getDescripcion()+"%'";
+        // Usar LIKE para búsqueda parcial (case-insensitive)
+        return "LOWER(h.ubicacion.descripcion) LIKE LOWER(CONCAT('%', :descripcionUbicacionParam, '%'))";
     }
 
     @Override
     @Transient
     public Map<String, Object> getQueryParameters() {
         Map<String, Object> params = new HashMap<>();
-        if (ubicacion != null) {
-            params.put("idUbicacionParam", ubicacion.getId_ubicacion());
+        if (ubicacion != null && ubicacion.getDescripcion() != null) {
+            // Guardamos la descripción sin los % porque ya están en la query
+            params.put("descripcionUbicacionParam", ubicacion.getDescripcion());
         }
         return params;
     }

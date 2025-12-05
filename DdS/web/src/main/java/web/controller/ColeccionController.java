@@ -3,15 +3,8 @@ package web.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
-import utils.Dominio.HechosYColecciones.Ubicacion;
+import web.domain.HechosYColecciones.Ubicacion;
 import web.domain.Fuente.TipoDeFuente; // Solo para el enum de Criterios si se usa
-import okhttp3.Request;
-import okhttp3.Response;
-import web.domain.Criterios.CriterioUbicacion;
-import utils.Dominio.Usuario.Usuario;
-import web.domain.Criterios.Criterio;
-import web.domain.Criterios.TipoDeTexto;
-import web.domain.Fuente.TipoDeFuente;
 import web.domain.HechosYColecciones.Coleccion;
 import web.domain.HechosYColecciones.TipoAlgoritmoConsenso;
 import web.dto.Hechos.FuenteDTO; // Importante: Tu DTO
