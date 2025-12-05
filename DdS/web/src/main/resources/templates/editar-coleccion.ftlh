@@ -112,9 +112,6 @@
                                     <#assign tipo = "CriterioContribuyente">
                                     <div><strong>Contribuyente:</strong> ${(criterio.nombreContribuyente)!''}</div>
                                     <input type="hidden" name="criterios[${criterioId}].nombreContribuyente" value="${(criterio.nombreContribuyente)!''}">
-                                <#elseif criterio.fuente??>
-                                    <div><strong>Tipo De Fuente:</strong> ${(criterio.fuente)!''}</div>
-                                    <input type="hidden" name="criterios[${criterioId}].fuente" value="${(criterio.fuente)!''}">
                                 </#if>
 
                                 <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">

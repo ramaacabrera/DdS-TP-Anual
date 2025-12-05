@@ -37,7 +37,9 @@ public class CriterioEtiquetas extends Criterio {
     @Override
     public String getQueryCondition() {
         if (etiquetas == null || etiquetas.isEmpty()) return "1=1";
-        return "EXISTS (SELECT e FROM h.etiquetas e WHERE e.id IN :idsEtiquetas)";
+
+        // Buscar por nombre en lugar de por ID
+        return "EXISTS (SELECT e FROM h.etiquetas e WHERE LOWER(e.nombre) IN :nombresEtiquetas)";
     }
 
     @Override
@@ -45,10 +47,11 @@ public class CriterioEtiquetas extends Criterio {
     public Map<String, Object> getQueryParameters() {
         Map<String, Object> params = new HashMap<>();
         if (etiquetas != null && !etiquetas.isEmpty()) {
-            List<java.util.UUID> ids = etiquetas.stream()
-                    .map(Etiqueta::getId)
+            // Extraer los nombres (en minúsculas para case-insensitive)
+            List<String> nombres = etiquetas.stream()
+                    .map(etiqueta -> etiqueta.getNombre().toLowerCase())
                     .collect(Collectors.toList());
-            params.put("idsEtiquetas", ids);
+            params.put("nombresEtiquetas", nombres);
         }
         return params;
     }
