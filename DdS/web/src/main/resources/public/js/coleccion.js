@@ -17,6 +17,7 @@ function verEstadisticas(id) {
 }
 
 function verHecho(id) {
+    console.log('ID recibido: ', id);
     if (id) {
         window.location.href = '/hechos/' + id;
     } else {

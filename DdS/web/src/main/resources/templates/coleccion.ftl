@@ -204,7 +204,7 @@
         <#if coleccion?? && coleccion.hechos?? && (coleccion.hechos?size > 0)>
             <div class="grid-metadata">
                 <#list coleccion.hechos as hecho>
-                    <div class="card" style="cursor:pointer;" onclick="verHecho('${(hecho.id)!}')">
+                    <div class="card" style="cursor:pointer;" onclick="verHecho('${(hecho.hechoId)!}')">
                         <p class="card-subtitle">${(hecho.categoria)!?default("Sin categoría")?html}</p>
                         <h4>${(hecho.titulo)!?default("Hecho sin título")?html}</h4>
                         <p style="color:#666; font-size:0.9em;">
