@@ -8,6 +8,7 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import okhttp3.Request;
 import okhttp3.Response;
+import web.domain.Criterios.CriterioUbicacion;
 import web.domain.HechosYColecciones.Ubicacion;
 import utils.Dominio.Usuario.Usuario;
 import web.domain.Criterios.Criterio;
@@ -82,6 +83,12 @@ public class ColeccionController {
             modelo.put("pageTitle", "Detalle de Colección");
             modelo.put("coleccion", coleccion);
             modelo.put("coleccionId", coleccionId);
+
+            for(Criterio c : coleccion.getCriteriosDePertenencia()){
+                if(c instanceof CriterioUbicacion){
+                    System.out.println("Ubicacion de la coleccion: " + ((CriterioUbicacion) c).getUbicacion().getDescripcion());
+                }
+            }
 
             // 4 Renderizamos la vista
             ctx.render("coleccion.ftl", modelo);
@@ -193,7 +200,9 @@ public class ColeccionController {
         for (Map<String, Object> criterio : criteriosDePertenencia) {
             criterio.remove("_id");
             if(criterio.get("@type").equals("CriterioUbicacion")){
+                System.out.println("Ubicacion: " + criterio.get("ubicacion.descripcion").toString());
                 Ubicacion ubicacion = new Ubicacion(0, 0, criterio.get("ubicacion.descripcion").toString());
+                System.out.println("Descripcion de la ubicacion: " +  ubicacion.getDescripcion());
                 criterio.put("ubicacion", ubicacion);
                 criterio.remove("ubicacion.descripcion");
             }

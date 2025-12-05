@@ -33,6 +33,8 @@ public class Application {
                 return;
             }
 
+            System.out.println("Comprobando privilegios");
+
             String username = ctx.header("username");
             String accessToken = ctx.header("access_token");
             String rolUsuario = ctx.header("rol_usuario");

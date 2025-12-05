@@ -107,7 +107,7 @@ public class ColeccionService {
                 requestBuilder
                         .header("username", username)
                         .header("access_token", access_token)
-                        .header("rolUsuario", rolUsuario);
+                        .header("rol_usuario", rolUsuario);
 
             }
             HttpRequest request = requestBuilder.build();
@@ -156,7 +156,7 @@ public class ColeccionService {
                 requestBuilder
                         .header("username", username)
                         .header("access_token", access_token)
-                        .header("rolUsuario", rolUsuario);
+                        .header("rol_usuario", rolUsuario);
 
             }
             HttpRequest request = requestBuilder.build();
@@ -208,7 +208,7 @@ public class ColeccionService {
                 requestBuilder
                         .header("username", username)
                         .header("access_token", access_token)
-                        .header("rolUsuario", rolUsuario);
+                        .header("rol_usuario", rolUsuario);
 
             }
             HttpRequest request = requestBuilder.build();
