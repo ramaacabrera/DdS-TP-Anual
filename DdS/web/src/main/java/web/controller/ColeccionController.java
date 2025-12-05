@@ -5,6 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
 import utils.Dominio.HechosYColecciones.Ubicacion;
 import web.domain.Fuente.TipoDeFuente; // Solo para el enum de Criterios si se usa
+import okhttp3.Request;
+import okhttp3.Response;
+import web.domain.Criterios.CriterioUbicacion;
+import utils.Dominio.Usuario.Usuario;
+import web.domain.Criterios.Criterio;
+import web.domain.Criterios.TipoDeTexto;
+import web.domain.Fuente.TipoDeFuente;
 import web.domain.HechosYColecciones.Coleccion;
 import web.domain.HechosYColecciones.TipoAlgoritmoConsenso;
 import web.dto.Hechos.FuenteDTO; // Importante: Tu DTO
@@ -218,12 +225,11 @@ public class ColeccionController {
         for (Map<String, Object> criterio : criteriosDePertenencia) {
             criterio.remove("_id");
             if(criterio.get("@type").equals("CriterioUbicacion")){
-                double latitud = Double.parseDouble(criterio.get("ubicacion.latitud").toString());
-                double longitud = Double.parseDouble(criterio.get("ubicacion.longitud").toString());
-                Ubicacion ubicacion = new Ubicacion(latitud, longitud);
+                System.out.println("Ubicacion: " + criterio.get("ubicacion.descripcion").toString());
+                Ubicacion ubicacion = new Ubicacion(0, 0, criterio.get("ubicacion.descripcion").toString());
+                System.out.println("Descripcion de la ubicacion: " +  ubicacion.getDescripcion());
                 criterio.put("ubicacion", ubicacion);
-                criterio.remove("ubicacion.latitud");
-                criterio.remove("ubicacion.longitud");
+                criterio.remove("ubicacion.descripcion");
             }
         }
     }

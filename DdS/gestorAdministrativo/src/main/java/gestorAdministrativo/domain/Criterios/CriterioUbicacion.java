@@ -22,7 +22,7 @@ public class CriterioUbicacion extends Criterio {
     @Override
     public boolean cumpleConCriterio(Hecho hecho){
         if (hecho.getUbicacion() == null || this.ubicacion == null) return false;
-        return hecho.getUbicacion().getId_ubicacion().equals(ubicacion.getId_ubicacion());
+        return hecho.getUbicacion().getDescripcion().equals(ubicacion.getDescripcion());
     }
 
     public Ubicacion getUbicacion() { return ubicacion; }

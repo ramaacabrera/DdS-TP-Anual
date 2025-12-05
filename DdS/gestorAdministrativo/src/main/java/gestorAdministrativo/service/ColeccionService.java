@@ -53,6 +53,11 @@ public class ColeccionService {
         if (dto.getCriteriosDePertenencia() != null) {
             coleccion.setCriteriosDePertenencia(mapCriteriosToEntity(dto.getCriteriosDePertenencia()));
         }
+        for(Criterio c : coleccion.getCriteriosDePertenencia()){
+            if(c instanceof CriterioUbicacion){
+                System.out.println("Ubicacion de la coleccion: " + ((CriterioUbicacion)c).getUbicacion().getDescripcion());
+            }
+        }
 
         List<Fuente> fuentesReales = new ArrayList<>();
 
@@ -394,6 +399,7 @@ public class ColeccionService {
         if (dto.getUbicacionId() != null) {
             u.setId_ubicacion(dto.getUbicacionId());
         }
+        u.setDescripcion(dto.getDescripcion());
         u.setLatitud(dto.getLatitud());
         u.setLongitud(dto.getLongitud());
         return u;
