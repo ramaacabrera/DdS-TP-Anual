@@ -71,7 +71,7 @@ public class HechoDTO {
         // Contribuyente
         if (hecho.getContribuyente() != null) {
             this.contribuyente = new UsuarioDTO();
-            this.contribuyente.setId(hecho.getContribuyente().getId_usuario());;
+            this.contribuyente.setId(hecho.getContribuyente().getUsuarioId());;
             this.contribuyente.setUsername(hecho.getContribuyente().getUsername());
         }
 

@@ -122,9 +122,9 @@ public class SolicitudEliminacionService {
         if (solicitud.getHechoAsociado() != null) {
             dto.setHechoId(solicitud.getHechoAsociado().getHecho_id());
         }
-
-        if (solicitud.getUsuario() != null) {
-            UsuarioDTO uDto = new UsuarioDTO();
+        Usuario usuario = solicitud.getUsuario();
+        if (usuario != null) {
+            UsuarioDTO uDto = new UsuarioDTO(usuario.getId_usuario(), usuario.getUsername(),usuario.getRol().toString());
             dto.setUsuario(uDto);
         }
 

@@ -37,7 +37,7 @@ public class UsuarioService {
 
             System.out.println("Body: " + res.body());
             Usuario user = mapper.readValue(res.body(), new TypeReference<Usuario>() {});
-            System.out.println("Usuario: " + user.getId_usuario());
+            System.out.println("Usuario: " + user.getUsuarioId());
             System.out.println("Rol: " + user.getRol());
             rol = user.getRol();
         } catch (IOException e) {

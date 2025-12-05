@@ -1,132 +1,116 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('form-solicitud-eliminacion');
     const btnCancelar = document.getElementById('btn-cancelar');
-    const checkboxAnonimo = document.getElementById('anonimo');
-    const inputNombre = document.getElementById('nombreUsuario');
-    const inputApellido = document.getElementById('apellidoUsuario');
-    const inputEdad = document.getElementById('edadUsuario');
     const textareaJustificacion = document.getElementById('justificacion');
     const contadorCaracteres = document.getElementById('contador-caracteres');
 
-    // Contador de caracteres para la justificación (MÁXIMO 500)
-    textareaJustificacion.addEventListener('input', function() {
-        const caracteres = this.value.length;
-        contadorCaracteres.textContent = `${caracteres} / 500 caracteres`;
+    // El checkbox puede no existir si el usuario no está logueado
+    const checkboxAnonimo = document.getElementById('anonimo');
 
-        if (caracteres > 500) {
-            contadorCaracteres.style.color = '#dc3545';
-        } else {
-            contadorCaracteres.style.color = 'var(--muted-color)';
-        }
-    });
+    // Contador de caracteres para la justificación
+    if(textareaJustificacion && contadorCaracteres) {
+        textareaJustificacion.addEventListener('input', function() {
+            const caracteres = this.value.length;
+            contadorCaracteres.textContent = `${caracteres} / 500 caracteres`;
 
-    // Manejar checkbox anónimo
-    checkboxAnonimo.addEventListener('change', function() {
-        const inputsUsuario = [inputNombre, inputApellido, inputEdad];
-
-        inputsUsuario.forEach(input => {
-            if (input) {
-                input.disabled = this.checked;
-                if (this.checked) {
-                    input.value = '';
-                }
+            if (caracteres > 500) {
+                contadorCaracteres.style.color = '#dc3545';
+            } else {
+                contadorCaracteres.style.color = 'var(--muted-color)';
             }
         });
-    });
+    }
 
     // Cancelar
-    btnCancelar.addEventListener('click', function() {
-        if (confirm('¿Está seguro de que desea cancelar? Se perderán los datos ingresados.')) {
-            window.history.back();
-        }
-    });
+    if(btnCancelar) {
+        btnCancelar.addEventListener('click', function() {
+            if (confirm('¿Está seguro de que desea cancelar? Se perderán los datos ingresados.')) {
+                window.history.back();
+            }
+        });
+    }
 
-    // Validación del formulario
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
+    // Validación y Envío del formulario
+    if(form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-        const justificacion = textareaJustificacion.value.trim();
+            const justificacion = textareaJustificacion.value.trim();
 
-        // Validar longitud MÁXIMA (500 caracteres)
-        if (justificacion.length > 500) {
-            alert('La justificación no puede tener más de 500 caracteres. Actualmente tiene ' + justificacion.length + ' caracteres.');
-            textareaJustificacion.focus();
-            return;
-        }
-
-        // Validar que la justificación no esté vacía
-        if (justificacion.length === 0) {
-            alert('La justificación es obligatoria.');
-            textareaJustificacion.focus();
-            return;
-        }
-
-        const btnEnviar = document.getElementById('btn-enviar');
-        const mensajeExito = document.getElementById('mensaje-exito');
-        const mensajeError = document.getElementById('mensaje-error');
-
-        // Ocultar mensajes anteriores
-        mensajeExito.style.display = 'none';
-        mensajeError.style.display = 'none';
-
-        // Deshabilitar botón
-        btnEnviar.disabled = true;
-        btnEnviar.textContent = 'Enviando...';
-
-        try {
-            // Construir objeto JSON como espera el backend
-            const solicitudData = {
-                id_hechoAsociado: document.getElementById('ID_hechoAsociado').value,
-                justificacion: justificacion,
-                usuario: checkboxAnonimo.checked ? null : {
-                    nombre: inputNombre.value.trim() || "",
-                    apellido: inputApellido.value.trim() || "",
-                    edad: inputEdad.value ? parseInt(inputEdad.value) : null,
-                    rol: "CONTRIBUYENTE"
-                }
-            };
-
-            console.log('Enviando solicitud de eliminación:', solicitudData);
-            console.log('JSON stringified:', JSON.stringify(solicitudData));
-
-            const response = await fetch(URL_PUBLICA + '/solicitudEliminacion', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(solicitudData)
-            });
-
-            console.log('Respuesta del servidor:', response.status, response.statusText);
-
-            if (response.ok) {
-                const result = await response.text();
-                console.log('Éxito:', result);
-                mensajeExito.style.display = 'block';
-                setTimeout(() => {
-                    // Redirigir a la página del hecho
-                    const hechoId = document.getElementById('ID_hechoAsociado').value;
-                    window.location.href = '/hechos/' + encodeURIComponent(hechoId);
-                }, 2000);
-            } else {
-                let errorMessage = `Error ${response.status}: ${response.statusText}`;
-                try {
-                    const errorBody = await response.text();
-                    console.error('Cuerpo del error:', errorBody);
-                    errorMessage += ` - ${errorBody}`;
-                } catch (e) {
-                    console.error('No se pudo leer el cuerpo del error');
-                }
-                throw new Error(errorMessage);
+            if (justificacion.length > 500) {
+                alert('La justificación no puede tener más de 500 caracteres.');
+                textareaJustificacion.focus();
+                return;
             }
 
-        } catch (error) {
-            console.error('Error completo:', error);
-            mensajeError.textContent = `❌ ${error.message}`;
-            mensajeError.style.display = 'block';
-        } finally {
-            btnEnviar.disabled = false;
-            btnEnviar.textContent = 'Enviar Solicitud';
-        }
-    });
+            if (justificacion.length === 0) {
+                alert('La justificación es obligatoria.');
+                textareaJustificacion.focus();
+                return;
+            }
+
+            const btnEnviar = document.getElementById('btn-enviar');
+            const mensajeExito = document.getElementById('mensaje-exito');
+            const mensajeError = document.getElementById('mensaje-error');
+
+            mensajeExito.style.display = 'none';
+            mensajeError.style.display = 'none';
+            btnEnviar.disabled = true;
+            btnEnviar.textContent = 'Enviando...';
+
+            try {
+                // --- LÓGICA DE USUARIO / ANÓNIMO ---
+                let usuarioData = null;
+
+                // 1. Si hay un usuario logueado (CURRENT_USER viene del FTL)
+                if (CURRENT_USER && CURRENT_USER !== "") {
+                    // 2. Verificamos si marcó "Anónimo" (si el checkbox existe y está marcado)
+                    const esAnonimo = checkboxAnonimo && checkboxAnonimo.checked;
+
+                    if (!esAnonimo) {
+                        // Enviamos el objeto con el nombre de usuario
+                        usuarioData = { username: CURRENT_USER };
+                    }
+                    // Si esAnonimo es true, usuarioData se queda como null
+                }
+                // Si no hay CURRENT_USER (usuario no logueado), usuarioData queda null
+                // -----------------------------------
+
+                const solicitudData = {
+                    id_hechoAsociado: document.getElementById('ID_hechoAsociado').value,
+                    justificacion: justificacion,
+                    usuario: usuarioData
+                };
+
+                console.log('Enviando solicitud:', JSON.stringify(solicitudData));
+
+                const response = await fetch(URL_PUBLICA + '/solicitudEliminacion', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(solicitudData)
+                });
+
+                if (response.ok) {
+                    mensajeExito.style.display = 'block';
+                    setTimeout(() => {
+                        const hechoId = document.getElementById('ID_hechoAsociado').value;
+                        window.location.href = '/hechos/' + encodeURIComponent(hechoId);
+                    }, 2000);
+                } else {
+                    const text = await response.text();
+                    throw new Error(`Error ${response.status}: ${text}`);
+                }
+
+            } catch (error) {
+                console.error('Error completo:', error);
+                mensajeError.textContent = `❌ ${error.message}`;
+                mensajeError.style.display = 'block';
+            } finally {
+                btnEnviar.disabled = false;
+                btnEnviar.textContent = 'Enviar Solicitud';
+            }
+        });
+    }
 });

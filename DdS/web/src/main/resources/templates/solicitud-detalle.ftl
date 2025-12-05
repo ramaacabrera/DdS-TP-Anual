@@ -52,11 +52,7 @@
                 <p class="card-subtitle">SOLICITANTE</p>
                 <p>
                     <#if solicitud.usuario??>
-                        <#if solicitud.usuario?is_hash>
-                            ${solicitud.usuario.nombre!""} ${solicitud.usuario.apellido!""}
-                        <#else>
-                            ${solicitud.usuario!""}
-                        </#if>
+                        ${solicitud.usuario.username}
                     <#else>
                         Anónimo
                     </#if>

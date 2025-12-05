@@ -9,7 +9,7 @@ public class UsuarioDTO {
 
     public UsuarioDTO() {}
 
-    public UsuarioDTO(UUID usuarioId, String nombreUsuario, int edad, String nombre, String apellido, String rol) {
+    public UsuarioDTO(UUID usuarioId, String nombreUsuario, String rol) {
         this.usuarioId = usuarioId;
         this.username = nombreUsuario;
         this.rol = rol;

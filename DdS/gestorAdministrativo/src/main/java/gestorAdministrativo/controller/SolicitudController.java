@@ -80,6 +80,7 @@ public class SolicitudController {
     };
 
     public Handler obtenerSolicitudes = ctx -> {
+        System.out.println("obteniendo solicitudes");
         try {
             List<SolicitudDeEliminacionDTO> solicitudes = eliminacionService.obtenerTodasLasSolicitudes();
             ctx.status(200).json(solicitudes);

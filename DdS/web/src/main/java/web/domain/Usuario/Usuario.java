@@ -21,7 +21,7 @@ public class Usuario {
     )
     @Type(type="uuid-char")
     @Column(name = "id_usuario", length = 36, updatable = false, nullable = false)
-    private UUID id_usuario;
+    private UUID usuarioId;
 
     @OneToMany(mappedBy = "contribuyente")
     @JsonIgnore
@@ -40,12 +40,12 @@ public class Usuario {
         hechosSubidos.add(hecho);
     }
 
-    public UUID getId_usuario() {return id_usuario;}
+    public UUID getUsuarioId() {return usuarioId;}
     public RolUsuario getRol() {return rol;}
     public String getUsername() {return username;}
 
 
     public void setRol(RolUsuario rol) { this.rol = rol; }
-    public void setId_usuario(UUID id_usuario) {this.id_usuario = id_usuario; }
+    public void setUsuarioId(UUID id_usuario) {this.usuarioId = id_usuario; }
     public void setUsername(String username) { this.username = username; }
 }

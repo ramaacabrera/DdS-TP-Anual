@@ -47,6 +47,9 @@ public class GestorSolicitudes {
 
                 solicitud.setJustificacion(dto.getJustificacion());
 
+                Usuario usuario = usuarioRepositorio.buscarPorUsername(dto.getUsuario().getUsername());
+                solicitud.setUsuario(usuario);
+
                 if (dto.getHechoId() != null) {
                     System.out.println("Tenemos hecho con id");
                     Hecho hecho = hechoRepositorio.buscarPorId(dto.getHechoId());

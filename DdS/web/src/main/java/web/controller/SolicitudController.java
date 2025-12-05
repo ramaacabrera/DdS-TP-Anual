@@ -33,6 +33,7 @@ public class SolicitudController {
 
             String username = ctx.sessionAttribute("username");
             String token = ctx.sessionAttribute("access_token");
+            String rolUsuario = ctx.sessionAttribute("rolUsuario");
 
             if (username == null || token == null) {
                 ctx.redirect("/login");
@@ -44,7 +45,7 @@ public class SolicitudController {
 
             // 1. Obtener solicitudes de eliminación
             List<SolicitudDeEliminacion> solicitudesElim =
-                    solicitudService.obtenerSolicitudesEliminacion(username, token);
+                    solicitudService.obtenerSolicitudesEliminacion(username, token, rolUsuario);
 
             System.out.println("Número de solicitudes eliminación: " + solicitudesElim.size());
 
@@ -134,6 +135,7 @@ public class SolicitudController {
 
             String username = ctx.sessionAttribute("username");
             String token = ctx.sessionAttribute("access_token");
+            String rolUsuario = ctx.sessionAttribute("rolUsuario");
 
             if (username == null || token == null) {
                 ctx.redirect("/login");
@@ -145,7 +147,9 @@ public class SolicitudController {
             modelo.put("tipo", tipo);
 
             if ("eliminacion".equals(tipo)) {
-                SolicitudDeEliminacion sol = solicitudService.obtenerSolicitudEliminacion(id, username, token);
+                SolicitudDeEliminacion sol = solicitudService.obtenerSolicitudEliminacion(id, username, token, rolUsuario);
+
+                System.out.println(new ObjectMapper().writeValueAsString(sol));
 
                 if (sol == null) {
                     ctx.status(404).result("Solicitud no encontrada");
@@ -229,7 +233,7 @@ public class SolicitudController {
 
             } else if ("modificacion".equals(tipo)) {
                 // Similar para modificación
-                SolicitudDeModificacion sol = solicitudService.obtenerSolicitudModificacion(id, username, token);
+                SolicitudDeModificacion sol = solicitudService.obtenerSolicitudModificacion(id, username, token, rolUsuario);
 
                 if (sol == null) {
                     ctx.status(404).result("Solicitud no encontrada");
@@ -345,13 +349,14 @@ public class SolicitudController {
             // Obtener datos de sesión
             String username = ctx.sessionAttribute("username");
             String token = ctx.sessionAttribute("access_token");
+            String rolUsuario = ctx.sessionAttribute("rolUsuario");
 
             if (username == null || token == null) {
                 ctx.status(401).result("Sesión expirada. Inicie sesión nuevamente.");
                 return;
             }
 
-            int status = solicitudService.actualizarEstadoSolicitud(id, tipo, nuevoEstado, username, token);
+            int status = solicitudService.actualizarEstadoSolicitud(id, tipo, nuevoEstado, username, token, rolUsuario);
 
             if (status >= 200 && status < 300) {
                 ctx.status(200).result("Solicitud actualizada");

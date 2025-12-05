@@ -12,14 +12,14 @@
 
     <script>
         const URL_PUBLICA = '${urlPublica!"http://localhost:8087/api"}';
+        // Variable global para saber quién está logueado en el JS
+        const CURRENT_USER = "${username!}";
     </script>
 
-    <form id="form-solicitud-eliminacion" class="form-container" method="POST" action="/api/solicitudEliminacion">
+    <form id="form-solicitud-eliminacion" class="form-container" method="POST">
 
-        <!-- ID del Hecho (oculto) -->
         <input type="hidden" id="ID_hechoAsociado" name="ID_hechoAsociado" value="${hechoId?html}">
 
-        <!-- Justificación -->
         <div class="form-group">
             <label for="justificacion" class="form-label">Justificación *</label>
             <textarea id="justificacion" name="justificacion" class="form-textarea" rows="6" required
@@ -31,46 +31,42 @@
             </div>
         </div>
 
-        <!-- Información del solicitante -->
         <div class="form-section">
-            <h3 class="form-section-title">👤 Información del solicitante (opcional)</h3>
+            <h3 class="form-section-title">👤 Información del solicitante</h3>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="nombreUsuario" class="form-label">Nombre</label>
-                    <input type="text" id="nombreUsuario" name="usuario.nombre" class="form-input"
-                           placeholder="Su nombre">
+            <#if access_token??>
+                <div style="background-color: #e8f5e9; padding: 15px; border-radius: 8px; border: 1px solid #c8e6c9; margin-bottom: 15px;">
+                    <p style="margin: 0; color: #2e7d32; font-weight: 500;">
+                        <span style="font-size: 1.2em;">👋</span> Solicitando como <strong>${username}</strong>
+                    </p>
+                    <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #1b5e20;">
+                        Esta solicitud quedará asociada a tu cuenta.
+                    </p>
                 </div>
 
-                <div class="form-group">
-                    <label for="apellidoUsuario" class="form-label">Apellido</label>
-                    <input type="text" id="apellidoUsuario" name="usuario.apellido" class="form-input"
-                           placeholder="Su apellido">
+                <div class="form-checkbox-group">
+                    <input type="checkbox" id="anonimo" name="anonimo" class="form-checkbox">
+                    <label for="anonimo" class="form-checkbox-label">Enviar solicitud de forma <strong>anónima</strong></label>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="edadUsuario" class="form-label">Edad</label>
-                <input type="number" id="edadUsuario" name="usuario.edad" class="form-input" min="1" max="120"
-                       placeholder="Su edad">
-            </div>
-
-            <!-- Rol (siempre será CONTRIBUYENTE para este formulario) -->
-            <input type="hidden" id="rolUsuario" name="usuario.rol" value="CONTRIBUYENTE">
-
-            <div class="form-checkbox-group">
-                <input type="checkbox" id="anonimo" name="anonimo" class="form-checkbox">
-                <label for="anonimo" class="form-checkbox-label">Enviar de forma anónima</label>
-            </div>
+            <#else>
+                <div style="background-color: #fff3e0; padding: 15px; border-radius: 8px; border: 1px solid #ffe0b2; margin-bottom: 15px;">
+                    <p style="margin: 0; color: #e65100; font-weight: 500;">
+                        <span style="font-size: 1.2em;">🕵️</span> Solicitando de forma <strong>anónima</strong>
+                    </p>
+                    <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #ef6c00;">
+                        Si deseas hacer un seguimiento de tu solicitud, te recomendamos
+                        <a href="/login" style="color: #e65100; text-decoration: underline; font-weight: bold;">iniciar sesión</a>.
+                    </p>
+                </div>
+            </#if>
         </div>
 
-        <!-- Botones -->
         <div class="form-actions">
             <button type="button" id="btn-cancelar" class="btn btn-secondary">Cancelar</button>
             <button type="submit" id="btn-enviar" class="btn btn-primary">Enviar Solicitud</button>
         </div>
 
-        <!-- Mensajes de estado -->
         <div id="mensaje-exito" class="mensaje mensaje-exito" style="display: none;">
             ✅ Solicitud de eliminación enviada exitosamente. Redirigiendo...
         </div>
@@ -82,5 +78,4 @@
 </#assign>
 
 <#include "layout.ftl">
-
 <script src="/js/solicitud-eliminacion.js" defer></script>

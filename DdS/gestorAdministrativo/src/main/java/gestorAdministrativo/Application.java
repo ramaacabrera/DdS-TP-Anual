@@ -35,7 +35,7 @@ public class Application {
 
             String username = ctx.header("username");
             String accessToken = ctx.header("access_token");
-            String rolUsuario = ctx.header("rolUsuario");
+            String rolUsuario = ctx.header("rol_usuario");
 
             if (accessToken == null || username == null ||  rolUsuario == null) {
                 throw new io.javalin.http.UnauthorizedResponse("Faltan credenciales");

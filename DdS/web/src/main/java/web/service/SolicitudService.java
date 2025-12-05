@@ -25,7 +25,7 @@ public class SolicitudService {
         this.urlAdmin = urlAdmin;
     }
 
-    private HttpRequest buildRequestGET(String endpoint, String username, String token) throws Exception {
+    private HttpRequest buildRequestGET(String endpoint, String username, String token, String rolUsuario) throws Exception {
         HttpRequest.Builder builder = HttpRequest.newBuilder()
                 .uri(new URI(urlAdmin + endpoint))
                 .GET();
@@ -33,12 +33,13 @@ public class SolicitudService {
         if (username != null && token != null) {
             builder.header("username", username);
             builder.header("access_token", token);
+            builder.header("rol_usuario", rolUsuario);
         }
 
         return builder.build();
     }
 
-    private HttpRequest buildRequestPATCH(String endpoint, String json, String username, String token) throws Exception {
+    private HttpRequest buildRequestPATCH(String endpoint, String json, String username, String token, String rolUsuario) throws Exception {
         HttpRequest.Builder builder = HttpRequest.newBuilder()
                 .uri(new URI(urlAdmin + endpoint))
                 .header("Content-Type", "application/json")
@@ -47,14 +48,15 @@ public class SolicitudService {
         if (username != null && token != null) {
             builder.header("username", username);
             builder.header("access_token", token);
+            builder.header("rol_usuario", rolUsuario);
         }
 
         return builder.build();
     }
 
-    public SolicitudDeEliminacion obtenerSolicitudEliminacion(String id, String username, String token) {
+    public SolicitudDeEliminacion obtenerSolicitudEliminacion(String id, String username, String token, String rolUsuario) {
         try {
-            HttpRequest request = buildRequestGET("api/solicitudes/" + id, username, token);
+            HttpRequest request = buildRequestGET("api/solicitudes/" + id, username, token, rolUsuario);
             System.out.println("Obtener solicitud de eliminacion 1: " + request);
 
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
@@ -76,9 +78,9 @@ public class SolicitudService {
         }
     }
 
-    public SolicitudDeModificacion obtenerSolicitudModificacion(String id, String username, String token) {
+    public SolicitudDeModificacion obtenerSolicitudModificacion(String id, String username, String token, String rolUsuario) {
         try {
-            HttpRequest request = buildRequestGET("api/solicitudes/modificacion/" + id, username, token);
+            HttpRequest request = buildRequestGET("api/solicitudes/modificacion/" + id, username, token, rolUsuario);
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200)
@@ -93,9 +95,9 @@ public class SolicitudService {
     }
 
 
-    public List<SolicitudDeEliminacion> obtenerSolicitudesEliminacion(String username, String token) {
+    public List<SolicitudDeEliminacion> obtenerSolicitudesEliminacion(String username, String token, String rolUsuario) {
         try {
-            HttpRequest request = buildRequestGET("api/solicitudes", username, token);
+            HttpRequest request = buildRequestGET("api/solicitudes", username, token, rolUsuario);
             System.out.println("Obtener solicitud de eliminacion (lista) 1: " + request);
 
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
@@ -118,9 +120,9 @@ public class SolicitudService {
         }
     }
 
-    public List<SolicitudDeModificacion> obtenerSolicitudesModificacion(String username, String token) {
+    public List<SolicitudDeModificacion> obtenerSolicitudesModificacion(String username, String token, String rolUsuario) {
         try {
-            HttpRequest request = buildRequestGET("api/solicitudes-modificacion", username, token);
+            HttpRequest request = buildRequestGET("api/solicitudes-modificacion", username, token, rolUsuario);
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200)
@@ -135,14 +137,18 @@ public class SolicitudService {
         }
     }
 
-    public int actualizarEstadoSolicitud(String id, String tipo, String accion, String username, String token) {
+    public int actualizarEstadoSolicitud(String id, String tipo, String accion, String username, String token, String rolUsuario) {
         try {
             String esMod = tipo.equals("modificacion") ? "modificacion/" : "";
             String endpoint = "api/solicitudes/" + esMod + id;
 
             String json = mapper.writeValueAsString(Map.of("accion", accion));
 
-            HttpRequest request = buildRequestPATCH(endpoint, json, username, token);
+            System.out.println(username);
+            System.out.println(token);
+            System.out.println(rolUsuario);
+
+            HttpRequest request = buildRequestPATCH(endpoint, json, username, token, rolUsuario);
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
             return response.statusCode();
