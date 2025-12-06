@@ -1,9 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ApiMock" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="cargadorDemo.APIMock.DemoAPIMockServer" />
-    <module name="cargador-demo" />
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
-  </configuration>
-</component>
