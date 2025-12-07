@@ -191,7 +191,7 @@
         var URL_ADMIN_EDITAR = '${URL_ADMIN!"http://localhost:8081"}';
         var COLECCION_ID_EDITAR = '${COLECCION_ID}';
         var USERNAME = '${username!""}';
-        var ACCESS_TOKEN = '${access_token!""}';
+        var ACCESS_TOKEN = '${accessToken!""}';
     </script>
     <script src="/js/editar-coleccion.js" defer></script>
 </#assign>

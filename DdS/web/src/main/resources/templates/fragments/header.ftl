@@ -180,12 +180,11 @@
                 <#if username??>
                     <div class="auth-section">
                         <p class="user-welcome">Bienvenido, ${username}</p>
-                        <button class="btn btn-outline" onclick="cerrarSesion()">Cerrar sesión</button>
+                        <a href="/logout" class="btn btn-outline">Cerrar sesión</a>
                     </div>
                 <#else>
                     <div class="auth-section">
-                        <a href="/login" class="btn btn-outline">Iniciar sesión</a>
-                        <a href="/sign-in" class="btn btn-primary">Registrarse</a>
+                        <a href="/login" class="btn btn-outline">Ingresar</a>
                     </div>
                 </#if>
             </div>

@@ -1,5 +1,6 @@
 package gestorPublico.service;
 
+import gestorPublico.dto.Hechos.UsuarioDTO;
 import gestorPublico.dto.LoginDTO;
 import gestorPublico.dto.RegistroUsuarioDTO;
 import gestorPublico.repository.UsuarioRepositorio;
@@ -86,5 +87,15 @@ public class UsuarioService {
         nuevoUsuario.setRol(RolUsuario.CONTRIBUYENTE);
 
         usuarioRepositorio.guardar(nuevoUsuario);
+    }
+
+    public void sincronizar(UsuarioDTO usuario) {
+        Usuario existente = usuarioRepositorio.buscarPorUsername(usuario.getUsername());
+        if (existente == null) {
+            Usuario nuevo = new Usuario();
+            nuevo.setUsername(usuario.getUsername());
+            usuarioRepositorio.guardar(nuevo);
+            System.out.println("Usuario nuevo registrado desde Keycloak: " + usuario.getUsername());
+        }
     }
 }

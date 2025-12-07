@@ -1,5 +1,7 @@
 package gestorPublico.controller;
 
+import gestorPublico.domain.Usuario.Usuario;
+import gestorPublico.dto.Hechos.UsuarioDTO;
 import gestorPublico.dto.LoginDTO;
 import gestorPublico.dto.RegistroUsuarioDTO;
 import gestorPublico.service.UsuarioService;
@@ -14,6 +16,12 @@ public class UsuarioController {
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
+
+    public Handler sincronizar = ctx ->{
+        UsuarioDTO usuario = ctx.bodyAsClass(UsuarioDTO.class);
+        usuarioService.sincronizar(usuario);
+        ctx.status(200);
+    };
 
     public Handler login = ctx -> {
         try {

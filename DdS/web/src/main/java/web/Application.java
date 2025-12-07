@@ -2,6 +2,9 @@ package web;
 
 import web.controller.*;
 import io.javalin.Javalin;
+import web.controller.loginKeycloak.AuthCallbackHandler;
+import web.controller.loginKeycloak.GetLogOutHandler;
+import web.controller.loginKeycloak.GetLoginHandler;
 import web.service.*;
 import utils.IniciadorApp;
 import utils.LecturaConfig;
@@ -24,7 +27,11 @@ public class Application {
         String urlEstadisticas = config.getProperty("URL_ESTADISTICAS");
         String cloudinaryUrl = config.getProperty("CLOUDINARY_URL");
         String cloudinaryPreset = config.getProperty("CLOUDINARY_PRESET");
-
+        String keycloakUrl = config.getProperty("URL_SERVIDOR_SSO");
+        String clientId = config.getProperty("CLIENT_ID");
+        String redirectUrl = config.getProperty("REDIRECT_URL");
+        String clientSecret = config.getProperty("CLIENT_SECRET");
+        String urlWeb = config.getProperty("URL_WEB");
 
         Map<String, Object> dataCloud = new HashMap<String, Object>();
         dataCloud.put("cloudinaryUrl", cloudinaryUrl);
@@ -53,10 +60,14 @@ public class Application {
         app.get("/home", new GetHomeHandler(urlPublica));
 
         //login
-        app.get("/login", new GetLoginHandler(urlPublica));
-        app.post("/login", new PostLoginHandler(urlPublica));
-        app.get("/sign-in", new GetSignInHandler(urlPublica));
-        app.get("/logout", new GetLogOutHandler());
+        app.get("/login", new GetLoginHandler(keycloakUrl, clientId, redirectUrl));
+        app.get("/auth/callback", new AuthCallbackHandler(usuarioService,clientSecret, keycloakUrl ,clientId, redirectUrl));
+        app.get("/logout", new GetLogOutHandler(urlWeb, keycloakUrl));
+
+
+        //app.post("/login", new PostLoginHandler(urlPublica));
+        //app.get("/sign-in", new GetSignInHandler(urlPublica));
+
 
         //hechos
         app.get("/hechos/{id}", hechoController.obtenerHechoPorId); //hecho especifico

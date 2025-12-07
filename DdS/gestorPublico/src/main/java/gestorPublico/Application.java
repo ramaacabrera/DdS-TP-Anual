@@ -55,7 +55,9 @@ public class Application {
         app.post("/api/solicitudModificacion", solicitudController.crearSolicitudModificacion);
 
         // Rutas de Usuario / Auth
-        app.post("/api/login", usuarioController.login);
+        app.post("/api/usuario/sincronizar", usuarioController.sincronizar);
+
+
         app.post("/api/sign-in", usuarioController.registrar);
         app.get("/api/usuario/{username}", usuarioController.obtenerUsuario);
     }

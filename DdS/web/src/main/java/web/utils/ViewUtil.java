@@ -14,7 +14,7 @@ public class ViewUtil {
         }
         Map<String, Object> model = new HashMap<>();
         model.put("username", ctx.sessionAttribute("username"));
-        model.put("access_token", ctx.sessionAttribute("access_token"));
+        model.put("accessToken", ctx.sessionAttribute("accessToken"));
         model.put("rolUsuario", rol);
 
         System.out.println("baseModel: " + rol);

@@ -34,7 +34,7 @@
         <div class="form-section">
             <h3 class="form-section-title">👤 Información del solicitante</h3>
 
-            <#if access_token??>
+            <#if accessToken??>
                 <div style="background-color: #e8f5e9; padding: 15px; border-radius: 8px; border: 1px solid #c8e6c9; margin-bottom: 15px;">
                     <p style="margin: 0; color: #2e7d32; font-weight: 500;">
                         <span style="font-size: 1.2em;">👋</span> Solicitando como <strong>${username}</strong>

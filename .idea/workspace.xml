@@ -5,10 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO">
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/loginKeycloak/AuthCallbackHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/loginKeycloak/GetLogOutHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/loginKeycloak/GetLoginHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/HechoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/HechoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/ColeccionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/ColeccionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHomeHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHomeHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/UsuarioController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/UsuarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/UsuarioService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetLogOutHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetLoginHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/UsuarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/UsuarioService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/utils/ViewUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/utils/ViewUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/componentes.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/componentes.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-hecho.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-hecho.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-solicitud-eliminacion.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-solicitud-eliminacion.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/editar-coleccion.ftlh" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/editar-coleccion.ftlh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/header.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/header.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/login.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/loginViejos/login.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/prueba-home.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/sign-in.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/loginViejos/sign-in.ftl" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -98,7 +114,7 @@
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/idiar/IdeaProjects/Diseño-TP/DdS/gestorPublico/src/main/java/gestorPublico/service",
+    "last_opened_file_path": "E:/Proyectos Intellij/DdS-TP-Anual/DdS/web/src/main/resources",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -115,6 +131,9 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="web.controller" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\idiar\IdeaProjects\DdS-TP-Anual\DdS\cargadorDinamico\src\main\java\cargadorDinamico" />
       <recent name="C:\Users\idiar\IdeaProjects\DdS-TP-Anual\DdS\cargadorEstatico\src\main\java\cargadorEstatico\domain" />
@@ -123,6 +142,8 @@
       <recent name="C:\Users\idiar\IdeaProjects\DdS-TP-Anual\DdS\cargadorDemo\src\main\java\cargadorDemo\domain" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\resources\templates\fragments" />
+      <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\resources\templates\loginViejos" />
       <recent name="C:\Users\helga\Bri\Diseño\DdS-TP-Anual\DdS\web\src\main\resources\public\img" />
       <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\resources\public\img" />
     </key>
