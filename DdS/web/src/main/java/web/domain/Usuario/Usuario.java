@@ -21,6 +21,7 @@ public class Usuario {
     )
     @Type(type="uuid-char")
     @Column(name = "id_usuario", length = 36, updatable = false, nullable = false)
+    @JsonProperty("usuarioId")
     private UUID id_usuario;
 
     @OneToMany(mappedBy = "contribuyente")
