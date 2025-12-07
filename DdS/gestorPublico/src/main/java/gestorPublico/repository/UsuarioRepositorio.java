@@ -1,6 +1,5 @@
 package gestorPublico.repository;
 
-import gestorPublico.domain.Usuario.RolUsuario;
 import gestorPublico.domain.Usuario.Usuario;
 import gestorPublico.utils.BDUtils;
 
@@ -64,41 +63,6 @@ public class UsuarioRepositorio {
                     "SELECT u FROM Usuario u WHERE u.username = :paramUsername", Usuario.class);
 
             query.setParameter("paramUsername", username.trim());
-
-            return query.getResultStream().findFirst().orElse(null);
-
-        } finally {
-            em.close();
-        }
-    }
-
-    public Usuario buscarPorNombreYApellido(String nombre, String apellido) {
-        if (nombre == null || apellido == null) return null;
-
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            TypedQuery<Usuario> query = em.createQuery(
-                    "SELECT u FROM Usuario u WHERE u.nombre = :nombre AND u.apellido = :apellido", Usuario.class);
-
-            query.setParameter("nombre", nombre.trim());
-            query.setParameter("apellido", apellido.trim());
-
-            return query.getResultStream().findFirst().orElse(null);
-        } finally {
-            em.close();
-        }
-    }
-
-    public Usuario buscarAdmin(String username){
-        if (username == null) return null;
-
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            TypedQuery<Usuario> query = em.createQuery(
-                    "SELECT u FROM Usuario u WHERE u.username = :paramUsername AND u.rol = :paramRol", Usuario.class);
-
-            query.setParameter("paramUsername", username.trim());
-            query.setParameter("paramRol", RolUsuario.ADMINISTRADOR);
 
             return query.getResultStream().findFirst().orElse(null);
 
