@@ -1,7 +1,6 @@
 package gestorAdministrativo.repository;
 
 import gestorAdministrativo.utils.BDUtils;
-import gestorAdministrativo.domain.Usuario.RolUsuario;
 import gestorAdministrativo.domain.Usuario.Usuario;
 
 import javax.persistence.EntityManager;
@@ -90,7 +89,6 @@ public class UsuarioRepositorio {
                     "SELECT u FROM Usuario u WHERE u.username = :paramUsername AND u.rol = :paramRol", Usuario.class);
 
             query.setParameter("paramUsername", username);
-            query.setParameter("paramRol", RolUsuario.ADMINISTRADOR);
 
             return query.getResultStream().findFirst().orElse(null);
 

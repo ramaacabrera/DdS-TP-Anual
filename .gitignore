@@ -9,5 +9,4 @@ dds/cargadorMetaMapa/target
 dds/estadisticas/target
 dds/utils/target
 dds/web/target
-*.iml
 target/

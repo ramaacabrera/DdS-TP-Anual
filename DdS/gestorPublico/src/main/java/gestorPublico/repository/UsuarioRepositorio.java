@@ -1,6 +1,5 @@
 package gestorPublico.repository;
 
-import gestorPublico.domain.Usuario.RolUsuario;
 import gestorPublico.domain.Usuario.Usuario;
 import gestorPublico.utils.BDUtils;
 
@@ -98,7 +97,6 @@ public class UsuarioRepositorio {
                     "SELECT u FROM Usuario u WHERE u.username = :paramUsername AND u.rol = :paramRol", Usuario.class);
 
             query.setParameter("paramUsername", username.trim());
-            query.setParameter("paramRol", RolUsuario.ADMINISTRADOR);
 
             return query.getResultStream().findFirst().orElse(null);
 
