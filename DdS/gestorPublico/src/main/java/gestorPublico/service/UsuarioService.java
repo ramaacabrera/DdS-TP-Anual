@@ -5,7 +5,6 @@ import gestorPublico.dto.LoginDTO;
 import gestorPublico.dto.RegistroUsuarioDTO;
 import gestorPublico.repository.UsuarioRepositorio;
 import org.json.JSONObject;
-import gestorPublico.domain.Usuario.RolUsuario;
 import gestorPublico.domain.Usuario.Usuario;
 import utils.Keycloak.UserCreator;
 
@@ -59,8 +58,8 @@ public class UsuarioService {
 
                 return Map.of(
                         "username", dto.usuario,
-                        "access_token", accessToken,
-                        "rol", usuario.getRol()
+                        "access_token", accessToken
+
                 );
             } else {
                 throw new SecurityException("Credenciales inválidas en Keycloak");
@@ -84,7 +83,6 @@ public class UsuarioService {
 
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setUsername(dto.usuario);
-        nuevoUsuario.setRol(RolUsuario.CONTRIBUYENTE);
 
         usuarioRepositorio.guardar(nuevoUsuario);
     }

@@ -5,14 +5,12 @@ import java.util.UUID;
 public class UsuarioDTO {
     private UUID usuarioId;
     private String username;
-    private String rol;
 
     public UsuarioDTO() {}
 
-    public UsuarioDTO(UUID usuarioId, String nombreUsuario, String rol) {
+    public UsuarioDTO(UUID usuarioId, String nombreUsuario) {
         this.usuarioId = usuarioId;
         this.username = nombreUsuario;
-        this.rol = rol;
     }
 
     // Getters y Setters
@@ -23,7 +21,4 @@ public class UsuarioDTO {
 
     public String getUsername() { return username; }
     public void setUsername(String nombreUsuario) { this.username = nombreUsuario; }
-
-    public String getRol() { return rol; }
-    public void setRol(String rol) { this.rol = rol; }
 }

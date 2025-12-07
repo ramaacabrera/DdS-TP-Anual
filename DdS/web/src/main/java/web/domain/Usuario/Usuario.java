@@ -21,7 +21,7 @@ public class Usuario {
     )
     @Type(type="uuid-char")
     @Column(name = "id_usuario", length = 36, updatable = false, nullable = false)
-    private UUID usuarioId;
+    private UUID id_usuario;
 
     @OneToMany(mappedBy = "contribuyente")
     @JsonIgnore
@@ -29,23 +29,14 @@ public class Usuario {
 
     private String username;
 
-    public void Contribuyente() {}
-
-    @Enumerated(EnumType.STRING)
-    private RolUsuario rol;
-
-    //public void VerificarMayoriaDeEdad() {}
-
     public void hechoSubido(Hecho hecho){
         hechosSubidos.add(hecho);
     }
 
-    public UUID getUsuarioId() {return usuarioId;}
-    public RolUsuario getRol() {return rol;}
+    public UUID getId_usuario() {return id_usuario;}
     public String getUsername() {return username;}
 
-
-    public void setRol(RolUsuario rol) { this.rol = rol; }
-    public void setUsuarioId(UUID id_usuario) {this.usuarioId = id_usuario; }
+    public void setId_usuario(UUID id_usuario) {this.id_usuario = id_usuario; }
     public void setUsername(String username) { this.username = username; }
 }
+

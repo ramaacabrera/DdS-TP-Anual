@@ -139,7 +139,6 @@ public class DinamicoRepositorio {
         if (usuarioD == null) return null;
 
         Usuario usuario = new Usuario();
-        usuario.setRol(RolUsuario.CONTRIBUYENTE);
         usuario.setUsername(usuarioD.getUsername());
 
         return usuario;

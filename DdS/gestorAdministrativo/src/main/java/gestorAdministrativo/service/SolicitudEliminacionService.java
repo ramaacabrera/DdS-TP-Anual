@@ -124,7 +124,7 @@ public class SolicitudEliminacionService {
         }
         Usuario usuario = solicitud.getUsuario();
         if (usuario != null) {
-            UsuarioDTO uDto = new UsuarioDTO(usuario.getId_usuario(), usuario.getUsername(),usuario.getRol().toString());
+            UsuarioDTO uDto = new UsuarioDTO(usuario.getId_usuario(), usuario.getUsername());
             dto.setUsuario(uDto);
         }
 
