@@ -98,7 +98,7 @@ public class HechoController {
         model.put("toIndex", toIndex);
 
         // 7) Renderizar
-        ctx.render("home.ftl", model);
+        ctx.render("hechos.ftl", model);
     };
 
 

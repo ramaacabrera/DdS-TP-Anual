@@ -28,39 +28,6 @@ public class Application {
         UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
         FuenteRepositorio fuenteRepositorio = new FuenteRepositorio();
 
-        app.before("/api/*", ctx -> {
-            if (ctx.method().equals("OPTIONS")) {
-                return;
-            }
-
-            System.out.println("Comprobando privilegios");
-
-            String username = ctx.header("username");
-            String accessToken = ctx.header("access_token");
-            String rolUsuario = ctx.header("rol_usuario");
-
-            if (accessToken == null || username == null ||  rolUsuario == null) {
-                throw new io.javalin.http.UnauthorizedResponse("Faltan credenciales");
-            }
-
-            try {
-                TokenValidator validador = new TokenValidator();
-                validador.validar(accessToken);
-            } catch (Exception e) {
-                System.err.println("Token inválido: " + e.getMessage());
-                throw new io.javalin.http.UnauthorizedResponse("Token inválido");
-            }
-
-            System.out.println("role "+rolUsuario);
-
-            if (!rolUsuario.equals("ADMINISTRADOR")) {
-                System.err.println("Usuario no es admin: " + username);
-                throw new io.javalin.http.ForbiddenResponse("No tienes permisos de administrador");
-            }
-
-            System.out.println("✅ Acceso autorizado para: " + username);
-        });
-
         // 2. Services
         ColeccionService coleccionService = new ColeccionService(coleccionRepositorio, hechoRepositorio, fuenteRepositorio);
         SolicitudEliminacionService solicitudEliminacionService = new SolicitudEliminacionService(solicitudEliminacionRepositorio, hechoRepositorio, usuarioRepositorio);
@@ -69,8 +36,10 @@ public class Application {
         // 3. Controllers
         ColeccionController coleccionController = new ColeccionController(coleccionService);
         SolicitudController solicitudController = new SolicitudController(solicitudEliminacionService, solicitudModificacionService);
-
+        VerificacionController verificacionController = new VerificacionController();
         // RUTAS
+
+        app.before("/api/*", verificacionController.verificarAdministrador);
 
         // Rutas de Colecciones
         app.post("/api/colecciones", coleccionController.crearColeccion);
