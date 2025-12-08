@@ -59,8 +59,8 @@ public class HechoService {
 
     public PageDTO<HechoDTO> buscarHechos(Map<String, String> filtros, int page, int size) throws IOException {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(urlPublica + "/hechos").newBuilder()
-                .addQueryParameter("pagina", String.valueOf(page))
-                .addQueryParameter("limite", String.valueOf(size));
+                .addQueryParameter("page", String.valueOf(page))
+                .addQueryParameter("size", String.valueOf(size));
         // Aplicar filtros dinámicos
         filtros.forEach((key, value) -> {
             if (value != null && !value.isBlank()) {

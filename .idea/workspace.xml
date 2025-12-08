@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="soluciono problemas en las solicitudes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/UsuarioRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/UsuarioRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/repository/UsuarioRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/repository/UsuarioRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/SolicitudController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/SolicitudController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/HechoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/HechoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/FiltroHechosDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/FiltroHechosDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/repository/HechoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/repository/HechoRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHomeHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHomeHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/HechoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/HechoService.java" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -145,7 +146,7 @@
       <recent name="agregador.utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.ApiAdmin">
+  <component name="RunManager" selected="Application.Web">
     <configuration name="Agregador" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="agregador.Application" />
       <module name="agregador" />
@@ -323,7 +324,7 @@
       <workItem from="1764933700939" duration="39000" />
       <workItem from="1764947017902" duration="3459000" />
       <workItem from="1765149276372" duration="193000" />
-      <workItem from="1765149482020" duration="1813000" />
+      <workItem from="1765149482020" duration="2935000" />
     </task>
     <task id="LOCAL-00001" summary="termine cargadorDemo, avanzo con cargadorDinamico (en proceso)">
       <option name="closed" value="true" />
@@ -389,7 +390,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764898796874</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="soluciono problemas en las solicitudes">
+      <option name="closed" value="true" />
+      <created>1765151401244</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1765151401244</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -414,7 +423,9 @@
     <MESSAGE value="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO" />
     <MESSAGE value="Cambios en el gestorAdministrativo" />
     <MESSAGE value="Arreglos en las fuentes de las colecciones" />
-    <option name="LAST_COMMIT_MESSAGE" value="Arreglos en las fuentes de las colecciones" />
+    <MESSAGE value="arreglo usuarios (creo andando todo) y actualizo clase usuario" />
+    <MESSAGE value="soluciono problemas en las solicitudes" />
+    <option name="LAST_COMMIT_MESSAGE" value="soluciono problemas en las solicitudes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -50,7 +50,6 @@ public class GetHomeHandler implements Handler {
             System.err.println("Error de red/IO al consultar el backend: " + e.getMessage());
         }
 
-
         Map<String, Object> model = ViewUtil.baseModel(ctx);
         model.put("hechos", hechos);
 

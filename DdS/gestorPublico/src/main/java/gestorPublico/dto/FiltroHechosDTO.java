@@ -11,6 +11,6 @@ public class FiltroHechosDTO {
     public String descripcion;
     public String contribuyente;
     public String textoBusqueda;
-    public int pagina = 1;
-    public int limite = 10;
+    public int page = 1;
+    public int size = 10;
 }

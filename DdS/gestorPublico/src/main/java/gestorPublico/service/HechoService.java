@@ -29,33 +29,26 @@ public class HechoService {
     public PageDTO<HechoDTO> buscarHechos(FiltroHechosDTO filtro) {
         List<Criterio> criterios = armarCriterios(filtro);
 
-        List<Hecho> todosLosHechos = hechoRepositorio.buscarHechos(criterios);
+        long totalElementsLong = hechoRepositorio.contarHechos(criterios);
+        int total = (int) totalElementsLong;
 
-        List<Hecho> hechosActivos = todosLosHechos.stream()
-                .filter(hecho -> hecho.getEstadoHecho() == EstadoHecho.ACTIVO) // ¡FILTRO AQUÍ!
-                .collect(Collectors.toList());
+        int totalPages = (int) Math.ceil(total / (double) filtro.size);
 
-        int total = hechosActivos.size();
-        int totalPages = (int) Math.ceil(total / (double) filtro.limite);
-
-        if (filtro.pagina > totalPages && totalPages > 0) filtro.pagina = totalPages;
-        if (filtro.pagina < 1) filtro.pagina = 1;
-
-        int fromIndex = (filtro.pagina - 1) * filtro.limite;
-        int toIndex = Math.min(fromIndex + filtro.limite, total);
+        if (filtro.page > totalPages && totalPages > 0) filtro.page = totalPages;
+        if (filtro.page < 1) filtro.page = 1;
 
         List<Hecho> hechosPaginados;
-        if (fromIndex >= total) {
+        if (total == 0) {
             hechosPaginados = new ArrayList<>();
         } else {
-            hechosPaginados = hechosActivos.subList(fromIndex, toIndex);
+            hechosPaginados = hechoRepositorio.buscarHechos(criterios, filtro.page, filtro.size);
         }
 
         List<HechoDTO> hechosDTO = hechosPaginados.stream()
                 .map(HechoDTO::new)
                 .collect(Collectors.toList());
 
-        return new PageDTO<>(hechosDTO, filtro.pagina, filtro.limite, totalPages, total);
+        return new PageDTO<>(hechosDTO, filtro.page, filtro.size, totalPages, total);
     }
 
     public HechoDTO obtenerHechoPorId(UUID id) {

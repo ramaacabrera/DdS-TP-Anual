@@ -1,10 +1,12 @@
 package gestorPublico.repository;
 
 import gestorPublico.domain.Criterios.Criterio;
+import gestorPublico.domain.HechosYColecciones.EstadoHecho;
 import gestorPublico.domain.HechosYColecciones.Hecho;
 import gestorPublico.utils.BDUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ public class HechoRepositorio {
 
     public HechoRepositorio(){}
 
-    public List<Hecho> buscarHechos(List<Criterio> criterios) {
+    public List<Hecho> buscarHechos(List<Criterio> criterios, int page, int size) {
         EntityManager em = BDUtils.getEntityManager();
         try {
             StringBuilder queryString = new StringBuilder(
@@ -25,28 +27,20 @@ public class HechoRepositorio {
                             "LEFT JOIN FETCH h.ubicacion " +
                             "LEFT JOIN FETCH h.contribuyente " +
                             "LEFT JOIN FETCH h.fuente " +
-                            "WHERE 1=1"
+                            "WHERE h.estadoHecho = :estadoActivo "
             );
 
-            if (criterios != null && !criterios.isEmpty()) {
-                for (Criterio criterio : criterios) {
-                    String condition = criterio.getQueryCondition();
-                    if (condition != null && !condition.trim().isEmpty()) {
-                        queryString.append(" AND ").append(condition);
-                    }
-                }
-            }
+            agregarCriteriosAQuery(queryString, criterios);
 
             TypedQuery<Hecho> query = em.createQuery(queryString.toString(), Hecho.class);
 
-            if (criterios != null) {
-                for (Criterio criterio : criterios) {
-                    Map<String, Object> params = criterio.getQueryParameters();
-                    for (Map.Entry<String, Object> param : params.entrySet()) {
-                        query.setParameter(param.getKey(), param.getValue());
-                    }
-                }
-            }
+            query.setParameter("estadoActivo", EstadoHecho.ACTIVO);
+
+            setearParametros(query, criterios);
+
+            int fromIndex = (page - 1) * size;
+            query.setFirstResult(fromIndex);
+            query.setMaxResults(size);
 
             List<Hecho> resultados = query.getResultList();
 
@@ -55,7 +49,6 @@ public class HechoRepositorio {
                     h.getContenidoMultimedia().size();
                 }
             }
-
             return resultados;
 
         } catch (Exception e) {
@@ -66,8 +59,56 @@ public class HechoRepositorio {
         }
     }
 
+    public long contarHechos(List<Criterio> criterios) {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            // Query optimizada para contar (sin FETCH JOINS innecesarios)
+            StringBuilder queryString = new StringBuilder(
+                    "SELECT COUNT(DISTINCT h) FROM Hecho h " +
+                            "WHERE h.estadoHecho = :estadoActivo "
+            );
+
+            agregarCriteriosAQuery(queryString, criterios);
+
+            TypedQuery<Long> query = em.createQuery(queryString.toString(), Long.class);
+            query.setParameter("estadoActivo", EstadoHecho.ACTIVO);
+            setearParametros(query, criterios);
+
+            return query.getSingleResult();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        } finally {
+            em.close();
+        }
+    }
+
+    // Helpers privados para evitar duplicar código entre el Count y el Select
+    private void agregarCriteriosAQuery(StringBuilder sb, List<Criterio> criterios) {
+        if (criterios != null && !criterios.isEmpty()) {
+            for (Criterio criterio : criterios) {
+                String condition = criterio.getQueryCondition();
+                if (condition != null && !condition.trim().isEmpty()) {
+                    sb.append(" AND ").append(condition);
+                }
+            }
+        }
+    }
+
+    private void setearParametros(Query query, List<Criterio> criterios) {
+        if (criterios != null) {
+            for (Criterio criterio : criterios) {
+                Map<String, Object> params = criterio.getQueryParameters();
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    query.setParameter(param.getKey(), param.getValue());
+                }
+            }
+        }
+    }
+
     public List<Hecho> getHechos() {
-        return buscarHechos(null);
+        return buscarHechos(null, 1, 10);
     }
 
     public Hecho buscarPorId(UUID id) {

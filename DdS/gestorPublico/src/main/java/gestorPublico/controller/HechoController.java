@@ -42,8 +42,8 @@ public class HechoController {
 
             filtro.descripcion = ctx.queryParam("descripcion");
 
-            filtro.pagina = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
-            filtro.limite = ctx.queryParamAsClass("size", Integer.class).getOrDefault(10);
+            filtro.page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
+            filtro.size = ctx.queryParamAsClass("size", Integer.class).getOrDefault(10);
 
             PageDTO<HechoDTO> resultado = hechoService.buscarHechos(filtro);
 
