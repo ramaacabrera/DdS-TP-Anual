@@ -73,12 +73,12 @@
 }
 
 .home-quick-nav-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-    row-gap: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
     max-width: 100%;
-    padding-bottom: 100px;
+    padding-bottom: 50px;
 }
 
 .home-nav-card {
@@ -91,21 +91,25 @@
     cursor: pointer;
     text-decoration: none;
     color: inherit;
-    display: block;
     border: 1px solid #e9ecef;
-    height: 100%;
-    min-height: 180px;
+
+    flex: 0 1 300px;
+    min-width: 260px;
+    max-width: 350px;
+    min-height: 220px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 .home-nav-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
     border-color: var(--home-primary);
     text-decoration: none;
     color: inherit;
+    z-index: 2;
 }
 
 .home-nav-card-icon {
@@ -273,10 +277,13 @@
     }
 
     .home-quick-nav-cards {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 25px;
-        max-width: 100%;
+    }
+
+    .home-nav-card {
+        flex: 1 1 100%;
+        max-width: 400px;
     }
 
     .home-map-section {
@@ -291,6 +298,19 @@
     .home-section-title {
         font-size: 1.7rem;
         margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 992px) {
+    .home-quick-nav-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 550px) {
+    /* Para celulares, 1 sola columna */
+    .home-quick-nav-cards {
+        grid-template-columns: 1fr;
     }
 }
 

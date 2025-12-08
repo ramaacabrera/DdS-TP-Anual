@@ -10,7 +10,7 @@
         />
 
         <!-- Navegación Rápida con Cards -->
-        <@cmp.quickNavCards rolUsuario=rolUsuario!""/>
+        <@cmp.quickNavCards/>
 
         <!-- Mapa de Hechos Registrados -->
         <@cmp.mapSection

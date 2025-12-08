@@ -1,28 +1,29 @@
-<#macro quickNavCards rolUsuario>
+<#macro quickNavCards>
     <div class="home-quick-nav-section">
         <h2 class="home-section-title">Navegación Rápida</h2>
         <div class="home-quick-nav-cards">
-            <#if rolUsuario == "ADMINISTRADOR">
-                <a href="/admin/solicitudes" class="home-nav-card">
-                    <div class="home-nav-card-icon">📋</div>
-                    <h3>Ver Solicitudes</h3>
-                    <p>Consulta y gestiona las solicitudes pendientes</p>
-                </a>
-                <a href="/crear-coleccion" class="home-nav-card">
-                    <div class="home-nav-card-icon">🗂️</div>
-                    <h3>Crear Colección</h3>
-                    <p>Organiza y agrupa hechos relacionados en colecciones temáticas</p>
-                </a>
-            </#if>
+            <a href="/hechos/crear" class="home-nav-card">
+                <div class="home-nav-card-icon">📢</div>
+                <h3>Reportar un Hecho</h3>
+                <p>Contribuye a la comunidad registrando un nuevo suceso en el mapa</p>
+            </a>
+
             <a href="/hechos" class="home-nav-card">
-                <div class="home-nav-card-icon">📊</div>
+                <div class="home-nav-card-icon">📋</div>
                 <h3>Ver Hechos</h3>
                 <p>Explora todos los hechos registrados en formato de lista</p>
             </a>
+
             <a href="/colecciones" class="home-nav-card">
                 <div class="home-nav-card-icon">📚</div>
                 <h3>Ver Colecciones</h3>
-                <p>Accede a las colecciones de hechos creadas por nuestros administradores</p>
+                <p>Accede a las colecciones creadas por nuestros administradores</p>
+            </a>
+
+            <a href="/estadisticas" class="home-nav-card">
+                <div class="home-nav-card-icon">📈</div>
+                <h3>Ver Estadísticas</h3>
+                <p>Visualiza métricas y análisis gráficos sobre los datos recopilados</p>
             </a>
         </div>
     </div>
