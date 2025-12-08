@@ -1,5 +1,5 @@
 <#assign pageTitle = "Hechos" />
-<#assign additionalCss = ["/css/styleHome.css"]>
+<#assign additionalCss = ["/css/styleHechos.css"]>
 
 <#assign content>
     <div class="container">
@@ -83,6 +83,7 @@
                                 etiquetas=h.etiquetas![]
                                 imagen=imagenUrl
                                 verHref="/hechos/${h.hechoId}"
+                                rolUsuario='${rolUsuario}'!""
                                 />
                             </#list>
                         </div>

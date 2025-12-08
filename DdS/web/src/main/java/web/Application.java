@@ -53,6 +53,7 @@ public class Application {
         ColeccionController coleccionController = new ColeccionController(coleccionService, usuarioService, fuenteService);
         HechoController hechoController = new HechoController(urlPublica, hechoService, dataCloud);
         SolicitudController solicitudController = new SolicitudController(solicitudService);
+        AdministradorController administradorController = new AdministradorController(solicitudService);
 
         app.get("/", ctx -> {
             ctx.redirect("/home");
@@ -78,7 +79,6 @@ public class Application {
         app.get("/colecciones", coleccionController.listarColecciones);
         app.get("/colecciones/{id}", coleccionController.obtenerColeccionPorId);
         app.get("/editar-coleccion/{id}", coleccionController.obtenerPageEditarColeccion);
-        app.get("/crear-coleccion", coleccionController.obtenerPageCrearColeccion);
         app.post("/colecciones", coleccionController.crearColeccion);
         app.put("/colecciones/{id}", coleccionController.editarColeccion);
         app.delete("/colecciones/{id}", coleccionController.eliminarColeccion);
@@ -97,10 +97,12 @@ public class Application {
         //app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
         app.get("/api/solicitudes/{id}", solicitudController.obtenerFormsEliminarSolicitud);
 
-        app.get("/admin/solicitudes", solicitudController.listarSolicitudes);
+        app.get("/admin/solicitudes/eliminacion", solicitudController.listarSolicitudesEliminacion);
         app.get("/admin/solicitudes/{tipo}/{id}", solicitudController.obtenerSolicitud);
         app.patch("/admin/solicitudes/{tipo}/{id}", solicitudController.actualizarEstadoSolicitud);
 
+        app.get("/admin/crear-coleccion", coleccionController.obtenerPageCrearColeccion);
 
+        app.get("/admin/panel", administradorController.obtenerPagePanel);
     }
 }

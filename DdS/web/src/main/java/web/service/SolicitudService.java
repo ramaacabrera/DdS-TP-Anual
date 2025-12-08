@@ -157,4 +157,12 @@ public class SolicitudService {
             throw new RuntimeException(e);
         }
     }
+
+    public long contarPendientesEliminacion() {
+        return 0;
+    }
+
+    public long contarPendientesModificacion() {
+        return 0;
+    }
 }

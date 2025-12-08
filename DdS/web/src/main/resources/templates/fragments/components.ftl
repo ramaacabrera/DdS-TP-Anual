@@ -346,7 +346,7 @@
 </#macro>
 
 <#-- CARD DE HECHO -------------------------------------------------------->
-<#macro hechoCard id titulo resumen fecha categoria ubicacion etiquetas verHref imagen="">
+<#macro hechoCard id titulo resumen fecha categoria ubicacion etiquetas verHref imagen rolUsuario="">
     <article class="card card-hecho">
 
         <div class="card-media" style="height: 200px; overflow: hidden; background-color: #f0f2f5; position: relative;">

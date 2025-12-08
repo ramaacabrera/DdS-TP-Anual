@@ -27,7 +27,7 @@ public class SolicitudController {
         this.solicitudService = solicitudService;
     }
 
-    public Handler listarSolicitudes = ctx -> {
+    public Handler listarSolicitudesEliminacion = ctx -> {
         try {
             System.out.println("Listando SOLO solicitudes de eliminación");
 
