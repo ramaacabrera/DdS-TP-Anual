@@ -45,6 +45,10 @@ public class Application {
 
 
         // 4. Endpoints (usando el agregador.Cargador ESPECÍFICO)
+
+        // Health check
+        app.get("/health", ctx -> { ctx.status(200).result("OK");});
+
         app.get("/hechos", new GetHechosHandler(cargadorMetamapa));
         app.post("/fuentes", new PostFuentesHandler(cargadorMetamapa));
     }

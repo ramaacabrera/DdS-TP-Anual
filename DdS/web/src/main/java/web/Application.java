@@ -54,6 +54,8 @@ public class Application {
         HechoController hechoController = new HechoController(urlPublica, hechoService, dataCloud);
         SolicitudController solicitudController = new SolicitudController(solicitudService);
 
+        app.get("/health", ctx -> { ctx.status(200).result("OK");});
+
         app.get("/", ctx -> {
             ctx.redirect("/home");
         });

@@ -72,6 +72,9 @@ public class Application {
 
         // RUTAS
 
+        // Health check
+        app.get("/health", ctx -> { ctx.status(200).result("OK");});
+
         // Rutas de Colecciones
         app.post("/api/colecciones", coleccionController.crearColeccion);
         app.put("/api/colecciones/{id}", coleccionController.actualizarColeccion);

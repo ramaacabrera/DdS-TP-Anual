@@ -35,6 +35,9 @@ public class Application {
 
         EstadisticasController controller = new EstadisticasController(estadisticasService);
 
+        // Health check
+        app.get("/health", ctx -> { ctx.status(200).result("OK");});
+
         app.get("/api/estadisticas/provinciaMax/colecciones/{coleccion}", controller::getProvinciaColeccion);
         app.get("/api/estadisticas/categoriaMax", controller::getCategoriaMax);
         app.get("/api/estadisticas/provinciaMax/categorias/{categoria}", controller::getProvinciaCategoria);

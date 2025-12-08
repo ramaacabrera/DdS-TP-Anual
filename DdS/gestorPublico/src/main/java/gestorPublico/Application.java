@@ -38,6 +38,8 @@ public class Application {
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
+        app.get("/health", ctx -> { ctx.status(200).result("OK");});
+
         // Rutas Hechos
         app.get("/api/hechos", hechoController.obtenerHechos);
         app.get("/api/hechos/{id}", hechoController.obtenerHechoPorId);

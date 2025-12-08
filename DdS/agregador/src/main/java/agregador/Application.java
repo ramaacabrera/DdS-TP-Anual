@@ -47,6 +47,9 @@ public class Application {
         ExecutorService wsWorkers = java.util.concurrent.Executors.newFixedThreadPool(
                 Math.max(4, Runtime.getRuntime().availableProcessors()));
 
+        // Health check
+        app.get("/health", ctx -> { ctx.status(200).result("OK");});
+
         app.ws("/cargador", ws -> {
             ws.onConnect(new OnConnectHandler(conexionCargadorService, fuenteRepositorio));
             ws.onMessage(ctx -> {

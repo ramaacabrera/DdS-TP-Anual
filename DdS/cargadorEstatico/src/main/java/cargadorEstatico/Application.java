@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import cargadorEstatico.conexionAgregador.ClienteDelAgregador;
 import cargadorEstatico.controller.ControladorEstatica;
 import cargadorEstatico.utils.LecturaConfig;
+import io.javalin.Javalin;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,6 +28,12 @@ public class Application {
         String pathGuia = carpeta.resolve("guia.csv").toString();
 
         //limpiarGuia(pathGuia); descomentar solo si se quiere que se carguen nuevamente los hechos cada vez que se runee
+
+        Javalin app = Javalin.create().start(8083);
+
+        app.get("/health", ctx -> {ctx.status(200).result("OK");});
+
+        System.out.println("Monitor de salud escuchando en puerto 8082");
 
         Fuente fuente = new Fuente(TipoDeFuente.ESTATICA, "ESTATICA");
         ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorEstatica(new HechosEstaticoService(fileServer, fuente)));

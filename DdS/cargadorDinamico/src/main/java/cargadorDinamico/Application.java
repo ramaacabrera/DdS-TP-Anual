@@ -36,6 +36,9 @@ public class Application {
         ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDinamica(hechosDinamicoService, solicitudesModificacionService, solicitudesEliminacionService));
         cliente.conectar(fuente);
 
+        // Health check
+        app.get("/health", ctx -> { ctx.status(200).result("OK");});
+
         app.post("/hechos", new PostHechosHandler(hechosDinamicoService));
         app.post("/solicitudesModificacion", new PostSolicitudesModificacionHandler(solicitudesModificacionService));
         app.post("/solicitudesEliminacion", new PostSolicitudesEliminacionHandler(solicitudesEliminacionService));
