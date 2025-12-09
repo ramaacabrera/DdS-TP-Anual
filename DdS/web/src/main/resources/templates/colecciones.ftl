@@ -1,5 +1,5 @@
 <#assign pageTitle = "Colecciones">
-<#assign additionalCss = ["/css/styleColecciones.css"]>
+<#assign additionalCss = ["/css/styleColecciones.css", "/css/styleCrearHechoSolEliminacion.css"]>
 <#assign content>
 <div class="container">
     <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
