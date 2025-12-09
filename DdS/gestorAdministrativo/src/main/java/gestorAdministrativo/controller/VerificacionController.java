@@ -12,12 +12,16 @@ import java.util.Map;
 public class VerificacionController {
 
     public Handler verificarAdministrador = ctx -> {
+
+        System.out.println("Iniciando verificacion de administrativo");
         if (ctx.method().name().equals("OPTIONS")) {
+            System.out.println("Rechazado por OPTIONS");
             return;
         }
         String accessToken = ctx.header("accessToken");
 
         if (accessToken == null) {
+            System.out.println("No hay token");
             throw new io.javalin.http.UnauthorizedResponse("Faltan credenciales");
         }
 
@@ -40,6 +44,7 @@ public class VerificacionController {
                 }else if (roles.contains("contribuyente")) {
                     rolUsuario = "CONTRIBUYENTE";
                 }
+                System.out.println("Rol: " + rolUsuario);
             }
         }
 

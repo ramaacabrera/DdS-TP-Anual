@@ -40,6 +40,7 @@ public class ColeccionController {
             int toIndex = fromIndex + (coleccionesPage.content != null ? coleccionesPage.content.size() : 0);
 
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);
+            modelo.put("baseHref", "/colecciones");
             modelo.put("pageTitle", "Colecciones");
             modelo.put("total", coleccionesPage.totalElements);
             modelo.put("page", coleccionesPage.page);
@@ -78,7 +79,7 @@ public class ColeccionController {
         modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
 
         String username = ctx.sessionAttribute("username");
-        String token = ctx.sessionAttribute("access_token");
+        String token = ctx.sessionAttribute("accessToken");
 
         System.out.println("--- DEBUG CONTROLLER ---");
         System.out.println("Username en sesion: " + username);
@@ -114,7 +115,6 @@ public class ColeccionController {
             List<FuenteDTO> listaFuentes = fuenteService.listarFuentes();
 
             modelo.put("listaFuentes", listaFuentes);
-            System.out.println("lista de fuentes: " + new ObjectMapper().writeValueAsString(listaFuentes));
             modelo.put("tiposDeFuente", TipoDeFuente.values());
 
             List<String> idSeleccionados = coleccion.getFuente().stream().map(fuente -> fuente.getId().toString()).toList();
@@ -170,9 +170,7 @@ public class ColeccionController {
         List<String> fuentes = new ArrayList<>();
         for(JsonNode fuente : rootNode.get("fuentes")){
             fuentes.add(fuente.asText());
-            System.out.println("fuente agregada: " + fuente.asText());
         }
-
         bodyData.put("fuentes", fuentes);
 
         bodyData.put("coleccionId", id);

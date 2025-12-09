@@ -1,5 +1,5 @@
 package gestorPublico.dto.Coleccion;
 
 public enum TipoAlgoritmoConsensoDTO {
-    ABSOLUTA, MAYORIASIMPLE, MULTIPLESMENCIONES
+    ABSOLUTA, MAYORIA_SIMPLE, MULTIPLES_MENCIONES
 }
