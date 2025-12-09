@@ -3,6 +3,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 <#assign pageTitle = "Reportar un Hecho">
+<#assign additionalCss = ["/css/styleCrearHechoSolEliminacion.css"]>
 <#assign content>
     <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
         <a href="/" class="header-link back-link">&larr; Volver al Inicio</a>

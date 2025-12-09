@@ -1,5 +1,6 @@
 package gestorAdministrativo.repository;
 
+import gestorAdministrativo.domain.HechosYColecciones.Etiqueta;
 import gestorAdministrativo.domain.fuente.Fuente;
 import gestorAdministrativo.utils.BDUtils;
 import gestorAdministrativo.domain.Criterios.Criterio;
@@ -237,5 +238,19 @@ public class HechoRepositorio {
             em.close();
         }
 
+    }
+
+    public Etiqueta buscarEtiquetaPorNombre(String nombreLimpio) {
+        EntityManager em = BDUtils.getEntityManager();
+        try{
+            return em.createQuery("SELECT e FROM Etiqueta e WHERE e.nombre = :t", Etiqueta.class)
+                    .setParameter("t", nombreLimpio)
+                    .getSingleResult();
+        }catch(Exception e){
+            BDUtils.rollback(em);
+            return null;
+        } finally {
+            em.close();
+        }
     }
 }

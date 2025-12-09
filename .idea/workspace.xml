@@ -4,14 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="soluciono problemas en las solicitudes">
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="agrego panel de administrador, falta agregar links y opciones">
+      <change afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/controller/HechoController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/dto/Hechos/AgregarEtiquetaDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/HechoService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleCrearHechoSolEliminacion.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/hechos.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/HechoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/HechoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/FiltroHechosDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/FiltroHechosDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/repository/HechoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/repository/HechoRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHomeHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetHomeHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/HechoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/HechoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/HechoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/HechoRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/HechoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/HechoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleHechoEspecifico.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleHechoEspecifico.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleHechos.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleHechos.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-hecho.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-hecho.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/components.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/components.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hechos.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hechos.ftl" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -28,6 +38,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
+        <option value="JavaScript File" />
         <option value="Class" />
       </list>
     </option>
@@ -120,6 +131,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="gestorAdministrativo.service" />
       <recent name="web.controller" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
@@ -146,7 +158,7 @@
       <recent name="agregador.utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Web">
+  <component name="RunManager" selected="Application.ApiAdmin">
     <configuration name="Agregador" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="agregador.Application" />
       <module name="agregador" />
@@ -324,7 +336,8 @@
       <workItem from="1764933700939" duration="39000" />
       <workItem from="1764947017902" duration="3459000" />
       <workItem from="1765149276372" duration="193000" />
-      <workItem from="1765149482020" duration="2935000" />
+      <workItem from="1765149482020" duration="3648000" />
+      <workItem from="1765208797709" duration="18418000" />
     </task>
     <task id="LOCAL-00001" summary="termine cargadorDemo, avanzo con cargadorDinamico (en proceso)">
       <option name="closed" value="true" />
@@ -398,7 +411,47 @@
       <option name="project" value="LOCAL" />
       <updated>1765151401244</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="arreglo problema del paginado de hechos">
+      <option name="closed" value="true" />
+      <created>1765152537685</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1765152537685</updated>
+    </task>
+    <task id="LOCAL-00011" summary="actualizo validacion de token y administrador en GestorAdministrativo">
+      <option name="closed" value="true" />
+      <created>1765226488445</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1765226488445</updated>
+    </task>
+    <task id="LOCAL-00012" summary="actualizo nav cards del inicio, ahora son fijas">
+      <option name="closed" value="true" />
+      <created>1765228986568</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1765228986568</updated>
+    </task>
+    <task id="LOCAL-00013" summary="modifico estilo header, agrego link para panel admin">
+      <option name="closed" value="true" />
+      <created>1765231621866</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1765231621866</updated>
+    </task>
+    <task id="LOCAL-00014" summary="agrego panel de administrador, falta agregar links y opciones">
+      <option name="closed" value="true" />
+      <created>1765235915510</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1765235915510</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -425,7 +478,12 @@
     <MESSAGE value="Arreglos en las fuentes de las colecciones" />
     <MESSAGE value="arreglo usuarios (creo andando todo) y actualizo clase usuario" />
     <MESSAGE value="soluciono problemas en las solicitudes" />
-    <option name="LAST_COMMIT_MESSAGE" value="soluciono problemas en las solicitudes" />
+    <MESSAGE value="arreglo problema del paginado de hechos" />
+    <MESSAGE value="actualizo validacion de token y administrador en GestorAdministrativo" />
+    <MESSAGE value="actualizo nav cards del inicio, ahora son fijas" />
+    <MESSAGE value="modifico estilo header, agrego link para panel admin" />
+    <MESSAGE value="agrego panel de administrador, falta agregar links y opciones" />
+    <option name="LAST_COMMIT_MESSAGE" value="agrego panel de administrador, falta agregar links y opciones" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -32,14 +32,19 @@ public class Application {
         ColeccionService coleccionService = new ColeccionService(coleccionRepositorio, hechoRepositorio, fuenteRepositorio);
         SolicitudEliminacionService solicitudEliminacionService = new SolicitudEliminacionService(solicitudEliminacionRepositorio, hechoRepositorio, usuarioRepositorio);
         SolicitudModificacionService solicitudModificacionService = new SolicitudModificacionService(solicitudModificacionRepositorio, hechoRepositorio, usuarioRepositorio);
-
+        HechoService hechoService = new HechoService(hechoRepositorio);
         // 3. Controllers
         ColeccionController coleccionController = new ColeccionController(coleccionService);
         SolicitudController solicitudController = new SolicitudController(solicitudEliminacionService, solicitudModificacionService);
         VerificacionController verificacionController = new VerificacionController();
+        HechoController hechoController = new HechoController(hechoService);
         // RUTAS
 
         app.before("/api/*", verificacionController.verificarAdministrador);
+
+        //Hechos
+
+        app.patch("/api/hecho/{hechoId}/etiquetas", hechoController.agregarEtiquetas);
 
         // Rutas de Colecciones
         app.post("/api/colecciones", coleccionController.crearColeccion);

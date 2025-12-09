@@ -32,7 +32,7 @@
     </style>
 
     <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
-        <a href="/" class="header-link back-link">&larr; Volver a la Lista</a>
+        <a href="/hechos" class="header-link back-link">&larr; Volver a la Lista</a>
     </div>
 
     <@cmp.hero hecho=hecho />

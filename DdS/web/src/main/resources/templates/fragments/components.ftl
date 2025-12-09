@@ -2,7 +2,7 @@
     <div class="home-quick-nav-section">
         <h2 class="home-section-title">Navegación Rápida</h2>
         <div class="home-quick-nav-cards">
-            <a href="/hechos/crear" class="home-nav-card">
+            <a href="/crear" class="home-nav-card">
                 <div class="home-nav-card-icon">📢</div>
                 <h3>Reportar un Hecho</h3>
                 <p>Contribuye a la comunidad registrando un nuevo suceso en el mapa</p>
@@ -408,11 +408,26 @@
                 </#if>
             </div>
 
-            <#if etiquetas?? && (etiquetas?size > 0)>
+            <#if (etiquetas?? && (etiquetas?size > 0)) || (rolUsuario == "ADMINISTRADOR")>
                 <div class="card-tags">
-                    <#list etiquetas as e>
-                        <span class="tag">${(e.nombre!e)?html}</span>
-                    </#list>
+                    <#if etiquetas??>
+                        <#list etiquetas as e>
+                            <span class="tag">${(e.nombre!e)?html}</span>
+                        </#list>
+                    </#if>
+
+                    <#if rolUsuario == "ADMINISTRADOR">
+                        <button type="button"
+                                class="btn-add-tag"
+                                onclick="abrirModalEtiqueta('${id}')"
+                                title="Agregar etiqueta">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Agregar
+                        </button>
+                    </#if>
                 </div>
             </#if>
         </div>

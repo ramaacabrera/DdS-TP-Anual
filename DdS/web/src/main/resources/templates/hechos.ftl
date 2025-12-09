@@ -1,3 +1,10 @@
+<script src="/js/hechos.js" defer></script>
+
+<script>
+    const URL_ADMIN = '${urlAdmin}';
+    const ACCESS_TOKEN = '${accessToken}';
+</script>
+
 <#assign pageTitle = "Hechos" />
 <#assign additionalCss = ["/css/styleHechos.css"]>
 
@@ -108,35 +115,39 @@
                 </main>
             </div>
         </form>
+
+        <div id="modalEtiqueta" class="modal-overlay hidden">
+            <div class="modal-content zoom-in">
+                <div class="modal-header">
+                    <h3>Nueva Etiqueta</h3>
+                    <button type="button" class="btn-close-modal" onclick="cerrarModalEtiqueta()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <form id="formAgregarEtiqueta" onsubmit="enviarEtiqueta(event)">
+                    <input type="hidden" id="modalHechoId" name="hechoId">
+
+                    <div class="form-group">
+                        <label for="inputEtiqueta" class="filter-label">Nombre de la etiqueta</label>
+                        <input type="text" id="inputEtiqueta" name="etiqueta" class="input" placeholder="Ej: ambiental, peligro, desastre, etc" required autocomplete="off">
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-ghost" onclick="cerrarModalEtiqueta()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Etiqueta</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </#assign>
 
 <script>
-    function toggleFilters() {
-        const filtersContent = document.getElementById('filtersContent');
-        const toggleBtn = document.querySelector('.filters-header button');
 
-        filtersContent.classList.toggle('collapsed');
-        toggleBtn.classList.toggle('rotated');
-    }
-
-    // Eliminar la aplicación automática de filtros
-    document.addEventListener('DOMContentLoaded', function() {
-        // Ya no hay event listeners para cambios automáticos en filtros
-        // Los filtros solo se aplican al hacer clic en "Aplicar" o "Buscar"
-
-        // Opcional: puedes agregar funcionalidad para limpiar filtros si lo deseas
-        const clearButtons = document.querySelectorAll('.btn-ghost');
-        clearButtons.forEach(button => {
-            if (button.textContent.includes('Limpiar')) {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    // Redirigir a la página sin parámetros
-                    window.location.href = '${baseHref!"/hechos"}';
-                });
-            }
-        });
-    });
 </script>
 
 <#include "layout.ftl">

@@ -14,9 +14,11 @@ public class HechoController {
     private HechoService hechoService;
     private String urlPublica;
     private Map<String, Object> dataCloud;
+    private String urlAdmin;
 
-    public HechoController(String urlPublica, HechoService hechoService, Map<String, Object> dataCloud) {
+    public HechoController(String urlPublica, String urlAdmin ,HechoService hechoService, Map<String, Object> dataCloud) {
         this.urlPublica = urlPublica;
+        this.urlAdmin = urlAdmin;
         this.hechoService = hechoService;
         this.dataCloud = dataCloud;
     }
@@ -96,6 +98,7 @@ public class HechoController {
         model.put("totalPages", resp.totalPages);
         model.put("fromIndex", fromIndex);
         model.put("toIndex", toIndex);
+        model.put("urlAdmin", urlAdmin);
 
         // 7) Renderizar
         ctx.render("hechos.ftl", model);
