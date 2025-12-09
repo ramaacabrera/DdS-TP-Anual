@@ -70,7 +70,6 @@ public class ColeccionService {
                 throw new IOException("Error al llamar al backend: " + response.code() + " " + response.message());
             }
             String body = Objects.requireNonNull(response.body()).string();
-            System.out.println(body);
             resp = mapper.readValue(body, new TypeReference<Coleccion>() {});
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -85,12 +84,12 @@ public class ColeccionService {
         // Usamos String.valueOf para evitar NullPointerException si el valor es null,
         // pero verificamos nulos después.
         String username = bodyData.get("username") != null ? bodyData.get("username").toString() : null;
-        String accessToken = bodyData.get("access_token") != null ? bodyData.get("access_token").toString() : null;
+        String accessToken = bodyData.get("accessToken") != null ? bodyData.get("accessToken").toString() : null;
         String rolUsuario = bodyData.get("rolUsuario") != null ? bodyData.get("rolUsuario").toString() : null;
 
         // 2. Limpiar el body para que no viajen estos datos en el JSON
         bodyData.remove("username");
-        bodyData.remove("access_token");
+        bodyData.remove("accessToken");
         bodyData.remove("rolUsuario");
 
         // 3. Serializar
@@ -148,14 +147,14 @@ public class ColeccionService {
     public void eliminarColeccion( Map<String, Object> bodyData){
         System.out.println(bodyData);
         String username = null;
-        String access_token = null;
+        String accessToken = null;
         String rolUsuario = null;
-        if(bodyData.containsKey("username") && bodyData.containsKey("access_token") && bodyData.containsKey("rolUsuario")){
+        if(bodyData.containsKey("username") && bodyData.containsKey("accessToken") && bodyData.containsKey("rolUsuario")){
             username = bodyData.get("username").toString();
-            access_token = bodyData.get("access_token").toString();
+            accessToken = bodyData.get("accessToken").toString();
             rolUsuario = bodyData.get("rolUsuario").toString();
             bodyData.remove("username");
-            bodyData.remove("access_token");
+            bodyData.remove("accessToken");
             bodyData.remove("rolUsuario");
         }
         String id = bodyData.get("id").toString();
@@ -168,11 +167,11 @@ public class ColeccionService {
                     .header("Content-Type", "application/json")
                     .DELETE();
 
-            if (username != null && access_token != null) {
+            if (username != null && accessToken != null) {
                 requestBuilder
                         .header("username", username)
-                        .header("access_token", access_token)
-                        .header("rol_usuario", rolUsuario);
+                        .header("accessToken", accessToken)
+                        .header("rolUsuario", rolUsuario);
 
             }
             HttpRequest request = requestBuilder.build();
@@ -197,14 +196,14 @@ public class ColeccionService {
     public void actualizarColeccion(String id, Map<String, Object> bodyData){
         System.out.println(bodyData);
         String username = null;
-        String access_token = null;
+        String accessToken = null;
         String rolUsuario = null;
-        if(bodyData.containsKey("username") && bodyData.containsKey("access_token") && bodyData.containsKey("rolUsuario")){
+        if(bodyData.containsKey("username") && bodyData.containsKey("accessToken") && bodyData.containsKey("rolUsuario")){
             username = bodyData.get("username").toString();
-            access_token = bodyData.get("access_token").toString();
+            accessToken = bodyData.get("accessToken").toString();
             rolUsuario = bodyData.get("rolUsuario").toString();
             bodyData.remove("username");
-            bodyData.remove("access_token");
+            bodyData.remove("accessToken");
             bodyData.remove("rolUsuario");
         }
 
@@ -212,19 +211,17 @@ public class ColeccionService {
 
         System.out.println("JSON que se va a enviar: " + jsonBody);
 
-        System.out.println("Mandando a: " + urlAdmin);
+        System.out.println("Mandando a: " + urlAdmin + "api/colecciones/"+id);
         HttpClient httpClient = HttpClient.newHttpClient();
         try{
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8081/api/colecciones/"+id))
+                    .uri(new URI(urlAdmin + "api/colecciones/"+id))
                     .header("Content-Type", "application/json")
                     .PUT(HttpRequest.BodyPublishers.ofString(jsonBody));
-
-            if (username != null && access_token != null) {
+            System.out.println("token" + accessToken);
+            if (accessToken != null) {
                 requestBuilder
-                        .header("username", username)
-                        .header("access_token", access_token)
-                        .header("rol_usuario", rolUsuario);
+                        .header("accessToken", accessToken);
 
             }
             HttpRequest request = requestBuilder.build();

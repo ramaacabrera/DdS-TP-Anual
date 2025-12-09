@@ -562,42 +562,7 @@ select[multiple] option:checked {
     transform: translateY(-1px);
 }
 
-.card-subtitle {
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary);
-    margin-bottom: var(--spacing-sm);
-}
 
-/* === RESPONSIVE PARA METADATOS === */
-@media (max-width: 768px) {
-    .card-meta {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--spacing-sm);
-    }
-
-    .meta-item {
-        width: 100%;
-        justify-content: flex-start;
-    }
-}
-
-@media (max-width: 480px) {
-    .card-body .row.space-between {
-        flex-direction: column;
-        align-items: stretch;
-        gap: var(--spacing-md);
-    }
-
-    .card-body .row.gap-8 {
-        margin-left: 0;
-        justify-content: flex-end;
-    }
-
-    .card-title {
-        margin-bottom: var(--spacing-sm);
-    }
-}
 
 /* === HERO === */
 .hero {

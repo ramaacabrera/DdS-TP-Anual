@@ -399,7 +399,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } catch (error) {
             console.error('Error:', error);
-            mensajeError.textContent = '❌ Error de conexión. Verifique su internet e intente nuevamente.';
+            mensajeError.textContent = '❌ Error de conexión. Verifique su internet e intente.';
             mensajeError.style.display = 'block';
 
             // Re-habilitar botón

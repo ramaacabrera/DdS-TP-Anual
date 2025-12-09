@@ -3,6 +3,7 @@ package web.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
+import web.domain.Fuente.Fuente;
 import web.domain.HechosYColecciones.Ubicacion;
 import web.domain.Fuente.TipoDeFuente; // Solo para el enum de Criterios si se usa
 import web.domain.HechosYColecciones.Coleccion;
@@ -14,10 +15,7 @@ import web.service.FuenteService; // Importante: El servicio nuevo
 import web.service.UsuarioService;
 import web.utils.ViewUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ColeccionController {
 
@@ -112,11 +110,16 @@ public class ColeccionController {
             modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
 
             String username = ctx.sessionAttribute("username");
-            String token = ctx.sessionAttribute("access_token");
+            String token = ctx.sessionAttribute("accessToken");
             List<FuenteDTO> listaFuentes = fuenteService.listarFuentes();
 
             modelo.put("listaFuentes", listaFuentes);
+            System.out.println("lista de fuentes: " + new ObjectMapper().writeValueAsString(listaFuentes));
             modelo.put("tiposDeFuente", TipoDeFuente.values());
+
+            List<String> idSeleccionados = coleccion.getFuente().stream().map(fuente -> fuente.getId().toString()).toList();
+            System.out.println("ids seleccionados: " + idSeleccionados);
+            modelo.put("idSeleccionados", new ObjectMapper().writeValueAsString(idSeleccionados));
 
             ctx.render("editar-coleccion.ftlh", modelo);
 
@@ -139,7 +142,7 @@ public class ColeccionController {
 
         bodyData.put("criteriosDePertenencia", criteriosDePertenencia);
         bodyData.put("username", ctx.sessionAttribute("username"));
-        bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+        bodyData.put("accessToken", ctx.sessionAttribute("accessToken"));
         bodyData.put("rolUsuario", ctx.sessionAttribute("rolUsuario"));
 
         try {
@@ -167,12 +170,14 @@ public class ColeccionController {
         List<String> fuentes = new ArrayList<>();
         for(JsonNode fuente : rootNode.get("fuentes")){
             fuentes.add(fuente.asText());
+            System.out.println("fuente agregada: " + fuente.asText());
         }
+
         bodyData.put("fuentes", fuentes);
 
         bodyData.put("coleccionId", id);
         bodyData.put("username", ctx.sessionAttribute("username"));
-        bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+        bodyData.put("accessToken", ctx.sessionAttribute("accessToken"));
         bodyData.put("rolUsuario", ctx.sessionAttribute("rolUsuario"));
 
         coleccionService.actualizarColeccion(id, bodyData);
@@ -184,7 +189,7 @@ public class ColeccionController {
         bodyData.put("id", id);
         if(!ctx.sessionAttributeMap().isEmpty()){
             bodyData.put("username", ctx.sessionAttribute("username"));
-            bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+            bodyData.put("accessToken", ctx.sessionAttribute("accessToken"));
             bodyData.put("rolUsuario", ctx.sessionAttribute("rolUsuario"));
         }
         coleccionService.eliminarColeccion(bodyData);

@@ -11,6 +11,9 @@
         <script>
             const URL_ADMIN = '${URL_ADMIN!"http://localhost:8081"}';
             const COLECCION_ID = '${COLECCION_ID}';
+            const USERNAME = '${username!""}';
+            const ACCESS_TOKEN = '${accessToken!""}';
+            const FUENTES_SELECCIONADAS_IDS = '${idSeleccionados}';
         </script>
 
         <form id="form-editar-coleccion" class="form-container">
@@ -142,35 +145,72 @@
             </div>
 
             <div class="form-section">
-                <h3 class="form-section-title">Fuentes asociadas</h3>
-                <label for="fuentes" class="form-label">Seleccioná una o más fuentes:</label><br>
-                <select id="fuentes" name="fuentes" multiple class="form-select" size="6">
-                    <#if listaFuentes?? && listaFuentes?size != 0>
-                        <#list listaFuentes as f>
-                            <#if f.fuenteId?? && f.descriptor??>
+                <h3 class="form-section-title">Fuentes</h3>
+                <p class="form-help">Seleccioná las fuentes que compondrán esta colección:</p>
 
-                                <#assign selected = false>
-                                <#if coleccion.fuentes??>
-                                    <#list coleccion.fuentes as colFuente>
-                                        <#if colFuente.id?? && colFuente.id?string == f.fuenteId?string>
-                                            <#assign selected = true>
-                                        </#if>
+                <#-- 1. Separamos las fuentes en grupos usando variables de FreeMarker -->
+                <#assign estaticas = []>
+                <#assign dinamicas = []>
+                <#assign proxies = []>
+                <#assign otras = []>
+
+                <#if listaFuentes??>
+                    <#list listaFuentes as f>
+                        <#if f.tipoDeFuente??>
+                            <#if f.tipoDeFuente == "ESTATICA">
+                                <#assign estaticas = estaticas + [f]>
+                            <#elseif f.tipoDeFuente == "DINAMICA">
+                                <#assign dinamicas = dinamicas + [f]>
+                            <#elseif f.tipoDeFuente == "PROXY">
+                                <#assign proxies = proxies + [f]>
+                            <#else>
+                                <#assign otras = otras + [f]>
+                            </#if>
+                        </#if>
+                    </#list>
+                </#if>
+
+                <#-- 2. Contenedor Grid para las columnas -->
+                <div class="fuentes-grid-container">
+
+                    <#-- Macro para renderizar cada columna y evitar repetir código HTML -->
+                    <#macro renderGrupoFuentes titulo icono lista claseColor>
+                        <div class="fuente-grupo-card">
+                            <div class="fuente-grupo-header ${claseColor}">
+                                <span class="grupo-icono">${icono}</span>
+                                <span class="grupo-titulo">${titulo}</span>
+                                <span class="badge-count">${lista?size}</span>
+                            </div>
+                            <div class="fuente-lista-scroll">
+                                <#if lista?size == 0>
+                                    <div class="fuente-vacia">No hay fuentes disponibles.</div>
+                                <#else>
+                                    <#list lista as f>
+                                        <label class="fuente-item">
+                                            <#-- IMPORTANTE: name="fuentes" para que el backend lo reciba igual que antes -->
+                                            <input type="checkbox"
+                                                   name="fuentes"
+                                                   value="${f.fuenteId}"
+                                                   class="form-checkbox"
+                                            >
+                                            <span class="fuente-descriptor">${f.descriptor}</span>
+                                        </label>
                                     </#list>
                                 </#if>
+                            </div>
+                        </div>
+                    </#macro>
 
-                                <option value="${f.fuenteId}" <#if selected>selected</#if>>
-                                    ${f.descriptor}
-                                    <#if f.tipoDeFuente??>
-                                        <small>(${f.tipoDeFuente})</small>
-                                    </#if>
-                                </option>
-                            </#if>
-                        </#list>
-                    <#else>
-                        <option disabled>No hay fuentes disponibles</option>
+                    <#-- 3. Renderizamos los grupos -->
+                    <@renderGrupoFuentes titulo="Dinámicas" icono="⚡" lista=dinamicas claseColor="header-dinamica" />
+                    <@renderGrupoFuentes titulo="Estáticas" icono="📄" lista=estaticas claseColor="header-estatica" />
+                    <@renderGrupoFuentes titulo="Proxy / Externas" icono="🔗" lista=proxies claseColor="header-proxy" />
+
+                    <#-- Opcional: Si hubiera tipos desconocidos -->
+                    <#if otras?size != 0>
+                        <@renderGrupoFuentes titulo="Otras" icono="❓" lista=otras claseColor="header-otras" />
                     </#if>
-                </select>
-                <small style="color: #666; margin-top: 5px; display: block;">Mantén presionada la tecla Ctrl (o Cmd) para seleccionar varias.</small>
+                </div>
             </div>
 
             <div class="form-actions">
@@ -186,13 +226,6 @@
             </div>
         </form>
     </div>
-
-    <script>
-        var URL_ADMIN_EDITAR = '${URL_ADMIN!"http://localhost:8081"}';
-        var COLECCION_ID_EDITAR = '${COLECCION_ID}';
-        var USERNAME = '${username!""}';
-        var ACCESS_TOKEN = '${accessToken!""}';
-    </script>
     <script src="/js/editar-coleccion.js" defer></script>
 </#assign>
 

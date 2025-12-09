@@ -1,6 +1,7 @@
 <script src="/js/coleccion.js" defer></script>
 
 <#assign pageTitle = (coleccion.titulo)!?default("Colección Detallada")>
+<#assign additionalCss = ["/css/styleCrearHechoSolEliminacion.css"]>
 <#assign content>
     <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
         <a href="/colecciones" class="header-link back-link">&larr; Volver a colecciones</a>

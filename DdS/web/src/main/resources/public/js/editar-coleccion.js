@@ -8,15 +8,29 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.URL_ADMIN_EDITAR) {
         URL_ADMIN_EDITAR = window.URL_ADMIN_EDITAR;
     }
-    if (window.COLECCION_ID_EDITAR) {
-        COLECCION_ID_EDITAR = window.COLECCION_ID_EDITAR;
+    if (window.COLECCION_ID) {
+        COLECCION_ID = window.COLECCION_ID;
     }
 
     hacerCriteriosEditables();
     const criteriosExistentes = document.querySelectorAll('.criterio-card');
     contadorCriteriosEditar = criteriosExistentes.length;
     inicializarEventosEditar();
+    marcarFuentesSeleccionadas();
 });
+
+function marcarFuentesSeleccionadas() {
+    if (typeof FUENTES_SELECCIONADAS_IDS === 'undefined' || !FUENTES_SELECCIONADAS_IDS.length) {
+        return;
+    }
+    const checkboxes = document.querySelectorAll('input[name="fuentes"]');
+    checkboxes.forEach(checkbox => {
+        // Si el valor del checkbox (el ID) está incluido en el array de IDs guardados
+        if (FUENTES_SELECCIONADAS_IDS.includes(checkbox.value)) {
+            checkbox.checked = true;
+        }
+    });
+}
 
 function hacerCriteriosEditables() {
     const criteriosCards = document.querySelectorAll('.criterio-card');
@@ -191,7 +205,7 @@ function inicializarEventosEditar() {
     const btnCancelar = document.getElementById("btn-cancelar");
     if (btnCancelar) {
         btnCancelar.addEventListener("click", function() {
-            if (confirm("¿Seguro que deseas cancelar?")) window.location.href = `/colecciones/${COLECCION_ID_EDITAR}`;
+            if (confirm("¿Seguro que deseas cancelar?")) window.location.href = `/colecciones/${COLECCION_ID}`;
         });
     }
 }
@@ -307,11 +321,8 @@ async function manejarEnvioFormularioEditar(e) {
     e.preventDefault();
     console.log('Enviando formulario de edición');
 
-    const fuentesSelect = document.getElementById('fuentes');
-    let fuentesSelected = [];
-    if (fuentesSelect) {
-        fuentesSelected = Array.from(fuentesSelect.selectedOptions).map(option => option.value);
-    }
+    const checkboxesFuentes = document.querySelectorAll('input[name="fuentes"]:checked');
+    let fuentesSelected = Array.from(checkboxesFuentes).map(cb => cb.value);
 
     const data = {
         titulo: document.getElementById("titulo").value,
@@ -379,16 +390,17 @@ async function manejarEnvioFormularioEditar(e) {
     const nuevosFiltrados = nuevosCriterios.filter(c => c !== null && c['@type']);
     data.criteriosDePertenencia = data.criteriosDePertenencia.concat(nuevosFiltrados);
 
-    const username = window.USERNAME || '', accessToken = window.ACCESS_TOKEN || '';
+    console.log(ACCESS_TOKEN)
+
     try {
-        const res = await fetch(`/colecciones/${COLECCION_ID_EDITAR}`, {
+        const res = await fetch(`/colecciones/${COLECCION_ID}`, {
             method: "PUT",
-            headers: {"Content-Type": "application/json", "username": username, "access_token": accessToken},
+            headers: {"Content-Type": "application/json", "accessToken": ACCESS_TOKEN},
             body: JSON.stringify(data)
         });
         if (!res.ok) throw new Error(await res.text());
         document.getElementById("mensaje-exito").style.display = "block";
-        setTimeout(() => window.location.href = `/colecciones/${COLECCION_ID_EDITAR}`, 1500);
+        setTimeout(() => window.location.href = `/colecciones/${COLECCION_ID}`, 1500);
     } catch (err) {
         console.error(err);
         document.getElementById("mensaje-error").style.display = "block";

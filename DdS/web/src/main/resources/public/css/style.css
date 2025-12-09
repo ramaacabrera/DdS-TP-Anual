@@ -249,7 +249,7 @@ h1 {
 }
 
 /* Botones Generales */
-.btn {
+.btn-header {
     padding: 10px 20px;
     border: 1px solid transparent;
     border-radius: 6px;
@@ -545,4 +545,130 @@ h1 {
 
     }
 
+}
+
+/* === CARDS === */
+.card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.card-hecho {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-media {
+    width: 100%;
+    height: 200px;
+    background-color: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    overflow: hidden;
+}
+
+.card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: var(--spacing-lg);
+}
+
+/* Contenedor del título y botones */
+.card-body .row.space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Cambiado de center a flex-start */
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Título que se ajusta y no empuja los botones */
+.card-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 0; /* Eliminar margen inferior */
+    flex: 1; /* Ocupa el espacio disponible */
+    min-width: 0; /* Permite que el texto se trunque */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+/* Contenedor de botones fijo */
+.card-body .row.gap-8 {
+    display: flex;
+    flex-shrink: 0; /* No se reduce */
+    gap: var(--spacing-sm);
+    margin-left: var(--spacing-md);
+}
+
+/* Asegurar que los botones mantengan su tamaño */
+.card-body .btn-sm {
+    white-space: nowrap;
+    min-width: 60px; /* Ancho mínimo para los botones */
+}
+
+/* === INFORMACIÓN DE METADATOS MEJORADA === */
+.card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm) 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* === RESPONSIVE PARA METADATOS === */
+@media (max-width: 768px) {
+    .card-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .meta-item {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-body .row.space-between {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-md);
+    }
+
+    .card-body .row.gap-8 {
+        margin-left: 0;
+        justify-content: flex-end;
+    }
+
+    .card-title {
+        margin-bottom: var(--spacing-sm);
+    }
 }

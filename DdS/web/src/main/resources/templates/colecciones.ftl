@@ -1,4 +1,5 @@
 <#assign pageTitle = "Colecciones">
+<#assign additionalCss = ["/css/styleCrearHechoSolEliminacion.css"]>
 <#assign content>
 <div class="container">
     <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
@@ -8,7 +9,7 @@
     <h1 class="main-title">Listado de Colecciones</h1>
     <#if rolUsuario == "ADMINISTRADOR">
         <div class="form-actions" style="margin-bottom: 20px;">
-            <a href="/crear-coleccion" class="btn btn-primary">➕ Nueva Colección</a>
+            <a href="/admin/crear-coleccion" class="btn btn-primary">➕ Nueva Colección</a>
         </div>
     </#if>
     <#if colecciones?? && (colecciones?size > 0)>
@@ -238,17 +239,6 @@ color: white;
 .btn-sm {
 padding: 6px 12px;
 font-size: 14px;
-}
-
-.btn-primary {
-background-color: #007bff;
-color: white;
-border: 1px solid #007bff;
-}
-
-.btn-primary:hover {
-background-color: #0056b3;
-border-color: #0056b3;
 }
 
 /* Animaciones */

@@ -26,7 +26,8 @@ public class ColeccionRepositorio {
             BDUtils.commit(em);
         } catch (Exception e) {
             BDUtils.rollback(em);
-            throw new RuntimeException("Error guardando colección", e);
+            System.err.println("Error en repository al actualizar coleccion" + e.getMessage());
+            throw new RuntimeException("Error guardando colección ", e);
         } finally {
             em.close();
         }
