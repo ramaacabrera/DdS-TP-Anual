@@ -62,7 +62,7 @@ services:
       HOST_GRPC_AGREGADOR: "agregador"
       PUERTO_GRPC_AGREGADOR: "9090"
       URL_MOCK: "https://demo-api.mock.com"
-      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: "MetaMapa-CargadorDemo"
     depends_on:
       - agregador
@@ -82,7 +82,7 @@ services:
       FILE_SERVER: "/app/csv_files"
       HOST_GRPC_AGREGADOR: "agregador"
       PUERTO_GRPC_AGREGADOR: "9090"
-      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: "MetaMapa-CargadorEstatico"
     depends_on:
       - agregador
@@ -97,7 +97,7 @@ services:
     environment:
       HOST_GRPC_AGREGADOR: "agregador"
       PUERTO_GRPC_AGREGADOR: "9090"
-      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: "MetaMapa-CargadorDinamico"
     depends_on:
       - agregador
@@ -113,7 +113,7 @@ services:
       HOST_GRPC_AGREGADOR: "agregador"
       PUERTO_GRPC_AGREGADOR: "9090"
       URL_OTRA_INSTANCIA: "https://otra-instancia.com"
-      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: "MetaMapa-CargadorMetaMapa"
     depends_on:
       - agregador
@@ -133,7 +133,7 @@ services:
       DB_USER: "root"
       DB_PASS: "root"
       URL_AGREGADOR: "http://agregador:8080" # Para GraphQL/REST
-      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: "MetaMapa-GestorPublico"
     depends_on:
       mysql_unificado:
@@ -151,7 +151,7 @@ services:
       DB_USER: "root"
       DB_PASS: "root"
       URL_AGREGADOR: "http://agregador:8080"
-      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: "MetaMapa-GestorAdmin"
     depends_on:
       mysql_unificado:
@@ -168,7 +168,7 @@ services:
       DB_URL: "jdbc:mysql://mysql_unificado:3306/estadisticas_db"
       DB_USER: "root"
       DB_PASS: "root"
-      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: "MetaMapa-Estadisticas"
     depends_on:
       mysql_unificado:
@@ -185,7 +185,7 @@ services:
       URL_GESTOR_PUBLICO: "http://gestor-publico:8080"
       URL_GESTOR_ADMIN: "http://gestor-administrativo:8080"
       URL_ESTADISTICAS: "http://estadisticas:8080"
-      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: "MetaMapa-Web"
     depends_on:
       - gestor-publico

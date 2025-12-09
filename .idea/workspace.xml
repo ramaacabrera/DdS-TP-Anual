@@ -4,55 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="Agrego los healthchecks en todos los modulos">
-      <change afterPath="$PROJECT_DIR$/DdS/Dockerfile.agregador" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/Dockerfile.cargadorDemo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/Dockerfile.cargadorDinamico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/Dockerfile.cargadorEstatico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/Dockerfile.cargadorMetaMapa" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/Dockerfile.estadisticas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/Dockerfile.gestorAdministrativo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/Dockerfile.gestorPublico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/Dockerfile.web" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="Agrego avances iniciales de los requerimientos de Observabilidad">
+      <change afterPath="$PROJECT_DIR$/DdS/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDemo/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDemo/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/domain/Criterios/CriterioContribuyente.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/domain/Criterios/CriterioContribuyente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/dto/Hechos/HechoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/dto/Hechos/HechoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/mvnw" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/mvnw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/mvnw.cmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/controller/ControladorMetamapa.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/controller/ControladorMetamapa.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/controller/GetHechosHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/controller/GetHechosHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/controller/MetamapaLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/controller/MetamapaLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/controller/PostFuentesHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/controller/PostFuentesHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/ColeccionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/ColeccionDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/FuenteDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/FuenteDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/HechoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/HechoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/ModelosMensajesDTO/HechosObtenidosPayload.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/ModelosMensajesDTO/HechosObtenidosPayload.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/ModelosMensajesDTO/IdCargadorPayload.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/ModelosMensajesDTO/IdCargadorPayload.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/ModelosMensajesDTO/MensajeVacioPayload.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/ModelosMensajesDTO/MensajeVacioPayload.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/ModelosMensajesDTO/SolicitudesEliminacionObtenidosPayload.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/ModelosMensajesDTO/SolicitudesEliminacionObtenidosPayload.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/ModelosMensajesDTO/SolicitudesModificacionObtenidosPayload.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/ModelosMensajesDTO/SolicitudesModificacionObtenidosPayload.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/ModelosMensajesDTO/WsMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/ModelosMensajesDTO/WsMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/PageDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/PageDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/SolicitudDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/SolicitudDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/SolicitudDeEliminacionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/SolicitudDeEliminacionDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/java/cargadorMetamapa/dto/SolicitudDeModificacionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/java/cargadorMetamapa/dto/SolicitudDeModificacionDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/resources/com/example/cargadormetamapa/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/resources/com/example/cargadormetamapa/hello-view.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorMetaMapa/src/main/resources/componentes.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorMetamapa/src/main/resources/componentes.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/pom.xml" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -463,7 +418,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765231790100</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Agrego avances iniciales de los requerimientos de Observabilidad">
+      <option name="closed" value="true" />
+      <created>1765246518628</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1765246518629</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -491,7 +454,8 @@
     <MESSAGE value="arreglo usuarios (creo andando todo) y actualizo clase usuario" />
     <MESSAGE value="soluciono problemas en las solicitudes" />
     <MESSAGE value="Agrego los healthchecks en todos los modulos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Agrego los healthchecks en todos los modulos" />
+    <MESSAGE value="Agrego avances iniciales de los requerimientos de Observabilidad" />
+    <option name="LAST_COMMIT_MESSAGE" value="Agrego avances iniciales de los requerimientos de Observabilidad" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
