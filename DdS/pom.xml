@@ -19,6 +19,7 @@
         <module>cargadorDemo</module>
         <module>cargadorMetamapa</module>
         <module>estadisticas</module>
+        <module>web</module>
     </modules>
 
     <properties>

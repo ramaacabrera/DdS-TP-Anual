@@ -1,0 +1,41 @@
+# === ETAPA 1: BUILD ===
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+WORKDIR /app
+
+COPY pom.xml .
+
+COPY agregador/pom.xml agregador/pom.xml
+COPY cargadorDemo/pom.xml cargadorDemo/pom.xml
+COPY cargadorDinamico/pom.xml cargadorDinamico/pom.xml
+COPY cargadorEstatico/pom.xml cargadorEstatico/pom.xml
+COPY cargadorMetamapa/pom.xml cargadorMetamapa/pom.xml
+COPY estadisticas/pom.xml estadisticas/pom.xml
+COPY gestorAdministrativo/pom.xml gestorAdministrativo/pom.xml
+COPY gestorPublico/pom.xml gestorPublico/pom.xml
+COPY utils/pom.xml utils/pom.xml
+COPY web/pom.xml web/pom.xml
+
+
+COPY utils/src utils/src
+COPY cargadorDinamico/src cargadorDinamico/src
+
+RUN mvn install -pl utils -am -DskipTests
+RUN mvn package -pl cargadorDinamico -am -DskipTests
+
+# === ETAPA 2: RUNTIME ===
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+
+RUN apk --no-cache add curl unzip
+
+RUN curl -O https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip \
+    && unzip newrelic-java.zip \
+    && cp newrelic/newrelic.jar . \
+    && rm -rf newrelic-java.zip newrelic
+
+COPY --from=build /app/cargadorDinamico/target/cargadorDinamico-*.jar app.jar
+
+# Asumiendo que este usa otro puerto o no expone (ajustar si es necesario)
+EXPOSE 8080
+
+CMD ["java", "-javaagent:newrelic.jar", "-jar", "app.jar"]

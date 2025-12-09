@@ -24,8 +24,8 @@ public class CriterioContribuyente extends Criterio {
         if (hecho.getContribuyente() == null || this.nombreContribuyente == null) {
             return false;
         }
-        return hecho.getContribuyente().getNombre().toLowerCase()
-                .contains(this.nombreContribuyente.toLowerCase());
+        return false;//hecho.getContribuyente().getNombre().toLowerCase()
+                //.contains(this.nombreContribuyente.toLowerCase());
     }
 
     public String getNombreContribuyente() { return this.nombreContribuyente; };

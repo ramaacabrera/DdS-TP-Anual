@@ -1,0 +1,45 @@
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+WORKDIR /app
+
+# 1. DEFINIR NOMBRE DEL MÓDULO AQUÍ
+ARG MODULE_NAME=gestorAdministrativo
+
+COPY pom.xml .
+
+# Copia de todos los poms (necesario para el reactor)
+COPY agregador/pom.xml agregador/pom.xml
+COPY cargadorDemo/pom.xml cargadorDemo/pom.xml
+COPY cargadorDinamico/pom.xml cargadorDinamico/pom.xml
+COPY cargadorEstatico/pom.xml cargadorEstatico/pom.xml
+COPY cargadorMetamapa/pom.xml cargadorMetamapa/pom.xml
+COPY estadisticas/pom.xml estadisticas/pom.xml
+COPY gestorAdministrativo/pom.xml gestorAdministrativo/pom.xml
+COPY gestorPublico/pom.xml gestorPublico/pom.xml
+COPY utils/pom.xml utils/pom.xml
+COPY web/pom.xml web/pom.xml
+
+COPY utils/src utils/src
+COPY ${MODULE_NAME}/src ${MODULE_NAME}/src
+
+RUN mvn install -pl utils -am -DskipTests
+RUN mvn package -pl ${MODULE_NAME} -am -DskipTests
+
+# --- ETAPA 2 ---
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+
+# 2. IMPORTANTE: REDEFINIR EL NOMBRE EXACTO AQUÍ (NO poner "MODULO")
+ARG MODULE_NAME=gestorAdministrativo
+
+RUN apk --no-cache add curl unzip
+RUN curl -O https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip \
+    && unzip newrelic-java.zip \
+    && cp newrelic/newrelic.jar . \
+    && rm -rf newrelic-java.zip newrelic
+
+# Ahora sí funcionará la copia porque MODULE_NAME es correcto
+COPY --from=build /app/${MODULE_NAME}/target/*.jar app.jar
+
+EXPOSE 8080
+
+CMD ["java", "-javaagent:newrelic.jar", "-jar", "app.jar"]

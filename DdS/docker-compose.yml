@@ -1,16 +1,195 @@
 version: '3.8'
+
 services:
+  # ==========================================
+  # BASE DE DATOS
+  # ==========================================
   mysql_unificado:
     image: mysql:8.0
     container_name: metamapa_mysql_unico
     environment:
-      # CRUCIAL: Contraseña de Root para permitir la conexión y creación de bases de datos
       MYSQL_ROOT_PASSWORD: root
-
+      MYSQL_DATABASE: metamapa_db
     ports:
       - "3306:3306"
     volumes:
       - mysql_datos_unificados:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # ==========================================
+  # AGREGADOR (CORE)
+  # ==========================================
+  agregador:
+    container_name: metamapa_agregador
+    build:
+      context: .
+      dockerfile: Dockerfile.agregador
+    ports:
+      - "8080:8080" # API Rest y Health
+      - "9090:9090" # gRPC
+    environment:
+      PUERTO_AGREGADOR: "8080"
+      PUERTO_GRPC: "9090"
+      DB_URL: "jdbc:mysql://mysql_unificado:3306/metamapa_db"
+      DB_USER: "root"
+      DB_PASS: "root"
+      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_APP_NAME: "MetaMapa-Agregador"
+      NEW_RELIC_LOGS: "true"
+    depends_on:
+      mysql_unificado:
+        condition: service_healthy
+    restart: on-failure:5
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      retries: 3
+
+  # ==========================================
+  # CARGADORES
+  # ==========================================
+  cargador-demo:
+    container_name: metamapa_cargador_demo
+    build:
+      context: .
+      dockerfile: Dockerfile.cargadorDemo
+    ports:
+      - "8082:8080"
+    environment:
+      HOST_GRPC_AGREGADOR: "agregador"
+      PUERTO_GRPC_AGREGADOR: "9090"
+      URL_MOCK: "https://demo-api.mock.com"
+      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_APP_NAME: "MetaMapa-CargadorDemo"
+    depends_on:
+      - agregador
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 30s
+      retries: 3
+
+  cargador-estatico:
+    container_name: metamapa_cargador_estatico
+    build:
+      context: .
+      dockerfile: Dockerfile.cargadorEstatico
+    ports:
+      - "8083:8080"
+    environment:
+      FILE_SERVER: "/app/csv_files"
+      HOST_GRPC_AGREGADOR: "agregador"
+      PUERTO_GRPC_AGREGADOR: "9090"
+      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_APP_NAME: "MetaMapa-CargadorEstatico"
+    depends_on:
+      - agregador
+
+  cargador-dinamico:
+    container_name: metamapa_cargador_dinamico
+    build:
+      context: .
+      dockerfile: Dockerfile.cargadorDinamico
+    ports:
+      - "8084:8080"
+    environment:
+      HOST_GRPC_AGREGADOR: "agregador"
+      PUERTO_GRPC_AGREGADOR: "9090"
+      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_APP_NAME: "MetaMapa-CargadorDinamico"
+    depends_on:
+      - agregador
+
+  cargador-metamapa:
+    container_name: metamapa_cargador_metamapa
+    build:
+      context: .
+      dockerfile: Dockerfile.cargadorMetaMapa
+    ports:
+      - "8086:8080"
+    environment:
+      HOST_GRPC_AGREGADOR: "agregador"
+      PUERTO_GRPC_AGREGADOR: "9090"
+      URL_OTRA_INSTANCIA: "https://otra-instancia.com"
+      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_APP_NAME: "MetaMapa-CargadorMetaMapa"
+    depends_on:
+      - agregador
+
+  # ==========================================
+  # GESTORES Y FRONTEND
+  # ==========================================
+  gestor-publico:
+    container_name: metamapa_gestor_publico
+    build:
+      context: .
+      dockerfile: Dockerfile.gestorPublico
+    ports:
+      - "8087:8080"
+    environment:
+      DB_URL: "jdbc:mysql://mysql_unificado:3306/metamapa_db"
+      DB_USER: "root"
+      DB_PASS: "root"
+      URL_AGREGADOR: "http://agregador:8080" # Para GraphQL/REST
+      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_APP_NAME: "MetaMapa-GestorPublico"
+    depends_on:
+      mysql_unificado:
+        condition: service_healthy
+
+  gestor-administrativo:
+    container_name: metamapa_gestor_admin
+    build:
+      context: .
+      dockerfile: Dockerfile.gestorAdministrativo
+    ports:
+      - "8081:8080"
+    environment:
+      DB_URL: "jdbc:mysql://mysql_unificado:3306/metamapa_db"
+      DB_USER: "root"
+      DB_PASS: "root"
+      URL_AGREGADOR: "http://agregador:8080"
+      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_APP_NAME: "MetaMapa-GestorAdmin"
+    depends_on:
+      mysql_unificado:
+        condition: service_healthy
+
+  estadisticas:
+    container_name: metamapa_estadisticas
+    build:
+      context: .
+      dockerfile: Dockerfile.estadisticas
+    ports:
+      - "8088:8080"
+    environment:
+      DB_URL: "jdbc:mysql://mysql_unificado:3306/estadisticas_db"
+      DB_USER: "root"
+      DB_PASS: "root"
+      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_APP_NAME: "MetaMapa-Estadisticas"
+    depends_on:
+      mysql_unificado:
+        condition: service_healthy
+
+  web:
+    container_name: metamapa_web
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "7070:8080"
+    environment:
+      URL_GESTOR_PUBLICO: "http://gestor-publico:8080"
+      URL_GESTOR_ADMIN: "http://gestor-administrativo:8080"
+      URL_ESTADISTICAS: "http://estadisticas:8080"
+      NEW_RELIC_LICENSE_KEY: "7c82696b1a3f22a4a2379abafca956acFFFFNRAL"
+      NEW_RELIC_APP_NAME: "MetaMapa-Web"
+    depends_on:
+      - gestor-publico
+      - gestor-administrativo
 
 volumes:
   mysql_datos_unificados: {}
