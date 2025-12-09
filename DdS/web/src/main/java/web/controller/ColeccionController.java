@@ -42,6 +42,7 @@ public class ColeccionController {
             int toIndex = fromIndex + (coleccionesPage.content != null ? coleccionesPage.content.size() : 0);
 
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);
+            modelo.put("baseHref", "/colecciones");
             modelo.put("pageTitle", "Colecciones");
             modelo.put("total", coleccionesPage.totalElements);
             modelo.put("page", coleccionesPage.page);
@@ -80,7 +81,7 @@ public class ColeccionController {
         modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
 
         String username = ctx.sessionAttribute("username");
-        String token = ctx.sessionAttribute("access_token");
+        String token = ctx.sessionAttribute("accessToken");
 
         System.out.println("--- DEBUG CONTROLLER ---");
         System.out.println("Username en sesion: " + username);
@@ -112,7 +113,7 @@ public class ColeccionController {
             modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
 
             String username = ctx.sessionAttribute("username");
-            String token = ctx.sessionAttribute("access_token");
+            String token = ctx.sessionAttribute("accessToken");
             List<FuenteDTO> listaFuentes = fuenteService.listarFuentes();
 
             modelo.put("listaFuentes", listaFuentes);
@@ -139,7 +140,7 @@ public class ColeccionController {
 
         bodyData.put("criteriosDePertenencia", criteriosDePertenencia);
         bodyData.put("username", ctx.sessionAttribute("username"));
-        bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+        bodyData.put("access_token", ctx.sessionAttribute("accessToken"));
         bodyData.put("rolUsuario", ctx.sessionAttribute("rolUsuario"));
 
         try {
@@ -172,7 +173,7 @@ public class ColeccionController {
 
         bodyData.put("coleccionId", id);
         bodyData.put("username", ctx.sessionAttribute("username"));
-        bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+        bodyData.put("access_token", ctx.sessionAttribute("accessToken"));
         bodyData.put("rolUsuario", ctx.sessionAttribute("rolUsuario"));
 
         coleccionService.actualizarColeccion(id, bodyData);
@@ -184,7 +185,7 @@ public class ColeccionController {
         bodyData.put("id", id);
         if(!ctx.sessionAttributeMap().isEmpty()){
             bodyData.put("username", ctx.sessionAttribute("username"));
-            bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+            bodyData.put("access_token", ctx.sessionAttribute("accessToken"));
             bodyData.put("rolUsuario", ctx.sessionAttribute("rolUsuario"));
         }
         coleccionService.eliminarColeccion(bodyData);

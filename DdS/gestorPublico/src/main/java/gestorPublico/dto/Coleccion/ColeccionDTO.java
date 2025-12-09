@@ -80,10 +80,10 @@ public class ColeccionDTO {
         switch (t){
             case ABSOLUTA:
                 return TipoAlgoritmoConsensoDTO.ABSOLUTA;
-            case MAYORIASIMPLE:
-                return TipoAlgoritmoConsensoDTO.MAYORIASIMPLE;
-            case MULTIPLESMENCIONES:
-                return TipoAlgoritmoConsensoDTO.MULTIPLESMENCIONES;
+            case MAYORIA_SIMPLE:
+                return TipoAlgoritmoConsensoDTO.MAYORIA_SIMPLE;
+            case MULTIPLES_MENCIONES:
+                return TipoAlgoritmoConsensoDTO.MULTIPLES_MENCIONES;
             default:
                 return null;
         }
