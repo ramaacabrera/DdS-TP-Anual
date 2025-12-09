@@ -119,8 +119,8 @@ public class ColeccionService {
 
                 requestBuilder
                         .header("username", username)
-                        .header("access_token", accessToken)
-                        .header("rol_usuario", rolUsuario);
+                        .header("accessToken", accessToken)
+                        .header("rolUsuario", rolUsuario);
             } else {
                 System.err.println("⚠️ ALERTA: Faltan credenciales, se enviará petición anónima (probablemente falle con 401).");
                 System.err.println("   Status: User=" + (username!=null) + ", Token=" + (accessToken!=null) + ", Rol=" + (rolUsuario!=null));

@@ -48,29 +48,29 @@ async function enviarEtiqueta(event) {
 
     const hechoId = document.getElementById('modalHechoId').value;
     const nombreEtiqueta = document.getElementById('inputEtiqueta').value;
-    console.log(hechoId);
-    console.log(nombreEtiqueta);
+
     if(!nombreEtiqueta.trim()) return;
 
+    // 1. Crear el FormData y agregar el campo
+    const formData = new FormData();
+    formData.append("nombre", nombreEtiqueta);
+
     try {
-        let url = URL_ADMIN + 'api/hecho/' + hechoId + '/etiquetas'
-        console.log(url)
+        let url = URL_ADMIN + 'api/hecho/' + hechoId + '/etiquetas';
+
         const response = await fetch(url, {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json',
                 'accessToken': ACCESS_TOKEN
             },
-            body: JSON.stringify({ nombre: nombreEtiqueta })
-            // Si tu backend espera Form Data:
-            // body: 'nombreEtiqueta=' + encodeURIComponent(nombreEtiqueta)
+            // 3. Pasar el objeto formData directo
+            body: formData
         });
 
         if (response.ok) {
-            // Recargar la página para ver los cambios
             window.location.reload();
         } else {
-            alert('Error al guardar la etiqueta. Verifica si ya existe.');
+            alert('Error al guardar la etiqueta.');
         }
     } catch (error) {
         console.error('Error:', error);

@@ -39,7 +39,6 @@ public class Application {
         VerificacionController verificacionController = new VerificacionController();
         HechoController hechoController = new HechoController(hechoService);
         // RUTAS
-
         app.before("/api/*", verificacionController.verificarAdministrador);
 
         //Hechos

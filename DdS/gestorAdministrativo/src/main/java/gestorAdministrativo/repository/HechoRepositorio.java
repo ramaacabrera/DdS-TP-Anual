@@ -122,17 +122,24 @@ public class HechoRepositorio {
         try {
             String jpql = "SELECT DISTINCT h FROM Hecho h " +
                     "LEFT JOIN FETCH h.etiquetas " +
-                    "LEFT JOIN FETCH h.contenidoMultimedia " +
+                    "LEFT JOIN h.contenidoMultimedia " +
                     "LEFT JOIN FETCH h.ubicacion " +
                     "LEFT JOIN FETCH h.contribuyente " +
-                    "WHERE h.id = :id";
+                    "WHERE h.hecho_id = :id";
 
             TypedQuery<Hecho> query = em.createQuery(jpql, Hecho.class);
             query.setParameter("id", id);
 
-            return query.getSingleResult();
+            Hecho resultado = query.getSingleResult();
+
+            // Inicializar manualmente
+            if (resultado.getContenidoMultimedia() != null) {
+                resultado.getContenidoMultimedia().size();
+            }
+
+            return resultado;
+
         } catch (Exception e) {
-            // Si no encuentra nada o falla, retorna null
             return null;
         } finally {
             em.close();

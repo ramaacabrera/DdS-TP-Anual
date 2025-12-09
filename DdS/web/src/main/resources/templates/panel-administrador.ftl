@@ -48,7 +48,7 @@
                 <div class="card-body">
                     <p>Supervisa los reportes, etiqueta contenido y gestiona la calidad.</p>
                     <div class="action-list">
-                        <a href="/hechos?modo=admin" class="action-item">
+                        <a href="/hechos" class="action-item">
                             <i data-feather="tag"></i>
                             <span>Etiquetar y Gestionar Hechos</span>
                         </a>

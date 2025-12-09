@@ -12,12 +12,9 @@ import java.util.Map;
 public class VerificacionController {
 
     public Handler verificarAdministrador = ctx -> {
-        if (ctx.method().equals("OPTIONS")) {
+        if (ctx.method().name().equals("OPTIONS")) {
             return;
         }
-
-        System.out.println("Comprobando privilegios");
-
         String accessToken = ctx.header("accessToken");
 
         if (accessToken == null) {
@@ -53,8 +50,6 @@ public class VerificacionController {
             System.err.println("Token inválido: " + e.getMessage());
             throw new io.javalin.http.UnauthorizedResponse("Token inválido");
         }
-
-        System.out.println("role "+rolUsuario);
 
         if (!rolUsuario.equals("ADMINISTRADOR")) {
             System.err.println("Usuario no es admin: " + username);
