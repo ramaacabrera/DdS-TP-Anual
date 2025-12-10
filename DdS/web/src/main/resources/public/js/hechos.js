@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
                 // Redirigir a la página sin parámetros
-                window.location.href = '${baseHref!"/hechos"}';
+                window.location.href = '/hechos';
             });
         }
     });

@@ -359,7 +359,7 @@
 
         <div class="filter-actions">
             <button class="btn" type="submit">Aplicar</button>
-            <a class="btn btn-ghost" href="${(baseHref!'/hechos')}">Limpiar</a>
+            <a class="btn btn-ghost" href="${baseHref!'/hechos'}">Limpiar</a>
         </div>
     </div>
 </#macro>

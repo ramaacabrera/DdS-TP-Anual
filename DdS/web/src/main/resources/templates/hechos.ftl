@@ -3,6 +3,20 @@
 <script>
     const URL_ADMIN = '${urlAdmin}';
     const ACCESS_TOKEN = '${accessToken!""}';
+    const BASE_HREF = '${baseHref!""}';
+    console.log(BASE_HREF);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const botonLimpiar = document.getElementById('limpiar-filtros');
+        if (botonLimpiar) {
+            console.log('Boton Limpiar encontrado, href:', botonLimpiar.href);
+            botonLimpiar.addEventListener('click', function(e) {
+                console.log('Click en Limpiar');
+                e.preventDefault();
+                window.location.href = '/hechos';
+            });
+        }
+    });
 </script>
 
 <#assign pageTitle = "Hechos" />
