@@ -47,7 +47,7 @@ public class SolicitudModificacionRepositorio {
             String jpql = "SELECT DISTINCT s FROM SolicitudDeModificacion s " +
                     "LEFT JOIN FETCH s.usuario " +
                     "LEFT JOIN FETCH s.hechoAsociado h " +
-                    "ORDER BY s.estadoSolicitudModificacion ASC";
+                    "ORDER BY s.estado ASC";
 
             TypedQuery<SolicitudDeModificacion> query = em.createQuery(jpql, SolicitudDeModificacion.class);
             return query.getResultList();

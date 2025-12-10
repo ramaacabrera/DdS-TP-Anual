@@ -1,4 +1,4 @@
-<#assign pageTitle = "Gestión de Solicitudes">
+<#assign pageTitle = "Gestión de Solicitudes de Eliminación">
 <#assign additionalCSS>
     <link rel="stylesheet" href="/css/styleSolicitudes.css">
 </#assign>

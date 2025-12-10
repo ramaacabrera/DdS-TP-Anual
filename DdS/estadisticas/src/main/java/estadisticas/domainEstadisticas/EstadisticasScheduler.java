@@ -1,4 +1,4 @@
-package estadisticas.domain;
+package estadisticas.domainEstadisticas;
 
 import estadisticas.service.GeneradorEstadisticas;
 
@@ -14,7 +14,7 @@ public class EstadisticasScheduler {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-        scheduler.scheduleAtFixedRate(generador::actualizarEstadisticas, 1, 360, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(generador::actualizarEstadisticas, 1, 320, TimeUnit.SECONDS);
     }
 
 }

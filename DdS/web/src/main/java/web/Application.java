@@ -45,7 +45,7 @@ public class Application {
         HechoService hechoService = new HechoService(urlPublica);
         EstadisticasService estadisticasService = new EstadisticasService(urlEstadisticas);
         CategoriasService categoriasService = new CategoriasService(urlEstadisticas);
-        SolicitudService solicitudService = new SolicitudService(urlAdmin);
+        SolicitudService solicitudService = new SolicitudService(urlAdmin,urlPublica);
         UsuarioService usuarioService = new UsuarioService(urlPublica);
         FuenteService fuenteService = new FuenteService(urlPublica);
 
@@ -94,10 +94,13 @@ public class Application {
         //solicitudes
 
         app.get("/hechos/{id}/eliminar", solicitudController.obtenerFormsEliminarSolicitud);
-        //app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
         app.get("/api/solicitudes/{id}", solicitudController.obtenerFormsEliminarSolicitud);
 
+        app.get("/hechos/{id}/modificar", solicitudController.obtenerFormsModificarSolicitud);
+        //app.get("/api/solicitudes/{id}", solicitudController.obtenerFormsModificarSolicitud);
+
         app.get("/admin/solicitudes/eliminacion", solicitudController.listarSolicitudesEliminacion);
+        app.get("/admin/solicitudes/modificacion", solicitudController.listarSolicitudesModificacion);
         app.get("/admin/solicitudes/{tipo}/{id}", solicitudController.obtenerSolicitud);
         app.patch("/admin/solicitudes/{tipo}/{id}", solicitudController.actualizarEstadoSolicitud);
 
