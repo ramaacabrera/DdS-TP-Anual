@@ -1,5 +1,7 @@
 package estadisticas.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import estadisticas.domainEstadisticas.Estadisticas;
 import estadisticas.domainEstadisticas.EstadisticasCategoria;
 import estadisticas.domainEstadisticas.EstadisticasColeccion;

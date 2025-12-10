@@ -1,5 +1,3 @@
-<script src="/js/hechos.js" defer></script>
-
 <script>
     const URL_ADMIN = '${urlAdmin}';
     const ACCESS_TOKEN = '${accessToken!""}';
@@ -18,6 +16,8 @@
         }
     });
 </script>
+
+<script src="/js/hechos.js" defer></script>
 
 <#assign pageTitle = "Hechos" />
 <#assign additionalCss = ["/css/styleHechos.css"]>
