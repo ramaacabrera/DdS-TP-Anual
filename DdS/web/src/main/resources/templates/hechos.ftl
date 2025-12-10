@@ -2,7 +2,7 @@
 
 <script>
     const URL_ADMIN = '${urlAdmin}';
-    const ACCESS_TOKEN = '${accessToken}';
+    const ACCESS_TOKEN = '${accessToken!""}';
 </script>
 
 <#assign pageTitle = "Hechos" />

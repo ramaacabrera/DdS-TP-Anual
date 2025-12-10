@@ -22,6 +22,7 @@
 </head>
 <body>
 
+<#-- header.ftl -->
 <header class="site-header">
     <div class="header-inner">
         <div class="header-left">
@@ -54,18 +55,18 @@
 
                         <div class="user-actions">
                             <#if rolUsuario?? && rolUsuario == "ADMINISTRADOR">
-                                <a href="/admin/panel" class="btn-header btn-sm btn-primary" title="Panel de Control">
+                                <a href="/admin/panel" class="btn-header btn-header-primary" title="Panel de Control">
                                     <i data-feather="settings" class="icon-xs"></i> Panel
                                 </a>
                             </#if>
-                            <a href="/logout" class="btn-header btn-sm btn-outline-danger" title="Cerrar sesión">
+                            <a href="/logout" class="btn-header btn-header-outline" title="Cerrar sesión">
                                 <i data-feather="log-out" class="icon-xs"></i> Salir
                             </a>
                         </div>
                     </div>
                 <#else>
                     <div class="guest-actions">
-                        <a href="/login" class="btn-header btn-primary btn-sm">Iniciar Sesión</a>
+                        <a href="/login" class="btn-header btn-header-primary">Iniciar Sesión</a>
                     </div>
                 </#if>
             </div>
