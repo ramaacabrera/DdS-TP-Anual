@@ -4,6 +4,7 @@ import agregador.controller.*;
 import agregador.service.*;
 import agregador.repository.ConexionCargadorRepositorio;
 import agregador.repository.*;
+import agregador.service.normalizacion.DiccionarioCategorias;
 import agregador.service.normalizacion.MockNormalizador;
 import io.javalin.Javalin;
 import agregador.utils.IniciadorApp;
@@ -32,10 +33,12 @@ public class Application {
         UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
         ConexionCargadorRepositorio  conexionCargadorRepositorio = new ConexionCargadorRepositorio();
 
+        DiccionarioCategorias diccionarioCategorias = new DiccionarioCategorias();
+
         // Services
         ConexionCargadorService conexionCargadorService = new ConexionCargadorService(fuenteRepositorio, conexionCargadorRepositorio);
         HechosCargadorService hechosCargadorService = new HechosCargadorService(fuenteRepositorio, conexionCargadorRepositorio);
-        ServicioNormalizacion servNorm = new ServicioNormalizacion(new MockNormalizador());
+        ServicioNormalizacion servNorm = new ServicioNormalizacion(new MockNormalizador(diccionarioCategorias));
         MotorConsenso motorConsenso = new MotorConsenso(coleccionRepositorio);
         GestorSolicitudes gestorSol = new GestorSolicitudes(solicitudEliminacionRepositorio, solicitudModificacionRepositorio, hechoRepositorio, usuarioRepositorio);
 
@@ -54,6 +57,12 @@ public class Application {
                 wsWorkers.execute(() -> new OnMessageHandler(agregador).handleMessageSeguro(raw, ctx));
             });
             ws.onClose(new OnCloseHandler(conexionCargadorService, fuenteRepositorio));
+        });
+
+        // Categorias
+
+        app.get("/api/categorias", ctx->{
+            ctx.json(diccionarioCategorias.obtenerCategoriasCanonicas());
         });
     }
 }

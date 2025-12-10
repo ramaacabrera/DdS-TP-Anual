@@ -30,7 +30,7 @@ public class Coleccion {
     private String titulo;
     private String descripcion;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private TipoAlgoritmoConsenso algoritmoDeConsenso;
 
 

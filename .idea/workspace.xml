@@ -4,24 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="agrego panel de administrador, falta agregar links y opciones">
-      <change afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/controller/HechoController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/dto/Hechos/AgregarEtiquetaDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/HechoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleCrearHechoSolEliminacion.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/hechos.js" afterDir="false" />
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="agrego todas las funcionalidades sobre colecciones">
+      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/normalizacion/DiccionarioCategorias.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/main/resources/categorias.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/csv_files/reportes_policiales.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/csv_files/reportes_urbanos.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/HechoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/HechoRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/HechoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/HechoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleHechoEspecifico.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleHechoEspecifico.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleHechos.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleHechos.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-hecho.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-hecho.ftl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/components.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/components.ftl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hechos.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hechos.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/Coleccion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/Coleccion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/normalizacion/MockNormalizador.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/normalizacion/MockNormalizador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/csv_files/mock.csv" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/csv_files/mock.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/domain/Criterios/CriterioContribuyente.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/domain/Criterios/CriterioContribuyente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/dto/Hechos/HechoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/dto/Hechos/HechoDTO.java" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -142,10 +137,11 @@
       <recent name="C:\Users\idiar\IdeaProjects\DdS-TP-Anual\DdS\cargadorDemo\src\main\java\cargadorDemo\domain" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\cargadorEstatico\csv_files" />
+      <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\agregador\src\main\resources" />
       <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\resources\templates\fragments" />
       <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\resources\templates\loginViejos" />
       <recent name="C:\Users\helga\Bri\Diseño\DdS-TP-Anual\DdS\web\src\main\resources\public\img" />
-      <recent name="E:\Proyectos Intellij\DdS-TP-Anual\DdS\web\src\main\resources\public\img" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="" />
@@ -158,7 +154,7 @@
       <recent name="agregador.utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.ApiAdmin">
+  <component name="RunManager" selected="Application.CargadorEstatico">
     <configuration name="Agregador" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="agregador.Application" />
       <module name="agregador" />
@@ -337,7 +333,8 @@
       <workItem from="1764947017902" duration="3459000" />
       <workItem from="1765149276372" duration="193000" />
       <workItem from="1765149482020" duration="3648000" />
-      <workItem from="1765208797709" duration="18418000" />
+      <workItem from="1765208797709" duration="27847000" />
+      <workItem from="1765301619628" duration="20299000" />
     </task>
     <task id="LOCAL-00001" summary="termine cargadorDemo, avanzo con cargadorDinamico (en proceso)">
       <option name="closed" value="true" />
@@ -451,7 +448,31 @@
       <option name="project" value="LOCAL" />
       <updated>1765235915510</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="agrego funcionalidades para el panel de administrador y marcado de etiquetas para admin con error en peticion al GestorAdministrativo">
+      <option name="closed" value="true" />
+      <created>1765241996703</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1765241996703</updated>
+    </task>
+    <task id="LOCAL-00016" summary="etiquetado de hechos funcionando">
+      <option name="closed" value="true" />
+      <created>1765254261713</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1765254261713</updated>
+    </task>
+    <task id="LOCAL-00017" summary="agrego todas las funcionalidades sobre colecciones">
+      <option name="closed" value="true" />
+      <created>1765320709542</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1765320709542</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -483,7 +504,10 @@
     <MESSAGE value="actualizo nav cards del inicio, ahora son fijas" />
     <MESSAGE value="modifico estilo header, agrego link para panel admin" />
     <MESSAGE value="agrego panel de administrador, falta agregar links y opciones" />
-    <option name="LAST_COMMIT_MESSAGE" value="agrego panel de administrador, falta agregar links y opciones" />
+    <MESSAGE value="agrego funcionalidades para el panel de administrador y marcado de etiquetas para admin con error en peticion al GestorAdministrativo" />
+    <MESSAGE value="etiquetado de hechos funcionando" />
+    <MESSAGE value="agrego todas las funcionalidades sobre colecciones" />
+    <option name="LAST_COMMIT_MESSAGE" value="agrego todas las funcionalidades sobre colecciones" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
