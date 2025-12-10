@@ -1,4 +1,3 @@
-<#-- header.ftl: cabecera común -->
 <!doctype html>
 <html lang="es">
 <head>
@@ -8,8 +7,11 @@
 
     <link rel="stylesheet" href="/css/style.css">
 
+    <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+    <!-- Feather Icons -->
     <script src="https://unpkg.com/feather-icons"></script>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺️</text></svg>">
@@ -20,17 +22,20 @@
         </#list>
     </#if>
 </head>
+
 <body>
 
-<#-- header.ftl -->
 <header class="site-header">
     <div class="header-inner">
+
+        <!-- LEFT -->
         <div class="header-left">
             <a href="/" class="brand">
                 <span class="brand-icon">🗺️</span> MetaMapa
             </a>
         </div>
 
+        <!-- CENTER (solo desktop) -->
         <nav class="header-center">
             <div class="nav-links-group">
                 <a href="/home" class="nav-link">Inicio</a>
@@ -40,6 +45,7 @@
             </div>
         </nav>
 
+        <!-- RIGHT -->
         <div class="header-right">
             <div class="auth-section">
                 <#if username??>
@@ -70,10 +76,37 @@
                     </div>
                 </#if>
             </div>
+
+            <!-- ICONO HAMBURGUESA (MOBILE, A LA DERECHA) -->
+            <button class="hamburger" id="hamburgerBtn">
+                <i data-feather="menu"></i>
+            </button>
         </div>
+
     </div>
+
+    <!-- MENÚ MÓVIL -->
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="/home" class="mobile-link">Inicio</a>
+        <a href="/hechos" class="mobile-link">Explorar</a>
+        <a href="/crear" class="mobile-link">Reportar</a>
+        <a href="/estadisticas" class="mobile-link">Estadísticas</a>
+    </nav>
 </header>
 
+
+<!-- JS DEL NAVBAR -->
 <script>
     feather.replace();
+
+    const btn = document.getElementById('hamburgerBtn');
+    const menu = document.getElementById('mobileMenu');
+
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('open');
+    });
 </script>
+
+</body>
+</html>
+

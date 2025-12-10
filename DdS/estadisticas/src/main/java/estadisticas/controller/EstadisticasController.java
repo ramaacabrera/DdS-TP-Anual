@@ -22,14 +22,13 @@ public class EstadisticasController {
 
     public void getCategoriaMax(@NotNull Context ctx) {
         Optional<String> categoria = service.obtenerCategoriaMaxHechos();
-
         Map<String, Object> resultado = new HashMap<>();
+
         if (categoria.isPresent()) {
             resultado.put("categoria", categoria.get());
             ctx.status(200).json(resultado);
         } else {
             resultado.put("error", "Categoría no encontrada");
-            resultado.put("status", 404);
             ctx.status(404).json(resultado);
         }
     }
@@ -39,16 +38,11 @@ public class EstadisticasController {
             List<String> categorias = service.obtenerCategoriasNormalizadas();
             Map<String, Object> resultado = new HashMap<>();
 
-            if (categorias.isEmpty()) {
-                resultado.put("error", "No se encontraron categorías en las estadísticas");
-                resultado.put("status", 404);
-                ctx.status(404).json(resultado);
-            } else {
-                resultado.put("categorias", categorias);
-                resultado.put("total", categorias.size());
-                resultado.put("timestamp", new Date());
-                ctx.status(200).json(resultado);
-            }
+            resultado.put("categorias", categorias);
+            resultado.put("total", categorias.size());
+            resultado.put("timestamp", new Date());
+            ctx.status(200).json(resultado);
+
         } catch (Exception e) {
             ctx.status(500).json(Map.of("error", "Error interno", "detalle", e.getMessage()));
         }

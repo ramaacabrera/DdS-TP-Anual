@@ -156,7 +156,7 @@
     display: block;
     margin-top: 4px;
     font-size: 0.85rem;
-    color: var(--muted-color);
+    color: black;
     line-height: 1.4;
 }
 
@@ -281,7 +281,7 @@
 .preview-title {
     margin-bottom: 12px;
     font-size: 1rem;
-    color: var(--muted-color);
+    color: black;
 }
 .preview-grid {
     display: grid;
@@ -378,7 +378,7 @@
 
 }.card-subtitle { /* Usado en la metadata para subtítulos */
 
-     color: var(--muted-color);
+     color: black;
 
      font-size: 0.85rem;
 
@@ -390,7 +390,7 @@
 
 .card p:first-child {
 
-    color: var(--muted-color);
+    color: black;
 
     font-size: 0.85rem;
 
@@ -399,3 +399,4 @@
     font-weight: 600;
 
 }
+
