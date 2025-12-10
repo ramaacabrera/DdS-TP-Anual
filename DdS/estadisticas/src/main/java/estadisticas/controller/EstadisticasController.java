@@ -89,6 +89,8 @@ public class EstadisticasController {
     public void getProvinciaColeccion(@NotNull Context ctx) {
         String coleccionParam = ctx.pathParam("coleccion");
 
+        System.out.println("Buscando estadisticas de coleccion: " + coleccionParam);
+
         try {
             Map<String, String> datos = service.obtenerProvinciaPorColeccion(coleccionParam);
 

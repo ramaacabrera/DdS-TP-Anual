@@ -115,7 +115,7 @@ public class ConexionAgregador {
         try {
             String query = "SELECT c.handle, c.titulo, u.descripcion " +
                     "FROM Coleccion c JOIN c.hechos h JOIN h.ubicacion u " +
-                    "WHERE u.descripcion IS NOT NULL";
+                    "WHERE u.descripcion IS NOT NULL AND u.descripcion <> ''";
 
             List<Object[]> resultados = em.createQuery(query, Object[].class).getResultList();
 
@@ -126,7 +126,9 @@ public class ConexionAgregador {
                 String titulo = (String) fila[1];
                 String descripcion = (String) fila[2];
 
-                if (descripcion == null || descripcion.trim().isEmpty()) continue;
+                if (descripcion == null || descripcion.trim().isEmpty()) {
+                    continue;
+                }
 
                 if (!datosColecciones.containsKey(coleccionId)) {
                     Map<String, Object> datos = new HashMap<>();
@@ -139,6 +141,7 @@ public class ConexionAgregador {
                 List<String> descripciones = (List<String>) datosColecciones.get(coleccionId).get("descripciones");
                 descripciones.add(descripcion);
             }
+
             return datosColecciones;
 
         } catch (Exception e) {

@@ -129,7 +129,13 @@ public class GeneradorEstadisticas {
     private void actualizarEstadisticasColeccion(EntityManager em) {
         try {
             System.out.println("=== INICIANDO ACTUALIZACIÓN COLECCIONES ===");
+
+            if (this.estadisticasActual == null) {
+                throw new IllegalStateException("No se puede actualizar colecciones: estadisticasActual es null (falló la carga base)");
+            }
+
             Map<UUID, Map<String, Object>> estadisticas = obtenerEstadisticasColeccion();
+            System.out.println("Colecciones a procesar con ubicación detectada: " + estadisticas.size());
 
             for (Map.Entry<UUID, Map<String, Object>> entry : estadisticas.entrySet()) {
                 UUID coleccionId = entry.getKey();
@@ -138,20 +144,23 @@ public class GeneradorEstadisticas {
                 String provincia = (String) datos.get("provincia");
                 String nombre = (String) datos.get("nombre");
 
-                System.out.println("Procesando colección: " + nombre + " → Provincia: " + provincia);
+                System.out.println("Procesando colección: " + nombre + " → Provincia detectada: " + provincia);
 
                 EstadisticasColeccion estadisticaColeccion = new EstadisticasColeccion(
-                        estadisticasActual,
+                        this.estadisticasActual,
                         coleccionId,
                         nombre,
                         provincia
                 );
+
                 em.merge(estadisticaColeccion);
             }
             System.out.println("=== ACTUALIZACIÓN COLECCIONES COMPLETADA ===");
+
         } catch (Exception e) {
-            System.err.println("ERROR en actualizarEstadisticasColeccion: " + e.getMessage());
+            System.err.println("ERROR CRÍTICO en actualizarEstadisticasColeccion: " + e.getMessage());
             e.printStackTrace();
+            throw new RuntimeException("Fallo al actualizar colecciones", e);
         }
     }
 
@@ -177,7 +186,6 @@ public class GeneradorEstadisticas {
         return resultado;
     }
 
-
     private String obtenerProvinciaMasRepetida(List<String> descripciones) {
         if (descripciones == null || descripciones.isEmpty()) {
             return "N/A";
@@ -197,12 +205,14 @@ public class GeneradorEstadisticas {
     }
 
     private String extraerProvincia(String descripcion) {
-        if (descripcion == null || descripcion.trim().isEmpty()) return "Desconocida";
+        if (descripcion == null || descripcion.trim().isEmpty()) {
+            return "Desconocida";
+        }
 
         String[] partes = descripcion.split(",");
 
         if (partes.length >= 2) {
-            return partes[1].trim();
+            return partes[partes.length - 1].trim();
         } else {
             return descripcion.trim();
         }
