@@ -166,10 +166,10 @@ public class Coleccion {
                 case ABSOLUTA:
                     algoritmo = new Absoluta();
                     break;
-                case MAYORIASIMPLE:
+                case MAYORIA_SIMPLE:
                     algoritmo = new MayoriaSimple();
                     break;
-                case MULTIPLESMENCIONES:
+                case MULTIPLES_MENCIONES:
                     algoritmo = new MultiplesMenciones();
                     break;
                 default:
