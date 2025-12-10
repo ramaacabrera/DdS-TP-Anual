@@ -31,6 +31,5 @@ RUN curl -O https://download.newrelic.com/newrelic/java-agent/newrelic-agent/cur
 COPY --from=build /app/agregador/target/agregador-*.jar app.jar
 
 EXPOSE 8080
-EXPOSE 9090
 
 CMD ["java", "-javaagent:newrelic.jar", "-jar", "app.jar"]

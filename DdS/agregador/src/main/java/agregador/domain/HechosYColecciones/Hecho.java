@@ -25,6 +25,8 @@ public class Hecho {
     private UUID hecho_id;
 
     private String titulo;
+
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
     private String categoria;
 

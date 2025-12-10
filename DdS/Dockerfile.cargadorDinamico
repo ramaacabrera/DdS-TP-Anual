@@ -35,7 +35,6 @@ RUN curl -O https://download.newrelic.com/newrelic/java-agent/newrelic-agent/cur
 
 COPY --from=build /app/cargadorDinamico/target/cargadorDinamico-*.jar app.jar
 
-# Asumiendo que este usa otro puerto o no expone (ajustar si es necesario)
 EXPOSE 8080
 
 CMD ["java", "-javaagent:newrelic.jar", "-jar", "app.jar"]

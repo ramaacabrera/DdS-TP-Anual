@@ -17,22 +17,27 @@ public class Application {
 
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
-        int puertoAgregador = Integer.parseInt(config.getProperty("PUERTO_AGREGADOR"));
-        System.out.println("Iniciando servidor Agregador en el puerto "+puertoAgregador);
 
-        IniciadorApp iniciador = new IniciadorApp();
-        Javalin app = iniciador.iniciarApp(puertoAgregador, "/");
+        String puertoStr = config.getProperty("PUERTO_AGREGADOR", "8080");
+        int puertoAgregador;
+        try {
+            puertoAgregador = Integer.parseInt(puertoStr);
+        } catch (NumberFormatException e) {
+            System.err.println("El puerto configurado no es válido. Usando 8080 por defecto.");
+            puertoAgregador = 8080;
+        }
 
-        // Repositorios
+        System.out.println("Iniciando servidor Agregador en el puerto " + puertoAgregador);
+
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
         SolicitudModificacionRepositorio solicitudModificacionRepositorio = new SolicitudModificacionRepositorio();
         SolicitudEliminacionRepositorio solicitudEliminacionRepositorio = new SolicitudEliminacionRepositorio();
         FuenteRepositorio fuenteRepositorio = new FuenteRepositorio();
         UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
-        ConexionCargadorRepositorio  conexionCargadorRepositorio = new ConexionCargadorRepositorio();
+        ConexionCargadorRepositorio conexionCargadorRepositorio = new ConexionCargadorRepositorio();
 
-        // Services
+        // Inicialización de Servicios
         ConexionCargadorService conexionCargadorService = new ConexionCargadorService(fuenteRepositorio, conexionCargadorRepositorio);
         HechosCargadorService hechosCargadorService = new HechosCargadorService(fuenteRepositorio, conexionCargadorRepositorio);
         ServicioNormalizacion servNorm = new ServicioNormalizacion(new MockNormalizador());
@@ -41,17 +46,22 @@ public class Application {
 
         AgregadorOrquestador agregador = new AgregadorOrquestador(hechoRepositorio, coleccionRepositorio, fuenteRepositorio,
                 servNorm, motorConsenso, gestorSol, hechosCargadorService);
+
         AgregadorScheduler agregadorScheduler = new AgregadorScheduler(agregador);
 
+        IniciadorApp iniciador = new IniciadorApp();
+        Javalin app = iniciador.iniciarApp(puertoAgregador, "/");
 
         ExecutorService wsWorkers = java.util.concurrent.Executors.newFixedThreadPool(
                 Math.max(4, Runtime.getRuntime().availableProcessors()));
 
-        // Health check
-        app.get("/health", ctx -> { ctx.status(200).result("OK");});
+        // --- RUTAS ---
+        app.get("/health", ctx -> {
+            ctx.status(200).result("OK");
+        });
 
         app.ws("/cargador", ws -> {
-            ws.onConnect(new OnConnectHandler(conexionCargadorService, fuenteRepositorio));
+            ws.onConnect(new OnConnectHandler(conexionCargadorService));
             ws.onMessage(ctx -> {
                 String raw = ctx.message();
                 wsWorkers.execute(() -> new OnMessageHandler(agregador).handleMessageSeguro(raw, ctx));

@@ -1,12 +1,10 @@
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# 1. DEFINIR NOMBRE DEL MÓDULO AQUÍ
 ARG MODULE_NAME=gestorPublico
 
 COPY pom.xml .
 
-# Copia de todos los poms (necesario para el reactor)
 COPY agregador/pom.xml agregador/pom.xml
 COPY cargadorDemo/pom.xml cargadorDemo/pom.xml
 COPY cargadorDinamico/pom.xml cargadorDinamico/pom.xml
@@ -28,7 +26,6 @@ RUN mvn package -pl ${MODULE_NAME} -am -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# 2. IMPORTANTE: REDEFINIR EL NOMBRE EXACTO AQUÍ (NO poner "MODULO")
 ARG MODULE_NAME=gestorPublico
 
 RUN apk --no-cache add curl unzip
@@ -37,7 +34,6 @@ RUN curl -O https://download.newrelic.com/newrelic/java-agent/newrelic-agent/cur
     && cp newrelic/newrelic.jar . \
     && rm -rf newrelic-java.zip newrelic
 
-# Ahora sí funcionará la copia porque MODULE_NAME es correcto
 COPY --from=build /app/${MODULE_NAME}/target/*.jar app.jar
 
 EXPOSE 8080
