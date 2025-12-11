@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Entity
+
 public class CriterioFecha extends Criterio {
     private Date fechaInicio;
     private Date fechaFin;

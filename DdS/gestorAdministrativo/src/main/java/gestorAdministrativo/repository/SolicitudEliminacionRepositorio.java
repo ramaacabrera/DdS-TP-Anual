@@ -53,7 +53,10 @@ public class SolicitudEliminacionRepositorio {
     public List<SolicitudDeEliminacion> obtenerPaginadas(int pagina, int limite){
         EntityManager em = BDUtils.getEntityManager();
         try {
-            String jpql = "SELECT s FROM SolicitudDeEliminacion s ORDER BY s.id ASC";
+            String jpql = "SELECT s FROM SolicitudDeEliminacion s " +
+                    "LEFT JOIN FETCH s.usuario " +
+                    "LEFT JOIN FETCH s.hechoAsociado " +
+                    "ORDER BY s.id ASC";
 
             TypedQuery<SolicitudDeEliminacion> query = em.createQuery(jpql, SolicitudDeEliminacion.class);
 

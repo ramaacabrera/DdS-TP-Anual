@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Map;
 import java.util.UUID;
 
-@Entity
+
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Criterio {
 

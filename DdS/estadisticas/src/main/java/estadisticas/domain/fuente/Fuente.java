@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
-@Entity
+
 public class Fuente {
     @Id
     @GeneratedValue(generator = "UUID")

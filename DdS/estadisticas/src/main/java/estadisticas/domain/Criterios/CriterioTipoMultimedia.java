@@ -10,7 +10,7 @@ import javax.persistence.Transient;
 import java.util.HashMap;
 import java.util.Map;
 
-@Entity
+
 public class CriterioTipoMultimedia extends Criterio {
     @Enumerated(EnumType.STRING)
     private TipoContenidoMultimedia tipoContenidoMultimedia;

@@ -4,7 +4,7 @@ import estadisticas.domain.HechosYColecciones.HechoModificado;
 
 import javax.persistence.*;
 
-@Entity
+
 @DiscriminatorValue("MODIFICACION")
 public class SolicitudDeModificacion extends Solicitud {
 

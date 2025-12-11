@@ -11,7 +11,7 @@ import javax.persistence.Transient;
 import java.util.HashMap;
 import java.util.Map;
 
-@Entity
+
 public class CriterioUbicacion extends Criterio {
 
     @ManyToOne

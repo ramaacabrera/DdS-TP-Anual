@@ -9,6 +9,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cargadorEstatico.domain.fuente.Fuente;
 import okhttp3.*;
+import utils.DTO.ModelosMensajesDTO.SolicitudesEliminacionObtenidosPayload;
+import utils.DTO.ModelosMensajesDTO.SolicitudesModificacionObtenidosPayload;
+import utils.DTO.SolicitudDeEliminacionDTO;
+import utils.DTO.SolicitudDeModificacionDTO;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -64,6 +68,21 @@ public class ClienteDelAgregador {
                             List<HechoDTO> hechos = controlador.obtenerHechos();
                             HechosObtenidosPayload payload = new HechosObtenidosPayload(hechos);
                             WsMessage<HechosObtenidosPayload> mensaje = new WsMessage<HechosObtenidosPayload>("hechosObtenidos", payload);
+
+                            webSocket.send(mapper.writeValueAsString(mensaje));
+                        }
+                        case "obtenerSolicitudesModificacion" -> {
+                            List<SolicitudDeModificacionDTO> solicitudes = controlador.obtenerSolicitudesModificacion();
+                            SolicitudesModificacionObtenidosPayload payload = new SolicitudesModificacionObtenidosPayload(solicitudes);
+                            WsMessage<SolicitudesModificacionObtenidosPayload> mensaje = new WsMessage<SolicitudesModificacionObtenidosPayload>("solicitudesModificacionObtenidos", payload);
+
+                            webSocket.send(mapper.writeValueAsString(mensaje));
+                        }
+                        case "obtenerSolicitudesEliminacion" -> {
+                            List<SolicitudDeEliminacionDTO> solicitudes = controlador.obtenerSolicitudesEliminacion();
+                            solicitudes.forEach(System.out::println);
+                            SolicitudesEliminacionObtenidosPayload payload = new SolicitudesEliminacionObtenidosPayload(solicitudes);
+                            WsMessage<SolicitudesEliminacionObtenidosPayload> mensaje = new WsMessage<SolicitudesEliminacionObtenidosPayload>("solicitudesEliminacionObtenidos", payload);
 
                             webSocket.send(mapper.writeValueAsString(mensaje));
                         }

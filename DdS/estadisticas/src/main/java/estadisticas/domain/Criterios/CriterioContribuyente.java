@@ -8,7 +8,7 @@ import javax.persistence.Transient;
 import java.util.HashMap;
 import java.util.Map;
 
-@Entity
+
 public class CriterioContribuyente extends Criterio {
 
     private String nombreContribuyente;

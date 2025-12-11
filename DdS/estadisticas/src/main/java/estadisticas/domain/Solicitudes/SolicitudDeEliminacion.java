@@ -5,7 +5,7 @@ import estadisticas.domain.Solicitudes.Solicitud;
 
 import javax.persistence.*;
 
-@Entity
+
 @DiscriminatorValue("ELIMINACION")
 public class SolicitudDeEliminacion extends Solicitud {
 

@@ -40,20 +40,17 @@ public class HechosCargadorService {
     public void obtenerSolicitudes() {
         ConcurrentMap<UUID, WsContext> fuentes = conexionCargadorRepositorio.obtenerFuentesCtxs();
         fuentes.forEach((fuenteId, ctx) -> {
-            Fuente fuente = fuenteRepositorio.buscarPorId(fuenteId);
             String mensaje = null;
-            if(fuente.getTipoDeFuente().equals(TipoDeFuente.DINAMICA)) {
-                try{
-                    mensaje = mapper.writeValueAsString(new WsMessage<MensajeVacioPayload>("obtenerSolicitudesEliminacion", null));
-                    ctx.send(mensaje);
-                    mensaje = mapper.writeValueAsString(new WsMessage<MensajeVacioPayload>("obtenerSolicitudesModificacion", null));
-                    ctx.send(mensaje);
+            try{
+                mensaje = mapper.writeValueAsString(new WsMessage<MensajeVacioPayload>("obtenerSolicitudesEliminacion", null));
+                ctx.send(mensaje);
+                mensaje = mapper.writeValueAsString(new WsMessage<MensajeVacioPayload>("obtenerSolicitudesModificacion", null));
+                ctx.send(mensaje);
 
-                    System.out.println("envio mensaje obtenerSolicitudes a: " + fuenteId);
-                }
-                catch(JsonProcessingException e){
-                    throw new RuntimeException(e);
-                }
+                System.out.println("envio mensaje obtenerSolicitudes a: " + fuenteId);
+            }
+            catch(JsonProcessingException e){
+                throw new RuntimeException(e);
             }
         });
     }
