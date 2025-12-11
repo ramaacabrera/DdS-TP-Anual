@@ -12,6 +12,7 @@ import web.domain.Solicitudes.SolicitudDeEliminacion;
 import web.domain.Solicitudes.SolicitudDeModificacion;
 import web.dto.PageDTO;
 import web.service.SolicitudService;
+import web.service.UsuarioService;
 import web.utils.ViewUtil;
 
 import java.net.URI;
@@ -24,11 +25,13 @@ import java.util.*;
 public class SolicitudController {
 
     private SolicitudService solicitudService;
+    private UsuarioService usuarioService;
     private String urlPublica;
 
-    public SolicitudController(SolicitudService solicitudService, String urlPublica) {
+    public SolicitudController(SolicitudService solicitudService, String urlPublica,  UsuarioService usuarioService) {
         this.solicitudService = solicitudService;
         this.urlPublica = urlPublica;
+        this.usuarioService = usuarioService;
     }
 
     public Handler listarSolicitudesEliminacion = ctx -> {
@@ -524,8 +527,10 @@ public class SolicitudController {
             String hechoId = ctx.pathParam("id");
             String username = ctx.sessionAttribute("username");
             String accessToken = ctx.sessionAttribute("accessToken");
-            String usuarioId = ctx.sessionAttribute("usuarioId"); // ID del usuario logueado (UUID)
 
+            String usuarioId = usuarioService.obtenerId(username); // ID del usuario logueado (UUID)
+
+            System.out.println("ID del usuario: " + usuarioId);
 
             /*if (username == null || accessToken == null || usuarioId == null) {
                 System.out.println("Intento de modificar sin sesión. Redirigiendo.");

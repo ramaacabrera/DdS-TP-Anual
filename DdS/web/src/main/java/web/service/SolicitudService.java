@@ -188,10 +188,13 @@ public class SolicitudService {
             String username, String token, String rolUsuario) {
         try {
             Map<String, Object> solicitudDTO = new HashMap<>();
-            solicitudDTO.put("hechoId", UUID.fromString(hechoId));
+            solicitudDTO.put("id_HechoAsociado", UUID.fromString(hechoId));
 
             if (usuarioId != null && !usuarioId.isEmpty()) {
-                solicitudDTO.put("usuarioId", UUID.fromString(usuarioId));
+                Map<String, Object> usuarioDTO = new HashMap<>();
+                usuarioDTO.put("id_usuario", usuarioId);
+                usuarioDTO.put("username",  username);
+                solicitudDTO.put("usuario", usuarioDTO);
             }
 
             solicitudDTO.put("justificacion", justificacion);

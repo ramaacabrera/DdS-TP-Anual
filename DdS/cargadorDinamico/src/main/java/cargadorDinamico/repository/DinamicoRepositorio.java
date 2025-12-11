@@ -26,6 +26,7 @@ import cargadorDinamico.domain.DinamicaDto.SolicitudDeEliminacionDTO;
 import cargadorDinamico.domain.Usuario.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
@@ -254,19 +255,76 @@ public class DinamicoRepositorio {
 
     //-------------------------SOLICITUDES---------------------------------------
 
-    public void guardarSolicitudModificacion(SolicitudDeModificacion_D solicitud){
+    public void guardarSolicitudModificacion(SolicitudDeModificacion_D solicitud) {
         EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
-            em.merge(solicitud); // Usamos persist para insertar nuevo
+
+            // 1. Extraer datos del usuario
+            Usuario_D usuarioSolicitud = solicitud.getUsuario();
+            UUID usuarioId = usuarioSolicitud.getId_usuario();
+            String username = usuarioSolicitud.getUsername();
+
+            // 2. Verificar si usuario existe en BD dinámica
+            Usuario_D usuarioDinamico = em.find(Usuario_D.class, usuarioId);
+
+            if (usuarioDinamico == null) {
+                // 3. Crear consulta SQL nativa para insertar con ID específico
+                String sql = "INSERT INTO Usuario_D (id_usuario, username) VALUES (?, ?)";
+
+                Query query = em.createNativeQuery(sql);
+                query.setParameter(1, usuarioId.toString());
+                query.setParameter(2, username);
+                query.executeUpdate();
+
+                // 4. Refrescar el contexto de persistencia
+                em.flush();
+                em.clear();
+
+                // 5. Obtener la entidad recién insertada
+                usuarioDinamico = em.find(Usuario_D.class, usuarioId);
+
+                System.out.println("Usuario insertado con ID específico: " + usuarioId);
+            }
+
+            // 6. Asignar usuario a la solicitud
+            solicitud.setUsuario(usuarioDinamico);
+
+            // 7. Guardar solicitud
+            em.persist(solicitud);
+
             BDUtilsDinamico.commit(em);
-            System.out.println("SolicitudDeModificacion_D guardado: " + solicitud.getJustificacion());
+            System.out.println("Solicitud guardada exitosamente");
+
         } catch (Exception e) {
             BDUtilsDinamico.rollback(em);
-            System.err.println("ERROR al guardar SolicitudDeModificacion_D: " + e.getMessage());
+            System.err.println("ERROR: " + e.getMessage());
             e.printStackTrace();
-        }finally {
+            throw new RuntimeException("Error al guardar solicitud", e);
+        } finally {
             em.close();
+        }
+    }
+
+    public Usuario_D buscarUsuarioPorId(EntityManager em, String id) {
+        try {
+            UUID uuid = UUID.fromString(id);
+
+            TypedQuery<Usuario_D> query = em.createQuery(
+                    "SELECT u FROM Usuario_D u WHERE u.id_usuario = :id_usuario",
+                    Usuario_D.class
+            );
+            query.setParameter("id_usuario", uuid);
+
+            return query.getResultStream().findFirst().orElse(null);
+
+        } catch (IllegalArgumentException e) {
+            System.err.println("Formato de UUID inválido: " + id);
+            return null;
+        } catch (Exception e) {
+            System.err.println("Error buscando usuario por id: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
     }
 

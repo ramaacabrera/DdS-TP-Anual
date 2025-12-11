@@ -142,9 +142,11 @@ public class UsuarioController {
 
     public Handler obtenerUsuario = ctx -> {
         String username = ctx.pathParam("username");
-        var usuario = usuarioService.obtenerPorUsername(username);
+        System.out.println("===== Buscando usuario: " + username + " =====");
+        Usuario usuario = usuarioService.obtenerPorUsername(username);
 
         if (usuario != null) {
+            System.out.println("Devolviendo usuario");
             ctx.json(usuario);
         } else {
             ctx.status(404).json(Map.of("error", "Usuario no encontrado"));
