@@ -1,5 +1,7 @@
 package gestorAdministrativo.dto.Solicitudes;
 
+import gestorAdministrativo.domain.Solicitudes.SolicitudDeEliminacion;
+import gestorAdministrativo.domain.Usuario.Usuario;
 import gestorAdministrativo.dto.Hechos.UsuarioDTO; // Asumo que tienes este DTO
 import gestorAdministrativo.domain.Solicitudes.EstadoSolicitudEliminacion;
 import java.util.UUID;
@@ -12,6 +14,18 @@ public class SolicitudDeEliminacionDTO {
     private EstadoSolicitudEliminacion estado;
 
     public SolicitudDeEliminacionDTO() {}
+
+    public SolicitudDeEliminacionDTO(SolicitudDeEliminacion s) {
+        this.id = s.getId();
+        this.justificacion = s.getJustificacion();
+        this.hechoId = s.getHechoAsociado().getHecho_id();
+        this.usuario = convertirDTO(s.getUsuario());
+        this.estado = s.getEstado();
+    }
+
+    private UsuarioDTO convertirDTO(Usuario u) {
+        return new UsuarioDTO(u.getId_usuario(), u.getUsername());
+    }
 
     // Getters y Setters
     public UUID getId() { return id; }

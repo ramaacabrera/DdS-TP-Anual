@@ -39,6 +39,37 @@ public class SolicitudEliminacionRepositorio {
         }
     }
 
+    public long contarTodas(){
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            return em.createQuery("SELECT COUNT(s) FROM SolicitudDeEliminacion s", Long.class)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<SolicitudDeEliminacion> obtenerPaginadas(int pagina, int limite){
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            String jpql = "SELECT s FROM SolicitudDeEliminacion s ORDER BY s.id ASC";
+
+            TypedQuery<SolicitudDeEliminacion> query = em.createQuery(jpql, SolicitudDeEliminacion.class);
+
+            int offset = (pagina - 1) * limite;
+
+            query.setFirstResult(offset);
+            query.setMaxResults(limite);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+    }
+
     public void agregarSolicitudDeEliminacion(SolicitudDeEliminacion solicitud) {
         this.guardar(solicitud);
     }

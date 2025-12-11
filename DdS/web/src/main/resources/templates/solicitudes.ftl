@@ -40,6 +40,18 @@
             </div>
         </#if>
     </div>
+    <!-- Paginador -->
+    <#if totalPages?? && (totalPages > 1)>
+        <div class="page-btn" style="display: flex; justify-content: center; margin: 30px 0;">
+            <#import "fragments/components.ftl" as cmp>
+            <@cmp.pager
+            page=(page!1)
+            size=(size!10)
+            totalPages=(totalPages!1)
+            baseHref=(baseHref!"/admin/solicitudes/eliminacion")
+            keep={} />
+        </div>
+    </#if>
 </#assign>
 
 <!-- MACRO para tarjeta de solicitud -->

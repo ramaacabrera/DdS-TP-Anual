@@ -3,8 +3,10 @@ package web.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
+import web.domain.HechosYColecciones.Coleccion;
 import web.domain.Solicitudes.SolicitudDeEliminacion;
 import web.domain.Solicitudes.SolicitudDeModificacion;
+import web.dto.PageDTO;
 
 import java.io.IOException;
 import java.net.URI;
@@ -12,6 +14,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class SolicitudService {
 
@@ -83,6 +86,7 @@ public class SolicitudService {
             HttpRequest request = buildRequestGET("api/solicitudes/modificacion/" + id, username, token, rolUsuario);
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
+
             if (response.statusCode() == 200)
                 return mapper.readValue(response.body(), SolicitudDeModificacion.class);
 
@@ -95,25 +99,24 @@ public class SolicitudService {
     }
 
 
-    public List<SolicitudDeEliminacion> obtenerSolicitudesEliminacion(String username, String token, String rolUsuario) {
+    public PageDTO<SolicitudDeEliminacion> listarColecciones(String username, String token, String rolUsuario, int pagina, int size) {
         try {
-            HttpRequest request = buildRequestGET("api/solicitudes", username, token, rolUsuario);
-            //System.out.println("Obtener solicitud de eliminacion (lista) 1: " + request);
+            System.out.println("Pidiendo solicitudes de eliminacion a: " + urlAdmin);
+            HttpRequest request = buildRequestGET("api/solicitudes?pagina=" + pagina + "&limite=" + size, username, token, rolUsuario);
 
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
-            //System.out.println("Obtener solicitud de eliminacion (lista) 2: " );
-
 
             if (response.statusCode() == 200) {
                 //System.out.println("Obtener solicitud de eliminacion (lista) 3: " );
 
                 return mapper.readValue(response.body(),
-                        new TypeReference<List<SolicitudDeEliminacion>>() {
+                        new TypeReference<PageDTO<SolicitudDeEliminacion>>() {
                         });
             }
 
-            System.err.println("Error obteniendo solicitudes eliminación: " + response.statusCode());
-            return List.of();
+            System.err.println("Error obteniendo solicitudes de eliminacion: " +  response.statusCode());
+
+            return null;
 
         } catch (Exception e) {
             throw new RuntimeException(e);

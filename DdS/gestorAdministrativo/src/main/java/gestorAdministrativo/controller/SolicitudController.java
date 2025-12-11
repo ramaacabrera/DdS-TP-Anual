@@ -1,5 +1,6 @@
 package gestorAdministrativo.controller;
 
+import gestorAdministrativo.dto.PageDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDeEliminacionDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDeModificacionDTO;
@@ -82,8 +83,12 @@ public class SolicitudController {
     public Handler obtenerSolicitudes = ctx -> {
         System.out.println("obteniendo solicitudes");
         try {
-            List<SolicitudDeEliminacionDTO> solicitudes = eliminacionService.obtenerTodasLasSolicitudes();
-            ctx.status(200).json(solicitudes);
+            int pagina = ctx.queryParamAsClass("pagina", Integer.class).getOrDefault(1);
+            int limite = ctx.queryParamAsClass("limite", Integer.class).getOrDefault(10);
+
+            PageDTO<SolicitudDeEliminacionDTO> resultado = eliminacionService.obtenerTodasLasSolicitudes(pagina, limite);
+            System.out.println("Devolviendo solicitudes");
+            ctx.status(200).json(resultado);
         } catch (Exception e) {
             ctx.status(500).json("Error obteniendo solicitudes: " + e.getMessage());
         }
