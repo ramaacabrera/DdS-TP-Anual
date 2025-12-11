@@ -52,7 +52,7 @@ public class Application {
         // controllers
         ColeccionController coleccionController = new ColeccionController(coleccionService, usuarioService, fuenteService);
         HechoController hechoController = new HechoController(urlPublica, urlAdmin,hechoService, dataCloud);
-        SolicitudController solicitudController = new SolicitudController(solicitudService);
+        SolicitudController solicitudController = new SolicitudController(solicitudService, urlPublica);
         AdministradorController administradorController = new AdministradorController(solicitudService);
 
         app.get("/", ctx -> {
@@ -97,6 +97,7 @@ public class Application {
         app.get("/api/solicitudes/{id}", solicitudController.obtenerFormsEliminarSolicitud);
 
         app.get("/hechos/{id}/modificar", solicitudController.obtenerFormsModificarSolicitud);
+        app.post("/api/solicitar-modificacion", solicitudController.crearSolicitudModificacion);
         //app.get("/api/solicitudes/{id}", solicitudController.obtenerFormsModificarSolicitud);
 
         app.get("/admin/solicitudes/eliminacion", solicitudController.listarSolicitudesEliminacion);

@@ -2,38 +2,32 @@
 
 var mapaModificacion;
 var marcadorPropuesto = null;
-var coordenadasOriginales = {}; // Para referencia
+var coordenadasOriginales = {};
 
 function initMapaModificacion(config) {
     coordenadasOriginales = { lat: config.originalLat, lon: config.originalLon };
 
-    // 1. Inicializar Mapa (centrado en la ubicación original)
     mapaModificacion = L.map(config.mapContainerId).setView([config.originalLat, config.originalLon], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(mapaModificacion);
 
-    // 2. Marcar Ubicación Original (Solo para referencia visual)
     L.marker([config.originalLat, config.originalLon], {
         icon: L.divIcon({className: 'map-original-marker', html: '<span style="color: blue; font-size: 20px;">★</span>'})
     }).addTo(mapaModificacion).bindPopup("Ubicación Original");
 
-    // 3. Listener de Clic para seleccionar nueva ubicación
     mapaModificacion.on('click', function(e) {
         const lat = e.latlng.lat.toFixed(6);
         const lon = e.latlng.lng.toFixed(6);
 
-        // Remover marcador anterior
         if (marcadorPropuesto) {
             mapaModificacion.removeLayer(marcadorPropuesto);
         }
 
-        // Crear nuevo marcador (icono de lápiz o diferente color)
         marcadorPropuesto = L.marker([lat, lon]).addTo(mapaModificacion);
         marcadorPropuesto.bindPopup("Ubicación Propuesta").openPopup();
 
-        // Actualizar campos ocultos del formulario
         document.getElementById('latitud').value = lat;
         document.getElementById('longitud').value = lon;
 
@@ -48,11 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const mensajeError = document.getElementById('mensaje-error');
     const btnEnviar = document.getElementById('btn-enviar');
 
-
     const POST_URL = '/api/solicitar-modificacion';
 
     form.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Detener el envío por defecto del formulario (evita el 404)
+        e.preventDefault();
 
         mensajeExito.style.display = 'none';
         mensajeError.style.display = 'none';
@@ -68,45 +61,47 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const hechoId = formData.get('hechoId');
-        const usuarioId = formData.get('usuarioId');
+        const hechoModificado = {};
+        let hayCambios = false;
 
-        // 1. Recolectar solo los campos que tienen un valor NUEVO
-        const cambios = {};
-        let camposModificadosCount = 0;
+        const camposSimples = ['titulo', 'descripcion', 'categoria', 'fechaDeAcontecimiento'];
 
-        // Asumiendo que tus campos editables tienen el atributo 'name' (ej: name="titulo", name="descripcion")
-        const camposEditables = ['titulo', 'descripcion' /*, ... otros campos ... */];
-
-        camposEditables.forEach(campo => {
+        camposSimples.forEach(campo => {
             const valor = formData.get(campo);
             if (valor && valor.trim() !== '') {
-                cambios[campo] = valor.trim();
-                camposModificadosCount++;
+                hechoModificado[campo] = valor.trim();
+                hayCambios = true;
             }
         });
 
-        if (camposModificadosCount === 0) {
-            mensajeError.textContent = 'Debe proponer una modificación en al menos un campo.';
+        const lat = formData.get('ubicacion.latitud');
+        const lon = formData.get('ubicacion.longitud');
+
+        if (lat && lon && lat.trim() !== '' && lon.trim() !== '') {
+            hechoModificado['ubicacion'] = {
+                'latitud': parseFloat(lat),
+                'longitud': parseFloat(lon)
+            };
+            hayCambios = true;
+        }
+
+        if (!hayCambios) {
+            mensajeError.textContent = 'Debe proponer una modificación en al menos un campo (o cambiar la ubicación).';
             mensajeError.style.display = 'block';
             btnEnviar.disabled = false;
             return;
         }
 
-        // 2. Construir el cuerpo JSON
         const body = {
-            "hechoId": "uuid...",
-            "justificacion": "...",
-            "hechoModificado": {
-                "titulo": "nuevo titulo",
-                "ubicacion": {
-                    "latitud": valor_lat,
-                    "longitud": valor_lon
-                }
-            }
+            "hechoId": formData.get('hechoId'),
+            "usuarioId": formData.get('usuarioId'),
+            "justificacion": justificacion.trim(),
+            "hechoModificado": hechoModificado
         };
 
-        // 3. Enviar la solicitud POST
+        console.log("Enviando JSON:", JSON.stringify(body));
+
+        // --- 3. ENVÍO ---
         try {
             const response = await fetch(POST_URL, {
                 method: 'POST',
@@ -116,15 +111,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(body)
             });
 
-            if (response.ok && response.status === 201) {
+            if (response.ok) {
                 mensajeExito.style.display = 'block';
-                // Redirigir o limpiar el formulario después de un breve retraso
+                const hechoId = formData.get('hechoId');
                 setTimeout(() => {
                     window.location.href = `/hechos/${hechoId}`;
                 }, 2000);
             } else {
                 const errorData = await response.json();
-                mensajeError.textContent = `Error (${response.status}): ${errorData.error || response.statusText}`;
+                mensajeError.textContent = `Error: ${errorData.error || 'No se pudo procesar la solicitud'}`;
                 mensajeError.style.display = 'block';
             }
 

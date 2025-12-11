@@ -1,4 +1,5 @@
 <script src="/js/solicitud-detalle.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <#assign pageTitle = "Detalle de Solicitud">
 <#assign additionalCss = ["/css/styleSolicitudes.css"]>
@@ -99,22 +100,6 @@
             tipo: '${tipo!"eliminacion"}'
         };
 
-        function procesarSolicitud(accion) {
-            fetch(window.location.pathname, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ accion })
-            }).then(() => window.location.href="/admin/solicitudes");
-        }
-
-        // Funciones directas sin confirmación
-        function aceptarSolicitud() {
-            procesarSolicitud('ACEPTADA');
-        }
-
-        function rechazarSolicitud() {
-            procesarSolicitud('RECHAZADA');
-        }
     </script>
 </#assign>
 

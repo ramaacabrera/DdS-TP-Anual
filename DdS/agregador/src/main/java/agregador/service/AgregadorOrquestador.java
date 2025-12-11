@@ -5,11 +5,14 @@ import agregador.domain.HechosYColecciones.Hecho;
 import agregador.domain.fuente.Fuente;
 import agregador.dto.Hechos.FuenteDTO;
 import agregador.dto.Hechos.HechoDTO;
+import agregador.dto.Hechos.UbicacionDTO;
 import agregador.dto.Solicitudes.SolicitudDeEliminacionDTO;
 import agregador.dto.Solicitudes.SolicitudDeModificacionDTO;
 import agregador.repository.ColeccionRepositorio;
 import agregador.repository.FuenteRepositorio;
 import agregador.repository.HechoRepositorio;
+import agregador.service.normalizacion.GeolocalizadorOffline;
+import agregador.service.normalizacion.ServicioGeoref;
 import agregador.service.normalizacion.ServicioNormalizacion;
 import agregador.utils.BDUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +31,7 @@ public class AgregadorOrquestador {
     private final MotorConsenso motorConsenso;
     private final GestorSolicitudes gestorSolicitudes;
     private final HechosCargadorService hechosCargadorService;
+    private final ServicioGeoref servicioGeoref;
 
     public AgregadorOrquestador(
             HechoRepositorio hechoRepositorio,
@@ -45,6 +49,7 @@ public class AgregadorOrquestador {
         this.motorConsenso = motorConsenso;
         this.gestorSolicitudes = gestorSolicitudes;
         this.hechosCargadorService = hechosCargadorService;
+        this.servicioGeoref = new ServicioGeoref(null,null);
     }
 
 
@@ -66,6 +71,7 @@ public class AgregadorOrquestador {
         List<Hecho> hechosParaColecciones = new ArrayList<>();
 
         for (HechoDTO dto : hechosDTO) {
+            enriquecerUbicacion(dto);
             try {
                 System.out.println("Procesando DTO: " + new ObjectMapper().writeValueAsString(dto));
                 gestionarFuente(dto);
@@ -140,6 +146,39 @@ public class AgregadorOrquestador {
             coleccionRepositorio.actualizarTodas(modificadas);
 
             BDUtils.getEntityManager().clear();
+        }
+    }
+
+    private void enriquecerUbicacion(HechoDTO hecho) {
+        UbicacionDTO ubicacion = hecho.getUbicacion();
+
+        if (ubicacion == null) return;
+
+        boolean tieneCoordenadas = ubicacion.getLatitud() != 0 && ubicacion.getLongitud() != 0;
+        boolean faltaDescripcion = ubicacion.getDescripcion() == null || ubicacion.getDescripcion().trim().isEmpty();
+
+        if (tieneCoordenadas && faltaDescripcion) {
+            System.out.println("📍 Buscando descripción para coord: " + ubicacion.getLatitud() + ", " + ubicacion.getLongitud());
+
+            String descripcionEncontrada = servicioGeoref.obtenerDescripcionPorCoordenadas(
+                    ubicacion.getLatitud(),
+                    ubicacion.getLongitud()
+            );
+
+            if (descripcionEncontrada != null) {
+                ubicacion.setDescripcion(descripcionEncontrada);
+                System.out.println("✅ Ubicación actualizada (API): " + descripcionEncontrada);
+            } else {
+                System.out.println("⚠ API falló, calculando ubicación aproximada offline...");
+
+                String descripcionOffline = GeolocalizadorOffline.obtenerUbicacionAproximada(
+                        ubicacion.getLatitud(),
+                        ubicacion.getLongitud()
+                );
+
+                ubicacion.setDescripcion(descripcionOffline);
+                System.out.println("✅ Ubicación actualizada (Offline): " + descripcionOffline);
+            }
         }
     }
 }

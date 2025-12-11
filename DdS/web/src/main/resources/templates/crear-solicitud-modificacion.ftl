@@ -66,6 +66,7 @@
     <script>
         const CURRENT_USER_ID = "${usuarioId!}";
         const HECHO_ID = "${hechoId?html}";
+        const URL_PUBLICA = '${urlPublica}';
     </script>
 
 

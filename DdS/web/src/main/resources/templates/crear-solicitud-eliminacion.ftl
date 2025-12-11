@@ -11,7 +11,7 @@
     </p>
 
     <script>
-        const URL_PUBLICA = '${urlPublica!"http://localhost:8087/api"}';
+        const URL_PUBLICA = '${urlPublica!}';
         // Variable global para saber quién está logueado en el JS
         const CURRENT_USER = "${username!}";
     </script>

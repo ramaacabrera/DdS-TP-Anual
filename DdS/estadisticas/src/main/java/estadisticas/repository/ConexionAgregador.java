@@ -4,6 +4,7 @@ import estadisticas.utils.BDUtilsAgregador;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.*;
 import java.util.function.Function;
@@ -14,10 +15,17 @@ public class ConexionAgregador {
     public ConexionAgregador(){}
 
     public Long obtenerSpamActual() {
-        EntityManager em = BDUtilsAgregador.getEntityManager(); // 1. Obtener
+        EntityManager em = BDUtilsAgregador.getEntityManager();
         try {
-            TypedQuery<Long> query = em.createQuery("SELECT count(*) FROM Solicitud s WHERE s.esSpam = true ", Long.class);
-            return query.getSingleResult();
+            Query query = em.createNativeQuery("SELECT count(*) FROM Solicitud WHERE esSpam = true");
+
+            Object resultado = query.getSingleResult();
+
+            if (resultado != null) {
+                return ((Number) resultado).longValue();
+            }
+            return 0L;
+
         } finally {
             if (em != null && em.isOpen()) {
                 em.close();
@@ -28,11 +36,12 @@ public class ConexionAgregador {
     public String obtenerCategoriaMaxHechos() {
         EntityManager em = BDUtilsAgregador.getEntityManager();
         try {
-            TypedQuery<String> query = em.createQuery(
-                    "SELECT h.categoria FROM Hecho h GROUP BY h.categoria ORDER BY COUNT(h) DESC", String.class);
+            Query query = em.createNativeQuery("SELECT categoria FROM Hecho GROUP BY categoria ORDER BY COUNT(*) DESC");
 
             query.setMaxResults(1);
-            return query.getSingleResult();
+            Object resultado = query.getSingleResult();
+
+            return resultado != null ? resultado.toString() : "Sin categorías";
 
         } catch (NoResultException e) {
             return "Sin categorías";
@@ -47,21 +56,24 @@ public class ConexionAgregador {
     public Map<String, Map<String, Object>> obtenerUbicacionesPorCategoria() {
         EntityManager em = BDUtilsAgregador.getEntityManager();
         try {
-            String query = "SELECT h.categoria, u.descripcion, COUNT(h) FROM Hecho h JOIN h.ubicacion u " +
+            String sql = "SELECT h.categoria, u.descripcion, COUNT(*) " +
+                    "FROM Hecho h " +
+                    "JOIN Ubicacion u ON h.id_ubicacion = u.id_ubicacion " +
                     "WHERE h.categoria IS NOT NULL AND u.descripcion IS NOT NULL " +
                     "GROUP BY h.categoria, u.descripcion " +
-                    "ORDER BY h.categoria, COUNT(h) DESC";
+                    "ORDER BY h.categoria, COUNT(*) DESC";
 
-            List<Object[]> resultados = em.createQuery(query, Object[].class).getResultList();
+            List<Object[]> resultados = em.createNativeQuery(sql).getResultList();
 
             Map<String, Map<String, Object>> datosCategorias = new HashMap<>();
 
             for (Object[] fila : resultados) {
                 String categoria = (String) fila[0];
                 String descripcion = (String) fila[1];
-                Long count = (Long) fila[2];
+                // SQL Nativo devuelve BigInteger para COUNT, casteamos seguro:
+                Long count = ((Number) fila[2]).longValue();
 
-                if (descripcion.trim().isEmpty()) continue;
+                if (descripcion == null || descripcion.trim().isEmpty()) continue;
 
                 if (!datosCategorias.containsKey(categoria)) {
                     Map<String, Object> datos = new HashMap<>();
@@ -83,6 +95,7 @@ public class ConexionAgregador {
 
         } catch (Exception e) {
             System.err.println("Error en obtenerUbicacionesPorCategoria: " + e.getMessage());
+            e.printStackTrace();
             return new HashMap<>();
         } finally {
             if (em != null && em.isOpen()) em.close();
@@ -92,15 +105,18 @@ public class ConexionAgregador {
     public Map<String, Integer> obtenerHorasPicoPorCategoria() {
         EntityManager em = BDUtilsAgregador.getEntityManager();
         try {
-            String query = "SELECT h.categoria, FUNCTION('HOUR', h.fechaDeAcontecimiento), COUNT(h) " +
+            String sql = "SELECT h.categoria, HOUR(h.fechaDeAcontecimiento), COUNT(*) " +
                     "FROM Hecho h " +
                     "WHERE h.categoria IS NOT NULL AND h.fechaDeAcontecimiento IS NOT NULL " +
-                    "GROUP BY h.categoria, FUNCTION('HOUR', h.fechaDeAcontecimiento) " +
-                    "ORDER BY h.categoria, COUNT(h) DESC";
+                    "GROUP BY h.categoria, HOUR(h.fechaDeAcontecimiento) " +
+                    "ORDER BY h.categoria, COUNT(*) DESC";
 
-            List<Object[]> resultados = em.createQuery(query, Object[].class).getResultList();
+            List<Object[]> resultados = em.createNativeQuery(sql).getResultList();
 
-            return this.obtenerMaximoPor(resultados, fila -> (String) fila[0], fila -> ((Number) fila[1]).intValue());
+            return this.obtenerMaximoPor(resultados,
+                    fila -> (String) fila[0],
+                    fila -> ((Number) fila[1]).intValue()
+            );
 
         } catch (Exception e) {
             System.err.println("Error en obtenerHorasPicoPorCategoria: " + e.getMessage());
@@ -113,11 +129,14 @@ public class ConexionAgregador {
     public Map<UUID, Map<String, Object>> obtenerDatosColeccionesConUbicacion() {
         EntityManager em = BDUtilsAgregador.getEntityManager();
         try {
-            String query = "SELECT c.handle, c.titulo, u.descripcion " +
-                    "FROM Coleccion c JOIN c.hechos h JOIN h.ubicacion u " +
+            String sql = "SELECT c.handle, c.titulo, u.descripcion " +
+                    "FROM Coleccion c " +
+                    "JOIN ColeccionXHecho cxh on c.handle = cxh.handle " +
+                    "JOIN Hecho h ON cxh.hecho_id = h.hecho_id " +
+                    "JOIN Ubicacion u ON h.id_ubicacion = u.id_ubicacion " +
                     "WHERE u.descripcion IS NOT NULL AND u.descripcion <> ''";
 
-            List<Object[]> resultados = em.createQuery(query, Object[].class).getResultList();
+            List<Object[]> resultados = em.createNativeQuery(sql).getResultList();
 
             Map<UUID, Map<String, Object>> datosColecciones = new HashMap<>();
 

@@ -184,52 +184,24 @@ public class SolicitudService {
     }
     public int crearSolicitudModificacion(
             String hechoId, String usuarioId, String justificacion,
-            Map<String, String> cambiosPropuestos,
-            String username, String token, String rolUsuario)
-    {
+            Map<String, Object> cambiosPropuestos,
+            String username, String token, String rolUsuario) {
         try {
-            // 1. Crear el DTO anidado 'HechoModificadoDTO' (que es un mapa plano de cambios)
-            Map<String, String> hechoModificadoDTO = new HashMap<>();
-            Map<String, String> ubicacionDTO = new HashMap<>();
-
-            cambiosPropuestos.forEach((campo, valor) -> {
-                // Manejo de Ubicación (campos anidados)
-                if (campo.startsWith("ubicacion.")) {
-
-                    String subCampo = campo.substring("ubicacion.".length());
-                    ubicacionDTO.put(subCampo, valor);
-                }
-                // Manejo de Multimedia (IGNORAR COMENTARIO MULTIMEDIA AQUÍ - Opcional B)
-                else if (campo.equals("multimediaComentario")) {
-                    // Ignorar, ya que HechoModificado no tiene este campo.
-                    // Si la entidad SolicitudDeModificacion tiene un campo para esto,
-                    // se añade al mapa 'solicitudDTO' en el paso 3.
-                }
-                // Manejo de campos simples (titulo, descripcion, categoria, fechaDeAcontecimiento)
-                else {
-                    hechoModificadoDTO.put(campo, valor);
-                }
-            });
-
-            // 3. Añadir la ubicación si se propone algún cambio (lat o lon)
-            if (!ubicacionDTO.isEmpty()) {
-               // hechoModificadoDTO.put("ubicacion", ubicacionDTO);
-            }
-
-            // 4. Crear el DTO principal 'SolicitudDeModificacionDTO'
             Map<String, Object> solicitudDTO = new HashMap<>();
             solicitudDTO.put("hechoId", UUID.fromString(hechoId));
-            solicitudDTO.put("usuarioId", UUID.fromString(usuarioId));
-            solicitudDTO.put("justificacion", justificacion);
-            solicitudDTO.put("hechoModificado", hechoModificadoDTO);
 
+            if (usuarioId != null && !usuarioId.isEmpty()) {
+                solicitudDTO.put("usuarioId", UUID.fromString(usuarioId));
+            }
+
+            solicitudDTO.put("justificacion", justificacion);
+
+            solicitudDTO.put("hechoModificado", cambiosPropuestos);
 
             String jsonBody = mapper.writeValueAsString(solicitudDTO);
 
-            // 3. Construir y enviar la solicitud POST al endpoint del Componente Publico
-            // Endpoint: POST /api/solicitudes/modificacion
-            HttpRequest request = buildRequestPOST(
-                    "api/solicitudes/modificacion",
+            HttpRequest request = buildRequestPublicaPOST(
+                    "solicitudModificacion",
                     jsonBody,
                     username,
                     token,
@@ -239,18 +211,17 @@ public class SolicitudService {
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 201) {
-                System.err.println("Error Admin creando solicitud mod: HTTP " + response.statusCode() + " Body: " + response.body());
+                System.err.println("Error creando solicitud: " + response.body());
             }
 
             return response.statusCode();
 
         } catch (Exception e) {
-            System.err.println("Error fatal al crear solicitud de modificación: " + e.getMessage());
-            throw new RuntimeException("Error al crear solicitud de modificación.", e);
+            System.err.println("Error fatal al crear solicitud: " + e.getMessage());
+            throw new RuntimeException("Error al crear solicitud.", e);
         }
     }
 
-    // Método auxiliar para construir solicitudes POST (similar a buildRequestPATCH)
     private HttpRequest buildRequestPOST(String endpoint, String json, String username, String token, String rolUsuario) throws Exception {
         String finalUrl = urlAdmin;
         if (!finalUrl.endsWith("/")) {
@@ -263,6 +234,27 @@ public class SolicitudService {
                 .POST(HttpRequest.BodyPublishers.ofString(json));
 
         // Asumimos que los headers de seguridad son CamelCase (ajustado en debug)
+        if (username != null && token != null) {
+            builder.header("username", username);
+            builder.header("accessToken", token);
+            builder.header("rolUsuario", rolUsuario);
+        }
+        return builder.build();
+    }
+
+    private HttpRequest buildRequestPublicaPOST(String endpoint, String json, String username, String token, String rolUsuario) throws Exception {
+        String finalUrl = urlPublica;
+        if (!finalUrl.endsWith("/")) {
+            finalUrl += "/";
+        }
+
+        System.out.println(new URI(finalUrl + endpoint));
+
+        HttpRequest.Builder builder = HttpRequest.newBuilder()
+                .uri(new URI(finalUrl + endpoint))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json));
+
         if (username != null && token != null) {
             builder.header("username", username);
             builder.header("accessToken", token);

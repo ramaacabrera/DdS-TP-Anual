@@ -11,15 +11,12 @@ import java.util.stream.Collectors;
 public class ServicioNormalizacion {
 
     private final MockNormalizador normalizador;
-    private final ServicioGeoref servicioGeoref;
 
     public ServicioNormalizacion(MockNormalizador normalizador) {
         this.normalizador = normalizador;
-        this.servicioGeoref = new ServicioGeoref(null,null);
     }
 
     public Hecho normalizar(HechoDTO hechoDTO) {
-        enriquecerUbicacion(hechoDTO);
         Hecho hechoSinNormalizar = convertirAEntidad(hechoDTO);
 
         return normalizador.normalizar(hechoSinNormalizar);
@@ -102,38 +99,5 @@ public class ServicioNormalizacion {
         }
 
         return entidad;
-    }
-
-    private void enriquecerUbicacion(HechoDTO hecho) {
-        UbicacionDTO ubicacion = hecho.getUbicacion();
-
-        if (ubicacion == null) return;
-
-        boolean tieneCoordenadas = ubicacion.getLatitud() != 0 && ubicacion.getLongitud() != 0;
-        boolean faltaDescripcion = ubicacion.getDescripcion() == null || ubicacion.getDescripcion().trim().isEmpty();
-
-        if (tieneCoordenadas && faltaDescripcion) {
-            System.out.println("📍 Buscando descripción para coord: " + ubicacion.getLatitud() + ", " + ubicacion.getLongitud());
-
-            String descripcionEncontrada = servicioGeoref.obtenerDescripcionPorCoordenadas(
-                    ubicacion.getLatitud(),
-                    ubicacion.getLongitud()
-            );
-
-            if (descripcionEncontrada != null) {
-                ubicacion.setDescripcion(descripcionEncontrada);
-                System.out.println("✅ Ubicación actualizada (API): " + descripcionEncontrada);
-            } else {
-                System.out.println("⚠ API falló, calculando ubicación aproximada offline...");
-
-                String descripcionOffline = GeolocalizadorOffline.obtenerUbicacionAproximada(
-                        ubicacion.getLatitud(),
-                        ubicacion.getLongitud()
-                );
-
-                ubicacion.setDescripcion(descripcionOffline);
-                System.out.println("✅ Ubicación actualizada (Offline): " + descripcionOffline);
-            }
-        }
     }
 }

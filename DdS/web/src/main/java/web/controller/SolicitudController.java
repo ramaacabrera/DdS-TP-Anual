@@ -24,9 +24,11 @@ import java.util.*;
 public class SolicitudController {
 
     private SolicitudService solicitudService;
+    private String urlPublica;
 
-    public SolicitudController(SolicitudService solicitudService) {
+    public SolicitudController(SolicitudService solicitudService, String urlPublica) {
         this.solicitudService = solicitudService;
+        this.urlPublica = urlPublica;
     }
 
     public Handler listarSolicitudesEliminacion = ctx -> {
@@ -102,7 +104,7 @@ public class SolicitudController {
                         // Verificar si el hecho existe primero
                         HttpClient client = HttpClient.newHttpClient();
                         HttpRequest request = HttpRequest.newBuilder()
-                                .uri(new URI("http://localhost:8087/api/hechos/" + hechoIdStr))
+                                .uri(new URI(urlPublica + "/hechos/" + hechoIdStr))
                                 .GET()
                                 .build();
 
@@ -199,7 +201,7 @@ public class SolicitudController {
                         System.out.println("Buscando hecho para detalle: " + hechoIdStr);
 
                         HttpClient client = HttpClient.newHttpClient();
-                        String urlCompleta = "http://localhost:8087/api/hechos/" + hechoIdStr;
+                        String urlCompleta = urlPublica + "/hechos/" + hechoIdStr;
                         System.out.println("URL del hecho: " + urlCompleta);
 
                         HttpRequest request = HttpRequest.newBuilder()
@@ -268,7 +270,7 @@ public class SolicitudController {
                     try {
                         String hechoIdStr = sol.getHechoAsociado().toString();
                         HttpClient client = HttpClient.newHttpClient();
-                        String urlCompleta = "http://localhost:8087/api/hechos/" + hechoIdStr;
+                        String urlCompleta = urlPublica + "/hechos/" + hechoIdStr;
 
                         HttpRequest request = HttpRequest.newBuilder()
                                 .uri(new URI(urlCompleta))
@@ -312,6 +314,7 @@ public class SolicitudController {
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);
             modelo.put("pageTitle", "Solicitar Eliminación");
             modelo.put("hechoId", hechoId);
+            modelo.put("urlPublica", urlPublica);
 
             ctx.render("crear-solicitud-eliminacion.ftl", modelo);
 
@@ -451,7 +454,7 @@ public class SolicitudController {
                         System.out.println("entra a try antes de request");
                         // Obtener el título del hecho del servicio de hechos
                         HttpRequest request = HttpRequest.newBuilder()
-                                .uri(new URI("http://localhost:8087/api/hechos/" + hechoIdStr))
+                                .uri(new URI(urlPublica + "/hechos/" + hechoIdStr))
                                 .GET()
                                 .build();
 
@@ -538,12 +541,12 @@ public class SolicitudController {
                 return;
             }
 
-
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);
             modelo.put("pageTitle", "Solicitar Modificación");
             modelo.put("hechoId", hechoId);
             modelo.put("hecho", hechoData); // Contiene el título, descripción, etc. originales
             modelo.put("usuarioId", usuarioId);
+            modelo.put("urlPublica", urlPublica);
 
 
             ctx.render("crear-solicitud-modificacion.ftl", modelo);
@@ -554,18 +557,19 @@ public class SolicitudController {
             ctx.status(500).result("Error al cargar formulario de modificación: " + e.getMessage());
         }
     };
+
     public Handler crearSolicitudModificacion = ctx -> {
         try {
-            // 1. Obtener los datos del cuerpo JSON (enviados por solicitud-modificacion.js)
-            // Se asume que el cuerpo JSON es plano, ej: {"hechoId": "uuid", "justificacion": "...", "titulo": "nuevo valor"}
+            System.out.println(ctx.body());
             Map<String, Object> body = ctx.bodyAsClass(Map.class);
 
-            // 2. Extracción de datos básicos y validación
             String hechoId = (String) body.get("hechoId");
             String usuarioId = (String) body.get("usuarioId");
             String justificacion = (String) body.get("justificacion");
 
-            if (hechoId == null || hechoId.isBlank() || usuarioId == null || usuarioId.isBlank()) {
+            Map<String, Object> hechoModificado = (Map<String, Object>) body.get("hechoModificado");
+
+            if (hechoId == null || hechoId.isBlank()){ //|| usuarioId == null || usuarioId.isBlank()) {
                 ctx.status(400).json(Map.of("error", "Los IDs de hecho y usuario son obligatorios."));
                 return;
             }
@@ -575,32 +579,10 @@ public class SolicitudController {
                 return;
             }
 
-            // 3. Extracción de los cambios propuestos
-            // Creamos un mapa que solo contiene los campos modificados con valores no vacíos.
-            Map<String, String> cambiosPropuestos = new HashMap<>();
-
-
-            List<String> camposRevisar = List.of("titulo", "descripcion", "categoria","fechaDeAcontecimiento", "ubicacion.latitud", "ubicacion.longitud" );
-
-            int camposModificadosCount = 0;
-
-            for (String campo : camposRevisar) {
-                // Buscamos la clave en el body y verificamos si es un String no vacío.
-                Object valorObj = body.get(campo);
-                if (valorObj instanceof String valor) {
-                    if (!valor.isBlank()) {
-                        cambiosPropuestos.put(campo, valor.trim());
-                        camposModificadosCount++;
-                    }
-                }
-            }
-
-            if (camposModificadosCount == 0) {
+            if (hechoModificado == null || hechoModificado.isEmpty()) {
                 ctx.status(400).json(Map.of("error", "Debe proponer una modificación en al menos un campo."));
                 return;
             }
-
-            // 4. Preparar credenciales de sesión
             String username = ctx.sessionAttribute("username");
             String accessToken = ctx.sessionAttribute("accessToken");
             String rolUsuario = ctx.sessionAttribute("rolUsuario");
@@ -610,17 +592,20 @@ public class SolicitudController {
                 return;
             }
 
-            // 5. Llamar al Service para enviar el POST al Componente Administrativo
             int status = solicitudService.crearSolicitudModificacion(
-                    hechoId, usuarioId, justificacion, cambiosPropuestos, username, accessToken, rolUsuario
+                    hechoId,
+                    usuarioId,
+                    justificacion,
+                    hechoModificado,
+                    username,
+                    accessToken,
+                    rolUsuario
             );
 
-            // 6. Manejar la respuesta del Componente Administrativo
             if (status == 201) {
                 ctx.status(201).json(Map.of("mensaje", "Solicitud de modificación enviada exitosamente."));
             } else {
-                // Si el CA devuelve un error (ej. 400 por ID de hecho inválido o 401/403)
-                ctx.status(status).json(Map.of("error", "Error al procesar la solicitud en el servidor administrativo. HTTP: " + status));
+                ctx.status(status).json(Map.of("error", "Error al procesar la solicitud en el servidor publico. HTTP: " + status));
             }
 
         } catch (Exception e) {
