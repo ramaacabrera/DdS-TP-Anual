@@ -1,6 +1,7 @@
 package gestorPublico;
 
 import gestorPublico.service.*;
+import gestorPublico.service.Normalizador.DiccionarioCategorias;
 import io.javalin.Javalin;
 import gestorPublico.controller.*;
 import utils.IniciadorApp;
@@ -23,11 +24,14 @@ public class Application {
         FuenteRepositorio fuenteRepositorio = new FuenteRepositorio();
 
         // Service
-        HechoService hechoService = new HechoService(hechoRepositorio, urlDinamica);
+        DiccionarioCategorias diccionarioCategorias  = new DiccionarioCategorias();
+        HechoService hechoService = new HechoService(hechoRepositorio, diccionarioCategorias, urlDinamica);
         ColeccionService coleccionService = new ColeccionService(coleccionRepositorio);
         SolicitudService solicitudService = new SolicitudService(urlDinamica);
         UsuarioService usuarioService = new UsuarioService(usuarioRepositorio, servidorSSO);
         FuenteService fuenteService = new FuenteService(fuenteRepositorio);
+
+
 
         // Controller
         HechoController hechoController = new HechoController(hechoService, fuenteService);
@@ -57,8 +61,7 @@ public class Application {
         // Rutas de Usuario / Auth
         app.post("/api/usuario/sincronizar", usuarioController.sincronizar);
 
-
-        app.post("/api/sign-in", usuarioController.registrar);
-        app.get("/api/usuario/{username}", usuarioController.obtenerUsuario);
+        //app.post("/api/sign-in", usuarioController.registrar);
+        //app.get("/api/usuario/{username}", usuarioController.obtenerUsuario);
     }
 }

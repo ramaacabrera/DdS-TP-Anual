@@ -194,6 +194,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 const categoriaVal = selectCategoria.value;
+                console.log(categoriaVal);
                 const otraCatVal = inputOtraCategoria ? inputOtraCategoria.value.trim() : '';
 
                 let contribuyenteData = null;

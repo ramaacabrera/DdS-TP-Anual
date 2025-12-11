@@ -71,13 +71,9 @@
             <label for="categoria" class="form-label">Categoría *</label>
             <select id="categoria" name="categoria" class="form-select" required>
                 <option value="">Seleccione una categoría</option>
-                <option value="Incendio">Incendio</option>
-                <option value="Desaparición">Desaparición</option>
-                <option value="Contaminación">Contaminación</option>
-                <option value="Accidente vial">Accidente vial</option>
-                <option value="Crimen de odio">Crimen de odio</option>
-                <option value="Desastre natural">Desastre natural</option>
-                <option value="Otro">Otro</option>
+                <#list categorias as cat>
+                    <option value='${cat}'>${cat}</option>
+                </#list>
             </select>
         </div>
 

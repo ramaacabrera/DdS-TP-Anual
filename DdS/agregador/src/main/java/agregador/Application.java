@@ -59,11 +59,5 @@ public class Application {
             });
             ws.onClose(new OnCloseHandler(conexionCargadorService, fuenteRepositorio));
         });
-
-        // Categorias
-
-        app.get("/api/categorias", ctx->{
-            ctx.json(diccionarioCategorias.obtenerCategoriasCanonicas());
-        });
     }
 }

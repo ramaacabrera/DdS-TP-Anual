@@ -8,6 +8,7 @@ import gestorPublico.dto.FiltroHechosDTO;
 import gestorPublico.repository.HechoRepositorio;
 import gestorPublico.dto.Hechos.HechoDTO;
 import gestorPublico.dto.PageDTO;
+import gestorPublico.service.Normalizador.DiccionarioCategorias;
 import gestorPublico.service.Normalizador.NormalizadorCategorias;
 
 import java.net.URI;
@@ -20,10 +21,12 @@ import java.util.stream.Collectors;
 public class HechoService {
     private final HechoRepositorio hechoRepositorio;
     private final String urlDinamica;
+    private final DiccionarioCategorias diccionarioCategorias;
 
-    public HechoService(HechoRepositorio hechoRepositorio, String urlDinamica) {
+    public HechoService(HechoRepositorio hechoRepositorio, DiccionarioCategorias diccionarioCategorias, String urlDinamica) {
         this.hechoRepositorio = hechoRepositorio;
         this.urlDinamica = urlDinamica;
+        this.diccionarioCategorias = diccionarioCategorias;
     }
 
     public PageDTO<HechoDTO> buscarHechos(FiltroHechosDTO filtro) {
@@ -75,7 +78,7 @@ public class HechoService {
     }
 
     public List<String> buscarCategorias() {
-        return this.hechoRepositorio.buscarCategorias();
+        return this.diccionarioCategorias.obtenerCategoriasCanonicas();
     }
 
     private List<Criterio> armarCriterios(FiltroHechosDTO f) {

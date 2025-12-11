@@ -121,12 +121,16 @@ public class HechoController {
     };
 
     public Handler obtenerPageCrearHecho = ctx -> {
+
+        List<String> categorias = hechoService.obtenerCategorias();
+
         // Solo renderiza la plantilla con el formulario vacío
         Map<String, Object> modelo = ViewUtil.baseModel(ctx);
         modelo.put("pageTitle", "Reportar un Hecho");
         modelo.put("urlPublica", urlPublica);
         modelo.put("cloudinaryUrl", dataCloud.get("cloudinaryUrl"));
         modelo.put("cloudinaryPreset", dataCloud.get("cloudinaryPreset"));
+        modelo.put("categorias", categorias);
         ctx.render("crear-hecho.ftl", modelo);
     };
 

@@ -1066,7 +1066,7 @@ h3 { font-size: var(--font-size-xl); }
 }
 
 /* --- RESPONSIVE --- */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .header-center {
         display: none;
     }
