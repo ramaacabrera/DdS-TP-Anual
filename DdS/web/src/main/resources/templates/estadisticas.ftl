@@ -119,6 +119,20 @@
             display: none;
         }
     </style>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: 0 !important;
+        }
+        main.container {
+            flex: 1;
+            width: 100%;
+        }
+    </style>
 </#assign>
+
 
 <#include "layout.ftl">
