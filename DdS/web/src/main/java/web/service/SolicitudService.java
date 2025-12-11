@@ -271,11 +271,22 @@ public class SolicitudService {
         return builder.build();
     }
 
-    public long contarPendientesEliminacion() {
+    public int contarPendientesEliminacion(String username, String rolUsuario, String token) throws Exception {
+        HttpRequest request = buildRequestGET("api/solicitudes/cantidad", username, token, rolUsuario);
+        HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if(response.statusCode() == 200) {
+            return Integer.parseInt(response.body());
+        }
         return 0;
     }
 
-    public long contarPendientesModificacion() {
+    public int contarPendientesModificacion(String username, String rolUsuario, String token) throws Exception {
+        HttpRequest request = buildRequestGET("api/solicitudes/modificacion/cantidad", username, token, rolUsuario);
+        HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+        if(response.statusCode() == 200) {
+            return Integer.parseInt(response.body());
+        }
         return 0;
     }
 }

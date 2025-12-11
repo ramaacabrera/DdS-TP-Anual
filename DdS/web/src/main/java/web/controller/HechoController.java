@@ -44,6 +44,7 @@ public class HechoController {
         String fechaAcontecimientoDesde = ctx.queryParam("fecha_acontecimiento_desde");
         String fechaAcontecimientoHasta = ctx.queryParam("fecha_acontecimiento_hasta");
         String descripcion = ctx.queryParam("descripcion");
+        String callback =  ctx.queryParam("callback");
 
         // Paginación (Default: Página 1, Tamaño 10)
         int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
@@ -93,6 +94,7 @@ public class HechoController {
         model.put("fromIndex", fromIndex);
         model.put("toIndex", toIndex);
         model.put("urlAdmin", urlAdmin);
+        model.put("callback", callback);
 
         // 7) Renderizar
         ctx.render("hechos.ftl", model);

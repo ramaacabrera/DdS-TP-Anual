@@ -8,13 +8,13 @@
                 <p>Contribuye a la comunidad registrando un nuevo suceso en el mapa</p>
             </a>
 
-            <a href="/hechos" class="home-nav-card">
+            <a href="/hechos?callback=/home" class="home-nav-card">
                 <div class="home-nav-card-icon">📋</div>
                 <h3>Ver Hechos</h3>
                 <p>Explora todos los hechos registrados en formato de lista</p>
             </a>
 
-            <a href="/colecciones" class="home-nav-card">
+            <a href="/colecciones?callback=/home" class="home-nav-card">
                 <div class="home-nav-card-icon">📚</div>
                 <h3>Ver Colecciones</h3>
                 <p>Accede a las colecciones creadas por nuestros administradores</p>

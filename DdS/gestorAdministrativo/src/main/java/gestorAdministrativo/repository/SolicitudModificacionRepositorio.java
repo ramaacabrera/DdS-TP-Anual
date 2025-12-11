@@ -1,5 +1,6 @@
 package gestorAdministrativo.repository;
 
+import gestorAdministrativo.domain.Solicitudes.EstadoSolicitudModificacion;
 import gestorAdministrativo.utils.BDUtils;
 import gestorAdministrativo.domain.Solicitudes.SolicitudDeModificacion;
 
@@ -78,6 +79,21 @@ public class SolicitudModificacionRepositorio {
             return Optional.empty();
         } finally {
             em.close();
+        }
+    }
+
+    public Integer obtenerCantidadPendientes() {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            String jpql = "SELECT COUNT(s) FROM SolicitudDeModificacion s WHERE s.estado = :estado";
+
+            TypedQuery<Long> query = em.createQuery(jpql, Long.class);
+            query.setParameter("estado", EstadoSolicitudModificacion.PENDIENTE);
+            return query.getSingleResult().intValue();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return 0; // Es mejor devolver 0 que null si es un conteo
         }
     }
 }

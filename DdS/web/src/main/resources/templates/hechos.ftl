@@ -24,6 +24,9 @@
 
 <#assign content>
     <div class="container">
+        <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
+            <a href='${callback!"/home"}' class="header-link back-link">&larr; Volver</a>
+        </div>
         <!-- Formulario único que incluye tanto búsqueda como filtros -->
         <form method="get" action="${baseHref}" id="mainSearchForm">
             <!-- Barra de búsqueda principal -->

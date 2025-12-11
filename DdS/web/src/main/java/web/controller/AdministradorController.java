@@ -30,8 +30,8 @@ public class AdministradorController {
 
         Map<String, Object> modelo = ViewUtil.baseModel(ctx);
 
-        long pendientesEliminacion = solicitudService.contarPendientesEliminacion();
-        long pendientesModificacion = solicitudService.contarPendientesModificacion();
+        int pendientesEliminacion = solicitudService.contarPendientesEliminacion(ctx.sessionAttribute("username"),rolUsuario, accessToken);
+        int pendientesModificacion = solicitudService.contarPendientesModificacion(ctx.sessionAttribute("username"),rolUsuario, accessToken);
 
         modelo.put("pendientesEliminacion", pendientesEliminacion);
         modelo.put("pendientesModificacion", pendientesModificacion);

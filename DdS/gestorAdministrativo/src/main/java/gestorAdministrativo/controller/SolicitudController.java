@@ -7,6 +7,7 @@ import gestorAdministrativo.dto.Solicitudes.SolicitudDeModificacionDTO;
 import gestorAdministrativo.service.SolicitudEliminacionService;
 import gestorAdministrativo.service.SolicitudModificacionService;
 import io.javalin.http.Handler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
@@ -111,6 +112,23 @@ public class SolicitudController {
             ctx.status(400).json("ID inválido");
         } catch (Exception e) {
             ctx.status(500).json("Error obteniendo solicitud: " + e.getMessage());
+        }
+    };
+
+    public Handler obtenerCantidadPendientesEliminacion = ctx -> {
+        System.out.println("obteniendo cantidad pendientes eliminacion");
+        ctx.status(200).json(eliminacionService.obtenerCantidadPendientes());
+    };
+
+    public Handler obtenerCantidadPendientesModificacion = ctx -> {
+        try{
+            System.out.println("obteniendo cantidad pendientes modificacion");
+            ctx.status(200).json(modificacionService.obtenerCantidadPendientes());
+        }catch (IllegalArgumentException e){
+            ctx.status(400);
+        }
+        catch(Exception e){
+            ctx.status(500).json("Error obteniendo cantidad pendientes modificacion");
         }
     };
 

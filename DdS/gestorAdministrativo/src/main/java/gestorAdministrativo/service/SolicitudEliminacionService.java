@@ -151,4 +151,11 @@ public class SolicitudEliminacionService {
 
         return dto;
     }
+
+    public Integer obtenerCantidadPendientes() {
+
+        Integer solis = solicitudRepositorio.obtenerCantidadPendientes();
+        System.out.println("Total solicitudes eliminacion: " + solis);
+        return solis;
+    }
 }

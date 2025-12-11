@@ -8,7 +8,7 @@
     <div class="container">
 
         <div class="header">
-            <a href="/home" class="header-link back-link">&larr; Volver al Inicio</a>
+            <a href="/admin/panel" class="header-link back-link">&larr; Volver al Panel</a>
         </div>
 
         <h1 class="main-title">✍️ Solicitudes de Modificación</h1>

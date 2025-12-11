@@ -30,7 +30,7 @@
                             <i data-feather="plus-circle"></i>
                             <span>Crear Nueva Colección</span>
                         </a>
-                        <a href="/colecciones" class="action-item">
+                        <a href="/colecciones?callback=/admin/panel" class="action-item">
                             <i data-feather="list"></i>
                             <span>Ver/Editar Colecciones</span>
                         </a>
@@ -48,7 +48,7 @@
                 <div class="card-body">
                     <p>Supervisa los reportes, etiqueta contenido y gestiona la calidad.</p>
                     <div class="action-list">
-                        <a href="/hechos" class="action-item">
+                        <a href="/hechos?callback=/admin/panel" class="action-item">
                             <i data-feather="tag"></i>
                             <span>Etiquetar y Gestionar Hechos</span>
                         </a>
@@ -70,7 +70,7 @@
                         <a href="/admin/solicitudes/modificacion" class="action-item warning-hover">
                             <div class="action-text">
                                 <span class="title">Modificaciones</span>
-                                <#if pendientesModificacion?? && pendientesModificacion gt 0>
+                                <#if pendientesModificacion??>
                                     <span class="badge badge-warning">${pendientesModificacion} pendientes</span>
                                 </#if>
                             </div>
@@ -80,7 +80,7 @@
                         <a href="/admin/solicitudes/eliminacion" class="action-item danger-hover">
                             <div class="action-text">
                                 <span class="title">Eliminaciones</span>
-                                <#if pendientesEliminacion?? && pendientesEliminacion gt 0>
+                                <#if pendientesEliminacion??>
                                     <span class="badge badge-danger">${pendientesEliminacion} pendientes</span>
                                 </#if>
                             </div>

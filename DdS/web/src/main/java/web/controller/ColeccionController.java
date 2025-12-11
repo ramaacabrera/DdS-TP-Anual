@@ -33,6 +33,7 @@ public class ColeccionController {
         try {
             int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
             int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
+            String callback = ctx.queryParam("callback");
 
             PageDTO<Coleccion> coleccionesPage = coleccionService.listarColecciones(page, size);
 
@@ -49,6 +50,7 @@ public class ColeccionController {
             modelo.put("fromIndex", fromIndex);
             modelo.put("toIndex", toIndex);
             modelo.put("colecciones", coleccionesPage.content);
+            modelo.put("callback", callback);
 
             ctx.render("colecciones.ftl", modelo);
 

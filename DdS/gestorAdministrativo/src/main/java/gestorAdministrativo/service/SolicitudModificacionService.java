@@ -218,4 +218,10 @@ public class SolicitudModificacionService {
         dto.setFechaDeAcontecimiento(hm.getFechaDeAcontecimiento());
         return dto;
     }
+
+    public Integer obtenerCantidadPendientes() {
+        Integer solis = solicitudRepositorio.obtenerCantidadPendientes();
+        System.out.println("Total solicitudes modificacion: " + solis);
+        return solis;
+    }
 }
