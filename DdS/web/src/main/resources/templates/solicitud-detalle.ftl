@@ -1,9 +1,7 @@
 <script src="/js/solicitud-detalle.js" defer></script>
 
 <#assign pageTitle = "Detalle de Solicitud">
-<#assign additionalCSS>
-    <link rel="stylesheet" href="/css/styleSolicitudes.css">
-</#assign>
+<#assign additionalCss = ["/css/styleSolicitudes.css"]>
 
 <#assign content>
     <div class="container">
@@ -27,7 +25,7 @@
         </div>
 
         <!-- Información del Hecho -->
-        <div class="card" style="margin-bottom: 20px;">
+        <div class="info-card" style="margin-bottom: 20px;">
             <h3 class="card-subtitle">INFORMACIÓN DEL HECHO</h3>
             <div class="grid-metadata">
                 <div class="info-item">
@@ -48,7 +46,7 @@
 
         <!-- Información de la Solicitud -->
         <div class="grid-metadata">
-            <div class="card">
+            <div class="info-card small">
                 <p class="card-subtitle">SOLICITANTE</p>
                 <p>
                     <#if solicitud.usuario??>
@@ -59,7 +57,7 @@
                 </p>
             </div>
 
-            <div class="card">
+            <div class="info-card small">
                 <p class="card-subtitle">ESTADO ACTUAL</p>
                 <p>
                     <span class="estado-badge estado-${(solicitud.estado!solicitud.estado!'PENDIENTE')?lower_case}">
@@ -70,7 +68,7 @@
         </div>
 
         <!-- Justificación -->
-        <div class="card" style="grid-column: 1 / -1;">
+        <div class="info-card full-width">
             <p class="card-subtitle">JUSTIFICACIÓN</p>
             <div class="justificacion">
                 <p>${solicitud.justificacion!"Sin justificación proporcionada"}</p>
@@ -121,4 +119,3 @@
 </#assign>
 
 <#include "layout.ftl">
-
