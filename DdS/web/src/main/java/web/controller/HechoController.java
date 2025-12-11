@@ -41,8 +41,6 @@ public class HechoController {
         String textoBusqueda = ctx.queryParam("textoBusqueda");
 
         // Fechas
-        String fechaCargaDesde = ctx.queryParam("fecha_carga_desde");
-        String fechaCargaHasta = ctx.queryParam("fecha_carga_hasta");
         String fechaAcontecimientoDesde = ctx.queryParam("fecha_acontecimiento_desde");
         String fechaAcontecimientoHasta = ctx.queryParam("fecha_acontecimiento_hasta");
         String descripcion = ctx.queryParam("descripcion");
@@ -55,8 +53,6 @@ public class HechoController {
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("categoria", categoria);
         queryParams.put("textoBusqueda", textoBusqueda);
-        queryParams.put("fecha_carga_desde", fechaCargaDesde);
-        queryParams.put("fecha_carga_hasta", fechaCargaHasta);
         queryParams.put("fecha_acontecimiento_desde", fechaAcontecimientoDesde);
         queryParams.put("fecha_acontecimiento_hasta", fechaAcontecimientoHasta);
         queryParams.put("descripcion", descripcion);
@@ -83,8 +79,6 @@ public class HechoController {
         model.put("filterValues", Map.of(
                 "textoBusqueda", textoBusqueda != null ? textoBusqueda : "",
                 "categoria", categoria != null ? categoria : "",
-                "fecha_carga_desde", formatDateForInput(fechaCargaDesde),
-                "fecha_carga_hasta", formatDateForInput(fechaCargaHasta),
                 "fecha_acontecimiento_desde", formatDateForInput(fechaAcontecimientoDesde),
                 "fecha_acontecimiento_hasta", formatDateForInput(fechaAcontecimientoHasta),
                 "descripcion", descripcion != null ? descripcion : ""
@@ -154,10 +148,6 @@ public class HechoController {
             cat.setOptions(categorias);
         }
         list.add(cat);
-
-        // Fechas de carga
-        list.add(new HechoController.FilterDef("fecha_carga_desde", "Fecha carga desde", "date"));
-        list.add(new HechoController.FilterDef("fecha_carga_hasta", "Fecha carga hasta", "date"));
 
         // Fechas de acontecimiento
         list.add(new HechoController.FilterDef("fecha_acontecimiento_desde", "Acontecimiento desde", "date"));
