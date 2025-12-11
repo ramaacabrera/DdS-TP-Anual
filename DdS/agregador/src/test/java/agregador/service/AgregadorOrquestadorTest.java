@@ -10,6 +10,8 @@ import agregador.dto.Hechos.UbicacionDTO;
 import agregador.repository.ColeccionRepositorio;
 import agregador.repository.FuenteRepositorio;
 import agregador.repository.HechoRepositorio;
+import agregador.service.normalizacion.ServicioGeoref;
+import agregador.service.normalizacion.ServicioNormalizacion;
 import agregador.utils.BDUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,11 +35,13 @@ class AgregadorOrquestadorTest {
     @Mock HechoRepositorio hechoRepositorio;
     @Mock ColeccionRepositorio coleccionRepositorio;
     @Mock FuenteRepositorio fuenteRepositorio;
-    @Mock ServicioNormalizacion servicioNormalizacion;
+    @Mock
+    ServicioNormalizacion servicioNormalizacion;
     @Mock MotorConsenso motorConsenso;
     @Mock GestorSolicitudes gestorSolicitudes;
     @Mock HechosCargadorService hechosCargadorService;
-    @Mock ServicioGeoref servicioGeorefMock;
+    @Mock
+    ServicioGeoref servicioGeorefMock;
 
     @InjectMocks
     private AgregadorOrquestador orquestador;

@@ -5,6 +5,7 @@ import agregador.dto.Hechos.FuenteDTO;
 import agregador.dto.Hechos.HechoDTO;
 import agregador.dto.Hechos.UbicacionDTO;
 import agregador.service.normalizacion.MockNormalizador;
+import agregador.service.normalizacion.ServicioNormalizacion;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

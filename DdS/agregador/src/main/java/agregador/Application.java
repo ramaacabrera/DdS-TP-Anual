@@ -6,6 +6,7 @@ import agregador.repository.ConexionCargadorRepositorio;
 import agregador.repository.*;
 import agregador.service.normalizacion.DiccionarioCategorias;
 import agregador.service.normalizacion.MockNormalizador;
+import agregador.service.normalizacion.ServicioNormalizacion;
 import io.javalin.Javalin;
 import agregador.utils.IniciadorApp;
 import agregador.utils.LecturaConfig;

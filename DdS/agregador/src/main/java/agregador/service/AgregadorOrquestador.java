@@ -5,14 +5,15 @@ import agregador.domain.HechosYColecciones.Hecho;
 import agregador.domain.fuente.Fuente;
 import agregador.dto.Hechos.FuenteDTO;
 import agregador.dto.Hechos.HechoDTO;
-import agregador.dto.Hechos.UbicacionDTO;
 import agregador.dto.Solicitudes.SolicitudDeEliminacionDTO;
 import agregador.dto.Solicitudes.SolicitudDeModificacionDTO;
 import agregador.repository.ColeccionRepositorio;
 import agregador.repository.FuenteRepositorio;
 import agregador.repository.HechoRepositorio;
+import agregador.service.normalizacion.ServicioNormalizacion;
 import agregador.utils.BDUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,6 @@ public class AgregadorOrquestador {
     private final MotorConsenso motorConsenso;
     private final GestorSolicitudes gestorSolicitudes;
     private final HechosCargadorService hechosCargadorService;
-
-    private final ServicioGeoref servicioGeoref;
 
     public AgregadorOrquestador(
             HechoRepositorio hechoRepositorio,
@@ -46,7 +45,6 @@ public class AgregadorOrquestador {
         this.motorConsenso = motorConsenso;
         this.gestorSolicitudes = gestorSolicitudes;
         this.hechosCargadorService = hechosCargadorService;
-        this.servicioGeoref = new ServicioGeoref(null,null);
     }
 
 
@@ -60,6 +58,7 @@ public class AgregadorOrquestador {
         motorConsenso.ejecutar();
     }
 
+    @Transactional
     public void procesarNuevosHechos(List<HechoDTO> hechosDTO) {
         System.out.println("Procesando lote de " + hechosDTO.size() + " hechos.");
         if (hechosDTO.isEmpty()) return;
@@ -67,7 +66,6 @@ public class AgregadorOrquestador {
         List<Hecho> hechosParaColecciones = new ArrayList<>();
 
         for (HechoDTO dto : hechosDTO) {
-            enriquecerUbicacion(dto);
             try {
                 System.out.println("Procesando DTO: " + new ObjectMapper().writeValueAsString(dto));
                 gestionarFuente(dto);
@@ -117,6 +115,7 @@ public class AgregadorOrquestador {
         }
     }
 
+    @Transactional
     public void actualizarColeccionesConNuevosHechos(List<Hecho> nuevosHechos) {
         int pageSize = 100;
         long totalColecciones = coleccionRepositorio.contarTodas();
@@ -141,29 +140,6 @@ public class AgregadorOrquestador {
             coleccionRepositorio.actualizarTodas(modificadas);
 
             BDUtils.getEntityManager().clear();
-        }
-    }
-
-    private void enriquecerUbicacion(HechoDTO hecho) {
-        UbicacionDTO ubicacion = hecho.getUbicacion();
-
-        if (ubicacion == null) return;
-
-        boolean tieneCoordenadas = ubicacion.getLatitud() != 0 && ubicacion.getLongitud() != 0;
-        boolean faltaDescripcion = ubicacion.getDescripcion() == null || ubicacion.getDescripcion().trim().isEmpty();
-
-        if (tieneCoordenadas && faltaDescripcion) {
-            System.out.println("📍 Buscando descripción para coord: " + ubicacion.getLatitud() + ", " + ubicacion.getLongitud());
-
-            String descripcionEncontrada = servicioGeoref.obtenerDescripcionPorCoordenadas(
-                    ubicacion.getLatitud(),
-                    ubicacion.getLongitud()
-            );
-
-            if (descripcionEncontrada != null) {
-                ubicacion.setDescripcion(descripcionEncontrada);
-                System.out.println("✅ Ubicación actualizada: " + descripcionEncontrada);
-            }
         }
     }
 }
