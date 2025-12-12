@@ -55,8 +55,8 @@ public class AgregadorOrquestador {
 
     public void iniciarBusquedaAgregador() {
         System.out.println(">>> Iniciando ciclo de búsqueda del Agregador...");
-        hechosCargadorService.obtenerHechosNuevos();
         hechosCargadorService.obtenerSolicitudes();
+        hechosCargadorService.obtenerHechosNuevos();
     }
 
     public void ejecutarAlgoritmoDeConsenso() {

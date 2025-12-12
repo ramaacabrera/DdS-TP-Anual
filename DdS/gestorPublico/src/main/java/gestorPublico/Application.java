@@ -48,6 +48,7 @@ public class Application {
         app.post("/api/hechos", hechoController.crearHecho);
         app.get("/api/categoria", hechoController.buscarCategorias);
         app.get("/api/fuentes", hechoController.obtenerTodasLasFuentes);
+        app.patch("/api/hecho/{id}", hechoController.modificarHecho);
 
         // Rutas Colecciones
         app.get("/api/colecciones", coleccionController.obtenerColecciones);

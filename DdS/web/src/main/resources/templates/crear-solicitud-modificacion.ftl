@@ -63,18 +63,19 @@
 
 <#-- Variables JS necesarias -->
     <script>
-        const CURRENT_USER_ID = "${usuarioId!}";
-        console.log("Mostrando ID usuario");
+        const CURRENT_USER_ID = "${username!}";
+        console.log("Mostrando username usuario");
         console.log(CURRENT_USER_ID);
         const HECHO_ID = "${hechoId?html}";
         const URL_PUBLICA = '${urlPublica}';
+        const ACCESS_TOKEN = '${accessToken}';
     </script>
 
 
     <form id="form-solicitud-modificacion" class="form-container" method="POST">
 
         <input type="hidden" id="ID_hechoAsociado" name="hechoId" value="${hechoId?html}">
-        <input type="hidden" id="ID_usuario" name="usuarioId" value="${usuarioId!}">
+        <input type="hidden" id="ID_usuario" name="username" value="${username!}">
 
         <h3 class="form-section-title">Valores a Modificar</h3>
 

@@ -1,5 +1,3 @@
-// solicitud-modificacion.js
-
 var mapaModificacion;
 var marcadorPropuesto = null;
 var coordenadasOriginales = {};
@@ -41,8 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const mensajeExito = document.getElementById('mensaje-exito');
     const mensajeError = document.getElementById('mensaje-error');
     const btnEnviar = document.getElementById('btn-enviar');
-
-    const POST_URL = '/api/solicitar-modificacion';
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -93,18 +89,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const body = {
-            "hechoId": formData.get('hechoId'),
-            "usuarioId": formData.get('usuarioId'),
+            "username": formData.get('username'),
             "justificacion": justificacion.trim(),
-            "hechoModificado": hechoModificado
+            "hechoModificado": hechoModificado,
+            "accessToken": ACCESS_TOKEN
         };
 
         console.log("Enviando JSON:", JSON.stringify(body));
-
+        const hechoId = formData.get('hechoId');
         // --- 3. ENVÍO ---
         try {
-            const response = await fetch(POST_URL, {
-                method: 'POST',
+            const response = await fetch(URL_PUBLICA + "/hecho/"+hechoId, {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
