@@ -1,8 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Delegación: maneja clicks en cualquier grupo de botones
     document.body.addEventListener('click', (e) => {
-        const btn = e.target.closest('.icon-btn, .action-button');
+        // 1. CORRECCIÓN: Buscamos la clase nueva 'btn-action-large'
+        const btn = e.target.closest('.btn-action-large');
+
         if (!btn) return;
+        if (btn.tagName === 'A') return;
 
         const group = btn.closest('.action-buttons-group');
         if (!group) return;
@@ -12,15 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!hechoId || !action) return;
 
+        e.preventDefault();
+
         if (action === 'share') {
             copyHechoLinkToClipboard(hechoId, btn);
-        } else if (action === 'edit') {
-            // Redirige a la página de solicitud de modificación (GET)
-            //////////////////acaaaaaaaaaaaaa
-            window.location.href = `${window.location.origin}/hechos/${encodeURIComponent(hechoId)}/editar`;
-        } else if (action === 'delete') {
-            // Redirige a la página de solicitud de eliminación (GET)
-            // aacaaaaaaaaaaaaaaaaaaaa
+        }
+
+        else if (action === 'delete') {
             window.location.href = `${window.location.origin}/hechos/${encodeURIComponent(hechoId)}/eliminar`;
         }
     });

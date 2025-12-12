@@ -75,7 +75,6 @@ public class HechoRepositorio {
             setearParametros(query, criterios);
 
             return query.getSingleResult();
-
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
