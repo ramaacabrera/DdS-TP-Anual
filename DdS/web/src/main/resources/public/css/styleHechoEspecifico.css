@@ -167,7 +167,7 @@
 
     background-color: #dee2e6;
 
-    color: var(--muted-color);
+    color: var(--text-muted);
 
     font-weight: 600;
 
@@ -200,7 +200,7 @@
 }
 
 .title-content {
-
+    max-width: 600px;
     flex-grow: 1;
 
 }
@@ -409,7 +409,7 @@
 
 }.card-subtitle { /* Usado en la metadata para subtítulos */
 
-     color: var(--muted-color);
+     color: var(--text-muted);
 
      font-size: 0.85rem;
 
@@ -421,7 +421,7 @@
 
 .card p:first-child {
 
-    color: var(--muted-color);
+    color: var(--text-muted);
 
     font-size: 0.85rem;
 
@@ -505,7 +505,7 @@
 
     font-size: 1rem;
 
-    color: var(--muted-color);
+    color: var(--text-muted);
 
     transition: color .15s, border-color .15s;
 
@@ -543,7 +543,7 @@
 
     font-size: 1rem;
 
-    color: var(--muted-color);
+    color: var(--text-muted);
 
     transition: color .15s, border-color .15s;
 
@@ -612,7 +612,7 @@
 
     text-decoration: none;
 
-    color: var(--muted-color);
+    color: var(--text-muted);
 
     font-size: 0.9rem;
 
@@ -630,7 +630,7 @@
 
     text-decoration: none;
 
-    color: var(--muted-color);
+    color: var(--text-muted);
 
     font-size: 0.9rem;
 

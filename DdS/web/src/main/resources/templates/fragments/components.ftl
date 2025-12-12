@@ -81,71 +81,139 @@
 </#macro>
 <#macro actionButtons hecho>
     <div class="action-buttons-group" data-hecho-id="${hecho.hechoId?html}">
-        <button class="icon-btn" data-action="share" aria-label="Compartir hecho" title="Compartir">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <!-- Cuerpo principal del avión -->
+
+        <button class="btn-action-large" data-action="share" aria-label="Compartir hecho" title="Compartir">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M21 4L10.5 14.5M21 4l-7 17-4-9-9-4 17-7z"
                       stroke="currentColor"
-                      stroke-width="1.8"
+                      stroke-width="2"
                       stroke-linecap="round"
                       stroke-linejoin="round"/>
-                <!-- Detalle interior (opcional) -->
-            <path d="M3 19l9-4"
-                  stroke="currentColor"
-                  stroke-width="1.4"
-                  stroke-linecap="round"
-                  opacity="0.7"/>
+                <path d="M3 19l9-4"
+                      stroke="currentColor"
+                      stroke-width="1.4"
+                      stroke-linecap="round"
+                      opacity="0.7"/>
             </svg>
+            <span>Compartir</span>
         </button>
+
         <#assign sieteDiasEnMilis = 604800000>
-        <#if username?? && hecho.contribuyente?? && hecho.contribuyente.username = username && hecho.fechaDeCarga
-                && ((.now?long - hecho.fechaDeCarga?long) < sieteDiasEnMilis)>
+        <#if username?? && hecho.contribuyente?? && hecho.contribuyente.username == username && hecho.fechaDeCarga??
+        && ((.now?long - hecho.fechaDeCarga?long) < sieteDiasEnMilis)>
+
             <a href="/hechos/${hecho.hechoId?html}/modificar"
-               class="icon-btn"
+               class="btn-action-large"
                aria-label="Solicitar modificación de hecho"
                title="Solicitar Modificación"
                style="text-decoration: none;">
 
                 <svg xmlns="http://www.w3.org/2000/svg"
-                     width="24" height="24" viewBox="0 0 24 24"
+                     width="20" height="20" viewBox="0 0 24 24"
                      fill="none"
                      stroke="currentColor"
-                     stroke-width="1.8"
+                     stroke-width="2"
                      stroke-linecap="round"
                      stroke-linejoin="round"
                      aria-hidden="true">
                     <path d="M12 20h9"/>
                     <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
                 </svg>
+                <span>Modificar</span>
             </a>
         </#if>
-        <!-- Eliminar: tacho de basura  -->
-        <button class="icon-btn danger" data-action="delete" aria-label="Solicitar eliminación" title="Solicitar eliminación">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <!-- Cuerpo de la papelera -->
+
+        <button class="btn-action-large danger" data-action="delete" aria-label="Solicitar eliminación" title="Solicitar eliminación">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M5 8h14v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8Z"
                       stroke="currentColor"
-                      stroke-width="1.5"
+                      stroke-width="2"
                       stroke-linejoin="round"/>
-                <!-- Tapa -->
                 <path d="M4 6h16"
                       stroke="currentColor"
                       stroke-width="1.5"
                       stroke-linecap="round"/>
-                <!-- Asa -->
                 <path d="M9 6V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"
                       stroke="currentColor"
                       stroke-width="1.5"
                       stroke-linecap="round"/>
-                <!-- Líneas de contenido -->
                 <path d="M10 11v6M14 11v6"
                       stroke="currentColor"
                       stroke-width="1.5"
                       stroke-linecap="round"/>
             </svg>
+            <span>Eliminar</span>
         </button>
 
     </div>
+    <style>
+        /* Grupo de botones */
+        .action-buttons-group {
+            display: flex;
+            flex-wrap: wrap; /* Permite que bajen si no hay espacio */
+            gap: 12px;       /* Espacio entre botones */
+            margin-top: 15px;
+        }
+
+        /* Nuevo estilo para botón grande con texto */
+        .btn-action-large {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Espacio entre el icono y el texto */
+
+            padding: 10px 16px; /* Más relleno para hacerlo grande */
+            font-size: 0.95rem;
+            font-weight: 500;
+
+            background-color: white;
+            color: var(--text-color, #333);
+            border: 1px solid var(--border-color, #dee2e6);
+            border-radius: 8px; /* Bordes más redondeados */
+
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none; /* Para el <a> */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .btn-action-large svg {
+            /* Aseguramos que el icono no se deforme */
+            flex-shrink: 0;
+        }
+
+        /* Hover general */
+        .btn-action-large:hover {
+            background-color: var(--bg-light, #f8f9fa);
+            border-color: var(--primary-color, #1d7858);
+            color: var(--primary-color, #1d7858);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Estilo específico para Eliminar (Danger) */
+        .btn-action-large.danger {
+            color: #dc3545;
+            border-color: #f5c6cb;
+            background-color: #fff;
+        }
+
+        .btn-action-large.danger:hover {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        /* Responsive: En móviles muy pequeños, quizás quieras ocultar el texto y volver al icono solo */
+        @media (max-width: 480px) {
+            .btn-action-large span {
+                display: none;
+            }
+            .btn-action-large {
+                padding: 10px; /* Reducir padding horizontal */
+            }
+        }
+    </style>
 </#macro>
 
 <#macro tagsList etiquetas>

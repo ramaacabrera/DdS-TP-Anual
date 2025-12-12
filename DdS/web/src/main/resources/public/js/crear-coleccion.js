@@ -298,21 +298,21 @@ function mostrarModalExito() {
         contador--;
         if (contador <= 0) {
             clearInterval(intervalo);
-            window.location.href = '/colecciones';
+            window.location.href = '/colecciones?callback=/admin/panel';
         }
     }, 1000);
 
     // Configurar botón de redirección manual
     btnRedirigir.onclick = function() {
         clearInterval(intervalo);
-        window.location.href = '/colecciones';
+        window.location.href = '/colecciones?callback=/admin/panel';
     };
 
     // Cerrar modal con ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             modal.classList.remove('active');
-            window.location.href = '/colecciones';
+            window.location.href = '/colecciones?callback=/admin/panel';
         }
     });
 
@@ -320,7 +320,7 @@ function mostrarModalExito() {
     modal.onclick = function(e) {
         if (e.target === modal) {
             modal.classList.remove('active');
-            window.location.href = '/colecciones';
+            window.location.href = '/colecciones?callback=/admin/panel';
         }
     };
 }
@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cancelar button
     document.getElementById('btn-cancelar').addEventListener('click', function() {
         if (confirm('¿Seguro que deseas cancelar? Los datos no guardados se perderán.')) {
-            window.location.href = '/colecciones';
+            window.location.href = '/colecciones?callback=/admin/panel';
         }
     });
 

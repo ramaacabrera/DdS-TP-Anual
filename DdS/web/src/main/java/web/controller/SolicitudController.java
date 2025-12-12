@@ -523,10 +523,14 @@ public class SolicitudController {
         }
     };
     public Handler obtenerFormsModificarSolicitud = ctx -> {
+        String accessToken = ctx.sessionAttribute("accessToken");
+        if(accessToken == null || accessToken.isEmpty()) {
+            ctx.redirect("/login");
+        }
         try {
             String hechoId = ctx.pathParam("id");
             String username = ctx.sessionAttribute("username");
-            String accessToken = ctx.sessionAttribute("accessToken");
+
 
             String usuarioId = usuarioService.obtenerId(username); // ID del usuario logueado (UUID)
 

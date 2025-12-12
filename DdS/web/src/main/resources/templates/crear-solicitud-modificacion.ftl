@@ -55,7 +55,7 @@
         <a href="javascript:history.back()" class="header-link back-link">&larr; Volver Atrás</a>
     </div>
 
-    <h1 class="main-title">✍️ Solicitar Modificación de Hecho</h1>
+    <h1 class="main-title">✍️ Modificar Hecho</h1>
 
     <p style="color: black; margin-bottom: 25px;">
         Está solicitando la modificación del hecho ID: <strong>${hechoId?html}</strong>. Por favor, ingrese solo los nuevos valores que desea cambiar.
@@ -129,7 +129,7 @@
             <#-- 4. Fecha de Acontecimiento -->
             <div class="form-group campo-original">
                 <label class="form-label">Fecha Original</label>
-                <input type="text" value="${fechaLegible}" class="form-input" disabled>
+                <input type="text" value=${hecho.fechaDeAcontecimiento} class="form-input" disabled>
             </div>
             <div class="form-group campo-propuesto">
                 <label for="fechaDeAcontecimiento" class="form-label">Nueva Fecha/Hora</label>
@@ -153,44 +153,24 @@
             Coordenadas propuestas: Ninguna
         </p>
 
-
-        <h3 class="form-section-title" style="margin-top: 20px;">Justificación de los Cambios *</h3>
-
-        <div class="form-group">
-            <label for="justificacion" class="form-label">Justificación</label>
-            <textarea id="justificacion" name="justificacion" class="form-textarea" rows="6" required
-                      placeholder="Explique detalladamente por qué solicita la modificación y el propósito de los cambios..."
-                      maxlength="500"></textarea>
-            <small class="form-help">La justificación es obligatoria.</small>
-        </div>
-
         <#-- Sección de anonimato -->
 
         <div class="form-section">
-            <h3 class="form-section-title">👤 Información del solicitante</h3>
+            <h3 class="form-section-title">👤 Información del modificante</h3>
 
             <#if accessToken??>
                 <div style="background-color: #e8f5e9; padding: 15px; border-radius: 8px; border: 1px solid #c8e6c9; margin-bottom: 15px;">
                     <p style="margin: 0; color: #2e7d32; font-weight: 500;">
-                        <span style="font-size: 1.2em;">👋</span> Solicitando como <strong>${username}</strong>
+                        <span style="font-size: 1.2em;">👋</span> Modificando como <strong>${username}</strong>
                     </p>
                     <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #1b5e20;">
-                        Esta solicitud quedará asociada a tu cuenta.
+                        Esta modificacion quedará asociada a tu cuenta.
                     </p>
                 </div>
-
-                <div class="form-checkbox-group">
-                    <input type="checkbox" id="anonimo" name="anonimo" class="form-checkbox">
-                    <label for="anonimo" class="form-checkbox-label">Enviar solicitud de forma <strong>anónima</strong></label>
-                </div>
-
             <#else>
                 <div style="background-color: #fff3e0; padding: 15px; border-radius: 8px; border: 1px solid #ffe0b2; margin-bottom: 15px;">
-                    <p style="margin: 0; color: #e65100; font-weight: 500;">
-                        <span style="font-size: 1.2em;">🕵️</span> Solicitando de forma <strong>anónima</strong>
-                    </p>
                     <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #ef6c00;">
-                        Si deseas hacer un seguimiento de tu solicitud, te recomendamos
+                        Para modificar el hecho debes
                         <a href="/login" style="color: #e65100; text-decoration: underline; font-weight: bold;">iniciar sesión</a>.
                     </p>
                 </div>
@@ -199,15 +179,15 @@
 
         <div class="form-actions">
             <button type="button" id="btn-cancelar" class="btn btn-secondary">Cancelar</button>
-            <button type="submit" id="btn-enviar" class="btn btn-primary">Enviar Solicitud de Modificación</button>
+            <button type="submit" id="btn-enviar" class="btn btn-primary">Confirmar Modificación</button>
         </div>
 
         <div id="mensaje-exito" class="mensaje mensaje-exito" style="display: none;">
-            ✅ Solicitud de modificación enviada exitosamente.
+            ✅ Modificación enviada exitosamente.
         </div>
 
         <div id="mensaje-error" class="mensaje mensaje-error" style="display: none;">
-            ❌ Error al enviar la solicitud. Por favor, intente nuevamente.
+            ❌ Error al enviar la modificación. Por favor, intente nuevamente.
         </div>
     </form>
 </#assign>

@@ -42,7 +42,7 @@ public class CriterioContribuyente extends Criterio {
     public Map<String, Object> getQueryParameters() {
         Map<String, Object> params = new HashMap<>();
         if (nombreContribuyente != null) {
-            params.put("nombreContrib", "%" + nombreContribuyente + "%");
+            params.put("nombreContrib", nombreContribuyente);
         }
         return params;
     }
