@@ -141,7 +141,8 @@ public class ConexionAgregador {
             Map<UUID, Map<String, Object>> datosColecciones = new HashMap<>();
 
             for (Object[] fila : resultados) {
-                UUID coleccionId = (UUID) fila[0];
+                String handle = (String) fila[0];
+                UUID coleccionId = UUID.fromString(handle);
                 String titulo = (String) fila[1];
                 String descripcion = (String) fila[2];
 
