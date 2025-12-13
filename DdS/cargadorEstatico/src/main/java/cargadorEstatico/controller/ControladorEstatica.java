@@ -3,9 +3,11 @@ package cargadorEstatico.controller;
 import cargadorEstatico.conexionAgregador.Controlador;
 import cargadorEstatico.dto.Hechos.HechoDTO;
 import cargadorEstatico.service.HechosEstaticoService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.DTO.SolicitudDeEliminacionDTO;
 import utils.DTO.SolicitudDeModificacionDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +20,7 @@ public class ControladorEstatica implements Controlador {
 
     @Override
     public List<HechoDTO> obtenerHechos() {
-        return service.obtenerHechos();
+        return service.obtenerHechosDrive();
     }
 
     @Override

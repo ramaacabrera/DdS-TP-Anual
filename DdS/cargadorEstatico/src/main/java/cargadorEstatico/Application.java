@@ -24,9 +24,9 @@ public class Application {
 
         String fileServer = config.getProperty("FILE_SERVER", "/app/csv_files");
 
-        String urlAgregador = config.getProperty("URL_AGREGADOR", "ws://agregador:8080/cargador");
+        String urlAgregador = config.getProperty("URL_AGREGADOR", "ws://agregador:8070/cargador");
 
-        int puerto = Integer.parseInt(config.getProperty("PUERTO_CARGADOR", "8080"));
+        int puerto = Integer.parseInt(config.getProperty("PUERTO_CARGADOR", "8090"));
 
         System.out.println("   -> File Server Path: " + fileServer);
         System.out.println("   -> URL Agregador: " + urlAgregador);
