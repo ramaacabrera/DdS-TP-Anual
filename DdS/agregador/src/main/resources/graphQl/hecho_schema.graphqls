@@ -8,6 +8,7 @@ type Hecho {
   ubicacion: Ubicacion
   fuente: Fuente
   estadoHecho: EstadoHecho
+  contribuyente: Usuario
 }
 
 input HechoFiltroInput {
@@ -51,6 +52,11 @@ type Fuente {
 enum EstadoHecho {
   ACTIVO
   OCULTO
+}
+
+type Usuario {
+    id: ID
+    username: String
 }
 
 

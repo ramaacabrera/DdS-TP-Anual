@@ -124,20 +124,6 @@ public class HechoDTO {
         this.contenidoMultimedia = contenidoMultimedia;
     }
 
-    /*public static HechoDTO fromHechoGraphQL(Hecho hecho) {
-        HechoDTO dto = new HechoDTO();
-
-        dto.hechoId = hecho.getHecho_id();
-        dto.titulo = hecho.getTitulo();
-        dto.descripcion = hecho.getDescripcion();
-        dto.categoria = hecho.getCategoria();
-        dto.fechaDeAcontecimiento = hecho.getFechaDeAcontecimiento();
-        dto.fechaDeCarga = hecho.getFechaDeCarga();
-        dto.esEditable = hecho.getEsEditable();
-
-        return dto;
-    }*/
-
 
     // Getters y Setters
     public UUID getHechoId() { return hechoId; }
