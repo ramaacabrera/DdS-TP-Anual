@@ -2,6 +2,26 @@ version: '3.8'
 
 services:
   # ==========================================
+  # AGENTE DE DATADOG (Simula el Sidecar Localmente)
+  # ==========================================
+  datadog-agent:
+    image: gcr.io/datadoghq/agent:7
+    container_name: metamapa_datadog_agent
+    environment:
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_SITE=us5.datadoghq.com
+      - DD_APM_ENABLED=true
+      - DD_APM_NON_LOCAL_TRAFFIC=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+    ports:
+      - "8126:8126"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+
+  # ==========================================
   # BASE DE DATOS
   # ==========================================
   mysql_unificado:
@@ -34,12 +54,13 @@ services:
       DB_URL: "jdbc:mysql://mysql_unificado:3306/agregador_db?serverTimezone=America/Buenos_Aires"
       DB_USER: "root"
       DB_PASS: "root"
-      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
-      NEW_RELIC_APP_NAME: "MetaMapa-Agregador"
-      NEW_RELIC_LOGS: "true"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
     depends_on:
       mysql_unificado:
         condition: service_healthy
+      datadog-agent:
+        condition: service_started
     restart: on-failure:5
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
@@ -60,10 +81,12 @@ services:
       HOST_GRPC_AGREGADOR: "agregador"
       PUERTO_GRPC_AGREGADOR: "9090"
       URL_MOCK: "https://demo-api.mock.com"
-      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
-      NEW_RELIC_APP_NAME: "MetaMapa-CargadorDemo"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE_MAPPING: "agregador:metamapa-agregador"
     depends_on:
       - agregador
+      - datadog-agent
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
@@ -78,17 +101,15 @@ services:
       - "8083:8080"
     environment:
       FILE_SERVER: "/app/csv_files"
-
       URL_AGREGADOR: "ws://agregador:8080/"
-
-      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
-      NEW_RELIC_APP_NAME: "MetaMapa-CargadorEstatico"
-
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE_MAPPING: "agregador:metamapa-agregador"
     volumes:
       - ./cargadorEstatico/csv_files:/app/csv_files
-
     depends_on:
       - agregador
+      - datadog-agent
 
   cargador-dinamico:
     container_name: metamapa_cargador_dinamico
@@ -100,10 +121,12 @@ services:
     environment:
       HOST_GRPC_AGREGADOR: "agregador"
       PUERTO_GRPC_AGREGADOR: "9090"
-      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
-      NEW_RELIC_APP_NAME: "MetaMapa-CargadorDinamico"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE_MAPPING: "agregador:metamapa-agregador"
     depends_on:
       - agregador
+      - datadog-agent
 
   cargador-metamapa:
     container_name: metamapa_cargador_metamapa
@@ -116,10 +139,12 @@ services:
       HOST_GRPC_AGREGADOR: "agregador"
       PUERTO_GRPC_AGREGADOR: "9090"
       URL_OTRA_INSTANCIA: "https://otra-instancia.com"
-      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
-      NEW_RELIC_APP_NAME: "MetaMapa-CargadorMetaMapa"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE_MAPPING: "agregador:metamapa-agregador"
     depends_on:
       - agregador
+      - datadog-agent
 
   # ==========================================
   # GESTORES Y FRONTEND
@@ -136,11 +161,14 @@ services:
       DB_USER: "root"
       DB_PASS: "root"
       URL_AGREGADOR: "http://agregador:8080"
-      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
-      NEW_RELIC_APP_NAME: "MetaMapa-GestorPublico"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE_MAPPING: "agregador:metamapa-agregador"
     depends_on:
       mysql_unificado:
         condition: service_healthy
+      datadog-agent:
+        condition: service_started
 
   gestor-administrativo:
     container_name: metamapa_gestor_admin
@@ -154,11 +182,14 @@ services:
       DB_USER: "root"
       DB_PASS: "root"
       URL_AGREGADOR: "http://agregador:8080"
-      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
-      NEW_RELIC_APP_NAME: "MetaMapa-GestorAdmin"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE_MAPPING: "agregador:metamapa-agregador"
     depends_on:
       mysql_unificado:
         condition: service_healthy
+      datadog-agent:
+        condition: service_started
 
   estadisticas:
     container_name: metamapa_estadisticas
@@ -171,11 +202,13 @@ services:
       DB_URL: "jdbc:mysql://mysql_unificado:3306/agregador_db?serverTimezone=America/Buenos_Aires"
       DB_USER: "root"
       DB_PASS: "root"
-      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
-      NEW_RELIC_APP_NAME: "MetaMapa-Estadisticas"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
     depends_on:
       mysql_unificado:
         condition: service_healthy
+      datadog-agent:
+        condition: service_started
 
   web:
     container_name: metamapa_web
@@ -188,11 +221,13 @@ services:
       URL_GESTOR_PUBLICO: "http://gestor-publico:8080"
       URL_GESTOR_ADMIN: "http://gestor-administrativo:8080"
       URL_ESTADISTICAS: "http://estadisticas:8080"
-      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
-      NEW_RELIC_APP_NAME: "MetaMapa-Web"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE_MAPPING: "gestor-publico:metamapa-gestor-publico,gestor-administrativo:metamapa-gestor-administrativo,estadisticas:metamapa-estadisticas"
     depends_on:
       - gestor-publico
       - gestor-administrativo
+      - datadog-agent
 
 volumes:
   mysql_datos_unificados: {}

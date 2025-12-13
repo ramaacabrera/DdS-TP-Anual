@@ -1,10 +1,8 @@
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
-
 ARG MODULE_NAME=cargadorEstatico
 
 COPY pom.xml .
-
 COPY agregador/pom.xml agregador/pom.xml
 COPY cargadorDemo/pom.xml cargadorDemo/pom.xml
 COPY cargadorDinamico/pom.xml cargadorDinamico/pom.xml
@@ -22,20 +20,21 @@ COPY ${MODULE_NAME}/src ${MODULE_NAME}/src
 RUN mvn install -pl utils -am -DskipTests
 RUN mvn package -pl ${MODULE_NAME} -am -DskipTests
 
-# --- ETAPA 2: RUNTIME ---
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-
 ARG MODULE_NAME=cargadorEstatico
 
-RUN apk --no-cache add curl unzip
-RUN curl -O https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip \
-    && unzip newrelic-java.zip \
-    && cp newrelic/newrelic.jar . \
-    && rm -rf newrelic-java.zip newrelic
+RUN apk --no-cache add curl
+RUN curl -L -o dd-java-agent.jar https://dtdg.co/latest-java-tracer
 
 COPY --from=build /app/${MODULE_NAME}/target/*-jar-with-dependencies.jar app.jar
 
 EXPOSE 8080
 
-CMD ["java", "-javaagent:newrelic.jar", "-jar", "app.jar"]
+CMD ["java", \
+    "-javaagent:dd-java-agent.jar", \
+    "-Ddd.logs.injection=true", \
+    "-Ddd.profiling.enabled=true", \
+    "-Ddd.service=metamapa-cargador-estatico", \
+    "-Ddd.env=produccion", \
+    "-jar", "app.jar"]

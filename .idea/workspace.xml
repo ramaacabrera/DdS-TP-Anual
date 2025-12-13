@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="Arreglo problema de seguridad con la key de New Relic">
-      <change afterPath="$PROJECT_DIR$/DdS/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.agregador" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.agregador" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.cargadorDemo" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.cargadorDemo" afterDir="false" />
@@ -15,17 +14,12 @@
       <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.estadisticas" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.estadisticas" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.gestorAdministrativo" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.gestorAdministrativo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.gestorPublico" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.gestorPublico" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/controller/OnConnectHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/controller/OnConnectHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/Hecho.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/Hecho.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/utils/BDUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/utils/BDUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/utils/LecturaConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/utils/LecturaConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.web" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.web" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/csv_files/guia.csv" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/csv_files/guia.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/utils/LecturaConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/utils/LecturaConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/resources/META-INF/persistence.xml" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -53,6 +47,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -321,10 +316,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.DdS: Compose Deployment" />
+        <item itemvalue="Docker.DdS.mysql_unificado: Compose Deployment" />
         <item itemvalue="Docker.DdS.cargador-estatico: Compose Deployment" />
         <item itemvalue="Docker.DdS.agregador: Compose Deployment" />
-        <item itemvalue="Docker.DdS.mysql_unificado: Compose Deployment" />
-        <item itemvalue="Docker.DdS: Compose Deployment" />
         <item itemvalue="Application.cargadorEstatico.Application" />
       </list>
     </recent_temporary>
@@ -377,6 +372,7 @@
       <workItem from="1765149482020" duration="2935000" />
       <workItem from="1765306271646" duration="13913000" />
       <workItem from="1765327057093" duration="4390000" />
+      <workItem from="1765625273128" duration="6539000" />
     </task>
     <task id="LOCAL-00001" summary="termine cargadorDemo, avanzo con cargadorDinamico (en proceso)">
       <option name="closed" value="true" />
