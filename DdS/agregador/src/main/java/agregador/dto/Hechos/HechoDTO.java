@@ -166,4 +166,8 @@ public class HechoDTO {
     public void setEsEditable(boolean esEditable) { this.esEditable = esEditable; }
     public List<ContenidoMultimediaDTO> getContenidoMultimedia() { return contenidoMultimedia; }
     public void setContenidoMultimedia(List<ContenidoMultimediaDTO> contenidoMultimedia) { this.contenidoMultimedia = contenidoMultimedia; }
+
+    public String getId() {
+        return hechoId != null ? hechoId.toString() : null;
+    }
 }
