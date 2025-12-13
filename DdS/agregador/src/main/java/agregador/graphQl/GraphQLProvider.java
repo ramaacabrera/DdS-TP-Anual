@@ -23,7 +23,7 @@ public class GraphQLProvider {
         // 1️⃣ Cargar el schema desde resources/schema.graphqls
         InputStream schemaStream = getClass()
                 .getClassLoader()
-                .getResourceAsStream("schema.graphqls");
+                .getResourceAsStream("graphQl/hecho_schema.graphqls");
 
         if (schemaStream == null) {
             throw new RuntimeException("No se encontró schema.graphqls en resources");

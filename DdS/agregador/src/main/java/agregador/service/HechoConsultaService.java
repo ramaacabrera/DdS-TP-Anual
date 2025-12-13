@@ -3,6 +3,7 @@ package agregador.service;
 import agregador.domain.Criterios.*;
 import agregador.domain.HechosYColecciones.Hecho;
 import agregador.domain.HechosYColecciones.Ubicacion;
+import agregador.dto.Hechos.HechoDTO;
 import agregador.graphQl.dtoGraphQl.HechoFiltroDTO;
 import agregador.graphQl.dtoGraphQl.PageHechoDTO;
 import agregador.graphQl.dtoGraphQl.PageRequestDTO;
@@ -37,9 +38,13 @@ public class HechoConsultaService {
         int from = Math.min((page - 1) * size, total);
         int to = Math.min(from + size, total);
 
-        List<Hecho> contenido = hechos.subList(from, to);
+        List<Hecho> pagina = hechos.subList(from, to);
 
-        return PageHechoDTO.from(contenido, page, size, total);
+        List<HechoDTO> content = pagina.stream()
+                .map(HechoDTO::fromHechoGraphQL)
+                .toList();
+
+        return PageHechoDTO.from(pagina, page, size, total);
     }
 
     // =========================
