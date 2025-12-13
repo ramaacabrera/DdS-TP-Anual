@@ -14,9 +14,17 @@ type Hecho {
 input HechoFiltroInput {
   categoria: String
   titulo: String
+
   fechaAcontecimientoDesde: String
   fechaAcontecimientoHasta: String
+
+  fechaCargaDesde: String
+  fechaCargaHasta: String
+
   ubicacion: String
+  contribuyente: String
+  tipoDeFuente: String
+  etiquetas: [ID]
 }
 
 input PageInput {

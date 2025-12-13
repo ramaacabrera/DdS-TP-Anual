@@ -1,8 +1,10 @@
 package agregador.service;
 
 import agregador.domain.Criterios.*;
+import agregador.domain.HechosYColecciones.Etiqueta;
 import agregador.domain.HechosYColecciones.Hecho;
 import agregador.domain.HechosYColecciones.Ubicacion;
+import agregador.domain.fuente.TipoDeFuente;
 import agregador.dto.Hechos.HechoDTO;
 import agregador.graphQl.dtoGraphQl.HechoFiltroDTO;
 import agregador.graphQl.dtoGraphQl.PageHechoDTO;
@@ -95,12 +97,45 @@ public class HechoConsultaService {
             criterios.add(new CriterioUbicacion(ubicacion));
         }
 
-        // 📅 Fecha de acontecimiento
+        // 📅 Fechas
         Date desde = parsearFecha(filtro.getFechaAcontecimientoDesde());
         Date hasta = parsearFecha(filtro.getFechaAcontecimientoHasta());
 
         if (desde != null || hasta != null) {
             criterios.add(new CriterioFecha(desde, hasta, "fechaDeAcontecimiento"));
+        }
+
+        Date cargaDesde = parsearFecha(filtro.getFechaCargaDesde());
+        Date cargaHasta = parsearFecha(filtro.getFechaCargaHasta());
+
+        if (cargaDesde != null || cargaHasta != null) {
+            criterios.add(new CriterioFecha(cargaDesde, cargaHasta, "fechaDeCarga"));
+        }
+
+        // Contribuyente
+        if (filtro.getContribuyente() != null && !filtro.getContribuyente().isBlank()) {
+            criterios.add(new CriterioContribuyente(filtro.getContribuyente()));
+        }
+
+        // TipoDeFuente
+        if (filtro.getTipoDeFuente() != null) {
+            try {
+                TipoDeFuente tipo = TipoDeFuente.valueOf(filtro.getTipoDeFuente());
+                criterios.add(new CriterioTipoFuente(tipo));
+            } catch (IllegalArgumentException ignored) {}
+        }
+
+        // Etiquetas
+        if (filtro.getEtiquetas() != null && !filtro.getEtiquetas().isEmpty()) {
+            List<Etiqueta> etiquetas = filtro.getEtiquetas().stream()
+                    .map(id -> {
+                        Etiqueta e = new Etiqueta();
+                        e.setId(id);
+                        return e;
+                    })
+                    .toList();
+
+            criterios.add(new CriterioEtiquetas(etiquetas));
         }
 
         return criterios;

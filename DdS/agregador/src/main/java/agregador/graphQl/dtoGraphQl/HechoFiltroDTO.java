@@ -1,33 +1,73 @@
 package agregador.graphQl.dtoGraphQl;
 
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class HechoFiltroDTO {
+
     private String categoria;
     private String titulo;
     private String ubicacion;
+
     private String fechaAcontecimientoDesde;
     private String fechaAcontecimientoHasta;
 
-    // Constructor vacío
+    private String fechaCargaDesde;
+    private String fechaCargaHasta;
+
+    private String contribuyente;
+    private String tipoDeFuente;
+
+    private List<UUID> etiquetas;
+
+    // =========================
+    // CONSTRUCTOR VACÍO
+    // =========================
     public HechoFiltroDTO() {}
 
-    // Constructor desde Map (GraphQL arguments)
+    // =========================
+    // FACTORY DESDE MAP (GraphQL)
+    // =========================
+    @SuppressWarnings("unchecked")
     public static HechoFiltroDTO fromMap(Map<String, Object> filtroMap) {
+
         if (filtroMap == null) {
             return new HechoFiltroDTO();
         }
 
         HechoFiltroDTO dto = new HechoFiltroDTO();
+
         dto.setCategoria((String) filtroMap.get("categoria"));
         dto.setTitulo((String) filtroMap.get("titulo"));
         dto.setUbicacion((String) filtroMap.get("ubicacion"));
+
         dto.setFechaAcontecimientoDesde((String) filtroMap.get("fechaAcontecimientoDesde"));
         dto.setFechaAcontecimientoHasta((String) filtroMap.get("fechaAcontecimientoHasta"));
+
+        dto.setFechaCargaDesde((String) filtroMap.get("fechaCargaDesde"));
+        dto.setFechaCargaHasta((String) filtroMap.get("fechaCargaHasta"));
+
+        dto.setContribuyente((String) filtroMap.get("contribuyente"));
+        dto.setTipoDeFuente((String) filtroMap.get("tipoDeFuente"));
+
+        // 🏷️ Etiquetas (IDs)
+        if (filtroMap.get("etiquetas") != null) {
+            List<Object> ids = (List<Object>) filtroMap.get("etiquetas");
+            dto.setEtiquetas(
+                    ids.stream()
+                            .map(id -> UUID.fromString(id.toString()))
+                            .toList()
+            );
+        }
+
         return dto;
     }
 
-    // Getters y setters
+    // =========================
+    // GETTERS Y SETTERS
+    // =========================
+
     public String getCategoria() { return categoria; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
 
@@ -45,5 +85,30 @@ public class HechoFiltroDTO {
     public String getFechaAcontecimientoHasta() { return fechaAcontecimientoHasta; }
     public void setFechaAcontecimientoHasta(String fechaAcontecimientoHasta) {
         this.fechaAcontecimientoHasta = fechaAcontecimientoHasta;
+    }
+
+    public String getFechaCargaDesde() { return fechaCargaDesde; }
+    public void setFechaCargaDesde(String fechaCargaDesde) {
+        this.fechaCargaDesde = fechaCargaDesde;
+    }
+
+    public String getFechaCargaHasta() { return fechaCargaHasta; }
+    public void setFechaCargaHasta(String fechaCargaHasta) {
+        this.fechaCargaHasta = fechaCargaHasta;
+    }
+
+    public String getContribuyente() { return contribuyente; }
+    public void setContribuyente(String contribuyente) {
+        this.contribuyente = contribuyente;
+    }
+
+    public String getTipoDeFuente() { return tipoDeFuente; }
+    public void setTipoDeFuente(String tipoDeFuente) {
+        this.tipoDeFuente = tipoDeFuente;
+    }
+
+    public List<UUID> getEtiquetas() { return etiquetas; }
+    public void setEtiquetas(List<UUID> etiquetas) {
+        this.etiquetas = etiquetas;
     }
 }
