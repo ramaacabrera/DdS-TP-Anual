@@ -194,6 +194,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 const categoriaVal = selectCategoria.value;
+                console.log(categoriaVal);
                 const otraCatVal = inputOtraCategoria ? inputOtraCategoria.value.trim() : '';
 
                 let contribuyenteData = null;
@@ -231,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (response.ok) {
                     if (mensajeExito) mensajeExito.style.display = 'block';
-                    // setTimeout(() => { window.location.href = '/'; }, 2000);
+                    setTimeout(() => { window.location.href = '/'; }, 2000);
                 } else {
                     const text = await response.text();
                     throw new Error(`Error ${response.status}: ${text}`);

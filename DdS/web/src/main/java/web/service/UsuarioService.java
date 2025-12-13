@@ -4,8 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kong.unirest.json.JSONObject;
+import web.domain.Usuario.Usuario;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -105,6 +107,35 @@ public class UsuarioService {
         };
 
         return Map.of("username", username,"rolUsuario", rolUsuario, "accessToken", accessToken);
+    }
+
+    public String obtenerId(String username){
+        System.out.println("Consultando ID de usuario a: " + urlPublica);
+
+        String id = null;
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(urlPublica + "/usuario/" + username))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+        try{
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if(response.statusCode() != 200){
+                System.err.println("Error consultando ID de usuario: " + response.statusCode());
+                return null;
+            }
+            ObjectMapper mapper = new  ObjectMapper();
+            JsonNode root = mapper.readTree(response.body());
+
+            id = root.get("id_usuario").asText();
+
+            System.out.println("ID recuperado: " + id);
+
+        } catch (Exception e){
+            System.err.println("Error consultando ID de usuario: " + e.getMessage());
+        }
+        return id;
     }
 
     private static String formData(Map<String, String> data) {

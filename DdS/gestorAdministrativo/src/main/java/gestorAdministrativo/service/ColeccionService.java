@@ -1,5 +1,7 @@
 package gestorAdministrativo.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gestorAdministrativo.dto.Coleccion.ColeccionDTO;
 import gestorAdministrativo.dto.Coleccion.TipoAlgoritmoConsensoDTO;
 import gestorAdministrativo.dto.Criterios.*;
@@ -75,6 +77,12 @@ public class ColeccionService {
 
             coleccion.setFuente(fuentesReales);
 
+
+            try {
+                System.out.println("Fuentes reales: " + new ObjectMapper().writeValueAsString(fuentesReales));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
             List<Hecho> hechosQueCumplen = hechoRepositorio.buscarHechos(coleccion.getCriteriosDePertenencia(), fuentesReales);
             coleccion.setHechos(hechosQueCumplen);
 
@@ -115,10 +123,25 @@ public class ColeccionService {
             criteriosCambiaron = true;
         }
 
+        if(dto.getFuentes() != null &&  !dto.getFuentes().isEmpty()) {
+
+            List<Fuente> fuentes = new ArrayList<>();
+            for (FuenteDTO fDto : dto.getFuentes()) {
+                fuentes.add(fuenteRepositorio.buscarPorId(fDto.getFuenteId()));
+            }
+
+            coleccionExistente.setFuente(fuentes);
+            criteriosCambiaron = true;
+        }
+        try {
+            System.out.println("Coleccion fuentes actualizadas: " + new ObjectMapper().writeValueAsString(coleccionExistente.getFuente()));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         System.out.println("Coleccion service 3");
 
         if (criteriosCambiaron) {
-            List<Hecho> nuevosHechos = hechoRepositorio.buscarHechos(coleccionExistente.getCriteriosDePertenencia());
+            List<Hecho> nuevosHechos = hechoRepositorio.buscarHechos(coleccionExistente.getCriteriosDePertenencia(), coleccionExistente.getFuente());
             coleccionExistente.setHechos(nuevosHechos);
         }
         System.out.println("Coleccion service 4");

@@ -1,5 +1,6 @@
 package gestorAdministrativo.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gestorAdministrativo.domain.Criterios.Criterio;
 import gestorAdministrativo.dto.Coleccion.ColeccionDTO;
 import gestorAdministrativo.dto.Criterios.CriterioDTO;
@@ -39,7 +40,7 @@ public class ColeccionController {
 
             System.out.println(request.getCriteriosDePertenencia().size());
 
-            System.out.println("DTO creado: " + request.toString());
+            System.out.println("DTO creado: " + new ObjectMapper().writeValueAsString(request));
             for(CriterioDTO c : request.getCriteriosDePertenencia()){
                 if(c instanceof CriterioUbicacionDTO){
                     System.out.println("Ubicacion: " + ((CriterioUbicacionDTO) c).getUbicacion().getDescripcion());
@@ -69,8 +70,7 @@ public class ColeccionController {
             System.out.println("Creando dto");
             ColeccionDTO request = ctx.bodyAsClass(ColeccionDTO.class);
 
-            System.out.println("Coleccion dto creada");
-
+            System.out.println("Coleccion dto creada: " + new ObjectMapper().writeValueAsString(request));
             for(FuenteDTO fuente : request.getFuentes()){
                 System.out.println("Fuentes del dto: " + fuente.getTipoFuente() + " " + fuente.getDescriptor() + " " + fuente.getFuenteId());
             }

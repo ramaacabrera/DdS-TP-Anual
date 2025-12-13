@@ -1,8 +1,8 @@
 package estadisticas.utils;
 
-import estadisticas.domain.Estadisticas;
-import estadisticas.domain.EstadisticasCategoria;
-import estadisticas.domain.EstadisticasColeccion;
+import estadisticas.domainEstadisticas.Estadisticas;
+import estadisticas.domainEstadisticas.EstadisticasCategoria;
+import estadisticas.domainEstadisticas.EstadisticasColeccion;
 import java.util.List;
 
 public class EstadisticasCSVTransformer {

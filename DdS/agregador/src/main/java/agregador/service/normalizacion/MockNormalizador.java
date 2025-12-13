@@ -3,7 +3,11 @@ import agregador.domain.HechosYColecciones.Hecho;
 
 public class MockNormalizador {
 
-    public MockNormalizador(){}
+    private DiccionarioCategorias diccionarioCategorias;
+
+    public MockNormalizador(DiccionarioCategorias diccionarioCategorias) {
+        this.diccionarioCategorias = diccionarioCategorias;
+    }
 
     public Hecho normalizar(Hecho hecho) {
         //System.out.println("Empezando a normalizar");
@@ -27,7 +31,8 @@ public class MockNormalizador {
         hechoNormalizado.setContenidoMultimedia(hecho.getContenidoMultimedia());
 
         // Normalizar categoría
-        String categoriaNormalizada = NormalizadorCategorias.normalizar(hecho.getCategoria());
+        String sintaxisLimpia = NormalizadorCategorias.normalizar(hecho.getCategoria());
+        String categoriaNormalizada = diccionarioCategorias.buscarPorTerminoNormalizado(sintaxisLimpia);
         hechoNormalizado.setCategoria(categoriaNormalizada);
 
         // Normalizar título (eliminar espacios extras)

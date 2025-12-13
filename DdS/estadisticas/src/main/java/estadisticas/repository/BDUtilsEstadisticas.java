@@ -6,19 +6,13 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 public class BDUtilsEstadisticas {
-    private static final EntityManagerFactory factory;
-
-    static {
-        try {
-            factory = Persistence.createEntityManagerFactory("estadisticas-PU");
-        } catch (Exception e) {
-            throw new RuntimeException("Error inicializando EntityManagerFactory", e);
-        }
-    }
+    private static EntityManagerFactory factory;
 
     public static EntityManager getEntityManager() {
-        EntityManager em = factory.createEntityManager();
-        return em;
+        if (factory == null || !factory.isOpen()) {
+            factory = javax.persistence.Persistence.createEntityManagerFactory("estadisticas-PU");
+        }
+        return factory.createEntityManager();
     }
 
     public static void comenzarTransaccion(EntityManager em) {

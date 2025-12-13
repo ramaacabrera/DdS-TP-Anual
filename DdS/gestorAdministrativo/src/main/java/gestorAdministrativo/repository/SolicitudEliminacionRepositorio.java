@@ -1,5 +1,6 @@
 package gestorAdministrativo.repository;
 
+import gestorAdministrativo.domain.Solicitudes.EstadoSolicitudModificacion;
 import gestorAdministrativo.utils.BDUtils;
 import gestorAdministrativo.domain.Solicitudes.EstadoSolicitudEliminacion;
 import gestorAdministrativo.domain.Solicitudes.SolicitudDeEliminacion;
@@ -34,6 +35,40 @@ public class SolicitudEliminacionRepositorio {
             System.err.println("❌ Error guardando solicitud: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Error al guardar la solicitud", e);
+        } finally {
+            em.close();
+        }
+    }
+
+    public long contarTodas(){
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            return em.createQuery("SELECT COUNT(s) FROM SolicitudDeEliminacion s", Long.class)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<SolicitudDeEliminacion> obtenerPaginadas(int pagina, int limite){
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            String jpql = "SELECT s FROM SolicitudDeEliminacion s " +
+                    "LEFT JOIN FETCH s.usuario " +
+                    "LEFT JOIN FETCH s.hechoAsociado " +
+                    "ORDER BY s.id ASC";
+
+            TypedQuery<SolicitudDeEliminacion> query = em.createQuery(jpql, SolicitudDeEliminacion.class);
+
+            int offset = (pagina - 1) * limite;
+
+            query.setFirstResult(offset);
+            query.setMaxResults(limite);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         } finally {
             em.close();
         }
@@ -122,6 +157,21 @@ public class SolicitudEliminacionRepositorio {
             return false;
         } finally {
             em.close();
+        }
+    }
+
+    public Integer obtenerCantidadPendientes() {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            String jpql = "SELECT COUNT(s) FROM SolicitudDeEliminacion s WHERE s.estado = :estado";
+
+            TypedQuery<Long> query = em.createQuery(jpql, Long.class);
+            query.setParameter("estado", EstadoSolicitudEliminacion.PENDIENTE);
+            return query.getSingleResult().intValue();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return 0; // Es mejor devolver 0 que null si es un conteo
         }
     }
 }

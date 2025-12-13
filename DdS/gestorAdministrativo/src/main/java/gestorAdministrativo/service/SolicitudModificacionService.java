@@ -12,9 +12,7 @@ import gestorAdministrativo.repository.HechoRepositorio;
 import gestorAdministrativo.repository.SolicitudModificacionRepositorio;
 import gestorAdministrativo.repository.UsuarioRepositorio;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SolicitudModificacionService {
@@ -128,11 +126,65 @@ public class SolicitudModificacionService {
     private SolicitudDeModificacionDTO convertirADTO(SolicitudDeModificacion s) {
         SolicitudDeModificacionDTO dto = new SolicitudDeModificacionDTO();
 
-        // Asumiendo que agregaste el campo 'id' en el DTO hijo o padre
         dto.setId(s.getId());
-        // Si te da error en .setId, es porque falta agregar 'private UUID id;' en SolicitudDeModificacionDTO
 
         dto.setJustificacion(s.getJustificacion());
+        Hecho hechoOriginal = s.getHechoAsociado();
+
+        if (s.getHechoModificado() != null && hechoOriginal != null) {
+
+            // --- Generar una lista de cambios con valores originales ---
+            List<Map<String, String>> cambiosMapeados = new ArrayList<>();
+
+            HechoModificado cambios = s.getHechoModificado();
+
+            // Título
+            if (cambios.getTitulo() != null && !cambios.getTitulo().equals(hechoOriginal.getTitulo())) {
+                cambiosMapeados.add(Map.of(
+                        "campo", "titulo",
+                        "anterior", hechoOriginal.getTitulo() != null ? hechoOriginal.getTitulo() : "",
+                        "nuevo", cambios.getTitulo()
+                ));
+            }
+
+            // Descripción
+            if (cambios.getDescripcion() != null && !cambios.getDescripcion().equals(hechoOriginal.getDescripcion())) {
+                cambiosMapeados.add(Map.of(
+                        "campo", "descripcion",
+                        "anterior", hechoOriginal.getDescripcion() != null ? hechoOriginal.getDescripcion() : "",
+                        "nuevo", cambios.getDescripcion()
+                ));
+            }
+
+            // Categoría
+            if (cambios.getCategoria() != null && !cambios.getCategoria().equals(hechoOriginal.getCategoria())) {
+                cambiosMapeados.add(Map.of(
+                        "campo", "categoria",
+                        "anterior", hechoOriginal.getCategoria() != null ? hechoOriginal.getCategoria() : "",
+                        "nuevo", cambios.getCategoria()
+                ));
+            }
+
+            // Fecha de Acontecimiento
+            if (cambios.getFechaDeAcontecimiento() != null && !cambios.getFechaDeAcontecimiento().equals(hechoOriginal.getFechaDeAcontecimiento())) {
+                // Es mejor comparar con el string de la fecha para evitar problemas de formato
+                String fechaAnterior = hechoOriginal.getFechaDeAcontecimiento() != null ? hechoOriginal.getFechaDeAcontecimiento().toString() : "";
+                String fechaNueva = cambios.getFechaDeAcontecimiento().toString();
+
+                cambiosMapeados.add(Map.of(
+                        "campo", "fechaDeAcontecimiento",
+                        "anterior", fechaAnterior,
+                        "nuevo", fechaNueva
+                ));
+            }
+            dto.setCambios(cambiosMapeados);
+
+            // También podemos agregar el título del hecho original para que el web component lo muestre fácilmente
+            dto.setHechoTitulo(hechoOriginal.getTitulo());
+
+            // Si el componente web sigue necesitando el objeto anidado:
+            dto.setHechoModificado(convertirHechoModificadoADTO(s.getHechoModificado()));
+        }
 
         if (s.getHechoAsociado() != null) {
             dto.setHechoId(s.getHechoAsociado().getHecho_id());
@@ -165,5 +217,11 @@ public class SolicitudModificacionService {
         dto.setCategoria(hm.getCategoria());
         dto.setFechaDeAcontecimiento(hm.getFechaDeAcontecimiento());
         return dto;
+    }
+
+    public Integer obtenerCantidadPendientes() {
+        Integer solis = solicitudRepositorio.obtenerCantidadPendientes();
+        System.out.println("Total solicitudes modificacion: " + solis);
+        return solis;
     }
 }

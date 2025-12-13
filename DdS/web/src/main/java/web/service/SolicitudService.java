@@ -3,25 +3,28 @@ package web.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
+import web.domain.HechosYColecciones.Coleccion;
 import web.domain.Solicitudes.SolicitudDeEliminacion;
 import web.domain.Solicitudes.SolicitudDeModificacion;
+import web.dto.PageDTO;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class SolicitudService {
 
     private final String urlAdmin;
+    private final String urlPublica;
     private final ObjectMapper mapper = new ObjectMapper();
     private final HttpClient http = HttpClient.newHttpClient();
 
-    public SolicitudService(String urlAdmin) {
+    public SolicitudService(String urlAdmin,String urlPublica) {
+        this.urlPublica = urlPublica;
         this.urlAdmin = urlAdmin;
     }
 
@@ -32,8 +35,8 @@ public class SolicitudService {
 
         if (username != null && token != null) {
             builder.header("username", username);
-            builder.header("access_token", token);
-            builder.header("rol_usuario", rolUsuario);
+            builder.header("accessToken", token);
+            builder.header("rolUsuario", rolUsuario);
         }
 
         return builder.build();
@@ -47,8 +50,8 @@ public class SolicitudService {
 
         if (username != null && token != null) {
             builder.header("username", username);
-            builder.header("access_token", token);
-            builder.header("rol_usuario", rolUsuario);
+            builder.header("accessToken", token);
+            builder.header("rolUsuario", rolUsuario);
         }
 
         return builder.build();
@@ -83,6 +86,7 @@ public class SolicitudService {
             HttpRequest request = buildRequestGET("api/solicitudes/modificacion/" + id, username, token, rolUsuario);
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
+
             if (response.statusCode() == 200)
                 return mapper.readValue(response.body(), SolicitudDeModificacion.class);
 
@@ -95,25 +99,24 @@ public class SolicitudService {
     }
 
 
-    public List<SolicitudDeEliminacion> obtenerSolicitudesEliminacion(String username, String token, String rolUsuario) {
+    public PageDTO<SolicitudDeEliminacion> listarColecciones(String username, String token, String rolUsuario, int pagina, int size) {
         try {
-            HttpRequest request = buildRequestGET("api/solicitudes", username, token, rolUsuario);
-            System.out.println("Obtener solicitud de eliminacion (lista) 1: " + request);
+            System.out.println("Pidiendo solicitudes de eliminacion a: " + urlAdmin);
+            HttpRequest request = buildRequestGET("api/solicitudes?pagina=" + pagina + "&limite=" + size, username, token, rolUsuario);
 
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Obtener solicitud de eliminacion (lista) 2: " );
-
 
             if (response.statusCode() == 200) {
-                System.out.println("Obtener solicitud de eliminacion (lista) 3: " );
+                //System.out.println("Obtener solicitud de eliminacion (lista) 3: " );
 
                 return mapper.readValue(response.body(),
-                        new TypeReference<List<SolicitudDeEliminacion>>() {
+                        new TypeReference<PageDTO<SolicitudDeEliminacion>>() {
                         });
             }
 
-            System.err.println("Error obteniendo solicitudes eliminación: " + response.statusCode());
-            return List.of();
+            System.err.println("Error obteniendo solicitudes de eliminacion: " +  response.statusCode());
+
+            return null;
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -122,18 +125,21 @@ public class SolicitudService {
 
     public List<SolicitudDeModificacion> obtenerSolicitudesModificacion(String username, String token, String rolUsuario) {
         try {
-            HttpRequest request = buildRequestGET("api/solicitudes-modificacion", username, token, rolUsuario);
+            System.out.println("entra  try 1 service");
+            HttpRequest request = buildRequestGET("api/solicitudes/modificacion/listado", username,token, rolUsuario);
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200)
                 return mapper.readValue(response.body(),
                         new TypeReference<List<SolicitudDeModificacion>>() {});
 
-            System.err.println("Error obteniendo solicitudes modificación: " + response.statusCode());
+           System.err.println("Error obteniendo solicitudes modificación: " + response.statusCode());
             return List.of();
 
         } catch (Exception e) {
+            System.out.println("fallo acaaa ");
             throw new RuntimeException(e);
+
         }
     }
 
@@ -144,10 +150,6 @@ public class SolicitudService {
 
             String json = mapper.writeValueAsString(Map.of("accion", accion));
 
-            System.out.println(username);
-            System.out.println(token);
-            System.out.println(rolUsuario);
-
             HttpRequest request = buildRequestPATCH(endpoint, json, username, token, rolUsuario);
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -156,5 +158,130 @@ public class SolicitudService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Map<String, Object> obtenerDatosHecho(String hechoId) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        HttpClient http = HttpClient.newHttpClient();
+        String hechoEndpoint = urlPublica;
+        if (!hechoEndpoint.endsWith("/")) hechoEndpoint += "/";
+
+        String urlCompleta = hechoEndpoint + "hechos/" + hechoId;
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(urlCompleta))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            return mapper.readValue(response.body(), new TypeReference<Map<String, Object>>() {});
+        }
+
+
+        return null;
+    }
+    public int crearSolicitudModificacion(
+            String hechoId, String usuarioId, String justificacion,
+            Map<String, Object> cambiosPropuestos,
+            String username, String token, String rolUsuario) {
+        try {
+            Map<String, Object> solicitudDTO = new HashMap<>();
+            solicitudDTO.put("id_HechoAsociado", UUID.fromString(hechoId));
+
+            if (usuarioId != null && !usuarioId.isEmpty()) {
+                Map<String, Object> usuarioDTO = new HashMap<>();
+                usuarioDTO.put("id_usuario", usuarioId);
+                usuarioDTO.put("username",  username);
+                solicitudDTO.put("usuario", usuarioDTO);
+            }
+
+            solicitudDTO.put("justificacion", justificacion);
+
+            solicitudDTO.put("hechoModificado", cambiosPropuestos);
+
+            String jsonBody = mapper.writeValueAsString(solicitudDTO);
+
+            HttpRequest request = buildRequestPublicaPOST(
+                    "solicitudModificacion",
+                    jsonBody,
+                    username,
+                    token,
+                    rolUsuario
+            );
+
+            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 201) {
+                System.err.println("Error creando solicitud: " + response.body());
+            }
+
+            return response.statusCode();
+
+        } catch (Exception e) {
+            System.err.println("Error fatal al crear solicitud: " + e.getMessage());
+            throw new RuntimeException("Error al crear solicitud.", e);
+        }
+    }
+
+    private HttpRequest buildRequestPOST(String endpoint, String json, String username, String token, String rolUsuario) throws Exception {
+        String finalUrl = urlAdmin;
+        if (!finalUrl.endsWith("/")) {
+            finalUrl += "/";
+        }
+
+        HttpRequest.Builder builder = HttpRequest.newBuilder()
+                .uri(new URI(finalUrl + endpoint))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json));
+
+        // Asumimos que los headers de seguridad son CamelCase (ajustado en debug)
+        if (username != null && token != null) {
+            builder.header("username", username);
+            builder.header("accessToken", token);
+            builder.header("rolUsuario", rolUsuario);
+        }
+        return builder.build();
+    }
+
+    private HttpRequest buildRequestPublicaPOST(String endpoint, String json, String username, String token, String rolUsuario) throws Exception {
+        String finalUrl = urlPublica;
+        if (!finalUrl.endsWith("/")) {
+            finalUrl += "/";
+        }
+
+        System.out.println(new URI(finalUrl + endpoint));
+
+        HttpRequest.Builder builder = HttpRequest.newBuilder()
+                .uri(new URI(finalUrl + endpoint))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json));
+
+        if (username != null && token != null) {
+            builder.header("username", username);
+            builder.header("accessToken", token);
+            builder.header("rolUsuario", rolUsuario);
+        }
+        return builder.build();
+    }
+
+    public int contarPendientesEliminacion(String username, String rolUsuario, String token) throws Exception {
+        HttpRequest request = buildRequestGET("api/solicitudes/cantidad", username, token, rolUsuario);
+        HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if(response.statusCode() == 200) {
+            return Integer.parseInt(response.body());
+        }
+        return 0;
+    }
+
+    public int contarPendientesModificacion(String username, String rolUsuario, String token) throws Exception {
+        HttpRequest request = buildRequestGET("api/solicitudes/modificacion/cantidad", username, token, rolUsuario);
+        HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+        if(response.statusCode() == 200) {
+            return Integer.parseInt(response.body());
+        }
+        return 0;
     }
 }

@@ -55,7 +55,7 @@ public class HechoDTO {
             this.fuente.setFuenteId(hecho.getFuente().getId());
             this.fuente.setDescriptor(hecho.getFuente().getDescriptor());
             if (hecho.getFuente().getTipoDeFuente() != null) {
-                this.fuente.setTipoFuente(hecho.getFuente().getTipoDeFuente().name());
+                this.fuente.setTipoDeFuente(hecho.getFuente().getTipoDeFuente().name());
             }
         }
 
@@ -72,8 +72,6 @@ public class HechoDTO {
         if (hecho.getContribuyente() != null) {
             this.contribuyente = new UsuarioDTO();
             this.contribuyente.setId(hecho.getContribuyente().getId_usuario());
-            //this.contribuyente.setNombre(hecho.getContribuyente().getNombre());
-            //this.contribuyente.setApellido(hecho.getContribuyente().getApellido());
             this.contribuyente.setNombreUsuario(hecho.getContribuyente().getUsername());
         }
 

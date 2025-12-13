@@ -1,11 +1,13 @@
 package gestorAdministrativo.controller;
 
+import gestorAdministrativo.dto.PageDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDeEliminacionDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDeModificacionDTO;
 import gestorAdministrativo.service.SolicitudEliminacionService;
 import gestorAdministrativo.service.SolicitudModificacionService;
 import io.javalin.http.Handler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
@@ -82,8 +84,12 @@ public class SolicitudController {
     public Handler obtenerSolicitudes = ctx -> {
         System.out.println("obteniendo solicitudes");
         try {
-            List<SolicitudDeEliminacionDTO> solicitudes = eliminacionService.obtenerTodasLasSolicitudes();
-            ctx.status(200).json(solicitudes);
+            int pagina = ctx.queryParamAsClass("pagina", Integer.class).getOrDefault(1);
+            int limite = ctx.queryParamAsClass("limite", Integer.class).getOrDefault(10);
+
+            PageDTO<SolicitudDeEliminacionDTO> resultado = eliminacionService.obtenerTodasLasSolicitudes(pagina, limite);
+            System.out.println("Devolviendo solicitudes");
+            ctx.status(200).json(resultado);
         } catch (Exception e) {
             ctx.status(500).json("Error obteniendo solicitudes: " + e.getMessage());
         }
@@ -106,6 +112,23 @@ public class SolicitudController {
             ctx.status(400).json("ID inválido");
         } catch (Exception e) {
             ctx.status(500).json("Error obteniendo solicitud: " + e.getMessage());
+        }
+    };
+
+    public Handler obtenerCantidadPendientesEliminacion = ctx -> {
+        System.out.println("obteniendo cantidad pendientes eliminacion");
+        ctx.status(200).json(eliminacionService.obtenerCantidadPendientes());
+    };
+
+    public Handler obtenerCantidadPendientesModificacion = ctx -> {
+        try{
+            System.out.println("obteniendo cantidad pendientes modificacion");
+            ctx.status(200).json(modificacionService.obtenerCantidadPendientes());
+        }catch (IllegalArgumentException e){
+            ctx.status(400);
+        }
+        catch(Exception e){
+            ctx.status(500).json("Error obteniendo cantidad pendientes modificacion");
         }
     };
 

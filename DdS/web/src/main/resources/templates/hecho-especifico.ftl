@@ -11,8 +11,6 @@
         .tabs { font-family: 'Segoe UI', system-ui, sans-serif; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; margin-top: 20px; }
         .tabs-nav { display: flex; border-bottom: 1px solid #e5e7eb; background: #f9fafb; }
         .tab-btn { padding: 1rem 1.5rem; border: none; background: none; cursor: pointer; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; transition: all 0.3s ease; }
-        .tab-btn:hover { color: #2563eb; background: #eff6ff; }
-        .tab-btn.active { color: #2563eb; border-bottom-color: #2563eb; background: #fff; }
         .tab-content { display: none; padding: 30px; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
 
@@ -25,14 +23,12 @@
         .media-video-wrapper { background: #000; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; }
         .media-audio-wrapper { padding: 1.5rem; background: #f8fafc; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid #eee; }
         .media-file-wrapper { padding: 2rem; text-align: center; background: #f3f4f6; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .btn-download { margin-top: 10px; padding: 8px 16px; background: #2563eb; color: white; text-decoration: none; border-radius: 6px; font-size: 0.9rem; }
-        .btn-download:hover { background: #1d4ed8; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 
     <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
-        <a href="/" class="header-link back-link">&larr; Volver a la Lista</a>
+        <a href="/hechos" class="header-link back-link">&larr; Volver a la Lista</a>
     </div>
 
     <@cmp.hero hecho=hecho />

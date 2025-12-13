@@ -1,4 +1,4 @@
-package estadisticas.domain;
+package estadisticas.domainEstadisticas;
 
 import org.hibernate.annotations.Type;
 

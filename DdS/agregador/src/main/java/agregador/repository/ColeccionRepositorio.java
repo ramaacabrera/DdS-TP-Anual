@@ -2,6 +2,7 @@ package agregador.repository;
 
 import agregador.domain.HechosYColecciones.Coleccion;
 import agregador.utils.BDUtils;
+import org.hibernate.Hibernate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -54,7 +55,19 @@ public class ColeccionRepositorio {
             query.setFirstResult(offset);
             query.setMaxResults(limite);
 
-            return query.getResultList();
+            List<Coleccion> resultados = query.getResultList();
+
+            for (Coleccion c : resultados) {
+                Hibernate.initialize(c.getCriteriosDePertenencia());
+
+                Hibernate.initialize(c.getHechos());
+
+                Hibernate.initialize(c.getFuente());
+            }
+            // ------------------------------
+
+            return resultados;
+
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();

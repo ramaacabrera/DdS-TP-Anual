@@ -8,6 +8,7 @@ import gestorPublico.dto.FiltroHechosDTO;
 import gestorPublico.repository.HechoRepositorio;
 import gestorPublico.dto.Hechos.HechoDTO;
 import gestorPublico.dto.PageDTO;
+import gestorPublico.service.Normalizador.DiccionarioCategorias;
 import gestorPublico.service.Normalizador.NormalizadorCategorias;
 
 import java.net.URI;
@@ -15,15 +16,18 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class HechoService {
     private final HechoRepositorio hechoRepositorio;
     private final String urlDinamica;
+    private final DiccionarioCategorias diccionarioCategorias;
 
-    public HechoService(HechoRepositorio hechoRepositorio, String urlDinamica) {
+    public HechoService(HechoRepositorio hechoRepositorio, DiccionarioCategorias diccionarioCategorias, String urlDinamica) {
         this.hechoRepositorio = hechoRepositorio;
         this.urlDinamica = urlDinamica;
+        this.diccionarioCategorias = diccionarioCategorias;
     }
 
     public PageDTO<HechoDTO> buscarHechos(FiltroHechosDTO filtro) {
@@ -75,7 +79,7 @@ public class HechoService {
     }
 
     public List<String> buscarCategorias() {
-        return this.hechoRepositorio.buscarCategorias();
+        return this.diccionarioCategorias.obtenerCategoriasCanonicas();
     }
 
     private List<Criterio> armarCriterios(FiltroHechosDTO f) {
@@ -108,5 +112,57 @@ public class HechoService {
         }
 
         return criterios;
+    }
+
+    public void modificarHecho(String hechoId, String usernameSolicitante, Map<String, Object> cambios) {
+        Hecho hecho = hechoRepositorio.buscarPorId(UUID.fromString(hechoId));
+        if (hecho == null) {
+            throw new IllegalArgumentException("El hecho no existe.");
+        }
+
+        String usernamePropietario = hecho.getContribuyente().getUsername();
+
+        if (!usernamePropietario.equals(usernameSolicitante)) {
+            throw new SecurityException("No tienes permiso para editar este hecho. Solo el autor (" + usernamePropietario + ") puede hacerlo.");
+        }
+
+        Date fechaCarga = hecho.getFechaDeCarga();
+        Date fechaActual = new Date();
+
+        long diferenciaEnMillis = fechaActual.getTime() - fechaCarga.getTime();
+        long diasTranscurridos = TimeUnit.MILLISECONDS.toDays(diferenciaEnMillis);
+
+        if (diasTranscurridos > 7) {
+            throw new IllegalStateException("El periodo de edición de 7 días ha expirado (Han pasado " + diasTranscurridos + " días).");
+        }
+
+
+        if (cambios.containsKey("titulo")) {
+            hecho.setTitulo((String) cambios.get("titulo"));
+        }
+        if (cambios.containsKey("descripcion")) {
+            hecho.setDescripcion((String) cambios.get("descripcion"));
+        }
+        if (cambios.containsKey("categoria")) {
+            hecho.setCategoria((String) cambios.get("categoria"));
+        }
+        if (cambios.containsKey("fechaDeAcontecimiento")) {
+            // Aquí depende de cómo llegue la fecha desde el JSON (String ISO o Timestamp)
+            // Si llega como String "yyyy-MM-dd", deberías parsearla a Date o LocalDate
+            // Ejemplo simple si tu entity usa String para fecha (si usa Date, requiere parseo):
+            // hecho.setFechaDeAcontecimiento(parsearFecha((String) cambios.get("fechaDeAcontecimiento")));
+        }
+
+        // Manejo de Ubicación (Estructura anidada en el JSON)
+        if (cambios.containsKey("ubicacion")) {
+            Map<String, Object> ubicacionMap = (Map<String, Object>) cambios.get("ubicacion");
+
+            Ubicacion ubicacionNueva = new Ubicacion(Double.parseDouble(ubicacionMap.get("latitud").toString()), Double.parseDouble(ubicacionMap.get("longitud").toString()), null);
+
+            hecho.setUbicacion(ubicacionNueva);
+        }
+
+        // --- GUARDAR EN BD ---
+        hechoRepositorio.actualizar(hecho);
     }
 }

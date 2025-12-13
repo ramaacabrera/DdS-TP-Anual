@@ -89,6 +89,8 @@ public class EstadisticasService {
                 throw new RuntimeException("HTTP " + response.statusCode() + " para " + uri);
             }
 
+            System.out.println("Respuesta al endpoint: " + endpoint + ", " + response.body());
+
             return mapper.readValue(response.body(), new TypeReference<Map<String, Object>>() {});
         } catch (Exception e) {
             throw new Exception("Error al consultar servicio de estadisticas: " + endpoint, e);

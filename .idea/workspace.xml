@@ -4,22 +4,172 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="Arreglo problema de seguridad con la key de New Relic">
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="Merge branch 'main' of https://github.com/ramaacabrera/DdS-TP-Anual into Entrega7">
+      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/normalizacion/DiccionarioCategorias.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/normalizacion/GeolocalizadorOffline.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/agregador/src/main/resources/categorias.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Consenso/Absoluta.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Consenso/AlgoritmoConsenso.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Consenso/MayoriaSimple.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Consenso/MultiplesMenciones.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Criterios/Criterio.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Criterios/CriterioContribuyente.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Criterios/CriterioDeTexto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Criterios/CriterioEtiquetas.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Criterios/CriterioFecha.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Criterios/CriterioTipoFuente.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Criterios/CriterioTipoMultimedia.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Criterios/CriterioUbicacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Criterios/TipoDeTexto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/HechosYColecciones/Coleccion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/HechosYColecciones/ContenidoMultimedia.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/HechosYColecciones/EstadoHecho.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/HechosYColecciones/Etiqueta.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/HechosYColecciones/Hecho.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/HechosYColecciones/HechoModificado.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/HechosYColecciones/ModosDeNavegacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/HechosYColecciones/TipoAlgoritmoConsenso.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/HechosYColecciones/TipoContenidoMultimedia.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/HechosYColecciones/Ubicacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Solicitudes/EstadoSolicitudEliminacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Solicitudes/EstadoSolicitudModificacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Solicitudes/Solicitud.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Solicitudes/SolicitudDeEliminacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Solicitudes/SolicitudDeModificacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Usuario/Usuario.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/fuente/Fuente.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/fuente/TipoDeFuente.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/utils/BDUtilsAgregador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/controller/HechoController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/controller/VerificacionController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/dto/Hechos/AgregarEtiquetaDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/HechoService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/Normalizador/DiccionarioCategorias.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/resources/categorias.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/AdministradorController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/panelAdministrador.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleColecciones.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleCrearHechoSolEliminacion.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/hechos.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-modificacion.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-solicitud-modificacion.ftl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/panel-administrador.ftl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/solicitudes-mod.ftl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.agregador" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.agregador" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.cargadorDemo" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.cargadorDemo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.cargadorDinamico" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.cargadorDinamico" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.cargadorEstatico" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.cargadorEstatico" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.cargadorMetaMapa" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.cargadorMetaMapa" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.estadisticas" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.estadisticas" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.gestorAdministrativo" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.gestorAdministrativo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.gestorPublico" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.gestorPublico" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/Dockerfile.web" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/Dockerfile.web" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/controller/OnMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/controller/OnMessageHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/Criterios/CriterioDeTexto.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/Criterios/CriterioDeTexto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/Coleccion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/Coleccion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/TipoAlgoritmoConsenso.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/TipoAlgoritmoConsenso.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/dto/Coleccion/TipoAlgoritmoConsensoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/dto/Coleccion/TipoAlgoritmoConsensoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/repository/ColeccionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/repository/ColeccionRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/AgregadorOrquestador.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/AgregadorOrquestador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/ConexionCargadorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/ConexionCargadorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/HechosCargadorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/HechosCargadorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/ServicioGeoref.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/normalizacion/ServicioGeoref.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/ServicioNormalizacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/normalizacion/ServicioNormalizacion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/normalizacion/MockNormalizador.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/normalizacion/MockNormalizador.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/AgregadorOrquestadorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/AgregadorOrquestadorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/ConexionCargadorServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/ConexionCargadorServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/HechosCargadorServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/HechosCargadorServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/ServicioGeorefTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/ServicioGeorefTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/ServicioNormalizacionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/test/java/agregador/service/ServicioNormalizacionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/controller/PostSolicitudesModificacionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/controller/PostSolicitudesModificacionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/repository/DinamicoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/repository/DinamicoRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/conexionAgregador/ClienteDelAgregador.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/conexionAgregador/ClienteDelAgregador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/conexionAgregador/Controlador.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/conexionAgregador/Controlador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/controller/ControladorEstatica.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/controller/ControladorEstatica.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/domain/Criterios/CriterioContribuyente.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/domain/Criterios/CriterioContribuyente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/dto/Hechos/FuenteDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/dto/Hechos/FuenteDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/dto/Hechos/HechoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/dto/Hechos/HechoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/service/HechosEstaticoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorEstatico/src/main/java/cargadorEstatico/service/HechosEstaticoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/controller/EstadisticasController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/controller/EstadisticasController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/Estadisticas.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domainEstadisticas/Estadisticas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/EstadisticasCategoria.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domainEstadisticas/EstadisticasCategoria.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/EstadisticasCategoriaId.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domainEstadisticas/EstadisticasCategoriaId.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/EstadisticasColeccion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domainEstadisticas/EstadisticasColeccion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/EstadisticasColeccionId.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domainEstadisticas/EstadisticasColeccionId.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domain/EstadisticasScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/domainEstadisticas/EstadisticasScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/BDUtilsEstadisticas.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/BDUtilsEstadisticas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/ConexionAgregador.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/ConexionAgregador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/EstadisticasCategoriaRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/EstadisticasCategoriaRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/EstadisticasColeccionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/EstadisticasColeccionRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/EstadisticasRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/repository/EstadisticasRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/service/EstadisticasService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/service/EstadisticasService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/service/GeneradorEstadisticas.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/service/GeneradorEstadisticas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/utils/BDUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/utils/BDUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/utils/EstadisticasCSVTransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/java/estadisticas/utils/EstadisticasCSVTransformer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DdS/estadisticas/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/estadisticas/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/controller/ColeccionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/controller/ColeccionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/controller/SolicitudController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/controller/SolicitudController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/domain/Criterios/CriterioContribuyente.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/domain/Criterios/CriterioContribuyente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/domain/HechosYColecciones/Coleccion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/domain/HechosYColecciones/Coleccion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/domain/HechosYColecciones/TipoAlgoritmoConsenso.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/domain/HechosYColecciones/TipoAlgoritmoConsenso.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/dto/Hechos/FuenteDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/dto/Hechos/FuenteDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/dto/Solicitudes/SolicitudDeEliminacionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/dto/Solicitudes/SolicitudDeEliminacionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/dto/Solicitudes/SolicitudDeModificacionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/dto/Solicitudes/SolicitudDeModificacionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/ColeccionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/ColeccionRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/HechoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/HechoRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/SolicitudEliminacionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/SolicitudEliminacionRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/SolicitudModificacionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/SolicitudModificacionRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/ColeccionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/ColeccionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/SolicitudEliminacionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/SolicitudEliminacionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/SolicitudModificacionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/SolicitudModificacionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/tests/ColeccionServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/tests/SolicitudEliminacionServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/HechoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/HechoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/UsuarioController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/domain/Criterios/CriterioDeTexto.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/domain/Criterios/CriterioDeTexto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/domain/HechosYColecciones/Coleccion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/domain/HechosYColecciones/Coleccion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/domain/HechosYColecciones/TipoAlgoritmoConsenso.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/domain/HechosYColecciones/TipoAlgoritmoConsenso.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/Coleccion/ColeccionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/Coleccion/ColeccionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/Coleccion/TipoAlgoritmoConsensoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/Coleccion/TipoAlgoritmoConsensoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/Solicitudes/SolicitudDeModificacionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/dto/Solicitudes/SolicitudDeModificacionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/repository/HechoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/repository/HechoRepositorio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/ColeccionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/ColeccionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetEstadisticasHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/GetEstadisticasHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/HechoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/HechoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/SolicitudController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/SolicitudController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/dto/Solicitudes/SolicitudDeModificacionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/dto/Solicitudes/SolicitudDeModificacionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/ColeccionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/ColeccionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/EstadisticasService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/EstadisticasService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/SolicitudService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/SolicitudService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/UsuarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/service/UsuarioService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/componentes.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/componentes.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleCrearColeccion.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleCrearColeccion.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleEstadisticas.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleEstadisticas.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleHechoEspecifico.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleHechoEspecifico.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleHome.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleHechos.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleInicio.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleInicio.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleSolicitudes.css" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/css/styleSolicitudes.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/actions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/crear-coleccion.js" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/crear-coleccion.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/crear-hecho.js" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/crear-hecho.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/editar-coleccion.js" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/editar-coleccion.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/estadisticas.js" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/estadisticas.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-detalle.js" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/public/js/solicitud-detalle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/coleccion.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/coleccion.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/colecciones.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/colecciones.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-coleccion.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-coleccion.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-hecho.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-hecho.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-solicitud-eliminacion.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/crear-solicitud-eliminacion.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/editar-coleccion.ftlh" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/editar-coleccion.ftlh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/estadisticas.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/estadisticas.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/components.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/components.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/footer.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/footer.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/header.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/fragments/header.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hecho-especifico.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/home.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/hechos.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/inicio.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/inicio.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/solicitud-detalle.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/solicitud-detalle.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/solicitudes.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/solicitudes.ftl" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
     <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
@@ -43,11 +193,10 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="Entrega7" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -83,54 +232,49 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Agregador.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiAdmin.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiAdministrativa.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiMock.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiPublica.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Application.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CargadorDinamico.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CargadorEstatico.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CargadorMetamapa.executor&quot;: &quot;Run&quot;,
-    &quot;Application.DemoMockServer.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Web.executor&quot;: &quot;Run&quot;,
-    &quot;Application.cargadorEstatico.Application.executor&quot;: &quot;Run&quot;,
-    &quot;Application.estadisticas.executor&quot;: &quot;Run&quot;,
-    &quot;Application.gestorPublico.Application.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.DdS.agregador: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.DdS.cargador-estatico: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.DdS.mysql_unificado: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.DdS: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Entrega7&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/Proyectos Intellij/DdS-TP-Anual&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/agregador/untitled/src/main/java/com/metamapa/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Agregador.executor": "Run",
+    "Application.ApiAdmin.executor": "Run",
+    "Application.ApiAdministrativa.executor": "Run",
+    "Application.ApiMock.executor": "Run",
+    "Application.ApiPublica.executor": "Run",
+    "Application.Application.executor": "Run",
+    "Application.CargadorDinamico.executor": "Run",
+    "Application.CargadorEstatico.executor": "Run",
+    "Application.CargadorMetamapa.executor": "Run",
+    "Application.DemoMockServer.executor": "Run",
+    "Application.Web.executor": "Run",
+    "Application.cargadorEstatico.Application.executor": "Run",
+    "Application.estadisticas.executor": "Run",
+    "Application.gestorPublico.Application.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "Merging Entrega7",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/Proyectos Intellij/DdS-TP-Anual/DdS/web/src/main/resources",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/agregador/untitled/src/main/java/com/metamapa/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="web.controller" />
@@ -159,7 +303,7 @@
       <recent name="agregador.utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.DdS.cargador-estatico: Compose Deployment">
+  <component name="RunManager" selected="Application.Web">
     <configuration name="Agregador" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="agregador.Application" />
       <module name="agregador" />
@@ -181,6 +325,19 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="gestorPublico.Application" />
       <module name="gestorPublico" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="gestorAdministrativo.Application" />
+      <module name="gestorAdministrativo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="gestorAdministrativo.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -244,59 +401,18 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DdS: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="envFilePath" value="" />
-          <option name="sourceFilePath" value="DdS/docker-compose.yml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="DdS.agregador: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="services">
-            <list>
-              <option value="agregador" />
-            </list>
-          </option>
-          <option name="sourceFilePath" value="DdS/docker-compose.yml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="DdS.cargador-estatico: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="services">
-            <list>
-              <option value="cargador-estatico" />
-            </list>
-          </option>
-          <option name="sourceFilePath" value="DdS/docker-compose.yml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="DdS.mysql_unificado: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="services">
-            <list>
-              <option value="mysql_unificado" />
-            </list>
-          </option>
-          <option name="sourceFilePath" value="DdS/docker-compose.yml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
-      <deployment type="docker-compose.yml">
-        <settings />
-      </deployment>
-      <method v="2" />
+    <configuration name="gestorPublico.Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="gestorPublico.Application" />
+      <module name="gestorPublico" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="gestorPublico.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <list>
       <item itemvalue="Application.Agregador" />
@@ -309,31 +425,26 @@
       <item itemvalue="Application.Web" />
       <item itemvalue="Application.estadisticas" />
       <item itemvalue="Application.cargadorEstatico.Application" />
-      <item itemvalue="Docker.DdS.agregador: Compose Deployment" />
-      <item itemvalue="Docker.DdS.cargador-estatico: Compose Deployment" />
-      <item itemvalue="Docker.DdS.mysql_unificado: Compose Deployment" />
-      <item itemvalue="Docker.DdS: Compose Deployment" />
+      <item itemvalue="Application.gestorPublico.Application" />
+      <item itemvalue="Application.Application" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Docker.DdS: Compose Deployment" />
-        <item itemvalue="Docker.DdS.mysql_unificado: Compose Deployment" />
-        <item itemvalue="Docker.DdS.cargador-estatico: Compose Deployment" />
-        <item itemvalue="Docker.DdS.agregador: Compose Deployment" />
+        <item itemvalue="Application.Application" />
+        <item itemvalue="Application.gestorPublico.Application" />
         <item itemvalue="Application.cargadorEstatico.Application" />
+        <item itemvalue="Application.cargadorEstatico.Application" />
+        <item itemvalue="Application.gestorPublico.Application" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26094.121" />
-        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-IU-251.26094.121" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
       </set>
     </attachedChunks>
-  </component>
-  <component name="StructureViewState">
-    <option name="selectedTab" value="&lt;FreeMarker&gt;" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -368,11 +479,6 @@
       <workItem from="1764895871086" duration="8104000" />
       <workItem from="1764933700939" duration="39000" />
       <workItem from="1764947017902" duration="3459000" />
-      <workItem from="1765149276372" duration="193000" />
-      <workItem from="1765149482020" duration="2935000" />
-      <workItem from="1765306271646" duration="13913000" />
-      <workItem from="1765327057093" duration="4390000" />
-      <workItem from="1765625273128" duration="6539000" />
     </task>
     <task id="LOCAL-00001" summary="termine cargadorDemo, avanzo con cargadorDinamico (en proceso)">
       <option name="closed" value="true" />
@@ -438,39 +544,7 @@
       <option name="project" value="LOCAL" />
       <updated>1764898796874</updated>
     </task>
-    <task id="LOCAL-00009" summary="soluciono problemas en las solicitudes">
-      <option name="closed" value="true" />
-      <created>1765151401244</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1765151401244</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Agrego los healthchecks en todos los modulos">
-      <option name="closed" value="true" />
-      <created>1765231790100</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1765231790100</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Agrego avances iniciales de los requerimientos de Observabilidad">
-      <option name="closed" value="true" />
-      <created>1765246518628</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1765246518629</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Arreglo problema de seguridad con la key de New Relic">
-      <option name="closed" value="true" />
-      <created>1765247469534</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1765247469534</updated>
-    </task>
-    <option name="localTasksCounter" value="13" />
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -495,12 +569,8 @@
     <MESSAGE value="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO" />
     <MESSAGE value="Cambios en el gestorAdministrativo" />
     <MESSAGE value="Arreglos en las fuentes de las colecciones" />
-    <MESSAGE value="arreglo usuarios (creo andando todo) y actualizo clase usuario" />
-    <MESSAGE value="soluciono problemas en las solicitudes" />
-    <MESSAGE value="Agrego los healthchecks en todos los modulos" />
-    <MESSAGE value="Agrego avances iniciales de los requerimientos de Observabilidad" />
-    <MESSAGE value="Arreglo problema de seguridad con la key de New Relic" />
-    <option name="LAST_COMMIT_MESSAGE" value="Arreglo problema de seguridad con la key de New Relic" />
+    <MESSAGE value="Merge branch 'main' of https://github.com/ramaacabrera/DdS-TP-Anual into Entrega7" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'main' of https://github.com/ramaacabrera/DdS-TP-Anual into Entrega7" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

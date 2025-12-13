@@ -6,9 +6,19 @@
     </div>
 </footer>
 
-<!-- Scripts comunes -->
-<script defer src="/js/actions.js"></script>
+<style>
+    body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+    }
 
+    .site-footer {
+        margin-top: auto;
+    }
+</style>
+<script defer src="/js/actions.js"></script>
 <script defer src="/js/tabs.js"></script>
 
 <script>
@@ -16,7 +26,6 @@
         feather.replace({ 'stroke-width': 1.6 });
     }
 </script>
-
 
 </body>
 </html>

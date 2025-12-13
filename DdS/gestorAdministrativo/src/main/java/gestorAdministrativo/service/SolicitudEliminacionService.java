@@ -3,6 +3,7 @@ package gestorAdministrativo.service;
 
 import gestorAdministrativo.domain.HechosYColecciones.EstadoHecho;
 import gestorAdministrativo.dto.Hechos.UsuarioDTO;
+import gestorAdministrativo.dto.PageDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDeEliminacionDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDTO;
 import gestorAdministrativo.domain.HechosYColecciones.Hecho;
@@ -13,6 +14,7 @@ import gestorAdministrativo.domain.Solicitudes.EstadoSolicitudEliminacion;
 import gestorAdministrativo.domain.Solicitudes.SolicitudDeEliminacion;
 import gestorAdministrativo.repository.UsuarioRepositorio;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -84,12 +86,31 @@ public class SolicitudEliminacionService {
         }
     }
 
-    public List<SolicitudDeEliminacionDTO> obtenerTodasLasSolicitudes() {
-        List<SolicitudDeEliminacion> solicitudes = solicitudRepositorio.buscarTodas();
+    public PageDTO<SolicitudDeEliminacionDTO> obtenerTodasLasSolicitudes(int pagina, int limite) {
+        if (pagina < 1) pagina = 1;
+        if (limite < 1) limite = 10;
 
-        return solicitudes.stream()
+        long totalRegistros = solicitudRepositorio.contarTodas();
+
+        System.out.println("Total registros: " + totalRegistros);
+
+        int totalPages = (int) Math.ceil(totalRegistros / (double) limite);
+
+        if (pagina > totalPages && totalRegistros > 0) {
+            return new PageDTO<>(new ArrayList<>(), pagina, limite, totalPages, (int) totalRegistros);
+        }
+
+        List<SolicitudDeEliminacion> solicitudesPaginadas = solicitudRepositorio.obtenerPaginadas(pagina, limite);
+
+        System.out.println("Total solicitudes recuperadas: " + solicitudesPaginadas.size());
+
+        List<SolicitudDeEliminacionDTO> dtos = solicitudesPaginadas.stream()
                 .map(this::convertirADTO)
                 .collect(Collectors.toList());
+
+        System.out.println("Devolviendo solicitudes..");
+
+        return new PageDTO<>(dtos, pagina, limite, totalPages, (int) totalRegistros);
     }
 
     public Optional<SolicitudDeEliminacionDTO> obtenerSolicitudPorId(UUID id) {
@@ -129,5 +150,12 @@ public class SolicitudEliminacionService {
         }
 
         return dto;
+    }
+
+    public Integer obtenerCantidadPendientes() {
+
+        Integer solis = solicitudRepositorio.obtenerCantidadPendientes();
+        System.out.println("Total solicitudes eliminacion: " + solis);
+        return solis;
     }
 }

@@ -1,5 +1,7 @@
 package gestorPublico.controller;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import gestorPublico.dto.FiltroHechosDTO;
 import gestorPublico.service.FuenteService;
 import gestorPublico.service.HechoService;
@@ -8,12 +10,14 @@ import io.javalin.http.BadRequestResponse;
 import gestorPublico.dto.Hechos.HechoDTO;
 import gestorPublico.dto.PageDTO;
 import gestorPublico.dto.Hechos.FuenteDTO;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.http.HttpResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class HechoController {
@@ -79,6 +83,7 @@ public class HechoController {
     public Handler crearHecho = ctx -> {
         try {
             String body = ctx.body();
+            System.out.println(body);
             // Llamamos al servicio que actúa de proxy
             HttpResponse<String> response = hechoService.crearHechoProxy(body);
 
@@ -119,5 +124,45 @@ public class HechoController {
         } catch (Exception e) {
             ctx.status(500).json("Error obteniendo fuentes: " + e.getMessage());
         }
+    };
+
+    public Handler modificarHecho = ctx -> {
+        String hechoId = ctx.pathParam("id");
+
+        // 1. Mapeo "a mano" del Body a un Map genérico
+        // Javalin usa Jackson por defecto para convertir el JSON a Map
+        Map<String, Object> body = ctx.bodyAsClass(Map.class);
+
+        // 2. Extraer el token del cuerpo
+        String accessToken = (String) body.get("accessToken");
+
+        if (accessToken == null || accessToken.isEmpty()) {
+            ctx.status(401).json(Map.of("error", "Token de acceso no proporcionado en el cuerpo"));
+            return;
+        }
+
+        try {
+            // 3. Decodificar el token y extraer el username AQUÍ en el controller
+            DecodedJWT jwt = JWT.decode(accessToken);
+            String usernameSolicitante = jwt.getClaim("preferred_username").asString();
+
+            // 4. Extraer el objeto de cambios (hechoModificado)
+            // El JS envía: { "hechoModificado": { "titulo": "...", ... } }
+            Map<String, Object> cambios = (Map<String, Object>) body.get("hechoModificado");
+
+            if (cambios == null || cambios.isEmpty()) {
+                ctx.status(400).json(Map.of("error", "No se enviaron datos para modificar"));
+                return;
+            }
+
+            // 5. Pasar al servicio: id, Username validado del token, y los Cambios
+            hechoService.modificarHecho(hechoId, usernameSolicitante, cambios);
+
+            ctx.status(200).json(Map.of("mensaje", "Hecho modificado exitosamente"));
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     };
 }

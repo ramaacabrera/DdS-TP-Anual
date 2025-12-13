@@ -1,5 +1,6 @@
 package gestorAdministrativo.repository;
 
+import gestorAdministrativo.domain.HechosYColecciones.Etiqueta;
 import gestorAdministrativo.domain.fuente.Fuente;
 import gestorAdministrativo.utils.BDUtils;
 import gestorAdministrativo.domain.Criterios.Criterio;
@@ -121,17 +122,24 @@ public class HechoRepositorio {
         try {
             String jpql = "SELECT DISTINCT h FROM Hecho h " +
                     "LEFT JOIN FETCH h.etiquetas " +
-                    "LEFT JOIN FETCH h.contenidoMultimedia " +
+                    "LEFT JOIN h.contenidoMultimedia " +
                     "LEFT JOIN FETCH h.ubicacion " +
                     "LEFT JOIN FETCH h.contribuyente " +
-                    "WHERE h.id = :id";
+                    "WHERE h.hecho_id = :id";
 
             TypedQuery<Hecho> query = em.createQuery(jpql, Hecho.class);
             query.setParameter("id", id);
 
-            return query.getSingleResult();
+            Hecho resultado = query.getSingleResult();
+
+            // Inicializar manualmente
+            if (resultado.getContenidoMultimedia() != null) {
+                resultado.getContenidoMultimedia().size();
+            }
+
+            return resultado;
+
         } catch (Exception e) {
-            // Si no encuentra nada o falla, retorna null
             return null;
         } finally {
             em.close();
@@ -237,5 +245,19 @@ public class HechoRepositorio {
             em.close();
         }
 
+    }
+
+    public Etiqueta buscarEtiquetaPorNombre(String nombreLimpio) {
+        EntityManager em = BDUtils.getEntityManager();
+        try{
+            return em.createQuery("SELECT e FROM Etiqueta e WHERE e.nombre = :t", Etiqueta.class)
+                    .setParameter("t", nombreLimpio)
+                    .getSingleResult();
+        }catch(Exception e){
+            BDUtils.rollback(em);
+            return null;
+        } finally {
+            em.close();
+        }
     }
 }

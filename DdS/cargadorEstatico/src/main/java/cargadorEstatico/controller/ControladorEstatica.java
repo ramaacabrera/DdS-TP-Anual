@@ -3,6 +3,8 @@ package cargadorEstatico.controller;
 import cargadorEstatico.conexionAgregador.Controlador;
 import cargadorEstatico.dto.Hechos.HechoDTO;
 import cargadorEstatico.service.HechosEstaticoService;
+import utils.DTO.SolicitudDeEliminacionDTO;
+import utils.DTO.SolicitudDeModificacionDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,5 +24,15 @@ public class ControladorEstatica implements Controlador {
     @Override
     public void guardarId(UUID id) {
 
+    }
+
+    @Override
+    public List<SolicitudDeModificacionDTO> obtenerSolicitudesModificacion() {
+        return List.of();
+    }
+
+    @Override
+    public List<SolicitudDeEliminacionDTO> obtenerSolicitudesEliminacion() {
+        return List.of();
     }
 }

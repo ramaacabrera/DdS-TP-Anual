@@ -61,110 +61,11 @@ class HechosCargadorServiceTest {
     }
 
     @Test
-    @DisplayName("Solo debe pedir solicitudes a fuentes DINAMICAS")
-    void testObtenerSolicitudes_SoloDinamicas() {
-        // Arrange
-        UUID idDinamica = UUID.randomUUID();
-        UUID idEstatica = UUID.randomUUID();
-
-        WsContext ctxDinamica = mock(WsContext.class);
-        WsContext ctxEstatica = mock(WsContext.class);
-
-        ConcurrentMap<UUID, WsContext> mapa = new ConcurrentHashMap<>();
-        mapa.put(idDinamica, ctxDinamica);
-        mapa.put(idEstatica, ctxEstatica);
-
-        Fuente fuenteDinamica = new Fuente();
-        fuenteDinamica.setTipoDeFuente(TipoDeFuente.DINAMICA);
-
-        Fuente fuenteEstatica = new Fuente();
-        fuenteEstatica.setTipoDeFuente(TipoDeFuente.ESTATICA);
-
-        when(conexionCargadorRepositorio.obtenerFuentesCtxs()).thenReturn(mapa);
-        when(fuenteRepositorio.buscarPorId(idDinamica)).thenReturn(fuenteDinamica);
-        when(fuenteRepositorio.buscarPorId(idEstatica)).thenReturn(fuenteEstatica);
-
-        // Act
-        service.obtenerSolicitudes();
-
-        // Assert
-        verify(ctxDinamica, times(1)).send(contains("obtenerSolicitudesEliminacion"));
-        verify(ctxDinamica, times(1)).send(contains("obtenerSolicitudesModificacion"));
-
-        verify(ctxEstatica, never()).send(anyString());
-    }
-
-    @Test
     @DisplayName("obtenerSolicitudes: No hace nada si mapa vacío")
     void testObtenerSolicitudes_MapaVacio() {
         when(conexionCargadorRepositorio.obtenerFuentesCtxs()).thenReturn(new ConcurrentHashMap<>());
         service.obtenerSolicitudes();
         verifyNoInteractions(fuenteRepositorio);
-    }
-
-    @Test
-    @DisplayName("obtenerSolicitudes: Ignora fuentes ESTATICAS")
-    void testIgnorarFuentesEstaticas() {
-        UUID id = UUID.randomUUID();
-        WsContext ctx = mock(WsContext.class);
-
-        ConcurrentHashMap<UUID, WsContext> map = new ConcurrentHashMap<>();
-        map.put(id, ctx);
-
-        Fuente fuenteEstatica = new Fuente();
-        fuenteEstatica.setTipoDeFuente(TipoDeFuente.ESTATICA);
-
-        when(conexionCargadorRepositorio.obtenerFuentesCtxs()).thenReturn(map);
-        when(fuenteRepositorio.buscarPorId(id)).thenReturn(fuenteEstatica);
-
-        service.obtenerSolicitudes();
-
-        verify(ctx, never()).send(anyString());
-    }
-
-    @Test
-    @DisplayName("obtenerSolicitudes: Ignora fuentes PROXY")
-    void testIgnorarFuentesProxy() {
-        UUID id = UUID.randomUUID();
-        WsContext ctx = mock(WsContext.class);
-        ConcurrentHashMap<UUID, WsContext> map = new ConcurrentHashMap<>();
-        map.put(id, ctx);
-
-        Fuente fuenteProxy = new Fuente();
-        fuenteProxy.setTipoDeFuente(TipoDeFuente.DEMO);
-
-        when(conexionCargadorRepositorio.obtenerFuentesCtxs()).thenReturn(map);
-        when(fuenteRepositorio.buscarPorId(id)).thenReturn(fuenteProxy);
-
-        service.obtenerSolicitudes();
-
-        verify(ctx, never()).send(anyString());
-    }
-
-    @Test
-    @DisplayName("obtenerSolicitudes: Si falla buscar fuente, lanza RuntimeException o lo maneja")
-    void testFalloBuscarFuente() {
-        UUID id = UUID.randomUUID();
-        ConcurrentHashMap<UUID, WsContext> map = new ConcurrentHashMap<>();
-        map.put(id, mock(WsContext.class));
-
-        when(conexionCargadorRepositorio.obtenerFuentesCtxs()).thenReturn(map);
-        when(fuenteRepositorio.buscarPorId(id)).thenThrow(new RuntimeException("DB Error"));
-
-        assertThrows(RuntimeException.class, () -> service.obtenerSolicitudes());
-    }
-
-    @Test
-    @DisplayName("obtenerSolicitudes: Si fuente es null, salta NPE controlada")
-    void testFuenteNula() {
-        UUID id = UUID.randomUUID();
-        ConcurrentHashMap<UUID, WsContext> map = new ConcurrentHashMap<>();
-        map.put(id, mock(WsContext.class));
-
-        when(conexionCargadorRepositorio.obtenerFuentesCtxs()).thenReturn(map);
-        when(fuenteRepositorio.buscarPorId(id)).thenReturn(null); // Caso inconsistente
-
-        assertThrows(NullPointerException.class, () -> service.obtenerSolicitudes());
     }
 
     @Test

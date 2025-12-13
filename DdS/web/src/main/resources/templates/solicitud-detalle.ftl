@@ -1,14 +1,13 @@
 <script src="/js/solicitud-detalle.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <#assign pageTitle = "Detalle de Solicitud">
-<#assign additionalCSS>
-    <link rel="stylesheet" href="/css/styleSolicitudes.css">
-</#assign>
+<#assign additionalCss = ["/css/styleSolicitudes.css"]>
 
 <#assign content>
     <div class="container">
         <div class="header">
-            <a href="/admin/solicitudes" class="header-link back-link">&larr; Volver a Solicitudes</a>
+            <a href="/admin/solicitudes/eliminacion" class="header-link back-link">&larr; Volver a Solicitudes</a>
         </div>
 
         <div class="title-actions-container">
@@ -27,7 +26,7 @@
         </div>
 
         <!-- Información del Hecho -->
-        <div class="card" style="margin-bottom: 20px;">
+        <div class="info-card" style="margin-bottom: 20px;">
             <h3 class="card-subtitle">INFORMACIÓN DEL HECHO</h3>
             <div class="grid-metadata">
                 <div class="info-item">
@@ -48,7 +47,7 @@
 
         <!-- Información de la Solicitud -->
         <div class="grid-metadata">
-            <div class="card">
+            <div class="info-card small">
                 <p class="card-subtitle">SOLICITANTE</p>
                 <p>
                     <#if solicitud.usuario??>
@@ -59,7 +58,7 @@
                 </p>
             </div>
 
-            <div class="card">
+            <div class="info-card small">
                 <p class="card-subtitle">ESTADO ACTUAL</p>
                 <p>
                     <span class="estado-badge estado-${(solicitud.estado!solicitud.estado!'PENDIENTE')?lower_case}">
@@ -70,7 +69,7 @@
         </div>
 
         <!-- Justificación -->
-        <div class="card" style="grid-column: 1 / -1;">
+        <div class="info-card full-width">
             <p class="card-subtitle">JUSTIFICACIÓN</p>
             <div class="justificacion">
                 <p>${solicitud.justificacion!"Sin justificación proporcionada"}</p>
@@ -101,24 +100,7 @@
             tipo: '${tipo!"eliminacion"}'
         };
 
-        function procesarSolicitud(accion) {
-            fetch(window.location.pathname, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ accion })
-            }).then(() => window.location.href="/admin/solicitudes");
-        }
-
-        // Funciones directas sin confirmación
-        function aceptarSolicitud() {
-            procesarSolicitud('ACEPTADA');
-        }
-
-        function rechazarSolicitud() {
-            procesarSolicitud('RECHAZADA');
-        }
     </script>
 </#assign>
 
 <#include "layout.ftl">
-

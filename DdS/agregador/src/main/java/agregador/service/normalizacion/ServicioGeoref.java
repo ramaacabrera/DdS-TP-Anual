@@ -1,4 +1,4 @@
-package agregador.service;
+package agregador.service.normalizacion;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,16 +60,23 @@ public class ServicioGeoref {
 
             if (ubicacion.isMissingNode()) return null;
 
-            String localidad = "";
-            if (ubicacion.has("municipio_nombre") && !ubicacion.path("municipio_nombre").isNull()) {
-                localidad = ubicacion.path("municipio_nombre").asText();
-            } else if (ubicacion.has("departamento_nombre")) {
-                localidad = ubicacion.path("departamento_nombre").asText();
+            String provincia = null;
+            if (ubicacion.has("provincia_nombre") && !ubicacion.get("provincia_nombre").isNull()) {
+                provincia = ubicacion.get("provincia_nombre").asText();
             }
 
-            String provincia = ubicacion.path("provincia_nombre").asText();
+            if (provincia == null || provincia.trim().isEmpty()) {
+                return null;
+            }
 
-            if (!localidad.isEmpty() && !provincia.isEmpty()) {
+            String localidad = null;
+            if (ubicacion.has("municipio_nombre") && !ubicacion.get("municipio_nombre").isNull()) {
+                localidad = ubicacion.get("municipio_nombre").asText();
+            } else if (ubicacion.has("departamento_nombre") && !ubicacion.get("departamento_nombre").isNull()) {
+                localidad = ubicacion.get("departamento_nombre").asText();
+            }
+
+            if (localidad != null && !localidad.trim().isEmpty()) {
                 return localidad + ", " + provincia;
             } else {
                 return provincia;

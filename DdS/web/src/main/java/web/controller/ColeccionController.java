@@ -3,6 +3,7 @@ package web.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
+import web.domain.Fuente.Fuente;
 import web.domain.HechosYColecciones.Ubicacion;
 import web.domain.Fuente.TipoDeFuente; // Solo para el enum de Criterios si se usa
 import web.domain.HechosYColecciones.Coleccion;
@@ -14,10 +15,7 @@ import web.service.FuenteService; // Importante: El servicio nuevo
 import web.service.UsuarioService;
 import web.utils.ViewUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ColeccionController {
 
@@ -35,6 +33,7 @@ public class ColeccionController {
         try {
             int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
             int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
+            String callback = ctx.queryParam("callback");
 
             PageDTO<Coleccion> coleccionesPage = coleccionService.listarColecciones(page, size);
 
@@ -42,6 +41,7 @@ public class ColeccionController {
             int toIndex = fromIndex + (coleccionesPage.content != null ? coleccionesPage.content.size() : 0);
 
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);
+            modelo.put("baseHref", "/colecciones");
             modelo.put("pageTitle", "Colecciones");
             modelo.put("total", coleccionesPage.totalElements);
             modelo.put("page", coleccionesPage.page);
@@ -50,6 +50,7 @@ public class ColeccionController {
             modelo.put("fromIndex", fromIndex);
             modelo.put("toIndex", toIndex);
             modelo.put("colecciones", coleccionesPage.content);
+            modelo.put("callback", callback);
 
             ctx.render("colecciones.ftl", modelo);
 
@@ -80,7 +81,7 @@ public class ColeccionController {
         modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
 
         String username = ctx.sessionAttribute("username");
-        String token = ctx.sessionAttribute("access_token");
+        String token = ctx.sessionAttribute("accessToken");
 
         System.out.println("--- DEBUG CONTROLLER ---");
         System.out.println("Username en sesion: " + username);
@@ -112,11 +113,15 @@ public class ColeccionController {
             modelo.put("algoritmos", TipoAlgoritmoConsenso.values());
 
             String username = ctx.sessionAttribute("username");
-            String token = ctx.sessionAttribute("access_token");
+            String token = ctx.sessionAttribute("accessToken");
             List<FuenteDTO> listaFuentes = fuenteService.listarFuentes();
 
             modelo.put("listaFuentes", listaFuentes);
             modelo.put("tiposDeFuente", TipoDeFuente.values());
+
+            List<String> idSeleccionados = coleccion.getFuente().stream().map(fuente -> fuente.getId().toString()).toList();
+            System.out.println("ids seleccionados: " + idSeleccionados);
+            modelo.put("idSeleccionados", new ObjectMapper().writeValueAsString(idSeleccionados));
 
             ctx.render("editar-coleccion.ftlh", modelo);
 
@@ -139,7 +144,7 @@ public class ColeccionController {
 
         bodyData.put("criteriosDePertenencia", criteriosDePertenencia);
         bodyData.put("username", ctx.sessionAttribute("username"));
-        bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+        bodyData.put("accessToken", ctx.sessionAttribute("accessToken"));
         bodyData.put("rolUsuario", ctx.sessionAttribute("rolUsuario"));
 
         try {
@@ -172,7 +177,7 @@ public class ColeccionController {
 
         bodyData.put("coleccionId", id);
         bodyData.put("username", ctx.sessionAttribute("username"));
-        bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+        bodyData.put("accessToken", ctx.sessionAttribute("accessToken"));
         bodyData.put("rolUsuario", ctx.sessionAttribute("rolUsuario"));
 
         coleccionService.actualizarColeccion(id, bodyData);
@@ -184,7 +189,7 @@ public class ColeccionController {
         bodyData.put("id", id);
         if(!ctx.sessionAttributeMap().isEmpty()){
             bodyData.put("username", ctx.sessionAttribute("username"));
-            bodyData.put("access_token", ctx.sessionAttribute("access_token"));
+            bodyData.put("accessToken", ctx.sessionAttribute("accessToken"));
             bodyData.put("rolUsuario", ctx.sessionAttribute("rolUsuario"));
         }
         coleccionService.eliminarColeccion(bodyData);

@@ -50,6 +50,8 @@ public class GetEstadisticasHandler implements Handler {
                 try {
                     Map<String, Object> statsColeccion = estadisticasService.obtenerEstadisticasColeccion(uuidColeccion);
 
+                    System.out.println(statsColeccion);
+
                     modelo.put("uuidColeccion", uuidColeccion.trim());
                     modelo.put("statsColeccion", statsColeccion);
                     if (statsColeccion.containsKey("nombre")) {

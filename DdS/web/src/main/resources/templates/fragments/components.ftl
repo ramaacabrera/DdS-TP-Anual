@@ -1,28 +1,29 @@
-<#macro quickNavCards rolUsuario>
+<#macro quickNavCards>
     <div class="home-quick-nav-section">
         <h2 class="home-section-title">Navegación Rápida</h2>
         <div class="home-quick-nav-cards">
-            <#if rolUsuario == "ADMINISTRADOR">
-                <a href="/admin/solicitudes" class="home-nav-card">
-                    <div class="home-nav-card-icon">📋</div>
-                    <h3>Ver Solicitudes</h3>
-                    <p>Consulta y gestiona las solicitudes pendientes</p>
-                </a>
-                <a href="/crear-coleccion" class="home-nav-card">
-                    <div class="home-nav-card-icon">🗂️</div>
-                    <h3>Crear Colección</h3>
-                    <p>Organiza y agrupa hechos relacionados en colecciones temáticas</p>
-                </a>
-            </#if>
-            <a href="/hechos" class="home-nav-card">
-                <div class="home-nav-card-icon">📊</div>
+            <a href="/crear" class="home-nav-card">
+                <div class="home-nav-card-icon">📢</div>
+                <h3>Reportar un Hecho</h3>
+                <p>Contribuye a la comunidad registrando un nuevo suceso en el mapa</p>
+            </a>
+
+            <a href="/hechos?callback=/home" class="home-nav-card">
+                <div class="home-nav-card-icon">📋</div>
                 <h3>Ver Hechos</h3>
                 <p>Explora todos los hechos registrados en formato de lista</p>
             </a>
-            <a href="/colecciones" class="home-nav-card">
+
+            <a href="/colecciones?callback=/home" class="home-nav-card">
                 <div class="home-nav-card-icon">📚</div>
                 <h3>Ver Colecciones</h3>
-                <p>Accede a las colecciones de hechos creadas por nuestros administradores</p>
+                <p>Accede a las colecciones creadas por nuestros administradores</p>
+            </a>
+
+            <a href="/estadisticas" class="home-nav-card">
+                <div class="home-nav-card-icon">📈</div>
+                <h3>Ver Estadísticas</h3>
+                <p>Visualiza métricas y análisis gráficos sobre los datos recopilados</p>
             </a>
         </div>
     </div>
@@ -80,49 +81,139 @@
 </#macro>
 <#macro actionButtons hecho>
     <div class="action-buttons-group" data-hecho-id="${hecho.hechoId?html}">
-        <button class="icon-btn" data-action="share" aria-label="Compartir hecho" title="Compartir">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <!-- Cuerpo principal del avión -->
+
+        <button class="btn-action-large" data-action="share" aria-label="Compartir hecho" title="Compartir">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M21 4L10.5 14.5M21 4l-7 17-4-9-9-4 17-7z"
                       stroke="currentColor"
-                      stroke-width="1.8"
+                      stroke-width="2"
                       stroke-linecap="round"
                       stroke-linejoin="round"/>
-                <!-- Detalle interior (opcional) -->
-            <path d="M3 19l9-4"
-                  stroke="currentColor"
-                  stroke-width="1.4"
-                  stroke-linecap="round"
-                  opacity="0.7"/>
+                <path d="M3 19l9-4"
+                      stroke="currentColor"
+                      stroke-width="1.4"
+                      stroke-linecap="round"
+                      opacity="0.7"/>
             </svg>
+            <span>Compartir</span>
         </button>
 
-        <!-- Eliminar: tacho de basura  -->
-        <button class="icon-btn danger" data-action="delete" aria-label="Solicitar eliminación" title="Solicitar eliminación">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <!-- Cuerpo de la papelera -->
+        <#assign sieteDiasEnMilis = 604800000>
+        <#if username?? && hecho.contribuyente?? && hecho.contribuyente.username == username && hecho.fechaDeCarga??
+        && ((.now?long - hecho.fechaDeCarga?long) < sieteDiasEnMilis)>
+
+            <a href="/hechos/${hecho.hechoId?html}/modificar"
+               class="btn-action-large"
+               aria-label="Solicitar modificación de hecho"
+               title="Solicitar Modificación"
+               style="text-decoration: none;">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="20" height="20" viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     aria-hidden="true">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                </svg>
+                <span>Modificar</span>
+            </a>
+        </#if>
+
+        <button class="btn-action-large danger" data-action="delete" aria-label="Solicitar eliminación" title="Solicitar eliminación">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M5 8h14v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8Z"
                       stroke="currentColor"
-                      stroke-width="1.5"
+                      stroke-width="2"
                       stroke-linejoin="round"/>
-                <!-- Tapa -->
                 <path d="M4 6h16"
                       stroke="currentColor"
                       stroke-width="1.5"
                       stroke-linecap="round"/>
-                <!-- Asa -->
                 <path d="M9 6V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"
                       stroke="currentColor"
                       stroke-width="1.5"
                       stroke-linecap="round"/>
-                <!-- Líneas de contenido -->
                 <path d="M10 11v6M14 11v6"
                       stroke="currentColor"
                       stroke-width="1.5"
                       stroke-linecap="round"/>
             </svg>
+            <span>Eliminar</span>
         </button>
+
     </div>
+    <style>
+        /* Grupo de botones */
+        .action-buttons-group {
+            display: flex;
+            flex-wrap: wrap; /* Permite que bajen si no hay espacio */
+            gap: 12px;       /* Espacio entre botones */
+            margin-top: 15px;
+        }
+
+        /* Nuevo estilo para botón grande con texto */
+        .btn-action-large {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Espacio entre el icono y el texto */
+
+            padding: 10px 16px; /* Más relleno para hacerlo grande */
+            font-size: 0.95rem;
+            font-weight: 500;
+
+            background-color: white;
+            color: var(--text-color, #333);
+            border: 1px solid var(--border-color, #dee2e6);
+            border-radius: 8px; /* Bordes más redondeados */
+
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none; /* Para el <a> */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .btn-action-large svg {
+            /* Aseguramos que el icono no se deforme */
+            flex-shrink: 0;
+        }
+
+        /* Hover general */
+        .btn-action-large:hover {
+            background-color: var(--bg-light, #f8f9fa);
+            border-color: var(--primary-color, #1d7858);
+            color: var(--primary-color, #1d7858);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Estilo específico para Eliminar (Danger) */
+        .btn-action-large.danger {
+            color: #dc3545;
+            border-color: #f5c6cb;
+            background-color: #fff;
+        }
+
+        .btn-action-large.danger:hover {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        /* Responsive: En móviles muy pequeños, quizás quieras ocultar el texto y volver al icono solo */
+        @media (max-width: 480px) {
+            .btn-action-large span {
+                display: none;
+            }
+            .btn-action-large {
+                padding: 10px; /* Reducir padding horizontal */
+            }
+        }
+    </style>
 </#macro>
 
 <#macro tagsList etiquetas>
@@ -339,13 +430,13 @@
 
         <div class="filter-actions">
             <button class="btn" type="submit">Aplicar</button>
-            <a class="btn btn-ghost" href="${(baseHref!'/hechos')}">Limpiar</a>
+            <a class="btn btn-ghost" href="${baseHref!'/hechos'}">Limpiar</a>
         </div>
     </div>
 </#macro>
 
 <#-- CARD DE HECHO -------------------------------------------------------->
-<#macro hechoCard id titulo resumen fecha categoria ubicacion etiquetas verHref imagen="">
+<#macro hechoCard id titulo resumen fecha categoria ubicacion etiquetas verHref imagen rolUsuario="">
     <article class="card card-hecho">
 
         <div class="card-media" style="height: 200px; overflow: hidden; background-color: #f0f2f5; position: relative;">
@@ -407,11 +498,26 @@
                 </#if>
             </div>
 
-            <#if etiquetas?? && (etiquetas?size > 0)>
+            <#if (etiquetas?? && (etiquetas?size > 0)) || (rolUsuario == "ADMINISTRADOR")>
                 <div class="card-tags">
-                    <#list etiquetas as e>
-                        <span class="tag">${(e.nombre!e)?html}</span>
-                    </#list>
+                    <#if etiquetas??>
+                        <#list etiquetas as e>
+                            <span class="tag">${(e.nombre!e)?html}</span>
+                        </#list>
+                    </#if>
+
+                    <#if rolUsuario == "ADMINISTRADOR">
+                        <button type="button"
+                                class="btn-add-tag"
+                                onclick="abrirModalEtiqueta('${id}')"
+                                title="Agregar etiqueta">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Agregar
+                        </button>
+                    </#if>
                 </div>
             </#if>
         </div>

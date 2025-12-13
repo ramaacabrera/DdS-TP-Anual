@@ -1,12 +1,15 @@
 package web.dto.Solicitudes;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class SolicitudDeModificacionDTO extends SolicitudDTO {
     private UUID id;
-
     private HechoModificadoDTO hechoModificado;
     private EstadoSolicitudModificacionDTO estado;
+    private String hechoTitulo;
+    private List<Map<String, String>> cambios;
 
     public SolicitudDeModificacionDTO() {}
 
@@ -32,4 +35,11 @@ public class SolicitudDeModificacionDTO extends SolicitudDTO {
 
     public EstadoSolicitudModificacionDTO getEstado() { return estado; }
     public void setEstado(EstadoSolicitudModificacionDTO estado) { this.estado = estado; }
+
+    // Getters y Setters new
+    public String getHechoTitulo() { return hechoTitulo; }
+    public void setHechoTitulo(String hechoTitulo) { this.hechoTitulo = hechoTitulo; }
+
+    public List<Map<String, String>> getCambios() { return cambios; }
+    public void setCambios(List<Map<String, String>> cambios) { this.cambios = cambios; }
 }

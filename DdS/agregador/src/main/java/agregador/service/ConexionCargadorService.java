@@ -83,18 +83,21 @@ public class ConexionCargadorService {
 
     public String nuevaConexion(String sessionId, Fuente nuevo, @NotNull WsConnectContext ctx) {
         try {
+            /*
             Fuente fuentePersistida = fuenteRepositorio.buscarPorDescriptor(nuevo.getDescriptor());
 
             if (fuentePersistida == null) {
                 System.out.println("➕ Guardando nueva fuente: " + nuevo.getDescriptor());
-                fuentePersistida = fuenteRepositorio.guardar(nuevo);
+                fuentePersistida = new Fuente()
             } else {
                 System.out.println("🔍 Fuente existente encontrada: " + fuentePersistida.getId());
             }
 
-            this.registrarFuentePorSession(sessionId, fuentePersistida.getId(), ctx);
+             */
+            UUID fuenteId = UUID.randomUUID();
+            this.registrarFuentePorSession(sessionId, fuenteId, ctx);
 
-            WsMessage<IdCargadorPayload> mensaje = new WsMessage<>("idCargador", new IdCargadorPayload(fuentePersistida.getId()));
+            WsMessage<IdCargadorPayload> mensaje = new WsMessage<>("idCargador", new IdCargadorPayload(fuenteId));
             String message = mapper.writeValueAsString(mensaje);
 
             System.out.println("🎯 Conexión establecida exitosamente - Session: " + sessionId);

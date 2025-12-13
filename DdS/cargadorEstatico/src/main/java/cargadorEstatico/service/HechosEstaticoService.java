@@ -4,6 +4,8 @@ import cargadorEstatico.controller.ConexionEstatica;
 import cargadorEstatico.domain.fuente.Fuente;
 import cargadorEstatico.dto.Hechos.FuenteDTO;
 import cargadorEstatico.dto.Hechos.HechoDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 import java.nio.file.*;
@@ -54,7 +56,6 @@ public class HechosEstaticoService {
         }
 
         hechosTotales.forEach(hecho->hecho.setFuente(new FuenteDTO(fuente.getId(),fuente.getTipoDeFuente().toString(),fuente.getDescriptor())));
-
         return hechosTotales;
     }
 

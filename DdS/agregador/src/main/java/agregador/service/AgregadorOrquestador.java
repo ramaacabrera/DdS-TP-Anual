@@ -11,8 +11,12 @@ import agregador.dto.Solicitudes.SolicitudDeModificacionDTO;
 import agregador.repository.ColeccionRepositorio;
 import agregador.repository.FuenteRepositorio;
 import agregador.repository.HechoRepositorio;
+import agregador.service.normalizacion.GeolocalizadorOffline;
+import agregador.service.normalizacion.ServicioGeoref;
+import agregador.service.normalizacion.ServicioNormalizacion;
 import agregador.utils.BDUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +31,6 @@ public class AgregadorOrquestador {
     private final MotorConsenso motorConsenso;
     private final GestorSolicitudes gestorSolicitudes;
     private final HechosCargadorService hechosCargadorService;
-
     private final ServicioGeoref servicioGeoref;
 
     public AgregadorOrquestador(
@@ -52,14 +55,15 @@ public class AgregadorOrquestador {
 
     public void iniciarBusquedaAgregador() {
         System.out.println(">>> Iniciando ciclo de búsqueda del Agregador...");
-        hechosCargadorService.obtenerHechosNuevos();
         hechosCargadorService.obtenerSolicitudes();
+        hechosCargadorService.obtenerHechosNuevos();
     }
 
     public void ejecutarAlgoritmoDeConsenso() {
         motorConsenso.ejecutar();
     }
 
+    @Transactional
     public void procesarNuevosHechos(List<HechoDTO> hechosDTO) {
         System.out.println("Procesando lote de " + hechosDTO.size() + " hechos.");
         if (hechosDTO.isEmpty()) return;
@@ -117,6 +121,7 @@ public class AgregadorOrquestador {
         }
     }
 
+    @Transactional
     public void actualizarColeccionesConNuevosHechos(List<Hecho> nuevosHechos) {
         int pageSize = 100;
         long totalColecciones = coleccionRepositorio.contarTodas();
@@ -162,7 +167,17 @@ public class AgregadorOrquestador {
 
             if (descripcionEncontrada != null) {
                 ubicacion.setDescripcion(descripcionEncontrada);
-                System.out.println("✅ Ubicación actualizada: " + descripcionEncontrada);
+                System.out.println("✅ Ubicación actualizada (API): " + descripcionEncontrada);
+            } else {
+                System.out.println("⚠ API falló, calculando ubicación aproximada offline...");
+
+                String descripcionOffline = GeolocalizadorOffline.obtenerUbicacionAproximada(
+                        ubicacion.getLatitud(),
+                        ubicacion.getLongitud()
+                );
+
+                ubicacion.setDescripcion(descripcionOffline);
+                System.out.println("✅ Ubicación actualizada (Offline): " + descripcionOffline);
             }
         }
     }

@@ -1,3 +1,124 @@
+/* =========================================
+   RESET PARA PROTEGER COMPONENTES HOME
+   ========================================= */
+
+/* 1. RESET COMPLETO para home-nav-card - SOBRESCRIBE cualquier estilo previo */
+.home-nav-card,
+.home-quick-nav-cards a.home-nav-card {
+    all: unset !important;
+    cursor: pointer !important;
+
+    /* Restaura los estilos específicos del home */
+    background: white !important;
+    border-radius: var(--home-border-radius) !important;
+    padding: 30px 25px !important;
+    box-shadow: var(--home-box-shadow) !important;
+    transition: var(--home-transition) !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    color: inherit !important;
+    border: 1px solid #e9ecef !important;
+
+    flex: 0 1 300px !important;
+    min-width: 260px !important;
+    max-width: 350px !important;
+    min-height: 220px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    white-space: normal !important;
+}
+
+/* 2. Reset para hover */
+.home-nav-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+    border-color: var(--home-primary) !important;
+    text-decoration: none !important;
+    color: inherit !important;
+    background: white !important; /* Mantener fondo blanco en hover */
+}
+
+/* 3. Reset específico para iconos y texto */
+.home-nav-card-icon {
+    font-size: 3rem !important;
+    margin-bottom: 20px !important;
+    display: block !important;
+    color: var(--home-primary) !important;
+}
+
+.home-nav-card h3 {
+    margin-bottom: 15px !important;
+    color: var(--home-dark) !important;
+    font-size: 1.3rem !important;
+    font-weight: 600 !important;
+}
+
+.home-nav-card p {
+    color: var(--home-gray) !important;
+    line-height: 1.5 !important;
+    margin: 0 !important;
+    font-size: 1rem !important;
+}
+
+/* 4. Proteger también los botones del hero */
+.home-hero-buttons .home-btn {
+
+    cursor: pointer;
+
+    padding: 12px 30px !important;
+    border-radius: var(--home-border-radius) !important;
+    font-weight: 500 !important;
+    transition: var(--home-transition) !important;
+    border: none !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    text-align: center !important;
+    font-size: 1rem !important;
+    font-family: inherit !important;
+}
+
+.home-btn-large {
+    padding: 14px 32px !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+}
+
+.home-btn-outline {
+    background: transparent !important;
+    border: 2px solid var(--home-primary) !important;
+    color: var(--home-primary) !important;
+}
+
+.home-btn-outline:hover {
+    background: var(--home-primary) !important;
+    color: white !important;
+    text-decoration: none !important;
+    transform: translateY(-2px) !important;
+}
+
+.home-btn-primary {
+    background: var(--home-primary) !important;
+    color: white !important;
+    border: 2px solid var(--home-primary) !important;
+}
+
+.home-btn-primary:hover {
+    background: var(--home-primary-dark) !important;
+    border-color: var(--home-primary-dark) !important;
+    color: white !important;
+    text-decoration: none !important;
+    transform: translateY(-2px) !important;
+}
+
+/* 5. Asegurar que el contenedor del home no herede estilos */
+.home-container {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
 :root {
     --home-primary: #1d7858;
     --home-primary-light: #2a946e;
@@ -46,7 +167,10 @@
 
 .home-hero-buttons {
     display: flex;
+    flex-direction: row;
+    align-items: center;
     justify-content: center;
+
     gap: 15px;
     margin-top: 30px;
 }
@@ -73,12 +197,12 @@
 }
 
 .home-quick-nav-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-    row-gap: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
     max-width: 100%;
-    padding-bottom: 100px;
+    padding-bottom: 50px;
 }
 
 .home-nav-card {
@@ -91,21 +215,25 @@
     cursor: pointer;
     text-decoration: none;
     color: inherit;
-    display: block;
     border: 1px solid #e9ecef;
-    height: 100%;
-    min-height: 180px;
+
+    flex: 0 1 300px;
+    min-width: 260px;
+    max-width: 350px;
+    min-height: 220px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 .home-nav-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
     border-color: var(--home-primary);
     text-decoration: none;
     color: inherit;
+    z-index: 2;
 }
 
 .home-nav-card-icon {
@@ -256,11 +384,7 @@
         font-size: 1.1rem;
     }
 
-    .home-hero-buttons {
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-    }
+
 
     .home-btn-large {
         width: 100%;
@@ -273,10 +397,13 @@
     }
 
     .home-quick-nav-cards {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 25px;
-        max-width: 100%;
+    }
+
+    .home-nav-card {
+        flex: 1 1 100%;
+        max-width: 400px;
     }
 
     .home-map-section {
@@ -291,6 +418,19 @@
     .home-section-title {
         font-size: 1.7rem;
         margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 992px) {
+    .home-quick-nav-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 550px) {
+    /* Para celulares, 1 sola columna */
+    .home-quick-nav-cards {
+        grid-template-columns: 1fr;
     }
 }
 

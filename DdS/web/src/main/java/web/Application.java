@@ -45,14 +45,15 @@ public class Application {
         HechoService hechoService = new HechoService(urlPublica);
         EstadisticasService estadisticasService = new EstadisticasService(urlEstadisticas);
         CategoriasService categoriasService = new CategoriasService(urlEstadisticas);
-        SolicitudService solicitudService = new SolicitudService(urlAdmin);
+        SolicitudService solicitudService = new SolicitudService(urlAdmin,urlPublica);
         UsuarioService usuarioService = new UsuarioService(urlPublica);
         FuenteService fuenteService = new FuenteService(urlPublica);
 
         // controllers
         ColeccionController coleccionController = new ColeccionController(coleccionService, usuarioService, fuenteService);
-        HechoController hechoController = new HechoController(urlPublica, hechoService, dataCloud);
-        SolicitudController solicitudController = new SolicitudController(solicitudService);
+        HechoController hechoController = new HechoController(urlPublica, urlAdmin,hechoService, dataCloud);
+        SolicitudController solicitudController = new SolicitudController(solicitudService, urlPublica, usuarioService);
+        AdministradorController administradorController = new AdministradorController(solicitudService);
 
         app.get("/health", ctx -> { ctx.status(200).result("OK");});
 
@@ -80,7 +81,6 @@ public class Application {
         app.get("/colecciones", coleccionController.listarColecciones);
         app.get("/colecciones/{id}", coleccionController.obtenerColeccionPorId);
         app.get("/editar-coleccion/{id}", coleccionController.obtenerPageEditarColeccion);
-        app.get("/crear-coleccion", coleccionController.obtenerPageCrearColeccion);
         app.post("/colecciones", coleccionController.crearColeccion);
         app.put("/colecciones/{id}", coleccionController.editarColeccion);
         app.delete("/colecciones/{id}", coleccionController.eliminarColeccion);
@@ -96,13 +96,19 @@ public class Application {
         //solicitudes
 
         app.get("/hechos/{id}/eliminar", solicitudController.obtenerFormsEliminarSolicitud);
-        //app.get("/api/solicitudes", new GetSolicitudesEliminacionHandler(urlAdmin));
         app.get("/api/solicitudes/{id}", solicitudController.obtenerFormsEliminarSolicitud);
 
-        app.get("/admin/solicitudes", solicitudController.listarSolicitudes);
+        app.get("/hechos/{id}/modificar", solicitudController.obtenerFormsModificarSolicitud);
+        app.post("/api/solicitar-modificacion", solicitudController.crearSolicitudModificacion);
+        //app.get("/api/solicitudes/{id}", solicitudController.obtenerFormsModificarSolicitud);
+
+        app.get("/admin/solicitudes/eliminacion", solicitudController.listarSolicitudesEliminacion);
+        app.get("/admin/solicitudes/modificacion", solicitudController.listarSolicitudesModificacion);
         app.get("/admin/solicitudes/{tipo}/{id}", solicitudController.obtenerSolicitud);
         app.patch("/admin/solicitudes/{tipo}/{id}", solicitudController.actualizarEstadoSolicitud);
 
+        app.get("/admin/crear-coleccion", coleccionController.obtenerPageCrearColeccion);
 
+        app.get("/admin/panel", administradorController.obtenerPagePanel);
     }
 }

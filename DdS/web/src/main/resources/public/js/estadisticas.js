@@ -17,7 +17,7 @@ function showError(containerId, message) {
 }
 
 async function cargarEstadisticasGenerales() {
-    const API_BASE_URL = '/api/estadisticas';
+    const API_BASE_URL = 'http://localhost:8088/api/estadisticas';
     try {
         const spamResponse = await fetch(`${API_BASE_URL}/solicitudesSpam`);
         if (spamResponse.ok) {

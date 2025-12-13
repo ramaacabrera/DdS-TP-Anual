@@ -1,14 +1,15 @@
 <#assign pageTitle = "Colecciones">
+<#assign additionalCss = ["/css/styleColecciones.css", "/css/styleCrearHechoSolEliminacion.css"]>
 <#assign content>
 <div class="container">
     <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
-        <a href="/" class="header-link back-link">&larr; Volver al inicio</a>
+        <a href='${callback}' class="header-link back-link">&larr; Volver</a>
     </div>
 
     <h1 class="main-title">Listado de Colecciones</h1>
     <#if rolUsuario == "ADMINISTRADOR">
         <div class="form-actions" style="margin-bottom: 20px;">
-            <a href="/crear-coleccion" class="btn btn-primary">➕ Nueva Colección</a>
+            <a href="/admin/crear-coleccion" class="btn btn-primary">➕ Nueva Colección</a>
         </div>
     </#if>
     <#if colecciones?? && (colecciones?size > 0)>
@@ -41,6 +42,19 @@
             <div class="empty-state-icon">📭</div>
             <h3>No hay colecciones creadas aún</h3>
             <p>Podés crear una nueva colección desde el botón de arriba.</p>
+        </div>
+    </#if>
+
+    <!-- Paginador -->
+    <#if totalPages?? && (totalPages > 1)>
+        <div class="page-btn" style="display: flex; justify-content: center; margin: 30px 0;">
+            <#import "fragments/components.ftl" as cmp>
+            <@cmp.pager
+            page=(page!1)
+            size=(size!10)
+            totalPages=(totalPages!1)
+            baseHref=(baseHref!"/colecciones")
+            keep={} />
         </div>
     </#if>
 </div>
@@ -181,103 +195,7 @@ setupModalClicks();
 });
 </script>
 
-<style>
-    /* Estilos para el modal */
-.modal {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: rgba(0, 0, 0, 0.5);
-display: flex;
-align-items: center;
-justify-content: center;
-z-index: 1000;
-animation: fadeIn 0.3s ease;
-}
 
-.modal-content {
-background: white;
-padding: 30px;
-border-radius: 8px;
-max-width: 500px;
-width: 90%;
-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-animation: slideIn 0.3s ease;
-}
-
-/* Estilos específicos para modal de éxito */
-#modalExito .modal-content {
-background: #f8fff8;
-border: 1px solid #d4edda;
-}
-
-.btn-danger {
-background-color: #dc3545;
-color: white;
-border: 1px solid #dc3545;
-}
-
-.btn-danger:hover {
-background-color: #c82333;
-border-color: #bd2130;
-}
-
-.btn-outline {
-background-color: transparent;
-color: #6c757d;
-border: 1px solid #6c757d;
-}
-
-.btn-outline:hover {
-background-color: #6c757d;
-color: white;
-}
-
-.btn-sm {
-padding: 6px 12px;
-font-size: 14px;
-}
-
-.btn-primary {
-background-color: #007bff;
-color: white;
-border: 1px solid #007bff;
-}
-
-.btn-primary:hover {
-background-color: #0056b3;
-border-color: #0056b3;
-}
-
-/* Animaciones */
-@keyframes fadeIn {
-from { opacity: 0; }
-to { opacity: 1; }
-}
-
-@keyframes slideIn {
-from {
-opacity: 0;
-transform: translateY(-20px);
-}
-to {
-opacity: 1;
-transform: translateY(0);
-}
-}
-
-/* Estilo para mensaje de éxito */
-.mensaje-exito {
-color: #155724;
-background-color: #d4edda;
-border: 1px solid #c3e6cb;
-border-radius: 4px;
-padding: 10px;
-margin: 10px 0;
-}
-</style>
 </#assign>
 
 <#include "layout.ftl">

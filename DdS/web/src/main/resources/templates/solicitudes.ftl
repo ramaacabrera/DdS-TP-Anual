@@ -1,4 +1,4 @@
-<#assign pageTitle = "Gestión de Solicitudes">
+<#assign pageTitle = "Gestión de Solicitudes de Eliminación">
 <#assign additionalCSS>
     <link rel="stylesheet" href="/css/styleSolicitudes.css">
 </#assign>
@@ -7,7 +7,7 @@
     <div class="container">
 
         <div class="header">
-            <a href="/home" class="header-link back-link">&larr; Volver al Inicio</a>
+            <a href="/admin/panel" class="header-link back-link">&larr; Volver al Panel</a>
         </div>
 
         <h1 class="main-title">Solicitudes de Eliminación</h1>
@@ -40,6 +40,18 @@
             </div>
         </#if>
     </div>
+    <!-- Paginador -->
+    <#if totalPages?? && (totalPages > 1)>
+        <div class="page-btn" style="display: flex; justify-content: center; margin: 30px 0;">
+            <#import "fragments/components.ftl" as cmp>
+            <@cmp.pager
+            page=(page!1)
+            size=(size!10)
+            totalPages=(totalPages!1)
+            baseHref=(baseHref!"/admin/solicitudes/eliminacion")
+            keep={} />
+        </div>
+    </#if>
 </#assign>
 
 <!-- MACRO para tarjeta de solicitud -->

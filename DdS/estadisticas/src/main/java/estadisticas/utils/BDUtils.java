@@ -10,7 +10,7 @@ public class BDUtils {
 
     static {
         try {
-            factory = Persistence.createEntityManagerFactory("servicioEstadisticas-PU");
+            factory = Persistence.createEntityManagerFactory("estadisticas-PU");
         } catch (Exception e) {
             throw new RuntimeException("Error inicializando EntityManagerFactory", e);
         }

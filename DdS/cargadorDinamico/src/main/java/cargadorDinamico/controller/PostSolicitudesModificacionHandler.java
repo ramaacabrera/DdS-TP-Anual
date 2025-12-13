@@ -17,6 +17,7 @@ public class PostSolicitudesModificacionHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context context) throws Exception {
+        System.out.println("Proceso la solicitud de modificacion");
         String bodyString = context.body();
         SolicitudModificacion_D_DTO solicitudNueva = context.bodyAsClass(SolicitudModificacion_D_DTO.class);
 
@@ -32,6 +33,8 @@ public class PostSolicitudesModificacionHandler implements Handler {
         entidad.setUsuario(solicitudNueva.getUsuario());
         entidad.setEstadoSolicitudModificacion(EstadoSolicitudModificacion_D.PENDIENTE);
         entidad.setHechoModificado(solicitudNueva.getHechoModificado());
+
+        System.out.println("ID del usuario: " + entidad.getUsuario().getId_usuario().toString());
 
         service.guardarSolicitudModificacion(entidad);
         context.status(201);

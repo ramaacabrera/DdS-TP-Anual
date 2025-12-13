@@ -1,11 +1,9 @@
-package agregador.service;
+package agregador.service.normalizacion;
 
 import agregador.dto.Hechos.*; // Importa los DTOs anidados (FuenteDTO, etc)
 import agregador.domain.HechosYColecciones.*;
 import agregador.domain.Usuario.Usuario;
 import agregador.domain.fuente.Fuente;
-import agregador.domain.fuente.TipoDeFuente;
-import agregador.service.normalizacion.MockNormalizador;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -19,10 +17,8 @@ public class ServicioNormalizacion {
     }
 
     public Hecho normalizar(HechoDTO hechoDTO) {
-        // 1. Convertimos DTO -> Entidad manualmente aquí (Patrón Mapper)
         Hecho hechoSinNormalizar = convertirAEntidad(hechoDTO);
 
-        // 2. Ejecutamos la normalización sobre la entidad
         return normalizador.normalizar(hechoSinNormalizar);
     }
 

@@ -1,7 +1,7 @@
 package estadisticas.repository;
 
-import estadisticas.domain.EstadisticasColeccion;
-import estadisticas.domain.Estadisticas;
+import estadisticas.domainEstadisticas.EstadisticasColeccion;
+import estadisticas.domainEstadisticas.Estadisticas;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -49,12 +49,13 @@ public class EstadisticasColeccionRepositorio {
     public Optional<Map<String, String>> buscarProvinciaYNombreColeccion(UUID idColeccion) {
         EntityManager em = BDUtilsEstadisticas.getEntityManager();
         try {
-            TypedQuery<Object[]> query = em.createQuery(
-                    "SELECT ec.provincia, ec.titulo " +
-                            "FROM EstadisticasColeccion ec " +
-                            "WHERE ec.coleccionId = :idColeccion " +
-                            "AND ec.estadisticas.estadisticas_id = (SELECT MAX(e2.estadisticas_id) FROM Estadisticas e2)",
-                    Object[].class);
+            String queryStr = "SELECT ec.provincia, ec.titulo " +
+                    "FROM EstadisticasColeccion ec " +
+                    "JOIN ec.estadisticas e " +
+                    "WHERE ec.coleccionId = :idColeccion " +
+                    "ORDER BY e.estadisticas_fecha DESC";
+
+            TypedQuery<Object[]> query = em.createQuery(queryStr, Object[].class);
 
             query.setParameter("idColeccion", idColeccion);
             query.setMaxResults(1);
@@ -67,15 +68,16 @@ public class EstadisticasColeccionRepositorio {
 
             Object[] resultado = resultados.get(0);
             Map<String, String> datos = new HashMap<>();
-            datos.put("provincia", (String) resultado[0]);
-            datos.put("nombre", (String) resultado[1]);
+            datos.put("provincia", resultado[0] != null ? (String) resultado[0] : "N/A");
+            datos.put("nombre", resultado[1] != null ? (String) resultado[1] : "Sin Título");
 
             return Optional.of(datos);
 
         } catch (Exception e) {
+            e.printStackTrace();
             return Optional.empty();
         } finally {
-            em.close();
+            if (em != null && em.isOpen()) em.close();
         }
     }
     public List<EstadisticasColeccion> buscarPorEstadisticaPadre(Estadisticas estadistica) {

@@ -32,6 +32,7 @@ public class OnMessageHandler {
                 case "hechosObtenidos" -> {
                     HechosObtenidosPayload payload = mapper.treeToValue(root.get("payload"), HechosObtenidosPayload.class);
                     System.out.println("→ Hechos recibidos: " + payload.hechos.size());
+                    //System.out.println("Hecho 0 recibido: " + mapper.writeValueAsString(payload.hechos.get(0)));
                     agregador.procesarNuevosHechos(payload.hechos);
                 }
                 case "solicitudesModificacionObtenidos" -> {
