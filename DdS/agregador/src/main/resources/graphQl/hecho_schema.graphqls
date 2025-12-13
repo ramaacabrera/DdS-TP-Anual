@@ -5,6 +5,9 @@ type Hecho {
   categoria: String
   fechaDeAcontecimiento: String
   fechaDeCarga: String
+  ubicacion: Ubicacion
+  fuente: Fuente
+  estadoHecho: EstadoHecho
 }
 
 input HechoFiltroInput {
@@ -32,3 +35,22 @@ type Query {
   hechos(filtro: HechoFiltroInput, page: PageInput): PageHecho
   hecho(id: ID!): Hecho
 }
+
+type Ubicacion {
+  id: ID
+  latitud: Float
+  longitud: Float
+  descripcion: String
+}
+
+type Fuente {
+  id: ID
+  tipoDeFuente: String
+}
+
+enum EstadoHecho {
+  ACTIVO
+  OCULTO
+}
+
+

@@ -31,4 +31,8 @@ public class FuenteDTO {
 
     public String getDescriptor() { return descriptor; }
     public void setDescriptor(String descriptor) { this.descriptor = descriptor; }
+
+    public String getId() {
+        return fuenteId != null ? fuenteId.toString() : null;
+    }
 }

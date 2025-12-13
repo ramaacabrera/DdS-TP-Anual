@@ -124,7 +124,7 @@ public class HechoDTO {
         this.contenidoMultimedia = contenidoMultimedia;
     }
 
-    public static HechoDTO fromHechoGraphQL(Hecho hecho) {
+    /*public static HechoDTO fromHechoGraphQL(Hecho hecho) {
         HechoDTO dto = new HechoDTO();
 
         dto.hechoId = hecho.getHecho_id();
@@ -136,7 +136,7 @@ public class HechoDTO {
         dto.esEditable = hecho.getEsEditable();
 
         return dto;
-    }
+    }*/
 
 
     // Getters y Setters
