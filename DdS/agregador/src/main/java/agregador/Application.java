@@ -1,16 +1,20 @@
 package agregador;
 
 import agregador.controller.*;
+import agregador.graphQl.GraphQLProvider;
 import agregador.service.*;
 import agregador.repository.ConexionCargadorRepositorio;
 import agregador.repository.*;
 import agregador.service.normalizacion.DiccionarioCategorias;
 import agregador.service.normalizacion.MockNormalizador;
 import agregador.service.normalizacion.ServicioNormalizacion;
+import graphql.ExecutionInput;
+import graphql.ExecutionResult;
 import io.javalin.Javalin;
 import agregador.utils.IniciadorApp;
 import agregador.utils.LecturaConfig;
 
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 
@@ -72,5 +76,26 @@ public class Application {
             });
             ws.onClose(new OnCloseHandler(conexionCargadorService, fuenteRepositorio));
         });
+
+        GraphQLProvider graphQLProvider = new GraphQLProvider();
+
+        app.post("/graphql", ctx -> {
+            Map<String, Object> request = ctx.bodyAsClass(Map.class);
+
+            String query = (String) request.get("query");
+            Map<String, Object> variables =
+                    (Map<String, Object>) request.getOrDefault("variables", Map.of());
+
+            ExecutionInput executionInput = ExecutionInput.newExecutionInput()
+                    .query(query)
+                    .variables(variables)
+                    .build();
+
+            ExecutionResult executionResult =
+                    graphQLProvider.graphQL().execute(executionInput);
+
+            ctx.json(executionResult.toSpecification());
+        });
+
     }
 }

@@ -1,0 +1,34 @@
+type Hecho {
+  id: ID!
+  titulo: String
+  descripcion: String
+  categoria: String
+  fechaDeAcontecimiento: String
+  fechaDeCarga: String
+}
+
+input HechoFiltroInput {
+  categoria: String
+  titulo: String
+  fechaAcontecimientoDesde: String
+  fechaAcontecimientoHasta: String
+  ubicacion: String
+}
+
+input PageInput {
+  page: Int = 1
+  size: Int = 10
+}
+
+type PageHecho {
+  content: [Hecho]
+  page: Int
+  size: Int
+  totalPages: Int
+  totalElements: Int
+}
+
+type Query {
+  hechos(filtro: HechoFiltroInput, page: PageInput): PageHecho
+  hecho(id: ID!): Hecho
+}
