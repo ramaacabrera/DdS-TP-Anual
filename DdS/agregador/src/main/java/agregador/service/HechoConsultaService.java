@@ -28,23 +28,33 @@ public class HechoConsultaService {
 
         List<Criterio> criterios = construirCriterios(filtro);
 
+        // 🔴 ENTIDADES JPA (solo acá)
         List<Hecho> hechos = hechoRepositorio.buscarHechos(criterios);
 
-        // Paginado en memoria (como ya hace el sistema)
-        int total = hechos.size();
+        // 🟢 CONVERTIR INMEDIATAMENTE A DTO
+        List<HechoDTO> dtos = hechos.stream()
+                .map(HechoDTO::new)
+                .toList();
+
+        // Paginado en memoria
+        int total = dtos.size();
         int page = pageRequest.getPage();
         int size = pageRequest.getSize();
 
         int from = Math.min((page - 1) * size, total);
         int to = Math.min(from + size, total);
 
-        List<Hecho> pagina = hechos.subList(from, to);
+        List<HechoDTO> contenido = dtos.subList(from, to);
 
-        List<HechoDTO> content = pagina.stream()
-                .map(HechoDTO::fromHechoGraphQL)
-                .toList();
+        int totalPages = (int) Math.ceil((double) total / size);
 
-        return PageHechoDTO.from(pagina, page, size, total);
+        return new PageHechoDTO(
+                contenido,
+                page,
+                size,
+                totalPages,
+                total
+        );
     }
 
     // =========================

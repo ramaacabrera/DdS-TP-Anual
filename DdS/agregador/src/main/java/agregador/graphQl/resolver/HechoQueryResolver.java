@@ -17,13 +17,12 @@ public class HechoQueryResolver {
 
     public PageHechoDTO hechos(Map<String, Object> filtroInput,
                                Map<String, Object> pageInput) {
-        // Convertir inputs de GraphQL a DTOs
-        HechoFiltroDTO filtro = HechoFiltroDTO.fromMap(filtroInput);
-        PageRequestDTO pageRequest = PageRequestDTO.fromMap(pageInput);
-
-        // Delegar al servicio
-        return hechoConsultaService.buscarHechos(filtro, pageRequest);
+        return hechoConsultaService.buscarHechos(
+                HechoFiltroDTO.fromMap(filtroInput),
+                PageRequestDTO.fromMap(pageInput)
+        );
     }
+
 
     public Hecho hecho(String id) {
         return hechoConsultaService.obtenerHechoPorId(id);
