@@ -2,6 +2,7 @@ FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
 COPY pom.xml .
+# ... (Copia de todos los POMs igual que arriba) ...
 COPY agregador/pom.xml agregador/pom.xml
 COPY cargadorDemo/pom.xml cargadorDemo/pom.xml
 COPY cargadorDinamico/pom.xml cargadorDinamico/pom.xml
