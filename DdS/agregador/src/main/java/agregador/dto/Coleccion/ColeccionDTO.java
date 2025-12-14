@@ -87,4 +87,9 @@ public class ColeccionDTO {
     public void setAlgoritmoDeConsenso(TipoAlgoritmoConsensoDTO algoritmoDeConsenso) {
         this.algoritmoDeConsenso = algoritmoDeConsenso;
     }
+
+
+    public String getId() {
+        return coleccionId != null ? coleccionId.toString() : null;
+    }
 }

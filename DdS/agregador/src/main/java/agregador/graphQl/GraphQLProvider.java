@@ -1,7 +1,10 @@
 package agregador.graphQl;
 
+import agregador.graphQl.resolver.ColeccionQueryResolver;
 import agregador.graphQl.resolver.HechoQueryResolver;
+import agregador.repository.ColeccionRepositorio;
 import agregador.repository.HechoRepositorio;
+import agregador.service.ColeccionConsultaService;
 import agregador.service.HechoConsultaService;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
@@ -20,7 +23,7 @@ public class GraphQLProvider {
 
     private void init() {
 
-        // 1️⃣ Cargar el schema desde resources/schema.graphqls
+        //Cargar el schema desde resources/schema.graphqls
         InputStream schemaStream = getClass()
                 .getClassLoader()
                 .getResourceAsStream("graphQl/hecho_schema.graphqls");
@@ -32,16 +35,24 @@ public class GraphQLProvider {
         TypeDefinitionRegistry typeRegistry =
                 new SchemaParser().parse(new InputStreamReader(schemaStream));
 
-        // 2️⃣ Crear repositorio y service del agregador
+
+        //Crear repositorio y service del agregador
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         HechoConsultaService hechoConsultaService =
                 new HechoConsultaService(hechoRepositorio);
 
-        // 3️⃣ Crear resolvers
+        ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
+        ColeccionConsultaService coleccionService =
+                new ColeccionConsultaService(coleccionRepositorio);
+
+        //Crear resolvers
         HechoQueryResolver hechoQueryResolver =
                 new HechoQueryResolver(hechoConsultaService);
 
-        // 4️⃣ Wirear schema + resolvers
+        ColeccionQueryResolver coleccionResolver =
+                new ColeccionQueryResolver(coleccionService);
+
+        //Wirear schema + resolvers
         RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
                 .type(TypeRuntimeWiring.newTypeWiring("Query")
                         .dataFetcher("hechos", env ->
@@ -55,14 +66,26 @@ public class GraphQLProvider {
                                         env.getArgument("id")
                                 )
                         )
+                        .dataFetcher("colecciones", env ->
+                                coleccionResolver.colecciones(
+                                        env.getArgument("filtro"),
+                                        env.getArgument("page")
+                                )
+                        )
+                        .dataFetcher("coleccion", env ->
+                                coleccionResolver.coleccion(
+                                        env.getArgument("id")
+                                )
+                        )
+
                 )
                 .build();
 
-        // 5️⃣ Crear el schema final
+        //Crear el schema final
         GraphQLSchema schema = new SchemaGenerator()
                 .makeExecutableSchema(typeRegistry, runtimeWiring);
 
-        // 6️⃣ Crear GraphQL
+        //Crear GraphQL
         this.graphQL = GraphQL.newGraphQL(schema).build();
     }
 

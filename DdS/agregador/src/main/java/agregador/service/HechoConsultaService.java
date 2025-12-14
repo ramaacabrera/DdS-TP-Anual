@@ -30,10 +30,10 @@ public class HechoConsultaService {
 
         List<Criterio> criterios = construirCriterios(filtro);
 
-        // 🔴 ENTIDADES JPA (solo acá)
+        //ENTIDADES JPA
         List<Hecho> hechos = hechoRepositorio.buscarHechos(criterios);
 
-        // 🟢 CONVERTIR INMEDIATAMENTE A DTO
+        //CONVERTIR INMEDIATAMENTE A DTO
         List<HechoDTO> dtos = hechos.stream()
                 .map(HechoDTO::new)
                 .toList();
@@ -74,7 +74,7 @@ public class HechoConsultaService {
         List<Criterio> criterios = new ArrayList<>();
         if (filtro == null) return criterios;
 
-        // 🔎 Búsqueda por título
+        // Búsqueda por título
         if (filtro.getTitulo() != null && !filtro.getTitulo().isBlank()) {
             criterios.add(new CriterioDeTexto(
                     List.of(filtro.getTitulo()),
@@ -82,7 +82,7 @@ public class HechoConsultaService {
             ));
         }
 
-        // 🗂 Categoría
+        // Categoría
         if (filtro.getCategoria() != null && !filtro.getCategoria().isBlank()) {
             criterios.add(new CriterioDeTexto(
                     List.of(filtro.getCategoria()),
@@ -90,14 +90,14 @@ public class HechoConsultaService {
             ));
         }
 
-        // 📍 Ubicación
+        // Ubicación
         if (filtro.getUbicacion() != null && !filtro.getUbicacion().isBlank()) {
             Ubicacion ubicacion = new Ubicacion();
             ubicacion.setDescripcion(filtro.getUbicacion());
             criterios.add(new CriterioUbicacion(ubicacion));
         }
 
-        // 📅 Fechas
+        //Fechas
         Date desde = parsearFecha(filtro.getFechaAcontecimientoDesde());
         Date hasta = parsearFecha(filtro.getFechaAcontecimientoHasta());
 

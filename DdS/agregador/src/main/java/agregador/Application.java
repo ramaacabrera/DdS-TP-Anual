@@ -14,6 +14,7 @@ import io.javalin.Javalin;
 import agregador.utils.IniciadorApp;
 import agregador.utils.LecturaConfig;
 
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
@@ -77,6 +78,7 @@ public class Application {
             ws.onClose(new OnCloseHandler(conexionCargadorService, fuenteRepositorio));
         });
 
+        // GraphQl
         GraphQLProvider graphQLProvider = new GraphQLProvider();
 
         app.post("/graphql", ctx -> {
@@ -95,6 +97,11 @@ public class Application {
                     graphQLProvider.graphQL().execute(executionInput);
 
             ctx.json(executionResult.toSpecification());
+        });
+
+        app.get("/playground", ctx -> {
+            ctx.contentType("text/html");
+            ctx.result("<h1>Playground OK</h1>");
         });
 
     }

@@ -1,3 +1,5 @@
+# HECHOS
+
 type Hecho {
   id: ID!
   titulo: String
@@ -9,27 +11,20 @@ type Hecho {
   fuente: Fuente
   estadoHecho: EstadoHecho
   contribuyente: Usuario
+  etiquetas: [Etiqueta]
 }
 
 input HechoFiltroInput {
   categoria: String
   titulo: String
-
   fechaAcontecimientoDesde: String
   fechaAcontecimientoHasta: String
-
   fechaCargaDesde: String
   fechaCargaHasta: String
-
   ubicacion: String
   contribuyente: String
   tipoDeFuente: String
-  etiquetas: [ID]
-}
-
-input PageInput {
-  page: Int = 1
-  size: Int = 10
+  etiquetas: [String]
 }
 
 type PageHecho {
@@ -40,21 +35,11 @@ type PageHecho {
   totalElements: Int
 }
 
-type Query {
-  hechos(filtro: HechoFiltroInput, page: PageInput): PageHecho
-  hecho(id: ID!): Hecho
-}
-
 type Ubicacion {
   id: ID
   latitud: Float
   longitud: Float
   descripcion: String
-}
-
-type Fuente {
-  id: ID
-  tipoDeFuente: String
 }
 
 enum EstadoHecho {
@@ -65,6 +50,70 @@ enum EstadoHecho {
 type Usuario {
     id: ID
     username: String
+}
+
+type Etiqueta {
+  id: ID
+  nombre: String
+}
+
+# Colección
+
+type Coleccion {
+  id: ID!
+  titulo: String
+  descripcion: String
+  algoritmoDeConsenso: TipoAlgoritmoConsenso
+  hechos: [Hecho]
+  hechosConsensuados: [Hecho]
+  fuentes: [Fuente]
+}
+
+input ColeccionFiltroInput {
+  titulo: String
+  descripcion: String
+  algoritmoDeConsenso: TipoAlgoritmoConsenso
+  tieneAlgoritmoDeConsenso: Boolean
+  minHechos: Int
+  minFuentes: Int
+}
+
+type PageColeccion {
+  content: [Coleccion]
+  page: Int
+  size: Int
+  totalPages: Int
+  totalElements: Int
+}
+
+enum TipoAlgoritmoConsenso {
+  ABSOLUTA
+  MAYORIA_SIMPLE
+  MULTIPLES_MENCIONES
+}
+
+# Comunes
+
+input PageInput {
+  page: Int = 1
+  size: Int = 10
+}
+
+type Fuente {
+  id: ID
+  tipoDeFuente: String
+}
+
+# QUERY
+
+type Query {
+  # Hechos
+  hechos(filtro: HechoFiltroInput, page: PageInput): PageHecho
+  hecho(id: ID!): Hecho
+
+  # Colecciones
+  colecciones(page: PageInput): PageColeccion
+  coleccion(id: ID!): Coleccion
 }
 
 

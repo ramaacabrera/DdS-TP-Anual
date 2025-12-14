@@ -25,23 +25,25 @@ public class CriterioUbicacion extends Criterio {
     @Override
     public boolean cumpleConCriterio(Hecho hecho){
         if (hecho.getUbicacion() == null || this.ubicacion == null) return false;
-        return hecho.getUbicacion().getId_ubicacion().equals(ubicacion.getId_ubicacion());
-    }
+        if (hecho.getUbicacion().getDescripcion() == null || this.ubicacion.getDescripcion() == null) return false;
+
+        return hecho.getUbicacion().getDescripcion().equalsIgnoreCase(ubicacion.getDescripcion());
+        }
 
     public Ubicacion getUbicacion() { return ubicacion; }
     public void setUbicacion(Ubicacion ubicacion) { this.ubicacion = ubicacion; }
 
     @Override
     public String getQueryCondition() {
-        return "h.ubicacion.descripcion = "+ ubicacion.getDescripcion();
+        return "LOWER(h.ubicacion.descripcion) = LOWER(:descripcionUbicacionParam)";
     }
 
     @Override
     @Transient
     public Map<String, Object> getQueryParameters() {
         Map<String, Object> params = new HashMap<>();
-        if (ubicacion != null) {
-            params.put("idUbicacionParam", ubicacion.getId_ubicacion());
+        if (ubicacion != null && ubicacion.getDescripcion() != null) {
+            params.put("descripcionUbicacionParam", ubicacion.getDescripcion());
         }
         return params;
     }

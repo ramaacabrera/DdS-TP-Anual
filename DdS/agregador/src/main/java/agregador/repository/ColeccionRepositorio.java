@@ -31,13 +31,18 @@ public class ColeccionRepositorio {
     public List<Coleccion> obtenerTodas() {
         EntityManager em = BDUtils.getEntityManager();
         try {
-            String jpql = "SELECT DISTINCT c FROM Coleccion c " +
-                    "LEFT JOIN FETCH c.hechos " +
-                    "LEFT JOIN FETCH c.fuentes " +
-                    "LEFT JOIN FETCH c.criteriosDePertenencia";
+            String jpql = "SELECT c FROM Coleccion c ORDER BY c.titulo ASC";
+            List<Coleccion> colecciones =
+                    em.createQuery(jpql, Coleccion.class).getResultList();
 
-            TypedQuery<Coleccion> query = em.createQuery(jpql, Coleccion.class);
-            return query.getResultList();
+            // Inicializar relaciones UNA POR UNA
+            for (Coleccion c : colecciones) {
+                Hibernate.initialize(c.getHechos());
+                Hibernate.initialize(c.getFuente());
+                Hibernate.initialize(c.getCriteriosDePertenencia());
+            }
+
+            return colecciones;
         } finally {
             em.close();
         }
