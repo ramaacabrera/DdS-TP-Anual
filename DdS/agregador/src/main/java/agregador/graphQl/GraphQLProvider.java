@@ -1,5 +1,6 @@
 package agregador.graphQl;
 
+import agregador.graphQl.resolver.ColeccionFieldResolver;
 import agregador.graphQl.resolver.ColeccionQueryResolver;
 import agregador.graphQl.resolver.HechoQueryResolver;
 import agregador.repository.ColeccionRepositorio;
@@ -52,8 +53,13 @@ public class GraphQLProvider {
         ColeccionQueryResolver coleccionResolver =
                 new ColeccionQueryResolver(coleccionService);
 
+        ColeccionFieldResolver coleccionFieldResolver =
+                new ColeccionFieldResolver(hechoConsultaService);
+
         //Wirear schema + resolvers
         RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
+
+                // QUERIES
                 .type(TypeRuntimeWiring.newTypeWiring("Query")
                         .dataFetcher("hechos", env ->
                                 hechoQueryResolver.hechos(
@@ -62,9 +68,7 @@ public class GraphQLProvider {
                                 )
                         )
                         .dataFetcher("hecho", env ->
-                                hechoQueryResolver.hecho(
-                                        env.getArgument("id")
-                                )
+                                hechoQueryResolver.hecho(env.getArgument("id"))
                         )
                         .dataFetcher("colecciones", env ->
                                 coleccionResolver.colecciones(
@@ -73,12 +77,20 @@ public class GraphQLProvider {
                                 )
                         )
                         .dataFetcher("coleccion", env ->
-                                coleccionResolver.coleccion(
-                                        env.getArgument("id")
-                                )
+                                coleccionResolver.coleccion(env.getArgument("id"))
                         )
-
                 )
+
+                // CAMPOS DE COLECCION
+                .type(TypeRuntimeWiring.newTypeWiring("Coleccion")
+                        .dataFetcher("hechos", env ->
+                                coleccionFieldResolver.hechos(env.getSource())
+                        )
+                        .dataFetcher("hechosConsensuados", env ->
+                                coleccionFieldResolver.hechosConsensuados(env.getSource())
+                        )
+                )
+
                 .build();
 
         //Crear el schema final

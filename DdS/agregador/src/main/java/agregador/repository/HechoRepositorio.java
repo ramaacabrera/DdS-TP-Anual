@@ -14,7 +14,8 @@ import java.util.UUID;
 
 public class HechoRepositorio {
 
-    public HechoRepositorio(){}
+    public HechoRepositorio() {
+    }
 
     public List<Hecho> buscarHechos(List<Criterio> criterios) {
         EntityManager em = BDUtils.getEntityManager();
@@ -189,7 +190,7 @@ public class HechoRepositorio {
 
     public List<String> buscarCategorias() {
         EntityManager em = BDUtils.getEntityManager();
-        try{
+        try {
             String jpql = "SELECT DISTINCT h.categoria FROM Hecho h WHERE h.categoria IS NOT NULL ORDER BY h.categoria";
             TypedQuery<String> query = em.createQuery(jpql, String.class);
             return query.getResultList();
@@ -202,4 +203,38 @@ public class HechoRepositorio {
         }
 
     }
+    public List<Hecho> buscarPorColeccion(EntityManager em, UUID coleccionId, boolean consensuados) {
+
+        String jpql;
+
+        if (consensuados) {
+            jpql =
+                    "SELECT DISTINCT h " +
+                            "FROM Coleccion c " +
+                            "JOIN c.hechosConsensuados h " +
+                            "LEFT JOIN FETCH h.etiquetas " +
+                            "LEFT JOIN FETCH h.contenidoMultimedia " +
+                            "LEFT JOIN FETCH h.ubicacion " +
+                            "LEFT JOIN FETCH h.contribuyente " +
+                            "LEFT JOIN FETCH h.fuente " +
+                            "WHERE c.handle = :id";
+        } else {
+            jpql =
+                    "SELECT DISTINCT h " +
+                            "FROM Coleccion c " +
+                            "JOIN c.hechos h " +
+                            "LEFT JOIN FETCH h.etiquetas " +
+                            "LEFT JOIN FETCH h.contenidoMultimedia " +
+                            "LEFT JOIN FETCH h.ubicacion " +
+                            "LEFT JOIN FETCH h.contribuyente " +
+                            "LEFT JOIN FETCH h.fuente " +
+                            "WHERE c.handle = :id";
+        }
+
+        return em.createQuery(jpql, Hecho.class)
+                .setParameter("id", coleccionId)
+                .getResultList();
+    }
+
+
 }

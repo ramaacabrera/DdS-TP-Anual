@@ -4,6 +4,7 @@ import agregador.domain.HechosYColecciones.Coleccion;
 import agregador.dto.Coleccion.TipoAlgoritmoConsensoDTO;
 import agregador.dto.Criterios.CriterioDTO;
 import agregador.dto.Hechos.FuenteDTO;
+import agregador.dto.Hechos.HechoDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ public class ColeccionDTO {
     private List<FuenteDTO> fuentes = new ArrayList<>();
     private List<CriterioDTO> criteriosDePertenencia = new ArrayList<>();
     private TipoAlgoritmoConsensoDTO algoritmoDeConsenso;
+    private List<HechoDTO> hechos = new ArrayList<>();
+    private List<HechoDTO> hechosConsensuados = new ArrayList<>();
 
     public ColeccionDTO() {}
 
@@ -58,10 +61,18 @@ public class ColeccionDTO {
             }).collect(Collectors.toList());
         }
 
-        // NOTA: El mapeo de Criterios (Lista polimórfica) es complejo para hacerlo dentro del constructor del DTO
-        // sin acoplar demasiadas clases. Por ahora inicializamos la lista vacía.
-        // Si necesitas mostrar los criterios en el listado público, deberías usar un "Mapper" externo
-        // o inyectar la lógica de conversión, pero para listados generales suele dejarse vacío por rendimiento.
+        if (coleccion.getHechos() != null) {
+            this.hechos = coleccion.getHechos().stream()
+                    .map(HechoDTO::new)
+                    .toList();
+        }
+
+        if (coleccion.getHechosConsensuados() != null) {
+            this.hechosConsensuados = coleccion.getHechosConsensuados().stream()
+                    .map(HechoDTO::new)
+                    .toList();
+        }
+
         this.criteriosDePertenencia = new ArrayList<>();
     }
 
@@ -88,6 +99,13 @@ public class ColeccionDTO {
         this.algoritmoDeConsenso = algoritmoDeConsenso;
     }
 
+    public List<HechoDTO> getHechos() {
+        return hechos;
+    }
+
+    public List<HechoDTO> getHechosConsensuados() {
+        return hechosConsensuados;
+    }
 
     public String getId() {
         return coleccionId != null ? coleccionId.toString() : null;

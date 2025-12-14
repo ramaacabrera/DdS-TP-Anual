@@ -1,6 +1,7 @@
 package agregador.graphQl.resolver;
 
 import agregador.domain.HechosYColecciones.Coleccion;
+import agregador.dto.Coleccion.ColeccionDTO;
 import agregador.graphQl.dtoGraphQl.ColeccionFiltroDTO;
 import agregador.graphQl.dtoGraphQl.PageRequestDTO;
 import agregador.graphQl.dtoGraphQl.PageColeccionDTO;
@@ -25,8 +26,10 @@ public class ColeccionQueryResolver {
         );
     }
 
-    public Coleccion coleccion(String handle) {
-        return coleccionConsultaService.obtenerColeccionPorHandle(handle);
+    public ColeccionDTO coleccion(String id) {
+        return new ColeccionDTO(
+                coleccionConsultaService.obtenerColeccionPorHandle(id)
+        );
     }
 }
 

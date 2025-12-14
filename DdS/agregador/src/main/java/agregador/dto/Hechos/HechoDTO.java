@@ -1,6 +1,5 @@
-package agregador.dto.Hechos; // O el paquete correcto donde lo tengas
+package agregador.dto.Hechos;
 
-// Imports de tus Entidades de Dominio (Ajusta los paquetes si es necesario)
 import agregador.domain.HechosYColecciones.Hecho;
 import agregador.domain.HechosYColecciones.Ubicacion;
 import agregador.dto.Hechos.FuenteDTO;

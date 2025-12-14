@@ -3,7 +3,6 @@ package agregador.graphQl.dtoGraphQl;
 import agregador.dto.Coleccion.ColeccionDTO;
 
 import java.util.List;
-
 public class PageColeccionDTO {
 
     private List<ColeccionDTO> content;

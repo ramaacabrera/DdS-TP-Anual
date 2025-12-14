@@ -10,7 +10,11 @@ import agregador.graphQl.dtoGraphQl.HechoFiltroDTO;
 import agregador.graphQl.dtoGraphQl.PageHechoDTO;
 import agregador.graphQl.dtoGraphQl.PageRequestDTO;
 import agregador.repository.HechoRepositorio;
+import agregador.utils.BDUtils;
+import jakarta.transaction.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -149,6 +153,44 @@ public class HechoConsultaService {
                         .atStartOfDay(ZoneId.systemDefault())
                         .toInstant()
         );
+    }
+    @Transactional
+    public List<HechoDTO> buscarHechosPorColeccion(UUID coleccionId, boolean consensuados) {
+        EntityManager em = BDUtils.getEntityManager();
+
+        try {
+            BDUtils.comenzarTransaccion(em);
+
+            List<Hecho> hechos =
+                    hechoRepositorio.buscarPorColeccion(em, coleccionId, consensuados);
+
+
+            for (Hecho h : hechos) {
+                h.getEtiquetas().size();          // etiquetas
+                if (h.getUbicacion() != null) {
+                    h.getUbicacion().getDescripcion();
+                }
+                if (h.getFuente() != null) {
+                    h.getFuente().getId();
+                }
+                if (h.getContribuyente() != null) {
+                    h.getContribuyente().getUsername();
+                }
+            }
+            List<HechoDTO> dtos = hechos.stream()
+                    .map(HechoDTO::new)
+                    .toList();
+
+            BDUtils.commit(em);
+            return dtos;
+
+        } catch (Exception e) {
+            BDUtils.rollback(em);
+            throw e;
+
+        } finally {
+            em.close();
+        }
     }
 }
 

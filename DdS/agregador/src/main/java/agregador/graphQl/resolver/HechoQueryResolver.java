@@ -1,6 +1,7 @@
 package agregador.graphQl.resolver;
 
 import agregador.domain.HechosYColecciones.Hecho;
+import agregador.dto.Hechos.HechoDTO;
 import agregador.graphQl.dtoGraphQl.HechoFiltroDTO;
 import agregador.graphQl.dtoGraphQl.PageHechoDTO;
 import agregador.graphQl.dtoGraphQl.PageRequestDTO;
@@ -24,7 +25,8 @@ public class HechoQueryResolver {
     }
 
 
-    public Hecho hecho(String id) {
-        return hechoConsultaService.obtenerHechoPorId(id);
+    public HechoDTO hecho(String id) {
+        Hecho hecho = hechoConsultaService.obtenerHechoPorId(id);
+        return new HechoDTO(hecho);
     }
 }
