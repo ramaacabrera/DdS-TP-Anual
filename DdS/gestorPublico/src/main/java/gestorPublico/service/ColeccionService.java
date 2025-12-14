@@ -90,7 +90,7 @@ public class ColeccionService {
             criterios.add(new CriterioFecha(f.fechaAcontecimientoDesde, f.fechaAcontecimientoHasta, "fechaDeAcontecimiento"));
 
         if (f.descripcion != null && !f.descripcion.equals(""))
-            criterios.add(new CriterioUbicacion(new Ubicacion(0, 0, f.descripcion)));
+            criterios.add(new CriterioUbicacion(f.descripcion));
 
         // Agrega más si son necesarios (categoria, etc.)
         return criterios;

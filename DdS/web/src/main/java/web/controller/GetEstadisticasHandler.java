@@ -24,7 +24,6 @@ public class GetEstadisticasHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        try {
             String uuidColeccion = ctx.queryParam("uuid");
 
             // Obtener estadísticas generales
@@ -64,15 +63,6 @@ public class GetEstadisticasHandler implements Handler {
             }
 
             ctx.render("estadisticas.ftl", modelo);
-
-        } catch (Exception e) {
-            System.err.println("Error general en GetEstadisticasHandler: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).json(Map.of(
-                    "error", "Error al obtener estadísticas",
-                    "detalle", e.getMessage()
-            ));
-        }
     }
 
     private boolean esUUIDValido(String uuid) {

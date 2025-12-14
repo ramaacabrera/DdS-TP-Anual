@@ -104,7 +104,7 @@ public class HechoService {
         }
 
         if (f.descripcion != null && !f.descripcion.equals("")) {
-            criterios.add(new CriterioUbicacion(new Ubicacion(0, 0,f.descripcion)));
+            criterios.add(new CriterioUbicacion(f.descripcion));
         }
 
         if (f.contribuyente != null && !f.contribuyente.trim().isEmpty()) {

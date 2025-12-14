@@ -10,7 +10,7 @@
 
         <script>
             const URL_ADMIN = '${URL_ADMIN!"http://localhost:8081"}';
-            const COLECCION_ID = '${COLECCION_ID}';
+            let COLECCION_ID = '${COLECCION_ID}';
             const USERNAME = '${username!""}';
             const ACCESS_TOKEN = '${accessToken!""}';
             const FUENTES_SELECCIONADAS_IDS = '${idSeleccionados}';
@@ -44,101 +44,153 @@
                 <div id="criterios-agregados" class="criterios-container">
                     <#if coleccion.criteriosDePertenencia?? && (coleccion.criteriosDePertenencia?size > 0)>
                         <#list coleccion.criteriosDePertenencia as criterio>
-                            <#assign criterioId = "criterio_" + criterio_index>
-                            <#assign tipo = "">
-                            <div class="criterio-card" id="${criterioId}">
+                            <#assign criterioId = "criterio_existente_" + criterio_index>
+                            <#assign tipoCriterio = criterio.tipoCriterio!"Desconocido">
+
+                            <#assign cardClass = "">
+                            <#assign iconClass = "">
+                            <#assign tituloLimpio = tipoCriterio?replace("Criterio", "")>
+
+                            <#if tipoCriterio == "CriterioDeTexto">
+                                <#assign cardClass = "type-texto">
+                                <#assign iconClass = "fas fa-font">
+                            <#elseif tipoCriterio == "CriterioEtiquetas">
+                                <#assign cardClass = "type-etiqueta">
+                                <#assign iconClass = "fas fa-tags"> <#-- 🏷️ -->
+                            <#elseif tipoCriterio == "CriterioTipoMultimedia">
+                                <#assign cardClass = "type-multimedia">
+                                <#assign iconClass = "fas fa-photo-video"> <#-- 📷 -->
+                            <#elseif tipoCriterio == "CriterioFecha">
+                                <#assign cardClass = "type-fecha">
+                                <#assign iconClass = "far fa-calendar-alt"> <#-- 📅 -->
+                            <#elseif tipoCriterio == "CriterioUbicacion">
+                                <#assign cardClass = "type-ubicacion">
+                                <#assign iconClass = "fas fa-map-marker-alt"> <#-- 📍 -->
+                            <#elseif tipoCriterio == "CriterioContribuyente">
+                                <#assign cardClass = "type-contribuyente">
+                                <#assign iconClass = "fas fa-user"> <#-- 👤 -->
+                            </#if>
+
+                            <div class="criterio-card ${cardClass}" id="${criterioId}">
                                 <div class="criterio-header">
-                                    <span class="criterio-tipo">${(criterio.tipoCriterio!)?replace('Criterio', '')}</span>
-                                    <button type="button" class="btn-eliminar-criterio">Eliminar</button>
+                                    <div class="criterio-info">
+                                        <span class="criterio-icon"><i class="${iconClass}"></i></span>
+                                        <span class="criterio-titulo">${tituloLimpio}</span>
+                                    </div>
+                                    <button type="button" class="btn-eliminar-criterio">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
                                 </div>
 
-                                <#if criterio.tipoDeTexto??>
-                                    <#assign tipo = "CriterioDeTexto">
-                                    <div><strong>Palabras:</strong> ${(criterio.palabras?join(', '))!''}</div>
-                                    <div><strong>Tipo de texto:</strong> ${(criterio.tipoDeTexto)!''}</div>
-                                    <#if criterio.palabras??>
-                                        <#list criterio.palabras as palabra>
-                                            <input type="hidden" name="criterios[${criterioId}].palabras" value="${palabra}">
-                                        </#list>
-                                    </#if>
-                                    <input type="hidden" name="criterios[${criterioId}].tipoDeTexto" value="${(criterio.tipoDeTexto)!''}">
+                                <div class="criterio-body">
+                                    <#if tipoCriterio == "CriterioDeTexto">
+                                        <div class="dato-fila">
+                                            <span class="dato-label">Tipo:</span>
+                                            <span>${(criterio.tipoDeTexto)!''}</span>
+                                        </div>
+                                        <div class="dato-fila" style="align-items: flex-start;">
+                                            <span class="dato-label">Palabras:</span>
+                                            <div class="badge-container">
+                                                <#if criterio.palabras??>
+                                                    <#list criterio.palabras as palabra>
+                                                        <span class="badge-item">${palabra}</span>
+                                                        <input type="hidden" name="criterios[${criterioId}].palabras" value="${palabra}">
+                                                    </#list>
+                                                <#else>
+                                                    <span class="text-muted">-</span>
+                                                </#if>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="criterios[${criterioId}].tipoDeTexto" value="${(criterio.tipoDeTexto)!''}">
 
-                                <#elseif criterio.etiquetas??>
-                                    <#assign tipo = "CriterioEtiquetas">
-                                    <div><strong>Etiquetas:</strong>
-                                        <#if criterio.etiquetas??>
-                                            ${criterio.etiquetas?map(e -> e.nombre)?join(', ')}
+                                    <#elseif tipoCriterio == "CriterioEtiquetas">
+                                        <div class="dato-fila" style="align-items: flex-start;">
+                                            <span class="dato-label">Etiquetas:</span>
+                                            <div class="badge-container">
+                                                <#if criterio.etiquetas??>
+                                                    <#list criterio.etiquetas as etiqueta>
+                                                        <span class="badge-item">#${etiqueta.nombre}</span>
+                                                        <input type="hidden" name="criterios[${criterioId}].etiquetas" value="${etiqueta.nombre}">
+                                                    </#list>
+                                                <#else>
+                                                    <span class="text-muted">-</span>
+                                                </#if>
+                                            </div>
+                                        </div>
+
+                                    <#elseif tipoCriterio == "CriterioTipoMultimedia">
+                                        <div class="dato-fila">
+                                            <span class="dato-label">Formato:</span>
+                                            <strong>${(criterio.tipoContenidoMultimedia)!''}</strong>
+                                        </div>
+                                        <input type="hidden" name="criterios[${criterioId}].tipoContenidoMultimedia" value="${(criterio.tipoContenidoMultimedia)!''}">
+
+                                    <#elseif tipoCriterio == "CriterioFecha">
+                                        <#assign fechaInicioStr = ''>
+                                        <#if criterio.fechaInicio??>
+                                            <#assign fechaInicioDate = criterio.fechaInicio?long?number_to_datetime>
+                                            <#assign fechaInicioStr = fechaInicioDate?string('yyyy-MM-dd')>
                                         </#if>
-                                    </div>
-                                    <#if criterio.etiquetas??>
-                                        <#list criterio.etiquetas as etiqueta>
-                                            <input type="hidden" name="criterios[${criterioId}].etiquetas" value="${etiqueta.nombre}">
-                                        </#list>
+                                        <#assign fechaFinStr = ''>
+                                        <#if criterio.fechaFin??>
+                                            <#assign fechaFinDate = criterio.fechaFin?long?number_to_datetime>
+                                            <#assign fechaFinStr = fechaFinDate?string('yyyy-MM-dd')>
+                                        </#if>
+
+                                        <div class="dato-fila">
+                                            <span class="dato-label">Rango:</span>
+                                            <span>${fechaInicioStr} <strong>al</strong> ${fechaFinStr}</span>
+                                        </div>
+                                        <div class="dato-fila">
+                                            <span class="dato-label">Aplica a:</span>
+                                            <span>${(criterio.tipoFecha == 'fechaDeCarga')?then('Fecha de Carga', 'Fecha del Hecho')}</span>
+                                        </div>
+                                        <input type="hidden" name="criterios[${criterioId}].fechaInicio" value="${fechaInicioStr}">
+                                        <input type="hidden" name="criterios[${criterioId}].fechaFin" value="${fechaFinStr}">
+                                        <input type="hidden" name="criterios[${criterioId}].tipoFecha" value="${(criterio.tipoFecha)!''}">
+
+                                    <#elseif tipoCriterio == "CriterioUbicacion">
+                                        <div class="dato-fila">
+                                            <span class="dato-label">Lugar:</span>
+                                            <strong>${(criterio.descripcion)!''}</strong>
+                                        </div>
+                                        <input type="hidden" name="criterios[${criterioId}].descripcion" value="${(criterio.descripcion)!''}">
+
+                                    <#elseif tipoCriterio == "CriterioContribuyente">
+                                        <div class="dato-fila">
+                                            <span class="dato-label">Usuario:</span>
+                                            <span>@${(criterio.nombreContribuyente)!''}</span>
+                                        </div>
+                                        <input type="hidden" name="criterios[${criterioId}].nombreContribuyente" value="${(criterio.nombreContribuyente)!''}">
                                     </#if>
 
-                                <#elseif criterio.tipoContenidoMultimedia??>
-                                    <#assign tipo = "CriterioTipoMultimedia">
-                                    <div><strong>Tipo:</strong> ${(criterio.tipoContenidoMultimedia)!''}</div>
-                                    <input type="hidden" name="criterios[${criterioId}].tipoContenidoMultimedia" value="${(criterio.tipoContenidoMultimedia)!''}">
-
-                                <#elseif criterio.tipoFecha??>
-                                    <#assign tipo = "CriterioFecha">
-                                    <#assign fechaInicioStr = ''>
-                                    <#if criterio.fechaInicio??>
-                                        <#assign fechaInicioTimestamp = criterio.fechaInicio?long>
-                                        <#assign fechaInicioDate = fechaInicioTimestamp?number_to_datetime>
-                                        <#assign fechaInicioStr = fechaInicioDate?string('yyyy-MM-dd')>
-                                    </#if>
-
-                                    <#assign fechaFinStr = ''>
-                                    <#if criterio.fechaFin??>
-                                        <#assign fechaFinTimestamp = criterio.fechaFin?long>
-                                        <#assign fechaFinDate = fechaFinTimestamp?number_to_datetime>
-                                        <#assign fechaFinStr = fechaFinDate?string('yyyy-MM-dd')>
-                                    </#if>
-
-                                    <div><strong>Desde:</strong> ${fechaInicioStr}</div>
-                                    <div><strong>Hasta:</strong> ${fechaFinStr}</div>
-                                    <div><strong>Tipo de fecha:</strong> ${(criterio.tipoFecha)!''}</div>
-                                    <input type="hidden" name="criterios[${criterioId}].fechaInicio" value="${fechaInicioStr}">
-                                    <input type="hidden" name="criterios[${criterioId}].fechaFin" value="${fechaFinStr}">
-                                    <input type="hidden" name="criterios[${criterioId}].tipoFecha" value="${(criterio.tipoFecha)!''}">
-
-                                <#elseif criterio.ubicacion??>
-                                    <#assign tipo = "CriterioUbicacion">
-                                    <#if criterio.ubicacion??>
-                                        <div><strong>Descripcion:</strong> ${(criterio.ubicacion.descripcion)!''}</div>
-                                        <input type="hidden" name="criterios[${criterioId}].ubicacion.descripcion" value="${(criterio.ubicacion.descripcion)!''}">
-                                    </#if>
-
-                                <#elseif criterio.nombreContribuyente??>
-                                    <#assign tipo = "CriterioContribuyente">
-                                    <div><strong>Contribuyente:</strong> ${(criterio.nombreContribuyente)!''}</div>
-                                    <input type="hidden" name="criterios[${criterioId}].nombreContribuyente" value="${(criterio.nombreContribuyente)!''}">
-                                </#if>
-
-                                <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+                                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipoCriterio}">
+                                </div>
                             </div>
                         </#list>
                     </#if>
                 </div>
 
                 <div class="nuevo-criterio-card">
-                    <h4 class="form-subtitle">Agregar nuevo criterio</h4>
-                    <div class="form-group">
-                        <label for="tipoCriterio" class="form-label">Tipo de criterio</label>
-                        <select id="tipoCriterio" class="form-select">
-                            <option value="">Seleccione un tipo</option>
-                            <option value="CriterioDeTexto">Texto</option>
-                            <option value="CriterioTipoMultimedia">Tipo Multimedia</option>
-                            <option value="CriterioEtiquetas">Etiquetas</option>
-                            <option value="CriterioFecha">Fecha</option>
-                            <option value="CriterioUbicacion">Ubicación</option>
-                            <option value="CriterioContribuyente">Contribuyente</option>
-                        </select>
-                        <div id="campoCriterio" class="campo-criterio-dinamico"></div>
-                        <button type="button" id="btn-agregar-criterio" class="btn btn-secondary" style="margin-top: 10px;" disabled>
-                            + Agregar criterio
+                    <h4 class="form-subtitle"><i class="fas fa-plus-circle"></i> Agregar Criterio de Pertenencia</h4>
+                    <div class="criterio-controls">
+                        <div class="form-group" style="text-align: left;">
+                            <label for="tipoCriterio" class="form-label">Seleccione el tipo de regla:</label>
+                            <select id="tipoCriterio" class="form-select">
+                                <option value="">-- Seleccionar --</option>
+                                <option value="CriterioDeTexto">Texto (Título/Descripción)</option>
+                                <option value="CriterioTipoMultimedia">Tipo de Multimedia</option>
+                                <option value="CriterioEtiquetas">Etiquetas</option>
+                                <option value="CriterioFecha">Rango de Fechas</option>
+                                <option value="CriterioUbicacion">Ubicación Geográfica</option>
+                                <option value="CriterioContribuyente">Contribuyente</option>
+                            </select>
+                        </div>
+
+                        <div id="campoCriterio" class="campo-criterio-dinamico" style="text-align: left;"></div>
+
+                        <button type="button" id="btn-agregar-criterio" class="btn btn-primary" style="width: 100%;" disabled>
+                            + Insertar Criterio
                         </button>
                     </div>
                 </div>

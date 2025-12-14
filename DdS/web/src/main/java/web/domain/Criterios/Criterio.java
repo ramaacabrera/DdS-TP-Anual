@@ -14,16 +14,16 @@ import java.util.UUID;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "tipoCriterio"
+        property = "@type"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = CriterioContribuyente.class, name = "CRITERIO_CONTRIBUYENTE"),
-        @JsonSubTypes.Type(value = CriterioDeTexto.class, name = "CRITERIO_TEXTO"),
-        @JsonSubTypes.Type(value = CriterioEtiquetas.class, name = "CRITERIO_ETIQUETAS"),
-        @JsonSubTypes.Type(value = CriterioFecha.class, name = "CRITERIO_FECHA"),
-        @JsonSubTypes.Type(value = CriterioTipoFuente.class, name = "CRITERIO_TIPO_FUENTE"),
-        @JsonSubTypes.Type(value = CriterioTipoMultimedia.class, name = "CRITERIO_TIPO_MULTIMEDIA"),
-        @JsonSubTypes.Type(value = CriterioUbicacion.class, name = "CRITERIO_UBICACION")
+        @JsonSubTypes.Type(value = CriterioDeTexto.class, name = "CriterioDeTexto"),
+        @JsonSubTypes.Type(value = CriterioUbicacion.class, name = "CriterioUbicacion"),
+        @JsonSubTypes.Type(value = CriterioFecha.class, name = "CriterioFecha"),
+        @JsonSubTypes.Type(value = CriterioEtiquetas.class, name = "CriterioEtiquetas"),
+        @JsonSubTypes.Type(value = CriterioTipoFuente.class, name = "CriterioTipoFuente"),
+        @JsonSubTypes.Type(value = CriterioTipoMultimedia.class, name = "CriterioTipoMultimedia"),
+        @JsonSubTypes.Type(value = CriterioContribuyente.class, name = "CriterioContribuyente")
 })
 
 @Entity
@@ -43,12 +43,10 @@ public abstract class Criterio {
 
     public Criterio() {}
 
-
     public abstract boolean cumpleConCriterio(Hecho hecho);
 
     public abstract String getQueryCondition();
     public abstract Map<String, Object> getQueryParameters();
-
 
     public UUID getId() {
         return id;
@@ -56,5 +54,9 @@ public abstract class Criterio {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getTipoCriterio() {
+        return this.getClass().getSimpleName();
     }
 }

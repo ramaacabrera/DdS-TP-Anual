@@ -1,7 +1,6 @@
 package gestorAdministrativo.domain.Criterios;
 
 import gestorAdministrativo.domain.HechosYColecciones.Hecho;
-import gestorAdministrativo.domain.HechosYColecciones.Ubicacion;
 
 import javax.persistence.*;
 import java.util.HashMap;
@@ -10,27 +9,34 @@ import java.util.Map;
 @Entity
 public class CriterioUbicacion extends Criterio {
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_ubicacion")
-    private Ubicacion ubicacion;
+    @Column(name = "descripcion_ubicacion")
+    private String descripcion;
 
     public CriterioUbicacion() {}
-    public CriterioUbicacion(Ubicacion ubicacion) {
-        this.ubicacion = ubicacion;
+
+    public CriterioUbicacion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Override
     public boolean cumpleConCriterio(Hecho hecho){
-        if (hecho.getUbicacion() == null || this.ubicacion == null) return false;
-        return hecho.getUbicacion().getDescripcion().equals(ubicacion.getDescripcion());
+        if (hecho.getUbicacion() == null ||
+                hecho.getUbicacion().getDescripcion() == null ||
+                this.descripcion == null) {
+            return false;
+        }
+
+        String hechoDesc = hecho.getUbicacion().getDescripcion().toLowerCase();
+        String criterioDesc = this.descripcion.toLowerCase();
+
+        return hechoDesc.contains(criterioDesc);
     }
 
-    public Ubicacion getUbicacion() { return ubicacion; }
-    public void setUbicacion(Ubicacion ubicacion) { this.ubicacion = ubicacion; }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
     @Override
     public String getQueryCondition() {
-        // Usar LIKE para búsqueda parcial (case-insensitive)
         return "LOWER(h.ubicacion.descripcion) LIKE LOWER(CONCAT('%', :descripcionUbicacionParam, '%'))";
     }
 
@@ -38,9 +44,8 @@ public class CriterioUbicacion extends Criterio {
     @Transient
     public Map<String, Object> getQueryParameters() {
         Map<String, Object> params = new HashMap<>();
-        if (ubicacion != null && ubicacion.getDescripcion() != null) {
-            // Guardamos la descripción sin los % porque ya están en la query
-            params.put("descripcionUbicacionParam", ubicacion.getDescripcion());
+        if (descripcion != null) {
+            params.put("descripcionUbicacionParam", descripcion);
         }
         return params;
     }

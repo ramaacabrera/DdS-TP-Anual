@@ -43,7 +43,7 @@ public class ColeccionController {
             System.out.println("DTO creado: " + new ObjectMapper().writeValueAsString(request));
             for(CriterioDTO c : request.getCriteriosDePertenencia()){
                 if(c instanceof CriterioUbicacionDTO){
-                    System.out.println("Ubicacion: " + ((CriterioUbicacionDTO) c).getUbicacion().getDescripcion());
+                    System.out.println("Ubicacion: " + ((CriterioUbicacionDTO) c).getDescripcion());
                 }
             }
 

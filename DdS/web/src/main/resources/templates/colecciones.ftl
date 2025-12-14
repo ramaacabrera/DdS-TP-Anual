@@ -3,7 +3,7 @@
 <#assign content>
 <div class="container">
     <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
-        <a href='${callback}' class="header-link back-link">&larr; Volver</a>
+        <a href="javascript:history.back()" class="header-link back-link">&larr; Volver</a>
     </div>
 
     <h1 class="main-title">Listado de Colecciones</h1>

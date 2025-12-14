@@ -57,7 +57,7 @@ public class ColeccionService {
         }
         for(Criterio c : coleccion.getCriteriosDePertenencia()){
             if(c instanceof CriterioUbicacion){
-                System.out.println("Ubicacion de la coleccion: " + ((CriterioUbicacion)c).getUbicacion().getDescripcion());
+                System.out.println("Ubicacion de la coleccion: " + ((CriterioUbicacion)c).getDescripcion());
             }
         }
 
@@ -326,8 +326,7 @@ public class ColeccionService {
             }
             else if (dto instanceof CriterioUbicacionDTO) {
                 CriterioUbicacionDTO ubicacionDTO = (CriterioUbicacionDTO) dto;
-                Ubicacion ubicacionEntidad = mapUbicacionToEntity(ubicacionDTO.getUbicacion());
-                entidad = new CriterioUbicacion(ubicacionEntidad);
+                entidad = new CriterioUbicacion(ubicacionDTO.getDescripcion());
             }
             else if (dto instanceof CriterioTipoFuenteDTO) {
                 CriterioTipoFuenteDTO fuenteDTO = (CriterioTipoFuenteDTO) dto;
@@ -374,7 +373,7 @@ public class ColeccionService {
             }
             else if (entidad instanceof CriterioUbicacion) {
                 CriterioUbicacion e = (CriterioUbicacion) entidad;
-                dto = new CriterioUbicacionDTO(e.getId(), mapUbicacionToDTO(e.getUbicacion()));
+                dto = new CriterioUbicacionDTO(e.getId(), e.getDescripcion());
             }
             else if (entidad instanceof CriterioTipoFuente) {
                 CriterioTipoFuente e = (CriterioTipoFuente) entidad;

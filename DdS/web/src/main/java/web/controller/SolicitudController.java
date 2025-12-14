@@ -35,7 +35,6 @@ public class SolicitudController {
     }
 
     public Handler listarSolicitudesEliminacion = ctx -> {
-        try {
             System.out.println("Listando SOLO solicitudes de eliminación");
 
             int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
@@ -143,16 +142,9 @@ public class SolicitudController {
             modelo.put("solicitudesModificacion", new ArrayList<>());
 
             ctx.render("solicitudes.ftl", modelo);
-
-        } catch (Exception e) {
-            System.err.println("Error listando Solicitudes: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).result("Error al cargar solicitudes: " + e.getMessage());
-        }
     };
 
     public Handler obtenerSolicitud = ctx -> {
-        try {
             String id = ctx.pathParam("id");
             String tipo = ctx.pathParam("tipo");
 
@@ -301,17 +293,10 @@ public class SolicitudController {
             }
 
             ctx.render("solicitud-detalle.ftl", modelo);
-
-        } catch (Exception e) {
-            System.err.println("Error obtenerSolicitud: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).result("Error al cargar la solicitud: " + e.getMessage());
-        }
     };
 
 
     public Handler obtenerFormsEliminarSolicitud = ctx -> {
-        try {
             String hechoId = ctx.pathParam("id");
 
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);
@@ -320,15 +305,9 @@ public class SolicitudController {
             modelo.put("urlPublica", urlPublica);
 
             ctx.render("crear-solicitud-eliminacion.ftl", modelo);
-
-        } catch (Exception e) {
-            System.err.println("Error obtenerFormsEliminarSolicitud: " + e.getMessage());
-            ctx.status(500).result("Error al cargar formulario: " + e.getMessage());
-        }
     };
 
     public Handler actualizarEstadoSolicitud = ctx -> {
-        try {
             String id = ctx.pathParam("id");
             String tipo = ctx.pathParam("tipo");
 
@@ -389,19 +368,12 @@ public class SolicitudController {
             } else {
                 ctx.status(status).result("Error del servidor administrativo: HTTP " + status);
             }
-
-        } catch (Exception e) {
-            System.err.println("Error actualizarEstadoSolicitud: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).result("Error al actualizar: " + e.getMessage());
-        }
     };
 
 
     public Handler listarSolicitudesModificacion = ctx -> {
         ObjectMapper mapper = new ObjectMapper();
         HttpClient http = HttpClient.newHttpClient();
-        try {
             System.out.println("Listando SOLO solicitudes de modificación");
 
             String username = ctx.sessionAttribute("username");
@@ -515,19 +487,12 @@ public class SolicitudController {
 
             // 3. Renderizar el template específico de modificación
             ctx.render("solicitudes-mod.ftl", modelo);
-
-        } catch (Exception e) {
-            System.err.println("Error listando Solicitudes de Modificación: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).result("Error al cargar solicitudes de modificación: " + e.getMessage());
-        }
     };
     public Handler obtenerFormsModificarSolicitud = ctx -> {
         String accessToken = ctx.sessionAttribute("accessToken");
         if(accessToken == null || accessToken.isEmpty()) {
             ctx.redirect("/login");
         }
-        try {
             String hechoId = ctx.pathParam("id");
             String username = ctx.sessionAttribute("username");
 
@@ -559,16 +524,9 @@ public class SolicitudController {
 
 
             ctx.render("crear-solicitud-modificacion.ftl", modelo);
-
-        } catch (Exception e) {
-            System.err.println("Error obtenerFormsModificarSolicitud: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).result("Error al cargar formulario de modificación: " + e.getMessage());
-        }
     };
 
     public Handler crearSolicitudModificacion = ctx -> {
-        try {
             System.out.println(ctx.body());
             Map<String, Object> body = ctx.bodyAsClass(Map.class);
 
@@ -616,11 +574,5 @@ public class SolicitudController {
             } else {
                 ctx.status(status).json(Map.of("error", "Error al procesar la solicitud en el servidor publico. HTTP: " + status));
             }
-
-        } catch (Exception e) {
-            System.err.println("Error interno al procesar POST de solicitud de modificación: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).json(Map.of("error", "Error interno al procesar la solicitud."));
-        }
     };
 }

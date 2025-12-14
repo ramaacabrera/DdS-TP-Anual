@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @Entity
 public class CriterioDeTexto extends Criterio {
 
@@ -31,54 +32,49 @@ public class CriterioDeTexto extends Criterio {
         switch (tipoDeTexto) {
             case TITULO:
                 for (String palabra : palabras) {
-                    if(contienePalabraCompleta(hecho.getTitulo(), palabra)){
+                    if (contieneTexto(hecho.getTitulo(), palabra)) {
                         return true;
                     }
                 }
                 return false;
+
             case DESCRIPCION:
                 for (String palabra : palabras) {
-                    if(contienePalabraCompleta(hecho.getDescripcion(), palabra)){
+                    if (contieneTexto(hecho.getDescripcion(), palabra)) {
                         return true;
                     }
                 }
                 return false;
+
             case CATEGORIA:
                 for (String palabra : palabras) {
-                    // Para categoría mantenemos contains (puede ser una sola palabra)
-                    if(hecho.getCategoria().toLowerCase().contains(palabra.toLowerCase())){
+                    if (contieneTexto(hecho.getCategoria(), palabra)) {
                         return true;
                     }
                 }
                 return false;
+
             case BUSQUEDA:
                 for (String palabra : palabras) {
-                    if(contienePalabraCompleta(hecho.getTitulo(), palabra) ||
-                            contienePalabraCompleta(hecho.getDescripcion(), palabra) ||
-                            hecho.getCategoria().toLowerCase().contains(palabra.toLowerCase())){
+                    if (contieneTexto(hecho.getTitulo(), palabra) ||
+                            contieneTexto(hecho.getDescripcion(), palabra) ||
+                            contieneTexto(hecho.getCategoria(), palabra)) {
                         return true;
                     }
                 }
                 return false;
+
             default:
                 return palabras.stream().anyMatch(texto ->
-                        contienePalabraCompleta(hecho.getTitulo(), texto) ||
-                                contienePalabraCompleta(hecho.getDescripcion(), texto));
+                        contieneTexto(hecho.getTitulo(), texto) ||
+                                contieneTexto(hecho.getDescripcion(), texto));
         }
     }
 
-    // ← NUEVO MÉTODO: Verifica si contiene la palabra completa
-    private boolean contienePalabraCompleta(String texto, String palabra) {
-        if (texto == null || palabra == null) return false;
+    private boolean contieneTexto(String textoBase, String textoBusqueda) {
+        if (textoBase == null || textoBusqueda == null) return false;
 
-        String textoLower = texto.toLowerCase();
-        String palabraLower = palabra.toLowerCase();
-
-        // Verificar si la palabra está al inicio, en medio o al final
-        return textoLower.equals(palabraLower) ||                    // Exacto
-                textoLower.startsWith(palabraLower + " ") ||          // Al inicio
-                textoLower.contains(" " + palabraLower + " ") ||      // En medio
-                textoLower.endsWith(" " + palabraLower);              // Al final
+        return textoBase.toLowerCase().contains(textoBusqueda.toLowerCase());
     }
 
     public TipoDeTexto getTipoDeTexto() {
@@ -105,40 +101,32 @@ public class CriterioDeTexto extends Criterio {
         switch (tipoDeTexto) {
             case TITULO:
                 for (int i = 0; i < palabras.size(); i++) {
-                    // ← CAMBIO: Buscar palabra completa con espacios alrededor
-                    conditions.add("(LOWER(h.titulo) LIKE LOWER(:titulo_start_" + i + ") OR " +
-                            "LOWER(h.titulo) LIKE LOWER(:titulo_middle_" + i + ") OR " +
-                            "LOWER(h.titulo) LIKE LOWER(:titulo_end_" + i + "))");
+                    conditions.add("LOWER(h.titulo) LIKE LOWER(CONCAT('%', :titulo_" + i + ", '%'))");
                 }
                 break;
+
             case DESCRIPCION:
                 for (int i = 0; i < palabras.size(); i++) {
-                    // ← CAMBIO: Buscar palabra completa con espacios alrededor
-                    conditions.add("(LOWER(h.descripcion) LIKE LOWER(:descripcion_start_" + i + ") OR " +
-                            "LOWER(h.descripcion) LIKE LOWER(:descripcion_middle_" + i + ") OR " +
-                            "LOWER(h.descripcion) LIKE LOWER(:descripcion_end_" + i + "))");
+                    conditions.add("LOWER(h.descripcion) LIKE LOWER(CONCAT('%', :descripcion_" + i + ", '%'))");
                 }
                 break;
+
             case CATEGORIA:
                 for (int i = 0; i < palabras.size(); i++) {
-                    // ← CAMBIO: Para categoría puede ser exacta o contener (depende de tu uso)
-                    conditions.add("LOWER(h.categoria) LIKE LOWER(:categoria_" + i + ")");
+                    conditions.add("LOWER(h.categoria) LIKE LOWER(CONCAT('%', :categoria_" + i + ", '%'))");
                 }
                 break;
+
             case BUSQUEDA:
                 for (int i = 0; i < palabras.size(); i++) {
-                    // ← CAMBIO: Buscar palabra completa en todos los campos
-                    conditions.add("((LOWER(h.titulo) LIKE LOWER(:busqueda_titulo_start_" + i + ") OR " +
-                            "LOWER(h.titulo) LIKE LOWER(:busqueda_titulo_middle_" + i + ") OR " +
-                            "LOWER(h.titulo) LIKE LOWER(:busqueda_titulo_end_" + i + ")) OR " +
-
-                            "(LOWER(h.descripcion) LIKE LOWER(:busqueda_descripcion_start_" + i + ") OR " +
-                            "LOWER(h.descripcion) LIKE LOWER(:busqueda_descripcion_middle_" + i + ") OR " +
-                            "LOWER(h.descripcion) LIKE LOWER(:busqueda_descripcion_end_" + i + ")) OR " +
-
-                            "LOWER(h.categoria) LIKE LOWER(:busqueda_categoria_" + i + "))");
+                    conditions.add("(" +
+                            "LOWER(h.titulo) LIKE LOWER(CONCAT('%', :busqueda_" + i + ", '%')) OR " +
+                            "LOWER(h.descripcion) LIKE LOWER(CONCAT('%', :busqueda_" + i + ", '%')) OR " +
+                            "LOWER(h.categoria) LIKE LOWER(CONCAT('%', :busqueda_" + i + ", '%'))" +
+                            ")");
                 }
                 break;
+
             default:
                 return "(1=1)";
         }
@@ -160,42 +148,25 @@ public class CriterioDeTexto extends Criterio {
         switch (tipoDeTexto) {
             case TITULO:
                 for (int i = 0; i < palabras.size(); i++) {
-                    String palabra = palabras.get(i);
-                    // ← CAMBIO: Tres patrones para cubrir todos los casos
-                    params.put("titulo_start_" + i, palabra + " %");    // Palabra al inicio
-                    params.put("titulo_middle_" + i, "% " + palabra + " %"); // Palabra en medio
-                    params.put("titulo_end_" + i, "% " + palabra);      // Palabra al final
+                    params.put("titulo_" + i, palabras.get(i));
                 }
                 break;
+
             case DESCRIPCION:
                 for (int i = 0; i < palabras.size(); i++) {
-                    String palabra = palabras.get(i);
-                    params.put("descripcion_start_" + i, palabra + " %");
-                    params.put("descripcion_middle_" + i, "% " + palabra + " %");
-                    params.put("descripcion_end_" + i, "% " + palabra);
+                    params.put("descripcion_" + i, palabras.get(i));
                 }
                 break;
+
             case CATEGORIA:
                 for (int i = 0; i < palabras.size(); i++) {
-                    // Para categoría mantenemos búsqueda parcial (puede ser una sola palabra)
-                    params.put("categoria_" + i, "%" + palabras.get(i) + "%");
+                    params.put("categoria_" + i, palabras.get(i));
                 }
                 break;
+
             case BUSQUEDA:
                 for (int i = 0; i < palabras.size(); i++) {
-                    String palabra = palabras.get(i);
-                    // Título - palabra completa
-                    params.put("busqueda_titulo_start_" + i, palabra + " %");
-                    params.put("busqueda_titulo_middle_" + i, "% " + palabra + " %");
-                    params.put("busqueda_titulo_end_" + i, "% " + palabra);
-
-                    // Descripción - palabra completa
-                    params.put("busqueda_descripcion_start_" + i, palabra + " %");
-                    params.put("busqueda_descripcion_middle_" + i, "% " + palabra + " %");
-                    params.put("busqueda_descripcion_end_" + i, "% " + palabra);
-
-                    // Categoría - búsqueda parcial
-                    params.put("busqueda_categoria_" + i, "%" + palabra + "%");
+                    params.put("busqueda_" + i, palabras.get(i));
                 }
                 break;
         }
@@ -203,4 +174,3 @@ public class CriterioDeTexto extends Criterio {
         return params;
     }
 }
-//toLowerCase() compara letras sin importar si es mayus o minus

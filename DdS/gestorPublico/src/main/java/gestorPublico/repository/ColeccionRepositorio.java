@@ -111,9 +111,6 @@ public class ColeccionRepositorio {
             if(criterio instanceof CriterioDeTexto){
                 Hibernate.initialize(((CriterioDeTexto) criterio).getPalabras());
             }
-            if(criterio instanceof CriterioUbicacion){
-                Hibernate.initialize(((CriterioUbicacion) criterio).getUbicacion());
-            }
         }
     }
 

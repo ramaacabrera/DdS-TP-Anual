@@ -43,21 +43,25 @@
                 </div>
 
                 <div class="nuevo-criterio-card">
-                    <h4 class="form-subtitle">Agregar nuevo criterio</h4>
-                    <div class="form-group">
-                        <label for="tipoCriterio" class="form-label">Tipo de criterio</label>
-                        <select id="tipoCriterio" class="form-select">
-                            <option value="">Seleccione un tipo</option>
-                            <option value="CriterioDeTexto">Texto</option>
-                            <option value="CriterioTipoMultimedia">Tipo Multimedia</option>
-                            <option value="CriterioEtiquetas">Etiquetas</option>
-                            <option value="CriterioFecha">Fecha</option>
-                            <option value="CriterioUbicacion">Ubicación</option>
-                            <option value="CriterioContribuyente">Contribuyente</option>
-                        </select>
-                        <div id="campoCriterio" class="campo-criterio-dinamico"></div>
-                        <button type="button" id="btn-agregar-criterio" class="btn btn-secondary" style="margin-top: 10px;" disabled>
-                            + Agregar criterio
+                    <h4 class="form-subtitle"><i class="fas fa-plus-circle"></i> Agregar Criterio de Pertenencia</h4>
+                    <div class="criterio-controls">
+                        <div class="form-group" style="text-align: left;">
+                            <label for="tipoCriterio" class="form-label">Seleccione el tipo de regla:</label>
+                            <select id="tipoCriterio" class="form-select">
+                                <option value="">-- Seleccionar --</option>
+                                <option value="CriterioDeTexto">Texto (Título/Descripción)</option>
+                                <option value="CriterioTipoMultimedia">Tipo de Multimedia</option>
+                                <option value="CriterioEtiquetas">Etiquetas</option>
+                                <option value="CriterioFecha">Rango de Fechas</option>
+                                <option value="CriterioUbicacion">Ubicación Geográfica</option>
+                                <option value="CriterioContribuyente">Contribuyente</option>
+                            </select>
+                        </div>
+
+                        <div id="campoCriterio" class="campo-criterio-dinamico" style="text-align: left;"></div>
+
+                        <button type="button" id="btn-agregar-criterio" class="btn btn-primary" style="width: 100%;" disabled>
+                            + Insertar Criterio
                         </button>
                     </div>
                 </div>
