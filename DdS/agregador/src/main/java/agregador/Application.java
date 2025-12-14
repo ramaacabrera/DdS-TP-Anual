@@ -99,15 +99,39 @@ public class Application {
             ctx.json(executionResult.toSpecification());
         });
 
-        app.get("/playground", ctx -> {
-            ctx.contentType("text/html");
-            InputStream is = Application.class.getResourceAsStream("/playground.html");
-            if (is == null) {
-                ctx.status(404).result("Playground no encontrado");
-                return;
+        app.get("/graphql-explorer.html", ctx -> {
+            InputStream is = Application.class.getResourceAsStream("/public/graphql-explorer.html");
+            if (is != null) {
+                ctx.contentType("text/html");
+                ctx.result(is);
+            } else {
+                ctx.status(404).result("Archivo no encontrado");
             }
-            ctx.result(is);
         });
+
+        app.get("/css/style.css", ctx -> {
+            InputStream is = Application.class.getResourceAsStream("/public/css/style.css");
+            if (is != null) {
+                ctx.contentType("text/css");
+                ctx.result(is);
+            } else {
+                ctx.status(404).result("CSS no encontrado");
+            }
+        });
+
+        app.get("/js/app.js", ctx -> {
+            InputStream is = Application.class.getResourceAsStream("/public/js/app.js");
+            if (is != null) {
+                ctx.contentType("application/javascript");
+                ctx.result(is);
+            } else {
+                ctx.status(404).result("JavaScript no encontrado");
+            }
+        });
+
+        // También agrega redirecciones
+        app.get("/", ctx -> ctx.redirect("/graphql-explorer.html"));
+        app.get("/graphql-explorer", ctx -> ctx.redirect("/graphql-explorer.html"));
 
     }
 }
