@@ -2,7 +2,7 @@
    1. ESTILOS GENERALES Y LAYOUT
    ========================================= */
 :root {
-    --primary-color: #007bff;
+    --primary-color: #1d7858;
     --secondary-color: #6c757d;
     --danger-color: #dc3545;
     --border-color: #dee2e6;
@@ -63,7 +63,7 @@
 .form-textarea:focus {
     border-color: var(--primary-color);
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(0, 255, 55, 0.25);
 }
 
 .btn {
@@ -77,7 +77,7 @@
 }
 
 .btn-primary { background-color: var(--primary-color); }
-.btn-primary:hover { background-color: #0056b3; }
+.btn-primary:hover { background-color: #145c43; }
 .btn-secondary { background-color: var(--secondary-color); }
 .btn-secondary:hover { background-color: #545b62; }
 .btn-danger { background-color: var(--danger-color); }
