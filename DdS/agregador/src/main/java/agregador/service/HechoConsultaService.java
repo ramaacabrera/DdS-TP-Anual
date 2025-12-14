@@ -128,9 +128,9 @@ public class HechoConsultaService {
         // Etiquetas
         if (filtro.getEtiquetas() != null && !filtro.getEtiquetas().isEmpty()) {
             List<Etiqueta> etiquetas = filtro.getEtiquetas().stream()
-                    .map(id -> {
+                    .map(nombre -> {
                         Etiqueta e = new Etiqueta();
-                        e.setId(id);
+                        e.setNombre(nombre);  // ← Ahora se setea el nombre, no el ID
                         return e;
                     })
                     .toList();

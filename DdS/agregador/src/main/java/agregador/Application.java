@@ -101,7 +101,12 @@ public class Application {
 
         app.get("/playground", ctx -> {
             ctx.contentType("text/html");
-            ctx.result("<h1>Playground OK</h1>");
+            InputStream is = Application.class.getResourceAsStream("/playground.html");
+            if (is == null) {
+                ctx.status(404).result("Playground no encontrado");
+                return;
+            }
+            ctx.result(is);
         });
 
     }

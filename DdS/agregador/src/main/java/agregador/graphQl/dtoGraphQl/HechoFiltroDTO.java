@@ -19,7 +19,7 @@ public class HechoFiltroDTO {
     private String contribuyente;
     private String tipoDeFuente;
 
-    private List<UUID> etiquetas;
+    private List<String> etiquetas;
 
     // =========================
     // CONSTRUCTOR VACÍO
@@ -53,12 +53,8 @@ public class HechoFiltroDTO {
 
         // 🏷️ Etiquetas (IDs)
         if (filtroMap.get("etiquetas") != null) {
-            List<Object> ids = (List<Object>) filtroMap.get("etiquetas");
-            dto.setEtiquetas(
-                    ids.stream()
-                            .map(id -> UUID.fromString(id.toString()))
-                            .toList()
-            );
+            List<String> nombres = (List<String>) filtroMap.get("etiquetas");
+            dto.setEtiquetas(nombres);
         }
 
         return dto;
@@ -107,8 +103,8 @@ public class HechoFiltroDTO {
         this.tipoDeFuente = tipoDeFuente;
     }
 
-    public List<UUID> getEtiquetas() { return etiquetas; }
-    public void setEtiquetas(List<UUID> etiquetas) {
+    public List<String> getEtiquetas() { return etiquetas; }
+    public void setEtiquetas(List<String> etiquetas) {
         this.etiquetas = etiquetas;
     }
 }
