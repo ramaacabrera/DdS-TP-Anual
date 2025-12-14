@@ -55,6 +55,24 @@ public class Application {
         SolicitudController solicitudController = new SolicitudController(solicitudService, urlPublica, usuarioService);
         AdministradorController administradorController = new AdministradorController(solicitudService);
 
+        app.exception(Exception.class, (e, ctx) -> {
+            e.printStackTrace();
+
+            ctx.status(500);
+
+            Map<String, Object> model = new HashMap<>();
+            model.put("mensaje", e.getMessage());
+            ctx.render("error.ftl", model);
+        });
+
+        app.error(404, ctx -> {
+            ctx.render("no_encontrado.ftl");
+        });
+
+        app.get("/probar-error", ctx -> {
+            throw new RuntimeException("Error de prueba para verificar estilos CSS");
+        });
+
         app.get("/", ctx -> {
             ctx.redirect("/home");
         });
