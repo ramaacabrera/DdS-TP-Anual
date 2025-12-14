@@ -53,6 +53,7 @@ public class HechoDTO {
             this.ubicacion.setUbicacionId(u.getId_ubicacion());
             this.ubicacion.setLatitud(u.getLatitud());
             this.ubicacion.setLongitud(u.getLongitud());
+            this.ubicacion.setDescripcion(u.getDescripcion());
         }
 
         // Fuente
