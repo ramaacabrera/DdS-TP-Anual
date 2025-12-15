@@ -46,7 +46,7 @@
                     <h4 class="form-subtitle"><i class="fas fa-plus-circle"></i> Agregar Criterio de Pertenencia</h4>
                     <div class="criterio-controls">
                         <div class="form-group" style="text-align: left;">
-                            <label for="tipoCriterio" class="form-label">Seleccione el tipo de regla:</label>
+                            <label for="tipoCriterio" class="form-label">Seleccione el tipo de criterio:</label>
                             <select id="tipoCriterio" class="form-select">
                                 <option value="">-- Seleccionar --</option>
                                 <option value="CriterioDeTexto">Texto (Título/Descripción)</option>

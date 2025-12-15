@@ -16,7 +16,7 @@
         <div class="actions" style="margin-top:10px;">
             <#if coleccion?? && coleccion.handle??>
                 <#if rolUsuario?? && rolUsuario == "ADMINISTRADOR">
-                    <button type="button" class="btn btn-secondary" onclick="window.location.href='/colecciones/${coleccion.handle}/editar'">Editar</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='/editar-coleccion/${coleccion.handle}'">Editar</button>
                 </#if>
                 <button type="button" class="btn btn-primary" onclick="verEstadisticas('${coleccion.handle}')"> Ver estadísticas</button>
             <#else>
@@ -197,6 +197,28 @@
                 </#list>
             </div>
         <#else>
+            <p class="texto-placeholder" style="color: #999;">No hay hechos asociados aún.</p>
+        </#if>
+    </div>
+
+    <#-- HECHOS CONSENSUADOS -->
+    <div class="form-section" style="margin-top: 40px;">
+        <h3 class="form-section-title">🤝 Hechos consensuados</h3>
+        <#if coleccion?? && coleccion.hechosConsensuados?? && (coleccion.hechosConsensuados?size > 0)>
+            <div class="grid-metadata">
+                <#list coleccion.hechosConsensuados as hecho>
+                    <div class="card" style="cursor:pointer; border-left:4px solid;"
+                         onclick="verHecho('${(hecho.id)!}')">
+                        <p class="card-subtitle">${(hecho.categoria)!?default("Sin categoría")?html}</p>
+                        <h4>${(hecho.titulo)!?default("Hecho sin título")?html}</h4>
+                        <p style="color:#666; font-size:0.9em;">
+                            ${(hecho.descripcion)!?truncate(100, "...")?html}
+                        </p>
+                    </div>
+                </#list>
+            </div>
+        <#else>
+            <p class="texto-placeholder">No hay hechos consensuados aún.</p>
             <p class="texto-placeholder" style="color: #999;">No hay hechos asociados aún.</p>
         </#if>
     </div>
