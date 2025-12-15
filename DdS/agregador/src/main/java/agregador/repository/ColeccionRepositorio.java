@@ -143,4 +143,10 @@ public class ColeccionRepositorio {
         }
     }
 
+    public List<Fuente> buscarFuentesPorColeccion(EntityManager em, UUID coleccionId) {
+        String jpql = "SELECT f FROM Coleccion c JOIN c.fuentes f WHERE c.handle = :id";
+        return em.createQuery(jpql, Fuente.class)
+                .setParameter("id", coleccionId)
+                .getResultList();
+    }
 }

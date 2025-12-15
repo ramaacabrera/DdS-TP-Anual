@@ -6,13 +6,17 @@ import agregador.domain.Criterios.CriterioEtiquetas;
 import agregador.domain.Criterios.TipoDeTexto;
 import agregador.domain.HechosYColecciones.Coleccion;
 import agregador.domain.HechosYColecciones.Etiqueta;
+import agregador.domain.fuente.Fuente;
 import agregador.dto.Coleccion.ColeccionDTO;
+import agregador.dto.Hechos.FuenteDTO;
 import agregador.graphQl.dtoGraphQl.ColeccionFiltroDTO;
 import agregador.graphQl.dtoGraphQl.ColeccionGraphDTO;
 import agregador.graphQl.dtoGraphQl.PageColeccionDTO;
 import agregador.graphQl.dtoGraphQl.PageRequestDTO;
 import agregador.repository.ColeccionRepositorio;
+import agregador.utils.BDUtils;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -112,5 +116,29 @@ public class ColeccionConsultaService {
             return false;
 
         return true;
+    }
+    public List<FuenteDTO> buscarFuentesPorColeccion(UUID coleccionId) {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            BDUtils.comenzarTransaccion(em);
+
+            List<Fuente> fuentes = coleccionRepositorio.buscarFuentesPorColeccion(em, coleccionId);
+
+            List<FuenteDTO> dtos = fuentes.stream().map(f -> {
+                FuenteDTO dto = new FuenteDTO();
+                dto.setFuenteId(f.getId());
+                dto.setTipoDeFuente(f.getTipoDeFuente());
+                dto.setDescriptor(f.getDescriptor());
+                return dto;
+            }).toList();
+
+            BDUtils.commit(em);
+            return dtos;
+        } catch (Exception e) {
+            BDUtils.rollback(em);
+            throw e;
+        } finally {
+            em.close();
+        }
     }
 }

@@ -497,6 +497,7 @@ function formatColeccionResult(coleccion) {
         <h3>${coleccion.titulo || 'Sin título'}</h3>
         <div class="metadata">`;
 
+    // Campos básicos
     if (coleccion.id) html += `<div><strong>ID:</strong> ${coleccion.id}</div>`;
     if (document.getElementById('coleccionFieldTitulo').checked && coleccion.titulo) {
         html += `<div><strong>Título:</strong> ${coleccion.titulo}</div>`;
@@ -509,14 +510,40 @@ function formatColeccionResult(coleccion) {
     if (document.getElementById('coleccionFieldAlgoritmo').checked && coleccion.algoritmoDeConsenso) {
         html += `<div><strong>Algoritmo:</strong> ${coleccion.algoritmoDeConsenso}</div>`;
     }
+
+    // Mostrar hechos completos si está marcado
     if (document.getElementById('coleccionFieldHechos').checked && coleccion.hechos && coleccion.hechos.length > 0) {
-        html += `<div><strong>Hechos:</strong> ${coleccion.hechos.length}</div>`;
+        html += `<div class="hechos-list">
+            <strong>Hechos (${coleccion.hechos.length}):</strong>
+            <ul>`;
+        coleccion.hechos.forEach(hecho => {
+            html += `<li>${hecho.titulo || 'Sin título'} - ${hecho.categoria || 'Sin categoría'}</li>`;
+        });
+        html += `</ul></div>`;
     }
-    if (document.getElementById('coleccionFieldHechosConsensuados').checked && coleccion.hechosConsensuados && coleccion.hechosConsensuados.length > 0) {
-        html += `<div><strong>Hechos Consensuados:</strong> ${coleccion.hechosConsensuados.length}</div>`;
+
+    // Mostrar hechos consensuados completos si está marcado
+    if (document.getElementById('coleccionFieldHechosConsensuados').checked &&
+        coleccion.hechosConsensuados && coleccion.hechosConsensuados.length > 0) {
+        html += `<div class="hechos-consensuados-list">
+            <strong>Hechos Consensuados (${coleccion.hechosConsensuados.length}):</strong>
+            <ul>`;
+        coleccion.hechosConsensuados.forEach(hecho => {
+            html += `<li>${hecho.titulo || 'Sin título'} - ${hecho.categoria || 'Sin categoría'}</li>`;
+        });
+        html += `</ul></div>`;
     }
+
+    // Mostrar fuentes si está marcado
     if (document.getElementById('coleccionFieldFuentes').checked && coleccion.fuentes && coleccion.fuentes.length > 0) {
         html += `<div><strong>Fuentes:</strong> ${coleccion.fuentes.length}</div>`;
+        // Si quieres mostrar detalles de cada fuente:
+        html += `<div class="fuentes-list">
+            <ul>`;
+        coleccion.fuentes.forEach(fuente => {
+            html += `<li>${fuente.tipoDeFuente || 'Sin tipo'} (ID: ${fuente.id})</li>`;
+        });
+        html += `</ul></div>`;
     }
 
     html += `</div></div>`;
@@ -557,7 +584,7 @@ function clearFilters() {
         if (cb.id !== 'coleccionFieldId') {
             if (cb.id.includes('Titulo') || cb.id.includes('Descripcion') || cb.id.includes('Algoritmo')) {
                 cb.checked = true;
-            } else {
+            } else if (cb.id.includes('Hechos') || cb.id.includes('Fuentes')) {
                 cb.checked = false;
             }
         }
