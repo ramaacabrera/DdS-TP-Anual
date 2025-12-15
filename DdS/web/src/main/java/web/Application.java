@@ -52,7 +52,7 @@ public class Application {
         // controllers
         ColeccionController coleccionController = new ColeccionController(coleccionService, usuarioService, fuenteService);
         HechoController hechoController = new HechoController(urlPublica, urlAdmin,hechoService, dataCloud);
-        SolicitudController solicitudController = new SolicitudController(solicitudService, urlPublica, usuarioService);
+        SolicitudController solicitudController = new SolicitudController(solicitudService, urlPublica, usuarioService, dataCloud);
         AdministradorController administradorController = new AdministradorController(solicitudService);
 
         app.exception(Exception.class, (e, ctx) -> {

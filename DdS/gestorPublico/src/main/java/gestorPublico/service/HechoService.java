@@ -1,8 +1,10 @@
 package gestorPublico.service;
 
 import gestorPublico.domain.Criterios.*;
+import gestorPublico.domain.HechosYColecciones.ContenidoMultimedia;
 import gestorPublico.domain.HechosYColecciones.EstadoHecho;
 import gestorPublico.domain.HechosYColecciones.Hecho;
+import gestorPublico.domain.HechosYColecciones.TipoContenidoMultimedia;
 import gestorPublico.domain.HechosYColecciones.Ubicacion;
 import gestorPublico.dto.FiltroHechosDTO;
 import gestorPublico.repository.HechoRepositorio;
@@ -16,6 +18,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -30,6 +33,7 @@ public class HechoService {
         this.hechoRepositorio = hechoRepositorio;
         this.urlDinamica = urlDinamica;
         this.diccionarioCategorias = diccionarioCategorias;
+        // Asumiendo que ServicioGeoref tiene el constructor sin argumentos que arreglamos antes
         this.servicioGeoref = new ServicioGeoref();
     }
 
@@ -141,6 +145,21 @@ public class HechoService {
         if (cambios.containsKey("descripcion")) hecho.setDescripcion((String) cambios.get("descripcion"));
         if (cambios.containsKey("categoria")) hecho.setCategoria((String) cambios.get("categoria"));
 
+        if (cambios.containsKey("fechaDeAcontecimiento")) {
+            Object fechaObj = cambios.get("fechaDeAcontecimiento");
+
+            if (fechaObj != null && !fechaObj.toString().isEmpty()) {
+                try {
+                    Instant instant = Instant.parse(fechaObj.toString());
+
+                    hecho.setFechaDeAcontecimiento(Date.from(instant));
+
+                } catch (Exception e) {
+                    System.err.println("Error parseando fecha: " + fechaObj + ". Error: " + e.getMessage());
+                }
+            }
+        }
+
         if (cambios.containsKey("ubicacion")) {
             Map<String, Object> ubicacionMap = (Map<String, Object>) cambios.get("ubicacion");
 
@@ -152,6 +171,42 @@ public class HechoService {
 
             Ubicacion ubicacionNueva = new Ubicacion(lat, lon, descripcionFinal);
             hecho.setUbicacion(ubicacionNueva);
+        }
+
+        if (cambios.containsKey("contenidoMultimedia")) {
+            try {
+                List<Map<String, Object>> listaMedia = (List<Map<String, Object>>) cambios.get("contenidoMultimedia");
+
+                if (hecho.getContenidoMultimedia() != null) {
+                    hecho.getContenidoMultimedia().clear();
+                } else {
+                    hecho.setContenidoMultimedia(new ArrayList<>());
+                }
+
+                if (listaMedia != null && !listaMedia.isEmpty()) {
+                    List<ContenidoMultimedia> nuevosContenidos = new ArrayList<>();
+
+                    for (Map<String, Object> item : listaMedia) {
+                        String url = (String) item.get("contenido");
+                        String tipoStr = (String) item.get("tipoContenido");
+
+                        if (url != null && tipoStr != null) {
+                            try {
+                                TipoContenidoMultimedia tipo = TipoContenidoMultimedia.valueOf(tipoStr);
+                                ContenidoMultimedia cm = new ContenidoMultimedia(tipo, url);
+                                cm.setHecho(hecho);
+                                nuevosContenidos.add(cm);
+                            } catch (IllegalArgumentException e) {
+                                System.err.println("Tipo de contenido desconocido: " + tipoStr);
+                            }
+                        }
+                    }
+                    hecho.getContenidoMultimedia().addAll(nuevosContenidos);
+                }
+            } catch (Exception e) {
+                System.err.println("Error procesando multimedia: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
 
         hechoRepositorio.actualizar(hecho);
