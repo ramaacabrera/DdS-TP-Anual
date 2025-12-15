@@ -16,12 +16,12 @@
         <div class="actions" style="margin-top:10px;">
             <#if coleccion?? && coleccion.handle??>
                 <#if rolUsuario?? && rolUsuario == "ADMINISTRADOR">
-                    <button type="button" class="btn btn-secondary" onclick="window.location.href='/colecciones/${coleccion.handle}/editar'">✏️ Editar</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='/colecciones/${coleccion.handle}/editar'">Editar</button>
                 </#if>
-                <button type="button" class="btn btn-primary" onclick="verEstadisticas('${coleccion.handle}')">📊 Ver estadísticas</button>
+                <button type="button" class="btn btn-primary" onclick="verEstadisticas('${coleccion.handle}')"> Ver estadísticas</button>
             <#else>
-                <button type="button" class="btn btn-secondary" disabled>✏️ Editar</button>
-                <button type="button" class="btn btn-primary" disabled>📊 Ver estadísticas</button>
+                <button type="button" class="btn btn-secondary" disabled>Editar</button>
+                <button type="button" class="btn btn-primary" disabled>Ver estadísticas</button>
             </#if>
         </div>
     </div>

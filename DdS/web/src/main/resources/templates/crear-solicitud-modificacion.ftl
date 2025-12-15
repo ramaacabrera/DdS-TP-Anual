@@ -55,7 +55,7 @@
         <a href="javascript:history.back()" class="header-link back-link">&larr; Volver Atrás</a>
     </div>
 
-    <h1 class="main-title">✍️ Modificar Hecho</h1>
+    <h1 class="main-title"> Modificar Hecho</h1>
 
     <p style="color: black; margin-bottom: 25px;">
         Está solicitando la modificación del hecho ID: <strong>${hechoId?html}</strong>. Por favor, ingrese solo los nuevos valores que desea cambiar.

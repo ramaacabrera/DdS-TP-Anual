@@ -48,14 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnEnviar.disabled = true;
 
         const formData = new FormData(form);
-        const justificacion = formData.get('justificacion');
 
-        if (!justificacion || justificacion.trim() === '') {
-            mensajeError.textContent = 'La justificación es obligatoria.';
-            mensajeError.style.display = 'block';
-            btnEnviar.disabled = false;
-            return;
-        }
 
         const hechoModificado = {};
         let hayCambios = false;
@@ -90,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const body = {
             "username": formData.get('username'),
-            "justificacion": justificacion.trim(),
             "hechoModificado": hechoModificado,
             "accessToken": ACCESS_TOKEN
         };
