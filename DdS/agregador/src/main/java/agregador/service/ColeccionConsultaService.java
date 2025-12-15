@@ -8,6 +8,7 @@ import agregador.domain.HechosYColecciones.Coleccion;
 import agregador.domain.HechosYColecciones.Etiqueta;
 import agregador.dto.Coleccion.ColeccionDTO;
 import agregador.graphQl.dtoGraphQl.ColeccionFiltroDTO;
+import agregador.graphQl.dtoGraphQl.ColeccionGraphDTO;
 import agregador.graphQl.dtoGraphQl.PageColeccionDTO;
 import agregador.graphQl.dtoGraphQl.PageRequestDTO;
 import agregador.repository.ColeccionRepositorio;
@@ -32,9 +33,9 @@ public class ColeccionConsultaService {
 
         List<Coleccion> colecciones = coleccionRepositorio.obtenerTodas();
 
-        List<ColeccionDTO> filtradas = colecciones.stream()
+        List<ColeccionGraphDTO> filtradas = colecciones.stream()
                 .filter(c -> cumpleFiltro(c, filtro))
-                .map(ColeccionDTO::new)
+                .map(ColeccionGraphDTO::new)
                 .toList();
 
         int total = filtradas.size();
@@ -44,7 +45,7 @@ public class ColeccionConsultaService {
         int from = Math.min((page - 1) * size, total);
         int to = Math.min(from + size, total);
 
-        List<ColeccionDTO> contenido = filtradas.subList(from, to);
+        List<ColeccionGraphDTO> contenido = filtradas.subList(from, to);
         int totalPages = (int) Math.ceil((double) total / size);
 
         return new PageColeccionDTO(

@@ -5,13 +5,13 @@ import agregador.dto.Coleccion.ColeccionDTO;
 import java.util.List;
 public class PageColeccionDTO {
 
-    private List<ColeccionDTO> content;
+    private List<ColeccionGraphDTO> content;
     private int page;
     private int size;
     private int totalPages;
     private int totalElements;
 
-    public PageColeccionDTO(List<ColeccionDTO> content,
+    public PageColeccionDTO(List<ColeccionGraphDTO> content,
                             int page,
                             int size,
                             int totalPages,
@@ -24,7 +24,7 @@ public class PageColeccionDTO {
     }
 
     // Getters
-    public List<ColeccionDTO> getContent() { return content; }
+    public List<ColeccionGraphDTO> getContent() { return content; }
     public int getPage() { return page; }
     public int getSize() { return size; }
     public int getTotalPages() { return totalPages; }

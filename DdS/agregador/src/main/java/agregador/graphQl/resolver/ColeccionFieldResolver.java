@@ -3,6 +3,7 @@ package agregador.graphQl.resolver;
 import agregador.domain.HechosYColecciones.Coleccion;
 import agregador.dto.Coleccion.ColeccionDTO;
 import agregador.dto.Hechos.HechoDTO;
+import agregador.graphQl.dtoGraphQl.ColeccionGraphDTO;
 import agregador.graphQl.dtoGraphQl.PageHechoDTO;
 import agregador.graphQl.dtoGraphQl.PageRequestDTO;
 import agregador.service.HechoConsultaService;
@@ -19,14 +20,14 @@ public class ColeccionFieldResolver {
         this.hechoConsultaService = hechoConsultaService;
     }
 
-    public List<HechoDTO> hechos(ColeccionDTO coleccion) {
+    public List<HechoDTO> hechos(ColeccionGraphDTO coleccion) {
         return hechoConsultaService.buscarHechosPorColeccion(
                 UUID.fromString(coleccion.getId()),
                 false
         );
     }
 
-    public List<HechoDTO> hechosConsensuados(ColeccionDTO coleccion) {
+    public List<HechoDTO> hechosConsensuados(ColeccionGraphDTO coleccion) {
         return hechoConsultaService.buscarHechosPorColeccion(
                 UUID.fromString(coleccion.getId()),
                 true
