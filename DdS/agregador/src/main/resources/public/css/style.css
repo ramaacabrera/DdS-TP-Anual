@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1d7858 0%, #145c43 100%);
     min-height: 100vh;
     padding: 20px;
     color: #333;
@@ -26,7 +26,7 @@ body {
 
 /* Header */
 header {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    background: linear-gradient(135deg, #0f2818  0%, #145c43 100%);
     color: white;
     padding: 30px;
     text-align: center;
@@ -42,13 +42,13 @@ header h1 {
 }
 
 header h1 i {
-    color: #3498db;
+    color: #52b788;
 }
 
 header p {
     opacity: 0.9;
     font-size: 1.1em;
-    color: #bdc3c7;
+    color: #adb5bd;
 }
 
 /* Grid principal */
@@ -72,10 +72,10 @@ header p {
 }
 
 .panel h2 {
-    color: #2c3e50;
+    color: #52b788;
     margin-bottom: 20px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #3498db;
+    border-bottom: 2px solid #52b788;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -83,7 +83,7 @@ header p {
 }
 
 .panel h2 i {
-    color: #3498db;
+    color: #52b788;
 }
 
 /* Panel izquierdo (formulario) */
@@ -94,7 +94,7 @@ header p {
 
 /* Panel derecho (resultados) */
 .results-panel {
-    background: #2c3e50;
+    background: #0f2818;
     color: white;
 }
 
@@ -107,17 +107,17 @@ header p {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #2c3e50;
+    color: #212529;
     font-size: 14px;
 }
 
 .form-group label i {
     margin-right: 8px;
-    color: #3498db;
+    color: #52b788;
 }
 
 .results-panel .form-group label {
-    color: #ecf0f1;
+    color: #ffffff;
 }
 
 .form-group input,
@@ -125,25 +125,25 @@ header p {
 .form-group textarea {
     width: 100%;
     padding: 12px;
-    border: 2px solid #dfe6e9;
+    border: 2px solid #dee2e6;
     border-radius: 8px;
     font-size: 16px;
     transition: all 0.3s ease;
     background: white;
-    color: #2d3436;
+    color: #212529;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    border-color: #52b788;
+    box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.2);
 }
 
 /* Help text */
 .help-text {
-    color: #7f8c8d;
+    color: #6c757d;
     font-size: 12px;
     margin-top: 5px;
     display: block;
@@ -180,7 +180,7 @@ header p {
     cursor: pointer;
     margin-bottom: 0;
     font-weight: normal;
-    color: #2c3e50;
+    color: #212529;
 }
 
 /* Pagination controls */
@@ -217,27 +217,27 @@ header p {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    background: linear-gradient(135deg, #52b788 0%, #40916c 100%);
     color: white;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+    box-shadow: 0 10px 20px rgba(82, 183, 136, 0.3);
 }
 
 .btn-secondary {
-    background: #f1f2f6;
-    color: #2c3e50;
+    background: #e9ecef;
+    color: #212529;
 }
 
 .btn-secondary:hover {
-    background: #dfe4ea;
+    background: #dee2e6;
 }
 
 /* Resultados */
 #resultOutput {
-    background: #34495e;
+    background: #145c43;
     border-radius: 8px;
     padding: 20px;
     max-height: 500px;
@@ -247,7 +247,7 @@ header p {
 
 .empty-state {
     text-align: center;
-    color: #bdc3c7;
+    color: #adb5bd;
     padding: 40px;
 }
 
@@ -259,15 +259,15 @@ header p {
 
 /* Tarjetas de resultados */
 .hecho-card {
-    background: #3b4a5c;
+    background: #1d7858;
     padding: 20px;
     border-radius: 8px;
-    border-left: 4px solid #3498db;
+    border-left: 4px solid #52b788;
     margin-bottom: 15px;
 }
 
 .hecho-card h3 {
-    color: #3498db;
+    color: #ffffff;
     margin-bottom: 10px;
     font-size: 1.2em;
 }
@@ -276,18 +276,18 @@ header p {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 10px;
-    color: #ecf0f1;
+    color: #ffffff;
     font-size: 14px;
 }
 
 .hecho-card .metadata strong {
-    color: #bdc3c7;
+    color: #ffffff;
     margin-right: 5px;
 }
 
 /* Estadísticas */
 .response-stats {
-    background: #1abc9c;
+    background: #52b788;
     color: white;
     padding: 12px 15px;
     border-radius: 6px;
@@ -309,9 +309,9 @@ header p {
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    background: #ecf0f1;
+    background: #e9ecef;
     border-radius: 8px;
-    color: #2c3e50;
+    color: #212529;
 }
 
 .status-item {
@@ -324,17 +324,17 @@ header p {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #2ecc71;
+    background: #52b788;
     transition: background 0.3s ease;
 }
 
 .status-dot.loading {
-    background: #f39c12;
+    background: #ffc107;
     animation: pulse 1.5s infinite;
 }
 
 .status-dot.error {
-    background: #e74c3c;
+    background: #dc3545;
 }
 
 @keyframes pulse {
@@ -349,7 +349,7 @@ header p {
 }
 
 .query-container {
-    background: #2d3436;
+    background: #212529;
     border-radius: 8px;
     padding: 20px;
     overflow: auto;
@@ -357,7 +357,7 @@ header p {
 
 .query-container pre {
     margin: 0;
-    color: #ecf0f1;
+    color: #ffffff;
 }
 
 .query-container code {
@@ -422,11 +422,10 @@ header p {
     cursor: pointer;
     margin-bottom: 0;
     font-weight: normal;
-    color: #2c3e50;
+    color: #212529;
     flex-grow: 1;
 }
 
-/* Agrega esto a tu style.css */
 .filters-section {
     background: #f8f9fa;
     padding: 15px;
@@ -439,15 +438,15 @@ header p {
     color: #2c3e50;
     margin-bottom: 15px;
     font-size: 1.1em;
-    border-bottom: 2px solid #3498db;
+    border-bottom: 2px solid #52b788;
     padding-bottom: 8px;
 }
 
 /* Selector de entidad */
 .entity-selector {
-    background: #2c3e50;
+    background: #0f2818;
     padding: 15px;
-    border-bottom: 2px solid #3498db;
+    border-bottom: 2px solid #52b788;
 }
 
 .selector-buttons {
@@ -458,7 +457,7 @@ header p {
 
 .selector-btn {
     padding: 12px 24px;
-    background: #34495e;
+    background: #145c43;
     color: white;
     border: none;
     border-radius: 6px;
@@ -471,12 +470,12 @@ header p {
 }
 
 .selector-btn:hover {
-    background: #3c566e;
+    background: #1d7858;
 }
 
 .selector-btn.active {
-    background: #3498db;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+    background: #52b788;
+    box-shadow: 0 0 0 2px rgba(82, 183, 136, 0.3);
 }
 
 /* Filtros por entidad */
@@ -496,15 +495,15 @@ header p {
 
 /* Tarjetas de colecciones */
 .coleccion-card {
-    background: #3b4a5c;
+    background: #1d7858;
     padding: 20px;
     border-radius: 8px;
-    border-left: 4px solid #2ecc71;
+    border-left: 4px solid #52b788;
     margin-bottom: 15px;
 }
 
 .coleccion-card h3 {
-    color: #2ecc71;
+    color: #ffffff;
     margin-bottom: 10px;
     font-size: 1.2em;
 }
@@ -516,15 +515,168 @@ header p {
 }
 
 .combined-results h3 {
-    color: #3498db;
+    color: #ffffff;
     margin-bottom: 15px;
     padding-bottom: 8px;
     border-bottom: 2px solid currentColor;
 }
 
-/* Ajustes para cuando ambos filtros están visibles */
+/* Cuando ambos filtros están visibles */
 .entity-filters.active + .entity-filters.active {
     margin-top: 30px;
     padding-top: 30px;
     border-top: 2px solid #e9ecef;
+}
+
+/* Tarjetas mini de hechos */
+.hechos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.hecho-mini-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    border-radius: 6px;
+    border-left: 3px solid #52b788;
+    font-size: 13px;
+}
+
+.hecho-mini-card.consensuado {
+    border-left-color: #52b788;
+    background: rgba(82, 183, 136, 0.1);
+}
+
+.hecho-mini-titulo {
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.hecho-mini-card.consensuado .hecho-mini-titulo {
+    color: #52b788;
+}
+
+.hecho-mini-campo {
+    margin-bottom: 3px;
+    line-height: 1.3;
+}
+
+.hecho-mini-label {
+    color: #ffffff;
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+/* Listas de hechos dentro de colecciones */
+.hechos-list, .hechos-consensuados-list {
+    grid-column: 1 / -1;
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.hechos-list > strong, .hechos-consensuados-list > strong {
+    display: block;
+    margin-bottom: 10px;
+    color: #ffffff;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 5px;
+}
+
+/* Opciones de campos de hechos */
+#hechos-campos-opciones {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    margin-top: 15px;
+}
+
+#hechos-campos-opciones label {
+    color: #212529;
+    font-weight: 600;
+}
+
+/*AGREGOOOO*/
+/* Estilos para tags de fuentes */
+.fuentes-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.fuente-tag {
+    background: rgba(82, 183, 136, 0.15);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(82, 183, 136, 0.3);
+}
+
+.fuente-cantidad {
+    background: #52b788;
+    color: white;
+    border-radius: 10px;
+    padding: 1px 6px;
+    font-size: 11px;
+    font-weight: bold;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Colores diferentes para cada tipo de fuente */
+.fuente-tag[data-tipo="DINAMICA"] {
+    background: rgba(116, 198, 157, 0.25);
+    color: white;
+    border-color: rgba(116, 198, 157, 0.4);
+}
+
+.fuente-tag[data-tipo="DINAMICA"] .fuente-cantidad {
+    background: #74c69d;
+    color: white;
+}
+
+.fuente-tag[data-tipo="ESTATICA"] {
+    background: rgba(116, 198, 157, 0.25);
+    color: white;
+    border-color: rgba(116, 198, 157, 0.4);
+}
+
+.fuente-tag[data-tipo="ESTATICA"] .fuente-cantidad {
+    background: #74c69d;
+    color: white;
+}
+
+.fuente-tag[data-tipo="PROXY"] {
+    background: rgba(116, 198, 157, 0.25);
+    color:  white;
+    border-color: rgba(116, 198, 157, 0.4);
+}
+
+.fuente-tag[data-tipo="PROXY"] .fuente-cantidad {
+    background: #74c69d;
+    color: white;
+}
+
+.fuente-tag[data-tipo="OTRO"] {
+    background: rgba(116, 198, 157, 0.25);
+    color:  white;
+    border-color: rgba(116, 198, 157, 0.4);
+}
+
+.fuente-tag[data-tipo="OTRO"] .fuente-cantidad {
+    background: #74c69d;
+    color: white;
 }

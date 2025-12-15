@@ -54,7 +54,7 @@ public class GraphQLProvider {
                 new ColeccionQueryResolver(coleccionService);
 
         ColeccionFieldResolver coleccionFieldResolver =
-                new ColeccionFieldResolver(hechoConsultaService);
+                new ColeccionFieldResolver(hechoConsultaService, coleccionService);
 
         //Wirear schema + resolvers
         RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
@@ -88,6 +88,9 @@ public class GraphQLProvider {
                         )
                         .dataFetcher("hechosConsensuados", env ->
                                 coleccionFieldResolver.hechosConsensuados(env.getSource())
+                        )
+                        .dataFetcher("fuentes", env ->
+                                coleccionFieldResolver.fuentes(env.getSource())
                         )
                 )
 

@@ -195,12 +195,40 @@ function buildColeccionesQuery() {
     // Campos con sub-objetos
     const hechosFields = [];
     if (document.getElementById('coleccionFieldHechos').checked) {
-        hechosFields.push('id', 'titulo', 'descripcion', 'categoria');
+        // Campos básicos siempre
+        hechosFields.push('id', 'titulo');
+
+        // Campos según selección
+        if (document.getElementById('hechoFieldCategoria').checked) hechosFields.push('categoria');
+        if (document.getElementById('hechoFieldDescripcion').checked) hechosFields.push('descripcion');
+        if (document.getElementById('hechoFieldFecha').checked) {
+            hechosFields.push('fechaDeAcontecimiento');
+            hechosFields.push('fechaDeCarga');
+        }
+        if (document.getElementById('hechoFieldUbicacion').checked) {
+            hechosFields.push('ubicacion { descripcion }');
+        }
+        if (document.getElementById('hechoFieldEtiquetas').checked) {
+            hechosFields.push('etiquetas { nombre }');
+        }
     }
 
     const hechosConsensuadosFields = [];
     if (document.getElementById('coleccionFieldHechosConsensuados').checked) {
-        hechosConsensuadosFields.push('id', 'titulo', 'descripcion', 'categoria');
+        // Mismos campos que para hechos normales
+        hechosConsensuadosFields.push('id', 'titulo');
+        if (document.getElementById('hechoFieldCategoria').checked) hechosConsensuadosFields.push('categoria');
+        if (document.getElementById('hechoFieldDescripcion').checked) hechosConsensuadosFields.push('descripcion');
+        if (document.getElementById('hechoFieldFecha').checked) {
+            hechosConsensuadosFields.push('fechaDeAcontecimiento');
+            hechosConsensuadosFields.push('fechaDeCarga');
+        }
+        if (document.getElementById('hechoFieldUbicacion').checked) {
+            hechosConsensuadosFields.push('ubicacion { descripcion }');
+        }
+        if (document.getElementById('hechoFieldEtiquetas').checked) {
+            hechosConsensuadosFields.push('etiquetas { nombre }');
+        }
     }
 
     const fuentesFields = [];
@@ -511,40 +539,70 @@ function formatColeccionResult(coleccion) {
         html += `<div><strong>Algoritmo:</strong> ${coleccion.algoritmoDeConsenso}</div>`;
     }
 
-    // Mostrar hechos completos si está marcado
+    // Mostrar hechos con formato mejorado
     if (document.getElementById('coleccionFieldHechos').checked && coleccion.hechos && coleccion.hechos.length > 0) {
         html += `<div class="hechos-list">
             <strong>Hechos (${coleccion.hechos.length}):</strong>
-            <ul>`;
+            <div class="hechos-grid">`;
+
         coleccion.hechos.forEach(hecho => {
-            html += `<li>${hecho.titulo || 'Sin título'} - ${hecho.categoria || 'Sin categoría'}</li>`;
+            html += `<div class="hecho-mini-card">
+                <div class="hecho-mini-titulo">${hecho.titulo || 'Sin título'}</div>`;
+
+            if (document.getElementById('hechoFieldCategoria').checked && hecho.categoria) {
+                html += `<div class="hecho-mini-campo"><span class="hecho-mini-label">Categoría:</span> ${hecho.categoria}</div>`;
+            }
+            if (document.getElementById('hechoFieldDescripcion').checked && hecho.descripcion) {
+                const descCorta = hecho.descripcion.substring(0, 60);
+                const tieneMas = hecho.descripcion.length > 60 ? '...' : '';
+                html += `<div class="hecho-mini-campo"><span class="hecho-mini-label">Descripción:</span> ${descCorta}${tieneMas}</div>`;
+            }
+            if (document.getElementById('hechoFieldFecha').checked && hecho.fechaDeAcontecimiento) {
+                const fecha = new Date(hecho.fechaDeAcontecimiento).toLocaleDateString('es-AR');
+                html += `<div class="hecho-mini-campo"><span class="hecho-mini-label">Fecha:</span> ${fecha}</div>`;
+            }
+            if (document.getElementById('hechoFieldUbicacion').checked && hecho.ubicacion && hecho.ubicacion.descripcion) {
+                html += `<div class="hecho-mini-campo"><span class="hecho-mini-label">Ubicación:</span> ${hecho.ubicacion.descripcion}</div>`;
+            }
+            if (document.getElementById('hechoFieldEtiquetas').checked && hecho.etiquetas && hecho.etiquetas.length > 0) {
+                const tags = hecho.etiquetas.map(e => e.nombre).slice(0, 3).join(', ');
+                const masTags = hecho.etiquetas.length > 3 ? '...' : '';
+                html += `<div class="hecho-mini-campo"><span class="hecho-mini-label">Etiquetas:</span> ${tags}${masTags}</div>`;
+            }
+
+            html += `</div>`;
         });
-        html += `</ul></div>`;
+
+        html += `</div></div>`;
     }
 
-    // Mostrar hechos consensuados completos si está marcado
-    if (document.getElementById('coleccionFieldHechosConsensuados').checked &&
-        coleccion.hechosConsensuados && coleccion.hechosConsensuados.length > 0) {
-        html += `<div class="hechos-consensuados-list">
-            <strong>Hechos Consensuados (${coleccion.hechosConsensuados.length}):</strong>
-            <ul>`;
-        coleccion.hechosConsensuados.forEach(hecho => {
-            html += `<li>${hecho.titulo || 'Sin título'} - ${hecho.categoria || 'Sin categoría'}</li>`;
-        });
-        html += `</ul></div>`;
-    }
-
-    // Mostrar fuentes si está marcado
+    // Mostrar hechos consensuados con mismo formato
     if (document.getElementById('coleccionFieldFuentes').checked && coleccion.fuentes && coleccion.fuentes.length > 0) {
-        html += `<div><strong>Fuentes:</strong> ${coleccion.fuentes.length}</div>`;
-        // Si quieres mostrar detalles de cada fuente:
-        html += `<div class="fuentes-list">
-            <ul>`;
+        // Agrupar fuentes por tipo y contar
+        const fuentesPorTipo = {};
         coleccion.fuentes.forEach(fuente => {
-            html += `<li>${fuente.tipoDeFuente || 'Sin tipo'} (ID: ${fuente.id})</li>`;
+            const tipo = fuente.tipoDeFuente || 'Sin tipo';
+            if (!fuentesPorTipo[tipo]) {
+                fuentesPorTipo[tipo] = 0;
+            }
+            fuentesPorTipo[tipo]++;
         });
-        html += `</ul></div>`;
+
+        html += `<div class="fuentes-list">
+        <strong>Fuentes (${coleccion.fuentes.length}):</strong>
+        <div class="fuentes-tags">`;
+
+        // Mostrar cada tipo con su cantidad
+        Object.entries(fuentesPorTipo).forEach(([tipo, cantidad]) => {
+            html += `<span class="fuente-tag">
+            ${tipo} 
+            <span class="fuente-cantidad">${cantidad}</span>
+        </span>`;
+        });
+
+        html += `</div></div>`;
     }
+    
 
     html += `</div></div>`;
     return html;
@@ -574,7 +632,7 @@ function clearFilters() {
     document.getElementById('page').value = '0';
     document.getElementById('size').value = '10';
 
-    // Resetear checkboxes de hechos
+    // Resetear checkboxes de hechos (todos marcados excepto ID)
     document.querySelectorAll('#hechos-filtros .checkbox-item input[type="checkbox"]').forEach(cb => {
         if (cb.id !== 'fieldId') cb.checked = true;
     });
@@ -582,13 +640,38 @@ function clearFilters() {
     // Resetear checkboxes de colecciones
     document.querySelectorAll('#colecciones-filtros .checkbox-item input[type="checkbox"]').forEach(cb => {
         if (cb.id !== 'coleccionFieldId') {
+            // Campos básicos marcados por defecto
             if (cb.id.includes('Titulo') || cb.id.includes('Descripcion') || cb.id.includes('Algoritmo')) {
                 cb.checked = true;
-            } else if (cb.id.includes('Hechos') || cb.id.includes('Fuentes')) {
+            }
+            // Hechos y Hechos Consensuados desmarcados (porque hacen la query pesada)
+            else if (cb.id.includes('Hechos') || cb.id.includes('Fuentes')) {
                 cb.checked = false;
             }
         }
     });
+
+    // Resetear checkboxes de campos de hechos (dentro de colecciones)
+    const hechosCamposOpciones = document.getElementById('hechos-campos-opciones');
+    if (hechosCamposOpciones) {
+        // Ocultar la sección inicialmente
+        hechosCamposOpciones.style.display = 'none';
+
+        // Resetear los checkboxes internos
+        document.querySelectorAll('#hechos-campos-opciones input[type="checkbox"]').forEach(cb => {
+            if (cb.id === 'hechoFieldTitulo' || cb.id === 'hechoFieldCategoria') {
+                cb.checked = true; // Título y categoría marcados por defecto
+            } else {
+                cb.checked = false; // El resto desmarcados
+            }
+        });
+    }
+
+    // Si estamos en modo "ambos", resetear también la visibilidad de las secciones
+    if (currentEntity === 'ambos') {
+        document.getElementById('hechos-filtros').classList.add('active');
+        document.getElementById('colecciones-filtros').classList.add('active');
+    }
 
     // Limpiar resultados
     document.getElementById('resultOutput').innerHTML = `
@@ -604,6 +687,9 @@ function clearFilters() {
     document.getElementById('resultCount').textContent = '0 resultados';
     document.getElementById('responseStats').classList.remove('show');
     document.getElementById('statusDot').className = 'status-dot';
+
+    // Regenerar la query básica
+    buildQuery();
 }
 
 // Inicialización
@@ -622,6 +708,34 @@ document.addEventListener('DOMContentLoaded', function() {
         element.addEventListener('change', buildQuery);
         element.addEventListener('input', buildQuery);
     });
+
+    // Controlar visibilidad de opciones de campos de hechos para colecciones
+    const checkboxHechos = document.getElementById('coleccionFieldHechos');
+    const checkboxHechosConsensuados = document.getElementById('coleccionFieldHechosConsensuados');
+    const hechosCamposOpciones = document.getElementById('hechos-campos-opciones');
+
+    if (checkboxHechos && checkboxHechosConsensuados && hechosCamposOpciones) {
+        function toggleHechosCampos() {
+            if (checkboxHechos.checked || checkboxHechosConsensuados.checked) {
+                hechosCamposOpciones.style.display = 'block';
+            } else {
+                hechosCamposOpciones.style.display = 'none';
+            }
+            buildQuery(); // Regenerar la query cuando cambie
+        }
+
+        checkboxHechos.addEventListener('change', toggleHechosCampos);
+        checkboxHechosConsensuados.addEventListener('change', toggleHechosCampos);
+
+        // También para los checkboxes dentro de hechos-campos-opciones
+        document.querySelectorAll('#hechos-campos-opciones input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', buildQuery);
+            cb.addEventListener('input', buildQuery);
+        });
+
+        // Inicializar estado
+        toggleHechosCampos();
+    }
 
     // Inicializar con una query básica
     buildQuery();
