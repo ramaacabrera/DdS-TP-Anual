@@ -1,7 +1,5 @@
 <#assign pageTitle = "Gestión de Solicitudes de Eliminación">
-<#assign additionalCSS>
-    <link rel="stylesheet" href="/css/styleSolicitudes.css">
-</#assign>
+<#assign additionalCss = ["/css/styleSolicitudes.css"]>
 
 <#assign content>
     <div class="container">
@@ -15,8 +13,7 @@
         <!-- Resumen de solicitudes -->
         <div class="grid-metadata" style="margin-bottom: 30px;">
             <div class="card">
-                <p class="card-subtitle">🗑️ SOLICITUDES DE ELIMINACIÓN</p>
-                <p style="font-size: 1.5rem; font-weight: bold; color: var(--primary-color);">
+                <p style="font-size: 1.5rem; font-weight: bold; color: var(--primary-color); padding-left: 20px;">
                     ${solicitudesEliminacion?size}
                 </p>
             </div>
@@ -75,6 +72,13 @@
                         #${solicitud.id?substring(0, 36)}
                     </small>
                 </h3>
+                <div class="title-actions-container">
+                    <div class="title-content">
+                        <span class="estado-badge estado-${(solicitud.estado!solicitud.estado!'PENDIENTE')?lower_case}">
+                    ${(solicitud.estado!solicitud.estado!'PENDIENTE')}
+                        </span>
+                    </div>
+                </div>
                 <p class="solicitud-hecho">
                     <strong>Hecho:</strong> ${solicitud.hechoTitulo!"Sin título"}
                 </p>
