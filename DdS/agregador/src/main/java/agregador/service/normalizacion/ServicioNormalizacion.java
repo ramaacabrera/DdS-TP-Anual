@@ -6,6 +6,7 @@ import agregador.domain.Usuario.Usuario;
 import agregador.domain.fuente.Fuente;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 public class ServicioNormalizacion {
@@ -82,9 +83,9 @@ public class ServicioNormalizacion {
                 if (eDto.getId() != null) e.setId(eDto.getId());
                 e.setNombre(eDto.getNombre());
                 return e;
-            }).collect(Collectors.toList()));
+            }).collect(Collectors.toSet()));
         } else {
-            entidad.setEtiquetas(new ArrayList<>());
+            entidad.setEtiquetas(new HashSet<>());
         }
 
         if (dto.getContenidoMultimedia() != null) {
