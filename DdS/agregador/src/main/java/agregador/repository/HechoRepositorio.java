@@ -34,7 +34,6 @@ public class HechoRepositorio {
                 for (Criterio criterio : criterios) {
                     String condition = criterio.getQueryCondition();
                     if (condition != null && !condition.trim().isEmpty()) {
-                        // Asumimos que tus criterios usan el alias 'h' para referirse al Hecho
                         queryString.append(" AND ").append(condition);
                     }
                 }
@@ -42,7 +41,6 @@ public class HechoRepositorio {
 
             TypedQuery<Hecho> query = em.createQuery(queryString.toString(), Hecho.class);
 
-            // 3. Establecemos los valores de los parámetros
             if (criterios != null) {
                 for (Criterio criterio : criterios) {
                     Map<String, Object> params = criterio.getQueryParameters();
@@ -63,7 +61,6 @@ public class HechoRepositorio {
     }
 
     public List<Hecho> getHechos() {
-        // Reutilizamos la lógica optimizada pasando null (sin criterios = traer todo)
         return buscarHechos(null);
     }
 
@@ -84,35 +81,21 @@ public class HechoRepositorio {
 
             Hecho hecho = query.getSingleResult();
 
-            // Luego inicializar las colecciones manualmente
             if (hecho != null) {
-                // Inicializar etiquetas
                 hecho.getEtiquetas().size();
-                // Inicializar contenidoMultimedia
                 hecho.getContenidoMultimedia().size();
             }
 
             return hecho;
         } catch (NoResultException e) {
-            System.out.println("⚠️ NO se encontró ningún Hecho con ID: " + id);
             return null;
         } catch (Exception e) {
-            System.out.println("❌ Error en buscarPorId: " + e.getClass().getName());
             e.printStackTrace();
             return null;
         } finally {
             em.close();
         }
     }
-
-    /*public Hecho buscarPorId(String idString) {
-        try {
-            return buscarPorId(UUID.fromString(idString));
-        } catch (IllegalArgumentException e) {
-            System.err.println("ID inválido: " + idString);
-            return null;
-        }
-    }*/
 
     public void guardar(Hecho hecho) {
         EntityManager em = BDUtils.getEntityManager();
@@ -136,73 +119,6 @@ public class HechoRepositorio {
         }
     }
 
-    private Hecho buscarPorTituloInterno(EntityManager em, String titulo) {
-        try {
-            return em.createQuery("SELECT h FROM Hecho h WHERE h.titulo = :t", Hecho.class)
-                    .setParameter("t", titulo)
-                    .getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public Hecho buscarPorTitulo(String titulo) {
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            return buscarPorTituloInterno(em, titulo);
-        } finally {
-            em.close();
-        }
-    }
-
-    public void eliminar(Hecho hecho) {
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            BDUtils.comenzarTransaccion(em);
-            Hecho aBorrar = em.merge(hecho);
-            em.remove(aBorrar);
-            BDUtils.commit(em);
-        } catch (Exception e) {
-            BDUtils.rollback(em);
-            e.printStackTrace();
-        } finally {
-            em.close();
-        }
-    }
-
-    private <T> T gestionarRelacion(EntityManager em, T entidad) {
-        if (entidad == null) return null;
-
-        Object id = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entidad);
-        if (id != null) {
-            T existente = em.find((Class<T>) entidad.getClass(), id);
-            if (existente != null) {
-                return existente;
-            }
-        }
-
-        return em.merge(entidad);
-    }
-
-    public void actualizar(Hecho hecho) {
-        this.guardar(hecho);
-    }
-
-    public List<String> buscarCategorias() {
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            String jpql = "SELECT DISTINCT h.categoria FROM Hecho h WHERE h.categoria IS NOT NULL ORDER BY h.categoria";
-            TypedQuery<String> query = em.createQuery(jpql, String.class);
-            return query.getResultList();
-        } catch (Exception e) {
-            BDUtils.rollback(em);
-            e.printStackTrace();
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-
-    }
     public List<Hecho> buscarPorColeccion(EntityManager em, UUID coleccionId, boolean consensuados) {
 
         String jpql;
@@ -235,6 +151,4 @@ public class HechoRepositorio {
                 .setParameter("id", coleccionId)
                 .getResultList();
     }
-
-
 }

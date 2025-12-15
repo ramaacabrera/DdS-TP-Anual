@@ -1,6 +1,7 @@
 package agregador.repository;
 
 import agregador.domain.HechosYColecciones.Coleccion;
+import agregador.domain.fuente.Fuente;
 import agregador.utils.BDUtils;
 import org.hibernate.Hibernate;
 
@@ -69,7 +70,6 @@ public class ColeccionRepositorio {
 
                 Hibernate.initialize(c.getFuente());
             }
-            // ------------------------------
 
             return resultados;
 
@@ -94,21 +94,6 @@ public class ColeccionRepositorio {
                     .getSingleResult();
         } catch (Exception e) {
             return null;
-        } finally {
-            em.close();
-        }
-    }
-
-    public void eliminar(Coleccion coleccion) {
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            BDUtils.comenzarTransaccion(em);
-            Coleccion aBorrar = em.merge(coleccion);
-            em.remove(aBorrar);
-            BDUtils.commit(em);
-        } catch (Exception e) {
-            BDUtils.rollback(em);
-            e.printStackTrace();
         } finally {
             em.close();
         }
@@ -157,4 +142,5 @@ public class ColeccionRepositorio {
             em.close();
         }
     }
+
 }

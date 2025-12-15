@@ -72,10 +72,8 @@ type Coleccion {
 input ColeccionFiltroInput {
   titulo: String
   descripcion: String
-  algoritmoDeConsenso: TipoAlgoritmoConsenso
-  tieneAlgoritmoDeConsenso: Boolean
+  algoritmoDeConsenso: String
   minHechos: Int
-  minFuentes: Int
 }
 
 type PageColeccion {
@@ -112,7 +110,7 @@ type Query {
   hecho(id: ID!): Hecho
 
   # Colecciones
-  colecciones(page: PageInput): PageColeccion
+  colecciones(filtro: ColeccionFiltroInput page: PageInput): PageColeccion
   coleccion(id: ID!): Coleccion
 }
 
