@@ -7,10 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 public class Hecho {
@@ -55,7 +52,7 @@ public class Hecho {
             joinColumns = @JoinColumn(name = "hecho_id"),
             inverseJoinColumns = @JoinColumn(name = "id_etiqueta")
     )
-    private List<Etiqueta> etiquetas;
+    private Set<Etiqueta> etiquetas;
 
     private boolean esEditable;
 
@@ -65,7 +62,7 @@ public class Hecho {
     public Hecho() {}
     // esto es el Constructor
     public Hecho(String titulo, String descripcion, String categoria, Ubicacion ubicacion, Date fechaDeAcontecimiento,
-                 Date fechaDeCarga, Fuente fuente, EstadoHecho estadoHecho, Usuario contribuyente, List<Etiqueta> etiquetas, boolean esEditable,
+                 Date fechaDeCarga, Fuente fuente, EstadoHecho estadoHecho, Usuario contribuyente, Set<Etiqueta> etiquetas, boolean esEditable,
                  List<ContenidoMultimedia> contenidoMultimedia) {
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -137,7 +134,7 @@ public class Hecho {
         return contribuyente;
     }
 
-    public List<Etiqueta> getEtiquetas() {
+    public Set<Etiqueta> getEtiquetas() {
         return etiquetas;
     }
 
@@ -163,7 +160,7 @@ public class Hecho {
 
     public void setContribuyente(Usuario nuevo) {contribuyente = nuevo;}
 
-    public void setEtiquetas(List<Etiqueta> etiquetasNuevas) {etiquetas = etiquetasNuevas; }
+    public void setEtiquetas(Set<Etiqueta> etiquetasNuevas) {etiquetas = etiquetasNuevas; }
 
     public void setEsEditable(Boolean esEditableNuevo) {esEditable = esEditableNuevo;}
 

@@ -1,6 +1,7 @@
 package agregador.repository;
 
 import agregador.domain.HechosYColecciones.Coleccion;
+import agregador.domain.fuente.Fuente;
 import agregador.utils.BDUtils;
 import org.hibernate.Hibernate;
 
@@ -31,13 +32,18 @@ public class ColeccionRepositorio {
     public List<Coleccion> obtenerTodas() {
         EntityManager em = BDUtils.getEntityManager();
         try {
-            String jpql = "SELECT DISTINCT c FROM Coleccion c " +
-                    "LEFT JOIN FETCH c.hechos " +
-                    "LEFT JOIN FETCH c.fuentes " +
-                    "LEFT JOIN FETCH c.criteriosDePertenencia";
+            String jpql = "SELECT c FROM Coleccion c ORDER BY c.titulo ASC";
+            List<Coleccion> colecciones =
+                    em.createQuery(jpql, Coleccion.class).getResultList();
 
-            TypedQuery<Coleccion> query = em.createQuery(jpql, Coleccion.class);
-            return query.getResultList();
+            // Inicializar relaciones UNA POR UNA
+            for (Coleccion c : colecciones) {
+                Hibernate.initialize(c.getHechos());
+                Hibernate.initialize(c.getFuente());
+                Hibernate.initialize(c.getCriteriosDePertenencia());
+            }
+
+            return colecciones;
         } finally {
             em.close();
         }
@@ -64,7 +70,6 @@ public class ColeccionRepositorio {
 
                 Hibernate.initialize(c.getFuente());
             }
-            // ------------------------------
 
             return resultados;
 
@@ -89,21 +94,6 @@ public class ColeccionRepositorio {
                     .getSingleResult();
         } catch (Exception e) {
             return null;
-        } finally {
-            em.close();
-        }
-    }
-
-    public void eliminar(Coleccion coleccion) {
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            BDUtils.comenzarTransaccion(em);
-            Coleccion aBorrar = em.merge(coleccion);
-            em.remove(aBorrar);
-            BDUtils.commit(em);
-        } catch (Exception e) {
-            BDUtils.rollback(em);
-            e.printStackTrace();
         } finally {
             em.close();
         }
@@ -151,5 +141,12 @@ public class ColeccionRepositorio {
         } finally {
             em.close();
         }
+    }
+
+    public List<Fuente> buscarFuentesPorColeccion(EntityManager em, UUID coleccionId) {
+        String jpql = "SELECT f FROM Coleccion c JOIN c.fuentes f WHERE c.handle = :id";
+        return em.createQuery(jpql, Fuente.class)
+                .setParameter("id", coleccionId)
+                .getResultList();
     }
 }

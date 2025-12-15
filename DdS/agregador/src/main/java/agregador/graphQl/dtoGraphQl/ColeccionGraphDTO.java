@@ -1,4 +1,4 @@
-package agregador.dto.Coleccion;
+package agregador.graphQl.dtoGraphQl;
 
 import agregador.domain.HechosYColecciones.Coleccion;
 import agregador.dto.Coleccion.TipoAlgoritmoConsensoDTO;
@@ -6,22 +6,23 @@ import agregador.dto.Criterios.CriterioDTO;
 import agregador.dto.Hechos.FuenteDTO;
 import agregador.dto.Hechos.HechoDTO;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-public class ColeccionDTO {
+public class ColeccionGraphDTO {
     private UUID coleccionId;
     private String titulo;
     private String descripcion;
     private List<FuenteDTO> fuentes = new ArrayList<>();
     private List<CriterioDTO> criteriosDePertenencia = new ArrayList<>();
     private TipoAlgoritmoConsensoDTO algoritmoDeConsenso;
-    private Set<HechoDTO> hechos = new HashSet<>();
-    private Set<HechoDTO> hechosConsensuados = new HashSet<>();
+    private List<HechoDTO> hechos = new ArrayList<>();
+    private List<HechoDTO> hechosConsensuados = new ArrayList<>();
 
-    public ColeccionDTO() {}
+    public ColeccionGraphDTO() {}
 
-    public ColeccionDTO(String titulo, String descripcion, List<FuenteDTO> fuentes,
+    public ColeccionGraphDTO(String titulo, String descripcion, List<FuenteDTO> fuentes,
                         List<CriterioDTO> criteriosDePertenencia, TipoAlgoritmoConsensoDTO algoritmoDeConsenso) {
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -30,7 +31,7 @@ public class ColeccionDTO {
         this.algoritmoDeConsenso = algoritmoDeConsenso;
     }
 
-    public ColeccionDTO(Coleccion coleccion) {
+    public ColeccionGraphDTO(Coleccion coleccion) {
         if (coleccion == null) return;
 
         this.coleccionId = coleccion.getHandle();
@@ -42,33 +43,8 @@ public class ColeccionDTO {
             try {
                 this.algoritmoDeConsenso = TipoAlgoritmoConsensoDTO.valueOf(coleccion.getAlgoritmoDeConsenso().name());
             } catch (Exception e) {
-                // Si no coincide el nombre, se deja null
+
             }
-        }
-
-        // Mapeo de Fuentes
-        if (coleccion.getFuente() != null) {
-            this.fuentes = coleccion.getFuente().stream().map(f -> {
-                FuenteDTO dto = new FuenteDTO();
-                dto.setFuenteId(f.getId());
-                dto.setDescriptor(f.getDescriptor());
-                if (f.getTipoDeFuente() != null) {
-                    dto.setTipoDeFuente(f.getTipoDeFuente());
-                }
-                return dto;
-            }).collect(Collectors.toList());
-        }
-
-        if (coleccion.getHechos() != null) {
-            this.hechos = coleccion.getHechos().stream()
-                    .map(HechoDTO::new)
-                    .collect(Collectors.toSet());
-        }
-
-        if (coleccion.getHechosConsensuados() != null) {
-            this.hechosConsensuados = coleccion.getHechosConsensuados().stream()
-                    .map(HechoDTO::new)
-                    .collect(Collectors.toSet());
         }
 
         this.criteriosDePertenencia = new ArrayList<>();
@@ -97,11 +73,11 @@ public class ColeccionDTO {
         this.algoritmoDeConsenso = algoritmoDeConsenso;
     }
 
-    public Set<HechoDTO> getHechos() {
+    public List<HechoDTO> getHechos() {
         return hechos;
     }
 
-    public Set<HechoDTO> getHechosConsensuados() {
+    public List<HechoDTO> getHechosConsensuados() {
         return hechosConsensuados;
     }
 

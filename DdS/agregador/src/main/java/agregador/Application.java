@@ -1,16 +1,21 @@
 package agregador;
 
 import agregador.controller.*;
+import agregador.graphQl.GraphQLProvider;
 import agregador.service.*;
 import agregador.repository.ConexionCargadorRepositorio;
 import agregador.repository.*;
 import agregador.service.normalizacion.DiccionarioCategorias;
 import agregador.service.normalizacion.MockNormalizador;
 import agregador.service.normalizacion.ServicioNormalizacion;
+import graphql.ExecutionInput;
+import graphql.ExecutionResult;
 import io.javalin.Javalin;
 import agregador.utils.IniciadorApp;
 import agregador.utils.LecturaConfig;
 
+import java.io.InputStream;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 
@@ -72,5 +77,61 @@ public class Application {
             });
             ws.onClose(new OnCloseHandler(conexionCargadorService, fuenteRepositorio));
         });
+
+        // GraphQl
+        GraphQLProvider graphQLProvider = new GraphQLProvider();
+
+        app.post("/graphql", ctx -> {
+            Map<String, Object> request = ctx.bodyAsClass(Map.class);
+
+            String query = (String) request.get("query");
+            Map<String, Object> variables =
+                    (Map<String, Object>) request.getOrDefault("variables", Map.of());
+
+            ExecutionInput executionInput = ExecutionInput.newExecutionInput()
+                    .query(query)
+                    .variables(variables)
+                    .build();
+
+            ExecutionResult executionResult =
+                    graphQLProvider.graphQL().execute(executionInput);
+
+            ctx.json(executionResult.toSpecification());
+        });
+
+        app.get("/graphql-explorer.html", ctx -> {
+            InputStream is = Application.class.getResourceAsStream("/public/graphql-explorer.html");
+            if (is != null) {
+                ctx.contentType("text/html");
+                ctx.result(is);
+            } else {
+                ctx.status(404).result("Archivo no encontrado");
+            }
+        });
+
+        app.get("/css/style.css", ctx -> {
+            InputStream is = Application.class.getResourceAsStream("/public/css/style.css");
+            if (is != null) {
+                ctx.contentType("text/css");
+                ctx.result(is);
+            } else {
+                ctx.status(404).result("CSS no encontrado");
+            }
+        });
+
+        app.get("/js/app.js", ctx -> {
+            InputStream is = Application.class.getResourceAsStream("/public/js/app.js");
+            if (is != null) {
+                ctx.contentType("application/javascript");
+                ctx.result(is);
+            } else {
+                ctx.status(404).result("JavaScript no encontrado");
+            }
+        });
+
+        // También agrega redirecciones
+        app.get("/", ctx -> ctx.redirect("/graphql-explorer.html"));
+        app.get("/graphql-explorer", ctx -> ctx.redirect("/graphql-explorer.html"));
+
     }
 }

@@ -55,19 +55,4 @@ public class FuenteRepositorio {
         }
     }
 
-    public Fuente obtenerOCrear(Fuente fuenteEntrante) {
-        if (fuenteEntrante == null) return null;
-
-        if (fuenteEntrante.getId() != null) {
-            Fuente existente = buscarPorId(fuenteEntrante.getId());
-            if (existente != null) return existente;
-        }
-
-        if (fuenteEntrante.getDescriptor() != null) {
-            Fuente existente = buscarPorDescriptor(fuenteEntrante.getDescriptor());
-            if (existente != null) return existente;
-        }
-
-        return guardar(fuenteEntrante);
-    }
 }
