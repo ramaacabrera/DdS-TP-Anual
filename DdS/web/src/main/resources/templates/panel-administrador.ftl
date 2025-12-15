@@ -67,6 +67,7 @@
                     <p>Revisa las peticiones de los usuarios sobre el contenido.</p>
 
                     <div class="action-list">
+                    <#--
                         <a href="/admin/solicitudes/modificacion" class="action-item warning-hover">
                             <div class="action-text">
                                 <span class="title">Modificaciones</span>
@@ -75,7 +76,7 @@
                                 </#if>
                             </div>
                             <i data-feather="chevron-right"></i>
-                        </a>
+                        </a> -->
 
                         <a href="/admin/solicitudes/eliminacion" class="action-item danger-hover">
                             <div class="action-text">

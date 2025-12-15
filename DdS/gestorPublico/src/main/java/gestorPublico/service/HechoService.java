@@ -10,6 +10,7 @@ import gestorPublico.dto.Hechos.HechoDTO;
 import gestorPublico.dto.PageDTO;
 import gestorPublico.service.Normalizador.DiccionarioCategorias;
 import gestorPublico.service.Normalizador.NormalizadorCategorias;
+import gestorPublico.service.Normalizador.ServicioGeoref;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -23,11 +24,13 @@ public class HechoService {
     private final HechoRepositorio hechoRepositorio;
     private final String urlDinamica;
     private final DiccionarioCategorias diccionarioCategorias;
+    private final ServicioGeoref servicioGeoref;
 
     public HechoService(HechoRepositorio hechoRepositorio, DiccionarioCategorias diccionarioCategorias, String urlDinamica) {
         this.hechoRepositorio = hechoRepositorio;
         this.urlDinamica = urlDinamica;
         this.diccionarioCategorias = diccionarioCategorias;
+        this.servicioGeoref = new ServicioGeoref();
     }
 
     public PageDTO<HechoDTO> buscarHechos(FiltroHechosDTO filtro) {
@@ -128,41 +131,29 @@ public class HechoService {
 
         Date fechaCarga = hecho.getFechaDeCarga();
         Date fechaActual = new Date();
-
-        long diferenciaEnMillis = fechaActual.getTime() - fechaCarga.getTime();
-        long diasTranscurridos = TimeUnit.MILLISECONDS.toDays(diferenciaEnMillis);
+        long diasTranscurridos = TimeUnit.MILLISECONDS.toDays(fechaActual.getTime() - fechaCarga.getTime());
 
         if (diasTranscurridos > 7) {
-            throw new IllegalStateException("El periodo de edición de 7 días ha expirado (Han pasado " + diasTranscurridos + " días).");
+            throw new IllegalStateException("El periodo de edición de 7 días ha expirado.");
         }
 
+        if (cambios.containsKey("titulo")) hecho.setTitulo((String) cambios.get("titulo"));
+        if (cambios.containsKey("descripcion")) hecho.setDescripcion((String) cambios.get("descripcion"));
+        if (cambios.containsKey("categoria")) hecho.setCategoria((String) cambios.get("categoria"));
 
-        if (cambios.containsKey("titulo")) {
-            hecho.setTitulo((String) cambios.get("titulo"));
-        }
-        if (cambios.containsKey("descripcion")) {
-            hecho.setDescripcion((String) cambios.get("descripcion"));
-        }
-        if (cambios.containsKey("categoria")) {
-            hecho.setCategoria((String) cambios.get("categoria"));
-        }
-        if (cambios.containsKey("fechaDeAcontecimiento")) {
-            // Aquí depende de cómo llegue la fecha desde el JSON (String ISO o Timestamp)
-            // Si llega como String "yyyy-MM-dd", deberías parsearla a Date o LocalDate
-            // Ejemplo simple si tu entity usa String para fecha (si usa Date, requiere parseo):
-            // hecho.setFechaDeAcontecimiento(parsearFecha((String) cambios.get("fechaDeAcontecimiento")));
-        }
-
-        // Manejo de Ubicación (Estructura anidada en el JSON)
         if (cambios.containsKey("ubicacion")) {
             Map<String, Object> ubicacionMap = (Map<String, Object>) cambios.get("ubicacion");
 
-            Ubicacion ubicacionNueva = new Ubicacion(Double.parseDouble(ubicacionMap.get("latitud").toString()), Double.parseDouble(ubicacionMap.get("longitud").toString()), null);
+            double lat = Double.parseDouble(ubicacionMap.get("latitud").toString());
+            double lon = Double.parseDouble(ubicacionMap.get("longitud").toString());
+            String desc = (String) ubicacionMap.get("descripcion");
 
+            String descripcionFinal = servicioGeoref.enriquecerDescripcion(lat, lon, desc);
+
+            Ubicacion ubicacionNueva = new Ubicacion(lat, lon, descripcionFinal);
             hecho.setUbicacion(ubicacionNueva);
         }
 
-        // --- GUARDAR EN BD ---
         hechoRepositorio.actualizar(hecho);
     }
 }

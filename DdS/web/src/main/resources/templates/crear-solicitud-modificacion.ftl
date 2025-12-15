@@ -129,7 +129,10 @@
             <#-- 4. Fecha de Acontecimiento -->
             <div class="form-group campo-original">
                 <label class="form-label">Fecha Original</label>
-                <input type="text" value=${hecho.fechaDeAcontecimiento} class="form-input" disabled>
+                <input type="text"
+                       value="${(hecho.fechaDeAcontecimiento?number_to_datetime?string('dd/MM/yyyy HH:mm'))!'Sin fecha'}"
+                       class="form-input"
+                       disabled>
             </div>
             <div class="form-group campo-propuesto">
                 <label for="fechaDeAcontecimiento" class="form-label">Nueva Fecha/Hora</label>
@@ -153,7 +156,7 @@
             Coordenadas propuestas: Ninguna
         </p>
 
-        <#-- Sección de anonimato -->
+        <#--
 
         <div class="form-section">
             <h3 class="form-section-title">👤 Información del modificante</h3>
@@ -175,7 +178,7 @@
                     </p>
                 </div>
             </#if>
-        </div>
+        </div> -->
 
         <div class="form-actions">
             <button type="button" id="btn-cancelar" class="btn btn-secondary">Cancelar</button>
