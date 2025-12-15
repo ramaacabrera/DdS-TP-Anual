@@ -45,7 +45,7 @@ public class Application {
         HechoService hechoService = new HechoService(urlPublica);
         EstadisticasService estadisticasService = new EstadisticasService(urlEstadisticas);
         CategoriasService categoriasService = new CategoriasService(urlEstadisticas);
-        SolicitudService solicitudService = new SolicitudService(urlAdmin,urlPublica);
+        SolicitudService solicitudService = new SolicitudService(urlAdmin,urlPublica, hechoService);
         UsuarioService usuarioService = new UsuarioService(urlPublica);
         FuenteService fuenteService = new FuenteService(urlPublica);
 

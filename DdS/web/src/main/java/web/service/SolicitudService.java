@@ -20,12 +20,14 @@ public class SolicitudService {
 
     private final String urlAdmin;
     private final String urlPublica;
+    private final HechoService hechoService;
     private final ObjectMapper mapper = new ObjectMapper();
     private final HttpClient http = HttpClient.newHttpClient();
 
-    public SolicitudService(String urlAdmin,String urlPublica) {
+    public SolicitudService(String urlAdmin,String urlPublica, HechoService hechoService) {
         this.urlPublica = urlPublica;
         this.urlAdmin = urlAdmin;
+        this.hechoService = hechoService;
     }
 
     private HttpRequest buildRequestGET(String endpoint, String username, String token, String rolUsuario) throws Exception {
@@ -283,5 +285,9 @@ public class SolicitudService {
             return Integer.parseInt(response.body());
         }
         return 0;
+    }
+
+    public List<String> obtenerCategorias() {
+        return hechoService.obtenerCategorias();
     }
 }

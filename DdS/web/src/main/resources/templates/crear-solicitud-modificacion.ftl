@@ -108,12 +108,11 @@
             </div>
             <div class="form-group campo-propuesto">
                 <label for="categoria" class="form-label">Nueva Categoría</label>
-                <select id="categoria" name="categoria" class="form-select">
-                    <option value="">Seleccione o deje vacío</option>
-                    <option value="Incendio">Incendio</option>
-                    <option value="Desaparición">Desaparición</option>
-                    <option value="Contaminación">Contaminación</option>
-                    <option value="Otro">Otro</option>
+                <select id="categoria" name="categoria" class="form-select" required>
+                    <option value="">Seleccione una categoría</option>
+                    <#list categorias as cat>
+                        <option value='${cat}'>${cat}</option>
+                    </#list>
                 </select>
             </div>
 

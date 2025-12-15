@@ -446,11 +446,14 @@ public class SolicitudController {
             return;
         }
 
+        List<String> categorias = solicitudService.obtenerCategorias();
+
         Map<String, Object> modelo = ViewUtil.baseModel(ctx);
         modelo.put("pageTitle", "Solicitar Modificación");
         modelo.put("hechoId", hechoId);
         modelo.put("hecho", hechoData);
         modelo.put("usuarioId", usuarioId);
+        modelo.put("categorias", categorias);
         modelo.put("urlPublica", urlPublica);
 
         if (dataCloud != null) {
