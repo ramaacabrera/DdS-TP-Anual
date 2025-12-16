@@ -76,7 +76,7 @@
 .form-textarea:focus {
     border-color: var(--primary-color);
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 255, 55, 0.25);
+    box-shadow: 0 0 0 0.2rem rgb(29, 120, 88);
 }
 
 .btn {

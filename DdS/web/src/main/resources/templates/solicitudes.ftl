@@ -34,7 +34,7 @@
                            transition: all 0.2s;
                            cursor: pointer;
                            ">
-                    <span>📋</span>
+
                     <span>Todas</span>
                     <span class="badge-contador" style="
                             background-color: ${(!estadoFiltro?? || estadoFiltro == '')?then('white', 'var(--primary-color)')};
@@ -63,7 +63,7 @@
                            transition: all 0.2s;
                            cursor: pointer;
                            ">
-                    <span>⏳</span>
+
                     <span>Pendientes</span>
                     <span class="badge-contador" style="
                             background-color: ${(estadoFiltro?? && estadoFiltro == 'PENDIENTE')?then('#856404', '#fff3cd')};
@@ -92,7 +92,7 @@
                            transition: all 0.2s;
                            cursor: pointer;
                            ">
-                    <span>✅</span>
+
                     <span>Aceptadas</span>
                     <span class="badge-contador" style="
                             background-color: ${(estadoFiltro?? && estadoFiltro == 'ACEPTADA')?then('#004085', '#d1edff')};
@@ -121,7 +121,7 @@
                            transition: all 0.2s;
                            cursor: pointer;
                            ">
-                    <span>❌</span>
+
                     <span>Rechazadas</span>
                     <span class="badge-contador" style="
                             background-color: ${(estadoFiltro?? && estadoFiltro == 'RECHAZADA')?then('#721c24', '#f8d7da')};
