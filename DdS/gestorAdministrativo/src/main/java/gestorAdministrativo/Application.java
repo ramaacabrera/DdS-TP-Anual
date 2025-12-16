@@ -5,7 +5,7 @@ import gestorAdministrativo.service.*;
 import gestorAdministrativo.repository.*;
 import io.javalin.Javalin;
 import utils.IniciadorApp;
-import utils.LecturaConfig;
+import gestorAdministrativo.utils.LecturaConfig;
 import utils.Keycloak.TokenValidator;
 
 import java.util.Properties;
@@ -15,7 +15,7 @@ public class Application {
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
         int puerto = Integer.parseInt(config.getProperty("PUERTO_GESTOR_ADMINISTRATIVO"));
-
+        String urlSSO = config.getProperty("URL_KEYCLOAK");
         System.out.println("Iniciando API Administrativa en el puerto " + puerto);
 
         IniciadorApp iniciador = new IniciadorApp();
@@ -36,7 +36,7 @@ public class Application {
         // 3. Controllers
         ColeccionController coleccionController = new ColeccionController(coleccionService);
         SolicitudController solicitudController = new SolicitudController(solicitudEliminacionService, solicitudModificacionService);
-        VerificacionController verificacionController = new VerificacionController();
+        VerificacionController verificacionController = new VerificacionController(urlSSO);
         HechoController hechoController = new HechoController(hechoService);
         // RUTAS
         app.before("/api/*", verificacionController.verificarAdministrador);

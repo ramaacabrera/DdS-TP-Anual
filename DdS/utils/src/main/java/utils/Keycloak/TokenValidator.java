@@ -14,10 +14,8 @@ public class TokenValidator {
 
     private final String ISSUER;
 
-    public TokenValidator(){
-        LecturaConfig lector = new LecturaConfig();
-        Properties config = lector.leerConfig();
-        ISSUER = "http://localhost:8080/realms/tpDDSI";
+    public TokenValidator(String urlSSO){
+        ISSUER = urlSSO;
     }
 
     public void validar(String token) {

@@ -11,6 +11,12 @@ import java.util.Map;
 
 public class VerificacionController {
 
+    private String urlSSO;
+
+    public VerificacionController(String urlSSO){
+        this.urlSSO = urlSSO;
+    }
+
     public Handler verificarAdministrador = ctx -> {
 
         System.out.println("Iniciando verificacion de administrativo");
@@ -49,7 +55,7 @@ public class VerificacionController {
         }
 
         try {
-            TokenValidator validador = new TokenValidator();
+            TokenValidator validador = new TokenValidator(urlSSO);
             validador.validar(accessToken);
         } catch (Exception e) {
             System.err.println("Token inválido: " + e.getMessage());

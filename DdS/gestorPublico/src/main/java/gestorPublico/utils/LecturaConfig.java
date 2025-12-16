@@ -1,4 +1,4 @@
-package cargadorDemo.utils;
+package gestorPublico.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,9 +23,9 @@ public class LecturaConfig {
             System.err.println("Error al leer el archivo " + nombreArchivo + ": " + e.getMessage());
         }
 
-        cargarEnv(config, "URL_AGREGADOR");
-        cargarEnv(config, "URL_MOCK");
-        cargarEnv(config, "PUERTO_DEMO");
+        cargarEnv(config, "PUERTO_GESTOR_PUBLICO");
+        cargarEnv(config, "URL_DINAMICA");
+        cargarEnv(config, "URL_KEYCLOAK");
         cargarEnv(config, "NEW_RELIC_LICENSE_KEY");
 
         return config;

@@ -5,7 +5,7 @@ import gestorPublico.service.Normalizador.DiccionarioCategorias;
 import io.javalin.Javalin;
 import gestorPublico.controller.*;
 import utils.IniciadorApp;
-import utils.LecturaConfig;
+import gestorPublico.utils.LecturaConfig;
 import gestorPublico.repository.*;
 
 import java.util.Properties;
@@ -16,7 +16,7 @@ public class Application {
         Properties config = lector.leerConfig();
         int puerto = Integer.parseInt(config.getProperty("PUERTO_GESTOR_PUBLICO"));
         String urlDinamica = config.getProperty("URL_DINAMICA");
-        String servidorSSO = config.getProperty("URL_SERVIDOR_SSO");
+        String servidorSSO = config.getProperty("URL_KEYCLOAK");
 
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();

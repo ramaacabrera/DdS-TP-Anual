@@ -25,6 +25,7 @@ public class LecturaConfig {
 
         cargarEnv(config, "URL_AGREGADOR");
         cargarEnv(config, "PUERTO_DINAMICO");
+        cargarEnv(config, "URL_METAMAPA_EXTERNO");
         cargarEnv(config, "NEW_RELIC_LICENSE_KEY");
 
         return config;

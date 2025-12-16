@@ -7,7 +7,7 @@ import web.controller.loginKeycloak.GetLogOutHandler;
 import web.controller.loginKeycloak.GetLoginHandler;
 import web.service.*;
 import utils.IniciadorApp;
-import utils.LecturaConfig;
+import web.utils.LecturaConfig;
 
 
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public class Application {
         String urlEstadisticas = config.getProperty("URL_ESTADISTICAS");
         String cloudinaryUrl = config.getProperty("CLOUDINARY_URL");
         String cloudinaryPreset = config.getProperty("CLOUDINARY_PRESET");
-        String keycloakUrl = config.getProperty("URL_SERVIDOR_SSO");
+        String keycloakUrl = config.getProperty("URL_KEYCLOAK");
         String clientId = config.getProperty("CLIENT_ID");
         String redirectUrl = config.getProperty("REDIRECT_URL");
         String clientSecret = config.getProperty("CLIENT_SECRET");
