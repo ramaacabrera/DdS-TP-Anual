@@ -1,5 +1,10 @@
 <#assign pageTitle = "Solicitar Eliminación">
 <#assign content>
+    <style>
+        .header { margin-bottom: 30px;}
+        .header-link.back-link { display: inline-flex; align-items: center; gap: 8px; color: #718096; text-decoration: none; font-weight: 500; transition: color 0.2s;}
+        .header-link.back-link:hover { color: var(--primary-color);}
+    </style>
     <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
         <a href="javascript:history.back()" class="header-link back-link">&larr; Volver Atrás</a>
     </div>

@@ -8,6 +8,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import web.domain.HechosYColecciones.Coleccion;
+import web.domain.Solicitudes.EstadoSolicitudEliminacion;
 import web.domain.Solicitudes.SolicitudDeEliminacion;
 import web.domain.Solicitudes.SolicitudDeModificacion;
 import web.dto.PageDTO;
@@ -42,9 +43,21 @@ public class SolicitudController {
         int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
         int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
 
+        String estado = ctx.queryParam("estado");
+
         String username = ctx.sessionAttribute("username");
         String accessToken = ctx.sessionAttribute("accessToken");
         String rolUsuario = ctx.sessionAttribute("rolUsuario");
+
+        long totalPendientes = solicitudService.contarSolicitudes(username, rolUsuario,  accessToken, EstadoSolicitudEliminacion.PENDIENTE);
+        long totalAceptadas = solicitudService.contarSolicitudes(username, rolUsuario, accessToken, EstadoSolicitudEliminacion.ACEPTADA);
+        long totalRechazadas = solicitudService.contarSolicitudes(username, rolUsuario, accessToken, EstadoSolicitudEliminacion.RECHAZADA);
+
+        System.out.println("Pendientes: " + totalPendientes);
+        System.out.println("Aceptadas: " + totalAceptadas);
+        System.out.println("Rechazadas: " + totalRechazadas);
+
+        long totalTodas = totalPendientes + totalAceptadas + totalRechazadas;
 
         if (username == null || accessToken == null) {
             ctx.redirect("/login");
@@ -54,8 +67,18 @@ public class SolicitudController {
         Map<String, Object> modelo = ViewUtil.baseModel(ctx);
         modelo.put("pageTitle", "Solicitudes de Eliminación");
 
+        PageDTO<SolicitudDeEliminacion> solicitudesPage = null;
+
         // 1. Obtener solicitudes de eliminación
-        PageDTO<SolicitudDeEliminacion> solicitudesPage = solicitudService.listarColecciones(username, accessToken, rolUsuario, page, size);
+
+        if(estado != null){
+            System.out.println("===== Estado: " + estado + " =====");
+            solicitudesPage = solicitudService.listarPorEstado(username, accessToken, rolUsuario, page, size, estado);
+            modelo.put("estadoFiltro", estado);
+        } else{
+            solicitudesPage = solicitudService.listarSolicitudes(username, accessToken, rolUsuario, page, size);
+            modelo.put("estadoFiltro", "");
+        }
 
         System.out.println("Número de solicitudes eliminación: " + solicitudesPage.size);
 
@@ -69,6 +92,13 @@ public class SolicitudController {
         modelo.put("totalPages", solicitudesPage.totalPages);
         modelo.put("fromIndex", fromIndex);
         modelo.put("toIndex", toIndex);
+        modelo.put("totalSolicitudes", solicitudesPage.totalElements);
+
+        // Estadísticas para los botones
+        modelo.put("totalTodas", totalTodas);
+        modelo.put("totalPendientes", totalPendientes);
+        modelo.put("totalAceptadas", totalAceptadas);
+        modelo.put("totalRechazadas", totalRechazadas);
 
         // 2. Crear lista simplificada
         List<Map<String, Object>> solicitudesSimplificadas = new ArrayList<>();
@@ -130,6 +160,8 @@ public class SolicitudController {
 
         modelo.put("solicitudesEliminacion", solicitudesSimplificadas);
         modelo.put("solicitudesModificacion", new ArrayList<>());
+
+        System.out.println("Modelo: " + modelo);
 
         ctx.render("solicitudes.ftl", modelo);
     };

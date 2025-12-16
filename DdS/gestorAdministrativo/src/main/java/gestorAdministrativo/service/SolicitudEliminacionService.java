@@ -86,11 +86,11 @@ public class SolicitudEliminacionService {
         }
     }
 
-    public PageDTO<SolicitudDeEliminacionDTO> obtenerTodasLasSolicitudes(int pagina, int limite) {
+    public PageDTO<SolicitudDeEliminacionDTO> obtenerTodasLasSolicitudes(int pagina, int limite, String estado) {
         if (pagina < 1) pagina = 1;
         if (limite < 1) limite = 10;
 
-        long totalRegistros = solicitudRepositorio.contarTodas();
+        long totalRegistros = solicitudRepositorio.contarTodas(estado);
 
         System.out.println("Total registros: " + totalRegistros);
 
@@ -100,7 +100,7 @@ public class SolicitudEliminacionService {
             return new PageDTO<>(new ArrayList<>(), pagina, limite, totalPages, (int) totalRegistros);
         }
 
-        List<SolicitudDeEliminacion> solicitudesPaginadas = solicitudRepositorio.obtenerPaginadas(pagina, limite);
+        List<SolicitudDeEliminacion> solicitudesPaginadas = solicitudRepositorio.obtenerPaginadas(pagina, limite, estado);
 
         System.out.println("Total solicitudes recuperadas: " + solicitudesPaginadas.size());
 
@@ -152,10 +152,10 @@ public class SolicitudEliminacionService {
         return dto;
     }
 
-    public Integer obtenerCantidadPendientes() {
+    public Integer obtenerCantidad(String estado) {
 
-        Integer solis = solicitudRepositorio.obtenerCantidadPendientes();
-        System.out.println("Total solicitudes eliminacion: " + solis);
+        Integer solis = solicitudRepositorio.obtenerCantidad(estado);
+        System.out.println("Total solicitudes " + estado + " eliminacion: " + solis);
         return solis;
     }
 }

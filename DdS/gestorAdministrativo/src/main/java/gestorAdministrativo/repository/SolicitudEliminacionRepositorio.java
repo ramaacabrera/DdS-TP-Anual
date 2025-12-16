@@ -40,32 +40,63 @@ public class SolicitudEliminacionRepositorio {
         }
     }
 
-    public long contarTodas(){
+    public long contarTodas(String estado){
+        System.out.println("Contando solicitudes en estado: " + estado);
         EntityManager em = BDUtils.getEntityManager();
         try {
-            return em.createQuery("SELECT COUNT(s) FROM SolicitudDeEliminacion s", Long.class)
-                    .getSingleResult();
+            if(estado == null){
+                return em.createQuery("SELECT COUNT(s) FROM SolicitudDeEliminacion s", Long.class)
+                        .getSingleResult();
+            } else{
+                String jpql = "SELECT COUNT(s) FROM SolicitudDeEliminacion s" +
+                " WHERE s.estado = :estado";
+
+                TypedQuery<Long> query = em.createQuery(jpql, Long.class);
+                query.setParameter("estado", EstadoSolicitudEliminacion.valueOf(estado));
+
+                return query.getSingleResult();
+            }
+        } catch (Exception e) {
+            System.err.println("Error al contar solicitudes: " + e.getMessage());
         } finally {
             em.close();
         }
+        return 0;
     }
 
-    public List<SolicitudDeEliminacion> obtenerPaginadas(int pagina, int limite){
+    public List<SolicitudDeEliminacion> obtenerPaginadas(int pagina, int limite, String estado){
         EntityManager em = BDUtils.getEntityManager();
         try {
-            String jpql = "SELECT s FROM SolicitudDeEliminacion s " +
-                    "LEFT JOIN FETCH s.usuario " +
-                    "LEFT JOIN FETCH s.hechoAsociado " +
-                    "ORDER BY s.id ASC";
+            if(estado == null){
+                String jpql = "SELECT s FROM SolicitudDeEliminacion s " +
+                        "LEFT JOIN FETCH s.usuario " +
+                        "LEFT JOIN FETCH s.hechoAsociado " +
+                        "ORDER BY s.id ASC";
 
-            TypedQuery<SolicitudDeEliminacion> query = em.createQuery(jpql, SolicitudDeEliminacion.class);
+                TypedQuery<SolicitudDeEliminacion> query = em.createQuery(jpql, SolicitudDeEliminacion.class);
 
-            int offset = (pagina - 1) * limite;
+                int offset = (pagina - 1) * limite;
 
-            query.setFirstResult(offset);
-            query.setMaxResults(limite);
+                query.setFirstResult(offset);
+                query.setMaxResults(limite);
 
-            return query.getResultList();
+                return query.getResultList();
+            } else{
+                String jpql = "SELECT s FROM SolicitudDeEliminacion s " +
+                        "LEFT JOIN FETCH s.usuario " +
+                        "LEFT JOIN FETCH s.hechoAsociado " +
+                        "WHERE s.estado = :estado " +
+                        "ORDER BY s.id ASC";
+                TypedQuery<SolicitudDeEliminacion> query = em.createQuery(jpql, SolicitudDeEliminacion.class);
+                query.setParameter("estado", EstadoSolicitudEliminacion.valueOf(estado));
+
+                int offset = (pagina - 1) * limite;
+
+                query.setFirstResult(offset);
+                query.setMaxResults(limite);
+
+                return query.getResultList();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
@@ -160,13 +191,13 @@ public class SolicitudEliminacionRepositorio {
         }
     }
 
-    public Integer obtenerCantidadPendientes() {
+    public Integer obtenerCantidad(String estado) {
         EntityManager em = BDUtils.getEntityManager();
         try {
             String jpql = "SELECT COUNT(s) FROM SolicitudDeEliminacion s WHERE s.estado = :estado";
 
             TypedQuery<Long> query = em.createQuery(jpql, Long.class);
-            query.setParameter("estado", EstadoSolicitudEliminacion.PENDIENTE);
+            query.setParameter("estado", EstadoSolicitudEliminacion.valueOf(estado));
             return query.getSingleResult().intValue();
         }
         catch (Exception e) {

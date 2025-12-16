@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import web.domain.HechosYColecciones.Coleccion;
+import web.domain.Solicitudes.EstadoSolicitudEliminacion;
 import web.domain.Solicitudes.SolicitudDeEliminacion;
 import web.domain.Solicitudes.SolicitudDeModificacion;
 import web.dto.PageDTO;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -34,6 +36,7 @@ public class SolicitudService {
         HttpRequest.Builder builder = HttpRequest.newBuilder()
                 .uri(new URI(urlAdmin + endpoint))
                 .GET();
+        System.out.println("Haciendo GET a: " + urlAdmin + endpoint);
 
         if (username != null && token != null) {
             builder.header("username", username);
@@ -57,6 +60,24 @@ public class SolicitudService {
         }
 
         return builder.build();
+    }
+
+    public long contarSolicitudes(String username, String rolUsuario, String accessToken, EstadoSolicitudEliminacion estado){
+        try{
+            String url = "api/solicitudes/" + URLEncoder.encode(estado.toString(), "UTF-8") + "/cantidad";
+            System.out.println("Pidiendo cantidad a: " + url);
+            HttpRequest request = buildRequestGET(url, username, accessToken, rolUsuario);
+            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if(response.statusCode() == 200) {
+                return Integer.parseInt(response.body());
+            }
+
+        } catch (Exception e){
+            System.err.println("Error al contar solicitudes: " + e.getMessage());
+        }
+
+        return 0;
     }
 
     public SolicitudDeEliminacion obtenerSolicitudEliminacion(String id, String username, String token, String rolUsuario) {
@@ -101,7 +122,7 @@ public class SolicitudService {
     }
 
 
-    public PageDTO<SolicitudDeEliminacion> listarColecciones(String username, String token, String rolUsuario, int pagina, int size) {
+    public PageDTO<SolicitudDeEliminacion> listarSolicitudes(String username, String token, String rolUsuario, int pagina, int size) {
         try {
             System.out.println("Pidiendo solicitudes de eliminacion a: " + urlAdmin);
             HttpRequest request = buildRequestGET("api/solicitudes?pagina=" + pagina + "&limite=" + size, username, token, rolUsuario);
@@ -110,6 +131,32 @@ public class SolicitudService {
 
             if (response.statusCode() == 200) {
                 //System.out.println("Obtener solicitud de eliminacion (lista) 3: " );
+
+                return mapper.readValue(response.body(),
+                        new TypeReference<PageDTO<SolicitudDeEliminacion>>() {
+                        });
+            }
+
+            System.err.println("Error obteniendo solicitudes de eliminacion: " +  response.statusCode());
+
+            return null;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public PageDTO<SolicitudDeEliminacion> listarPorEstado(String username, String token, String rolUsuario,
+            int pagina, int size, String estado){
+        try {
+            System.out.println("Pidiendo solicitudes " + estado + " de eliminacion a: " + urlAdmin);
+            String url = "api/solicitudes/estado/" + estado + "?pagina=" + pagina + "&limite=" + size;
+            HttpRequest request = buildRequestGET(url, username, token, rolUsuario);
+
+            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                System.out.println("Las Solicitudes se obtuvieron exitosamente: " + response.body());
 
                 return mapper.readValue(response.body(),
                         new TypeReference<PageDTO<SolicitudDeEliminacion>>() {
@@ -279,7 +326,7 @@ public class SolicitudService {
     }
 
     public int contarPendientesModificacion(String username, String rolUsuario, String token) throws Exception {
-        HttpRequest request = buildRequestGET("api/solicitudes/modificacion/cantidad", username, token, rolUsuario);
+        HttpRequest request = buildRequestGET("api/solicitudes-modificacion/cantidad", username, token, rolUsuario);
         HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
         if(response.statusCode() == 200) {
             return Integer.parseInt(response.body());
