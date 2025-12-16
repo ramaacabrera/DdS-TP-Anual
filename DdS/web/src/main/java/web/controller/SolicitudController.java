@@ -306,6 +306,8 @@ public class SolicitudController {
 
                 String fechaAnt = formatearFecha(hechoData.get("fechaDeAcontecimiento"));
                 String fechaNue = formatearFecha(propuesta.get("fechaDeAcontecimiento"));
+                String fechaDeCarga = formatearFecha(hechoData.get("fechaDeCarga"));
+                hechoData.put("fechaDeCargaFormateada", fechaDeCarga);
                 compararYAgregar(cambios, "fechaDeAcontecimiento", fechaAnt, fechaNue);
 
                 String ubiAnt = obtenerDescripcionUbicacion(hechoData.get("ubicacion"));
