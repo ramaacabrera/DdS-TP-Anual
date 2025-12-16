@@ -9,6 +9,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import web.domain.HechosYColecciones.Coleccion;
 import web.domain.Solicitudes.EstadoSolicitudEliminacion;
+import web.domain.Solicitudes.EstadoSolicitudModificacion;
 import web.domain.Solicitudes.SolicitudDeEliminacion;
 import web.domain.Solicitudes.SolicitudDeModificacion;
 import web.dto.PageDTO;
@@ -410,6 +411,12 @@ public class SolicitudController {
         HttpClient http = HttpClient.newHttpClient();
         System.out.println("Listando SOLO solicitudes de modificación");
 
+        int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
+        int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
+        String estado = ctx.queryParam("estado");
+
+
+
         String username = ctx.sessionAttribute("username");
         String accessToken = ctx.sessionAttribute("accessToken");
         String rolUsuario = ctx.sessionAttribute("rolUsuario");
@@ -419,15 +426,57 @@ public class SolicitudController {
             return;
         }
 
+        long totalPendientes = solicitudService.contarSolicitudesModificacion(username, rolUsuario, accessToken, EstadoSolicitudModificacion.PENDIENTE);
+        long totalAceptadas = solicitudService.contarSolicitudesModificacion(username, rolUsuario, accessToken, EstadoSolicitudModificacion.ACEPTADA);
+        long totalRechazadas = solicitudService.contarSolicitudesModificacion(username, rolUsuario, accessToken, EstadoSolicitudModificacion.RECHAZADA);
+
+        System.out.println("Total pendientes: " + totalPendientes);
+        System.out.println("Total aceptadas: " + totalAceptadas);
+        System.out.println("Total rechazadas: " + totalRechazadas);
+
+        long totalTodas = totalPendientes + totalAceptadas + totalRechazadas;
+
+        System.out.println("Total: " + totalTodas);
+
+        PageDTO<SolicitudDeModificacion> solicitudesPage;
+
         Map<String, Object> modelo = ViewUtil.baseModel(ctx);
+
+        if(estado != null){
+            solicitudesPage = solicitudService.obtenerSolicitudesModificacion(username, accessToken, rolUsuario, page, size, estado);
+            modelo.put("estadoFiltro", estado);
+        } else{
+            solicitudesPage = solicitudService.listarSolicitudesModificacion(username, accessToken, rolUsuario, page, size);
+            modelo.put("estadoFiltro", "");
+        }
+
+
         modelo.put("pageTitle", "Solicitudes de Modificación");
 
-        List<SolicitudDeModificacion> solicitudesMod =
-                solicitudService.obtenerSolicitudesModificacion(username, accessToken, rolUsuario);
+        System.out.println("Número de solicitudes eliminación: " + solicitudesPage.size);
+
+        int fromIndex = (solicitudesPage.page - 1) * solicitudesPage.size;
+        int toIndex = fromIndex + (solicitudesPage.content != null ? solicitudesPage.content.size() : 0);
+
+        modelo.put("baseHref", "/admin/solicitudes/modificacion");
+        modelo.put("total", solicitudesPage.totalElements);
+        modelo.put("page", solicitudesPage.page);
+        modelo.put("size", solicitudesPage.size);
+        modelo.put("totalPages", solicitudesPage.totalPages);
+        modelo.put("fromIndex", fromIndex);
+        modelo.put("toIndex", toIndex);
+        modelo.put("totalSolicitudes", solicitudesPage.totalElements);
+
+        // Estadísticas para los botones
+        modelo.put("totalTodas", totalTodas);
+        modelo.put("totalPendientes", totalPendientes);
+        modelo.put("totalAceptadas", totalAceptadas);
+        modelo.put("totalRechazadas", totalRechazadas);
+
 
         List<Map<String, Object>> solicitudesSimplificadas = new ArrayList<>();
 
-        for (SolicitudDeModificacion solicitud : solicitudesMod) {
+        for (SolicitudDeModificacion solicitud : solicitudesPage.content) {
             Map<String, Object> solicitudData = new HashMap<>();
 
             solicitudData.put("id", solicitud.getId() != null ? solicitud.getId().toString() : "");

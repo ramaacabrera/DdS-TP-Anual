@@ -1,5 +1,24 @@
 /*ESTILOS PARA CREAR-HECHO-Y-SOL-ELIMINACION*/
 
+
+.header {
+    margin-bottom: 30px;
+}
+
+.header-link.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #718096;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.header-link.back-link:hover {
+    color: var(--primary-color);
+}
+
 /* Estilos para formularios */
 
 .form-container {

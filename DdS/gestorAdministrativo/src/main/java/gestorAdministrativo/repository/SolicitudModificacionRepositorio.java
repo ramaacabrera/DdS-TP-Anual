@@ -1,6 +1,8 @@
 package gestorAdministrativo.repository;
 
+import gestorAdministrativo.domain.Solicitudes.EstadoSolicitudEliminacion;
 import gestorAdministrativo.domain.Solicitudes.EstadoSolicitudModificacion;
+import gestorAdministrativo.domain.Solicitudes.SolicitudDeEliminacion;
 import gestorAdministrativo.utils.BDUtils;
 import gestorAdministrativo.domain.Solicitudes.SolicitudDeModificacion;
 import org.hibernate.Hibernate;
@@ -35,6 +37,84 @@ public class SolicitudModificacionRepositorio {
             BDUtils.rollback(em);
             e.printStackTrace();
             throw new RuntimeException("Error guardando solicitud de modificación", e);
+        } finally {
+            em.close();
+        }
+    }
+
+    public long contarTodas(String estado){
+        System.out.println("Contando solicitudes en estado: " + estado);
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            if(estado == null){
+                return em.createQuery("SELECT COUNT(s) FROM SolicitudDeModificacion s", Long.class)
+                        .getSingleResult();
+            } else{
+                String jpql = "SELECT COUNT(s) FROM SolicitudDeModificacion s" +
+                        " WHERE s.estado = :estado";
+
+                TypedQuery<Long> query = em.createQuery(jpql, Long.class);
+                query.setParameter("estado", EstadoSolicitudModificacion.valueOf(estado));
+
+                return query.getSingleResult();
+            }
+        } catch (Exception e) {
+            System.err.println("Error al contar solicitudes: " + e.getMessage());
+        } finally {
+            em.close();
+        }
+        return 0;
+    }
+
+    public List<SolicitudDeModificacion> obtenerPaginadas(int pagina, int limite, String estado){
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            if(estado == null){
+                String jpql = "SELECT s FROM SolicitudDeModificacion s " +
+                        "LEFT JOIN FETCH s.usuario " +
+                        "LEFT JOIN FETCH s.hechoAsociado " +
+                        "ORDER BY s.id ASC";
+
+                TypedQuery<SolicitudDeModificacion> query = em.createQuery(jpql, SolicitudDeModificacion.class);
+
+                int offset = (pagina - 1) * limite;
+
+                query.setFirstResult(offset);
+                query.setMaxResults(limite);
+
+                for(SolicitudDeModificacion solicitud : query.getResultList()){
+                    Hibernate.initialize(solicitud.getHechoAsociado().getContenidoMultimedia());
+                    Hibernate.initialize(solicitud.getHechoAsociado().getEtiquetas());
+                    Hibernate.initialize(solicitud.getHechoModificado().getContenidoMultimedia());
+                }
+
+                return query.getResultList();
+            } else{
+                System.out.println("Estado seleccionado: " + estado);
+                String jpql = "SELECT s FROM SolicitudDeModificacion s " +
+                        "LEFT JOIN FETCH s.usuario " +
+                        "LEFT JOIN FETCH s.hechoAsociado " +
+                        "WHERE s.estado = :estado " +
+                        "ORDER BY s.id ASC";
+                TypedQuery<SolicitudDeModificacion> query = em.createQuery(jpql, SolicitudDeModificacion.class);
+                query.setParameter("estado", EstadoSolicitudModificacion.valueOf(estado));
+
+                int offset = (pagina - 1) * limite;
+
+                query.setFirstResult(offset);
+                query.setMaxResults(limite);
+
+                for(SolicitudDeModificacion solicitud : query.getResultList()){
+                    Hibernate.initialize(solicitud.getHechoAsociado().getContenidoMultimedia());
+                    Hibernate.initialize(solicitud.getHechoAsociado().getEtiquetas());
+                    Hibernate.initialize(solicitud.getHechoModificado().getContenidoMultimedia());
+                }
+
+                return query.getResultList();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         } finally {
             em.close();
         }
@@ -127,16 +207,14 @@ public class SolicitudModificacionRepositorio {
         }
     }
 
-    public Integer obtenerCantidadPendientes() {
+    public Integer obtenerCantidad(String estado) {
         EntityManager em = BDUtils.getEntityManager();
         try {
-            String sql = "SELECT COUNT(*) FROM Solicitud " +
-                    "WHERE tipo_solicitud = 'MODIFICACION' " +
-                    "AND estado_modificacion = :estadoStr";
+            String sql = "SELECT COUNT(*) FROM Solicitud s WHERE s.estado_modificacion = :estado";
 
             Query query = em.createNativeQuery(sql);
 
-            query.setParameter("estadoStr", EstadoSolicitudModificacion.PENDIENTE.name());
+            query.setParameter("estado", estado);
 
             Number resultado = (Number) query.getSingleResult();
 

@@ -20,6 +20,8 @@ public class VerificacionController {
         }
         String accessToken = ctx.header("accessToken");
 
+        System.out.println("Token: " + accessToken);
+
         if (accessToken == null) {
             System.out.println("No hay token");
             throw new io.javalin.http.UnauthorizedResponse("Faltan credenciales");

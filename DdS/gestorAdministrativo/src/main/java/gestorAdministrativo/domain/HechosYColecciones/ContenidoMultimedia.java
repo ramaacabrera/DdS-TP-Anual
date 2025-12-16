@@ -1,5 +1,6 @@
 package gestorAdministrativo.domain.HechosYColecciones;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,6 +30,7 @@ public class ContenidoMultimedia {
 
     @ManyToOne
     @JoinColumn(name = "hecho_id")
+    @JsonIgnore
     private Hecho hecho;
 
     @JsonCreator

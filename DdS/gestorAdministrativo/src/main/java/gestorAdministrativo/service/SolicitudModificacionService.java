@@ -4,9 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gestorAdministrativo.domain.HechosYColecciones.ContenidoMultimedia;
 import gestorAdministrativo.domain.HechosYColecciones.TipoContenidoMultimedia;
+import gestorAdministrativo.domain.Solicitudes.SolicitudDeEliminacion;
 import gestorAdministrativo.dto.Hechos.ContenidoMultimediaDTO;
 import gestorAdministrativo.dto.Hechos.UbicacionDTO;
 import gestorAdministrativo.dto.Hechos.UsuarioDTO;
+import gestorAdministrativo.dto.PageDTO;
+import gestorAdministrativo.dto.Solicitudes.SolicitudDeEliminacionDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDeModificacionDTO;
 import gestorAdministrativo.dto.Solicitudes.HechoModificadoDTO;
 import gestorAdministrativo.dto.Solicitudes.EstadoSolicitudModificacionDTO;
@@ -93,16 +96,43 @@ public class SolicitudModificacionService {
         }
     }
 
-    public List<SolicitudDeModificacionDTO> obtenerTodasLasSolicitudes() {
-        List<SolicitudDeModificacionDTO> solis = solicitudRepositorio.buscarTodas().stream()
+    public PageDTO<SolicitudDeModificacionDTO> obtenerTodasLasSolicitudes(int pagina, int limite, String estado) {
+        if (pagina < 1) pagina = 1;
+        if (limite < 1) limite = 10;
+
+        long totalRegistros = solicitudRepositorio.contarTodas(estado);
+
+        System.out.println("Total registros: " + totalRegistros);
+
+        int totalPages = (int) Math.ceil(totalRegistros / (double) limite);
+
+        if (pagina > totalPages && totalRegistros > 0) {
+            return new PageDTO<>(new ArrayList<>(), pagina, limite, totalPages, (int) totalRegistros);
+        }
+
+        List<SolicitudDeModificacion> solicitudesPaginadas = solicitudRepositorio.obtenerPaginadas(pagina, limite, estado);
+
+        System.out.println("Total solicitudes recuperadas: " + solicitudesPaginadas.size());
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        System.out.println("Lista de solicitudes: ");
+
+        for(SolicitudDeModificacion sol :  solicitudesPaginadas) {
+            try {
+                System.out.println("Solicitud: " + mapper.writeValueAsString(sol));
+            } catch (Exception e){
+                System.err.println("Erro al serializar solicitud: " + e.getMessage());
+            }
+        }
+
+        List<SolicitudDeModificacionDTO> dtos = solicitudesPaginadas.stream()
                 .map(this::convertirADTO)
                 .collect(Collectors.toList());
-        try {
-            System.out.println("Obtener todas las solicitudes: " + new ObjectMapper().writeValueAsString(solis));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return solis;
+
+        System.out.println("Devolviendo solicitudes..");
+
+        return new PageDTO<>(dtos, pagina, limite, totalPages, (int) totalRegistros);
     }
 
     public Optional<SolicitudDeModificacionDTO> obtenerSolicitudPorId(UUID id) {
@@ -197,14 +227,20 @@ public class SolicitudModificacionService {
 
         SolicitudDeModificacionDTO dto = new SolicitudDeModificacionDTO();
 
+        System.out.println("Convertir DTO 1");
+
         // 1. Datos básicos
         dto.setId(entidad.getId());
         dto.setJustificacion(entidad.getJustificacion());
+
+        System.out.println("Convertir DTO 2");
 
         // 2. ID del Hecho Original
         if (entidad.getHechoAsociado() != null) {
             dto.setHechoId(entidad.getHechoAsociado().getHecho_id());
         }
+
+        System.out.println("Convertir DTO 3");
 
         if (entidad.getUsuario() != null) {
             UsuarioDTO uDto = new UsuarioDTO();
@@ -212,6 +248,8 @@ public class SolicitudModificacionService {
             uDto.setUsername(entidad.getUsuario().getUsername());
             dto.setUsuarioId(uDto);
         }
+
+        System.out.println("Convertir DTO 4");
 
         if (entidad.getEstado() != null) {
             try {
@@ -222,9 +260,13 @@ public class SolicitudModificacionService {
             }
         }
 
+        System.out.println("Convertir DTO 5");
+
         if (entidad.getHechoModificado() != null) {
             dto.setHechoModificado(convertirHechoModificadoADTO(entidad.getHechoModificado()));
         }
+
+        System.out.println("Convertir DTO 6");
 
         return dto;
     }
@@ -263,8 +305,8 @@ public class SolicitudModificacionService {
         return dto;
     }
 
-    public Integer obtenerCantidadPendientes() {
-        Integer solis = solicitudRepositorio.obtenerCantidadPendientes();
+    public Integer obtenerCantidad(String estado) {
+        Integer solis = solicitudRepositorio.obtenerCantidad(estado);
         System.out.println("Total solicitudes modificacion: " + solis);
         return solis;
     }

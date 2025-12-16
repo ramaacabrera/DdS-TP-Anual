@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import web.domain.HechosYColecciones.Coleccion;
 import web.domain.Solicitudes.EstadoSolicitudEliminacion;
+import web.domain.Solicitudes.EstadoSolicitudModificacion;
 import web.domain.Solicitudes.SolicitudDeEliminacion;
 import web.domain.Solicitudes.SolicitudDeModificacion;
 import web.dto.PageDTO;
@@ -67,6 +68,24 @@ public class SolicitudService {
     public long contarSolicitudes(String username, String rolUsuario, String accessToken, EstadoSolicitudEliminacion estado){
         try{
             String url = "api/solicitudes/" + URLEncoder.encode(estado.toString(), "UTF-8") + "/cantidad";
+            System.out.println("Pidiendo cantidad a: " + url);
+            HttpRequest request = buildRequestGET(url, username, accessToken, rolUsuario);
+            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if(response.statusCode() == 200) {
+                return Integer.parseInt(response.body());
+            }
+
+        } catch (Exception e){
+            System.err.println("Error al contar solicitudes: " + e.getMessage());
+        }
+
+        return 0;
+    }
+
+    public long contarSolicitudesModificacion(String username, String rolUsuario, String accessToken, EstadoSolicitudModificacion estado){
+        try{
+            String url = "api/solicitudes-modificacion/" + URLEncoder.encode(estado.toString(), "UTF-8") + "/cantidad";
             System.out.println("Pidiendo cantidad a: " + url);
             HttpRequest request = buildRequestGET(url, username, accessToken, rolUsuario);
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
@@ -174,18 +193,48 @@ public class SolicitudService {
         }
     }
 
-    public List<SolicitudDeModificacion> obtenerSolicitudesModificacion(String username, String token, String rolUsuario) {
-        try {
-            System.out.println("entra  try 1 service");
-            HttpRequest request = buildRequestGET("api/solicitudes/modificacion/listado", username,token, rolUsuario);
+    public PageDTO<SolicitudDeModificacion> obtenerSolicitudesModificacion(String username, String token, String rolUsuario, int page, int size, String estado) {
+
+        try{
+            String url = "api/solicitudes/modificacion/listado?estado=" + estado + "&pagina=" + page + "&limite=" + size;
+            HttpRequest request = buildRequestGET(url, username, token, rolUsuario);
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200)
-                return mapper.readValue(response.body(),
-                        new TypeReference<List<SolicitudDeModificacion>>() {});
+            if (response.statusCode() == 200) {
+                System.out.println("Las Solicitudes se obtuvieron exitosamente: " + response.body());
 
-           System.err.println("Error obteniendo solicitudes modificación: " + response.statusCode());
-            return List.of();
+                return mapper.readValue(response.body(),
+                        new TypeReference<PageDTO<SolicitudDeModificacion>>() {
+                        });
+            }
+
+            System.err.println("Error obteniendo solicitudes de eliminacion: " +  response.statusCode());
+
+            return null;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public PageDTO<SolicitudDeModificacion> listarSolicitudesModificacion(String username, String token, String rolUsuario, int pagina, int size) {
+        try {
+            System.out.println("entra  try 1 service");
+
+            HttpRequest request = buildRequestGET("api/solicitudes/modificacion/listado?pagina=" + pagina + "&limite=" + size, username, token, rolUsuario);
+            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                System.out.println("Solicitudes obtenidas exitosamente");
+                return mapper.readValue(response.body(),
+                        new TypeReference<PageDTO<SolicitudDeModificacion>>() {
+                        });
+            }
+
+            System.err.println("Error obteniendo solicitudes modificación: " + response.statusCode());
+
+            return null;
 
         } catch (Exception e) {
             System.out.println("fallo acaaa ");
@@ -193,6 +242,7 @@ public class SolicitudService {
 
         }
     }
+
 
     public int actualizarEstadoSolicitud(String id, String tipo, String accion, String username, String token, String rolUsuario) {
         try {

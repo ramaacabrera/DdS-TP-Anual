@@ -125,10 +125,11 @@ public class SolicitudController {
         ctx.status(200).json(eliminacionService.obtenerCantidad(estado));
     };
 
-    public Handler obtenerCantidadPendientesModificacion = ctx -> {
+    public Handler obtenerCantidadModificacion = ctx -> {
         try{
-            System.out.println("obteniendo cantidad pendientes modificacion");
-            ctx.status(200).json(modificacionService.obtenerCantidadPendientes());
+            String estado = ctx.pathParam("estado");
+            System.out.println("Obteniendo cantidad "  + estado + " modificacion");
+            ctx.status(200).json(modificacionService.obtenerCantidad(estado));
         }catch (IllegalArgumentException e){
             ctx.status(400);
         }
@@ -187,10 +188,18 @@ public class SolicitudController {
     };
 
     public Handler obtenerSolicitudesModificacion = ctx -> {
+        String estado = ctx.queryParam("estado");
+        System.out.println("Obteniendo solicitudes de modificacion " + estado);
         try {
-            ctx.json(modificacionService.obtenerTodasLasSolicitudes());
+            int pagina = ctx.queryParamAsClass("pagina", Integer.class).getOrDefault(1);
+            int limite = ctx.queryParamAsClass("limite", Integer.class).getOrDefault(10);
+
+            PageDTO<SolicitudDeModificacionDTO> resultado = modificacionService.obtenerTodasLasSolicitudes(pagina, limite, estado);
+            System.out.println("Devolviendo solicitudes");
+            ctx.status(200).json(resultado);
+            System.out.println("Devolvi un 200");
         } catch (Exception e) {
-            ctx.status(500).json(e.getMessage());
+            ctx.status(500).json("Error obteniendo solicitudes: " + e.getMessage());
         }
     };
 
