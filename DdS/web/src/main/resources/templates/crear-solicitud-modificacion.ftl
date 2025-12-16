@@ -1,5 +1,6 @@
 <#assign pageTitle = "Solicitar Modificación">
 <#assign content>
+<#-- Lógica de fechas (la mantengo igual) -->
     <#assign timestampRaw = hecho.fechaDeAcontecimiento!"0">
     <#assign timestampLimpio = timestampRaw?replace(".", "", "r")>
     <#if timestampLimpio?is_number && timestampLimpio?number gt 0>
@@ -13,7 +14,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <style>
-        /* Estilos unificados para la grilla */
+        /* Estilos (los mantengo igual) */
         .preview-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
         .preview-item { position: relative; width: 100px; height: 100px; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #f9f9f9; }
         .preview-item img, .preview-item video { width: 100%; height: 100%; object-fit: cover; }
@@ -26,7 +27,9 @@
     </style>
 
     <script>
-        const CURRENT_USER_ID = "${username!}";
+        // Variables globales para el JS
+        const CURRENT_USERNAME = "${username!}";
+        const CURRENT_USER_ID = "${usuarioId!}";
         const HECHO_ID = "${hechoId?html}";
         const URL_PUBLICA = '${urlPublica}';
         const ACCESS_TOKEN = '${accessToken}';
@@ -46,10 +49,13 @@
     </script>
 
     <script>
-        const originalLatStr = '${hecho.ubicacion.latitud!"-34.6037"}';
-        const originalLonStr = '${hecho.ubicacion.longitud!"-58.3816"}';
-        const originalLat = originalLatStr.replace(',', '.');
-        const originalLon = originalLonStr.replace(',', '.');
+        // Lógica segura para coordenadas
+        const latStr = '${(hecho.ubicacion.latitud)!-34.6037}';
+        const lonStr = '${(hecho.ubicacion.longitud)!-58.3816}';
+
+        // Convertimos comas a puntos y aseguramos que sean números para JS
+        const originalLat = parseFloat(String(latStr).replace(',', '.'));
+        const originalLon = parseFloat(String(lonStr).replace(',', '.'));
 
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof initMapaModificacion === 'function') {
@@ -74,7 +80,9 @@
     <form id="form-solicitud-modificacion" class="form-container" method="POST">
 
         <input type="hidden" id="ID_hechoAsociado" name="hechoId" value="${hechoId?html}">
-        <input type="hidden" id="ID_usuario" name="username" value="${username!}">
+        <#-- Usamos el UUID si existe, sino el username (el backend lo arreglará si hace falta) -->
+        <input type="hidden" id="ID_usuario" name="usuarioId" value="${usuarioId!username!}">
+        <input type="hidden" name="username" value="${username!}">
 
         <h3 class="form-section-title">Valores a Modificar</h3>
 
@@ -153,6 +161,12 @@
         <input type="hidden" id="latitud" name="ubicacion.latitud">
         <input type="hidden" id="longitud" name="ubicacion.longitud">
         <p id="coordenadas-seleccionadas" style="color: black; font-size: 0.9em;">Coordenadas propuestas: Ninguna</p>
+
+        <h3 class="form-section-title" style="margin-top: 30px;">📝 Justificación</h3>
+        <div class="form-group">
+            <label for="justificacion" class="form-label">Motivo de la modificación *</label>
+            <textarea id="justificacion" name="justificacion" class="form-textarea" rows="3" required placeholder="Explique brevemente por qué realiza estos cambios..."></textarea>
+        </div>
 
         <div class="form-actions">
             <button type="button" id="btn-cancelar" class="btn btn-secondary">Cancelar</button>

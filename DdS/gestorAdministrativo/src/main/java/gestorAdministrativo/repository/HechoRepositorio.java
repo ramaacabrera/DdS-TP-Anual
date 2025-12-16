@@ -5,6 +5,7 @@ import gestorAdministrativo.domain.fuente.Fuente;
 import gestorAdministrativo.utils.BDUtils;
 import gestorAdministrativo.domain.Criterios.Criterio;
 import gestorAdministrativo.domain.HechosYColecciones.Hecho;
+import org.hibernate.Hibernate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -163,6 +164,8 @@ public class HechoRepositorio {
             if (hecho.getHecho_id() == null && hecho.getTitulo() != null) {
                 Hecho existente = buscarPorTituloInterno(em, hecho.getTitulo());
                 if (existente != null) {
+                    Hibernate.initialize(existente.getContenidoMultimedia());
+                    Hibernate.initialize(existente.getEtiquetas());
                     hecho.setHecho_id(existente.getHecho_id());
                 }
             }

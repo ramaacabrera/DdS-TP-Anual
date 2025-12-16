@@ -100,27 +100,23 @@ public class SolicitudController {
         modelo.put("totalAceptadas", totalAceptadas);
         modelo.put("totalRechazadas", totalRechazadas);
 
-        // 2. Crear lista simplificada
         List<Map<String, Object>> solicitudesSimplificadas = new ArrayList<>();
 
         for (SolicitudDeEliminacion solicitud : solicitudesPage.content) {
             Map<String, Object> solicitudData = new HashMap<>();
 
-            // Datos básicos obligatorios
             solicitudData.put("id", solicitud.getId() != null ? solicitud.getId().toString() : "");
             solicitudData.put("justificacion", solicitud.getJustificacion() != null ? solicitud.getJustificacion() : "Sin justificación");
             solicitudData.put("estado", solicitud.getEstado() != null ? solicitud.getEstado() : "PENDIENTE");
 
-            // Usuario - simplificado
-            if (solicitud.getUsuario() != null) {
+            if (solicitud.getUsuarioId() != null) {
                 Map<String, String> usuarioMap = new HashMap<>();
-                usuarioMap.put("username", solicitud.getUsuario().getUsername() != null ? solicitud.getUsuario().getUsername() : "Usuario");
+                usuarioMap.put("username", solicitud.getUsuarioId().getUsername() != null ? solicitud.getUsuarioId().getUsername() : "Usuario");
                 solicitudData.put("usuario", usuarioMap);
             } else {
                 solicitudData.put("usuario", null);
             }
 
-            // Hecho - manejar el título
             String hechoTitulo = "Sin título";
             String hechoIdStr = null;
 
@@ -128,9 +124,7 @@ public class SolicitudController {
                 hechoIdStr = solicitud.getHechoAsociado().toString();
                 solicitudData.put("hechoId", hechoIdStr);
 
-                // Solo intentar obtener el título si el hecho existe
                 try {
-                    // Verificar si el hecho existe primero
                     HttpClient client = HttpClient.newHttpClient();
                     HttpRequest request = HttpRequest.newBuilder()
                             .uri(new URI(urlPublica + "/hechos/" + hechoIdStr))
@@ -181,9 +175,12 @@ public class SolicitudController {
             return;
         }
 
+        List<String> categorias = solicitudService.obtenerCategorias();
+
         Map<String, Object> modelo = ViewUtil.baseModel(ctx);
         modelo.put("pageTitle", "Detalle de Solicitud");
         modelo.put("tipo", tipo);
+        modelo.put("categorias", categorias);
 
         if ("eliminacion".equals(tipo)) {
             SolicitudDeEliminacion sol = solicitudService.obtenerSolicitudEliminacion(id, username, accessToken, rolUsuario);
@@ -262,6 +259,7 @@ public class SolicitudController {
             modelo.put("hecho", hechoData);
 
         } else if ("modificacion".equals(tipo)) {
+            // 1. Obtener la solicitud del servicio
             SolicitudDeModificacion sol = solicitudService.obtenerSolicitudModificacion(id, username, accessToken, rolUsuario);
 
             if (sol == null) {
@@ -272,7 +270,10 @@ public class SolicitudController {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> solicitudData = mapper.convertValue(sol, Map.class);
 
+            Map<String, Object> propuesta = (Map<String, Object>) solicitudData.get("hechoModificado");
+
             Map<String, Object> hechoData = new HashMap<>();
+
             if (sol.getHechoAsociado() != null) {
                 try {
                     String hechoIdStr = sol.getHechoAsociado().toString();
@@ -288,14 +289,46 @@ public class SolicitudController {
 
                     if (response.statusCode() == 200) {
                         hechoData = mapper.readValue(response.body(), Map.class);
-                    } else {
-                        hechoData.put("titulo", "Error al cargar el hecho");
                     }
                 } catch (Exception e) {
-                    System.err.println("Error obteniendo hecho para detalle (mod): " + e.getMessage());
                     hechoData.put("titulo", "Error de conexión");
                 }
             }
+
+            List<Map<String, String>> cambios = new ArrayList<>();
+
+            if (propuesta != null && !hechoData.isEmpty()) {
+
+                compararYAgregar(cambios, "titulo", hechoData.get("titulo"), propuesta.get("titulo"));
+                compararYAgregar(cambios, "descripcion", hechoData.get("descripcion"), propuesta.get("descripcion"));
+                compararYAgregar(cambios, "categoria", hechoData.get("categoria"), propuesta.get("categoria"));
+
+                String fechaAnt = formatearFecha(hechoData.get("fechaDeAcontecimiento"));
+                String fechaNue = formatearFecha(propuesta.get("fechaDeAcontecimiento"));
+                compararYAgregar(cambios, "fechaDeAcontecimiento", fechaAnt, fechaNue);
+
+                String ubiAnt = obtenerDescripcionUbicacion(hechoData.get("ubicacion"));
+                String ubiNue = obtenerDescripcionUbicacion(propuesta.get("ubicacion"));
+                if (propuesta.get("ubicacion") != null) {
+                    compararYAgregar(cambios, "Ubicacion", ubiAnt, ubiNue);
+                }
+
+                // D. Comparar Multimedia
+                List<Map<String, Object>> mediaAnt = (List<Map<String, Object>>) hechoData.get("contenidoMultimedia");
+                List<Map<String, Object>> mediaNue = (List<Map<String, Object>>) propuesta.get("contenidoMultimedia");
+
+                if (mediaNue != null && !mediaNue.isEmpty()) {
+                    String htmlAnt = generarHtmlFotos(mediaAnt);
+                    String htmlNue = generarHtmlFotos(mediaNue);
+
+                    // Si son diferentes, agregamos el cambio
+                    if (!htmlAnt.equals(htmlNue)) {
+                        compararYAgregar(cambios, "Multimedia", htmlAnt, htmlNue);
+                    }
+                }
+            }
+
+            solicitudData.put("cambios", cambios);
 
             modelo.put("solicitud", solicitudData);
             modelo.put("hecho", hechoData);
@@ -306,7 +339,6 @@ public class SolicitudController {
 
         ctx.render("solicitud-detalle.ftl", modelo);
     };
-
 
     public Handler obtenerFormsEliminarSolicitud = ctx -> {
         String hechoId = ctx.pathParam("id");
@@ -373,7 +405,6 @@ public class SolicitudController {
         }
     };
 
-
     public Handler listarSolicitudesModificacion = ctx -> {
         ObjectMapper mapper = new ObjectMapper();
         HttpClient http = HttpClient.newHttpClient();
@@ -403,9 +434,9 @@ public class SolicitudController {
             solicitudData.put("justificacion", solicitud.getJustificacion() != null ? solicitud.getJustificacion() : "Sin justificación");
             solicitudData.put("estado", solicitud.getEstado() != null ? solicitud.getEstado().name() : "PENDIENTE");
 
-            if (solicitud.getUsuario() != null) {
+            if (solicitud.getUsuarioId() != null) {
                 Map<String, String> usuarioMap = new HashMap<>();
-                usuarioMap.put("username", solicitud.getUsuario().getUsername() != null ? solicitud.getUsuario().getUsername() : "Usuario");
+                usuarioMap.put("username", solicitud.getUsuarioId().getUsername() != null ? solicitud.getUsuarioId().getUsername() : "Usuario");
                 solicitudData.put("usuario", usuarioMap);
             } else {
                 solicitudData.put("usuario", null);
@@ -463,13 +494,15 @@ public class SolicitudController {
         String accessToken = ctx.sessionAttribute("accessToken");
         if(accessToken == null || accessToken.isEmpty()) {
             ctx.redirect("/login");
+            return;
         }
+
         String hechoId = ctx.pathParam("id");
         String username = ctx.sessionAttribute("username");
 
         String usuarioId = usuarioService.obtenerId(username);
 
-        System.out.println("ID del usuario: " + usuarioId);
+        System.out.println("ID UUID del usuario recuperado para el form: " + usuarioId);
 
         Map<String, Object> hechoData = solicitudService.obtenerDatosHecho(hechoId);
 
@@ -484,7 +517,9 @@ public class SolicitudController {
         modelo.put("pageTitle", "Solicitar Modificación");
         modelo.put("hechoId", hechoId);
         modelo.put("hecho", hechoData);
+
         modelo.put("usuarioId", usuarioId);
+
         modelo.put("categorias", categorias);
         modelo.put("urlPublica", urlPublica);
 
@@ -497,52 +532,131 @@ public class SolicitudController {
     };
 
     public Handler crearSolicitudModificacion = ctx -> {
-        System.out.println(ctx.body());
-        Map<String, Object> body = ctx.bodyAsClass(Map.class);
+        System.out.println(">>> [WebController] Inicio crearSolicitudModificacion");
+        try {
+            Map<String, Object> body = ctx.bodyAsClass(Map.class);
+            System.out.println(">>> [WebController] Body parseado correctamente");
 
-        String hechoId = (String) body.get("hechoId");
-        String usuarioId = (String) body.get("usuarioId");
-        String justificacion = (String) body.get("justificacion");
+            String hechoId = (String) body.get("hechoId");
+            String usuarioId = (String) body.get("usuarioId");
+            String justificacion = (String) body.get("justificacion");
+            Map<String, Object> hechoModificado = (Map<String, Object>) body.get("hechoModificado");
 
-        Map<String, Object> hechoModificado = (Map<String, Object>) body.get("hechoModificado");
+            if (hechoId == null || hechoId.isBlank()){
+                ctx.status(400).json(Map.of("error", "Falta hechoId"));
+                return;
+            }
+            if (usuarioId == null || usuarioId.isBlank()){
+                ctx.status(400).json(Map.of("error", "Falta usuarioId"));
+                return;
+            }
 
-        if (hechoId == null || hechoId.isBlank()){
-            ctx.status(400).json(Map.of("error", "Los IDs de hecho y usuario son obligatorios."));
-            return;
-        }
+            String username = ctx.sessionAttribute("username");
+            String accessToken = ctx.sessionAttribute("accessToken");
+            String rolUsuario = ctx.sessionAttribute("rolUsuario");
 
-        if (justificacion == null || justificacion.isBlank()) {
-            ctx.status(400).json(Map.of("error", "La justificación es obligatoria."));
-            return;
-        }
+            if (accessToken == null) {
+                ctx.status(401).json(Map.of("error", "Sesión expirada"));
+                return;
+            }
 
-        if (hechoModificado == null || hechoModificado.isEmpty()) {
-            ctx.status(400).json(Map.of("error", "Debe proponer una modificación en al menos un campo."));
-            return;
-        }
-        String username = ctx.sessionAttribute("username");
-        String accessToken = ctx.sessionAttribute("accessToken");
-        String rolUsuario = ctx.sessionAttribute("rolUsuario");
+            if (!usuarioId.matches("[0-9a-fA-F-]{36}")) {
+                System.out.println(">>> [WebController] UUID inválido ('"+usuarioId+"'). Recuperando...");
+                usuarioId = usuarioService.obtenerId(username);
+                if (usuarioId == null) {
+                    ctx.status(500).json(Map.of("error", "No se pudo recuperar el UUID del usuario"));
+                    return;
+                }
+            }
 
-        if (accessToken == null) {
-            ctx.status(401).json(Map.of("error", "Sesión expirada. Inicie sesión nuevamente."));
-            return;
-        }
+            System.out.println(">>> [WebController] Llamando a SolicitudService con UUID: " + usuarioId);
 
-        int status = solicitudService.crearSolicitudModificacion(
-                hechoId,
-                usuarioId,
-                justificacion,
-                hechoModificado,
-                username,
-                accessToken,
-                rolUsuario
-        );
+            int status = solicitudService.crearSolicitudModificacion(
+                    hechoId,
+                    usuarioId,
+                    justificacion,
+                    hechoModificado,
+                    username,
+                    accessToken,
+                    rolUsuario
+            );
 
-        if (status == 201) {
-            ctx.status(201).json(Map.of("mensaje", "Solicitud de modificación enviada exitosamente."));
-        } else {
-            ctx.status(status).json(Map.of("error", "Error al procesar la solicitud en el servidor publico. HTTP: " + status));
+            System.out.println(">>> [WebController] Respuesta del servicio. Status: " + status);
+
+            if (status >= 200 && status < 300) {
+                ctx.status(201).json(Map.of("mensaje", "Solicitud enviada"));
+            } else {
+                ctx.status(status).json(Map.of("error", "El Gestor respondió con error HTTP " + status));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(">>> [WebController] EXCEPCION: " + e.getMessage());
+            ctx.status(500).json(Map.of("error", "Error interno Web: " + e.getMessage()));
         }
     };
+
+    private void compararYAgregar(List<Map<String, String>> cambios, String campo, Object valorAnterior, Object valorNuevo) {
+        String ant = valorAnterior != null ? valorAnterior.toString() : "";
+        String nue = valorNuevo != null ? valorNuevo.toString() : "";
+
+        if (!ant.equals(nue) && !nue.isEmpty()) {
+            Map<String, String> diff = new HashMap<>();
+            diff.put("campo", campo);
+            diff.put("anterior", ant);
+            diff.put("nuevo", nue);
+            cambios.add(diff);
+        }
+    }
+
+    private String formatearFecha(Object fechaObj) {
+        if (fechaObj == null) return "";
+        try {
+            long timestamp;
+            if (fechaObj instanceof Number) {
+                timestamp = ((Number) fechaObj).longValue();
+            } else {
+                timestamp = Long.parseLong(fechaObj.toString());
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            return sdf.format(new Date(timestamp));
+        } catch (Exception e) {
+            return fechaObj.toString();
+        }
+    }
+
+    private String obtenerDescripcionUbicacion(Object ubicacionObj) {
+        if (ubicacionObj == null) return "Sin ubicación";
+        try {
+            Map<String, Object> ubi = (Map<String, Object>) ubicacionObj;
+            return ubi.get("descripcion") != null ? ubi.get("descripcion").toString() : "Ubicación sin nombre";
+        } catch (Exception e) {
+            return "Error formato ubicación";
+        }
+    }
+
+    private String generarHtmlFotos(List<Map<String, Object>> listaMedia) {
+        if (listaMedia == null || listaMedia.isEmpty()) return "";
+        StringBuilder html = new StringBuilder();
+        for (Map<String, Object> item : listaMedia) {
+            Object url = item.get("contenido");
+            if (url != null) {
+                html.append("<img src='").append(url).append("' class='preview-img-mini' style='width:60px;height:60px;object-fit:cover;border-radius:4px;margin:2px;' />");
+            }
+        }
+        return html.toString();
+    }
+
+    private void compararYAgregar(List<Map<String, String>> cambios, String campo, String ant, String nue) {
+        if (ant == null) ant = "";
+        if (nue == null) nue = "";
+
+        if (!ant.equals(nue) && !nue.isEmpty()) {
+            Map<String, String> diff = new HashMap<>();
+            diff.put("campo", campo);
+            diff.put("anterior", ant);
+            diff.put("nuevo", nue);
+            cambios.add(diff);
+        }
+    }
 }

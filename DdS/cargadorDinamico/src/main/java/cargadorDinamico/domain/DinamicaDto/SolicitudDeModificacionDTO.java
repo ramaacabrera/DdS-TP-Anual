@@ -1,19 +1,21 @@
 package cargadorDinamico.domain.DinamicaDto;
 
-import cargadorDinamico.domain.HechosYColecciones.HechoModificado;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudModificacion;
 
 public class SolicitudDeModificacionDTO extends SolicitudDTO {
-    private HechoModificado hechoModificado;
+
+    private HechoModificadoDTO hechoModificado;
+
     private EstadoSolicitudModificacion estadoSolicitudModificacion;
 
     public SolicitudDeModificacionDTO() {}
 
-   public HechoModificado getHechoModificado() {
+
+    public HechoModificadoDTO getHechoModificado() {
         return hechoModificado;
     }
 
-    public void setHechoModificado(HechoModificado hechoModificado) {
+    public void setHechoModificado(HechoModificadoDTO hechoModificado) {
         this.hechoModificado = hechoModificado;
     }
 
