@@ -218,6 +218,7 @@ public class SolicitudController {
             modelo.put("hecho", hechoData);
 
         } else if ("modificacion".equals(tipo)) {
+            // 1. Obtener la solicitud del servicio
             SolicitudDeModificacion sol = solicitudService.obtenerSolicitudModificacion(id, username, accessToken, rolUsuario);
 
             if (sol == null) {
@@ -227,9 +228,11 @@ public class SolicitudController {
 
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> solicitudData = mapper.convertValue(sol, Map.class);
-            System.out.println("Data solicitud modificacion obtenida: " +  mapper.convertValue(sol, Map.class));
+
+            Map<String, Object> propuesta = (Map<String, Object>) solicitudData.get("hechoModificado");
 
             Map<String, Object> hechoData = new HashMap<>();
+
             if (sol.getHechoAsociado() != null) {
                 try {
                     String hechoIdStr = sol.getHechoAsociado().toString();
@@ -244,48 +247,43 @@ public class SolicitudController {
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                     if (response.statusCode() == 200) {
-                        System.out.println("Data hecho modificacion obtenida: "+ mapper.readValue(response.body(), Map.class));
                         hechoData = mapper.readValue(response.body(), Map.class);
-                    } else {
-                        hechoData.put("titulo", "Error al cargar el hecho");
                     }
                 } catch (Exception e) {
-                    System.err.println("Error obteniendo hecho para detalle (mod): " + e.getMessage());
                     hechoData.put("titulo", "Error de conexión");
                 }
             }
 
             List<Map<String, String>> cambios = new ArrayList<>();
 
-            // Obtenemos el objeto con los cambios propuestos
-            Map<String, Object> hechoModificado = (Map<String, Object>) solicitudData.get("hechoModificado");
+            if (propuesta != null && !hechoData.isEmpty()) {
 
-            if (hechoModificado != null && !hechoData.isEmpty()) {
+                compararYAgregar(cambios, "titulo", hechoData.get("titulo"), propuesta.get("titulo"));
+                compararYAgregar(cambios, "descripcion", hechoData.get("descripcion"), propuesta.get("descripcion"));
+                compararYAgregar(cambios, "categoria", hechoData.get("categoria"), propuesta.get("categoria"));
 
-                // 1. Comparar Título
-                compararYAgregar(cambios, "Titulo",
-                        hechoData.get("titulo"),
-                        hechoModificado.get("titulo"));
+                String fechaAnt = formatearFecha(hechoData.get("fechaDeAcontecimiento"));
+                String fechaNue = formatearFecha(propuesta.get("fechaDeAcontecimiento"));
+                compararYAgregar(cambios, "fechaDeAcontecimiento", fechaAnt, fechaNue);
 
-                // 2. Comparar Descripción
-                compararYAgregar(cambios, "Descripcion",
-                        hechoData.get("descripcion"),
-                        hechoModificado.get("descripcion"));
+                String ubiAnt = obtenerDescripcionUbicacion(hechoData.get("ubicacion"));
+                String ubiNue = obtenerDescripcionUbicacion(propuesta.get("ubicacion"));
+                if (propuesta.get("ubicacion") != null) {
+                    compararYAgregar(cambios, "Ubicacion", ubiAnt, ubiNue);
+                }
 
-                // 3. Comparar Categoría
-                compararYAgregar(cambios, "Categoria",
-                        hechoData.get("categoria"),
-                        hechoModificado.get("categoria"));
+                // D. Comparar Multimedia
+                List<Map<String, Object>> mediaAnt = (List<Map<String, Object>>) hechoData.get("contenidoMultimedia");
+                List<Map<String, Object>> mediaNue = (List<Map<String, Object>>) propuesta.get("contenidoMultimedia");
 
-                // 4. Comparar Ubicación (Un poco más complejo por ser objeto)
-                Map<String, Object> ubiOriginal = (Map<String, Object>) hechoData.get("ubicacion");
-                Map<String, Object> ubiNueva = (Map<String, Object>) hechoModificado.get("ubicacion");
+                if (mediaNue != null && !mediaNue.isEmpty()) {
+                    String htmlAnt = generarHtmlFotos(mediaAnt);
+                    String htmlNue = generarHtmlFotos(mediaNue);
 
-                if (ubiNueva != null) {
-                    String ubiOrigStr = ubiOriginal != null ? ubiOriginal.get("descripcion").toString() : "Sin ubicación";
-                    String ubiNuevaStr = ubiNueva.get("descripcion").toString();
-
-                    compararYAgregar(cambios, "Ubicacion", ubiOrigStr, ubiNuevaStr);
+                    // Si son diferentes, agregamos el cambio
+                    if (!htmlAnt.equals(htmlNue)) {
+                        compararYAgregar(cambios, "Multimedia", htmlAnt, htmlNue);
+                    }
                 }
             }
 
@@ -560,6 +558,57 @@ public class SolicitudController {
     private void compararYAgregar(List<Map<String, String>> cambios, String campo, Object valorAnterior, Object valorNuevo) {
         String ant = valorAnterior != null ? valorAnterior.toString() : "";
         String nue = valorNuevo != null ? valorNuevo.toString() : "";
+
+        if (!ant.equals(nue) && !nue.isEmpty()) {
+            Map<String, String> diff = new HashMap<>();
+            diff.put("campo", campo);
+            diff.put("anterior", ant);
+            diff.put("nuevo", nue);
+            cambios.add(diff);
+        }
+    }
+
+    private String formatearFecha(Object fechaObj) {
+        if (fechaObj == null) return "";
+        try {
+            long timestamp;
+            if (fechaObj instanceof Number) {
+                timestamp = ((Number) fechaObj).longValue();
+            } else {
+                timestamp = Long.parseLong(fechaObj.toString());
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            return sdf.format(new Date(timestamp));
+        } catch (Exception e) {
+            return fechaObj.toString();
+        }
+    }
+
+    private String obtenerDescripcionUbicacion(Object ubicacionObj) {
+        if (ubicacionObj == null) return "Sin ubicación";
+        try {
+            Map<String, Object> ubi = (Map<String, Object>) ubicacionObj;
+            return ubi.get("descripcion") != null ? ubi.get("descripcion").toString() : "Ubicación sin nombre";
+        } catch (Exception e) {
+            return "Error formato ubicación";
+        }
+    }
+
+    private String generarHtmlFotos(List<Map<String, Object>> listaMedia) {
+        if (listaMedia == null || listaMedia.isEmpty()) return "";
+        StringBuilder html = new StringBuilder();
+        for (Map<String, Object> item : listaMedia) {
+            Object url = item.get("contenido");
+            if (url != null) {
+                html.append("<img src='").append(url).append("' class='preview-img-mini' style='width:60px;height:60px;object-fit:cover;border-radius:4px;margin:2px;' />");
+            }
+        }
+        return html.toString();
+    }
+
+    private void compararYAgregar(List<Map<String, String>> cambios, String campo, String ant, String nue) {
+        if (ant == null) ant = "";
+        if (nue == null) nue = "";
 
         if (!ant.equals(nue) && !nue.isEmpty()) {
             Map<String, String> diff = new HashMap<>();

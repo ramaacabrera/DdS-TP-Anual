@@ -87,7 +87,13 @@
                                 <div class="valor-box anterior">
                                     <span class="badge-mini original">Valor Actual</span>
                                     <div class="valor-content">
-                                        ${cambio.anterior!"<em>(Vacío)</em>"}
+                                        <#if cambio.campo == "Multimedia">
+                                            <div class="multimedia-container" style="display: flex; gap: 5px; flex-wrap: wrap; opacity: 0.6;">
+                                                ${cambio.anterior!"<em>(Vacío)</em>"}
+                                            </div>
+                                        <#else>
+                                            ${cambio.anterior!"<em>(Vacío)</em>"}
+                                        </#if>
                                     </div>
                                 </div>
 
@@ -96,12 +102,21 @@
                                 </div>
 
                                 <div class="valor-box nuevo">
-                                    <span class="badge-mini propuesto">Valor Nuevo (Editable)</span>
+                                    <span class="badge-mini propuesto">Valor Nuevo</span>
 
                                     <#if cambio.campo == "descripcion">
                                         <textarea class="form-input input-modificado" rows="4">${cambio.nuevo!''}</textarea>
+
+                                    <#elseif cambio.campo == "Multimedia">
+                                        <div class="multimedia-container" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                                            ${cambio.nuevo!''}
+                                        </div>
+                                        <input type="hidden" class="input-modificado" value="SIN_CAMBIOS_MANUALES">
+                                        <small style="font-size: 0.7em; color: var(--text-light);">Las fotos no se pueden editar aquí.</small>
+
                                     <#elseif cambio.campo == "fechaDeAcontecimiento">
-                                        <input type="text" class="form-input input-modificado" value="${cambio.nuevo!''}">
+                                        <input type="datetime-local" class="form-input input-modificado" value="${cambio.nuevo!''}">
+
                                     <#else>
                                         <input type="text" class="form-input input-modificado" value="${cambio.nuevo!''}">
                                     </#if>
