@@ -14,6 +14,23 @@ async function procesarSolicitud(accion) {
             return;
         }
 
+        let datosExtra = {};
+
+        if (accion === 'ACEPTADA' && tipoSolicitud === 'modificacion') {
+            const cambios = [];
+            document.querySelectorAll('.cambio-row').forEach(row => {
+                const campo = row.getAttribute('data-campo'); // ej: "Titulo"
+                const input = row.querySelector('.input-modificado');
+                if (input) {
+                    cambios.push({
+                        campo: campo,
+                        valorFinal: input.value
+                    });
+                }
+            });
+            datosExtra.cambiosAprobados = cambios;
+        }
+
         // --- Confirmación SweetAlert ---
         const confirmMessage = accion === 'ACEPTADA'
             ? '¿Estás seguro de aceptar esta solicitud? El hecho será afectado según su tipo.'
@@ -46,7 +63,10 @@ async function procesarSolicitud(accion) {
         const response = await fetch(endpoint, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ accion: accion })
+            body: JSON.stringify({
+                accion: accion,
+                ...datosExtra
+            })
         });
 
         if (response.ok) {

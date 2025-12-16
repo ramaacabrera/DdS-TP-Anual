@@ -192,11 +192,22 @@ public class SolicitudController {
 
     public Handler obtenerSolicitudModificacion = ctx -> {
         try {
-            UUID id = UUID.fromString(ctx.pathParam("id"));
+            String idParam = ctx.pathParam("id");
+            UUID id = UUID.fromString(idParam);
+
             var sol = modificacionService.obtenerSolicitudPorId(id);
-            if(sol.isPresent()) ctx.json(sol.get()); else ctx.status(404);
+
+            if (sol.isPresent()) {
+                ctx.json(sol.get());
+            } else {
+                ctx.status(404).json("Solicitud no encontrada");
+            }
+
+        } catch (IllegalArgumentException e) {
+            ctx.status(400).json("El formato del ID es inválido: " + e.getMessage());
         } catch (Exception e) {
-            ctx.status(400).json("ID inválido");
+            e.printStackTrace();
+            ctx.status(500).json("Error interno del servidor: " + e.getMessage());
         }
     };
 }

@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+
 @Entity
 public class HechoModificado {
     @Id
@@ -33,7 +34,7 @@ public class HechoModificado {
 
     private Date fechaDeAcontecimiento;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "hecho_modificado_id")
     private List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
 
@@ -67,6 +68,7 @@ public class HechoModificado {
     public void setUbicacion(Ubicacion ubicacion) { this.ubicacion = ubicacion; }
     public void setFechaDeAcontecimiento(Date fechaDeAcontecimiento) { this.fechaDeAcontecimiento = fechaDeAcontecimiento; }
     public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoMultimedia) { this.contenidoMultimedia = contenidoMultimedia; }
+
 
     public boolean esIgualAotro(HechoModificado otroHecho) {
         if (otroHecho == null) return false;

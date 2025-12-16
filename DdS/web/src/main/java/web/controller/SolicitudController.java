@@ -255,6 +255,42 @@ public class SolicitudController {
                 }
             }
 
+            List<Map<String, String>> cambios = new ArrayList<>();
+
+            // Obtenemos el objeto con los cambios propuestos
+            Map<String, Object> hechoModificado = (Map<String, Object>) solicitudData.get("hechoModificado");
+
+            if (hechoModificado != null && !hechoData.isEmpty()) {
+
+                // 1. Comparar Título
+                compararYAgregar(cambios, "Titulo",
+                        hechoData.get("titulo"),
+                        hechoModificado.get("titulo"));
+
+                // 2. Comparar Descripción
+                compararYAgregar(cambios, "Descripcion",
+                        hechoData.get("descripcion"),
+                        hechoModificado.get("descripcion"));
+
+                // 3. Comparar Categoría
+                compararYAgregar(cambios, "Categoria",
+                        hechoData.get("categoria"),
+                        hechoModificado.get("categoria"));
+
+                // 4. Comparar Ubicación (Un poco más complejo por ser objeto)
+                Map<String, Object> ubiOriginal = (Map<String, Object>) hechoData.get("ubicacion");
+                Map<String, Object> ubiNueva = (Map<String, Object>) hechoModificado.get("ubicacion");
+
+                if (ubiNueva != null) {
+                    String ubiOrigStr = ubiOriginal != null ? ubiOriginal.get("descripcion").toString() : "Sin ubicación";
+                    String ubiNuevaStr = ubiNueva.get("descripcion").toString();
+
+                    compararYAgregar(cambios, "Ubicacion", ubiOrigStr, ubiNuevaStr);
+                }
+            }
+
+            solicitudData.put("cambios", cambios);
+
             modelo.put("solicitud", solicitudData);
             modelo.put("hecho", hechoData);
         } else {
@@ -520,4 +556,17 @@ public class SolicitudController {
             ctx.status(500).json(Map.of("error", "Error interno Web: " + e.getMessage()));
         }
     };
+
+    private void compararYAgregar(List<Map<String, String>> cambios, String campo, Object valorAnterior, Object valorNuevo) {
+        String ant = valorAnterior != null ? valorAnterior.toString() : "";
+        String nue = valorNuevo != null ? valorNuevo.toString() : "";
+
+        if (!ant.equals(nue) && !nue.isEmpty()) {
+            Map<String, String> diff = new HashMap<>();
+            diff.put("campo", campo);
+            diff.put("anterior", ant);
+            diff.put("nuevo", nue);
+            cambios.add(diff);
+        }
+    }
 }

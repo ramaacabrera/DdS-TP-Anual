@@ -3,6 +3,8 @@ package gestorAdministrativo.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gestorAdministrativo.domain.HechosYColecciones.ContenidoMultimedia;
+import gestorAdministrativo.dto.Hechos.ContenidoMultimediaDTO;
+import gestorAdministrativo.dto.Hechos.UbicacionDTO;
 import gestorAdministrativo.dto.Hechos.UsuarioDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDeModificacionDTO;
 import gestorAdministrativo.dto.Solicitudes.HechoModificadoDTO;
@@ -143,106 +145,77 @@ public class SolicitudModificacionService {
         entidad.setCategoria(dto.getCategoria());
         entidad.setFechaDeAcontecimiento(dto.getFechaDeAcontecimiento());
 
-        // TODO: Mapear objetos complejos (Ubicacion, Fuente) si es necesario
-        // entidad.setUbicacion(mapUbicacion(dto.getUbicacion()));
-
         return entidad;
     }
 
-    private SolicitudDeModificacionDTO convertirADTO(SolicitudDeModificacion s) {
+    private SolicitudDeModificacionDTO convertirADTO(SolicitudDeModificacion entidad) {
+        if (entidad == null) return null;
+
         SolicitudDeModificacionDTO dto = new SolicitudDeModificacionDTO();
 
-        dto.setId(s.getId());
+        // 1. Datos básicos
+        dto.setId(entidad.getId());
+        dto.setJustificacion(entidad.getJustificacion());
 
-        dto.setJustificacion(s.getJustificacion());
-        Hecho hechoOriginal = s.getHechoAsociado();
-
-        if (s.getHechoModificado() != null && hechoOriginal != null) {
-
-            // --- Generar una lista de cambios con valores originales ---
-            List<Map<String, String>> cambiosMapeados = new ArrayList<>();
-
-            HechoModificado cambios = s.getHechoModificado();
-
-            // Título
-            if (cambios.getTitulo() != null && !cambios.getTitulo().equals(hechoOriginal.getTitulo())) {
-                cambiosMapeados.add(Map.of(
-                        "campo", "titulo",
-                        "anterior", hechoOriginal.getTitulo() != null ? hechoOriginal.getTitulo() : "",
-                        "nuevo", cambios.getTitulo()
-                ));
-            }
-
-            // Descripción
-            if (cambios.getDescripcion() != null && !cambios.getDescripcion().equals(hechoOriginal.getDescripcion())) {
-                cambiosMapeados.add(Map.of(
-                        "campo", "descripcion",
-                        "anterior", hechoOriginal.getDescripcion() != null ? hechoOriginal.getDescripcion() : "",
-                        "nuevo", cambios.getDescripcion()
-                ));
-            }
-
-            // Categoría
-            if (cambios.getCategoria() != null && !cambios.getCategoria().equals(hechoOriginal.getCategoria())) {
-                cambiosMapeados.add(Map.of(
-                        "campo", "categoria",
-                        "anterior", hechoOriginal.getCategoria() != null ? hechoOriginal.getCategoria() : "",
-                        "nuevo", cambios.getCategoria()
-                ));
-            }
-
-            // Fecha de Acontecimiento
-            if (cambios.getFechaDeAcontecimiento() != null && !cambios.getFechaDeAcontecimiento().equals(hechoOriginal.getFechaDeAcontecimiento())) {
-                // Es mejor comparar con el string de la fecha para evitar problemas de formato
-                String fechaAnterior = hechoOriginal.getFechaDeAcontecimiento() != null ? hechoOriginal.getFechaDeAcontecimiento().toString() : "";
-                String fechaNueva = cambios.getFechaDeAcontecimiento().toString();
-
-                cambiosMapeados.add(Map.of(
-                        "campo", "fechaDeAcontecimiento",
-                        "anterior", fechaAnterior,
-                        "nuevo", fechaNueva
-                ));
-            }
-            dto.setCambios(cambiosMapeados);
-
-            // También podemos agregar el título del hecho original para que el web component lo muestre fácilmente
-            dto.setHechoTitulo(hechoOriginal.getTitulo());
-
-            // Si el componente web sigue necesitando el objeto anidado:
-            dto.setHechoModificado(convertirHechoModificadoADTO(s.getHechoModificado()));
+        // 2. ID del Hecho Original
+        if (entidad.getHechoAsociado() != null) {
+            dto.setHechoId(entidad.getHechoAsociado().getHecho_id());
         }
 
-        if (s.getHechoAsociado() != null) {
-            dto.setHechoId(s.getHechoAsociado().getHecho_id());
+        if (entidad.getUsuario() != null) {
+            UsuarioDTO uDto = new UsuarioDTO();
+            uDto.setUsuarioId(entidad.getUsuario().getId_usuario());
+            uDto.setUsername(entidad.getUsuario().getUsername());
+            dto.setUsuarioId(uDto);
         }
 
-        if (s.getUsuario() != null) {
-            UsuarioDTO u = new UsuarioDTO(s.getUsuario().getId_usuario(), s.getUsuario().getUsername());
-            dto.setUsuarioId(u);
-        }
-
-        if (s.getEstado() != null) {
+        if (entidad.getEstado() != null) {
             try {
-                dto.setEstado(EstadoSolicitudModificacionDTO.valueOf(s.getEstado().name()));
-            } catch (Exception e) {
+                String nombreEstado = entidad.getEstado().name();
+                dto.setEstado(EstadoSolicitudModificacionDTO.valueOf(nombreEstado));
+            } catch (IllegalArgumentException e) {
                 dto.setEstado(EstadoSolicitudModificacionDTO.PENDIENTE);
             }
         }
 
-        if (s.getHechoModificado() != null) {
-            dto.setHechoModificado(convertirHechoModificadoADTO(s.getHechoModificado()));
+        if (entidad.getHechoModificado() != null) {
+            dto.setHechoModificado(convertirHechoModificadoADTO(entidad.getHechoModificado()));
         }
 
         return dto;
     }
 
-    private HechoModificadoDTO convertirHechoModificadoADTO(HechoModificado hm) {
-        if (hm == null) return null;
+
+    private HechoModificadoDTO convertirHechoModificadoADTO(HechoModificado entidad) {
+        if (entidad == null) return null;
+
         HechoModificadoDTO dto = new HechoModificadoDTO();
-        dto.setTitulo(hm.getTitulo());
-        dto.setDescripcion(hm.getDescripcion());
-        dto.setCategoria(hm.getCategoria());
-        dto.setFechaDeAcontecimiento(hm.getFechaDeAcontecimiento());
+
+        dto.setHechoModificadoId(entidad.getHecho_modificado_id()); // o getId()
+        dto.setTitulo(entidad.getTitulo());
+        dto.setDescripcion(entidad.getDescripcion());
+        dto.setCategoria(entidad.getCategoria());
+        dto.setFechaDeAcontecimiento(entidad.getFechaDeAcontecimiento());
+
+
+        if (entidad.getUbicacion() != null) {
+            UbicacionDTO uDto = new UbicacionDTO();
+            uDto.setLatitud(entidad.getUbicacion().getLatitud());
+            uDto.setLongitud(entidad.getUbicacion().getLongitud());
+            uDto.setDescripcion(entidad.getUbicacion().getDescripcion());
+            dto.setUbicacion(uDto);
+        }
+
+        if (entidad.getContenidoMultimedia() != null) {
+            List<ContenidoMultimediaDTO> mediaListDTO = new ArrayList<>();
+            for (var mediaEntidad : entidad.getContenidoMultimedia()) {
+                ContenidoMultimediaDTO mediaDTO = new ContenidoMultimediaDTO();
+                mediaDTO.setContenido(mediaEntidad.getContenido());
+                mediaListDTO.add(mediaDTO);
+            }
+            dto.setContenidoMultimedia(mediaListDTO);
+        }
+
         return dto;
     }
 
