@@ -3,6 +3,7 @@ package gestorAdministrativo.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gestorAdministrativo.domain.HechosYColecciones.ContenidoMultimedia;
+import gestorAdministrativo.domain.HechosYColecciones.TipoContenidoMultimedia;
 import gestorAdministrativo.dto.Hechos.ContenidoMultimediaDTO;
 import gestorAdministrativo.dto.Hechos.UbicacionDTO;
 import gestorAdministrativo.dto.Hechos.UsuarioDTO;
@@ -147,10 +148,43 @@ public class SolicitudModificacionService {
         if (dto == null) return null;
 
         HechoModificado entidad = new HechoModificado();
+
         entidad.setTitulo(dto.getTitulo());
         entidad.setDescripcion(dto.getDescripcion());
         entidad.setCategoria(dto.getCategoria());
         entidad.setFechaDeAcontecimiento(dto.getFechaDeAcontecimiento());
+
+        if (dto.getUbicacion() != null) {
+            gestorAdministrativo.domain.HechosYColecciones.Ubicacion ubi = new gestorAdministrativo.domain.HechosYColecciones.Ubicacion();
+            ubi.setLatitud(dto.getUbicacion().getLatitud());
+            ubi.setLongitud(dto.getUbicacion().getLongitud());
+            ubi.setDescripcion(dto.getUbicacion().getDescripcion());
+            entidad.setUbicacion(ubi);
+        }
+
+        if (dto.getContenidoMultimedia() != null) {
+            List<ContenidoMultimedia> listaMedia = new ArrayList<>();
+            for (ContenidoMultimediaDTO mediaDto : dto.getContenidoMultimedia()) {
+                ContenidoMultimedia media = new ContenidoMultimedia();
+
+                media.setContenido(mediaDto.getContenido());
+
+                if (mediaDto.getTipoContenido() != null) {
+                    try {
+                        String nombreTipo = mediaDto.getTipoContenido().name();
+
+                        media.setTipoContenido(TipoContenidoMultimedia.valueOf(nombreTipo));
+
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Tipo de contenido desconocido: " + mediaDto.getTipoContenido());
+                        media.setTipoContenido(TipoContenidoMultimedia.IMAGEN);
+                    }
+                }
+
+                listaMedia.add(media);
+            }
+            entidad.setContenidoMultimedia(listaMedia);
+        }
 
         return entidad;
     }

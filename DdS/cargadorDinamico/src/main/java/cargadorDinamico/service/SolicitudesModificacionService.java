@@ -1,12 +1,11 @@
 package cargadorDinamico.service;
 
 import cargadorDinamico.domain.DinamicaDto.SolicitudDeModificacionDTO;
-// IMPORTANTE: Importar la nueva clase
 import cargadorDinamico.domain.DinamicaDto.SolicitudModificacionSalienteDTO;
 import cargadorDinamico.domain.HechosYColeccionesD.HechoModificado_D;
 import cargadorDinamico.domain.HechosYColeccionesD.Ubicacion_D;
 import cargadorDinamico.domain.HechosYColeccionesD.ContenidoMultimedia_D;
-import cargadorDinamico.domain.HechosYColecciones.*; // Entidades finales (Hecho, Ubicacion, Multimedia)
+import cargadorDinamico.domain.HechosYColecciones.*;
 import cargadorDinamico.domain.Solicitudes.SolicitudDeModificacion_D;
 import cargadorDinamico.repository.DinamicoRepositorio;
 import cargadorDinamico.repository.HechoRepositorio;
@@ -27,13 +26,20 @@ public class SolicitudesModificacionService {
     public List<SolicitudModificacionSalienteDTO> obtenerSolicitudes() {
 
         List<SolicitudDeModificacion_D> entidades = repositorio.buscarSolModificacionEntidades();
-        repositorio.resetearSolicitudesModificacion();
         List<SolicitudModificacionSalienteDTO> dtosSalida = new ArrayList<>();
 
         for (SolicitudDeModificacion_D entidad : entidades) {
             dtosSalida.add(new SolicitudModificacionSalienteDTO(entidad));
         }
 
+        try {
+            ObjectMapper o = new ObjectMapper();
+            System.out.println("DTOS Solicitud de Modificacion: " + o.writeValueAsString(dtosSalida));
+        } catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+
+        repositorio.resetearSolicitudesModificacion();
         return dtosSalida;
     }
 
