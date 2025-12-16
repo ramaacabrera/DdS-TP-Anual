@@ -219,7 +219,6 @@
             </div>
         <#else>
             <p class="texto-placeholder">No hay hechos consensuados aún.</p>
-            <p class="texto-placeholder" style="color: #999;">No hay hechos asociados aún.</p>
         </#if>
     </div>
 

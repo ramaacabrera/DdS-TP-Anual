@@ -426,7 +426,7 @@
 .modal-title { font-size: 24px; font-weight: 600; margin-bottom: 10px; color: #333; }
 .modal-message { font-size: 16px; color: #666; margin-bottom: 25px; line-height: 1.5; }
 .modal-button {
-    background-color: #007bff;
+    background-color: #1d7858;
     color: white;
     border: none;
     padding: 10px 25px;
@@ -435,4 +435,81 @@
     cursor: pointer;
     transition: background-color 0.3s;
 }
-.modal-button:hover { background-color: #0056b3; }
+.modal-button:hover { background-color: #1d7858; }
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .form-container {
+        padding: 15px;
+    }
+
+    .main-title {
+        font-size: 1.5rem;
+    }
+
+    /* Acciones del formulario en vertical */
+    .form-actions {
+        flex-direction: column-reverse; /* El botón principal queda arriba */
+        gap: 10px;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* Grid de fuentes a una sola columna */
+    .fuentes-grid-container {
+        grid-template-columns: 1fr;
+    }
+
+    /* Ajuste de controles de criterios */
+    .criterio-controls {
+        max-width: 100%;
+    }
+
+    .nuevo-criterio-card {
+        padding: 15px;
+    }
+
+    /* Ajuste de tarjetas de criterios */
+    .criterio-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .btn-eliminar-criterio {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Inputs dinámicos */
+    .input-palabra-group,
+    .input-palabra-group-editable {
+        flex-direction: column;
+    }
+
+    .input-palabra-group button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .dato-fila {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .dato-label {
+        min-width: unset;
+    }
+
+    .modal-content {
+        padding: 20px;
+        width: 95%;
+    }
+}
