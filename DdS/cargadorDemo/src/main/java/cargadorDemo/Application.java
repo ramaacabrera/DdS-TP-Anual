@@ -6,9 +6,11 @@ import cargadorDemo.domain.fuente.Fuente;
 import cargadorDemo.domain.fuente.TipoDeFuente;
 import cargadorDemo.conexionAgregador.ClienteDelAgregador;
 import cargadorDemo.domain.Conexiones.Cargador;
+import cargadorDemo.utils.IniciadorApp;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import cargadorDemo.controller.ControladorDemo;
-import utils.LecturaConfig;
+import cargadorDemo.utils.LecturaConfig;
+
 
 // IMPORT NUEVO
 import io.javalin.Javalin;
@@ -19,14 +21,19 @@ public class Application {
 
     public static void main(String[] args) throws InterruptedException, JsonProcessingException {
 
-        Javalin app = Javalin.create().start(8082);
+        LecturaConfig lector = new LecturaConfig();
+        Properties config = lector.leerConfig();
+
+        int puerto = Integer.parseInt(config.getProperty("PUERTO_DEMO"));
+
+        IniciadorApp iniciador = new IniciadorApp();
+        Javalin app = iniciador.iniciarApp(puerto, "/");
 
         app.get("/health", ctx -> {ctx.status(200).result("OK");});
 
         System.out.println("Monitor de salud escuchando en puerto 8082");
 
-        LecturaConfig lector = new LecturaConfig();
-        Properties config = lector.leerConfig();
+
         String urlMock = config.getProperty("URL_MOCK");
         String urlAgregador = config.getProperty("URL_AGREGADOR");
 

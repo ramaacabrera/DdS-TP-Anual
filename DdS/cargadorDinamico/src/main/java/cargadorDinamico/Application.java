@@ -8,8 +8,8 @@ import cargadorDinamico.domain.fuente.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javalin.Javalin;
 import cargadorDinamico.conexionAgregador.ClienteDelAgregador;
-import utils.IniciadorApp;
-import utils.LecturaConfig;
+import cargadorDinamico.utils.IniciadorApp;
+import cargadorDinamico.utils.LecturaConfig;
 
 import java.util.Properties;
 

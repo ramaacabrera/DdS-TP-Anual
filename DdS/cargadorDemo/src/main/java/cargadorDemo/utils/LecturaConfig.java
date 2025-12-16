@@ -1,4 +1,4 @@
-package cargadorEstatico.utils;
+package cargadorDemo.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,10 +23,9 @@ public class LecturaConfig {
             System.err.println("Error al leer el archivo " + nombreArchivo + ": " + e.getMessage());
         }
 
-        cargarEnv(config, "FILE_SERVER");
         cargarEnv(config, "URL_AGREGADOR");
-        cargarEnv(config, "PUERTO_ESTATICO");
-        cargarEnv(config, "NEW_RELIC_LICENSE_KEY");
+        cargarEnv(config, "URL_MOCK");
+        cargarEnv(config, "PUERTO_DEMO");
 
         return config;
     }

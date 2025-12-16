@@ -1,13 +1,12 @@
 package cargadorDinamico.repository;
 
-import cargadorDinamico.domain.BDUtilsDinamico;
+import cargadorDinamico.utils.BDUtilsDinamico;
 import cargadorDinamico.domain.DinamicaDto.Hecho_D_DTO;
 import cargadorDinamico.domain.HechosYColeccionesD.*;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudEliminacion_D;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudModificacion_D;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.Hibernate;
-import cargadorDinamico.domain.Usuario.RolUsuario;
 import cargadorDinamico.domain.Usuario.Usuario_D;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudEliminacion;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudModificacion;

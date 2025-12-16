@@ -1,4 +1,4 @@
-package cargadorEstatico.utils;
+package cargadorMetamapa.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,9 +23,8 @@ public class LecturaConfig {
             System.err.println("Error al leer el archivo " + nombreArchivo + ": " + e.getMessage());
         }
 
-        cargarEnv(config, "FILE_SERVER");
         cargarEnv(config, "URL_AGREGADOR");
-        cargarEnv(config, "PUERTO_ESTATICO");
+        cargarEnv(config, "PUERTO_DINAMICO");
         cargarEnv(config, "NEW_RELIC_LICENSE_KEY");
 
         return config;

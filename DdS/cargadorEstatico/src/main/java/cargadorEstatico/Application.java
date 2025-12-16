@@ -3,6 +3,7 @@ package cargadorEstatico;
 import cargadorEstatico.domain.fuente.Fuente;
 import cargadorEstatico.domain.fuente.TipoDeFuente;
 import cargadorEstatico.service.HechosEstaticoService;
+import cargadorEstatico.utils.IniciadorApp;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import cargadorEstatico.conexionAgregador.ClienteDelAgregador;
 import cargadorEstatico.controller.ControladorEstatica;
@@ -26,7 +27,7 @@ public class Application {
 
         String urlAgregador = config.getProperty("URL_AGREGADOR", "ws://agregador:8070/cargador");
 
-        int puerto = Integer.parseInt(config.getProperty("PUERTO_CARGADOR", "8090"));
+        int puerto = Integer.parseInt(config.getProperty("PUERTO_ESTATICO", "8090"));
 
         System.out.println("   -> File Server Path: " + fileServer);
         System.out.println("   -> URL Agregador: " + urlAgregador);
@@ -34,7 +35,8 @@ public class Application {
         Path carpeta = Paths.get(fileServer);
         // String pathGuia = carpeta.resolve("guia.csv").toString();
 
-        Javalin app = Javalin.create().start(puerto);
+        IniciadorApp iniciador = new IniciadorApp();
+        Javalin app = iniciador.iniciarApp(puerto, "/");
 
         app.get("/health", ctx -> {
             ctx.status(200).result("OK");
