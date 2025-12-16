@@ -115,21 +115,28 @@ public class SolicitudModificacionService {
         if (cambios.getFechaDeAcontecimiento() != null) original.setFechaDeAcontecimiento(cambios.getFechaDeAcontecimiento());
 
         if (cambios.getUbicacion() != null) {
-        if (original.getUbicacion() == null) {
-            original.setUbicacion(cambios.getUbicacion());
-        } else {
+            if (original.getUbicacion() == null) {
+                original.setUbicacion(new gestorAdministrativo.domain.HechosYColecciones.Ubicacion());
+            }
+
             original.getUbicacion().setLatitud(cambios.getUbicacion().getLatitud());
             original.getUbicacion().setLongitud(cambios.getUbicacion().getLongitud());
             original.getUbicacion().setDescripcion(cambios.getUbicacion().getDescripcion());
         }
-        }
 
         if (cambios.getContenidoMultimedia() != null && !cambios.getContenidoMultimedia().isEmpty()) {
-            original.getContenidoMultimedia().clear();
-            original.getContenidoMultimedia().addAll(cambios.getContenidoMultimedia());
 
-            for (ContenidoMultimedia media : original.getContenidoMultimedia()) {
-                media.setHecho(original);
+            original.getContenidoMultimedia().clear();
+
+            for (ContenidoMultimedia mediaCambio : cambios.getContenidoMultimedia()) {
+
+                ContenidoMultimedia mediaNueva = new ContenidoMultimedia();
+
+                mediaNueva.setContenido(mediaCambio.getContenido());
+
+                mediaNueva.setHecho(original);
+
+                original.getContenidoMultimedia().add(mediaNueva);
             }
         }
 

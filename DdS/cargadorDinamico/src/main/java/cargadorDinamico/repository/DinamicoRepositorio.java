@@ -324,17 +324,26 @@ public class DinamicoRepositorio {
         EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
+
             em.createQuery("DELETE FROM SolicitudDeModificacion_D").executeUpdate();
-            // Borramos también los hechos modificados huérfanos si es necesario, aunque el cascade suele encargarse al borrar la solicitud
+
+            em.createQuery("DELETE FROM ContenidoMultimedia_D").executeUpdate();
+
             em.createQuery("DELETE FROM HechoModificado_D").executeUpdate();
-            // em.createQuery("DELETE FROM Usuario_D").executeUpdate(); // Opcional, depende de tu lógica
+
+            em.createQuery("DELETE FROM Ubicacion_D").executeUpdate();
+
             BDUtilsDinamico.commit(em);
-            System.out.println("Todos las agregador.Solicitudes De Modificacion han sido reseteados");
+            System.out.println("✅ Todos las Solicitudes, Hechos Modificados y sus datos asociados han sido reseteados.");
+
         } catch (Exception e) {
             BDUtilsDinamico.rollback(em);
-            System.err.println("ERROR al resetear agregador.Solicitudes De Modificacion: " + e.getMessage());
-        }finally {
-            em.close();
+            System.err.println("❌ ERROR al resetear datos: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
     }
 
