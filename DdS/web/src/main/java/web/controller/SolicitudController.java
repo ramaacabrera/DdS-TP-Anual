@@ -73,9 +73,9 @@ public class SolicitudController {
             solicitudData.put("justificacion", solicitud.getJustificacion() != null ? solicitud.getJustificacion() : "Sin justificación");
             solicitudData.put("estado", solicitud.getEstado() != null ? solicitud.getEstado() : "PENDIENTE");
 
-            if (solicitud.getUsuario() != null) {
+            if (solicitud.getUsuarioId() != null) {
                 Map<String, String> usuarioMap = new HashMap<>();
-                usuarioMap.put("username", solicitud.getUsuario().getUsername() != null ? solicitud.getUsuario().getUsername() : "Usuario");
+                usuarioMap.put("username", solicitud.getUsuarioId().getUsername() != null ? solicitud.getUsuarioId().getUsername() : "Usuario");
                 solicitudData.put("usuario", usuarioMap);
             } else {
                 solicitudData.put("usuario", null);
@@ -227,6 +227,7 @@ public class SolicitudController {
 
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> solicitudData = mapper.convertValue(sol, Map.class);
+            System.out.println("Data solicitud modificacion obtenida: " +  mapper.convertValue(sol, Map.class));
 
             Map<String, Object> hechoData = new HashMap<>();
             if (sol.getHechoAsociado() != null) {
@@ -243,6 +244,7 @@ public class SolicitudController {
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                     if (response.statusCode() == 200) {
+                        System.out.println("Data hecho modificacion obtenida: "+ mapper.readValue(response.body(), Map.class));
                         hechoData = mapper.readValue(response.body(), Map.class);
                     } else {
                         hechoData.put("titulo", "Error al cargar el hecho");
@@ -357,9 +359,9 @@ public class SolicitudController {
             solicitudData.put("justificacion", solicitud.getJustificacion() != null ? solicitud.getJustificacion() : "Sin justificación");
             solicitudData.put("estado", solicitud.getEstado() != null ? solicitud.getEstado().name() : "PENDIENTE");
 
-            if (solicitud.getUsuario() != null) {
+            if (solicitud.getUsuarioId() != null) {
                 Map<String, String> usuarioMap = new HashMap<>();
-                usuarioMap.put("username", solicitud.getUsuario().getUsername() != null ? solicitud.getUsuario().getUsername() : "Usuario");
+                usuarioMap.put("username", solicitud.getUsuarioId().getUsername() != null ? solicitud.getUsuarioId().getUsername() : "Usuario");
                 solicitudData.put("usuario", usuarioMap);
             } else {
                 solicitudData.put("usuario", null);

@@ -116,7 +116,7 @@
             </div>
             <div class="form-group campo-propuesto">
                 <label for="categoria" class="form-label">Nueva Categoría</label>
-                <select id="categoria" name="categoria" class="form-select" required>
+                <select id="categoria" name="categoria" class="form-select">
                     <option value="">Seleccione una categoría</option>
                     <#list categorias as cat>
                         <option value='${cat}'>${cat}</option>

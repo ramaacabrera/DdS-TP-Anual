@@ -1,6 +1,9 @@
 package gestorAdministrativo.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gestorAdministrativo.domain.HechosYColecciones.ContenidoMultimedia;
+import gestorAdministrativo.dto.Hechos.UsuarioDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDeModificacionDTO;
 import gestorAdministrativo.dto.Solicitudes.HechoModificadoDTO;
 import gestorAdministrativo.dto.Solicitudes.EstadoSolicitudModificacionDTO;
@@ -35,9 +38,9 @@ public class SolicitudModificacionService {
             throw new IllegalArgumentException("El Hecho original no existe: " + dto.getHechoId());
         }
 
-        Usuario usuario = usuarioRepositorio.buscarPorId(dto.getUsuarioId());
+        Usuario usuario = usuarioRepositorio.buscarPorId(dto.getUsuarioId().getUsuarioId());
         if (usuario == null) {
-            throw new IllegalArgumentException("El Usuario no existe: " + dto.getUsuarioId());
+            throw new IllegalArgumentException("El Usuario no existe: " + dto.getUsuarioId().getUsuarioId());
         }
 
         SolicitudDeModificacion solicitud = new SolicitudDeModificacion();
@@ -86,9 +89,15 @@ public class SolicitudModificacionService {
     }
 
     public List<SolicitudDeModificacionDTO> obtenerTodasLasSolicitudes() {
-        return solicitudRepositorio.buscarTodas().stream()
+        List<SolicitudDeModificacionDTO> solis = solicitudRepositorio.buscarTodas().stream()
                 .map(this::convertirADTO)
                 .collect(Collectors.toList());
+        try {
+            System.out.println("Obtener todas las solicitudes: " + new ObjectMapper().writeValueAsString(solis));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return solis;
     }
 
     public Optional<SolicitudDeModificacionDTO> obtenerSolicitudPorId(UUID id) {
@@ -208,7 +217,8 @@ public class SolicitudModificacionService {
         }
 
         if (s.getUsuario() != null) {
-            dto.setUsuarioId(s.getUsuario().getId_usuario());
+            UsuarioDTO u = new UsuarioDTO(s.getUsuario().getId_usuario(), s.getUsuario().getUsername());
+            dto.setUsuarioId(u);
         }
 
         if (s.getEstado() != null) {

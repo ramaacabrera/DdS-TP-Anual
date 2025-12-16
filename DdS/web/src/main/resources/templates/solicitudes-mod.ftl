@@ -59,12 +59,12 @@
             <div class="solicitud-info">
                 <h3 class="solicitud-titulo">
                     ✍️ Solicitud de Modificación
-                    <small style="color: var(--muted-color); font-weight: normal;">
+                    <small style="color: var(--text-muted); font-weight: normal;">
                         #${solicitud.id?substring(0, 36)}
                     </small>
                 </h3>
                 <p class="solicitud-hecho">
-                    <strong>Hecho Asociado ID:</strong> ${solicitud.hechoAsociado!""}
+                    <strong>Hecho Asociado:</strong> ${solicitud.hechoTitulo!""}
                 </p>
                 <p class="solicitud-usuario">
                     <strong>Usuario:</strong>

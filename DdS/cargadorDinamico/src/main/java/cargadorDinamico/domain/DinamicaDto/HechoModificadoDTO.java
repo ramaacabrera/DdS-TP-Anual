@@ -15,12 +15,6 @@ public class HechoModificadoDTO {
     private String categoria;
     private UbicacionDTO ubicacion;
     private Date fechaDeAcontecimiento;
-    private Date fechaDeCarga;
-    private FuenteDTO fuente;
-    private EstadoHechoDTO estadoHecho;
-    private UsuarioDTO contribuyente;
-    private List<EtiquetaDTO> etiquetas;
-    private boolean esEditable;
     private List<ContenidoMultimediaDTO> contenidoMultimedia;
 
     public HechoModificadoDTO() {}
@@ -33,7 +27,6 @@ public class HechoModificadoDTO {
         this.descripcion = entidad.getDescripcion();
         this.categoria = entidad.getCategoria();
         this.fechaDeAcontecimiento = entidad.getFechaDeAcontecimiento();
-        this.fechaDeCarga = new Date();
 
         if (entidad.getUbicacion() != null) {
             this.ubicacion = new UbicacionDTO(entidad.getUbicacion());
@@ -46,13 +39,6 @@ public class HechoModificadoDTO {
         } else {
             this.contenidoMultimedia = new ArrayList<>();
         }
-
-        this.etiquetas = new ArrayList<>();
-        this.esEditable = false;
-
-        this.fuente = null;
-        this.estadoHecho = null;
-        this.contribuyente = null;
     }
 
     // Getters y Setters
@@ -73,24 +59,6 @@ public class HechoModificadoDTO {
 
     public Date getFechaDeAcontecimiento() { return fechaDeAcontecimiento; }
     public void setFechaDeAcontecimiento(Date fechaDeAcontecimiento) { this.fechaDeAcontecimiento = fechaDeAcontecimiento; }
-
-    public Date getFechaDeCarga() { return fechaDeCarga; }
-    public void setFechaDeCarga(Date fechaDeCarga) { this.fechaDeCarga = fechaDeCarga; }
-
-    public FuenteDTO getFuente() { return fuente; }
-    public void setFuente(FuenteDTO fuente) { this.fuente = fuente; }
-
-    public EstadoHechoDTO getEstadoHecho() { return estadoHecho; }
-    public void setEstadoHecho(EstadoHechoDTO estadoHecho) { this.estadoHecho = estadoHecho; }
-
-    public UsuarioDTO getContribuyente() { return contribuyente; }
-    public void setContribuyente(UsuarioDTO contribuyente) { this.contribuyente = contribuyente; }
-
-    public List<EtiquetaDTO> getEtiquetas() { return etiquetas; }
-    public void setEtiquetas(List<EtiquetaDTO> etiquetas) { this.etiquetas = etiquetas; }
-
-    public boolean isEsEditable() { return esEditable; }
-    public void setEsEditable(boolean esEditable) { this.esEditable = esEditable; }
 
     public List<ContenidoMultimediaDTO> getContenidoMultimedia() { return contenidoMultimedia; }
     public void setContenidoMultimedia(List<ContenidoMultimediaDTO> contenidoMultimedia) { this.contenidoMultimedia = contenidoMultimedia; }

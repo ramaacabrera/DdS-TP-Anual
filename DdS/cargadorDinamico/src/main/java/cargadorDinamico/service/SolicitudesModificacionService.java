@@ -27,7 +27,7 @@ public class SolicitudesModificacionService {
     public List<SolicitudModificacionSalienteDTO> obtenerSolicitudes() {
 
         List<SolicitudDeModificacion_D> entidades = repositorio.buscarSolModificacionEntidades();
-
+        repositorio.resetearSolicitudesModificacion();
         List<SolicitudModificacionSalienteDTO> dtosSalida = new ArrayList<>();
 
         for (SolicitudDeModificacion_D entidad : entidades) {

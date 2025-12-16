@@ -50,8 +50,8 @@
             <div class="info-card small">
                 <p class="card-subtitle">SOLICITANTE</p>
                 <p>
-                    <#if solicitud.usuario??>
-                        ${solicitud.usuario.username}
+                    <#if solicitud.usuarioId??>
+                        ${solicitud.usuarioId.username}
                     <#else>
                         Anónimo
                     </#if>
@@ -68,6 +68,50 @@
             </div>
         </div>
 
+        <!-- Cambios si es modificacion -->
+        <#if solicitud.cambios??>
+            <div class="info-card full-width">
+                <div class="card-header-with-icon">
+                    <h3 class="card-subtitle">CAMBIOS PROPUESTOS (COMPARATIVA)</h3>
+                    <small style="color: var(--text-light);">Puedes editar el valor de la derecha antes de aceptar.</small>
+                </div>
+
+                <div class="cambios-container">
+                    <#list solicitud.cambios as cambio>
+                        <div class="cambio-row" data-campo="${cambio.campo}">
+                            <div class="cambio-header">
+                                <span class="campo-nombre">${cambio.campo?upper_case}</span>
+                            </div>
+
+                            <div class="comparacion-body">
+                                <div class="valor-box anterior">
+                                    <span class="badge-mini original">Valor Actual</span>
+                                    <div class="valor-content">
+                                        ${cambio.anterior!"<em>(Vacío)</em>"}
+                                    </div>
+                                </div>
+
+                                <div class="flecha-indicadora">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </div>
+
+                                <div class="valor-box nuevo">
+                                    <span class="badge-mini propuesto">Valor Nuevo (Editable)</span>
+
+                                    <#if cambio.campo == "descripcion">
+                                        <textarea class="form-input input-modificado" rows="4">${cambio.nuevo!''}</textarea>
+                                    <#elseif cambio.campo == "fechaDeAcontecimiento">
+                                        <input type="text" class="form-input input-modificado" value="${cambio.nuevo!''}">
+                                    <#else>
+                                        <input type="text" class="form-input input-modificado" value="${cambio.nuevo!''}">
+                                    </#if>
+                                </div>
+                            </div>
+                        </div>
+                    </#list>
+                </div>
+            </div>
+        </#if>
         <!-- Justificación -->
         <div class="info-card full-width">
             <p class="card-subtitle">JUSTIFICACIÓN</p>

@@ -1,5 +1,6 @@
 package web.domain.HechosYColecciones;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import web.domain.Usuario.Usuario;
 import web.domain.Fuente.Fuente;
 import org.hibernate.annotations.GenericGenerator;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+
 public class HechoModificado {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -20,7 +22,7 @@ public class HechoModificado {
     )
     @Type(type = "uuid-char")
     @Column(name = "hecho_modificado_id", length = 36 , updatable = false, nullable = false)
-    private UUID hecho_modificado_id;
+    private UUID hechoModificadoId;
 
     private String titulo;
     private String descripcion;
@@ -103,7 +105,7 @@ public class HechoModificado {
         return titulo;
     }
 
-    public UUID getHecho_id() {return hecho_modificado_id;}
+    public UUID getHechoModificadoId() {return hechoModificadoId;}
 
     public String getDescripcion() {
         return descripcion;
@@ -165,7 +167,7 @@ public class HechoModificado {
 
     public void setEsEditable(Boolean esEditableNuevo) {esEditable = esEditableNuevo;}
 
-    public void setHecho_id (UUID id) {hecho_modificado_id = id;}
+    public void setHechoModificadoId (UUID id) {hechoModificadoId = id;}
 
     public void setColeccion(Coleccion coleccion_) {coleccion = coleccion_;}
 

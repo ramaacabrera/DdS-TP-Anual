@@ -23,13 +23,13 @@ public class HechoModificado_D {
     private String descripcion;
     private String categoria;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "id_ubicacion")
     private Ubicacion_D ubicacion;
 
     private Date fechaDeAcontecimiento;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JoinColumn(name = "hecho_modificado_id") // FK en la tabla de multimedia
     private List<ContenidoMultimedia_D> contenidoMultimedia;
 

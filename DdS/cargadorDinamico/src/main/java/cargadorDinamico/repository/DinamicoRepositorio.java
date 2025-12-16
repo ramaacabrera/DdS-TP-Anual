@@ -326,7 +326,7 @@ public class DinamicoRepositorio {
             BDUtilsDinamico.comenzarTransaccion(em);
             em.createQuery("DELETE FROM SolicitudDeModificacion_D").executeUpdate();
             // Borramos también los hechos modificados huérfanos si es necesario, aunque el cascade suele encargarse al borrar la solicitud
-            // em.createQuery("DELETE FROM HechoModificado_D").executeUpdate();
+            em.createQuery("DELETE FROM HechoModificado_D").executeUpdate();
             // em.createQuery("DELETE FROM Usuario_D").executeUpdate(); // Opcional, depende de tu lógica
             BDUtilsDinamico.commit(em);
             System.out.println("Todos las agregador.Solicitudes De Modificacion han sido reseteados");
