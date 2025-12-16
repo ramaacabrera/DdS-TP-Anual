@@ -115,10 +115,18 @@
                                         <small style="font-size: 0.7em; color: var(--text-light);">Las fotos no se pueden editar aquí.</small>
 
                                     <#elseif cambio.campo == "fechaDeAcontecimiento">
-                                        <input type="datetime-local" class="form-input input-modificado" value="${cambio.nuevo!''}">
-
-                                    <#else>
+                                        <span class="form-input input-modificado">${cambio.nuevo!''}</span>
+                                    <#elseif cambio.campo == "titulo">
                                         <input type="text" class="form-input input-modificado" value="${cambio.nuevo!''}">
+                                    <#elseif cambio.campo == "categoria">
+                                        <select id="categoria" name="categoria" class="form-input input-modificado" required>
+                                            <option value=${cambio.nuevo!''}>${cambio.nuevo!''}</option>
+                                            <#list categorias as cat>
+                                                <option value='${cat}'>${cat}</option>
+                                            </#list>
+                                        </select>
+                                    <#else>
+                                        <span class="form-input input-modificado">${cambio.nuevo!''} </span>
                                     </#if>
                                 </div>
                             </div>

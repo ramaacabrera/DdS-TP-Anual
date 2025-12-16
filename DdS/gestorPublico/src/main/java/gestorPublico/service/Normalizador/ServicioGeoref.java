@@ -8,98 +8,82 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.List;
 
 public class ServicioGeoref {
+
+    private static final String API_URL = "https://apis.datos.gob.ar/georef/api/v2.0/ubicacion";
     private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper mapper;
 
-    private static final List<Region> REGIONES = List.of(
-            new Region("Uruguay", -35.0, -30.0, -58.5, -53.0),
-            new Region("Chile", -56.0, -17.5, -76.0, -69.0),
-            new Region("CABA, Buenos Aires", -34.7, -34.5, -58.55, -58.35),
-            new Region("Buenos Aires", -41.0, -33.0, -63.4, -56.6),
-            new Region("Córdoba", -35.0, -29.5, -65.5, -61.7),
-            new Region("Santa Fe", -34.4, -28.0, -63.0, -59.0),
-            new Region("Argentina (General)", -55.0, -21.0, -73.5, -53.5)
-    );
-
-    public ServicioGeoref() {
-        this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = new ObjectMapper();
-    }
-
-    public String enriquecerDescripcion(double latitud, double longitud, String descripcionActual) {
-        boolean tieneCoordenadas = latitud != 0 && longitud != 0;
-        boolean faltaDescripcion = descripcionActual == null || descripcionActual.trim().isEmpty();
-
-        if (tieneCoordenadas && faltaDescripcion) {
-            System.out.println("📍 Buscando descripción para coord: " + latitud + ", " + longitud);
-
-            // Intentar API Georef
-            String descripcionApi = consultarApiGeoref(latitud, longitud);
-            if (descripcionApi != null) {
-                System.out.println("✅ Ubicación actualizada (API): " + descripcionApi);
-                return descripcionApi;
-            }
-
-            // Fallback Offline
-            System.out.println("⚠ API falló, calculando ubicación aproximada offline...");
-            String descripcionOffline = consultarOffline(latitud, longitud);
-            System.out.println("✅ Ubicación actualizada (Offline): " + descripcionOffline);
-            return descripcionOffline;
+    public ServicioGeoref(HttpClient client, ObjectMapper mapper) {
+        if(client == null || mapper == null) {
+            this.httpClient = HttpClient.newHttpClient();
+            this.mapper = new ObjectMapper();
+        } else {
+            this.httpClient = client;
+            this.mapper = mapper;
         }
-
-        return descripcionActual;
     }
 
-    private String consultarApiGeoref(double lat, double lon) {
+    public String obtenerDescripcionPorCoordenadas(double latitud, double longitud) {
         try {
-            String url = String.format("https://apis.datos.gob.ar/georef/api/v2.0/ubicacion?lat=%s&lon=%s&aplanar=true&campos=estandar", lat, lon);
+            if (latitud == 0 && longitud == 0) return null;
+
+            String url = String.format("%s?lat=%s&lon=%s&aplanar=true&campos=estandar",
+                    API_URL, latitud, longitud);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .header("accept", "application/json")
                     .GET()
-                    .timeout(Duration.ofSeconds(3))
+                    .timeout(Duration.ofSeconds(5))
                     .build();
 
-            // Ahora sí funciona 'this.httpClient'
-            HttpResponse<String> response = this.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                JsonNode root = this.objectMapper.readTree(response.body());
-                JsonNode ubicacion = root.path("ubicacion");
-
-                if (!ubicacion.isMissingNode()) {
-                    String provincia = ubicacion.path("provincia_nombre").asText(null);
-                    String localidad = ubicacion.path("municipio_nombre").asText(null);
-                    if (localidad == null) localidad = ubicacion.path("departamento_nombre").asText(null);
-
-                    if (provincia != null && localidad != null) return localidad + ", " + provincia;
-                    if (provincia != null) return provincia;
-                }
+                return parsearRespuesta(response.body());
+            } else {
+                System.err.println("⚠ Error API Georef: Status " + response.statusCode());
             }
+
         } catch (Exception e) {
-            System.err.println("⚠ Error conectando a Georef interno: " + e.getMessage());
+            System.err.println("⚠ Error conectando a Georef: " + e.getMessage());
         }
         return null;
     }
 
-    private String consultarOffline(double lat, double lon) {
-        for (Region r : REGIONES) {
-            if (lat >= r.minLat && lat <= r.maxLat && lon >= r.minLon && lon <= r.maxLon) {
-                return r.nombre + " (Aprox)";
-            }
-        }
-        return "Ubicación desconocida";
-    }
+    private String parsearRespuesta(String jsonResponse) {
+        try {
+            JsonNode root = mapper.readTree(jsonResponse);
+            JsonNode ubicacion = root.path("ubicacion");
 
-    private static class Region {
-        String nombre;
-        double minLat, maxLat, minLon, maxLon;
-        public Region(String n, double minLat, double maxLat, double minLon, double maxLon) {
-            this.nombre = n; this.minLat = minLat; this.maxLat = maxLat; this.minLon = minLon; this.maxLon = maxLon;
+            if (ubicacion.isMissingNode()) return null;
+
+            String provincia = null;
+            if (ubicacion.has("provincia_nombre") && !ubicacion.get("provincia_nombre").isNull()) {
+                provincia = ubicacion.get("provincia_nombre").asText();
+            }
+
+            if (provincia == null || provincia.trim().isEmpty()) {
+                return null;
+            }
+
+            String localidad = null;
+            if (ubicacion.has("municipio_nombre") && !ubicacion.get("municipio_nombre").isNull()) {
+                localidad = ubicacion.get("municipio_nombre").asText();
+            } else if (ubicacion.has("departamento_nombre") && !ubicacion.get("departamento_nombre").isNull()) {
+                localidad = ubicacion.get("departamento_nombre").asText();
+            }
+
+            if (localidad != null && !localidad.trim().isEmpty()) {
+                return localidad + ", " + provincia;
+            } else {
+                return provincia;
+            }
+
+        } catch (Exception e) {
+            return null;
         }
     }
 }

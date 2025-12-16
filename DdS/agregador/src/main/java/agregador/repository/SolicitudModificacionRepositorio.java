@@ -19,7 +19,10 @@ public class SolicitudModificacionRepositorio {
     public void guardar(SolicitudDeModificacion solicitud) {
         EntityManager em = BDUtils.getEntityManager();
         try {
+            System.out.println("GUARDANDO SOLICITUD 1");
             BDUtils.comenzarTransaccion(em);
+
+            System.out.println("GUARDANDO SOLICITUD 2");
 
             if (solicitud.getId() == null) {
                 em.persist(solicitud);
@@ -27,8 +30,12 @@ public class SolicitudModificacionRepositorio {
                 em.merge(solicitud);
             }
 
+            System.out.println("GUARDANDO SOLICITUD 3");
+
             BDUtils.commit(em);
+            System.out.println("GUARDANDO SOLICITUD 4");
         } catch (Exception e) {
+            System.out.println("ERROR GUARDANDO SOLICITUD HAGO ROLLBACK");
             BDUtils.rollback(em);
             e.printStackTrace();
             throw new RuntimeException("Error guardando solicitud de modificación", e);

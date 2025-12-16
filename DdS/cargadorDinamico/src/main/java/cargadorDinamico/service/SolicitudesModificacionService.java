@@ -9,6 +9,7 @@ import cargadorDinamico.domain.HechosYColecciones.*;
 import cargadorDinamico.domain.Solicitudes.SolicitudDeModificacion_D;
 import cargadorDinamico.repository.DinamicoRepositorio;
 import cargadorDinamico.repository.HechoRepositorio;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;

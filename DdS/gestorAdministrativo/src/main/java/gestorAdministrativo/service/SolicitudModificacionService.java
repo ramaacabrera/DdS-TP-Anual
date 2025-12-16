@@ -63,6 +63,7 @@ public class SolicitudModificacionService {
 
     public boolean procesarSolicitud(UUID solicitudId, String accion) {
         Optional<SolicitudDeModificacion> optSolicitud = solicitudRepositorio.buscarPorId(solicitudId);
+        System.out.println("Termine de buscar por Id");
         if (optSolicitud.isEmpty()) return false;
 
         SolicitudDeModificacion solicitud = optSolicitud.get();
@@ -76,6 +77,7 @@ public class SolicitudModificacionService {
                 aplicarCambiosAlHechoOriginal(solicitud.getHechoAsociado(), solicitud.getHechoModificado());
 
                 hechoRepositorio.guardar(solicitud.getHechoAsociado());
+                System.out.println("Termine de guardar");
 
             } else if (nuevoEstado == EstadoSolicitudModificacion.RECHAZADA) {
                 solicitud.rechazarSolicitud();
@@ -136,6 +138,7 @@ public class SolicitudModificacionService {
                 mediaNueva.setContenido(mediaCambio.getContenido());
 
                 mediaNueva.setHecho(original);
+                mediaNueva.setTipoContenido(mediaCambio.getTipoContenido());
 
                 original.getContenidoMultimedia().add(mediaNueva);
             }

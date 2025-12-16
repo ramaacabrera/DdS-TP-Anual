@@ -44,7 +44,7 @@ public class HechoDTO {
         if (hecho.getUbicacion() != null) {
             Ubicacion u = hecho.getUbicacion();
             this.ubicacion = new UbicacionDTO();
-            this.ubicacion.setUbicacionId(u.getId_ubicacion());
+            this.ubicacion.setUbicacionId(u.getUbicacionId());
             this.ubicacion.setLatitud(u.getLatitud());
             this.ubicacion.setLongitud(u.getLongitud());
         }

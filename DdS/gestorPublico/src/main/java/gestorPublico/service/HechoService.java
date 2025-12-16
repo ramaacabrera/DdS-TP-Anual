@@ -34,7 +34,7 @@ public class HechoService {
         this.urlDinamica = urlDinamica;
         this.diccionarioCategorias = diccionarioCategorias;
         // Asumiendo que ServicioGeoref tiene el constructor sin argumentos que arreglamos antes
-        this.servicioGeoref = new ServicioGeoref();
+        this.servicioGeoref = new ServicioGeoref(null,null);
     }
 
     public PageDTO<HechoDTO> buscarHechos(FiltroHechosDTO filtro) {
@@ -119,96 +119,5 @@ public class HechoService {
         }
 
         return criterios;
-    }
-
-    public void modificarHecho(String hechoId, String usernameSolicitante, Map<String, Object> cambios) {
-        Hecho hecho = hechoRepositorio.buscarPorId(UUID.fromString(hechoId));
-        if (hecho == null) {
-            throw new IllegalArgumentException("El hecho no existe.");
-        }
-
-        String usernamePropietario = hecho.getContribuyente().getUsername();
-
-        if (!usernamePropietario.equals(usernameSolicitante)) {
-            throw new SecurityException("No tienes permiso para editar este hecho. Solo el autor (" + usernamePropietario + ") puede hacerlo.");
-        }
-
-        Date fechaCarga = hecho.getFechaDeCarga();
-        Date fechaActual = new Date();
-        long diasTranscurridos = TimeUnit.MILLISECONDS.toDays(fechaActual.getTime() - fechaCarga.getTime());
-
-        if (diasTranscurridos > 7) {
-            throw new IllegalStateException("El periodo de edición de 7 días ha expirado.");
-        }
-
-        if (cambios.containsKey("titulo")) hecho.setTitulo((String) cambios.get("titulo"));
-        if (cambios.containsKey("descripcion")) hecho.setDescripcion((String) cambios.get("descripcion"));
-        if (cambios.containsKey("categoria")) hecho.setCategoria((String) cambios.get("categoria"));
-
-        if (cambios.containsKey("fechaDeAcontecimiento")) {
-            Object fechaObj = cambios.get("fechaDeAcontecimiento");
-
-            if (fechaObj != null && !fechaObj.toString().isEmpty()) {
-                try {
-                    Instant instant = Instant.parse(fechaObj.toString());
-
-                    hecho.setFechaDeAcontecimiento(Date.from(instant));
-
-                } catch (Exception e) {
-                    System.err.println("Error parseando fecha: " + fechaObj + ". Error: " + e.getMessage());
-                }
-            }
-        }
-
-        if (cambios.containsKey("ubicacion")) {
-            Map<String, Object> ubicacionMap = (Map<String, Object>) cambios.get("ubicacion");
-
-            double lat = Double.parseDouble(ubicacionMap.get("latitud").toString());
-            double lon = Double.parseDouble(ubicacionMap.get("longitud").toString());
-            String desc = (String) ubicacionMap.get("descripcion");
-
-            String descripcionFinal = servicioGeoref.enriquecerDescripcion(lat, lon, desc);
-
-            Ubicacion ubicacionNueva = new Ubicacion(lat, lon, descripcionFinal);
-            hecho.setUbicacion(ubicacionNueva);
-        }
-
-        if (cambios.containsKey("contenidoMultimedia")) {
-            try {
-                List<Map<String, Object>> listaMedia = (List<Map<String, Object>>) cambios.get("contenidoMultimedia");
-
-                if (hecho.getContenidoMultimedia() != null) {
-                    hecho.getContenidoMultimedia().clear();
-                } else {
-                    hecho.setContenidoMultimedia(new ArrayList<>());
-                }
-
-                if (listaMedia != null && !listaMedia.isEmpty()) {
-                    List<ContenidoMultimedia> nuevosContenidos = new ArrayList<>();
-
-                    for (Map<String, Object> item : listaMedia) {
-                        String url = (String) item.get("contenido");
-                        String tipoStr = (String) item.get("tipoContenido");
-
-                        if (url != null && tipoStr != null) {
-                            try {
-                                TipoContenidoMultimedia tipo = TipoContenidoMultimedia.valueOf(tipoStr);
-                                ContenidoMultimedia cm = new ContenidoMultimedia(tipo, url);
-                                cm.setHecho(hecho);
-                                nuevosContenidos.add(cm);
-                            } catch (IllegalArgumentException e) {
-                                System.err.println("Tipo de contenido desconocido: " + tipoStr);
-                            }
-                        }
-                    }
-                    hecho.getContenidoMultimedia().addAll(nuevosContenidos);
-                }
-            } catch (Exception e) {
-                System.err.println("Error procesando multimedia: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-
-        hechoRepositorio.actualizar(hecho);
     }
 }

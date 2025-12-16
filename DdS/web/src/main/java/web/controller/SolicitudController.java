@@ -137,9 +137,12 @@ public class SolicitudController {
             return;
         }
 
+        List<String> categorias = solicitudService.obtenerCategorias();
+
         Map<String, Object> modelo = ViewUtil.baseModel(ctx);
         modelo.put("pageTitle", "Detalle de Solicitud");
         modelo.put("tipo", tipo);
+        modelo.put("categorias", categorias);
 
         if ("eliminacion".equals(tipo)) {
             SolicitudDeEliminacion sol = solicitudService.obtenerSolicitudEliminacion(id, username, accessToken, rolUsuario);

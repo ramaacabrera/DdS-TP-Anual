@@ -3,6 +3,7 @@ package gestorAdministrativo.repository;
 import gestorAdministrativo.domain.Solicitudes.EstadoSolicitudModificacion;
 import gestorAdministrativo.utils.BDUtils;
 import gestorAdministrativo.domain.Solicitudes.SolicitudDeModificacion;
+import org.hibernate.Hibernate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -108,6 +109,9 @@ public class SolicitudModificacionRepositorio {
             if (s.getHechoAsociado() != null) {
                 s.getHechoAsociado().getTitulo();
             }
+
+            Hibernate.initialize(s.getHechoAsociado().getContenidoMultimedia());
+            Hibernate.initialize(s.getHechoAsociado().getEtiquetas());
 
             return Optional.of(s);
 
