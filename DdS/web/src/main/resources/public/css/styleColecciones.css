@@ -1,6 +1,6 @@
 :root {
     /* Colores principales - Verde oscuro */
-    --primary: #1a4d2e;
+    --primary: #1d7858;
     --primary-dark: #0f2818;
     --primary-light: #2d6a4f;
     --primary-hover: #245c3a;
@@ -120,13 +120,13 @@
 
 /* En tu archivo CSS */
 .page-btn .pager .btn.btn-sm {
-    background-color: var(--primary) !important;  /* #1a4d2e */
+    background-color: var(--primary) !important;
     border-color: var(--primary) !important;
     color: var(--text-light) !important;
 }
 
 .page-btn .pager .btn.btn-sm:hover {
-    background-color: var(--primary-dark) !important;  /* #0f2818 */
+    background-color: var(--primary-dark) !important;
     border-color: var(--primary-dark) !important;
 }
 

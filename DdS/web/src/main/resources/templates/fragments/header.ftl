@@ -14,7 +14,7 @@
     <!-- Feather Icons -->
     <script src="https://unpkg.com/feather-icons"></script>
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺️</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%231d7858%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polygon points=%221 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6%22></polygon><line x1=%228%22 y1=%222%22 x2=%228%22 y2=%2218%22></line><line x1=%2216%22 y1=%226%22 x2=%2216%22 y2=%2222%22></line></svg>">
 
     <#if additionalCss??>
         <#list additionalCss as css>
@@ -31,7 +31,7 @@
         <!-- LEFT -->
         <div class="header-left">
             <a href="/" class="brand">
-                <span class="brand-icon">🗺️</span> MetaMapa
+                <span class="brand-icon"><i data-feather="map"></i></span> MetaMapa
             </a>
         </div>
 

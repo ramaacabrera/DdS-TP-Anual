@@ -60,14 +60,15 @@ public class Application {
         //app.post("/api/solicitudes", solicitudController.crearSolicitud);
         app.patch("/api/solicitudes/{id}", solicitudController.procesarSolicitud);
         app.get("/api/solicitudes", solicitudController.obtenerSolicitudes);
-        app.get("/api/solicitudes/cantidad", solicitudController.obtenerCantidadPendientesEliminacion);
+        app.get("api/solicitudes/estado/{estado}", solicitudController.obtenerSolicitudes);
+        app.get("/api/solicitudes/{estado}/cantidad", solicitudController.obtenerCantidadEliminacion);
         app.get("/api/solicitudes/{id}", solicitudController.obtenerSolicitud);
 
         // Rutas Solicitud Modificacion
         //app.post("/api/solicitudes/modificacion", solicitudController.crearSolicitudModificacion);
         app.patch("/api/solicitudes/modificacion/{id}", solicitudController.procesarSolicitudModificacion);
         app.get("/api/solicitudes/modificacion/listado", solicitudController.obtenerSolicitudesModificacion);
-        app.get("/api/solicitudes/modificacion/cantidad", solicitudController.obtenerCantidadPendientesModificacion);
+        app.get("/api/solicitudes-modificacion/cantidad", solicitudController.obtenerCantidadPendientesModificacion);
         app.get("/api/solicitudes/modificacion/{id}", solicitudController.obtenerSolicitudModificacion);
     }
 }

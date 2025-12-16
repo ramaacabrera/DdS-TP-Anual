@@ -2,7 +2,7 @@
 <#assign content>
 <#-- Lógica de fechas (la mantengo igual) -->
     <#assign timestampRaw = hecho.fechaDeAcontecimiento!"0">
-    <#assign timestampLimpio = timestampRaw?replace(".", "", "all")>
+    <#assign timestampLimpio = timestampRaw?replace(".", "", "r")>
     <#if timestampLimpio?is_number && timestampLimpio?number gt 0>
         <#assign timestampMilisegundos = timestampLimpio?number>
         <#assign fechaObjeto = timestampMilisegundos?datetime>
@@ -21,6 +21,9 @@
         .btn-remove-file { position: absolute; top: 0; right: 0; background: rgba(255,0,0,0.8); color: white; border: none; cursor: pointer; width: 24px; height: 24px; font-weight: bold; z-index: 10; display: flex; align-items: center; justify-content: center; }
         .btn-remove-file:hover { background: red; }
         .badge-nuevo { position: absolute; bottom: 0; left: 0; background: #4CAF50; color: white; font-size: 10px; padding: 2px 4px; width: 100%; text-align: center; }
+        .header { margin-bottom: 30px;}
+        .header-link.back-link {display: inline-flex; align-items: center; gap: 8px; color: #718096; text-decoration: none; font-weight: 500; transition: color 0.2s;}
+        .header-link.back-link:hover { color: var(--primary-color);}
     </style>
 
     <script>

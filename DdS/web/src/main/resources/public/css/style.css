@@ -139,13 +139,21 @@ body {
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 }
 
 .brand-icon {
-    font-size: 1.8rem;
-}
+   font-size: 1.2rem;
+    width: 24px;
+    height: 24px;
+    stroke: var(--primary-color);
+    vertical-align: center;}
 
+.brand-icon svg {
+    width: 1.2em;
+    height: 1.2em;
+    stroke: var(--primary-color, #1d7858);
+}
 /* 2. SECCIÓN CENTRAL (Navegación) */
 .header-center {
     display: flex;

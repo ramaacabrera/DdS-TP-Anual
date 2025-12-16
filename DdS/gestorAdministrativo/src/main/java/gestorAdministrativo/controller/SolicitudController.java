@@ -10,6 +10,7 @@ import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class SolicitudController {
@@ -82,14 +83,17 @@ public class SolicitudController {
     };
 
     public Handler obtenerSolicitudes = ctx -> {
-        System.out.println("obteniendo solicitudes");
+        Map<String, String> map = ctx.pathParamMap();
+        String estado = map.get("estado");
+        System.out.println("Obteniendo solicitudes " + estado);
         try {
             int pagina = ctx.queryParamAsClass("pagina", Integer.class).getOrDefault(1);
             int limite = ctx.queryParamAsClass("limite", Integer.class).getOrDefault(10);
 
-            PageDTO<SolicitudDeEliminacionDTO> resultado = eliminacionService.obtenerTodasLasSolicitudes(pagina, limite);
+            PageDTO<SolicitudDeEliminacionDTO> resultado = eliminacionService.obtenerTodasLasSolicitudes(pagina, limite, estado);
             System.out.println("Devolviendo solicitudes");
             ctx.status(200).json(resultado);
+            System.out.println("Devolvi un 200");
         } catch (Exception e) {
             ctx.status(500).json("Error obteniendo solicitudes: " + e.getMessage());
         }
@@ -115,9 +119,10 @@ public class SolicitudController {
         }
     };
 
-    public Handler obtenerCantidadPendientesEliminacion = ctx -> {
-        System.out.println("obteniendo cantidad pendientes eliminacion");
-        ctx.status(200).json(eliminacionService.obtenerCantidadPendientes());
+    public Handler obtenerCantidadEliminacion = ctx -> {
+        String estado = ctx.pathParam("estado");
+        System.out.println("Obteniendo cantidad solicitudes " + estado + " eliminacion");
+        ctx.status(200).json(eliminacionService.obtenerCantidad(estado));
     };
 
     public Handler obtenerCantidadPendientesModificacion = ctx -> {
@@ -166,7 +171,7 @@ public class SolicitudController {
     public Handler procesarSolicitudModificacion = ctx -> {
         String idString = ctx.pathParam("id");
         ProcesarSolicitudDTO request = ctx.bodyAsClass(ProcesarSolicitudDTO.class);
-        System.out.println("procesando solicitud modificacion");
+
         try {
             UUID id = UUID.fromString(idString);
             boolean resultado = modificacionService.procesarSolicitud(id, request.getAccion());
@@ -177,7 +182,6 @@ public class SolicitudController {
                 ctx.status(404).json("Solicitud no encontrada");
             }
         } catch (Exception e) {
-            System.out.println("Error procesando solicitud: " + e.getMessage());
             ctx.status(400).json("Error: " + e.getMessage());
         }
     };
@@ -192,22 +196,11 @@ public class SolicitudController {
 
     public Handler obtenerSolicitudModificacion = ctx -> {
         try {
-            String idParam = ctx.pathParam("id");
-            UUID id = UUID.fromString(idParam);
-
+            UUID id = UUID.fromString(ctx.pathParam("id"));
             var sol = modificacionService.obtenerSolicitudPorId(id);
-
-            if (sol.isPresent()) {
-                ctx.json(sol.get());
-            } else {
-                ctx.status(404).json("Solicitud no encontrada");
-            }
-
-        } catch (IllegalArgumentException e) {
-            ctx.status(400).json("El formato del ID es inválido: " + e.getMessage());
+            if(sol.isPresent()) ctx.json(sol.get()); else ctx.status(404);
         } catch (Exception e) {
-            e.printStackTrace();
-            ctx.status(500).json("Error interno del servidor: " + e.getMessage());
+            ctx.status(400).json("ID inválido");
         }
     };
 }
