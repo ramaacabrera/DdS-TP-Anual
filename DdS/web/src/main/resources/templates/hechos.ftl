@@ -75,9 +75,15 @@
                 <!-- Contenido principal -->
                 <main class="main-content">
                     <!-- Información de resultados -->
-                    <#if total??>
+                    <#if total?? && (total > 0)>
                         <div class="results-info">
-                            <span class="muted">Mostrando ${(fromIndex!0)+1}-${(toIndex!0)} de ${total} hechos</span>
+                            <span class="muted">
+                                Mostrando ${(fromIndex!0)} - ${((toIndex!0) gt total)?then(total, toIndex!0)} de ${total} hechos
+                            </span>
+                        </div>
+                    <#else>
+                        <div class="results-info">
+                            <span class="muted">No se encontraron hechos.</span>
                         </div>
                     </#if>
 

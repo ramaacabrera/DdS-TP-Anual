@@ -121,8 +121,10 @@ public class ColeccionDTO {
             return new CriterioTipoMultimediaDTO((CriterioTipoMultimedia) criterio);
 
 
-        if (criterio instanceof CriterioUbicacion)
-            return new CriterioUbicacionDTO((CriterioUbicacion) criterio);
+        if (criterio instanceof CriterioUbicacion) {
+            CriterioUbicacion c = (CriterioUbicacion) criterio;
+            return new CriterioUbicacionDTO(c.getId(), c.getDescripcion());
+        }
 
 
         throw new IllegalArgumentException("Tipo de criterio desconocido: " + criterio.getClass());

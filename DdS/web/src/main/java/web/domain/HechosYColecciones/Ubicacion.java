@@ -18,7 +18,7 @@ public class Ubicacion {
     )
     @Type(type = "uuid-char")
     @Column(name = "id_ubicacion", length = 36 , updatable = false, nullable = false)
-    private UUID id_ubicacion;
+    private UUID ubicacionId;
 
     private double latitud;
     private double longitud;
@@ -34,12 +34,12 @@ public class Ubicacion {
 
     public double getLatitud() { return latitud; }
     public double getLongitud() { return longitud; }
-    public UUID getId_ubicacion() {return id_ubicacion;}
+    public UUID getUbicacionId() {return ubicacionId;}
     public String getDescripcion() {return descripcion;}
 
     public void setLatitud(double latitud) { this.latitud = latitud; }
     public void setLongitud(double longitud) { this.longitud = longitud; }
-    public void setId_ubicacion(UUID id_ubicacion) {this.id_ubicacion = id_ubicacion;}
+    public void setUbicacionId(UUID id_ubicacion) {this.ubicacionId = id_ubicacion;}
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 }
 

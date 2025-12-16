@@ -33,7 +33,7 @@ public abstract class Solicitud {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
-    protected Usuario usuario;
+    protected Usuario usuarioId;
 
     public abstract void aceptarSolicitud();
     public abstract void rechazarSolicitud();
@@ -51,6 +51,6 @@ public abstract class Solicitud {
     public UUID getHechoAsociado() { return hechoAsociado; }
     public void setHechoAsociado(UUID hechoAsociado) { this.hechoAsociado = hechoAsociado; }
 
-    public Usuario getUsuario() { return usuario; }
-    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+    public Usuario getUsuarioId() { return usuarioId; }
+    public void setUsuarioId(Usuario usuario) { this.usuarioId = usuario; }
 }

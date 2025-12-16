@@ -111,6 +111,11 @@ public class HechoController {
 
         HechoDTO hecho = hechoService.obtenerHechoPorId(hechoIdString);
 
+        if(hecho.getEstadoHecho().toString().equals("OCULTO")){
+            ctx.redirect("/hechos");
+            return;
+        }
+
         if (hecho == null) {
             ctx.status(404).result("Hecho no encontrado o servicio no disponible.");
             return;

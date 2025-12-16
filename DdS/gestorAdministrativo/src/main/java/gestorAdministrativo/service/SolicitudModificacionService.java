@@ -1,5 +1,15 @@
 package gestorAdministrativo.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import gestorAdministrativo.domain.HechosYColecciones.ContenidoMultimedia;
+import gestorAdministrativo.domain.HechosYColecciones.TipoContenidoMultimedia;
+import gestorAdministrativo.domain.Solicitudes.SolicitudDeEliminacion;
+import gestorAdministrativo.dto.Hechos.ContenidoMultimediaDTO;
+import gestorAdministrativo.dto.Hechos.UbicacionDTO;
+import gestorAdministrativo.dto.Hechos.UsuarioDTO;
+import gestorAdministrativo.dto.PageDTO;
+import gestorAdministrativo.dto.Solicitudes.SolicitudDeEliminacionDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDeModificacionDTO;
 import gestorAdministrativo.dto.Solicitudes.HechoModificadoDTO;
 import gestorAdministrativo.dto.Solicitudes.EstadoSolicitudModificacionDTO;
@@ -34,9 +44,9 @@ public class SolicitudModificacionService {
             throw new IllegalArgumentException("El Hecho original no existe: " + dto.getHechoId());
         }
 
-        Usuario usuario = usuarioRepositorio.buscarPorId(dto.getUsuarioId());
+        Usuario usuario = usuarioRepositorio.buscarPorId(dto.getUsuarioId().getUsuarioId());
         if (usuario == null) {
-            throw new IllegalArgumentException("El Usuario no existe: " + dto.getUsuarioId());
+            throw new IllegalArgumentException("El Usuario no existe: " + dto.getUsuarioId().getUsuarioId());
         }
 
         SolicitudDeModificacion solicitud = new SolicitudDeModificacion();
@@ -56,6 +66,7 @@ public class SolicitudModificacionService {
 
     public boolean procesarSolicitud(UUID solicitudId, String accion) {
         Optional<SolicitudDeModificacion> optSolicitud = solicitudRepositorio.buscarPorId(solicitudId);
+        System.out.println("Termine de buscar por Id");
         if (optSolicitud.isEmpty()) return false;
 
         SolicitudDeModificacion solicitud = optSolicitud.get();
@@ -69,6 +80,7 @@ public class SolicitudModificacionService {
                 aplicarCambiosAlHechoOriginal(solicitud.getHechoAsociado(), solicitud.getHechoModificado());
 
                 hechoRepositorio.guardar(solicitud.getHechoAsociado());
+                System.out.println("Termine de guardar");
 
             } else if (nuevoEstado == EstadoSolicitudModificacion.RECHAZADA) {
                 solicitud.rechazarSolicitud();
@@ -84,10 +96,43 @@ public class SolicitudModificacionService {
         }
     }
 
-    public List<SolicitudDeModificacionDTO> obtenerTodasLasSolicitudes() {
-        return solicitudRepositorio.buscarTodas().stream()
+    public PageDTO<SolicitudDeModificacionDTO> obtenerTodasLasSolicitudes(int pagina, int limite, String estado) {
+        if (pagina < 1) pagina = 1;
+        if (limite < 1) limite = 10;
+
+        long totalRegistros = solicitudRepositorio.contarTodas(estado);
+
+        System.out.println("Total registros: " + totalRegistros);
+
+        int totalPages = (int) Math.ceil(totalRegistros / (double) limite);
+
+        if (pagina > totalPages && totalRegistros > 0) {
+            return new PageDTO<>(new ArrayList<>(), pagina, limite, totalPages, (int) totalRegistros);
+        }
+
+        List<SolicitudDeModificacion> solicitudesPaginadas = solicitudRepositorio.obtenerPaginadas(pagina, limite, estado);
+
+        System.out.println("Total solicitudes recuperadas: " + solicitudesPaginadas.size());
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        System.out.println("Lista de solicitudes: ");
+
+        for(SolicitudDeModificacion sol :  solicitudesPaginadas) {
+            try {
+                System.out.println("Solicitud: " + mapper.writeValueAsString(sol));
+            } catch (Exception e){
+                System.err.println("Erro al serializar solicitud: " + e.getMessage());
+            }
+        }
+
+        List<SolicitudDeModificacionDTO> dtos = solicitudesPaginadas.stream()
                 .map(this::convertirADTO)
                 .collect(Collectors.toList());
+
+        System.out.println("Devolviendo solicitudes..");
+
+        return new PageDTO<>(dtos, pagina, limite, totalPages, (int) totalRegistros);
     }
 
     public Optional<SolicitudDeModificacionDTO> obtenerSolicitudPorId(UUID id) {
@@ -100,127 +145,168 @@ public class SolicitudModificacionService {
         if (cambios.getTitulo() != null) original.setTitulo(cambios.getTitulo());
         if (cambios.getDescripcion() != null) original.setDescripcion(cambios.getDescripcion());
         if (cambios.getCategoria() != null) original.setCategoria(cambios.getCategoria());
-
         if (cambios.getFechaDeAcontecimiento() != null) original.setFechaDeAcontecimiento(cambios.getFechaDeAcontecimiento());
 
-        if (cambios.getUbicacion() != null) original.setUbicacion(cambios.getUbicacion());
+        if (cambios.getUbicacion() != null) {
+            if (original.getUbicacion() == null) {
+                original.setUbicacion(new gestorAdministrativo.domain.HechosYColecciones.Ubicacion());
+            }
 
-        System.out.println("✅ Hecho actualizado con los cambios de la solicitud.");
+            original.getUbicacion().setLatitud(cambios.getUbicacion().getLatitud());
+            original.getUbicacion().setLongitud(cambios.getUbicacion().getLongitud());
+            original.getUbicacion().setDescripcion(cambios.getUbicacion().getDescripcion());
+        }
+
+        if (cambios.getContenidoMultimedia() != null && !cambios.getContenidoMultimedia().isEmpty()) {
+
+            original.getContenidoMultimedia().clear();
+
+            for (ContenidoMultimedia mediaCambio : cambios.getContenidoMultimedia()) {
+
+                ContenidoMultimedia mediaNueva = new ContenidoMultimedia();
+
+                mediaNueva.setContenido(mediaCambio.getContenido());
+
+                mediaNueva.setHecho(original);
+                mediaNueva.setTipoContenido(mediaCambio.getTipoContenido());
+
+                original.getContenidoMultimedia().add(mediaNueva);
+            }
+        }
+
+        System.out.println("✅ Hecho actualizado correctamente.");
     }
 
     private HechoModificado mapHechoModificadoToEntity(HechoModificadoDTO dto) {
         if (dto == null) return null;
 
         HechoModificado entidad = new HechoModificado();
+
         entidad.setTitulo(dto.getTitulo());
         entidad.setDescripcion(dto.getDescripcion());
         entidad.setCategoria(dto.getCategoria());
         entidad.setFechaDeAcontecimiento(dto.getFechaDeAcontecimiento());
 
-        // TODO: Mapear objetos complejos (Ubicacion, Fuente) si es necesario
-        // entidad.setUbicacion(mapUbicacion(dto.getUbicacion()));
+        if (dto.getUbicacion() != null) {
+            gestorAdministrativo.domain.HechosYColecciones.Ubicacion ubi = new gestorAdministrativo.domain.HechosYColecciones.Ubicacion();
+            ubi.setLatitud(dto.getUbicacion().getLatitud());
+            ubi.setLongitud(dto.getUbicacion().getLongitud());
+            ubi.setDescripcion(dto.getUbicacion().getDescripcion());
+            entidad.setUbicacion(ubi);
+        }
+
+        if (dto.getContenidoMultimedia() != null) {
+            List<ContenidoMultimedia> listaMedia = new ArrayList<>();
+            for (ContenidoMultimediaDTO mediaDto : dto.getContenidoMultimedia()) {
+                ContenidoMultimedia media = new ContenidoMultimedia();
+
+                media.setContenido(mediaDto.getContenido());
+
+                if (mediaDto.getTipoContenido() != null) {
+                    try {
+                        String nombreTipo = mediaDto.getTipoContenido().name();
+
+                        media.setTipoContenido(TipoContenidoMultimedia.valueOf(nombreTipo));
+
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Tipo de contenido desconocido: " + mediaDto.getTipoContenido());
+                        media.setTipoContenido(TipoContenidoMultimedia.IMAGEN);
+                    }
+                }
+
+                listaMedia.add(media);
+            }
+            entidad.setContenidoMultimedia(listaMedia);
+        }
 
         return entidad;
     }
 
-    private SolicitudDeModificacionDTO convertirADTO(SolicitudDeModificacion s) {
+    private SolicitudDeModificacionDTO convertirADTO(SolicitudDeModificacion entidad) {
+        if (entidad == null) return null;
+
         SolicitudDeModificacionDTO dto = new SolicitudDeModificacionDTO();
 
-        dto.setId(s.getId());
+        System.out.println("Convertir DTO 1");
 
-        dto.setJustificacion(s.getJustificacion());
-        Hecho hechoOriginal = s.getHechoAsociado();
+        // 1. Datos básicos
+        dto.setId(entidad.getId());
+        dto.setJustificacion(entidad.getJustificacion());
 
-        if (s.getHechoModificado() != null && hechoOriginal != null) {
+        System.out.println("Convertir DTO 2");
 
-            // --- Generar una lista de cambios con valores originales ---
-            List<Map<String, String>> cambiosMapeados = new ArrayList<>();
-
-            HechoModificado cambios = s.getHechoModificado();
-
-            // Título
-            if (cambios.getTitulo() != null && !cambios.getTitulo().equals(hechoOriginal.getTitulo())) {
-                cambiosMapeados.add(Map.of(
-                        "campo", "titulo",
-                        "anterior", hechoOriginal.getTitulo() != null ? hechoOriginal.getTitulo() : "",
-                        "nuevo", cambios.getTitulo()
-                ));
-            }
-
-            // Descripción
-            if (cambios.getDescripcion() != null && !cambios.getDescripcion().equals(hechoOriginal.getDescripcion())) {
-                cambiosMapeados.add(Map.of(
-                        "campo", "descripcion",
-                        "anterior", hechoOriginal.getDescripcion() != null ? hechoOriginal.getDescripcion() : "",
-                        "nuevo", cambios.getDescripcion()
-                ));
-            }
-
-            // Categoría
-            if (cambios.getCategoria() != null && !cambios.getCategoria().equals(hechoOriginal.getCategoria())) {
-                cambiosMapeados.add(Map.of(
-                        "campo", "categoria",
-                        "anterior", hechoOriginal.getCategoria() != null ? hechoOriginal.getCategoria() : "",
-                        "nuevo", cambios.getCategoria()
-                ));
-            }
-
-            // Fecha de Acontecimiento
-            if (cambios.getFechaDeAcontecimiento() != null && !cambios.getFechaDeAcontecimiento().equals(hechoOriginal.getFechaDeAcontecimiento())) {
-                // Es mejor comparar con el string de la fecha para evitar problemas de formato
-                String fechaAnterior = hechoOriginal.getFechaDeAcontecimiento() != null ? hechoOriginal.getFechaDeAcontecimiento().toString() : "";
-                String fechaNueva = cambios.getFechaDeAcontecimiento().toString();
-
-                cambiosMapeados.add(Map.of(
-                        "campo", "fechaDeAcontecimiento",
-                        "anterior", fechaAnterior,
-                        "nuevo", fechaNueva
-                ));
-            }
-            dto.setCambios(cambiosMapeados);
-
-            // También podemos agregar el título del hecho original para que el web component lo muestre fácilmente
-            dto.setHechoTitulo(hechoOriginal.getTitulo());
-
-            // Si el componente web sigue necesitando el objeto anidado:
-            dto.setHechoModificado(convertirHechoModificadoADTO(s.getHechoModificado()));
+        // 2. ID del Hecho Original
+        if (entidad.getHechoAsociado() != null) {
+            dto.setHechoId(entidad.getHechoAsociado().getHecho_id());
         }
 
-        if (s.getHechoAsociado() != null) {
-            dto.setHechoId(s.getHechoAsociado().getHecho_id());
+        System.out.println("Convertir DTO 3");
+
+        if (entidad.getUsuario() != null) {
+            UsuarioDTO uDto = new UsuarioDTO();
+            uDto.setUsuarioId(entidad.getUsuario().getId_usuario());
+            uDto.setUsername(entidad.getUsuario().getUsername());
+            dto.setUsuarioId(uDto);
         }
 
-        if (s.getUsuario() != null) {
-            dto.setUsuarioId(s.getUsuario().getId_usuario());
-        }
+        System.out.println("Convertir DTO 4");
 
-        if (s.getEstado() != null) {
+        if (entidad.getEstado() != null) {
             try {
-                dto.setEstado(EstadoSolicitudModificacionDTO.valueOf(s.getEstado().name()));
-            } catch (Exception e) {
+                String nombreEstado = entidad.getEstado().name();
+                dto.setEstado(EstadoSolicitudModificacionDTO.valueOf(nombreEstado));
+            } catch (IllegalArgumentException e) {
                 dto.setEstado(EstadoSolicitudModificacionDTO.PENDIENTE);
             }
         }
 
-        if (s.getHechoModificado() != null) {
-            dto.setHechoModificado(convertirHechoModificadoADTO(s.getHechoModificado()));
+        System.out.println("Convertir DTO 5");
+
+        if (entidad.getHechoModificado() != null) {
+            dto.setHechoModificado(convertirHechoModificadoADTO(entidad.getHechoModificado()));
+        }
+
+        System.out.println("Convertir DTO 6");
+
+        return dto;
+    }
+
+
+    private HechoModificadoDTO convertirHechoModificadoADTO(HechoModificado entidad) {
+        if (entidad == null) return null;
+
+        HechoModificadoDTO dto = new HechoModificadoDTO();
+
+        dto.setHechoModificadoId(entidad.getHecho_modificado_id()); // o getId()
+        dto.setTitulo(entidad.getTitulo());
+        dto.setDescripcion(entidad.getDescripcion());
+        dto.setCategoria(entidad.getCategoria());
+        dto.setFechaDeAcontecimiento(entidad.getFechaDeAcontecimiento());
+
+
+        if (entidad.getUbicacion() != null) {
+            UbicacionDTO uDto = new UbicacionDTO();
+            uDto.setLatitud(entidad.getUbicacion().getLatitud());
+            uDto.setLongitud(entidad.getUbicacion().getLongitud());
+            uDto.setDescripcion(entidad.getUbicacion().getDescripcion());
+            dto.setUbicacion(uDto);
+        }
+
+        if (entidad.getContenidoMultimedia() != null) {
+            List<ContenidoMultimediaDTO> mediaListDTO = new ArrayList<>();
+            for (var mediaEntidad : entidad.getContenidoMultimedia()) {
+                ContenidoMultimediaDTO mediaDTO = new ContenidoMultimediaDTO();
+                mediaDTO.setContenido(mediaEntidad.getContenido());
+                mediaListDTO.add(mediaDTO);
+            }
+            dto.setContenidoMultimedia(mediaListDTO);
         }
 
         return dto;
     }
 
-    private HechoModificadoDTO convertirHechoModificadoADTO(HechoModificado hm) {
-        if (hm == null) return null;
-        HechoModificadoDTO dto = new HechoModificadoDTO();
-        dto.setTitulo(hm.getTitulo());
-        dto.setDescripcion(hm.getDescripcion());
-        dto.setCategoria(hm.getCategoria());
-        dto.setFechaDeAcontecimiento(hm.getFechaDeAcontecimiento());
-        return dto;
-    }
-
-    public Integer obtenerCantidadPendientes() {
-        Integer solis = solicitudRepositorio.obtenerCantidadPendientes();
+    public Integer obtenerCantidad(String estado) {
+        Integer solis = solicitudRepositorio.obtenerCantidad(estado);
         System.out.println("Total solicitudes modificacion: " + solis);
         return solis;
     }

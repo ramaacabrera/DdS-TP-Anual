@@ -1,18 +1,23 @@
 package gestorAdministrativo.dto.Solicitudes;
+import gestorAdministrativo.dto.Hechos.UsuarioDTO;
+
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class SolicitudDeModificacionDTO extends SolicitudDTO {
+public class SolicitudDeModificacionDTO {
     private UUID id;
     private HechoModificadoDTO hechoModificado;
     private EstadoSolicitudModificacionDTO estado;
+    private String justificacion;
     private String hechoTitulo;
     private List<Map<String, String>> cambios;
+    private UsuarioDTO usuarioId;
+    private UUID hechoId;
 
     public SolicitudDeModificacionDTO() {}
 
-    public SolicitudDeModificacionDTO(UUID id, UUID hechoAsociadoId, String justificacion, UUID usuarioId,
+    public SolicitudDeModificacionDTO(UUID id, UUID hechoAsociadoId, String justificacion, UsuarioDTO usuarioId,
                                       HechoModificadoDTO hechoModificado, EstadoSolicitudModificacionDTO estado) {
 
         super();
@@ -41,4 +46,13 @@ public class SolicitudDeModificacionDTO extends SolicitudDTO {
 
     public List<Map<String, String>> getCambios() { return cambios; }
     public void setCambios(List<Map<String, String>> cambios) { this.cambios = cambios; }
+
+    public UsuarioDTO getUsuarioId() { return usuarioId; }
+    public void setUsuarioId(UsuarioDTO usuarioId) { this.usuarioId = usuarioId; }
+
+    public String getJustificacion() { return justificacion; }
+    public void setJustificacion(String justificacion) { this.justificacion = justificacion; }
+
+    public UUID getHechoId() { return hechoId; }
+    public void setHechoId(UUID hechoId) { this.hechoId = hechoId; }
 }

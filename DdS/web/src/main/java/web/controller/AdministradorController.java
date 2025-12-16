@@ -1,6 +1,8 @@
 package web.controller;
 
 import io.javalin.http.Handler;
+import web.domain.Solicitudes.EstadoSolicitudEliminacion;
+import web.domain.Solicitudes.EstadoSolicitudModificacion;
 import web.service.SolicitudService;
 import web.utils.ViewUtil;
 import java.util.Map;
@@ -30,8 +32,8 @@ public class AdministradorController {
 
         Map<String, Object> modelo = ViewUtil.baseModel(ctx);
 
-        int pendientesEliminacion = solicitudService.contarPendientesEliminacion(ctx.sessionAttribute("username"),rolUsuario, accessToken);
-        int pendientesModificacion = solicitudService.contarPendientesModificacion(ctx.sessionAttribute("username"),rolUsuario, accessToken);
+        long pendientesEliminacion = solicitudService.contarSolicitudes(ctx.sessionAttribute("username"),rolUsuario, accessToken, EstadoSolicitudEliminacion.PENDIENTE);
+        long pendientesModificacion = solicitudService.contarSolicitudesModificacion(ctx.sessionAttribute("username"),rolUsuario, accessToken, EstadoSolicitudModificacion.PENDIENTE);
 
         modelo.put("pendientesEliminacion", pendientesEliminacion);
         modelo.put("pendientesModificacion", pendientesModificacion);

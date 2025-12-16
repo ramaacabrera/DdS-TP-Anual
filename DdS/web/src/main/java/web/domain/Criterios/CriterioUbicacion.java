@@ -1,48 +1,37 @@
 package web.domain.Criterios;
 
 import web.domain.HechosYColecciones.Hecho;
-import web.domain.HechosYColecciones.Ubicacion;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
-import java.util.HashMap;
-import java.util.Map;
-
-@Entity
 public class CriterioUbicacion extends Criterio {
-
-    @ManyToOne
-    @JoinColumn(name = "id_ubicacion")
-    private Ubicacion ubicacion;
+    private String descripcion;
 
     public CriterioUbicacion() {}
-    public CriterioUbicacion(Ubicacion ubicacion) {
-        this.ubicacion = ubicacion;
+
+    public CriterioUbicacion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Override
-    public boolean cumpleConCriterio(Hecho hecho){
-        if (hecho.getUbicacion() == null || this.ubicacion == null) return false;
-        return hecho.getUbicacion().getId_ubicacion().equals(ubicacion.getId_ubicacion());
+    public boolean cumpleConCriterio(Hecho hecho) {
+        if (hecho.getUbicacion() == null || this.descripcion == null) return false;
+        return hecho.getUbicacion().getDescripcion().toLowerCase().contains(this.descripcion.toLowerCase());
     }
-
-    public Ubicacion getUbicacion() { return ubicacion; }
-    public void setUbicacion(Ubicacion ubicacion) { this.ubicacion = ubicacion; }
 
     @Override
     public String getQueryCondition() {
-        return "h.ubicacion.id_ubicacion = :idUbicacionParam";
+        return "";
     }
 
     @Override
-    @Transient
-    public Map<String, Object> getQueryParameters() {
-        Map<String, Object> params = new HashMap<>();
-        if (ubicacion != null) {
-            params.put("idUbicacionParam", ubicacion.getId_ubicacion());
-        }
-        return params;
+    public java.util.Map<String, Object> getQueryParameters() {
+        return new java.util.HashMap<>();
     }
 }

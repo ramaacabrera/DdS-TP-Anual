@@ -274,44 +274,133 @@ function eliminarInputTemporalEditar(btn) {
 function agregarCriterioEditar() {
     const tipo = document.getElementById("tipoCriterio").value;
     if(!tipo) return;
+
     const cid = "criterio_nuevo_" + contadorCriteriosEditar++;
     const container = document.getElementById("criterios-agregados");
-    let html = '', obj = {'@type': tipo};
+
+    let cardClass = "", iconClass = "", titulo = "";
+    switch(tipo) {
+        case "CriterioDeTexto": cardClass = "type-texto"; iconClass = "fas fa-font"; titulo = "Texto"; break;
+        case "CriterioEtiquetas": cardClass = "type-etiqueta"; iconClass = "fas fa-tags"; titulo = "Etiquetas"; break;
+        case "CriterioTipoMultimedia": cardClass = "type-multimedia"; iconClass = "fas fa-photo-video"; titulo = "Multimedia"; break;
+        case "CriterioFecha": cardClass = "type-fecha"; iconClass = "far fa-calendar-alt"; titulo = "Fecha"; break;
+        case "CriterioUbicacion": cardClass = "type-ubicacion"; iconClass = "fas fa-map-marker-alt"; titulo = "Ubicación"; break;
+        case "CriterioContribuyente": cardClass = "type-contribuyente"; iconClass = "fas fa-user"; titulo = "Contribuyente"; break;
+    }
+
+    let cuerpoHTML = '';
+    let obj = {'@type': tipo};
 
     if(tipo === "CriterioDeTexto") {
         const words = Array.from(document.querySelectorAll('#lista-palabras-temporal .palabra-input-temporal')).map(i=>i.value).filter(v=>v.trim());
         if(!words.length) return alert('Ingrese palabras');
+
         obj.palabras = words;
         obj.tipoDeTexto = document.getElementById('tipoTexto').value;
-        html = `<div><strong>Palabras:</strong> ${words.join(', ')}</div><div><strong>Tipo:</strong> ${obj.tipoDeTexto}</div>`;
+
+        const badges = words.map(w => `<span class="badge-item">${w}</span>`).join('');
+        cuerpoHTML = `
+            <div class="dato-fila">
+                <span class="dato-label">Tipo:</span>
+                <span>${obj.tipoDeTexto}</span>
+            </div>
+            <div class="dato-fila" style="align-items: flex-start;">
+                <span class="dato-label">Palabras:</span>
+                <div class="badge-container">${badges}</div>
+            </div>
+        `;
+
     } else if (tipo === "CriterioEtiquetas") {
         const tags = Array.from(document.querySelectorAll('#lista-etiquetas-temporal .palabra-input-temporal')).map(i=>i.value).filter(v=>v.trim());
         if(!tags.length) return alert('Ingrese etiquetas');
+
         obj.etiquetas = tags.map(n => ({nombre:n}));
-        html = `<div><strong>Etiquetas:</strong> ${tags.join(', ')}</div>`;
+
+        const badges = tags.map(t => `<span class="badge-item">#${t}</span>`).join('');
+        cuerpoHTML = `
+            <div class="dato-fila" style="align-items: flex-start;">
+                <span class="dato-label">Etiquetas:</span>
+                <div class="badge-container">${badges}</div>
+            </div>
+        `;
+
     } else if (tipo === "CriterioTipoMultimedia") {
         obj.tipoContenidoMultimedia = document.getElementById('tipoMultimedia').value;
-        html = `<div><strong>Tipo:</strong> ${obj.tipoContenidoMultimedia}</div>`;
+        cuerpoHTML = `
+            <div class="dato-fila">
+                <span class="dato-label">Formato:</span>
+                <strong>${obj.tipoContenidoMultimedia}</strong>
+            </div>
+        `;
+
     } else if (tipo === "CriterioFecha") {
         const i = document.getElementById('fechaInicio').value, f = document.getElementById('fechaFin').value;
         if(!i || !f) return alert('Ingrese fechas');
-        obj.fechaInicio = new Date(i).getTime(); obj.fechaFin = new Date(f).getTime(); obj.tipoFecha = document.getElementById('tipoDeFecha').value;
-        html = `<div><strong>Desde:</strong> ${i}</div><div><strong>Hasta:</strong> ${f}</div>`;
+
+        obj.fechaInicio = new Date(i).getTime();
+        obj.fechaFin = new Date(f).getTime();
+        obj.tipoFecha = document.getElementById('tipoDeFecha').value;
+
+        const tipoLegible = obj.tipoFecha === 'fechaDeCarga' ? 'Fecha de Carga' : 'Fecha del Hecho';
+        cuerpoHTML = `
+            <div class="dato-fila">
+                <span class="dato-label">Rango:</span>
+                <span>${i} <strong>al</strong> ${f}</span>
+            </div>
+            <div class="dato-fila">
+                <span class="dato-label">Aplica a:</span>
+                <span>${tipoLegible}</span>
+            </div>
+        `;
+
     } else if (tipo === "CriterioUbicacion") {
         const d = document.getElementById('descripcionUbicacion').value;
         if(!d) return alert('Ingrese descripción');
-        obj.ubicacion = {descripcion: d};
-        html = `<div><strong>Descripción:</strong> ${d}</div>`;
+
+        obj.descripcion = d;
+
+        cuerpoHTML = `
+            <div class="dato-fila">
+                <span class="dato-label">Lugar:</span>
+                <strong>${d}</strong>
+            </div>
+        `;
+
     } else if (tipo === "CriterioContribuyente") {
         const c = document.getElementById('contribuyente').value;
         if(!c) return alert('Ingrese nombre');
+
         obj.nombreContribuyente = c;
-        html = `<div><strong>Contribuyente:</strong> ${c}</div>`;
+        cuerpoHTML = `
+            <div class="dato-fila">
+                <span class="dato-label">Usuario:</span>
+                <span>@${c}</span>
+            </div>
+        `;
     }
 
     nuevosCriterios.push(obj);
-    container.insertAdjacentHTML('beforeend', `<div class="criterio-card" id="${cid}"><div class="criterio-header"><span class="criterio-tipo">${tipo}</span><button type="button" class="btn-eliminar-criterio">Eliminar</button></div>${html}</div>`);
 
+    const cardHTML = `
+        <div class="criterio-card ${cardClass}" id="${cid}">
+            <div class="criterio-header">
+                <div class="criterio-info">
+                    <span class="criterio-icon"><i class="${iconClass}"></i></span>
+                    <span class="criterio-titulo">${titulo}</span>
+                </div>
+                <button type="button" class="btn-eliminar-criterio">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </div>
+            <div class="criterio-body">
+                ${cuerpoHTML}
+            </div>
+        </div>
+    `;
+
+    container.insertAdjacentHTML('beforeend', cardHTML);
+
+    // 5. Limpieza
     document.getElementById("tipoCriterio").value = "";
     document.getElementById("campoCriterio").innerHTML = "";
     document.getElementById("btn-agregar-criterio").disabled = true;
@@ -352,7 +441,7 @@ async function manejarEnvioFormularioEditar(e) {
                 else if (name.includes('.fechaInicio')) criterio.fechaInicio = new Date(value).getTime();
                 else if (name.includes('.fechaFin')) criterio.fechaFin = new Date(value).getTime();
                 else if (name.includes('.tipoFecha')) criterio.tipoFecha = value;
-                else if (name.includes('.ubicacion.descripcion')) { if(!criterio.ubicacion) criterio.ubicacion={}; criterio.ubicacion.descripcion = value; }
+                else if (name.includes('.descripcion')) { criterio.descripcion = value; }
                 else if (name.includes('.nombreContribuyente')) criterio.nombreContribuyente = value;
                 else if (name.includes('.fuente')) criterio.fuente = value;
             });
@@ -374,7 +463,7 @@ async function manejarEnvioFormularioEditar(e) {
                 criterio.tipoFecha = card.querySelector('.tipo-fecha-editable').value;
             } else if (tipoTexto.includes('Ubicación')) {
                 criterio['@type'] = 'CriterioUbicacion';
-                criterio.ubicacion = {descripcion: card.querySelector('.descripcion-ubicacion-editable').value.trim()};
+                criterio.descripcion = card.querySelector('.descripcion-ubicacion-editable').value.trim();
             } else if (tipoTexto.includes('Contribuyente')) {
                 criterio['@type'] = 'CriterioContribuyente';
                 criterio.nombreContribuyente = card.querySelector('.contribuyente-editable').value.trim();

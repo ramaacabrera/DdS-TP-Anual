@@ -15,13 +15,13 @@
         </div>
         <div class="actions" style="margin-top:10px;">
             <#if coleccion?? && coleccion.handle??>
-                <#if rolUsuario = "ADMINISTRADOR">
-                    <button type="button" class="btn btn-secondary" onclick="editarColeccion('${coleccion.handle}')">✏️ Editar</button>
+                <#if rolUsuario?? && rolUsuario == "ADMINISTRADOR">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='/editar-coleccion/${coleccion.handle}'">Editar</button>
                 </#if>
-                <button type="button" class="btn btn-primary" onclick="verEstadisticas('${coleccion.handle}')">📊 Ver estadísticas</button>
+                <button type="button" class="btn btn-primary" onclick="verEstadisticas('${coleccion.handle}')"> Ver estadísticas</button>
             <#else>
-                <button type="button" class="btn btn-secondary" disabled>✏️ Editar</button>
-                <button type="button" class="btn btn-primary" disabled>📊 Ver estadísticas</button>
+                <button type="button" class="btn btn-secondary" disabled>Editar</button>
+                <button type="button" class="btn btn-primary" disabled>Ver estadísticas</button>
             </#if>
         </div>
     </div>
@@ -37,14 +37,17 @@
 <#-- FUENTES -->
     <div class="card" style="margin-bottom: 25px;">
         <p class="card-subtitle">🔗 Fuentes asociadas</p>
-        <#if coleccion?? && coleccion.fuentes?? && (coleccion.fuentes?size > 0)>
+        <#if coleccion?? && coleccion.fuente?? && (coleccion.fuente?size > 0)>
             <ul class="list-group">
-                <#list coleccion.fuentes as fuente>
-                    <li class="list-item">${(fuente.tipoDeFuente)!?default("Tipo desconocido")?capitalize}</li>
+                <#list coleccion.fuente as f>
+                    <li class="list-item">
+                        <strong>${(f.tipoDeFuente)!?default("GENERAL")?capitalize}:</strong>
+                        ${(f.descriptor)!?html}
+                    </li>
                 </#list>
             </ul>
         <#else>
-            <p>No hay fuentes asociadas.</p>
+            <p style="color: #666; font-style: italic;">No hay fuentes asociadas.</p>
         </#if>
     </div>
 
@@ -54,142 +57,120 @@
         <#if coleccion?? && coleccion.criteriosDePertenencia?? && (coleccion.criteriosDePertenencia?size > 0)>
             <div class="criterios-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
                 <#list coleccion.criteriosDePertenencia as c>
-                    <div class="criterio-card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; background-color: #fafafa;">
-                        <#-- ICONO Y TIPO -->
-                        <div style="display: flex; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #eee;">
-                            <#-- Iconos según el tipo -->
-                            <#if c.tipoContenidoMultimedia??>
-                                <span style="font-size: 1.2em; margin-right: 8px;">🎨</span>
-                                <strong>TipoMultimedia</strong>
-                            <#elseif c.nombreContribuyente??>
-                                <span style="font-size: 1.2em; margin-right: 8px;">👤</span>
-                                <strong>Contribuyente</strong>
-                            <#elseif c.tipoFecha??>
-                                <span style="font-size: 1.2em; margin-right: 8px;">📅</span>
-                                <strong>Fecha</strong>
-                            <#elseif c.ubicacion??>
-                                <span style="font-size: 1.2em; margin-right: 8px;">📍</span>
-                                <strong>Ubicacion</strong>
-                            <#elseif c.tipoDeTexto??>
-                                <span style="font-size: 1.2em; margin-right: 8px;">🔍</span>
-                                <strong>Texto</strong>
-                            <#elseif c.etiquetas??>
-                                <span style="font-size: 1.2em; margin-right: 8px;">🏷️</span>
-                                <strong>Etiquetas</strong>
-                            <#elseif c.fuente??>
-                                <span style="font-size: 1.2em; margin-right: 8px;">🗄️</span>
-                                <strong>Fuente</strong>
+
+                <#-- Detectamos el tipo de forma robusta -->
+                    <#assign tipo = c.tipoCriterio!c['@type']!"Desconocido">
+
+                    <div class="criterio-card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; background-color: #fafafa; position: relative; overflow: hidden;">
+
+                        <#-- Barra lateral de color -->
+                        <#assign colorBorde = "#ccc">
+                        <#if tipo == "CriterioDeTexto"> <#assign colorBorde = "#3498db">
+                        <#elseif tipo == "CriterioEtiquetas"> <#assign colorBorde = "#9b59b6">
+                        <#elseif tipo == "CriterioFecha"> <#assign colorBorde = "#2ecc71">
+                        <#elseif tipo == "CriterioUbicacion"> <#assign colorBorde = "#e74c3c">
+                        <#elseif tipo == "CriterioTipoMultimedia"> <#assign colorBorde = "#e67e22">
+                        <#elseif tipo == "CriterioContribuyente"> <#assign colorBorde = "#34495e">
+                        </#if>
+                        <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background-color: ${colorBorde};"></div>
+
+                        <#-- HEADER DEL CRITERIO -->
+                        <div style="display: flex; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #eee; padding-left: 10px;">
+                            <#if tipo == "CriterioTipoMultimedia">
+                                <span style="font-size: 1.2em; margin-right: 8px;">📷</span> <strong>Multimedia</strong>
+                            <#elseif tipo == "CriterioContribuyente">
+                                <span style="font-size: 1.2em; margin-right: 8px;">👤</span> <strong>Contribuyente</strong>
+                            <#elseif tipo == "CriterioFecha">
+                                <span style="font-size: 1.2em; margin-right: 8px;">📅</span> <strong>Fecha</strong>
+                            <#elseif tipo == "CriterioUbicacion">
+                                <span style="font-size: 1.2em; margin-right: 8px;">📍</span> <strong>Ubicación</strong>
+                            <#elseif tipo == "CriterioDeTexto">
+                                <span style="font-size: 1.2em; margin-right: 8px;">📝</span> <strong>Texto</strong>
+                            <#elseif tipo == "CriterioEtiquetas">
+                                <span style="font-size: 1.2em; margin-right: 8px;">🏷️</span> <strong>Etiquetas</strong>
                             <#else>
-                                <span style="font-size: 1.2em; margin-right: 8px;">⚙️</span>
+                                <span style="font-size: 1.2em; margin-right: 8px;">⚙️</span> <strong>${tipo}</strong>
                             </#if>
                         </div>
 
-                        <#-- CONTENIDO ESPECÍFICO SEGÚN TIPO -->
-                        <div style="font-size: 0.9em; color: #555;">
+                        <#-- BODY DEL CRITERIO -->
+                        <div style="font-size: 0.9em; color: #555; padding-left: 10px;">
 
-                            <#-- CRITERIO TIPO MULTIMEDIA -->
-                            <#if c.tipoContenidoMultimedia??>
-                                <div>Tipo de contenido:</div>
-                                <div style="font-weight: bold; color: #1976d2; margin-top: 3px;">
-                                    <#if c.tipoContenidoMultimedia == 'VIDEO'>
-                                        🎥 VIDEO
-                                    <#elseif c.tipoContenidoMultimedia == 'AUDIO'>
-                                        🔊 AUDIO
-                                    <#elseif c.tipoContenidoMultimedia == 'IMAGEN'>
-                                        🖼️ IMAGEN
+                            <#if tipo == "CriterioTipoMultimedia">
+                                <div>Formato requerido:</div>
+                                <div style="font-weight: bold; color: #333; margin-top: 3px;">
+                                    ${(c.tipoContenidoMultimedia)!?html}
+                                </div>
+
+                            <#elseif tipo == "CriterioContribuyente">
+                                <div>Usuario:</div>
+                                <div style="font-weight: bold; color: #333; margin-top: 3px;">
+                                    @${(c.nombreContribuyente)!?html}
+                                </div>
+
+                            <#elseif tipo == "CriterioFecha">
+                                <#assign fInicio = "">
+                                <#assign fFin = "">
+
+                            <#-- Manejo robusto de fechas (Timestamp o Date) -->
+                                <#if c.fechaInicio??>
+                                    <#if c.fechaInicio?is_number>
+                                        <#assign fInicio = c.fechaInicio?long?number_to_datetime?string('dd/MM/yyyy')>
                                     <#else>
-                                        ${(c.tipoContenidoMultimedia)!?html}
+                                        <#assign fInicio = c.fechaInicio?string('dd/MM/yyyy')>
                                     </#if>
-                                </div>
+                                </#if>
 
-                            <#-- CRITERIO CONTRIBUYENTE -->
-                            <#elseif c.nombreContribuyente??>
-                                <div>Contribuyente:</div>
-                                <div style="font-weight: bold; color: #1976d2; margin-top: 3px;">
-                                    "${(c.nombreContribuyente)!?html}"
-                                </div>
-
-                            <#-- CRITERIO FECHA -->
-                            <#elseif c.tipoFecha??>
-                                <div>Tipo de fecha: <em>${(c.tipoFecha)!?default("Fecha")?html}</em></div>
-                                <div style="margin-top: 5px;">
-                                    <#if c.fechaInicio?? && c.fechaFin??>
-                                        Desde: <strong>${c.fechaInicio?datetime?string('dd/MM/yyyy')}</strong><br>
-                                        Hasta: <strong>${c.fechaFin?datetime?string('dd/MM/yyyy')}</strong>
-                                    <#elseif c.fechaInicio??>
-                                        Desde: <strong>${c.fechaInicio?datetime?string('dd/MM/yyyy')}</strong>
-                                    <#elseif c.fechaFin??>
-                                        Hasta: <strong>${c.fechaFin?datetime?string('dd/MM/yyyy')}</strong>
+                                <#if c.fechaFin??>
+                                    <#if c.fechaFin?is_number>
+                                        <#assign fFin = c.fechaFin?long?number_to_datetime?string('dd/MM/yyyy')>
+                                    <#else>
+                                        <#assign fFin = c.fechaFin?string('dd/MM/yyyy')>
                                     </#if>
+                                </#if>
+
+                                <div>Rango:</div>
+                                <div style="margin-top: 2px;"><strong>${fInicio}</strong> al <strong>${fFin}</strong></div>
+                                <div style="margin-top: 5px; font-size: 0.85em; color: #888;">
+                                    Aplica a: ${(c.tipoFecha == 'fechaDeCarga')?then('Fecha de Carga', 'Fecha del Hecho')}
                                 </div>
 
-                            <#-- CRITERIO UBICACIÓN -->
-                            <#elseif c.ubicacion??>
-                                <div>Ubicación específica:</div>
-                                <div><strong>${(c.ubicacion.descripcion)!?html}</strong></div>
+                            <#elseif tipo == "CriterioUbicacion">
+                                <div>Lugar contiene:</div>
+                            <#-- CAMBIO IMPORTANTE: Usamos .descripcion directo -->
+                                <div style="font-weight: bold; color: #333; margin-top: 3px;">
+                                    "${(c.descripcion)!?html}"
+                                </div>
 
-                            <#-- CRITERIO DE TEXTO -->
-                            <#elseif c.tipoDeTexto??>
-                                <div>Tipo de búsqueda: <em>${(c.tipoDeTexto)!?default("Texto")?html}</em></div>
+                            <#elseif tipo == "CriterioDeTexto">
+                                <div>Busca en: <strong>${(c.tipoDeTexto)!?default("Texto")?html}</strong></div>
                                 <#if c.palabras?? && (c.palabras?size > 0)>
-                                    <div style="margin-top: 5px;">
-                                        <div>Palabras clave:</div>
-                                        <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 3px;">
+                                    <div style="margin-top: 8px;">
+                                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
                                             <#list c.palabras as palabra>
-                                                <span class="badge" style="background-color: #e8f5e8; color: #2e7d32; border: 1px solid #c8e6c9;">
-                                                "${palabra?html}"
-                                            </span>
+                                                <span class="badge" style="background-color: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb;">
+                                                    ${palabra?html}
+                                                </span>
                                             </#list>
                                         </div>
                                     </div>
                                 </#if>
 
-                            <#-- CRITERIO ETIQUETAS -->
-                            <#elseif c.etiquetas??>
+                            <#elseif tipo == "CriterioEtiquetas">
                                 <#if c.etiquetas?? && (c.etiquetas?size > 0)>
                                     <div>Etiquetas requeridas:</div>
                                     <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px;">
                                         <#list c.etiquetas as etiqueta>
-                                            <span class="badge" style="background-color: #e3f2fd; color: #1976d2; border: 1px solid #bbdefb;">
-                                            ${(etiqueta.nombre)!?html}
-                                        </span>
+                                            <span class="badge" style="background-color: #f3e5f5; color: #7b1fa2; border: 1px solid #e1bee7;">
+                                                #${(etiqueta.nombre)!?html}
+                                            </span>
                                         </#list>
                                     </div>
                                 <#else>
                                     <div><em>Sin etiquetas específicas</em></div>
                                 </#if>
-
-                            <#-- CRITERIO TIPO DE FUENTE -->
-                            <#elseif c.fuente??>
-                                <div>Tipo de fuente requerida:</div>
-                                    <div style="margin-top: 5px;">
-                                        <div style="font-weight: bold; color: #1976d2;">
-                                            <#-- Mostrar el tipo de fuente con icono correspondiente -->
-                                            <#if c.fuente == 'ESTATICA'>
-                                                <span style="font-size: 1.1em; margin-right: 6px;">💾</span> ESTÁTICA
-                                            <#elseif c.fuente == 'DINAMICA'>
-                                                <span style="font-size: 1.1em; margin-right: 6px;">⚡</span> DINÁMICA
-                                            <#elseif c.fuente == 'METAMAPA'>
-                                                <span style="font-size: 1.1em; margin-right: 6px;">🗺️</span> METAMAPA
-                                            <#elseif c.fuente == 'DEMO'>
-                                                <span style="font-size: 1.1em; margin-right: 6px;">🧪</span> DEMO
-                                            <#else>
-                                                ${(c.fuente)!?html}
-                                            </#if>
-                                        </div>
-                                </div>
-                            <#-- TIPO DESCONOCIDO -->
-                            <#else>
-                                <div><em>Criterio sin detalles específicos</em></div>
                             </#if>
                         </div>
-
-                        <#-- CONDICIÓN DE QUERY (opcional, para debugging) -->
-                        <#if false>  <#-- Cambia a true si quieres mostrar la query para debugging -->
-                            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #ddd; font-size: 0.7em; color: #888; font-family: monospace;">
-                                ${(c.queryCondition)!?truncate(50, "...")}
-                            </div>
-                        </#if>
                     </div>
                 </#list>
             </div>
@@ -197,29 +178,30 @@
             <p style="color: #666; font-style: italic;">No hay criterios definidos para esta colección.</p>
         </#if>
     </div>
+
     <hr class="separator" style="border: 1px solid #eee; margin: 30px 0;">
 
 <#-- HECHOS ASOCIADOS -->
     <div class="form-section">
         <h3 class="form-section-title">📂 Hechos asociados</h3>
         <#if coleccion?? && coleccion.hechos?? && (coleccion.hechos?size > 0)>
-            <div class="grid-metadata">
+            <div class="grid-metadata" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
                 <#list coleccion.hechos as hecho>
-                    <div class="card" style="cursor:pointer;" onclick="verHecho('${(hecho.hechoId)!}')">
-                        <p class="card-subtitle">${(hecho.categoria)!?default("Sin categoría")?html}</p>
-                        <h4>${(hecho.titulo)!?default("Hecho sin título")?html}</h4>
-                        <p style="color:#666; font-size:0.9em;">
-                            ${(hecho.descripcion)!?truncate(100, "...")?html}
+                    <div class="card" style="cursor:pointer; transition: transform 0.2s;" onclick="window.location.href='/hechos/${(hecho.hechoId)!}'">
+                        <p class="card-subtitle" style="font-size: 0.8rem; text-transform: uppercase; color: #888; margin-bottom: 5px;">${(hecho.categoria)!?default("GENERAL")?html}</p>
+                        <h4 style="margin: 0 0 10px 0; color: #333;">${(hecho.titulo)!?default("Hecho sin título")?html}</h4>
+                        <p style="color:#666; font-size:0.9em; line-height: 1.4;">
+                            ${(hecho.descripcion)!?truncate(80, "...")?html}
                         </p>
                     </div>
                 </#list>
             </div>
         <#else>
-            <p class="texto-placeholder">No hay hechos asociados aún.</p>
+            <p class="texto-placeholder" style="color: #999;">No hay hechos asociados aún.</p>
         </#if>
     </div>
 
-<#-- HECHOS CONSENSUADOS -->
+    <#-- HECHOS CONSENSUADOS -->
     <div class="form-section" style="margin-top: 40px;">
         <h3 class="form-section-title">🤝 Hechos consensuados</h3>
         <#if coleccion?? && coleccion.hechosConsensuados?? && (coleccion.hechosConsensuados?size > 0)>
@@ -243,28 +225,23 @@
 </#assign>
 
 <style>
-.badge {
-display: inline-block;
-padding: 2px 8px;
-margin: 2px;
-border-radius: 12px;
-background-color: #f0f0f0;
-color: #555;
-font-size: 0.85em;
-border: 1px solid #ddd;
-}
+    .badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 0.85em;
+        font-weight: 500;
+    }
 
-.list-item {
-padding: 12px 15px;
-border-bottom: 1px solid #eee;
-}
+    .list-item {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        list-style: none;
+    }
 
-.list-item:last-child {
-border-bottom: none;
-}
-
-.list-item:hover {
-background-color: #f9f9f9;
-}
+    .list-group {
+        padding-left: 0;
+        margin: 0;
+    }
 </style>
 <#include "layout.ftl">

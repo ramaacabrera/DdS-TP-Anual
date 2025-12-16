@@ -13,12 +13,12 @@ import java.util.UUID;
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = CriterioDeTextoDTO.class, name = "CriterioDeTexto"),
-        @JsonSubTypes.Type(value = CriterioContribuyenteDTO.class, name = "CriterioContribuyente"),
-        @JsonSubTypes.Type(value = CriterioEtiquetasDTO.class, name = "CriterioEtiquetas"),
+        @JsonSubTypes.Type(value = CriterioUbicacionDTO.class, name = "CriterioUbicacion"),
         @JsonSubTypes.Type(value = CriterioFechaDTO.class, name = "CriterioFecha"),
+        @JsonSubTypes.Type(value = CriterioEtiquetasDTO.class, name = "CriterioEtiquetas"),
         @JsonSubTypes.Type(value = CriterioTipoFuenteDTO.class, name = "CriterioTipoFuente"),
         @JsonSubTypes.Type(value = CriterioTipoMultimediaDTO.class, name = "CriterioTipoMultimedia"),
-        @JsonSubTypes.Type(value = CriterioUbicacionDTO.class, name = "CriterioUbicacion")
+        @JsonSubTypes.Type(value = CriterioContribuyenteDTO.class, name = "CriterioContribuyente")
 })
 public abstract class CriterioDTO {
     private UUID criterioId;

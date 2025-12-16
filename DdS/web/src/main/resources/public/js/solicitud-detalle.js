@@ -1,15 +1,6 @@
 const solicitudId = window.solicitudData?.id;
 const tipoSolicitud = window.solicitudData?.tipo;
 
-const getEndpoint = () => {
-    if (tipoSolicitud === 'eliminacion') {
-        return `/admin/solicitudes/eliminacion/${solicitudId}`;
-    } else if (tipoSolicitud === 'modificacion') {
-        return `/admin/solicitudes/modificacion/${solicitudId}`;
-    }
-    throw new Error('Tipo de solicitud no válido');
-};
-
 async function procesarSolicitud(accion) {
     try {
         if (!solicitudId) {
@@ -21,6 +12,23 @@ async function procesarSolicitud(accion) {
                 confirmButtonColor: '#ff4f81'
             });
             return;
+        }
+
+        let datosExtra = {};
+
+        if (accion === 'ACEPTADA' && tipoSolicitud === 'modificacion') {
+            const cambios = [];
+            document.querySelectorAll('.cambio-row').forEach(row => {
+                const campo = row.getAttribute('data-campo'); // ej: "Titulo"
+                const input = row.querySelector('.input-modificado');
+                if (input) {
+                    cambios.push({
+                        campo: campo,
+                        valorFinal: input.value
+                    });
+                }
+            });
+            datosExtra.cambiosAprobados = cambios;
         }
 
         // --- Confirmación SweetAlert ---
@@ -55,7 +63,10 @@ async function procesarSolicitud(accion) {
         const response = await fetch(endpoint, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ accion: accion })
+            body: JSON.stringify({
+                accion: accion,
+                ...datosExtra
+            })
         });
 
         if (response.ok) {

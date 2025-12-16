@@ -1,33 +1,28 @@
 package agregador.dto.Criterios;
 
-import agregador.dto.Hechos.UbicacionDTO;
-
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class CriterioUbicacionDTO extends CriterioDTO {
-    private UbicacionDTO ubicacion;
+
+    private String descripcion;
 
     public CriterioUbicacionDTO() {
-        super(null, "CRITERIO_UBICACION");
+        super(null, "CriterioUbicacion");
     }
 
-    public CriterioUbicacionDTO(UUID criterioId, UbicacionDTO ubicacion) {
-        super(criterioId, "CRITERIO_UBICACION");
-        this.ubicacion = ubicacion;
+    public CriterioUbicacionDTO(UUID criterioId, String descripcion) {
+        super(criterioId, "CriterioUbicacion");
+        this.descripcion = descripcion;
     }
 
-    // Getters y Setters
-    public UbicacionDTO getUbicacion() { return ubicacion; }
-    public void setUbicacion(UbicacionDTO ubicacion) { this.ubicacion = ubicacion; }
-
-    @Override
-    public String getQueryCondition() {
-        return "h.id_ubicacion = " + ubicacion.getUbicacionId();
-    }
+    // Getters y Setters actualizados
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
     @Override
-    public Map<String, Object> getQueryParameters() {
-        return Map.of();
-    }
+    public Map<String, Object> getQueryParameters(){return new HashMap<>();};
+    @Override
+    public String getQueryCondition(){return "";}
 }

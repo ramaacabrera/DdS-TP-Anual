@@ -1,6 +1,7 @@
 package cargadorDinamico.controller;
 
 import cargadorDinamico.conexionAgregador.Controlador;
+import cargadorDinamico.domain.DinamicaDto.SolicitudModificacionSalienteDTO;
 import cargadorDinamico.service.HechosDinamicoService;
 import cargadorDinamico.service.SolicitudesEliminacionService;
 import cargadorDinamico.service.SolicitudesModificacionService;
@@ -33,7 +34,7 @@ public class ControladorDinamica implements Controlador {
     }
 
     @Override
-    public List<SolicitudDeModificacionDTO> obtenerSolicitudesModificacion() {
+    public List<SolicitudModificacionSalienteDTO> obtenerSolicitudesModificacion() {
         return modificacionService.obtenerSolicitudes();
     }
 

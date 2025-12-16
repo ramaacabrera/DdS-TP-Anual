@@ -7,6 +7,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.json.JSONObject;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -23,7 +24,7 @@ public class PostLoginHandler implements Handler {
     }
 
     @Override
-    public void handle(@NotNull Context ctx) {
+    public void handle(@NotNull Context ctx) throws IOException, InterruptedException {
         String usuario = ctx.formParam("usuario");
         String password = ctx.formParam("password");
 
@@ -38,7 +39,6 @@ public class PostLoginHandler implements Handler {
                 .header("Content-Type", "application/json")
                 .build();
 
-        try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             JSONObject json = new JSONObject(response.body());
 
@@ -79,14 +79,7 @@ public class PostLoginHandler implements Handler {
             } else {
                 String errorMsg = json.has("error") ? json.getString("error") : "Credenciales inválidas";
 
-                // Devolvemos un 401 (Unauthorized) y el mensaje en JSON
                 ctx.status(401).json(Map.of("error", errorMsg));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-            // CORRECCIÓN 3: Devolver JSON también en caso de excepción
-            ctx.status(500).json(Map.of("error", "Error interno del servidor"));
-        }
     }
 }

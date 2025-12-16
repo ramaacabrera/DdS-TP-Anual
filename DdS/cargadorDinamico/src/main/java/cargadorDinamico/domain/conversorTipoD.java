@@ -102,15 +102,15 @@ public interface conversorTipoD {
         return dto;
     }
 
-    private SolicitudDeModificacionDTO convertirEntidadSModificacionADTO(SolicitudDeModificacion_D entidad) {
-        SolicitudDeModificacionDTO dto = new SolicitudDeModificacionDTO();
-        dto.setJustificacion(entidad.getJustificacion());
-        dto.setID_HechoAsociado(entidad.getID_HechoAsociado());
-        dto.setusuario(convertirUsuario(entidad.getUsuario()));
-        dto.setHechoModificado(convertirHechoEntidadAHechoModificado(entidad.getHechoModificado()));
-        dto.setEstadoSolicitudModificacion(convertirEstadoSolicitudModificacion(entidad.getEstadoSolicitudModificacion()));
-        return dto;
-    }
+//    private SolicitudDeModificacionDTO convertirEntidadSModificacionADTO(SolicitudDeModificacion_D entidad) {
+//        SolicitudDeModificacionDTO dto = new SolicitudDeModificacionDTO();
+//        dto.setJustificacion(entidad.getJustificacion());
+//        dto.setID_HechoAsociado(entidad.getID_HechoAsociado());
+//        dto.setusuario(convertirUsuario(entidad.getUsuario()));
+//        dto.setHechoModificado(convertirHechoEntidadAHechoModificado(entidad.getHechoModificado()));
+//        dto.setEstadoSolicitudModificacion(convertirEstadoSolicitudModificacion(entidad.getEstadoSolicitudModificacion()));
+//        return dto;
+//    }
 
     private EstadoSolicitudEliminacion convertirEstadoSolicitudEliminacion(EstadoSolicitudEliminacion_D estadoD) {
         if (estadoD == null) return EstadoSolicitudEliminacion.PENDIENTE;

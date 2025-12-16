@@ -8,6 +8,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import web.domain.HechosYColecciones.Coleccion;
+import web.domain.Solicitudes.EstadoSolicitudEliminacion;
+import web.domain.Solicitudes.EstadoSolicitudModificacion;
 import web.domain.Solicitudes.SolicitudDeEliminacion;
 import web.domain.Solicitudes.SolicitudDeModificacion;
 import web.dto.PageDTO;
@@ -27,579 +29,596 @@ public class SolicitudController {
     private SolicitudService solicitudService;
     private UsuarioService usuarioService;
     private String urlPublica;
+    private Map<String, Object> dataCloud;
 
-    public SolicitudController(SolicitudService solicitudService, String urlPublica,  UsuarioService usuarioService) {
+    public SolicitudController(SolicitudService solicitudService, String urlPublica, UsuarioService usuarioService, Map<String, Object> dataCloud) {
         this.solicitudService = solicitudService;
         this.urlPublica = urlPublica;
         this.usuarioService = usuarioService;
+        this.dataCloud = dataCloud;
     }
 
     public Handler listarSolicitudesEliminacion = ctx -> {
-        try {
-            System.out.println("Listando SOLO solicitudes de eliminación");
+        System.out.println("Listando SOLO solicitudes de eliminación");
 
-            int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
-            int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
+        int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
+        int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
 
-            String username = ctx.sessionAttribute("username");
-            String accessToken = ctx.sessionAttribute("accessToken");
-            String rolUsuario = ctx.sessionAttribute("rolUsuario");
+        String estado = ctx.queryParam("estado");
 
-            if (username == null || accessToken == null) {
-                ctx.redirect("/login");
-                return;
-            }
+        String username = ctx.sessionAttribute("username");
+        String accessToken = ctx.sessionAttribute("accessToken");
+        String rolUsuario = ctx.sessionAttribute("rolUsuario");
 
-            Map<String, Object> modelo = ViewUtil.baseModel(ctx);
-            modelo.put("pageTitle", "Solicitudes de Eliminación");
+        long totalPendientes = solicitudService.contarSolicitudes(username, rolUsuario,  accessToken, EstadoSolicitudEliminacion.PENDIENTE);
+        long totalAceptadas = solicitudService.contarSolicitudes(username, rolUsuario, accessToken, EstadoSolicitudEliminacion.ACEPTADA);
+        long totalRechazadas = solicitudService.contarSolicitudes(username, rolUsuario, accessToken, EstadoSolicitudEliminacion.RECHAZADA);
 
-            // 1. Obtener solicitudes de eliminación
-            PageDTO<SolicitudDeEliminacion> solicitudesPage = solicitudService.listarColecciones(username, accessToken, rolUsuario, page, size);
-            /*
-            List<SolicitudDeEliminacion> solicitudesElim =
-                    solicitudService.obtenerSolicitudesEliminacion(username, accessToken, rolUsuario);
+        System.out.println("Pendientes: " + totalPendientes);
+        System.out.println("Aceptadas: " + totalAceptadas);
+        System.out.println("Rechazadas: " + totalRechazadas);
 
-             */
+        long totalTodas = totalPendientes + totalAceptadas + totalRechazadas;
 
-            System.out.println("Número de solicitudes eliminación: " + solicitudesPage.size);
-
-            int fromIndex = (solicitudesPage.page - 1) * solicitudesPage.size;
-            int toIndex = fromIndex + (solicitudesPage.content != null ? solicitudesPage.content.size() : 0);
-
-            modelo.put("baseHref", "/admin/solicitudes/eliminacion");
-            modelo.put("total", solicitudesPage.totalElements);
-            modelo.put("page", solicitudesPage.page);
-            modelo.put("size", solicitudesPage.size);
-            modelo.put("totalPages", solicitudesPage.totalPages);
-            modelo.put("fromIndex", fromIndex);
-            modelo.put("toIndex", toIndex);
-
-            // 2. Crear lista simplificada
-            List<Map<String, Object>> solicitudesSimplificadas = new ArrayList<>();
-
-            for (SolicitudDeEliminacion solicitud : solicitudesPage.content) {
-                Map<String, Object> solicitudData = new HashMap<>();
-
-                // Datos básicos obligatorios
-                solicitudData.put("id", solicitud.getId() != null ? solicitud.getId().toString() : "");
-                solicitudData.put("justificacion", solicitud.getJustificacion() != null ? solicitud.getJustificacion() : "Sin justificación");
-                solicitudData.put("estado", solicitud.getEstado() != null ? solicitud.getEstado() : "PENDIENTE");
-
-                // Usuario - simplificado
-                if (solicitud.getUsuario() != null) {
-                    Map<String, String> usuarioMap = new HashMap<>();
-                    usuarioMap.put("username", solicitud.getUsuario().getUsername() != null ? solicitud.getUsuario().getUsername() : "Usuario");
-                    solicitudData.put("usuario", usuarioMap);
-                } else {
-                    solicitudData.put("usuario", null);
-                }
-
-                // Hecho - manejar el título
-                String hechoTitulo = "Sin título";
-                String hechoIdStr = null;
-
-                if (solicitud.getHechoAsociado() != null) {
-                    hechoIdStr = solicitud.getHechoAsociado().toString();
-                    solicitudData.put("hechoId", hechoIdStr);
-
-                    // Solo intentar obtener el título si el hecho existe
-                    try {
-                        // Verificar si el hecho existe primero
-                        HttpClient client = HttpClient.newHttpClient();
-                        HttpRequest request = HttpRequest.newBuilder()
-                                .uri(new URI(urlPublica + "/hechos/" + hechoIdStr))
-                                .GET()
-                                .build();
-
-                        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                        if (response.statusCode() == 200) {
-                            ObjectMapper mapper = new ObjectMapper();
-                            Map<String, Object> hechoData = mapper.readValue(response.body(), Map.class);
-                            hechoTitulo = (String) hechoData.getOrDefault("titulo", "Sin título");
-                        } else {
-                            hechoTitulo = "Hecho eliminado o no encontrado";
-                        }
-                    } catch (Exception e) {
-                        System.err.println("Error obteniendo hecho ID " + hechoIdStr + ": " + e.getMessage());
-                        hechoTitulo = "Error cargando";
-                    }
-                } else {
-                    hechoTitulo = "Sin hecho asociado";
-                }
-
-                solicitudData.put("hechoTitulo", hechoTitulo);
-                solicitudesSimplificadas.add(solicitudData);
-
-                // Debug
-                System.out.println("Solicitud procesada: ID=" + solicitudData.get("id") +
-                        ", Estado=" + solicitudData.get("estado") +
-                        ", Título hecho=" + hechoTitulo);
-            }
-
-            modelo.put("solicitudesEliminacion", solicitudesSimplificadas);
-
-            // Para modificación, simplemente lista vacía por ahora
-            modelo.put("solicitudesModificacion", new ArrayList<>());
-
-            ctx.render("solicitudes.ftl", modelo);
-
-        } catch (Exception e) {
-            System.err.println("Error listando Solicitudes: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).result("Error al cargar solicitudes: " + e.getMessage());
+        if (username == null || accessToken == null) {
+            ctx.redirect("/login");
+            return;
         }
+
+        Map<String, Object> modelo = ViewUtil.baseModel(ctx);
+        modelo.put("pageTitle", "Solicitudes de Eliminación");
+
+        PageDTO<SolicitudDeEliminacion> solicitudesPage = null;
+
+        // 1. Obtener solicitudes de eliminación
+
+        if(estado != null){
+            System.out.println("===== Estado: " + estado + " =====");
+            solicitudesPage = solicitudService.listarPorEstado(username, accessToken, rolUsuario, page, size, estado);
+            modelo.put("estadoFiltro", estado);
+        } else{
+            solicitudesPage = solicitudService.listarSolicitudes(username, accessToken, rolUsuario, page, size);
+            modelo.put("estadoFiltro", "");
+        }
+
+        System.out.println("Número de solicitudes eliminación: " + solicitudesPage.size);
+
+        int fromIndex = (solicitudesPage.page - 1) * solicitudesPage.size;
+        int toIndex = fromIndex + (solicitudesPage.content != null ? solicitudesPage.content.size() : 0);
+
+        modelo.put("baseHref", "/admin/solicitudes/eliminacion");
+        modelo.put("total", solicitudesPage.totalElements);
+        modelo.put("page", solicitudesPage.page);
+        modelo.put("size", solicitudesPage.size);
+        modelo.put("totalPages", solicitudesPage.totalPages);
+        modelo.put("fromIndex", fromIndex);
+        modelo.put("toIndex", toIndex);
+        modelo.put("totalSolicitudes", solicitudesPage.totalElements);
+
+        // Estadísticas para los botones
+        modelo.put("totalTodas", totalTodas);
+        modelo.put("totalPendientes", totalPendientes);
+        modelo.put("totalAceptadas", totalAceptadas);
+        modelo.put("totalRechazadas", totalRechazadas);
+
+        List<Map<String, Object>> solicitudesSimplificadas = new ArrayList<>();
+
+        for (SolicitudDeEliminacion solicitud : solicitudesPage.content) {
+            Map<String, Object> solicitudData = new HashMap<>();
+
+            solicitudData.put("id", solicitud.getId() != null ? solicitud.getId().toString() : "");
+            solicitudData.put("justificacion", solicitud.getJustificacion() != null ? solicitud.getJustificacion() : "Sin justificación");
+            solicitudData.put("estado", solicitud.getEstado() != null ? solicitud.getEstado() : "PENDIENTE");
+
+            if (solicitud.getUsuarioId() != null) {
+                Map<String, String> usuarioMap = new HashMap<>();
+                usuarioMap.put("username", solicitud.getUsuarioId().getUsername() != null ? solicitud.getUsuarioId().getUsername() : "Usuario");
+                solicitudData.put("usuario", usuarioMap);
+            } else {
+                solicitudData.put("usuario", null);
+            }
+
+            String hechoTitulo = "Sin título";
+            String hechoIdStr = null;
+
+            if (solicitud.getHechoAsociado() != null) {
+                hechoIdStr = solicitud.getHechoAsociado().toString();
+                solicitudData.put("hechoId", hechoIdStr);
+
+                try {
+                    HttpClient client = HttpClient.newHttpClient();
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .uri(new URI(urlPublica + "/hechos/" + hechoIdStr))
+                            .GET()
+                            .build();
+
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                    if (response.statusCode() == 200) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        Map<String, Object> hechoData = mapper.readValue(response.body(), Map.class);
+                        hechoTitulo = (String) hechoData.getOrDefault("titulo", "Sin título");
+                    } else {
+                        hechoTitulo = "Hecho eliminado o no encontrado";
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error obteniendo hecho ID " + hechoIdStr + ": " + e.getMessage());
+                    hechoTitulo = "Error cargando";
+                }
+            } else {
+                hechoTitulo = "Sin hecho asociado";
+            }
+
+            solicitudData.put("hechoTitulo", hechoTitulo);
+            solicitudesSimplificadas.add(solicitudData);
+        }
+
+        modelo.put("solicitudesEliminacion", solicitudesSimplificadas);
+        modelo.put("solicitudesModificacion", new ArrayList<>());
+
+        System.out.println("Modelo: " + modelo);
+
+        ctx.render("solicitudes.ftl", modelo);
     };
 
     public Handler obtenerSolicitud = ctx -> {
-        try {
-            String id = ctx.pathParam("id");
-            String tipo = ctx.pathParam("tipo");
+        String id = ctx.pathParam("id");
+        String tipo = ctx.pathParam("tipo");
 
-            System.out.println("Obteniendo solicitud detalle ID: " + id + ", tipo: " + tipo);
+        System.out.println("Obteniendo solicitud detalle ID: " + id + ", tipo: " + tipo);
 
-            String username = ctx.sessionAttribute("username");
-            String accessToken = ctx.sessionAttribute("accessToken");
-            String rolUsuario = ctx.sessionAttribute("rolUsuario");
+        String username = ctx.sessionAttribute("username");
+        String accessToken = ctx.sessionAttribute("accessToken");
+        String rolUsuario = ctx.sessionAttribute("rolUsuario");
 
-            if (username == null || accessToken == null) {
-                ctx.redirect("/login");
+        if (username == null || accessToken == null) {
+            ctx.redirect("/login");
+            return;
+        }
+
+        List<String> categorias = solicitudService.obtenerCategorias();
+
+        Map<String, Object> modelo = ViewUtil.baseModel(ctx);
+        modelo.put("pageTitle", "Detalle de Solicitud");
+        modelo.put("tipo", tipo);
+        modelo.put("categorias", categorias);
+
+        if ("eliminacion".equals(tipo)) {
+            SolicitudDeEliminacion sol = solicitudService.obtenerSolicitudEliminacion(id, username, accessToken, rolUsuario);
+
+            System.out.println(new ObjectMapper().writeValueAsString(sol));
+
+            if (sol == null) {
+                ctx.status(404).result("Solicitud no encontrada");
                 return;
             }
 
-            Map<String, Object> modelo = ViewUtil.baseModel(ctx);
-            modelo.put("pageTitle", "Detalle de Solicitud");
-            modelo.put("tipo", tipo);
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> solicitudData = mapper.convertValue(sol, Map.class);
 
-            if ("eliminacion".equals(tipo)) {
-                SolicitudDeEliminacion sol = solicitudService.obtenerSolicitudEliminacion(id, username, accessToken, rolUsuario);
+            String estadoStr = "PENDIENTE";
+            if (sol.getEstado() != null) {
+                estadoStr = sol.getEstado().name();
+                System.out.println("Estado obtenido (ENUM): " + sol.getEstado() + ", como String: " + estadoStr);
+            }
 
-                System.out.println(new ObjectMapper().writeValueAsString(sol));
+            solicitudData.put("estado", estadoStr);
 
-                if (sol == null) {
-                    ctx.status(404).result("Solicitud no encontrada");
-                    return;
-                }
+            Map<String, Object> hechoData = new HashMap<>();
+            if (sol.getHechoAsociado() != null) {
+                try {
+                    String hechoIdStr = sol.getHechoAsociado().toString();
+                    System.out.println("Buscando hecho para detalle: " + hechoIdStr);
 
-                // Convertir la solicitud a un Map para poder agregar campos extras
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, Object> solicitudData = mapper.convertValue(sol, Map.class);
+                    HttpClient client = HttpClient.newHttpClient();
+                    String urlCompleta = urlPublica + "/hechos/" + hechoIdStr;
+                    System.out.println("URL del hecho: " + urlCompleta);
 
-                // Obtener el estado como String del ENUM
-                String estadoStr = "PENDIENTE";
-                if (sol.getEstado() != null) {
-                    estadoStr = sol.getEstado().name(); // Esto convierte el ENUM a String: "ACEPTADA", "RECHAZADA", "PENDIENTE"
-                    System.out.println("Estado obtenido (ENUM): " + sol.getEstado() + ", como String: " + estadoStr);
-                }
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .uri(new URI(urlCompleta))
+                            .GET()
+                            .build();
 
-                solicitudData.put("estado", estadoStr);
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    System.out.println("Response status: " + response.statusCode());
 
-                System.out.println("DEBUG - Campo 'estado' agregado como String: " + solicitudData.get("estado"));
+                    if (response.statusCode() == 200) {
+                        hechoData = mapper.readValue(response.body(), Map.class);
 
-                // Obtener datos del hecho
-                Map<String, Object> hechoData = new HashMap<>();
-                if (sol.getHechoAsociado() != null) {
-                    try {
-                        String hechoIdStr = sol.getHechoAsociado().toString();
-                        System.out.println("Buscando hecho para detalle: " + hechoIdStr);
-
-                        HttpClient client = HttpClient.newHttpClient();
-                        String urlCompleta = urlPublica + "/hechos/" + hechoIdStr;
-                        System.out.println("URL del hecho: " + urlCompleta);
-
-                        HttpRequest request = HttpRequest.newBuilder()
-                                .uri(new URI(urlCompleta))
-                                .GET()
-                                .build();
-
-                        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                        System.out.println("Response status: " + response.statusCode());
-
-                        if (response.statusCode() == 200) {
-                            hechoData = mapper.readValue(response.body(), Map.class);
-                            System.out.println("Datos del hecho obtenidos: " + hechoData.keySet());
-
-                            // Formatear la fecha si existe
-                            if (hechoData.containsKey("fechaDeCarga")) {
-                                Object fechaObj = hechoData.get("fechaDeCarga");
-                                if (fechaObj != null) {
-                                    try {
-                                        if (fechaObj instanceof Number) {
-                                            // Si es un número (timestamp), convertirlo a fecha formateada
-                                            long timestamp = ((Number) fechaObj).longValue();
-                                            Date fecha = new Date(timestamp);
-                                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                                            hechoData.put("fechaDeCargaFormateada", sdf.format(fecha));
-                                        } else if (fechaObj instanceof String) {
-                                            // Si ya es string, dejarlo como está
-                                            hechoData.put("fechaDeCargaFormateada", fechaObj.toString());
-                                        }
-                                    } catch (Exception e) {
-                                        System.err.println("Error formateando fecha: " + e.getMessage());
-                                        hechoData.put("fechaDeCargaFormateada", "Fecha inválida");
+                        if (hechoData.containsKey("fechaDeCarga")) {
+                            Object fechaObj = hechoData.get("fechaDeCarga");
+                            if (fechaObj != null) {
+                                try {
+                                    if (fechaObj instanceof Number) {
+                                        long timestamp = ((Number) fechaObj).longValue();
+                                        Date fecha = new Date(timestamp);
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                                        hechoData.put("fechaDeCargaFormateada", sdf.format(fecha));
+                                    } else if (fechaObj instanceof String) {
+                                        hechoData.put("fechaDeCargaFormateada", fechaObj.toString());
                                     }
+                                } catch (Exception e) {
+                                    System.err.println("Error formateando fecha: " + e.getMessage());
+                                    hechoData.put("fechaDeCargaFormateada", "Fecha inválida");
                                 }
                             }
-                        } else {
-                            System.err.println("Error obteniendo hecho: " + response.statusCode());
-                            hechoData.put("titulo", "Error al cargar el hecho");
                         }
-                    } catch (Exception e) {
-                        System.err.println("Error obteniendo hecho para detalle: " + e.getMessage());
-                        e.printStackTrace();
-                        hechoData.put("titulo", "Error de conexión");
+                    } else {
+                        System.err.println("Error obteniendo hecho: " + response.statusCode());
+                        hechoData.put("titulo", "Error al cargar el hecho");
                     }
-                } else {
-                    hechoData.put("titulo", "Sin hecho asociado");
+                } catch (Exception e) {
+                    System.err.println("Error obteniendo hecho para detalle: " + e.getMessage());
+                    e.printStackTrace();
+                    hechoData.put("titulo", "Error de conexión");
                 }
-
-                modelo.put("solicitud", solicitudData);
-                modelo.put("hecho", hechoData);
-
-            } else if ("modificacion".equals(tipo)) {
-                // Similar para modificación
-                SolicitudDeModificacion sol = solicitudService.obtenerSolicitudModificacion(id, username, accessToken, rolUsuario);
-
-                if (sol == null) {
-                    ctx.status(404).result("Solicitud no encontrada");
-                    return;
-                }
-
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, Object> solicitudData = mapper.convertValue(sol, Map.class);
-
-                Map<String, Object> hechoData = new HashMap<>();
-                if (sol.getHechoAsociado() != null) {
-                    try {
-                        String hechoIdStr = sol.getHechoAsociado().toString();
-                        HttpClient client = HttpClient.newHttpClient();
-                        String urlCompleta = urlPublica + "/hechos/" + hechoIdStr;
-
-                        HttpRequest request = HttpRequest.newBuilder()
-                                .uri(new URI(urlCompleta))
-                                .GET()
-                                .build();
-
-                        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                        if (response.statusCode() == 200) {
-                            hechoData = mapper.readValue(response.body(), Map.class);
-                        } else {
-                            hechoData.put("titulo", "Error al cargar el hecho");
-                        }
-                    } catch (Exception e) {
-                        System.err.println("Error obteniendo hecho para detalle (mod): " + e.getMessage());
-                        hechoData.put("titulo", "Error de conexión");
-                    }
-                }
-
-                modelo.put("solicitud", solicitudData);
-                modelo.put("hecho", hechoData);
             } else {
-                ctx.status(400).result("Tipo inválido");
+                hechoData.put("titulo", "Sin hecho asociado");
+            }
+
+            modelo.put("solicitud", solicitudData);
+            modelo.put("hecho", hechoData);
+
+        } else if ("modificacion".equals(tipo)) {
+            // 1. Obtener la solicitud del servicio
+            SolicitudDeModificacion sol = solicitudService.obtenerSolicitudModificacion(id, username, accessToken, rolUsuario);
+
+            if (sol == null) {
+                ctx.status(404).result("Solicitud no encontrada");
                 return;
             }
 
-            ctx.render("solicitud-detalle.ftl", modelo);
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> solicitudData = mapper.convertValue(sol, Map.class);
 
-        } catch (Exception e) {
-            System.err.println("Error obtenerSolicitud: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).result("Error al cargar la solicitud: " + e.getMessage());
+            Map<String, Object> propuesta = (Map<String, Object>) solicitudData.get("hechoModificado");
+
+            Map<String, Object> hechoData = new HashMap<>();
+
+            if (sol.getHechoAsociado() != null) {
+                try {
+                    String hechoIdStr = sol.getHechoAsociado().toString();
+                    HttpClient client = HttpClient.newHttpClient();
+                    String urlCompleta = urlPublica + "/hechos/" + hechoIdStr;
+
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .uri(new URI(urlCompleta))
+                            .GET()
+                            .build();
+
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                    if (response.statusCode() == 200) {
+                        hechoData = mapper.readValue(response.body(), Map.class);
+                    }
+                } catch (Exception e) {
+                    hechoData.put("titulo", "Error de conexión");
+                }
+            }
+
+            List<Map<String, String>> cambios = new ArrayList<>();
+
+            if (propuesta != null && !hechoData.isEmpty()) {
+
+                compararYAgregar(cambios, "titulo", hechoData.get("titulo"), propuesta.get("titulo"));
+                compararYAgregar(cambios, "descripcion", hechoData.get("descripcion"), propuesta.get("descripcion"));
+                compararYAgregar(cambios, "categoria", hechoData.get("categoria"), propuesta.get("categoria"));
+
+                String fechaAnt = formatearFecha(hechoData.get("fechaDeAcontecimiento"));
+                String fechaNue = formatearFecha(propuesta.get("fechaDeAcontecimiento"));
+                compararYAgregar(cambios, "fechaDeAcontecimiento", fechaAnt, fechaNue);
+
+                String ubiAnt = obtenerDescripcionUbicacion(hechoData.get("ubicacion"));
+                String ubiNue = obtenerDescripcionUbicacion(propuesta.get("ubicacion"));
+                if (propuesta.get("ubicacion") != null) {
+                    compararYAgregar(cambios, "Ubicacion", ubiAnt, ubiNue);
+                }
+
+                // D. Comparar Multimedia
+                List<Map<String, Object>> mediaAnt = (List<Map<String, Object>>) hechoData.get("contenidoMultimedia");
+                List<Map<String, Object>> mediaNue = (List<Map<String, Object>>) propuesta.get("contenidoMultimedia");
+
+                if (mediaNue != null && !mediaNue.isEmpty()) {
+                    String htmlAnt = generarHtmlFotos(mediaAnt);
+                    String htmlNue = generarHtmlFotos(mediaNue);
+
+                    // Si son diferentes, agregamos el cambio
+                    if (!htmlAnt.equals(htmlNue)) {
+                        compararYAgregar(cambios, "Multimedia", htmlAnt, htmlNue);
+                    }
+                }
+            }
+
+            solicitudData.put("cambios", cambios);
+
+            modelo.put("solicitud", solicitudData);
+            modelo.put("hecho", hechoData);
+        } else {
+            ctx.status(400).result("Tipo inválido");
+            return;
         }
+
+        ctx.render("solicitud-detalle.ftl", modelo);
     };
 
-
     public Handler obtenerFormsEliminarSolicitud = ctx -> {
-        try {
-            String hechoId = ctx.pathParam("id");
+        String hechoId = ctx.pathParam("id");
 
-            Map<String, Object> modelo = ViewUtil.baseModel(ctx);
-            modelo.put("pageTitle", "Solicitar Eliminación");
-            modelo.put("hechoId", hechoId);
-            modelo.put("urlPublica", urlPublica);
+        Map<String, Object> modelo = ViewUtil.baseModel(ctx);
+        modelo.put("pageTitle", "Solicitar Eliminación");
+        modelo.put("hechoId", hechoId);
+        modelo.put("urlPublica", urlPublica);
 
-            ctx.render("crear-solicitud-eliminacion.ftl", modelo);
-
-        } catch (Exception e) {
-            System.err.println("Error obtenerFormsEliminarSolicitud: " + e.getMessage());
-            ctx.status(500).result("Error al cargar formulario: " + e.getMessage());
-        }
+        ctx.render("crear-solicitud-eliminacion.ftl", modelo);
     };
 
     public Handler actualizarEstadoSolicitud = ctx -> {
+        String id = ctx.pathParam("id");
+        String tipo = ctx.pathParam("tipo");
+        String body = ctx.body();
+        System.out.println("Body recibido: " + body);
+
+        if (body == null || body.trim().isEmpty()) {
+            ctx.status(400).result("Cuerpo de solicitud vacío");
+            return;
+        }
+
+        String nuevoEstado;
         try {
-            String id = ctx.pathParam("id");
-            String tipo = ctx.pathParam("tipo");
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode jsonNode = mapper.readTree(body);
 
-            // Parsear el cuerpo JSON
-            String body = ctx.body();
-            System.out.println("Body recibido: " + body);
-
-            // Si el body está vacío o no es JSON válido
-            if (body == null || body.trim().isEmpty()) {
-                ctx.status(400).result("Cuerpo de solicitud vacío");
-                return;
-            }
-
-            // Intentar parsear como JSON
-            String nuevoEstado;
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode jsonNode = mapper.readTree(body);
-
-                // Intentar obtener la propiedad "accion"
-                if (jsonNode.has("accion")) {
-                    nuevoEstado = jsonNode.get("accion").asText();
-                } else if (jsonNode.isTextual()) {
-                    // Si es solo texto (para compatibilidad)
-                    nuevoEstado = jsonNode.asText();
-                } else {
-                    ctx.status(400).result("Propiedad 'accion' no encontrada en JSON");
-                    return;
-                }
-            } catch (Exception e) {
-                // Si falla el parseo JSON, tratar el body como texto plano
-                System.out.println("No es JSON válido, tratando como texto: " + body);
-                nuevoEstado = body.trim();
-            }
-
-            System.out.println("ID: " + id + ", Tipo: " + tipo + ", Nuevo estado: " + nuevoEstado);
-
-            // Validar el estado
-            if (!"ACEPTADA".equals(nuevoEstado) && !"RECHAZADA".equals(nuevoEstado)) {
-                ctx.status(400).result("Estado no válido. Use 'ACEPTADA' o 'RECHAZADA'");
-                return;
-            }
-
-            // Obtener datos de sesión
-            String username = ctx.sessionAttribute("username");
-            String accessToken = ctx.sessionAttribute("accessToken");
-            String rolUsuario = ctx.sessionAttribute("rolUsuario");
-
-            if (username == null || accessToken == null) {
-                ctx.status(401).result("Sesión expirada. Inicie sesión nuevamente.");
-                return;
-            }
-
-            int status = solicitudService.actualizarEstadoSolicitud(id, tipo, nuevoEstado, username, accessToken, rolUsuario);
-
-            if (status >= 200 && status < 300) {
-                ctx.status(200).result("Solicitud actualizada");
+            if (jsonNode.has("accion")) {
+                nuevoEstado = jsonNode.get("accion").asText();
+            } else if (jsonNode.isTextual()) {
+                nuevoEstado = jsonNode.asText();
             } else {
-                ctx.status(status).result("Error del servidor administrativo: HTTP " + status);
+                ctx.status(400).result("Propiedad 'accion' no encontrada en JSON");
+                return;
             }
-
         } catch (Exception e) {
-            System.err.println("Error actualizarEstadoSolicitud: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).result("Error al actualizar: " + e.getMessage());
+            System.out.println("No es JSON válido, tratando como texto: " + body);
+            nuevoEstado = body.trim();
+        }
+
+        System.out.println("ID: " + id + ", Tipo: " + tipo + ", Nuevo estado: " + nuevoEstado);
+
+        if (!"ACEPTADA".equals(nuevoEstado) && !"RECHAZADA".equals(nuevoEstado)) {
+            ctx.status(400).result("Estado no válido. Use 'ACEPTADA' o 'RECHAZADA'");
+            return;
+        }
+
+        String username = ctx.sessionAttribute("username");
+        String accessToken = ctx.sessionAttribute("accessToken");
+        String rolUsuario = ctx.sessionAttribute("rolUsuario");
+
+        if (username == null || accessToken == null) {
+            ctx.status(401).result("Sesión expirada. Inicie sesión nuevamente.");
+            return;
+        }
+
+        int status = solicitudService.actualizarEstadoSolicitud(id, tipo, nuevoEstado, username, accessToken, rolUsuario);
+
+        if (status >= 200 && status < 300) {
+            ctx.status(200).result("Solicitud actualizada");
+        } else {
+            ctx.status(status).result("Error del servidor administrativo: HTTP " + status);
         }
     };
-
 
     public Handler listarSolicitudesModificacion = ctx -> {
         ObjectMapper mapper = new ObjectMapper();
         HttpClient http = HttpClient.newHttpClient();
-        try {
-            System.out.println("Listando SOLO solicitudes de modificación");
+        System.out.println("Listando SOLO solicitudes de modificación");
 
-            String username = ctx.sessionAttribute("username");
-            String accessToken = ctx.sessionAttribute("accessToken");
-            String rolUsuario = ctx.sessionAttribute("rolUsuario");
-            System.out.println("entra a try 1");
-            if (username == null || accessToken == null) {
-                ctx.redirect("/login");
-
-                return;
-
-            }
+        int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
+        int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
+        String estado = ctx.queryParam("estado");
 
 
-            Map<String, Object> modelo = ViewUtil.baseModel(ctx);
-            modelo.put("pageTitle", "Solicitudes de Modificación");
 
-            List<SolicitudDeModificacion> solicitudesMod =
-                    solicitudService.obtenerSolicitudesModificacion(username, accessToken, rolUsuario);
-
-            // 2. Crear lista simplificada (para agregar el título del hecho)
-            List<Map<String, Object>> solicitudesSimplificadas = new ArrayList<>();
-
-            for (SolicitudDeModificacion solicitud : solicitudesMod) {
-                Map<String, Object> solicitudData = new HashMap<>();
-
-                // Datos básicos
-                solicitudData.put("id", solicitud.getId() != null ? solicitud.getId().toString() : "");
-                solicitudData.put("justificacion", solicitud.getJustificacion() != null ? solicitud.getJustificacion() : "Sin justificación");
-
-                // Estado: Usar el ENUM como String
-                solicitudData.put("estado", solicitud.getEstado() != null ? solicitud.getEstado().name() : "PENDIENTE");
-
-                // Usuario
-                if (solicitud.getUsuario() != null) {
-                    Map<String, String> usuarioMap = new HashMap<>();
-                    usuarioMap.put("username", solicitud.getUsuario().getUsername() != null ? solicitud.getUsuario().getUsername() : "Usuario");
-                    solicitudData.put("usuario", usuarioMap);
-                } else {
-                    solicitudData.put("usuario", null);
-                }
-
-                // === Manejo de Hecho (Título) ===
-                String hechoTitulo = "Sin título";
-                String hechoIdStr = null;
-
-                if (solicitud.getHechoAsociado() != null) {
-                    System.out.println("entra a if antes de request");
-                    hechoIdStr = solicitud.getHechoAsociado().toString();
-                    solicitudData.put("hechoId", hechoIdStr);
-
-                    try {
-                        System.out.println("entra a try antes de request");
-                        // Obtener el título del hecho del servicio de hechos
-                        HttpRequest request = HttpRequest.newBuilder()
-                                .uri(new URI(urlPublica + "/hechos/" + hechoIdStr))
-                                .GET()
-                                .build();
-
-                        HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
-
-                        if (response.statusCode() == 200) {
-                            Map<String, Object> hechoData = mapper.readValue(response.body(), Map.class);
-                            hechoTitulo = (String) hechoData.getOrDefault("titulo", "Sin título");
-                        } else {
-                            hechoTitulo = "Hecho eliminado o no encontrado (HTTP " + response.statusCode() + ")";
-                        }
-                    } catch (Exception e) {
-                        System.err.println("Error obteniendo hecho ID " + hechoIdStr + ": " + e.getMessage());
-                        hechoTitulo = "Error de conexión o lectura";
-                    }
-                } else {
-                    hechoTitulo = "Sin hecho asociado";
-                }
-
-                solicitudData.put("hechoTitulo", hechoTitulo);
-
-                // === Manejo de los Cambios (HechoModificado) ===
-                // Convertir la entidad HechoModificado a un Map/JSON para que Freemarker lo pueda usar
-                if (solicitud.getHechoModificado() != null) {
-                    // Aquí se asume que HechoModificado tiene campos que Freemarker listará (como en la respuesta anterior)
-                    // Si HechoModificado necesita ser transformado en una lista simple de {campo, anterior, nuevo},
-                    // esa lógica de transformación debería ocurrir aquí.
-
-                    // Por ahora, lo pasamos directamente, asumiendo que contiene los datos que necesitamos:
-                    Map<String, Object> hechoModificadoMap = mapper.convertValue(solicitud.getHechoModificado(), Map.class);
-
-                    // IMPORTANTÍSIMO: Debemos añadir una lista iterable de cambios (como en el FTL)
-                    // Como el modelo de dominio no proporciona una lista de cambios simple,
-                    // la lista debe ser construida aquí.
-                    // EJEMPLO: (Recomendación: Mueve esta lógica al componente administrativo)
-                    List<Map<String, String>> listaDeCambios = new ArrayList<>();
-
-                    // Simulación de la obtención de la lista de cambios a partir del hechoModificado
-                    // (Esta parte es altamente dependiente de la estructura JSON que envíe el admin)
-                    // Si el componente administrativo ya envía la lista de cambios, no necesitas esta simulación.
-                    // Si no, debes iterar sobre las propiedades de 'hechoModificadoMap' y crear la lista.
-
-                    // Aquí usamos el hechoModificado original para pasarlo a Freemarker,
-                    // y el template de Freemarker intentará acceder a `solicitud.hechoModificado.cambios`
-                    solicitudData.put("hechoModificado", hechoModificadoMap);
-                } else {
-                    solicitudData.put("hechoModificado", null);
-                }
-
-
-                solicitudesSimplificadas.add(solicitudData);
-            }
-
-            modelo.put("solicitudesModificacion", solicitudesSimplificadas);
-
-            // 3. Renderizar el template específico de modificación
-            ctx.render("solicitudes-mod.ftl", modelo);
-
-        } catch (Exception e) {
-            System.err.println("Error listando Solicitudes de Modificación: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).result("Error al cargar solicitudes de modificación: " + e.getMessage());
+        String username = ctx.sessionAttribute("username");
+        String accessToken = ctx.sessionAttribute("accessToken");
+        String rolUsuario = ctx.sessionAttribute("rolUsuario");
+        System.out.println("entra a try 1");
+        if (username == null || accessToken == null) {
+            ctx.redirect("/login");
+            return;
         }
+
+        long totalPendientes = solicitudService.contarSolicitudesModificacion(username, rolUsuario, accessToken, EstadoSolicitudModificacion.PENDIENTE);
+        long totalAceptadas = solicitudService.contarSolicitudesModificacion(username, rolUsuario, accessToken, EstadoSolicitudModificacion.ACEPTADA);
+        long totalRechazadas = solicitudService.contarSolicitudesModificacion(username, rolUsuario, accessToken, EstadoSolicitudModificacion.RECHAZADA);
+
+        System.out.println("Total pendientes: " + totalPendientes);
+        System.out.println("Total aceptadas: " + totalAceptadas);
+        System.out.println("Total rechazadas: " + totalRechazadas);
+
+        long totalTodas = totalPendientes + totalAceptadas + totalRechazadas;
+
+        System.out.println("Total: " + totalTodas);
+
+        PageDTO<SolicitudDeModificacion> solicitudesPage;
+
+        Map<String, Object> modelo = ViewUtil.baseModel(ctx);
+
+        if(estado != null){
+            solicitudesPage = solicitudService.obtenerSolicitudesModificacion(username, accessToken, rolUsuario, page, size, estado);
+            modelo.put("estadoFiltro", estado);
+        } else{
+            solicitudesPage = solicitudService.listarSolicitudesModificacion(username, accessToken, rolUsuario, page, size);
+            modelo.put("estadoFiltro", "");
+        }
+
+
+        modelo.put("pageTitle", "Solicitudes de Modificación");
+
+        System.out.println("Número de solicitudes eliminación: " + solicitudesPage.size);
+
+        int fromIndex = (solicitudesPage.page - 1) * solicitudesPage.size;
+        int toIndex = fromIndex + (solicitudesPage.content != null ? solicitudesPage.content.size() : 0);
+
+        modelo.put("baseHref", "/admin/solicitudes/modificacion");
+        modelo.put("total", solicitudesPage.totalElements);
+        modelo.put("page", solicitudesPage.page);
+        modelo.put("size", solicitudesPage.size);
+        modelo.put("totalPages", solicitudesPage.totalPages);
+        modelo.put("fromIndex", fromIndex);
+        modelo.put("toIndex", toIndex);
+        modelo.put("totalSolicitudes", solicitudesPage.totalElements);
+
+        // Estadísticas para los botones
+        modelo.put("totalTodas", totalTodas);
+        modelo.put("totalPendientes", totalPendientes);
+        modelo.put("totalAceptadas", totalAceptadas);
+        modelo.put("totalRechazadas", totalRechazadas);
+
+
+        List<Map<String, Object>> solicitudesSimplificadas = new ArrayList<>();
+
+        for (SolicitudDeModificacion solicitud : solicitudesPage.content) {
+            Map<String, Object> solicitudData = new HashMap<>();
+
+            solicitudData.put("id", solicitud.getId() != null ? solicitud.getId().toString() : "");
+            solicitudData.put("justificacion", solicitud.getJustificacion() != null ? solicitud.getJustificacion() : "Sin justificación");
+            solicitudData.put("estado", solicitud.getEstado() != null ? solicitud.getEstado().name() : "PENDIENTE");
+
+            if (solicitud.getUsuarioId() != null) {
+                Map<String, String> usuarioMap = new HashMap<>();
+                usuarioMap.put("username", solicitud.getUsuarioId().getUsername() != null ? solicitud.getUsuarioId().getUsername() : "Usuario");
+                solicitudData.put("usuario", usuarioMap);
+            } else {
+                solicitudData.put("usuario", null);
+            }
+
+            String hechoTitulo = "Sin título";
+            String hechoIdStr = null;
+
+            if (solicitud.getHechoAsociado() != null) {
+                System.out.println("entra a if antes de request");
+                hechoIdStr = solicitud.getHechoAsociado().toString();
+                solicitudData.put("hechoId", hechoIdStr);
+
+                try {
+                    System.out.println("entra a try antes de request");
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .uri(new URI(urlPublica + "/hechos/" + hechoIdStr))
+                            .GET()
+                            .build();
+
+                    HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+
+                    if (response.statusCode() == 200) {
+                        Map<String, Object> hechoData = mapper.readValue(response.body(), Map.class);
+                        hechoTitulo = (String) hechoData.getOrDefault("titulo", "Sin título");
+                    } else {
+                        hechoTitulo = "Hecho eliminado o no encontrado (HTTP " + response.statusCode() + ")";
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error obteniendo hecho ID " + hechoIdStr + ": " + e.getMessage());
+                    hechoTitulo = "Error de conexión o lectura";
+                }
+            } else {
+                hechoTitulo = "Sin hecho asociado";
+            }
+
+            solicitudData.put("hechoTitulo", hechoTitulo);
+
+            if (solicitud.getHechoModificado() != null) {
+                Map<String, Object> hechoModificadoMap = mapper.convertValue(solicitud.getHechoModificado(), Map.class);
+                solicitudData.put("hechoModificado", hechoModificadoMap);
+            } else {
+                solicitudData.put("hechoModificado", null);
+            }
+
+            solicitudesSimplificadas.add(solicitudData);
+        }
+
+        modelo.put("solicitudesModificacion", solicitudesSimplificadas);
+
+        ctx.render("solicitudes-mod.ftl", modelo);
     };
+
     public Handler obtenerFormsModificarSolicitud = ctx -> {
         String accessToken = ctx.sessionAttribute("accessToken");
         if(accessToken == null || accessToken.isEmpty()) {
             ctx.redirect("/login");
+            return;
         }
-        try {
-            String hechoId = ctx.pathParam("id");
-            String username = ctx.sessionAttribute("username");
 
+        String hechoId = ctx.pathParam("id");
+        String username = ctx.sessionAttribute("username");
 
-            String usuarioId = usuarioService.obtenerId(username); // ID del usuario logueado (UUID)
+        String usuarioId = usuarioService.obtenerId(username);
 
-            System.out.println("ID del usuario: " + usuarioId);
+        System.out.println("ID UUID del usuario recuperado para el form: " + usuarioId);
 
-            /*if (username == null || accessToken == null || usuarioId == null) {
-                System.out.println("Intento de modificar sin sesión. Redirigiendo.");
-                ctx.redirect("/login");
-                return;
-            }*/
+        Map<String, Object> hechoData = solicitudService.obtenerDatosHecho(hechoId);
 
-            // 2. Obtener los datos del hecho original
-            Map<String, Object> hechoData = solicitudService.obtenerDatosHecho(hechoId);
-
-            if (hechoData == null || hechoData.isEmpty()) {
-                ctx.status(404).result("Hecho no encontrado (" + hechoId + ") o no disponible para modificación.");
-                return;
-            }
-
-            Map<String, Object> modelo = ViewUtil.baseModel(ctx);
-            modelo.put("pageTitle", "Solicitar Modificación");
-            modelo.put("hechoId", hechoId);
-            modelo.put("hecho", hechoData); // Contiene el título, descripción, etc. originales
-            modelo.put("usuarioId", usuarioId);
-            modelo.put("urlPublica", urlPublica);
-
-
-            ctx.render("crear-solicitud-modificacion.ftl", modelo);
-
-        } catch (Exception e) {
-            System.err.println("Error obtenerFormsModificarSolicitud: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).result("Error al cargar formulario de modificación: " + e.getMessage());
+        if (hechoData == null || hechoData.isEmpty()) {
+            ctx.status(404).result("Hecho no encontrado (" + hechoId + ") o no disponible para modificación.");
+            return;
         }
+
+        List<String> categorias = solicitudService.obtenerCategorias();
+
+        Map<String, Object> modelo = ViewUtil.baseModel(ctx);
+        modelo.put("pageTitle", "Solicitar Modificación");
+        modelo.put("hechoId", hechoId);
+        modelo.put("hecho", hechoData);
+
+        modelo.put("usuarioId", usuarioId);
+
+        modelo.put("categorias", categorias);
+        modelo.put("urlPublica", urlPublica);
+
+        if (dataCloud != null) {
+            modelo.put("cloudinaryUrl", dataCloud.get("cloudinaryUrl"));
+            modelo.put("cloudinaryPreset", dataCloud.get("cloudinaryPreset"));
+        }
+
+        ctx.render("crear-solicitud-modificacion.ftl", modelo);
     };
 
     public Handler crearSolicitudModificacion = ctx -> {
+        System.out.println(">>> [WebController] Inicio crearSolicitudModificacion");
         try {
-            System.out.println(ctx.body());
             Map<String, Object> body = ctx.bodyAsClass(Map.class);
+            System.out.println(">>> [WebController] Body parseado correctamente");
 
             String hechoId = (String) body.get("hechoId");
             String usuarioId = (String) body.get("usuarioId");
             String justificacion = (String) body.get("justificacion");
-
             Map<String, Object> hechoModificado = (Map<String, Object>) body.get("hechoModificado");
 
-            if (hechoId == null || hechoId.isBlank()){ //|| usuarioId == null || usuarioId.isBlank()) {
-                ctx.status(400).json(Map.of("error", "Los IDs de hecho y usuario son obligatorios."));
+            if (hechoId == null || hechoId.isBlank()){
+                ctx.status(400).json(Map.of("error", "Falta hechoId"));
+                return;
+            }
+            if (usuarioId == null || usuarioId.isBlank()){
+                ctx.status(400).json(Map.of("error", "Falta usuarioId"));
                 return;
             }
 
-            if (justificacion == null || justificacion.isBlank()) {
-                ctx.status(400).json(Map.of("error", "La justificación es obligatoria."));
-                return;
-            }
-
-            if (hechoModificado == null || hechoModificado.isEmpty()) {
-                ctx.status(400).json(Map.of("error", "Debe proponer una modificación en al menos un campo."));
-                return;
-            }
             String username = ctx.sessionAttribute("username");
             String accessToken = ctx.sessionAttribute("accessToken");
             String rolUsuario = ctx.sessionAttribute("rolUsuario");
 
             if (accessToken == null) {
-                ctx.status(401).json(Map.of("error", "Sesión expirada. Inicie sesión nuevamente."));
+                ctx.status(401).json(Map.of("error", "Sesión expirada"));
                 return;
             }
+
+            if (!usuarioId.matches("[0-9a-fA-F-]{36}")) {
+                System.out.println(">>> [WebController] UUID inválido ('"+usuarioId+"'). Recuperando...");
+                usuarioId = usuarioService.obtenerId(username);
+                if (usuarioId == null) {
+                    ctx.status(500).json(Map.of("error", "No se pudo recuperar el UUID del usuario"));
+                    return;
+                }
+            }
+
+            System.out.println(">>> [WebController] Llamando a SolicitudService con UUID: " + usuarioId);
 
             int status = solicitudService.crearSolicitudModificacion(
                     hechoId,
@@ -611,16 +630,82 @@ public class SolicitudController {
                     rolUsuario
             );
 
-            if (status == 201) {
-                ctx.status(201).json(Map.of("mensaje", "Solicitud de modificación enviada exitosamente."));
+            System.out.println(">>> [WebController] Respuesta del servicio. Status: " + status);
+
+            if (status >= 200 && status < 300) {
+                ctx.status(201).json(Map.of("mensaje", "Solicitud enviada"));
             } else {
-                ctx.status(status).json(Map.of("error", "Error al procesar la solicitud en el servidor publico. HTTP: " + status));
+                ctx.status(status).json(Map.of("error", "El Gestor respondió con error HTTP " + status));
             }
 
         } catch (Exception e) {
-            System.err.println("Error interno al procesar POST de solicitud de modificación: " + e.getMessage());
             e.printStackTrace();
-            ctx.status(500).json(Map.of("error", "Error interno al procesar la solicitud."));
+            System.err.println(">>> [WebController] EXCEPCION: " + e.getMessage());
+            ctx.status(500).json(Map.of("error", "Error interno Web: " + e.getMessage()));
         }
     };
+
+    private void compararYAgregar(List<Map<String, String>> cambios, String campo, Object valorAnterior, Object valorNuevo) {
+        String ant = valorAnterior != null ? valorAnterior.toString() : "";
+        String nue = valorNuevo != null ? valorNuevo.toString() : "";
+
+        if (!ant.equals(nue) && !nue.isEmpty()) {
+            Map<String, String> diff = new HashMap<>();
+            diff.put("campo", campo);
+            diff.put("anterior", ant);
+            diff.put("nuevo", nue);
+            cambios.add(diff);
+        }
+    }
+
+    private String formatearFecha(Object fechaObj) {
+        if (fechaObj == null) return "";
+        try {
+            long timestamp;
+            if (fechaObj instanceof Number) {
+                timestamp = ((Number) fechaObj).longValue();
+            } else {
+                timestamp = Long.parseLong(fechaObj.toString());
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            return sdf.format(new Date(timestamp));
+        } catch (Exception e) {
+            return fechaObj.toString();
+        }
+    }
+
+    private String obtenerDescripcionUbicacion(Object ubicacionObj) {
+        if (ubicacionObj == null) return "Sin ubicación";
+        try {
+            Map<String, Object> ubi = (Map<String, Object>) ubicacionObj;
+            return ubi.get("descripcion") != null ? ubi.get("descripcion").toString() : "Ubicación sin nombre";
+        } catch (Exception e) {
+            return "Error formato ubicación";
+        }
+    }
+
+    private String generarHtmlFotos(List<Map<String, Object>> listaMedia) {
+        if (listaMedia == null || listaMedia.isEmpty()) return "";
+        StringBuilder html = new StringBuilder();
+        for (Map<String, Object> item : listaMedia) {
+            Object url = item.get("contenido");
+            if (url != null) {
+                html.append("<img src='").append(url).append("' class='preview-img-mini' style='width:60px;height:60px;object-fit:cover;border-radius:4px;margin:2px;' />");
+            }
+        }
+        return html.toString();
+    }
+
+    private void compararYAgregar(List<Map<String, String>> cambios, String campo, String ant, String nue) {
+        if (ant == null) ant = "";
+        if (nue == null) nue = "";
+
+        if (!ant.equals(nue) && !nue.isEmpty()) {
+            Map<String, String> diff = new HashMap<>();
+            diff.put("campo", campo);
+            diff.put("anterior", ant);
+            diff.put("nuevo", nue);
+            cambios.add(diff);
+        }
+    }
 }

@@ -1,43 +1,28 @@
 package gestorPublico.dto.Criterios;
 
-import gestorPublico.domain.Criterios.CriterioUbicacion;
-import gestorPublico.domain.HechosYColecciones.Ubicacion;
-import gestorPublico.dto.Hechos.UbicacionDTO;
-
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class CriterioUbicacionDTO extends CriterioDTO {
-    private UbicacionDTO ubicacion;
+
+    private String descripcion;
 
     public CriterioUbicacionDTO() {
-        super(null, "CRITERIO_UBICACION");
-    }
-    public CriterioUbicacionDTO(CriterioUbicacion c){
-        super(c.getId(), "CRITERIO_UBICACION");
-        this.ubicacion = this.convertirUbicacion(c.getUbicacion());
+        super(null, "CriterioUbicacion");
     }
 
-    public UbicacionDTO convertirUbicacion(Ubicacion u){
-        return new UbicacionDTO(u);
+    public CriterioUbicacionDTO(UUID criterioId, String descripcion) {
+        super(criterioId, "CriterioUbicacion");
+        this.descripcion = descripcion;
     }
 
-    public CriterioUbicacionDTO(UUID criterioId, UbicacionDTO ubicacion) {
-        super(criterioId, "CRITERIO_UBICACION");
-        this.ubicacion = ubicacion;
-    }
-
-    // Getters y Setters
-    public UbicacionDTO getUbicacion() { return ubicacion; }
-    public void setUbicacion(UbicacionDTO ubicacion) { this.ubicacion = ubicacion; }
+    // Getters y Setters actualizados
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
     @Override
-    public String getQueryCondition() {
-        return "h.id_ubicacion = " + ubicacion.getId_ubicacion();
-    }
-
+    public Map<String, Object> getQueryParameters(){return new HashMap<>();};
     @Override
-    public Map<String, Object> getQueryParameters() {
-        return Map.of();
-    }
+    public String getQueryCondition(){return "";}
 }

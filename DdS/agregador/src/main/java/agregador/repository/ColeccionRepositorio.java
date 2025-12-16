@@ -1,5 +1,7 @@
 package agregador.repository;
 
+import agregador.domain.Criterios.Criterio;
+import agregador.domain.Criterios.CriterioEtiquetas;
 import agregador.domain.HechosYColecciones.Coleccion;
 import agregador.domain.fuente.Fuente;
 import agregador.utils.BDUtils;
@@ -66,10 +68,17 @@ public class ColeccionRepositorio {
             for (Coleccion c : resultados) {
                 Hibernate.initialize(c.getCriteriosDePertenencia());
 
+                for (Criterio crit : c.getCriteriosDePertenencia()) {
+                    if (crit instanceof CriterioEtiquetas) {
+                        Hibernate.initialize(((CriterioEtiquetas) crit).getEtiquetas());
+                    }
+                }
+
                 Hibernate.initialize(c.getHechos());
 
                 Hibernate.initialize(c.getFuente());
             }
+            // ------------------------------
 
             return resultados;
 
@@ -148,5 +157,24 @@ public class ColeccionRepositorio {
         return em.createQuery(jpql, Fuente.class)
                 .setParameter("id", coleccionId)
                 .getResultList();
+    }
+
+    public void actualizarLoteYLimpiar(List<Coleccion> colecciones) {
+        EntityManager em = BDUtils.getEntityManager();
+        try {
+            BDUtils.comenzarTransaccion(em);
+
+            for (Coleccion c : colecciones) {
+                em.merge(c);
+            }
+
+            em.flush();
+            em.clear();
+
+            BDUtils.commit(em);
+        } catch (Exception e) {
+            BDUtils.rollback(em);
+            throw e;
+        }
     }
 }

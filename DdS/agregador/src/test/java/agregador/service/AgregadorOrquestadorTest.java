@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.persistence.EntityManager;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -69,27 +70,37 @@ class AgregadorOrquestadorTest {
     }
 
     @Test
-    @DisplayName("procesarNuevosHechos: Flujo completo SIN TOCAR DB REAL")
+    @DisplayName("procesarNuevosHechos: Flujo completo")
     void testProcesarNuevosHechos() {
         // Arrange
         HechoDTO dto = crearHechoDTOValido();
+        if (dto.getUbicacion() != null) {
+            dto.getUbicacion().setLatitud(0);
+            dto.getUbicacion().setLongitud(0);
+        }
         List<HechoDTO> listaDtos = List.of(dto);
 
-        // Mocks de comportamiento
+        // 1. Mock Fuentes
         when(fuenteRepositorio.buscarPorDescriptor("fuente-demo")).thenReturn(null);
-
         Fuente fuenteGuardada = new Fuente();
         fuenteGuardada.setId(UUID.randomUUID());
         when(fuenteRepositorio.guardar(any(Fuente.class))).thenReturn(fuenteGuardada);
 
+        // 2. Mock Normalización
         Hecho hechoNormalizado = new Hecho();
         hechoNormalizado.setTitulo("Hecho Normalizado");
+        hechoNormalizado.setHecho_id(UUID.randomUUID());
         when(servicioNormalizacion.normalizar(dto)).thenReturn(hechoNormalizado);
 
         when(coleccionRepositorio.contarTodas()).thenReturn(1L);
+
         Coleccion coleccionMock = mock(Coleccion.class);
-        when(coleccionRepositorio.obtenerPaginadas(1, 100)).thenReturn(List.of(coleccionMock));
+
+        when(coleccionMock.getHechos()).thenReturn(new ArrayList<>());
+
         when(coleccionMock.cumpleCriterio(hechoNormalizado)).thenReturn(true);
+
+        when(coleccionRepositorio.obtenerPaginadas(1, 100)).thenReturn(List.of(coleccionMock));
 
         // Act
         orquestador.procesarNuevosHechos(listaDtos);
@@ -99,7 +110,10 @@ class AgregadorOrquestadorTest {
         verify(fuenteRepositorio).guardar(any(Fuente.class));
         verify(servicioNormalizacion).normalizar(dto);
         verify(hechoRepositorio).guardar(hechoNormalizado);
-        verify(coleccionRepositorio).actualizarTodas(anyList());
+
+        verify(coleccionRepositorio).actualizarLoteYLimpiar(anyList());
+
+        verify(coleccionMock).agregarHecho(hechoNormalizado);
     }
 
     @Test

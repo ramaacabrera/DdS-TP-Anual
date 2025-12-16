@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class HechoRepositorio {
 
@@ -150,5 +151,20 @@ public class HechoRepositorio {
         return em.createQuery(jpql, Hecho.class)
                 .setParameter("id", coleccionId)
                 .getResultList();
+    }
+
+    public List<Hecho> recargarLista(List<Hecho> hechosDesconectados) {
+        if (hechosDesconectados == null || hechosDesconectados.isEmpty()) return new ArrayList<>();
+
+        EntityManager em = BDUtils.getEntityManager();
+        List<Hecho> hechosFrescos = new ArrayList<>();
+
+        List<UUID> ids = hechosDesconectados.stream()
+                .map(Hecho::getHecho_id)
+                .collect(Collectors.toList());
+
+        TypedQuery<Hecho> query = em.createQuery("SELECT h FROM Hecho h WHERE h.id IN :ids", Hecho.class);
+        query.setParameter("ids", ids);
+        return query.getResultList();
     }
 }

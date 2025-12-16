@@ -17,18 +17,11 @@ public class GetDescargarEstadisticasHandler implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        try {
-            InputStream csvStream = estadisticasService.descargarReporteCSV();
+        InputStream csvStream = estadisticasService.descargarReporteCSV();
 
-            ctx.header("Content-Type", "text/csv; charset=UTF-8");
-            ctx.header("Content-Disposition", "attachment; filename=\"reporte_metamapa_" + LocalDate.now() + ".csv\"");
+        ctx.header("Content-Type", "text/csv; charset=UTF-8");
+        ctx.header("Content-Disposition", "attachment; filename=\"reporte_metamapa_" + LocalDate.now() + ".csv\"");
 
-            ctx.result(csvStream);
-
-        } catch (Exception e) {
-            System.err.println("Error en la descarga del CSV: " + e.getMessage());
-            e.printStackTrace();
-            ctx.status(500).result("Error al generar el reporte: " + e.getMessage());
-        }
+        ctx.result(csvStream);
     }
 }

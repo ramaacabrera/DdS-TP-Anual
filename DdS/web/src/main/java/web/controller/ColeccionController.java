@@ -30,7 +30,6 @@ public class ColeccionController {
     }
 
     public Handler listarColecciones = ctx -> {
-        try {
             int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
             int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
             String callback = ctx.queryParam("callback");
@@ -54,13 +53,9 @@ public class ColeccionController {
 
             ctx.render("colecciones.ftl", modelo);
 
-        } catch (Exception e) {
-            ctx.status(500).result("Error al cargar las colecciones: " + e.getMessage());
-        }
     };
 
     public Handler obtenerColeccionPorId = ctx -> {
-        try {
             String coleccionId = ctx.pathParam("id");
             Coleccion coleccion = coleccionService.obtenerColeccionPorId(coleccionId);
 
@@ -70,9 +65,6 @@ public class ColeccionController {
             modelo.put("coleccionId", coleccionId);
 
             ctx.render("coleccion.ftl", modelo);
-        } catch (Exception e) {
-            ctx.status(500).result("Error al cargar la colección: " + e.getMessage());
-        }
     };
 
     public Handler obtenerPageCrearColeccion = ctx -> {
@@ -96,7 +88,6 @@ public class ColeccionController {
     };
 
     public Handler obtenerPageEditarColeccion = ctx -> {
-        try {
             String coleccionId = ctx.pathParam("id");
 
             if(ctx.sessionAttributeMap().isEmpty()){
@@ -124,11 +115,6 @@ public class ColeccionController {
             modelo.put("idSeleccionados", new ObjectMapper().writeValueAsString(idSeleccionados));
 
             ctx.render("editar-coleccion.ftlh", modelo);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            ctx.status(500).result("Error al cargar el formulario: " + e.getMessage());
-        }
     };
 
     public Handler crearColeccion = ctx -> {
@@ -147,11 +133,7 @@ public class ColeccionController {
         bodyData.put("accessToken", ctx.sessionAttribute("accessToken"));
         bodyData.put("rolUsuario", ctx.sessionAttribute("rolUsuario"));
 
-        try {
             coleccionService.crearColeccion(bodyData);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     };
 
     public Handler editarColeccion = ctx -> {
@@ -222,16 +204,8 @@ public class ColeccionController {
 
         for (Map<String, Object> criterio : criteriosDePertenencia) {
             criterio.remove("_id");
-            if(criterio.get("@type").equals("CriterioUbicacion")){
-                System.out.println("Ubicacion: " + criterio.get("ubicacion.descripcion").toString());
-                Ubicacion ubicacion = new Ubicacion(0, 0, criterio.get("ubicacion.descripcion").toString());
-                System.out.println("Descripcion de la ubicacion: " +  ubicacion.getDescripcion());
-                criterio.put("ubicacion", ubicacion);
-                criterio.remove("ubicacion.descripcion");
-            }
         }
     }
-
     private void extraer(JsonNode body, List<Map<String, Object>> criterios){
         for(JsonNode criterio : body){
             Map<String, Object> map = new HashMap<>();
@@ -268,11 +242,10 @@ public class ColeccionController {
                     map.put("tipoFecha", criterio.get("tipoFecha").asText());
                     break;
                 case "CriterioUbicacion":
-                    JsonNode ubicacionNode = criterio.get("ubicacion");
-                    if (ubicacionNode != null) {
-                        Map<String, Object> ubicacionMap = new HashMap<>();
-                        ubicacionMap.put("descripcion", ubicacionNode.get("descripcion").asText());
-                        map.put("ubicacion", ubicacionMap);
+                    if (criterio.has("descripcion")) {
+                        map.put("descripcion", criterio.get("descripcion").asText());
+                    } else if (criterio.has("ubicacion") && criterio.get("ubicacion").has("descripcion")) {
+                        map.put("descripcion", criterio.get("ubicacion").get("descripcion").asText());
                     }
                     break;
                 case "CriterioContribuyente":

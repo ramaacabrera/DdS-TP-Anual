@@ -3,7 +3,7 @@
 <#assign content>
 <div class="container">
     <div class="header" style="border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:25px;">
-        <a href='${callback}' class="header-link back-link">&larr; Volver</a>
+        <a href="javascript:history.back()" class="header-link back-link">&larr; Volver</a>
     </div>
 
     <h1 class="main-title">Listado de Colecciones</h1>
@@ -21,16 +21,16 @@
                     <small><b>Algoritmo:</b> ${c.algoritmoDeConsenso!''}</small>
 
                     <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
-                        <a href="/colecciones/${c.handle!''}" class="btn btn-secondary btn-sm">👁️ Ver Detalle</a>
+                        <a href="/colecciones/${c.handle!''}" class="btn btn-secondary btn-sm">Ver Detalle</a>
 
                         <#if rolUsuario == "ADMINISTRADOR">
-                            <a href="/editar-coleccion/${c.handle!''}" class="btn btn-sm btn-outline">✏️ Editar</a>
+                            <a href="/editar-coleccion/${c.handle!''}" class="btn btn-sm btn-outline"> Editar</a>
 
                             <!-- Botón de Eliminar - Versión más simple -->
                             <button
                                 onclick="confirmarEliminacion('${c.handle!''}', '${(c.titulo!'')?js_string}')"
                                 class="btn btn-sm btn-danger">
-                                🗑️ Eliminar
+                                 Eliminar
                             </button>
                         </#if>
                     </div>
@@ -115,7 +115,7 @@ tituloColeccion = '';
         var botonEliminar = event.target;
         var textoOriginal = botonEliminar.innerHTML;
         botonEliminar.disabled = true;
-        botonEliminar.innerHTML = '🗑️ Eliminando...';
+        botonEliminar.innerHTML = '️ Eliminando...';
 
         // Realizar petición DELETE
         fetch('/colecciones/' + coleccionAEliminar, {

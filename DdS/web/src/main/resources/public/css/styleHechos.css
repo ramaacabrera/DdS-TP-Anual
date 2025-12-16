@@ -6,7 +6,7 @@
 /* === VARIABLES CSS === */
 :root {
     /* Colores principales - Verde oscuro */
-    --primary: #1a4d2e;
+    --primary: #1d7858;
     --primary-dark: #0f2818;
     --primary-light: #2d6a4f;
     --primary-hover: #245c3a;
@@ -27,6 +27,7 @@
     --text-secondary: #6c757d;
     --text-muted: #adb5bd;
     --text-light: #ffffff;
+    --text-light2: #718096;
 
     /* Colores de estado */
     --success: #52b788;
@@ -63,6 +64,24 @@
 
     /* Transiciones */
     --transition: all 0.2s ease;
+}
+
+.header {
+    margin-bottom: 30px;
+}
+
+.header-link.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-light2);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.header-link.back-link:hover {
+    color: var(--primary-color);
 }
 
 /* === RESET Y BASE === */

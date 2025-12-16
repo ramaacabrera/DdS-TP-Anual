@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Copia al portapapeles la URL del hecho y muestra un pequeño toast de confirmación.
 function copyHechoLinkToClipboard(hechoId, button) {
-    const url = `${window.location.origin}/hecho/${encodeURIComponent(hechoId)}`;
+    const url = `${window.location.origin}/hechos/${encodeURIComponent(hechoId)}`;
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url).then(() => {

@@ -10,7 +10,7 @@ public class SolicitudDeEliminacionDTO {
     private UUID id;
     private UUID hechoId;
     private String justificacion;
-    private UsuarioDTO usuario;
+    private UsuarioDTO usuarioId;
     private EstadoSolicitudEliminacion estado;
 
     public SolicitudDeEliminacionDTO() {}
@@ -19,7 +19,7 @@ public class SolicitudDeEliminacionDTO {
         this.id = s.getId();
         this.justificacion = s.getJustificacion();
         this.hechoId = s.getHechoAsociado().getHecho_id();
-        this.usuario = convertirDTO(s.getUsuario());
+        this.usuarioId = convertirDTO(s.getUsuario());
         this.estado = s.getEstado();
     }
 
@@ -37,8 +37,8 @@ public class SolicitudDeEliminacionDTO {
     public String getJustificacion() { return justificacion; }
     public void setJustificacion(String justificacion) { this.justificacion = justificacion; }
 
-    public UsuarioDTO getUsuario() { return usuario; }
-    public void setUsuario(UsuarioDTO usuario) { this.usuario = usuario; }
+    public UsuarioDTO getUsuarioId() { return usuarioId; }
+    public void setUsuarioId(UsuarioDTO usuario) { this.usuarioId = usuario; }
 
     public EstadoSolicitudEliminacion getEstado() { return estado; }
     public void setEstado(EstadoSolicitudEliminacion estado) { this.estado = estado; }

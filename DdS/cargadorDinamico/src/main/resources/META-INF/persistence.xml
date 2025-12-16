@@ -11,6 +11,7 @@
         <class>cargadorDinamico.domain.HechosYColeccionesD.Etiqueta_D</class>
         <class>cargadorDinamico.domain.HechosYColeccionesD.Ubicacion_D</class>
         <class>cargadorDinamico.domain.HechosYColeccionesD.ContenidoMultimedia_D</class>
+        <class>cargadorDinamico.domain.HechosYColeccionesD.HechoModificado_D</class>
 
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/dinamico_db?serverTimezone=America/Buenos_Aires"/>

@@ -45,15 +45,33 @@ public class Application {
         HechoService hechoService = new HechoService(urlPublica);
         EstadisticasService estadisticasService = new EstadisticasService(urlEstadisticas);
         CategoriasService categoriasService = new CategoriasService(urlEstadisticas);
-        SolicitudService solicitudService = new SolicitudService(urlAdmin,urlPublica);
+        SolicitudService solicitudService = new SolicitudService(urlAdmin,urlPublica, hechoService);
         UsuarioService usuarioService = new UsuarioService(urlPublica);
         FuenteService fuenteService = new FuenteService(urlPublica);
 
         // controllers
         ColeccionController coleccionController = new ColeccionController(coleccionService, usuarioService, fuenteService);
         HechoController hechoController = new HechoController(urlPublica, urlAdmin,hechoService, dataCloud);
-        SolicitudController solicitudController = new SolicitudController(solicitudService, urlPublica, usuarioService);
+        SolicitudController solicitudController = new SolicitudController(solicitudService, urlPublica, usuarioService, dataCloud);
         AdministradorController administradorController = new AdministradorController(solicitudService);
+
+        app.exception(Exception.class, (e, ctx) -> {
+            e.printStackTrace();
+
+            ctx.status(500);
+
+            Map<String, Object> model = new HashMap<>();
+            model.put("mensaje", e.getMessage());
+            ctx.render("error.ftl", model);
+        });
+
+        app.error(404, ctx -> {
+            ctx.render("no_encontrado.ftl");
+        });
+
+        app.get("/probar-error", ctx -> {
+            throw new RuntimeException("Error de prueba para verificar estilos CSS");
+        });
 
         app.get("/health", ctx -> { ctx.status(200).result("OK");});
 

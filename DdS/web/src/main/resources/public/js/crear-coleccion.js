@@ -126,12 +126,22 @@ function agregarCriterio() {
     const tipo = document.getElementById("tipoCriterio").value;
     if (!tipo) return;
 
-    const criterioId = "criterio_" + contadorCriterios;
-    contadorCriterios++;
+    const criterioId = "criterio_nuevo_" + Date.now(); // Usamos timestamp para ID único
     const criteriosContainer = document.getElementById("criterios-agregados");
 
-    let criterioHTML = '';
-    let camposHTML = '';
+    let cardClass = "", iconClass = "", titulo = "";
+
+    switch(tipo) {
+        case "CriterioDeTexto": cardClass = "type-texto"; iconClass = "fas fa-font"; titulo = "Texto"; break;
+        case "CriterioEtiquetas": cardClass = "type-etiqueta"; iconClass = "fas fa-tags"; titulo = "Etiquetas"; break;
+        case "CriterioTipoMultimedia": cardClass = "type-multimedia"; iconClass = "fas fa-photo-video"; titulo = "Multimedia"; break;
+        case "CriterioFecha": cardClass = "type-fecha"; iconClass = "far fa-calendar-alt"; titulo = "Fecha"; break;
+        case "CriterioUbicacion": cardClass = "type-ubicacion"; iconClass = "fas fa-map-marker-alt"; titulo = "Ubicación"; break;
+        case "CriterioContribuyente": cardClass = "type-contribuyente"; iconClass = "fas fa-user"; titulo = "Contribuyente"; break;
+    }
+
+    let cuerpoHTML = '';
+    let hiddenInputs = '';
 
     switch (tipo) {
         case "CriterioDeTexto":
@@ -139,131 +149,124 @@ function agregarCriterio() {
             const palabras = Array.from(palabrasInputs).map(input => input.value).filter(val => val.trim() !== '');
             const tipoTexto = document.getElementById('tipoTexto').value;
 
-            camposHTML = palabras.map(palabra =>
-                '<input type="hidden" name="criterios[' + criterioId + '].palabras" value="' + palabra + '">'
-            ).join('');
-            camposHTML += '<input type="hidden" name="criterios[' + criterioId + '].tipoDeTexto" value="' + tipoTexto + '">';
+            const badgesPalabras = palabras.map(p => `<span class="badge-item">${p}</span>`).join('');
 
-            criterioHTML = `
-                <div class="criterio-card">
-                    <div class="criterio-header">
-                        <span class="criterio-tipo">Criterio de Texto</span>
-                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
-                    </div>
-                    <div><strong>Palabras:</strong> ${palabras.join(', ')}</div>
-                    <div><strong>Tipo de texto:</strong> ${tipoTexto}</div>
-                    ${camposHTML}
-                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+            cuerpoHTML = `
+                <div class="dato-fila">
+                    <span class="dato-label">Tipo:</span>
+                    <span>${tipoTexto}</span>
+                </div>
+                <div class="dato-fila" style="align-items: flex-start;">
+                    <span class="dato-label">Palabras:</span>
+                    <div class="badge-container">${badgesPalabras}</div>
                 </div>
             `;
+
+            hiddenInputs = palabras.map(palabra =>
+                `<input type="hidden" name="criterios[${criterioId}].palabras" value="${palabra}">`
+            ).join('');
+            hiddenInputs += `<input type="hidden" name="criterios[${criterioId}].tipoDeTexto" value="${tipoTexto}">`;
             break;
 
         case "CriterioEtiquetas":
             const etiquetasInputs = document.querySelectorAll('#lista-etiquetas-temporal .palabra-input-temporal');
             const etiquetas = Array.from(etiquetasInputs).map(input => input.value).filter(val => val.trim() !== '');
 
-            camposHTML = etiquetas.map(etiqueta =>
-                '<input type="hidden" name="criterios[' + criterioId + '].etiquetas" value="' + etiqueta + '">'
-            ).join('');
+            const badgesEtiquetas = etiquetas.map(e => `<span class="badge-item">#${e}</span>`).join('');
 
-            criterioHTML = `
-                <div class="criterio-card">
-                    <div class="criterio-header">
-                        <span class="criterio-tipo">Criterio de Etiquetas</span>
-                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
-                    </div>
-                    <div><strong>Etiquetas:</strong> ${etiquetas.join(', ')}</div>
-                    ${camposHTML}
-                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+            cuerpoHTML = `
+                <div class="dato-fila" style="align-items: flex-start;">
+                    <span class="dato-label">Etiquetas:</span>
+                    <div class="badge-container">${badgesEtiquetas}</div>
                 </div>
             `;
+
+            hiddenInputs = etiquetas.map(etiqueta =>
+                `<input type="hidden" name="criterios[${criterioId}].etiquetas" value="${etiqueta}">`
+            ).join('');
             break;
 
         case "CriterioTipoMultimedia":
             const tipoMultimedia = document.getElementById('tipoMultimedia').value;
-            camposHTML = '<input type="hidden" name="criterios[' + criterioId + '].tipoContenidoMultimedia" value="' + tipoMultimedia + '">';
-
-            criterioHTML = `
-                <div class="criterio-card">
-                    <div class="criterio-header">
-                        <span class="criterio-tipo">Criterio de Tipo Multimedia</span>
-                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
-                    </div>
-                    <div><strong>Tipo:</strong> ${tipoMultimedia}</div>
-                    ${camposHTML}
-                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+            cuerpoHTML = `
+                <div class="dato-fila">
+                    <span class="dato-label">Formato:</span>
+                    <strong>${tipoMultimedia}</strong>
                 </div>
             `;
+            hiddenInputs = `<input type="hidden" name="criterios[${criterioId}].tipoContenidoMultimedia" value="${tipoMultimedia}">`;
             break;
 
         case "CriterioFecha":
             const fechaInicio = document.getElementById('fechaInicio').value;
             const fechaFin = document.getElementById('fechaFin').value;
             const tipoDeFecha = document.getElementById('tipoDeFecha').value;
+            const tipoFechaLegible = tipoDeFecha === 'fechaDeCarga' ? 'Fecha de Carga' : 'Fecha del Hecho';
 
-            camposHTML = '<input type="hidden" name="criterios[' + criterioId + '].fechaInicio" value="' + fechaInicio + '">';
-            camposHTML += '<input type="hidden" name="criterios[' + criterioId + '].fechaFin" value="' + fechaFin + '">';
-            camposHTML += '<input type="hidden" name="criterios[' + criterioId + '].tipoFecha" value="' + tipoDeFecha + '">';
-
-            criterioHTML = `
-                <div class="criterio-card">
-                    <div class="criterio-header">
-                        <span class="criterio-tipo">Criterio de Fecha</span>
-                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
-                    </div>
-                    <div><strong>Desde:</strong> ${fechaInicio}</div>
-                    <div><strong>Hasta:</strong> ${fechaFin}</div>
-                    <div><strong>Tipo de fecha:</strong> ${tipoDeFecha}</div>
-                    ${camposHTML}
-                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+            cuerpoHTML = `
+                <div class="dato-fila">
+                    <span class="dato-label">Rango:</span>
+                    <span>${fechaInicio} <strong>al</strong> ${fechaFin}</span>
+                </div>
+                <div class="dato-fila">
+                    <span class="dato-label">Aplica a:</span>
+                    <span>${tipoFechaLegible}</span>
                 </div>
             `;
+
+            hiddenInputs = `<input type="hidden" name="criterios[${criterioId}].fechaInicio" value="${fechaInicio}">`;
+            hiddenInputs += `<input type="hidden" name="criterios[${criterioId}].fechaFin" value="${fechaFin}">`;
+            hiddenInputs += `<input type="hidden" name="criterios[${criterioId}].tipoFecha" value="${tipoDeFecha}">`;
             break;
 
         case "CriterioUbicacion":
             const descripcionUbicacion = document.getElementById('descripcionUbicacion').value.trim();
+            if (!descripcionUbicacion) { alert('Ingrese una descripción'); return; }
 
-            if (!descripcionUbicacion) {
-                alert('Por favor, ingrese una descripción de la ubicación');
-                return;
-            }
-
-            camposHTML = '<input type="hidden" name="criterios[' + criterioId + '].ubicacion.descripcion" value="' + descripcionUbicacion + '">';
-
-            criterioHTML = `
-                <div class="criterio-card">
-                    <div class="criterio-header">
-                        <span class="criterio-tipo">Criterio de Ubicación</span>
-                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
-                    </div>
-                    <div><strong>Descripción:</strong> ${descripcionUbicacion}</div>
-                    ${camposHTML}
-                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+            cuerpoHTML = `
+                <div class="dato-fila">
+                    <span class="dato-label">Lugar:</span>
+                    <strong>${descripcionUbicacion}</strong>
                 </div>
             `;
+            // Input oculto plano (solo descripción)
+            hiddenInputs = `<input type="hidden" name="criterios[${criterioId}].descripcion" value="${descripcionUbicacion}">`;
             break;
 
         case "CriterioContribuyente":
             const contribuyente = document.getElementById('contribuyente').value;
-            camposHTML = '<input type="hidden" name="criterios[' + criterioId + '].nombreContribuyente" value="' + contribuyente + '">';
-
-            criterioHTML = `
-                <div class="criterio-card">
-                    <div class="criterio-header">
-                        <span class="criterio-tipo">Criterio de Contribuyente</span>
-                        <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">Eliminar</button>
-                    </div>
-                    <div><strong>Contribuyente:</strong> ${contribuyente}</div>
-                    ${camposHTML}
-                    <input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">
+            cuerpoHTML = `
+                <div class="dato-fila">
+                    <span class="dato-label">Usuario:</span>
+                    <span>@${contribuyente}</span>
                 </div>
             `;
+            hiddenInputs = `<input type="hidden" name="criterios[${criterioId}].nombreContribuyente" value="${contribuyente}">`;
             break;
     }
 
-    criteriosContainer.insertAdjacentHTML('beforeend', criterioHTML);
+    hiddenInputs += `<input type="hidden" name="criterios[${criterioId}].@type" value="${tipo}">`;
 
-    // Limpiar el formulario temporal
+    const htmlFinal = `
+        <div class="criterio-card ${cardClass}" id="${criterioId}">
+            <div class="criterio-header">
+                <div class="criterio-info">
+                    <span class="criterio-icon"><i class="${iconClass}"></i></span>
+                    <span class="criterio-titulo">${titulo}</span>
+                </div>
+                <button type="button" class="btn-eliminar-criterio" onclick="eliminarCriterio('${criterioId}')">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </div>
+            <div class="criterio-body">
+                ${cuerpoHTML}
+                ${hiddenInputs}
+            </div>
+        </div>
+    `;
+
+    criteriosContainer.insertAdjacentHTML('beforeend', htmlFinal);
+
     document.getElementById("tipoCriterio").value = "";
     document.getElementById("campoCriterio").innerHTML = "";
     document.getElementById("btn-agregar-criterio").disabled = true;

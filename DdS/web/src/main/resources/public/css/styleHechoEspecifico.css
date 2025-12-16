@@ -1,4 +1,25 @@
 
+/* Header y Volver */
+
+.header {
+    margin-bottom: 30px;
+}
+
+.header-link.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #718096;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.header-link.back-link:hover {
+    color: var(--primary-color);
+}
+
+
 /* Estilos Generales de las Pestañas */
 .tabs {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -594,49 +615,4 @@
 }
 
 .media-item img { object-fit: cover; }
-
-
-/* Header y Volver */
-
-.header {
-
-    border-bottom: 1px solid var(--border-color);
-
-    padding-bottom: 15px;
-
-    margin-bottom: 25px;
-
-}
-
-.header-link {
-
-    text-decoration: none;
-
-    color: var(--text-muted);
-
-    font-size: 0.9rem;
-
-    transition: color 0.2s;
-
-}
-
-.header-link:hover { color: var(--primary-color); }
-
-
-
-
-
-.back-link {
-
-    text-decoration: none;
-
-    color: var(--text-muted);
-
-    font-size: 0.9rem;
-
-    transition: color 0.2s;
-
-}
-
-.back-link:hover { color: var(--primary-color); }
 

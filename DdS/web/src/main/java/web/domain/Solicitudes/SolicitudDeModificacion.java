@@ -3,6 +3,7 @@ package web.domain.Solicitudes;
 import web.domain.HechosYColecciones.HechoModificado;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @DiscriminatorValue("MODIFICACION")
@@ -15,6 +16,9 @@ public class SolicitudDeModificacion extends Solicitud {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "hecho_modificado_id")
     private HechoModificado hechoModificado;
+
+    private String hechoTitulo;
+    private List<Cambios> cambios;
 
     public SolicitudDeModificacion() {
         this.estado = EstadoSolicitudModificacion.PENDIENTE;
@@ -36,4 +40,10 @@ public class SolicitudDeModificacion extends Solicitud {
 
     public HechoModificado getHechoModificado() { return hechoModificado; }
     public void setHechoModificado(HechoModificado hechoModificado) { this.hechoModificado = hechoModificado; }
+
+    public String getHechoTitulo() { return hechoTitulo; }
+    public void setHechoTitulo(String hechoTitulo) { this.hechoTitulo = hechoTitulo; }
+
+    public List<Cambios> getCambios() { return cambios; }
+    public void setCambios(List<Cambios> cambios) { this.cambios = cambios; }
 }

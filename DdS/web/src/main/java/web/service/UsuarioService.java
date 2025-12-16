@@ -109,9 +109,8 @@ public class UsuarioService {
         return Map.of("username", username,"rolUsuario", rolUsuario, "accessToken", accessToken);
     }
 
-    public String obtenerId(String username){
-        System.out.println("Consultando ID de usuario a: " + urlPublica);
-
+    public String obtenerId(String username) {
+        System.out.println(">>> Buscando ID para el usuario: " + username);
         String id = null;
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -119,21 +118,33 @@ public class UsuarioService {
                 .header("Content-Type", "application/json")
                 .GET()
                 .build();
-        try{
+        try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            if(response.statusCode() != 200){
-                System.err.println("Error consultando ID de usuario: " + response.statusCode());
+
+            if (response.statusCode() != 200) {
+                System.err.println(">>> Error API Publica. Status: " + response.statusCode());
                 return null;
             }
-            ObjectMapper mapper = new  ObjectMapper();
+
+            System.out.println(">>> JSON Recibido: " + response.body());
+
+            ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(response.body());
 
-            id = root.get("id_usuario").asText();
+            if (root.has("usuarioId")) {
+                id = root.get("usuarioId").asText();
+                System.out.println(">>> ID UUID Encontrado: " + id);
+            } else if (root.has("id_usuario")) {
+                // Fallback por si acaso cambiara el DTO
+                id = root.get("id_usuario").asText();
+                System.out.println(">>> ID Encontrado (clave id_usuario): " + id);
+            } else {
+                System.err.println(">>> NO SE ENCONTRO NINGUNA CLAVE DE ID EN EL JSON.");
+            }
 
-            System.out.println("ID recuperado: " + id);
-
-        } catch (Exception e){
-            System.err.println("Error consultando ID de usuario: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println(">>> Excepción en obtenerId: " + e.getMessage());
+            e.printStackTrace();
         }
         return id;
     }

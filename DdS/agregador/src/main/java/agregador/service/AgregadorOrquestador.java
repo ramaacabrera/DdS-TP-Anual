@@ -18,6 +18,7 @@ import agregador.utils.BDUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,31 +122,35 @@ public class AgregadorOrquestador {
         }
     }
 
-    @Transactional
     public void actualizarColeccionesConNuevosHechos(List<Hecho> nuevosHechos) {
         int pageSize = 100;
         long totalColecciones = coleccionRepositorio.contarTodas();
         int totalPages = (int) Math.ceil(totalColecciones / (double) pageSize);
 
+        List<Hecho> hechosProcesables = new ArrayList<>(nuevosHechos);
+
         for (int i = 1; i <= totalPages; i++) {
             List<Coleccion> paginaColecciones = coleccionRepositorio.obtenerPaginadas(i, pageSize);
-
             List<Coleccion> modificadas = new ArrayList<>();
 
             for (Coleccion c : paginaColecciones) {
                 boolean cambio = false;
-                for (Hecho h : nuevosHechos) {
+                for (Hecho h : hechosProcesables) {
                     if (c.cumpleCriterio(h)) {
-                        c.agregarHecho(h);
-                        cambio = true;
+                        if (!c.getHechos().contains(h)) {
+                            c.agregarHecho(h);
+                            cambio = true;
+                        }
                     }
                 }
                 if (cambio) modificadas.add(c);
             }
 
-            coleccionRepositorio.actualizarTodas(modificadas);
+            coleccionRepositorio.actualizarLoteYLimpiar(modificadas);
 
-            BDUtils.getEntityManager().clear();
+            if (i < totalPages) {
+                hechosProcesables = hechoRepositorio.recargarLista(hechosProcesables);
+            }
         }
     }
 

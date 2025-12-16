@@ -1,10 +1,11 @@
 package agregador.service;
 
-import agregador.domain.HechosYColecciones.Hecho;
-import agregador.domain.HechosYColecciones.HechoModificado;
+import agregador.domain.HechosYColecciones.*;
 import agregador.domain.Solicitudes.SolicitudDeEliminacion;
 import agregador.domain.Solicitudes.SolicitudDeModificacion;
 import agregador.domain.Usuario.Usuario;
+import agregador.dto.Hechos.ContenidoMultimediaDTO;
+import agregador.dto.Hechos.UbicacionDTO;
 import agregador.dto.Solicitudes.HechoModificadoDTO;
 import agregador.dto.Solicitudes.SolicitudDeEliminacionDTO;
 import agregador.dto.Solicitudes.SolicitudDeModificacionDTO;
@@ -12,8 +13,12 @@ import agregador.repository.HechoRepositorio;
 import agregador.repository.SolicitudEliminacionRepositorio;
 import agregador.repository.SolicitudModificacionRepositorio;
 import agregador.repository.UsuarioRepositorio;
+import agregador.service.normalizacion.ServicioGeoref;
 import agregador.utils.DetectorDeSpam;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import agregador.service.normalizacion.GeolocalizadorOffline;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GestorSolicitudes {
@@ -23,6 +28,7 @@ public class GestorSolicitudes {
     private final HechoRepositorio hechoRepositorio;
     private final UsuarioRepositorio usuarioRepositorio;
     private final DetectorDeSpam detectorDeSpam;
+    private final ServicioGeoref servicioGeoref;
 
     public GestorSolicitudes(SolicitudEliminacionRepositorio elimRepo, SolicitudModificacionRepositorio modRepo,
                              HechoRepositorio hechoRepositorio, UsuarioRepositorio usuarioRepositorioNuevo) {
@@ -31,6 +37,7 @@ public class GestorSolicitudes {
         this.hechoRepositorio = hechoRepositorio;
         this.usuarioRepositorio = usuarioRepositorioNuevo;
         this.detectorDeSpam = new DetectorDeSpam();
+        this.servicioGeoref = new ServicioGeoref(null,null);
     }
 
     public void procesarSolicitudes(List<SolicitudDeModificacionDTO> mods, List<SolicitudDeEliminacionDTO> elims) {
@@ -105,7 +112,10 @@ public class GestorSolicitudes {
                     System.out.println("Spam detectado en solicitud modificación.");
                 }
 
+                ObjectMapper ob = new ObjectMapper();
+                System.out.println("Solicitud a agregar: " + ob.writeValueAsString(solicitud));
                 modRepo.agregarSolicitudDeModificacion(solicitud);
+                System.out.println("Solicitud de modificacion guardada");
             } catch (Exception e) {
                 System.err.println("Error procesando solicitud de modificación: " + e.getMessage());
             }
@@ -118,7 +128,65 @@ public class GestorSolicitudes {
         hm.setDescripcion(dto.getDescripcion());
         hm.setCategoria(dto.getCategoria());
         hm.setFechaDeAcontecimiento(dto.getFechaDeAcontecimiento());
-        // ... setear el resto de campos necesarios
+
+        List<ContenidoMultimedia> multimediaNuevo = new ArrayList<>();
+        List<ContenidoMultimediaDTO> dtoMultimedia = dto.getContenidoMultimedia();
+        for(ContenidoMultimediaDTO m: dtoMultimedia){
+            multimediaNuevo.add(new ContenidoMultimedia(TipoContenidoMultimedia.valueOf(m.getTipoContenido().toString()), m.getContenido()));
+        }
+
+        hm.setContenidoMultimedia(multimediaNuevo);
+        if (dto.getUbicacion() != null) {
+            enriquecerUbicacionDTO(dto.getUbicacion());
+            hm.setUbicacion(new Ubicacion(dto.getUbicacion().getLatitud(), dto.getUbicacion().getLongitud(), dto.getUbicacion().getDescripcion()));
+
+        }
         return hm;
+    }
+
+    private void enriquecerUbicacionDTO(UbicacionDTO ubicacion) {
+        if (ubicacion == null) return;
+
+        boolean tieneCoordenadas = ubicacion.getLatitud() != 0 && ubicacion.getLongitud() != 0;
+
+        boolean faltaDescripcion = ubicacion.getDescripcion() == null || ubicacion.getDescripcion().trim().isEmpty();
+
+        if (tieneCoordenadas && faltaDescripcion) {
+            System.out.println("📍 Buscando descripción para coord: " + ubicacion.getLatitud() + ", " + ubicacion.getLongitud());
+
+            String descripcionEncontrada = null;
+            try {
+                if (servicioGeoref != null) {
+                    descripcionEncontrada = servicioGeoref.obtenerDescripcionPorCoordenadas(
+                            ubicacion.getLatitud(),
+                            ubicacion.getLongitud()
+                    );
+                }
+            } catch (Exception e) {
+                System.err.println("Error conectando con servicioGeoref: " + e.getMessage());
+            }
+
+            if (descripcionEncontrada != null && !descripcionEncontrada.isEmpty()) {
+                ubicacion.setDescripcion(descripcionEncontrada);
+                System.out.println("✅ Ubicación actualizada (API): " + descripcionEncontrada);
+            } else {
+                System.out.println("⚠ API falló o no disponible, calculando ubicación aproximada offline...");
+
+                try {
+                    String descripcionOffline = GeolocalizadorOffline.obtenerUbicacionAproximada(
+                            ubicacion.getLatitud(),
+                            ubicacion.getLongitud()
+                    );
+
+                    if (descripcionOffline != null) {
+                        ubicacion.setDescripcion(descripcionOffline);
+                        System.out.println("✅ Ubicación actualizada (Offline): " + descripcionOffline);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error en geolocalizador offline: " + e.getMessage());
+                    ubicacion.setDescripcion("Ubicación por coordenadas (" + ubicacion.getLatitud() + ", " + ubicacion.getLongitud() + ")");
+                }
+            }
+        }
     }
 }

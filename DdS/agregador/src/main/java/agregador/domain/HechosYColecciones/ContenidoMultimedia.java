@@ -1,6 +1,7 @@
 package agregador.domain.HechosYColecciones;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -27,6 +28,7 @@ public class ContenidoMultimedia {
 
     @ManyToOne
     @JoinColumn(name = "hecho_id")
+    @JsonIgnore
     private Hecho hechoId;
 
     @JsonCreator
