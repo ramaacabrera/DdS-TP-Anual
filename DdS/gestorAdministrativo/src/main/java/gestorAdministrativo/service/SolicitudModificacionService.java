@@ -1,5 +1,6 @@
 package gestorAdministrativo.service;
 
+import gestorAdministrativo.domain.HechosYColecciones.ContenidoMultimedia;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDeModificacionDTO;
 import gestorAdministrativo.dto.Solicitudes.HechoModificadoDTO;
 import gestorAdministrativo.dto.Solicitudes.EstadoSolicitudModificacionDTO;
@@ -100,12 +101,28 @@ public class SolicitudModificacionService {
         if (cambios.getTitulo() != null) original.setTitulo(cambios.getTitulo());
         if (cambios.getDescripcion() != null) original.setDescripcion(cambios.getDescripcion());
         if (cambios.getCategoria() != null) original.setCategoria(cambios.getCategoria());
-
         if (cambios.getFechaDeAcontecimiento() != null) original.setFechaDeAcontecimiento(cambios.getFechaDeAcontecimiento());
 
-        if (cambios.getUbicacion() != null) original.setUbicacion(cambios.getUbicacion());
+        if (cambios.getUbicacion() != null) {
+        if (original.getUbicacion() == null) {
+            original.setUbicacion(cambios.getUbicacion());
+        } else {
+            original.getUbicacion().setLatitud(cambios.getUbicacion().getLatitud());
+            original.getUbicacion().setLongitud(cambios.getUbicacion().getLongitud());
+            original.getUbicacion().setDescripcion(cambios.getUbicacion().getDescripcion());
+        }
+        }
 
-        System.out.println("✅ Hecho actualizado con los cambios de la solicitud.");
+        if (cambios.getContenidoMultimedia() != null && !cambios.getContenidoMultimedia().isEmpty()) {
+            original.getContenidoMultimedia().clear();
+            original.getContenidoMultimedia().addAll(cambios.getContenidoMultimedia());
+
+            for (ContenidoMultimedia media : original.getContenidoMultimedia()) {
+                media.setHecho(original);
+            }
+        }
+
+        System.out.println("✅ Hecho actualizado correctamente.");
     }
 
     private HechoModificado mapHechoModificadoToEntity(HechoModificadoDTO dto) {

@@ -1,5 +1,6 @@
 package cargadorDinamico.conexionAgregador;
 
+import cargadorDinamico.domain.DinamicaDto.SolicitudModificacionSalienteDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,7 +70,7 @@ public class ClienteDelAgregador {
                             webSocket.send(mapper.writeValueAsString(mensaje));
                         }
                         case "obtenerSolicitudesModificacion" -> {
-                            List<SolicitudDeModificacionDTO> solicitudes = controlador.obtenerSolicitudesModificacion();
+                            List<SolicitudModificacionSalienteDTO> solicitudes = controlador.obtenerSolicitudesModificacion();
                             SolicitudesModificacionObtenidosPayload payload = new SolicitudesModificacionObtenidosPayload(solicitudes);
                             WsMessage<SolicitudesModificacionObtenidosPayload> mensaje = new WsMessage<SolicitudesModificacionObtenidosPayload>("solicitudesModificacionObtenidos", payload);
 

@@ -239,17 +239,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Debe proponer una modificación en al menos un campo o cambiar la multimedia.');
             }
 
+            const hechoId = formData.get('hechoId');
+            const username = formData.get('username');
+            const justificacion = formData.get('justificacion');
+
+            if (!justificacion || justificacion.trim() === '') {
+                throw new Error('Debe ingresar una justificación para la modificación.');
+            }
+
+            const usuarioId = (typeof CURRENT_USER_ID !== 'undefined' && CURRENT_USER_ID)
+                ? CURRENT_USER_ID
+                : document.getElementById('ID_usuario').value;
+
             const body = {
-                "username": formData.get('username'),
+                "hechoId": hechoId,
+                "usuarioId": usuarioId,
+                "justificacion": justificacion.trim(),
                 "hechoModificado": hechoModificado,
+                "username": username,
                 "accessToken": ACCESS_TOKEN
             };
 
             console.log("Enviando JSON:", JSON.stringify(body));
-            const hechoId = formData.get('hechoId');
 
-            const response = await fetch(URL_PUBLICA + "/hecho/"+hechoId, {
-                method: 'PATCH',
+
+            const response = await fetch("/api/solicitar-modificacion", {
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
             });

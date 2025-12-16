@@ -1,5 +1,6 @@
 package web.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
@@ -184,46 +185,43 @@ public class SolicitudService {
 
         return null;
     }
-    public int crearSolicitudModificacion(
-            String hechoId, String usuarioId, String justificacion,
-            Map<String, Object> cambiosPropuestos,
-            String username, String token, String rolUsuario) {
+    public int crearSolicitudModificacion(String hechoId,
+                                          String usuarioId,
+                                          String justificacion,
+                                          Map<String, Object> hechoModificado,
+                                          String username,
+                                          String accessToken,
+                                          String rolUsuario) {
         try {
-            Map<String, Object> solicitudDTO = new HashMap<>();
-            solicitudDTO.put("id_HechoAsociado", UUID.fromString(hechoId));
+            Map<String, Object> payload = new HashMap<>();
 
-            if (usuarioId != null && !usuarioId.isEmpty()) {
-                Map<String, Object> usuarioDTO = new HashMap<>();
-                usuarioDTO.put("id_usuario", usuarioId);
-                usuarioDTO.put("username",  username);
-                solicitudDTO.put("usuario", usuarioDTO);
-            }
+            payload.put("hechoId", hechoId);
 
-            solicitudDTO.put("justificacion", justificacion);
+            payload.put("usuarioId", usuarioId);
 
-            solicitudDTO.put("hechoModificado", cambiosPropuestos);
+            payload.put("justificacion", justificacion);
+            payload.put("hechoModificado", hechoModificado);
 
-            String jsonBody = mapper.writeValueAsString(solicitudDTO);
+            payload.put("username", username);
+            payload.put("accessToken", accessToken);
 
-            HttpRequest request = buildRequestPublicaPOST(
-                    "solicitudModificacion",
-                    jsonBody,
-                    username,
-                    token,
-                    rolUsuario
-            );
+            String jsonBody = mapper.writeValueAsString(payload);
+
+            System.out.println("WEB SERVICE -> Enviando a Gestor: " + jsonBody);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(urlPublica + "/solicitudModificacion"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
 
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() != 201) {
-                System.err.println("Error creando solicitud: " + response.body());
-            }
 
             return response.statusCode();
 
         } catch (Exception e) {
-            System.err.println("Error fatal al crear solicitud: " + e.getMessage());
-            throw new RuntimeException("Error al crear solicitud.", e);
+            e.printStackTrace();
+            return 500;
         }
     }
 

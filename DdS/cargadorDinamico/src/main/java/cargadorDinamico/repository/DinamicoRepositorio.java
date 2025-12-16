@@ -1,13 +1,13 @@
 package cargadorDinamico.repository;
 
 import cargadorDinamico.domain.BDUtilsDinamico;
-import cargadorDinamico.domain.DinamicaDto.Hecho_D_DTO;
+import cargadorDinamico.domain.DinamicaDto.*;
 import cargadorDinamico.domain.HechosYColeccionesD.*;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudEliminacion_D;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudModificacion_D;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.Hibernate;
-import cargadorDinamico.domain.Usuario.RolUsuario;
+import cargadorDinamico.domain.Usuario.Usuario;
 import cargadorDinamico.domain.Usuario.Usuario_D;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudEliminacion;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudModificacion;
@@ -19,11 +19,6 @@ import cargadorDinamico.domain.HechosYColecciones.*;
 
 import cargadorDinamico.domain.Solicitudes.SolicitudDeEliminacion_D;
 import cargadorDinamico.domain.Solicitudes.SolicitudDeModificacion_D;
-
-import cargadorDinamico.domain.DinamicaDto.HechoDTO;
-import cargadorDinamico.domain.DinamicaDto.SolicitudDeModificacionDTO;
-import cargadorDinamico.domain.DinamicaDto.SolicitudDeEliminacionDTO;
-import cargadorDinamico.domain.Usuario.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -136,15 +131,6 @@ public class DinamicoRepositorio {
         return new Fuente(TipoDeFuente.DINAMICA, "DINAMICA");
     }
 
-    private Usuario convertirUsuario(Usuario_D usuarioD) {
-        if (usuarioD == null) return null;
-
-        Usuario usuario = new Usuario();
-        usuario.setUsername(usuarioD.getUsername());
-
-        return usuario;
-    }
-
     private List<Etiqueta> convertirEtiquetas(List<Etiqueta_D> etiquetasD) {
         if (etiquetasD == null) return new ArrayList<>();
 
@@ -183,7 +169,6 @@ public class DinamicoRepositorio {
     private ContenidoMultimedia convertirContenidoMultimedia(ContenidoMultimedia_D contenidoD) {
         if (contenidoD == null) return null;
 
-        // Convertir el enum del dinámico al enum del agregador
         TipoContenidoMultimedia tipoConvertido =
                 convertirTipoContenido(contenidoD.getTipoContenido());
 
@@ -197,26 +182,14 @@ public class DinamicoRepositorio {
 
     private TipoContenidoMultimedia convertirTipoContenido(
             TipoContenidoMultimedia_D tipoD) {
-
-        // Mapeo manual entre los enums
+        if(tipoD == null) return TipoContenidoMultimedia.IMAGEN;
         switch (tipoD) {
             case IMAGEN: return TipoContenidoMultimedia.IMAGEN;
             case VIDEO: return TipoContenidoMultimedia.VIDEO;
             case AUDIO: return TipoContenidoMultimedia.AUDIO;
         }
-    return null;
+        return TipoContenidoMultimedia.IMAGEN;
     }
-
-    /*private ContenidoMultimedia convertirContenidoMultimedia(ContenidoMultimedia_D contenidoD) {
-        if (contenidoD == null) return null;
-
-        ContenidoMultimedia contenido = new ContenidoMultimedia(
-                contenidoD.getTipoContenido(), // Asumiendo que tienen el mismo enum
-                contenidoD.getContenido()
-        );
-
-        return contenido;
-    }*/
 
 
     public void resetearHechos() {
@@ -291,6 +264,7 @@ public class DinamicoRepositorio {
             solicitud.setUsuario(usuarioDinamico);
 
             // 7. Guardar solicitud
+            // Como HechoModificado_D tiene CascadeType.ALL en la entidad Solicitud, se guarda solo.
             em.persist(solicitud);
 
             BDUtilsDinamico.commit(em);
@@ -351,7 +325,9 @@ public class DinamicoRepositorio {
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
             em.createQuery("DELETE FROM SolicitudDeModificacion_D").executeUpdate();
-            em.createQuery("DELETE FROM Usuario_D").executeUpdate();
+            // Borramos también los hechos modificados huérfanos si es necesario, aunque el cascade suele encargarse al borrar la solicitud
+            // em.createQuery("DELETE FROM HechoModificado_D").executeUpdate();
+            // em.createQuery("DELETE FROM Usuario_D").executeUpdate(); // Opcional, depende de tu lógica
             BDUtilsDinamico.commit(em);
             System.out.println("Todos las agregador.Solicitudes De Modificacion han sido reseteados");
         } catch (Exception e) {
@@ -367,7 +343,6 @@ public class DinamicoRepositorio {
         try {
             BDUtilsDinamico.comenzarTransaccion(em);
             em.createQuery("DELETE FROM SolicitudDeEliminacion_D").executeUpdate();
-            //em.createQuery("DELETE FROM Usuario_D").executeUpdate();
             BDUtilsDinamico.commit(em);
             System.out.println("Todos las agregador.Solicitudes De Eliminacion han sido reseteados");
         } catch (Exception e) {
@@ -394,7 +369,17 @@ public class DinamicoRepositorio {
         EntityManager em = BDUtilsDinamico.getEntityManager();
         try {
             TypedQuery<SolicitudDeModificacion_D> query = em.createQuery("SELECT sm FROM SolicitudDeModificacion_D sm", SolicitudDeModificacion_D.class);
-            return query.getResultList();
+            List<SolicitudDeModificacion_D> resultados = query.getResultList();
+
+            for(SolicitudDeModificacion_D sol : resultados) {
+                if(sol.getHechoModificado() != null) {
+                    Hibernate.initialize(sol.getHechoModificado());
+                    if(sol.getHechoModificado().getContenidoMultimedia() != null) {
+                        Hibernate.initialize(sol.getHechoModificado().getContenidoMultimedia());
+                    }
+                }
+            }
+            return resultados;
         } catch (Exception e) {
             System.err.println("Error al obtener sol de modificación: " + e.getMessage());
             return new ArrayList<>();
@@ -406,7 +391,7 @@ public class DinamicoRepositorio {
     public List<SolicitudDeEliminacionDTO> buscarSolicitudesEliminacion() {
         return this.buscarSolEliminacionEntidades().stream()
                 .map(this::convertirEntidadSEliminacionADTO)
-                .filter(Objects::nonNull) // Filtrar conversiones nulas
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
@@ -438,15 +423,76 @@ public class DinamicoRepositorio {
         return dto;
     }
 
-
     private SolicitudDeModificacionDTO convertirEntidadSModificacionADTO(SolicitudDeModificacion_D entidad) {
         SolicitudDeModificacionDTO dto = new SolicitudDeModificacionDTO();
+
         dto.setJustificacion(entidad.getJustificacion());
         dto.setID_HechoAsociado(entidad.getID_HechoAsociado());
+
         dto.setusuario(convertirUsuario(entidad.getUsuario()));
-        dto.setHechoModificado(convertirHechoEntidadAHechoModificado(entidad.getHechoModificado()));
+
+        dto.setHechoModificado(convertirHechoModificadoEntidadADTO(entidad.getHechoModificado()));
         dto.setEstadoSolicitudModificacion(convertirEstadoSolicitudModificacion(entidad.getEstadoSolicitudModificacion()));
+
         return dto;
+    }
+
+    private HechoModificadoDTO convertirHechoModificadoEntidadADTO(HechoModificado_D entidad) {
+        if (entidad == null) return null;
+
+        HechoModificadoDTO dto = new HechoModificadoDTO();
+        dto.setTitulo(entidad.getTitulo());
+        dto.setDescripcion(entidad.getDescripcion());
+        dto.setCategoria(entidad.getCategoria());
+        dto.setFechaDeAcontecimiento(entidad.getFechaDeAcontecimiento());
+
+        if(entidad.getUbicacion() != null) {
+            dto.setUbicacion(convertirUbicacionADTO(entidad.getUbicacion()));
+        }
+
+        dto.setContenidoMultimedia(convertirMultimediaADTO(entidad.getContenidoMultimedia()));
+
+        return dto;
+    }
+
+    // --- MÉTODOS AUXILIARES NUEVOS ---
+
+    private UbicacionDTO convertirUbicacionADTO(Ubicacion_D ubicacionD) {
+        if (ubicacionD == null) return null;
+
+        // Usamos el constructor vacío y luego asignamos valores
+        UbicacionDTO dto = new UbicacionDTO();
+        dto.setLatitud(ubicacionD.getLatitud());
+        dto.setLongitud(ubicacionD.getLongitud());
+        dto.setDescripcion(ubicacionD.getDescripcion());
+
+        return dto;
+    }
+
+    private List<ContenidoMultimediaDTO> convertirMultimediaADTO(List<ContenidoMultimedia_D> multimediaD) {
+        if (multimediaD == null) return new ArrayList<>();
+        List<ContenidoMultimediaDTO> lista = new ArrayList<>();
+
+        for (ContenidoMultimedia_D cmD : multimediaD) {
+            TipoContenidoMultimediaDTO tipo = convertirTipoContenidoParaDTO(cmD.getTipoContenido());
+
+            ContenidoMultimediaDTO dto = new ContenidoMultimediaDTO();
+            dto.setTipoContenido(tipo);
+            dto.setContenido(cmD.getContenido());
+
+            lista.add(dto);
+        }
+        return lista;
+    }
+
+    private TipoContenidoMultimediaDTO convertirTipoContenidoParaDTO(TipoContenidoMultimedia_D tipoD) {
+        if(tipoD == null) return TipoContenidoMultimediaDTO.IMAGEN;
+        switch (tipoD) {
+            case IMAGEN: return TipoContenidoMultimediaDTO.IMAGEN;
+            case VIDEO: return TipoContenidoMultimediaDTO.VIDEO;
+            case AUDIO: return TipoContenidoMultimediaDTO.AUDIO;
+        }
+        return TipoContenidoMultimediaDTO.IMAGEN;
     }
 
     private EstadoSolicitudEliminacion convertirEstadoSolicitudEliminacion(EstadoSolicitudEliminacion_D estadoD) {
@@ -459,44 +505,19 @@ public class DinamicoRepositorio {
         return EstadoSolicitudModificacion.valueOf(estadoD.name());
     }
 
-    private HechoDTO convertirHechoEntidadAHecho(Hecho_D entidad) {
-        if (entidad == null) return null;
-
-        HechoDTO hecho = new HechoDTO();
-        hecho.setTitulo(entidad.getTitulo());
-        hecho.setDescripcion(entidad.getDescripcion());
-        hecho.setCategoria(entidad.getCategoria());
-        hecho.setUbicacion(convertirUbicacion(entidad.getUbicacion()));
-        hecho.setFechaDeAcontecimiento(entidad.getFechaDeAcontecimiento());
-        hecho.setFuente(crearFuenteDinamica());
-        hecho.setEstadoHecho(convertirEstado(entidad.getEstadoHecho()));
-        hecho.setContribuyente(convertirUsuario(entidad.getContribuyente()));
-        hecho.setEtiquetas(convertirEtiquetas(entidad.getEtiquetas()));
-        hecho.setEsEditable(entidad.getEsEditable());
-        hecho.setContenidoMultimedia(convertirMultimedia(entidad.getContenidoMultimedia()));
-
-        return hecho;
+    private Usuario convertirUsuario(Usuario_D usuarioD) {
+        if (usuarioD == null) return null;
+        Usuario usuario = new Usuario();
+        usuario.setUsername(usuarioD.getUsername());
+        return usuario;
     }
 
+    // Los siguientes métodos se mantienen si los usas para otras cosas,
+    // pero ya no se usan para la solicitud de modificación.
+
+
     private HechoModificado convertirHechoEntidadAHechoModificado(Hecho_D entidad) {
-        if (entidad == null) return null;
-
-        // Usar el constructor de HechoModificado
-        HechoModificado hechoModificado = new HechoModificado(
-                entidad.getTitulo(),
-                entidad.getDescripcion(),
-                entidad.getCategoria(),
-                convertirUbicacion(entidad.getUbicacion()),
-                entidad.getFechaDeAcontecimiento(),
-                entidad.getFechaDeCarga(),
-                crearFuenteDinamica(),
-                convertirEstado(entidad.getEstadoHecho()),
-                convertirUsuario(entidad.getContribuyente()),
-                convertirEtiquetas(entidad.getEtiquetas()),
-                entidad.getEsEditable(),
-                convertirMultimedia(entidad.getContenidoMultimedia())
-        );
-
-        return hechoModificado;
+         // YA NO SE USA PORQUE AHORA USAMOS HechoModificado_D
+         return null;
     }
 }

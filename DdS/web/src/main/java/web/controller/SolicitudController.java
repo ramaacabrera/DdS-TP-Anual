@@ -3,11 +3,6 @@ package web.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import web.domain.HechosYColecciones.Coleccion;
 import web.domain.Solicitudes.SolicitudDeEliminacion;
 import web.domain.Solicitudes.SolicitudDeModificacion;
 import web.dto.PageDTO;
@@ -54,7 +49,6 @@ public class SolicitudController {
         Map<String, Object> modelo = ViewUtil.baseModel(ctx);
         modelo.put("pageTitle", "Solicitudes de Eliminación");
 
-        // 1. Obtener solicitudes de eliminación
         PageDTO<SolicitudDeEliminacion> solicitudesPage = solicitudService.listarColecciones(username, accessToken, rolUsuario, page, size);
 
         System.out.println("Número de solicitudes eliminación: " + solicitudesPage.size);
@@ -70,18 +64,15 @@ public class SolicitudController {
         modelo.put("fromIndex", fromIndex);
         modelo.put("toIndex", toIndex);
 
-        // 2. Crear lista simplificada
         List<Map<String, Object>> solicitudesSimplificadas = new ArrayList<>();
 
         for (SolicitudDeEliminacion solicitud : solicitudesPage.content) {
             Map<String, Object> solicitudData = new HashMap<>();
 
-            // Datos básicos obligatorios
             solicitudData.put("id", solicitud.getId() != null ? solicitud.getId().toString() : "");
             solicitudData.put("justificacion", solicitud.getJustificacion() != null ? solicitud.getJustificacion() : "Sin justificación");
             solicitudData.put("estado", solicitud.getEstado() != null ? solicitud.getEstado() : "PENDIENTE");
 
-            // Usuario - simplificado
             if (solicitud.getUsuario() != null) {
                 Map<String, String> usuarioMap = new HashMap<>();
                 usuarioMap.put("username", solicitud.getUsuario().getUsername() != null ? solicitud.getUsuario().getUsername() : "Usuario");
@@ -90,7 +81,6 @@ public class SolicitudController {
                 solicitudData.put("usuario", null);
             }
 
-            // Hecho - manejar el título
             String hechoTitulo = "Sin título";
             String hechoIdStr = null;
 
@@ -98,9 +88,7 @@ public class SolicitudController {
                 hechoIdStr = solicitud.getHechoAsociado().toString();
                 solicitudData.put("hechoId", hechoIdStr);
 
-                // Solo intentar obtener el título si el hecho existe
                 try {
-                    // Verificar si el hecho existe primero
                     HttpClient client = HttpClient.newHttpClient();
                     HttpRequest request = HttpRequest.newBuilder()
                             .uri(new URI(urlPublica + "/hechos/" + hechoIdStr))
@@ -275,7 +263,6 @@ public class SolicitudController {
         ctx.render("solicitud-detalle.ftl", modelo);
     };
 
-
     public Handler obtenerFormsEliminarSolicitud = ctx -> {
         String hechoId = ctx.pathParam("id");
 
@@ -340,7 +327,6 @@ public class SolicitudController {
             ctx.status(status).result("Error del servidor administrativo: HTTP " + status);
         }
     };
-
 
     public Handler listarSolicitudesModificacion = ctx -> {
         ObjectMapper mapper = new ObjectMapper();
@@ -431,13 +417,15 @@ public class SolicitudController {
         String accessToken = ctx.sessionAttribute("accessToken");
         if(accessToken == null || accessToken.isEmpty()) {
             ctx.redirect("/login");
+            return;
         }
+
         String hechoId = ctx.pathParam("id");
         String username = ctx.sessionAttribute("username");
 
         String usuarioId = usuarioService.obtenerId(username);
 
-        System.out.println("ID del usuario: " + usuarioId);
+        System.out.println("ID UUID del usuario recuperado para el form: " + usuarioId);
 
         Map<String, Object> hechoData = solicitudService.obtenerDatosHecho(hechoId);
 
@@ -452,7 +440,9 @@ public class SolicitudController {
         modelo.put("pageTitle", "Solicitar Modificación");
         modelo.put("hechoId", hechoId);
         modelo.put("hecho", hechoData);
+
         modelo.put("usuarioId", usuarioId);
+
         modelo.put("categorias", categorias);
         modelo.put("urlPublica", urlPublica);
 
@@ -465,52 +455,67 @@ public class SolicitudController {
     };
 
     public Handler crearSolicitudModificacion = ctx -> {
-        System.out.println(ctx.body());
-        Map<String, Object> body = ctx.bodyAsClass(Map.class);
+        System.out.println(">>> [WebController] Inicio crearSolicitudModificacion");
+        try {
+            Map<String, Object> body = ctx.bodyAsClass(Map.class);
+            System.out.println(">>> [WebController] Body parseado correctamente");
 
-        String hechoId = (String) body.get("hechoId");
-        String usuarioId = (String) body.get("usuarioId");
-        String justificacion = (String) body.get("justificacion");
+            String hechoId = (String) body.get("hechoId");
+            String usuarioId = (String) body.get("usuarioId");
+            String justificacion = (String) body.get("justificacion");
+            Map<String, Object> hechoModificado = (Map<String, Object>) body.get("hechoModificado");
 
-        Map<String, Object> hechoModificado = (Map<String, Object>) body.get("hechoModificado");
+            if (hechoId == null || hechoId.isBlank()){
+                ctx.status(400).json(Map.of("error", "Falta hechoId"));
+                return;
+            }
+            if (usuarioId == null || usuarioId.isBlank()){
+                ctx.status(400).json(Map.of("error", "Falta usuarioId"));
+                return;
+            }
 
-        if (hechoId == null || hechoId.isBlank()){
-            ctx.status(400).json(Map.of("error", "Los IDs de hecho y usuario son obligatorios."));
-            return;
-        }
+            String username = ctx.sessionAttribute("username");
+            String accessToken = ctx.sessionAttribute("accessToken");
+            String rolUsuario = ctx.sessionAttribute("rolUsuario");
 
-        if (justificacion == null || justificacion.isBlank()) {
-            ctx.status(400).json(Map.of("error", "La justificación es obligatoria."));
-            return;
-        }
+            if (accessToken == null) {
+                ctx.status(401).json(Map.of("error", "Sesión expirada"));
+                return;
+            }
 
-        if (hechoModificado == null || hechoModificado.isEmpty()) {
-            ctx.status(400).json(Map.of("error", "Debe proponer una modificación en al menos un campo."));
-            return;
-        }
-        String username = ctx.sessionAttribute("username");
-        String accessToken = ctx.sessionAttribute("accessToken");
-        String rolUsuario = ctx.sessionAttribute("rolUsuario");
+            if (!usuarioId.matches("[0-9a-fA-F-]{36}")) {
+                System.out.println(">>> [WebController] UUID inválido ('"+usuarioId+"'). Recuperando...");
+                usuarioId = usuarioService.obtenerId(username);
+                if (usuarioId == null) {
+                    ctx.status(500).json(Map.of("error", "No se pudo recuperar el UUID del usuario"));
+                    return;
+                }
+            }
 
-        if (accessToken == null) {
-            ctx.status(401).json(Map.of("error", "Sesión expirada. Inicie sesión nuevamente."));
-            return;
-        }
+            System.out.println(">>> [WebController] Llamando a SolicitudService con UUID: " + usuarioId);
 
-        int status = solicitudService.crearSolicitudModificacion(
-                hechoId,
-                usuarioId,
-                justificacion,
-                hechoModificado,
-                username,
-                accessToken,
-                rolUsuario
-        );
+            int status = solicitudService.crearSolicitudModificacion(
+                    hechoId,
+                    usuarioId,
+                    justificacion,
+                    hechoModificado,
+                    username,
+                    accessToken,
+                    rolUsuario
+            );
 
-        if (status == 201) {
-            ctx.status(201).json(Map.of("mensaje", "Solicitud de modificación enviada exitosamente."));
-        } else {
-            ctx.status(status).json(Map.of("error", "Error al procesar la solicitud en el servidor publico. HTTP: " + status));
+            System.out.println(">>> [WebController] Respuesta del servicio. Status: " + status);
+
+            if (status >= 200 && status < 300) {
+                ctx.status(201).json(Map.of("mensaje", "Solicitud enviada"));
+            } else {
+                ctx.status(status).json(Map.of("error", "El Gestor respondió con error HTTP " + status));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(">>> [WebController] EXCEPCION: " + e.getMessage());
+            ctx.status(500).json(Map.of("error", "Error interno Web: " + e.getMessage()));
         }
     };
 }

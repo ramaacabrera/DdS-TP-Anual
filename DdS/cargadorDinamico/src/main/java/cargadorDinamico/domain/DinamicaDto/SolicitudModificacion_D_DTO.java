@@ -1,38 +1,36 @@
 package cargadorDinamico.domain.DinamicaDto;
 
-import cargadorDinamico.domain.HechosYColeccionesD.Hecho_D;
+import cargadorDinamico.domain.HechosYColeccionesD.HechoModificado_D; // Usar la nueva clase
 import cargadorDinamico.domain.Usuario.Usuario_D;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.UUID;
 
 public class SolicitudModificacion_D_DTO {
-    private UUID ID_hechoAsociado;
-    private String justificacion;
-    private Usuario_D usuario;
-    private Hecho_D hechoModificado;
 
-    SolicitudModificacion_D_DTO() {}
+    @JsonProperty("ID_HechoAsociado")
+    private UUID ID_HechoAsociado;
 
-    SolicitudModificacion_D_DTO(UUID ID_hechoAsociado, String justificacion, Usuario_D usuario, Hecho_D hechoModificado) {
-        this.ID_hechoAsociado = ID_hechoAsociado;
-        this.justificacion = justificacion;
-        this.usuario = usuario;
-        this.hechoModificado = hechoModificado;
-    }
+    @JsonProperty("Justificacion")
+    private String Justificacion;
 
-    public void setID_HechoAsociado(UUID hechoAsociado) {
-        this.ID_hechoAsociado = hechoAsociado;
-    }
-    public void setusuario(Usuario_D id_usuario) {this.usuario = id_usuario;}
-    public void setJustificacion(String justificacion) {
-        this.justificacion = justificacion;
-    }
-    public void setHechoModificado(Hecho_D hechoModificado) {this.hechoModificado = hechoModificado; }
+    @JsonProperty("Usuario")
+    private Usuario_D Usuario;
 
-    public String getJustificacion() {
-        return justificacion;
-    }
-    public UUID getID_HechoAsociado() {return ID_hechoAsociado;}
-    public Usuario_D getUsuario() {return usuario; }
-    public Hecho_D getHechoModificado() {return hechoModificado; }
+    @JsonProperty("HechoModificado")
+    private HechoModificado_D HechoModificado;
+
+    public SolicitudModificacion_D_DTO() {}
+
+    // Getters y Setters
+    public UUID getID_HechoAsociado() { return ID_HechoAsociado; }
+    public void setID_HechoAsociado(UUID ID_HechoAsociado) { this.ID_HechoAsociado = ID_HechoAsociado; }
+
+    public String getJustificacion() { return Justificacion; }
+    public void setJustificacion(String Justificacion) { this.Justificacion = Justificacion; }
+
+    public Usuario_D getUsuario() { return Usuario; }
+    public void setUsuario(Usuario_D Usuario) { this.Usuario = Usuario; }
+
+    public HechoModificado_D getHechoModificado() { return HechoModificado; }
+    public void setHechoModificado(HechoModificado_D HechoModificado) { this.HechoModificado = HechoModificado; }
 }
