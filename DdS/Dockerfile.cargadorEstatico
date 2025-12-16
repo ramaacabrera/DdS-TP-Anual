@@ -23,22 +23,17 @@ RUN mvn package -pl cargadorEstatico -am -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-RUN apk --no-cache add curl
-RUN curl -L -o dd-java-agent.jar https://dtdg.co/latest-java-tracer
+# COPY del agente New Relic
+COPY newrelic.jar newrelic.jar
 
-# OJO: Aquí copiamos el jar con dependencias si tu plugin lo genera así
-# Si falla, cambia a: cargadorEstatico-*.jar
+# OJO: Mantenemos tu logica de copiar el jar-with-dependencies
 COPY --from=build /app/cargadorEstatico/target/*-jar-with-dependencies.jar app.jar
 
-# Crear carpeta para CSVs (importante para evitar errores si no se monta volumen)
+# Crear carpeta para CSVs
 RUN mkdir -p /app/csv_files
 
 EXPOSE 8080
 
 CMD ["java", \
-    "-javaagent:dd-java-agent.jar", \
-    "-Ddd.logs.injection=true", \
-    "-Ddd.profiling.enabled=true", \
-    "-Ddd.service=metamapa-cargador-estatico", \
-    "-Ddd.env=produccion", \
+    "-javaagent:newrelic.jar", \
     "-jar", "app.jar"]

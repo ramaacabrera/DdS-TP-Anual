@@ -23,17 +23,13 @@ RUN mvn package -pl gestorAdministrativo -am -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-RUN apk --no-cache add curl
-RUN curl -L -o dd-java-agent.jar https://dtdg.co/latest-java-tracer
+# COPY del agente New Relic
+COPY newrelic.jar newrelic.jar
 
 COPY --from=build /app/gestorAdministrativo/target/gestorAdministrativo-*.jar app.jar
 
 EXPOSE 8080
 
 CMD ["java", \
-    "-javaagent:dd-java-agent.jar", \
-    "-Ddd.logs.injection=true", \
-    "-Ddd.profiling.enabled=true", \
-    "-Ddd.service=metamapa-gestor-administrativo", \
-    "-Ddd.env=produccion", \
+    "-javaagent:newrelic.jar", \
     "-jar", "app.jar"]

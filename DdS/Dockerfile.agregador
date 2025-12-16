@@ -1,3 +1,4 @@
+# --- ETAPA DE BUILD (Igual que antes) ---
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
@@ -22,21 +23,23 @@ COPY agregador/src agregador/src
 RUN mvn install -pl utils -am -DskipTests
 RUN mvn package -pl agregador -am -DskipTests
 
-# Runtime
+# --- ETAPA DE RUNTIME (Modificada para New Relic) ---
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-RUN apk --no-cache add curl
-RUN curl -L -o dd-java-agent.jar https://dtdg.co/latest-java-tracer
+# 1. Eliminamos CURL y la descarga de Datadog
+# RUN apk --no-cache add curl ... (YA NO ES NECESARIO)
 
+# 2. Copiamos el agente que descargaste en tu carpeta local
+COPY newrelic.jar newrelic.jar
+
+# 3. Copiamos tu aplicación compilada
 COPY --from=build /app/agregador/target/agregador-*.jar app.jar
 
 EXPOSE 8080
 
+# 4. Comando de inicio actualizado
+# Nota: La License Key y App Name se pasan por variables de entorno en el docker run
 CMD ["java", \
-    "-javaagent:dd-java-agent.jar", \
-    "-Ddd.logs.injection=true", \
-    "-Ddd.profiling.enabled=true", \
-    "-Ddd.service=metamapa-agregador", \
-    "-Ddd.env=produccion", \
+    "-javaagent:newrelic.jar", \
     "-jar", "app.jar"]
