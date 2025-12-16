@@ -1,15 +1,6 @@
 const solicitudId = window.solicitudData?.id;
 const tipoSolicitud = window.solicitudData?.tipo;
 
-const getEndpoint = () => {
-    if (tipoSolicitud === 'eliminacion') {
-        return `/admin/solicitudes/eliminacion/${solicitudId}`;
-    } else if (tipoSolicitud === 'modificacion') {
-        return `/admin/solicitudes/modificacion/${solicitudId}`;
-    }
-    throw new Error('Tipo de solicitud no válido');
-};
-
 async function procesarSolicitud(accion) {
     try {
         if (!solicitudId) {

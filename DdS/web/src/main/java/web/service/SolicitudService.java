@@ -46,6 +46,7 @@ public class SolicitudService {
     }
 
     private HttpRequest buildRequestPATCH(String endpoint, String json, String username, String token, String rolUsuario) throws Exception {
+        System.out.println("Consulto a la url: " + urlAdmin + endpoint);
         HttpRequest.Builder builder = HttpRequest.newBuilder()
                 .uri(new URI(urlAdmin + endpoint))
                 .header("Content-Type", "application/json")

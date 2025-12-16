@@ -166,7 +166,7 @@ public class SolicitudController {
     public Handler procesarSolicitudModificacion = ctx -> {
         String idString = ctx.pathParam("id");
         ProcesarSolicitudDTO request = ctx.bodyAsClass(ProcesarSolicitudDTO.class);
-
+        System.out.println("procesando solicitud modificacion");
         try {
             UUID id = UUID.fromString(idString);
             boolean resultado = modificacionService.procesarSolicitud(id, request.getAccion());
@@ -177,6 +177,7 @@ public class SolicitudController {
                 ctx.status(404).json("Solicitud no encontrada");
             }
         } catch (Exception e) {
+            System.out.println("Error procesando solicitud: " + e.getMessage());
             ctx.status(400).json("Error: " + e.getMessage());
         }
     };

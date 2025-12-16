@@ -33,7 +33,7 @@ public class HechoModificado {
 
     private Date fechaDeAcontecimiento;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "hecho_modificado_id")
     private List<ContenidoMultimedia> contenidoMultimedia = new ArrayList<>();
 
