@@ -325,7 +325,7 @@
                 align-items: center;
                 margin-top: 16px;
             ">
-                <a href="/admin/solicitudes/eliminacion/${solicitud.id}" class="btn btn-primary" style="
+                <a href="/admin/solicitudes/eliminacion/${solicitud.id}?callback=/admin/solicitudes/eliminacion" class="btn btn-primary" style="
                     display: inline-block;
                     padding: 8px 16px;
                     background: var(--primary-color);

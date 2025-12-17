@@ -7,7 +7,7 @@
 <#assign content>
     <div class="container">
         <div class="header">
-            <a href="/admin/solicitudes/eliminacion" class="header-link back-link">&larr; Volver a Solicitudes</a>
+            <a href="${callback!'/admin/panel'}" class="header-link back-link">&larr; Volver a Solicitudes</a>
         </div>
 
         <div class="title-actions-container">
