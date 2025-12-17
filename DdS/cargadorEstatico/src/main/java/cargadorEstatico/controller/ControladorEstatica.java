@@ -18,7 +18,7 @@ public class ControladorEstatica implements Controlador {
 
     @Override
     public List<HechoDTO> obtenerHechos() {
-        return service.obtenerHechos();
+        return service.obtenerHechosDrive();
     }
 
     @Override

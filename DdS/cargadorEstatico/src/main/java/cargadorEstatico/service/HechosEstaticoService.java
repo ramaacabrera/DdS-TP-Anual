@@ -1,6 +1,8 @@
+
 package cargadorEstatico.service;
 
 import cargadorEstatico.controller.ConexionEstatica;
+import cargadorEstatico.controller.ConexionEstaticaDrive;
 import cargadorEstatico.domain.fuente.Fuente;
 import cargadorEstatico.dto.Hechos.FuenteDTO;
 import cargadorEstatico.dto.Hechos.HechoDTO;
@@ -59,6 +61,43 @@ public class HechosEstaticoService {
         return hechosTotales;
     }
 
+    public List<HechoDTO> obtenerHechosDrive() {
+        List<HechoDTO> hechosTotales = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            System.out.println("=== OBTENIENDO HECHOS DE GOOGLE DRIVE ===");
+
+            // Obtener instancia del cargador de Drive
+            ConexionEstaticaDrive driveCargador = ConexionEstaticaDrive.getInstance();
+
+            // Obtener hechos (solo de archivos no procesados)
+            // Pasamos el ID de la fuente para identificar los hechos
+            List<HechoDTO> hechosDrive = driveCargador.obtenerHechos();
+
+            // Mostrar estadísticas de cada hecho (opcional, para debug)
+            for (HechoDTO hecho : hechosDrive) {
+                try {
+                    System.out.println("Hecho obtenido: " + mapper.writeValueAsString(hecho));
+                } catch (Exception e) {
+                    System.out.println("Hecho obtenido (sin serializar): " + hecho);
+                }
+                hechosTotales.add(hecho);
+            }
+
+            System.out.println("=== PROCESO COMPLETADO ===");
+
+        } catch (Exception e) {
+            System.err.println("Error obteniendo hechos de Drive: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al obtener hechos de Google Drive", e);
+        }
+
+        System.out.println("Total hechos obtenidos: " + hechosTotales.size());
+        return hechosTotales;
+    }
+
+
     private Set<String> cargarArchivosProcesados(Path pathGuia) {
         Set<String> procesados = new HashSet<>();
         if (!exists(pathGuia)) return procesados;
@@ -73,6 +112,18 @@ public class HechosEstaticoService {
         }
         return procesados;
     }
+
+    private void actualizarGuiaProcesados(Set<String> procesados) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("guia.csv"))) {
+            // Para Google Drive, podrías guardar la fecha de última sincronización
+            writer.write("Última sincronización: " + new Date());
+            writer.newLine();
+            writer.write("Hechos obtenidos desde Google Drive");
+        } catch (IOException e) {
+            System.err.println("No se pudo escribir la guía: " + e.getMessage());
+        }
+    }
+
 
     private void guardarGuia(Path pathGuia, Set<String> procesados) {
         try (BufferedWriter writer = newBufferedWriter(pathGuia)) {
