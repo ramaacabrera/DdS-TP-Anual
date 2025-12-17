@@ -1,12 +1,10 @@
 package estadisticas.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import estadisticas.domainEstadisticas.Estadisticas;
 import estadisticas.domainEstadisticas.EstadisticasCategoria;
 import estadisticas.domainEstadisticas.EstadisticasColeccion;
 import estadisticas.repository.ConexionAgregador;
-import estadisticas.repository.BDUtilsEstadisticas;
+import estadisticas.utils.BDUtilsEstadisticas;
 import estadisticas.service.normalizador.NormalizadorCategorias;
 
 import javax.persistence.EntityManager;

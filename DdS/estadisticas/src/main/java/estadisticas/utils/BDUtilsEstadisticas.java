@@ -1,4 +1,4 @@
-package cargadorDinamico.utils;
+package estadisticas.utils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class BDUtilsDinamico {
+public class BDUtilsEstadisticas {
     private static EntityManagerFactory factory;
 
     public static EntityManager getEntityManager() {
@@ -40,7 +40,7 @@ public class BDUtilsDinamico {
 
                 configOverrides.put("hibernate.hbm2ddl.auto", "update");
 
-                factory = Persistence.createEntityManagerFactory("dinamico-PU", configOverrides);
+                factory = Persistence.createEntityManagerFactory("estadisticas-PU", configOverrides);
 
             } catch (Exception e) {
                 System.err.println("Error CRÍTICO al conectar a la BD: " + e.getMessage());
@@ -71,5 +71,5 @@ public class BDUtilsDinamico {
             tx.rollback();
         }
     }
-
 }
+
