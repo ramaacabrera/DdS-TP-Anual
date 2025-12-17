@@ -33,6 +33,7 @@ public class LecturaConfig {
         cargarEnv(config, "CLIENT_ID");
         cargarEnv(config, "CLIENT_SECRET");
         cargarEnv(config, "REDIRECT_URL");
+        cargarEnv(config, "URL_KEYCLOAK");
 
         cargarEnv(config, "NEW_RELIC_LICENSE_KEY");
 
