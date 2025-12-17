@@ -10,14 +10,14 @@ public class AgregadorScheduler {
 
     private final AgregadorOrquestador agregador;
 
-    public AgregadorScheduler(AgregadorOrquestador agregadorNuevo) {
+    public AgregadorScheduler(AgregadorOrquestador agregadorNuevo, int tiempoScheduler) {
         this.agregador = agregadorNuevo;
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         scheduler.scheduleAtFixedRate(() -> {
             agregador.iniciarBusquedaAgregador();
-        }, 1, 30, TimeUnit.SECONDS);
+        }, 1, tiempoScheduler, TimeUnit.SECONDS);
 
         long delayInicial = calcularDelayHastaHora(2);
         scheduler.scheduleAtFixedRate(() -> {

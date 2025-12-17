@@ -26,6 +26,7 @@ public class Application {
         Properties config = lector.leerConfig();
 
         String puertoStr = config.getProperty("PUERTO_AGREGADOR", "8080");
+        int tiempoScheduler = Integer.parseInt(config.getProperty("TIEMPO_SCHEDULER"));
         int puertoAgregador;
         try {
             puertoAgregador = Integer.parseInt(puertoStr);
@@ -56,7 +57,7 @@ public class Application {
         AgregadorOrquestador agregador = new AgregadorOrquestador(hechoRepositorio, coleccionRepositorio, fuenteRepositorio,
                 servNorm, motorConsenso, gestorSol, hechosCargadorService);
 
-        AgregadorScheduler agregadorScheduler = new AgregadorScheduler(agregador);
+        AgregadorScheduler agregadorScheduler = new AgregadorScheduler(agregador, tiempoScheduler);
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puertoAgregador, "/");
