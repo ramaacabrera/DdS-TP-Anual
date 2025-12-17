@@ -70,9 +70,13 @@ public class ColeccionController {
             System.out.println("Creando dto");
             ColeccionDTO request = ctx.bodyAsClass(ColeccionDTO.class);
 
+            ObjectMapper o = new ObjectMapper();
+
+            System.out.println("=============== Coleccion dto: " + o.writeValueAsString(ColeccionDTO.class));
+
             System.out.println("Coleccion dto creada: " + new ObjectMapper().writeValueAsString(request));
             for(FuenteDTO fuente : request.getFuentes()){
-                System.out.println("Fuentes del dto: " + fuente.getTipoFuente() + " " + fuente.getDescriptor() + " " + fuente.getFuenteId());
+                System.out.println("Fuentes del dto: " + o.writeValueAsString(FuenteDTO.class));
             }
 
             ColeccionDTO response = coleccionService.actualizarColeccion(id, request);

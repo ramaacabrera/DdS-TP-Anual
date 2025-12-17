@@ -1,5 +1,6 @@
 package gestorPublico.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gestorPublico.dto.FiltroHechosDTO;
 import gestorPublico.service.ColeccionService;
 import io.javalin.http.Handler;
@@ -42,7 +43,9 @@ public class ColeccionController {
         try {
             UUID id = UUID.fromString(ctx.pathParam("id"));
             ColeccionDTO coleccion = coleccionService.obtenerColeccionPorId(id);
-            System.out.println("Coleccion a enviar: " + coleccion.toString());
+            ObjectMapper o = new ObjectMapper();
+            System.out.println("====== Coleccion a enviar: " + o.writeValueAsString(coleccion));
+            System.out.println("Cantidad de hechos consensuados: " + coleccion.getHechosConsensuados().size());
             System.out.println("Cantidad de hechos del dto: " + coleccion.getHechos().size());
 
             if (coleccion != null) {

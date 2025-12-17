@@ -3,6 +3,7 @@ package agregador.repository;
 import agregador.domain.Criterios.Criterio;
 import agregador.domain.Criterios.CriterioEtiquetas;
 import agregador.domain.HechosYColecciones.Coleccion;
+import agregador.domain.HechosYColecciones.Hecho;
 import agregador.utils.BDUtils;
 import org.hibernate.Hibernate;
 
@@ -34,11 +35,21 @@ public class ColeccionRepositorio {
         EntityManager em = BDUtils.getEntityManager();
         try {
             String jpql = "SELECT DISTINCT c FROM Coleccion c " +
-                    "LEFT JOIN FETCH c.hechos " +
-                    "LEFT JOIN FETCH c.fuentes " +
-                    "LEFT JOIN FETCH c.criteriosDePertenencia";
+                    "LEFT JOIN c.hechos " +
+                    "LEFT JOIN c.fuentes " +
+                    "LEFT JOIN c.criteriosDePertenencia";
 
             TypedQuery<Coleccion> query = em.createQuery(jpql, Coleccion.class);
+            for(Coleccion coleccion : query.getResultList()){
+                Hibernate.initialize(coleccion.getHechos());
+                Hibernate.initialize(coleccion.getCriteriosDePertenencia());
+                Hibernate.initialize(coleccion.getFuente());
+                Hibernate.initialize(coleccion.getHechosConsensuados());
+                for(Hecho h : coleccion.getHechos()){
+                    Hibernate.initialize(h.getContenidoMultimedia());
+                    Hibernate.initialize(h.getEtiquetas());
+                }
+            }
             return query.getResultList();
         } finally {
             em.close();

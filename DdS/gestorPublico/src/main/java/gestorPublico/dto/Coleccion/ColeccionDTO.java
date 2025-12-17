@@ -21,6 +21,7 @@ public class ColeccionDTO {
     private List<CriterioDTO> criteriosDePertenencia = new ArrayList<>();
     private TipoAlgoritmoConsensoDTO algoritmoDeConsenso;
     private List<HechoDTO> hechos = new ArrayList<>();
+    private List<HechoDTO> hechosConsensuados = new ArrayList<>();
 
     public ColeccionDTO() {}
 
@@ -65,6 +66,8 @@ public class ColeccionDTO {
         this.hechos = convertirHechos(coleccion.getHechos());
 
         this.criteriosDePertenencia = convertirDTO(coleccion.getCriteriosDePertenencia());
+
+        this.hechosConsensuados = convertirHechos(coleccion.getHechosConsensuados());
     }
 
     private List<HechoDTO> convertirHechos(List<Hecho> hechos){
@@ -156,4 +159,7 @@ public class ColeccionDTO {
     public void setAlgoritmoDeConsenso(TipoAlgoritmoConsensoDTO algoritmoDeConsenso) {
         this.algoritmoDeConsenso = algoritmoDeConsenso;
     }
+
+    public List<HechoDTO> getHechosConsensuados(){return hechosConsensuados;}
+    public void setHechosConsensuados(List<HechoDTO> hechosConsensuados){this.hechosConsensuados = hechosConsensuados;}
 }

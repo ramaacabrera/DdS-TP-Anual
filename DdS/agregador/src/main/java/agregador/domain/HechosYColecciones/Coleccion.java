@@ -175,6 +175,7 @@ public class Coleccion {
                 default:
                     throw new IllegalStateException("Algoritmo no soportado: " + algoritmoDeConsenso);
             }
+            System.out.println("Aplicando algoritmo de consenso");
             this.hechosConsensuados = algoritmo.obtenerHechosConsensuados(this);
             return true;
         } else {

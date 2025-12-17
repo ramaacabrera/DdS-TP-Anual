@@ -146,6 +146,8 @@ public class ColeccionService {
         }
         System.out.println("Coleccion service 4");
 
+        coleccionExistente.setAlgoritmoDeConsenso(TipoAlgoritmoConsenso.valueOf(dto.getAlgoritmoDeConsenso().toString()));
+
         coleccionRepositorio.guardar(coleccionExistente);
 
         System.out.println("Coleccion service 5");

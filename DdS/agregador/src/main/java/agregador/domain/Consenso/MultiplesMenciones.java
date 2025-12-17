@@ -9,12 +9,17 @@ import java.util.*;
 public class MultiplesMenciones extends AlgoritmoConsenso {
     @Override
     public List<Hecho> obtenerHechosConsensuados(Coleccion coleccion) {
+        System.out.println("Se aplicara multiples menciones");
         List<Hecho> hechos = coleccion.getHechos();
 
         Map<String, List<Hecho>> hechosPorTitulo = new HashMap<>();
         for (Hecho hecho : hechos) {
+            System.out.println("Titulo del hecho: " + hecho.getTitulo());
             hechosPorTitulo.computeIfAbsent(hecho.getTitulo(), k -> new ArrayList<>()).add(hecho);
         }
+
+        System.out.println("Coleccion: " + coleccion.getTitulo());
+        System.out.println("Hechos por titulo: " + hechosPorTitulo);
 
         List<Hecho> hechosConsensuados = new ArrayList<>();
 
@@ -26,6 +31,7 @@ public class MultiplesMenciones extends AlgoritmoConsenso {
 
                 for (VarianteHecho variante : variantes) {
                     if (variante.hecho.tieneMismosAtributosQue(hechoActual)) {
+                        System.out.println("Se encontraron hechos con distintos atributos: " + hechoActual.getTitulo());
                         variante.fuentes.add(hechoActual.getFuente().getId());
                         encontrado = true;
                         break;
