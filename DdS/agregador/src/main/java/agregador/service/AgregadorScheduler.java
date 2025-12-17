@@ -22,7 +22,7 @@ public class AgregadorScheduler {
         long delayInicial = calcularDelayHastaHora(2);
         scheduler.scheduleAtFixedRate(() -> {
             agregador.ejecutarAlgoritmoDeConsenso();
-        }, 0, 24, TimeUnit.HOURS);
+        }, delayInicial, 24, TimeUnit.HOURS);
     }
 
     private long calcularDelayHastaHora(int horaObjetivo) {

@@ -86,7 +86,7 @@ async function procesarSolicitud(accion) {
                 }
             });
 
-            window.location.href = '/admin/solicitudes/eliminacion';
+            window.location.href = '/admin/solicitudes/${tipoSolicitud}';
         } else {
             const errorText = await response.text();
             Swal.fire({

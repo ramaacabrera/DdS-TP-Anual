@@ -26,7 +26,6 @@ function initMap(hechos, mapId) {
             .addTo(map)
             .bindPopup(`
                 <b>${hecho.titulo}</b><br>
-                ${hecho.desc}<br>
                 <a href="/hechos/${hecho.id}" style="font-weight: bold; color: var(--primary-color);">Ver Detalles &rarr;</a>
             `)
             .on('click', function(e) {
