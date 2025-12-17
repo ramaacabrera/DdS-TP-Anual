@@ -59,6 +59,10 @@ public class ColeccionController {
             String coleccionId = ctx.pathParam("id");
             Coleccion coleccion = coleccionService.obtenerColeccionPorId(coleccionId);
 
+            ObjectMapper o = new ObjectMapper();
+
+            System.out.println("Coleccion: " + o.writeValueAsString(coleccion));
+
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);
             modelo.put("pageTitle", "Detalle de Colección");
             modelo.put("coleccion", coleccion);

@@ -2,6 +2,8 @@ package agregador.service;
 
 import agregador.domain.HechosYColecciones.Coleccion;
 import agregador.repository.ColeccionRepositorio;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.List;
 
 public class MotorConsenso {
@@ -16,7 +18,10 @@ public class MotorConsenso {
         System.out.println("--- Ejecutando Motor de Consenso ---");
         List<Coleccion> colecciones = coleccionRepositorio.obtenerTodas();
 
+        System.out.println("Iterando colecciones (" + colecciones.size() + "):");
+        ObjectMapper o = new ObjectMapper();
         for (Coleccion coleccion : colecciones) {
+            System.out.println("Coleccion: " +  coleccion.getTitulo());
             boolean huboCambios = coleccion.ejecutarAlgoritmoDeConsenso();
 
             if (huboCambios) {

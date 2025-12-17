@@ -120,7 +120,7 @@ public class DemoAPIMockServer {
         String[] extraData = {"", "Urgente", "Verificado", "En Curso"};
 
         Random random = new Random();
-        String id = "EXT-" + factIdCounter.getAndIncrement();
+        String id = "DEMO-" + factIdCounter.getAndIncrement();
         String titulo = categorias[random.nextInt(categorias.length)] + " - " + id;
         String descripcion = descripciones[random.nextInt(descripciones.length)];
         String categoria = categorias[random.nextInt(categorias.length)];

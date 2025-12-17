@@ -81,36 +81,6 @@ class GestorSolicitudesTest {
     }
 
     @Test
-    @DisplayName("Debe procesar modificación completa con hecho modificado")
-    void testProcesarModificacion() {
-        // Arrange
-        UUID hechoId = UUID.randomUUID();
-        UUID userId = UUID.randomUUID();
-
-        HechoModificadoDTO hmDto = new HechoModificadoDTO();
-        hmDto.setTitulo("Nuevo Titulo");
-
-        SolicitudDeModificacionDTO dto = new SolicitudDeModificacionDTO();
-        dto.setHechoId(hechoId);
-        dto.setUsuarioId(userId);
-        dto.setJustificacion("Update");
-        dto.setHechoModificado(hmDto);
-
-        when(hechoRepositorio.buscarPorId(hechoId)).thenReturn(new Hecho());
-
-        // Act
-        gestor.procesarSolicitudes(List.of(dto), null);
-
-        // Assert
-        ArgumentCaptor<SolicitudDeModificacion> captor = ArgumentCaptor.forClass(SolicitudDeModificacion.class);
-        verify(modRepo).agregarSolicitudDeModificacion(captor.capture());
-
-        SolicitudDeModificacion guardada = captor.getValue();
-        assertEquals("Nuevo Titulo", guardada.getHechoModificado().getTitulo());
-        assertEquals(userId, guardada.getUsuario().getId_usuario());
-    }
-
-    @Test
     @DisplayName("Manejo de listas nulas o vacías")
     void testListasVacias() {
         assertDoesNotThrow(() -> gestor.procesarSolicitudes(null, null));

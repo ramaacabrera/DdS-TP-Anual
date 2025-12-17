@@ -1,5 +1,7 @@
 package web.domain.HechosYColecciones;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -7,6 +9,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "Ubicacion")
 public class Ubicacion {
 

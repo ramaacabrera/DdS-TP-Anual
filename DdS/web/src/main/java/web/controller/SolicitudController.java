@@ -164,6 +164,7 @@ public class SolicitudController {
     public Handler obtenerSolicitud = ctx -> {
         String id = ctx.pathParam("id");
         String tipo = ctx.pathParam("tipo");
+        String callback =  ctx.queryParam("callback");
 
         System.out.println("Obteniendo solicitud detalle ID: " + id + ", tipo: " + tipo);
 
@@ -182,6 +183,7 @@ public class SolicitudController {
         modelo.put("pageTitle", "Detalle de Solicitud");
         modelo.put("tipo", tipo);
         modelo.put("categorias", categorias);
+        modelo.put("callback", callback);
 
         if ("eliminacion".equals(tipo)) {
             SolicitudDeEliminacion sol = solicitudService.obtenerSolicitudEliminacion(id, username, accessToken, rolUsuario);
@@ -306,6 +308,8 @@ public class SolicitudController {
 
                 String fechaAnt = formatearFecha(hechoData.get("fechaDeAcontecimiento"));
                 String fechaNue = formatearFecha(propuesta.get("fechaDeAcontecimiento"));
+                String fechaDeCarga = formatearFecha(hechoData.get("fechaDeCarga"));
+                hechoData.put("fechaDeCargaFormateada", fechaDeCarga);
                 compararYAgregar(cambios, "fechaDeAcontecimiento", fechaAnt, fechaNue);
 
                 String ubiAnt = obtenerDescripcionUbicacion(hechoData.get("ubicacion"));

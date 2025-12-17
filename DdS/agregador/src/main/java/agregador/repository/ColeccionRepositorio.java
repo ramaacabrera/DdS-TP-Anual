@@ -4,6 +4,7 @@ import agregador.domain.Criterios.Criterio;
 import agregador.domain.Criterios.CriterioEtiquetas;
 import agregador.domain.HechosYColecciones.Coleccion;
 import agregador.domain.fuente.Fuente;
+import agregador.domain.HechosYColecciones.Hecho;
 import agregador.utils.BDUtils;
 import org.hibernate.Hibernate;
 
@@ -34,18 +35,23 @@ public class ColeccionRepositorio {
     public List<Coleccion> obtenerTodas() {
         EntityManager em = BDUtils.getEntityManager();
         try {
-            String jpql = "SELECT c FROM Coleccion c ORDER BY c.titulo ASC";
-            List<Coleccion> colecciones =
-                    em.createQuery(jpql, Coleccion.class).getResultList();
+            String jpql = "SELECT DISTINCT c FROM Coleccion c " +
+                    "LEFT JOIN c.hechos " +
+                    "LEFT JOIN c.fuentes " +
+                    "LEFT JOIN c.criteriosDePertenencia";
 
-            // Inicializar relaciones UNA POR UNA
-            for (Coleccion c : colecciones) {
-                Hibernate.initialize(c.getHechos());
-                Hibernate.initialize(c.getFuente());
-                Hibernate.initialize(c.getCriteriosDePertenencia());
+            TypedQuery<Coleccion> query = em.createQuery(jpql, Coleccion.class);
+            for(Coleccion coleccion : query.getResultList()){
+                Hibernate.initialize(coleccion.getHechos());
+                Hibernate.initialize(coleccion.getCriteriosDePertenencia());
+                Hibernate.initialize(coleccion.getFuente());
+                Hibernate.initialize(coleccion.getHechosConsensuados());
+                for(Hecho h : coleccion.getHechos()){
+                    Hibernate.initialize(h.getContenidoMultimedia());
+                    Hibernate.initialize(h.getEtiquetas());
+                }
             }
-
-            return colecciones;
+            return query.getResultList();
         } finally {
             em.close();
         }

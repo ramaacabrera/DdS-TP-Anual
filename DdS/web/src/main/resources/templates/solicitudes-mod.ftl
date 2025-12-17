@@ -267,7 +267,7 @@
 <#macro solicitudModificacionCard solicitud>
     <#assign estado = solicitud.estado!obtenerTextoEstado(solicitud.estadoModificacion!"PENDIENTE")>
     <#assign hecho = solicitud.hechoModificado!"">
-    <#assign urlDetalle = "/admin/solicitudes/modificacion/${solicitud.id}">
+    <#assign urlDetalle = "/admin/solicitudes/modificacion/${solicitud.id}?callback=/admin/solicitudes/modificacion">
 
     <div class="solicitud-card" style="
         background: var(--bg-white);
