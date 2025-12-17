@@ -98,7 +98,7 @@ public class HechoConsultaService {
         if (filtro.getUbicacion() != null && !filtro.getUbicacion().isBlank()) {
             Ubicacion ubicacion = new Ubicacion();
             ubicacion.setDescripcion(filtro.getUbicacion());
-            criterios.add(new CriterioUbicacion(ubicacion));
+            criterios.add(new CriterioUbicacion(ubicacion.getDescripcion()));
         }
 
         //Fechas
