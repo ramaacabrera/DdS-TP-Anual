@@ -11,7 +11,7 @@ import java.time.Duration;
 
 public class ServicioGeoref {
 
-    private static final String API_URL = "https://apis.datos.gob.ar/georef/api/v2.0/ubicacion";
+    private static final String API_URL = "https://apis.datos.gob.ar/georef/api/ubicacion";
     private final HttpClient httpClient;
     private final ObjectMapper mapper;
 
