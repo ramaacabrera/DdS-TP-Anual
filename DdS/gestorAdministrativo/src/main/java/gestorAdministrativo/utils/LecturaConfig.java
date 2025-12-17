@@ -27,7 +27,7 @@ public class LecturaConfig {
         cargarEnv(config, "DB_USER");
         cargarEnv(config, "DB_PASS");
         cargarEnv(config, "URL_KEYCLOAK");
-        cargarEnv(config, "PUERTO_DINAMICO");
+        cargarEnv(config, "PUERTO_GESTOR_ADMINISTRATIVO");
         cargarEnv(config, "NEW_RELIC_LICENSE_KEY");
 
         return config;

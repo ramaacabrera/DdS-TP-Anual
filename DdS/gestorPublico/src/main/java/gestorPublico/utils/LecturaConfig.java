@@ -23,6 +23,9 @@ public class LecturaConfig {
             System.err.println("Error al leer el archivo " + nombreArchivo + ": " + e.getMessage());
         }
 
+        cargarEnv(config, "DB_URL");
+        cargarEnv(config, "DB_USER");
+        cargarEnv(config, "DB_PASS");
         cargarEnv(config, "PUERTO_GESTOR_PUBLICO");
         cargarEnv(config, "URL_DINAMICA");
         cargarEnv(config, "URL_KEYCLOAK");

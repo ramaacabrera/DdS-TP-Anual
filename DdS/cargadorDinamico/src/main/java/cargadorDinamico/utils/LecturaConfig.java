@@ -23,6 +23,9 @@ public class LecturaConfig {
             System.err.println("Error al leer el archivo " + nombreArchivo + ": " + e.getMessage());
         }
 
+        cargarEnv(config, "DB_URL");
+        cargarEnv(config, "DB_USER");
+        cargarEnv(config, "DB_PASS");
         cargarEnv(config, "URL_AGREGADOR");
         cargarEnv(config, "PUERTO_DINAMICO");
         cargarEnv(config, "NEW_RELIC_LICENSE_KEY");
