@@ -29,6 +29,7 @@ public class LecturaConfig {
         cargarEnv(config, "PUERTO_AGREGADOR");
         cargarEnv(config, "NEW_RELIC_LICENSE_KEY");
         cargarEnv(config, "URL_MOCK");
+        cargarEnv(config, "TIEMPO_SCHEDULER");
 
         return config;
     }
