@@ -21,12 +21,7 @@ public class KeycloakKeyProvider {
 
     private static RSAPublicKey cachedKey;
 
-    public static RSAPublicKey getKey(String token) throws Exception {
-        LecturaConfig lector = new LecturaConfig();
-        Properties config = lector.leerConfig();
-
-        String url = "http://localhost:8080/realms/tpDDSI";
-
+    public static RSAPublicKey getKey(String token, String url) throws Exception {
         if (cachedKey != null) return cachedKey;
         DecodedJWT jwt = JWT.decode(token);
         String tokenKid = jwt.getKeyId();

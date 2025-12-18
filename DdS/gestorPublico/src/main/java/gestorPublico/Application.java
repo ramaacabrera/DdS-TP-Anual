@@ -4,7 +4,7 @@ import gestorPublico.service.*;
 import gestorPublico.service.Normalizador.DiccionarioCategorias;
 import io.javalin.Javalin;
 import gestorPublico.controller.*;
-import utils.IniciadorApp;
+import gestorPublico.utils.IniciadorApp;
 import gestorPublico.utils.LecturaConfig;
 import gestorPublico.repository.*;
 

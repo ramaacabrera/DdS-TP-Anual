@@ -24,7 +24,7 @@ public class TokenValidator {
             System.out.println("Token validator: " + ISSUER + ", " +  token);
             //Algorithm algorithm = Algorithm.RSA256(KeycloakKeyProvider.getKey(), null);
             System.out.println("Token recibido: " + token);
-            RSAPublicKey key = KeycloakKeyProvider.getKey(token);
+            RSAPublicKey key = KeycloakKeyProvider.getKey(token, ISSUER);
             System.out.println("Clave obtenida: " + key);
             Algorithm algorithm = Algorithm.RSA256(key, null);
 
