@@ -152,7 +152,7 @@ public class GestorSolicitudes {
         boolean faltaDescripcion = ubicacion.getDescripcion() == null || ubicacion.getDescripcion().trim().isEmpty();
 
         if (tieneCoordenadas && faltaDescripcion) {
-            System.out.println("📍 Buscando descripción para coord: " + ubicacion.getLatitud() + ", " + ubicacion.getLongitud());
+            System.out.println("Buscando descripción para coord: " + ubicacion.getLatitud() + ", " + ubicacion.getLongitud());
 
             String descripcionEncontrada = null;
             try {
@@ -168,9 +168,9 @@ public class GestorSolicitudes {
 
             if (descripcionEncontrada != null && !descripcionEncontrada.isEmpty()) {
                 ubicacion.setDescripcion(descripcionEncontrada);
-                System.out.println("✅ Ubicación actualizada (API): " + descripcionEncontrada);
+                System.out.println("Ubicación actualizada (API): " + descripcionEncontrada);
             } else {
-                System.out.println("⚠ API falló o no disponible, calculando ubicación aproximada offline...");
+                System.out.println("API falló o no disponible, calculando ubicación aproximada offline...");
 
                 try {
                     String descripcionOffline = GeolocalizadorOffline.obtenerUbicacionAproximada(
@@ -180,7 +180,7 @@ public class GestorSolicitudes {
 
                     if (descripcionOffline != null) {
                         ubicacion.setDescripcion(descripcionOffline);
-                        System.out.println("✅ Ubicación actualizada (Offline): " + descripcionOffline);
+                        System.out.println("Ubicación actualizada (Offline): " + descripcionOffline);
                     }
                 } catch (Exception e) {
                     System.err.println("Error en geolocalizador offline: " + e.getMessage());

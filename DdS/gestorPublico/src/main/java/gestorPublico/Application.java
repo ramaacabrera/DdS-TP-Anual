@@ -63,8 +63,5 @@ public class Application {
         // Rutas de Usuario / Auth
         app.post("/api/usuario/sincronizar", usuarioController.sincronizar);
         app.get("/api/usuario/{username}", usuarioController.obtenerUsuario);
-
-        //app.post("/api/sign-in", usuarioController.registrar);
-        //app.get("/api/usuario/{username}", usuarioController.obtenerUsuario);
     }
 }

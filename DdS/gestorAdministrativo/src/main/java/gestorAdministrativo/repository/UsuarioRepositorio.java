@@ -31,7 +31,7 @@ public class UsuarioRepositorio {
             BDUtils.rollback(em);
             System.err.println("ERROR al guardar Usuario: " + e.getMessage());
             e.printStackTrace();
-            throw e; // Relanzar para que el servicio se entere
+            throw e;
         } finally {
             em.close();
         }

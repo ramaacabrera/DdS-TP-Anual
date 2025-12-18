@@ -23,7 +23,7 @@ public class BDUtils {
 
                 if (config.containsKey("DB_URL")) {
                     String url = config.getProperty("DB_URL");
-                    System.out.println("🔌 Usando DB URL: " + url);
+                    System.out.println("Usando DB URL: " + url);
                     configOverrides.put("javax.persistence.jdbc.url", url);
                     configOverrides.put("hibernate.connection.url", url);
                 }

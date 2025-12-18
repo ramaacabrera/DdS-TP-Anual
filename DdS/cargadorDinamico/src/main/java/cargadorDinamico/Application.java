@@ -43,6 +43,5 @@ public class Application {
         app.post("/solicitudesModificacion", new PostSolicitudesModificacionHandler(solicitudesModificacionService));
         app.post("/solicitudesEliminacion", new PostSolicitudesEliminacionHandler(solicitudesEliminacionService));
 
-        // DEJO LOS POST PORQUE CREO QUE SE USAN PARA CREAR LOS HECHOS DESDE EL FRONT, LOS GET SE USAN MEDIANTE EL CLIENTEDELAGREGADOR
     }
 }

@@ -21,14 +21,8 @@ public class HechoFiltroDTO {
 
     private List<String> etiquetas;
 
-    // =========================
-    // CONSTRUCTOR VACÍO
-    // =========================
     public HechoFiltroDTO() {}
 
-    // =========================
-    // FACTORY DESDE MAP (GraphQL)
-    // =========================
     @SuppressWarnings("unchecked")
     public static HechoFiltroDTO fromMap(Map<String, Object> filtroMap) {
 
@@ -59,10 +53,6 @@ public class HechoFiltroDTO {
 
         return dto;
     }
-
-    // =========================
-    // GETTERS Y SETTERS
-    // =========================
 
     public String getCategoria() { return categoria; }
     public void setCategoria(String categoria) { this.categoria = categoria; }

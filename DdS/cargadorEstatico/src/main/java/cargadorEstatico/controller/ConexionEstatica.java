@@ -26,7 +26,6 @@ public class ConexionEstatica {
         List<HechoDTO> hechos = new ArrayList<>();
 
         try {
-            // Obtener el InputStream del recurso desde /resources
             Path ruta = Paths.get(path);
 
             Reader reader = Files.newBufferedReader(ruta);
@@ -34,11 +33,9 @@ public class ConexionEstatica {
                     .withFirstRecordAsHeader()
                     .parse(reader);
 
-            // Leer los registros
             List<CSVRecord> registros = parser.getRecords();
             for (CSVRecord registro : registros) {
                 HechoDTO hechoDTO = conversor.mapearAHecho(registro);
-                //hechoDTO.setFuente(path);
                 hechos.add(hechoDTO);
             }
             System.out.println("Hechos encontrados: " + hechos.size());

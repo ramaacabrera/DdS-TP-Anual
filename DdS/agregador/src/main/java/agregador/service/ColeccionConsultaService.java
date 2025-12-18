@@ -29,9 +29,6 @@ public class ColeccionConsultaService {
         this.coleccionRepositorio = coleccionRepositorio;
     }
 
-    // =========================
-    // CONSULTA LISTADA
-    // =========================
     public PageColeccionDTO buscarColecciones(ColeccionFiltroDTO filtro,
                                               PageRequestDTO pageRequest) {
 
@@ -61,16 +58,10 @@ public class ColeccionConsultaService {
         );
     }
 
-    // =========================
-    // CONSULTA POR HANDLE
-    // =========================
     public Coleccion obtenerColeccionPorHandle(String handle) {
         return coleccionRepositorio.buscarPorHandle(handle);
     }
 
-    // =========================
-    // FILTROS
-    // =========================
     private boolean cumpleFiltro(Coleccion c, ColeccionFiltroDTO f) {
 
         if (f == null) return true;

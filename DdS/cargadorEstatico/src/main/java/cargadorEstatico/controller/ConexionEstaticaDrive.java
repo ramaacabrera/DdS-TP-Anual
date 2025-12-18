@@ -30,12 +30,10 @@ public class ConexionEstaticaDrive {
     private static final String GUIA_FILE_NAME = "guia.csv";
     private String csvEncoding = StandardCharsets.UTF_8.name();
 
-    // Singleton para reutilizar conexión
     private static ConexionEstaticaDrive instance;
 
     public static synchronized ConexionEstaticaDrive getInstance() throws IOException, GeneralSecurityException {
         if (instance == null) {
-            // Cargar configuración desde properties
             Properties props = new Properties();
             try (InputStream input = ConexionEstaticaDrive.class.getClassLoader()
                     .getResourceAsStream("config/drive-config.properties")) {
@@ -61,7 +59,6 @@ public class ConexionEstaticaDrive {
 
         System.out.println("Cargando credenciales a partir de: " + serviceAccountKeyPath);
 
-        // Cargar credenciales desde resources
         InputStream keyStream = getClass().getClassLoader()
                 .getResourceAsStream(serviceAccountKeyPath);
 
@@ -88,24 +85,17 @@ public class ConexionEstaticaDrive {
         System.out.println("✓ Conectado a Google Drive");
     }
 
-    /**
-     * Método que reemplaza tu ConexionEstatica.obtenerHechos()
-     * Lee directamente desde Google Drive sin descargar archivos
-     */
     public List<HechoDTO> obtenerHechos() {
         List<HechoDTO> todosHechos = new ArrayList<>();
         ConversorCSV conversor = new ConversorCSV();
 
         try {
-            // 1. Cargar archivos ya procesados desde la guía en Drive
             Set<String> archivosProcesados = cargarGuiaProcesados();
             System.out.println("Archivos ya procesados: " + archivosProcesados.size());
 
-            // 2. Obtener lista de archivos CSV del Drive
             List<FileInfo> archivosDisponibles = obtenerArchivosCSV();
             System.out.println("Archivos disponibles en Drive: " + archivosDisponibles.size());
 
-            // 3. Filtrar archivos no procesados
             List<FileInfo> archivosNuevos = new ArrayList<>();
             for (FileInfo archivo : archivosDisponibles) {
                 if (!archivosProcesados.contains(archivo.nombre) &&
@@ -121,7 +111,6 @@ public class ConexionEstaticaDrive {
                 return todosHechos;
             }
 
-            // 4. Procesar archivos nuevos
             Set<String> archivosProcesadosEnEsteCiclo = new HashSet<>();
 
             for (FileInfo archivo : archivosNuevos) {
@@ -129,7 +118,6 @@ public class ConexionEstaticaDrive {
                     System.out.println("Procesando: " + archivo.nombre);
                     List<HechoDTO> hechosArchivo = procesarArchivoCSV(archivo, conversor);
 
-                    // Asignar fuente a cada hecho
                     FuenteDTO fuente = new FuenteDTO(
                             null,
                             TipoDeFuente.ESTATICA.toString(),
@@ -150,7 +138,6 @@ public class ConexionEstaticaDrive {
                 }
             }
 
-            // 5. Actualizar guía en Drive con los nuevos archivos procesados
             if (!archivosProcesadosEnEsteCiclo.isEmpty()) {
                 actualizarGuiaProcesados(archivosProcesadosEnEsteCiclo);
                 System.out.println("✓ Guía actualizada con " + archivosProcesadosEnEsteCiclo.size() + " archivos nuevos");
@@ -171,7 +158,6 @@ public class ConexionEstaticaDrive {
         Set<String> procesados = new HashSet<>();
 
         try {
-            // Buscar archivo guía en Drive
             Optional<FileInfo> guia = buscarArchivoPorNombre(GUIA_FILE_NAME);
 
             if (!guia.isPresent()) {
@@ -179,12 +165,10 @@ public class ConexionEstaticaDrive {
                 return procesados;
             }
 
-            // Descargar contenido de la guía
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             driveService.files().get(guia.get().id).executeMediaAndDownloadTo(outputStream);
             String contenido = outputStream.toString(StandardCharsets.UTF_8.name());
 
-            // Parsear contenido (un archivo por línea)
             try (BufferedReader reader = new BufferedReader(
                     new StringReader(contenido))) {
                 String linea;
@@ -200,7 +184,6 @@ public class ConexionEstaticaDrive {
 
         } catch (Exception e) {
             System.err.println("Error cargando guía: " + e.getMessage());
-            // Si hay error, asumimos que no hay archivos procesados
         }
 
         return procesados;
@@ -209,17 +192,14 @@ public class ConexionEstaticaDrive {
     private void actualizarGuiaProcesados(Set<String> nuevosArchivos) throws IOException {
         System.out.println("Actualizando guia 1");
 
-        // 1. Cargar guía existente
         Set<String> todosProcesados = cargarGuiaProcesados();
 
         System.out.println("Actualizando guia 2");
 
-        // 2. Agregar nuevos archivos
         todosProcesados.addAll(nuevosArchivos);
 
         System.out.println("Actualizando guia 3");
 
-        // 3. Crear contenido para la guía
         StringBuilder contenido = new StringBuilder();
         for (String archivo : todosProcesados) {
             contenido.append(archivo).append("\n");
@@ -227,7 +207,6 @@ public class ConexionEstaticaDrive {
 
         System.out.println("Actualizando guia 4");
 
-        // 4. Subir/actualizar archivo en Drive
         ByteArrayContent mediaContent = new ByteArrayContent(
                 "text/csv",
                 contenido.toString().getBytes(StandardCharsets.UTF_8)
@@ -235,17 +214,14 @@ public class ConexionEstaticaDrive {
 
         System.out.println("Actualizando guia 5");
 
-        // Buscar si ya existe la guía
         Optional<FileInfo> guiaExistente = buscarArchivoPorNombre(GUIA_FILE_NAME);
 
         System.out.println("Actualizando guia 6");
 
         if (guiaExistente.isPresent()) {
-            // Actualizar archivo existente
             driveService.files().update(guiaExistente.get().id, null, mediaContent).execute();
             System.out.println("Guía actualizada en Drive");
         } else {
-            // Crear nuevo archivo
             File fileMetadata = new File();
             fileMetadata.setName(GUIA_FILE_NAME);
             fileMetadata.setParents(Collections.singletonList(folderId));
@@ -309,12 +285,10 @@ public class ConexionEstaticaDrive {
 
         List<HechoDTO> hechos = new ArrayList<>();
 
-        // Descargar contenido en memoria
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         driveService.files().get(archivo.id).executeMediaAndDownloadTo(outputStream);
         byte[] contenido = outputStream.toByteArray();
 
-        // Parsear CSV (igual que tu código original)
         try (Reader reader = new InputStreamReader(new ByteArrayInputStream(contenido), csvEncoding);
              CSVParser parser = CSVFormat.DEFAULT
                      .withFirstRecordAsHeader()
@@ -331,7 +305,6 @@ public class ConexionEstaticaDrive {
         return hechos;
     }
 
-    // Clase interna simple para info de archivos
     private static class FileInfo {
         String id;
         String nombre;
@@ -355,18 +328,16 @@ public class ConexionEstaticaDrive {
 
         private Date parseGoogleDriveDate(String fechaString) {
             if (fechaString == null) {
-                return new Date(); // Fecha actual como fallback
+                return new Date();
             }
 
             try {
-                // Google Drive devuelve fechas en formato RFC 3339
-                // Ejemplo: "2024-01-15T10:30:00.000Z"
                 java.time.Instant instant = java.time.Instant.parse(fechaString);
                 return Date.from(instant);
 
             } catch (Exception e) {
                 System.err.println("Error parseando fecha de Google Drive: " + fechaString);
-                return new Date(); // Fecha actual como fallback
+                return new Date();
             }
         }
     }

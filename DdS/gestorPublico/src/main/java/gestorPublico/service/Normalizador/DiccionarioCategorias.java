@@ -27,8 +27,6 @@ public class DiccionarioCategorias {
             for (Map.Entry<String, List<String>> entry : datos.entrySet()) {
                 String catOficial = entry.getKey();
                 for (String sinonimo : entry.getValue()) {
-                    // IMPORTANTE: Las claves del mapa también deben estar normalizadas
-                    // para que coincidan con lo que vendrá del Hecho
                     mapa.put(NormalizadorCategorias.normalizar(sinonimo), catOficial);
                 }
             }
@@ -43,8 +41,8 @@ public class DiccionarioCategorias {
 
     public List<String> obtenerCategoriasCanonicas() {
         return mapa.values().stream()
-                .distinct() // <--- ESTO ES LA CLAVE: Elimina los repetidos
-                .sorted()   // Las ordena alfabéticamente (A-Z) para que se vean bien
+                .distinct()
+                .sorted()
                 .collect(Collectors.toList());
     }
 }

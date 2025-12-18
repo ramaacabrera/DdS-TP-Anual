@@ -46,7 +46,6 @@ public class SolicitudController {
             ctx.status(201).json("Solicitud creada exitosamente");
 
         } catch (IllegalArgumentException e) {
-            // Capturamos errores de validación lógica (ej. hecho no existe)
             ctx.status(400).json(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,7 +55,6 @@ public class SolicitudController {
 
     public Handler procesarSolicitud = ctx -> {
         String idString = ctx.pathParam("id");
-        // Usamos la clase estática interna para mapear el JSON {"accion": "APROBADA"}
         ProcesarSolicitudDTO request = ctx.bodyAsClass(ProcesarSolicitudDTO.class);
 
         try {

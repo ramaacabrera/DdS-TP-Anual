@@ -47,10 +47,9 @@ public class HechosEstaticoService {
                 hechos.forEach(hecho -> {hecho.setFuente(new FuenteDTO(fuente.getId(),fuente.getTipoDeFuente().toString(),fuente.getDescriptor()));});
                 hechosTotales.addAll(hechos); // o tus criterios
 
-                procesados.add(nombreArchivo); // marcar como procesado
+                procesados.add(nombreArchivo);
             }
 
-            // Guardar cambios en la guía
             guardarGuia(pathGuia, procesados);
 
         } catch (IOException e) {
@@ -71,11 +70,8 @@ public class HechosEstaticoService {
             // Obtener instancia del cargador de Drive
             ConexionEstaticaDrive driveCargador = ConexionEstaticaDrive.getInstance();
 
-            // Obtener hechos (solo de archivos no procesados)
-            // Pasamos el ID de la fuente para identificar los hechos
             List<HechoDTO> hechosDrive = driveCargador.obtenerHechos();
 
-            // Mostrar estadísticas de cada hecho (opcional, para debug)
             for (HechoDTO hecho : hechosDrive) {
                 try {
                     System.out.println("Hecho obtenido: " + mapper.writeValueAsString(hecho));
@@ -115,7 +111,6 @@ public class HechosEstaticoService {
 
     private void actualizarGuiaProcesados(Set<String> procesados) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("guia.csv"))) {
-            // Para Google Drive, podrías guardar la fecha de última sincronización
             writer.write("Última sincronización: " + new Date());
             writer.newLine();
             writer.write("Hechos obtenidos desde Google Drive");

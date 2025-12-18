@@ -5,13 +5,6 @@ import java.util.Locale;
 
 public class NormalizadorCategorias {
 
-    /**
-     * Normaliza un texto para usarlo como identificador técnico
-     * - Convierte a minúsculas
-     * - Elimina acentos y caracteres especiales
-     * - Reemplaza espacios por underscore
-     * - Elimina caracteres no alfanuméricos
-     */
     public static String normalizar(String texto) {
         if (texto == null || texto.trim().isEmpty()) {
             return "sin_categoria";

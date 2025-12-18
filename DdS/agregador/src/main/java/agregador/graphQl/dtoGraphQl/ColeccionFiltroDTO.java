@@ -5,7 +5,7 @@ public class ColeccionFiltroDTO {
 
     private String titulo;
     private String descripcion;
-    private String algoritmoDeConsenso; // String para GraphQL
+    private String algoritmoDeConsenso;
     private Boolean tieneAlgoritmo;
     private Integer minHechos;
     private Integer maxHechos;

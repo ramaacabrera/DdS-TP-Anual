@@ -18,7 +18,6 @@ import java.util.UUID;
 public class SolicitudModificacionRepositorio {
 
     public SolicitudModificacionRepositorio() {
-        // No necesitamos inyectar HechoRepositorio aquí.
     }
 
     public void guardar(SolicitudDeModificacion solicitud) {
@@ -147,7 +146,6 @@ public class SolicitudModificacionRepositorio {
                     s.getHechoAsociado().getTitulo();
                 }
             }
-            // -------------------------------
 
             return lista;
 

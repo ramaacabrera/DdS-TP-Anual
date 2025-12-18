@@ -84,8 +84,6 @@ public class ColeccionRepositorio {
 
                 Hibernate.initialize(c.getFuente());
             }
-            // ------------------------------
-
             return resultados;
 
         } catch (Exception e) {

@@ -29,10 +29,10 @@ public class SolicitudEliminacionRepositorio {
             }
 
             BDUtils.commit(em);
-            System.out.println("✅ Solicitud guardada con éxito: " + solicitud.getId());
+            System.out.println("Solicitud guardada con éxito: " + solicitud.getId());
         } catch (Exception e) {
             BDUtils.rollback(em);
-            System.err.println("❌ Error guardando solicitud: " + e.getMessage());
+            System.err.println("Error guardando solicitud: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Error al guardar la solicitud", e);
         } finally {
@@ -202,7 +202,7 @@ public class SolicitudEliminacionRepositorio {
         }
         catch (Exception e) {
             e.printStackTrace();
-            return 0; // Es mejor devolver 0 que null si es un conteo
+            return 0;
         }
     }
 }

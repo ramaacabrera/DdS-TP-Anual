@@ -73,7 +73,6 @@ public class PostLoginHandler implements Handler {
                 ctx.sessionAttribute("rolUsuario", rolPrincipal);
                 System.out.println("PostLogin rolUsuario:" + rolPrincipal);
 
-                // Respuesta exitosa JSON
                 ctx.json(Map.of("status", "ok", "redirect", "/home"));
 
             } else {

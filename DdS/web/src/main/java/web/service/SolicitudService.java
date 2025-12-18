@@ -151,7 +151,6 @@ public class SolicitudService {
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                //System.out.println("Obtener solicitud de eliminacion (lista) 3: " );
 
                 return mapper.readValue(response.body(),
                         new TypeReference<PageDTO<SolicitudDeEliminacion>>() {
@@ -334,7 +333,6 @@ public class SolicitudService {
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json));
 
-        // Asumimos que los headers de seguridad son CamelCase (ajustado en debug)
         if (username != null && token != null) {
             builder.header("username", username);
             builder.header("accessToken", token);

@@ -33,11 +33,11 @@ public class PageRequestDTO {
     // Getters y setters
     public int getPage() { return page; }
     public void setPage(int page) {
-        this.page = Math.max(1, page); // Asegurar que sea al menos 1
+        this.page = Math.max(1, page);
     }
 
     public int getSize() { return size; }
     public void setSize(int size) {
-        this.size = Math.max(1, Math.min(size, 100)); // Limitar entre 1 y 100
+        this.size = Math.max(1, Math.min(size, 100));
     }
 }

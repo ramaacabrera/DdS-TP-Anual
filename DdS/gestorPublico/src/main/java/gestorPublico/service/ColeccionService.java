@@ -92,7 +92,6 @@ public class ColeccionService {
         if (f.descripcion != null && !f.descripcion.equals(""))
             criterios.add(new CriterioUbicacion(f.descripcion));
 
-        // Agrega más si son necesarios (categoria, etc.)
         return criterios;
     }
 }

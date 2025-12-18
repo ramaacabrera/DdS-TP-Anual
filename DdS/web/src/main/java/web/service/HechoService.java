@@ -31,10 +31,9 @@ public class HechoService {
     }
 
     public HechoDTO obtenerHechoPorId(String hechoIdString) {
-        // Construimos la URL de forma segura
         HttpUrl url = HttpUrl.parse(urlPublica + "/hechos/" + hechoIdString);
         if (url == null) {
-            System.err.println("❌ URL inválida para hecho ID: " + hechoIdString);
+            System.err.println("URL inválida para hecho ID: " + hechoIdString);
             return null;
         }
 
@@ -42,7 +41,7 @@ public class HechoService {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                System.err.println("❌ Error API al obtener hecho: " + response.code() + " " + response.message());
+                System.err.println("Error API al obtener hecho: " + response.code() + " " + response.message());
                 return null;
             }
 
@@ -51,7 +50,7 @@ public class HechoService {
             return mapper.readValue(body, HechoDTO.class);
 
         } catch (Exception e) {
-            System.err.println("❌ Excepción al obtener el hecho: " + e.getMessage());
+            System.err.println("Excepción al obtener el hecho: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -61,10 +60,8 @@ public class HechoService {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(urlPublica + "/hechos").newBuilder()
                 .addQueryParameter("page", String.valueOf(page))
                 .addQueryParameter("size", String.valueOf(size));
-        // Aplicar filtros dinámicos
         filtros.forEach((key, value) -> {
             if (value != null && !value.isBlank()) {
-                // Normalizamos fechas antes de enviar si la clave corresponde a una fecha
                 if (key.startsWith("fecha_")) {
                     urlBuilder.addQueryParameter(key, normalizarFecha(value));
                 } else {
@@ -73,7 +70,7 @@ public class HechoService {
             }
         });
         String finalUrl = urlBuilder.build().toString();
-        System.out.println("📡 Consultando backend: " + finalUrl);
+        System.out.println("Consultando backend: " + finalUrl);
         Request request = new Request.Builder().url(finalUrl).get().build();
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {

@@ -33,7 +33,6 @@ public class Application {
         System.out.println("   -> URL Agregador: " + urlAgregador);
 
         Path carpeta = Paths.get(fileServer);
-        // String pathGuia = carpeta.resolve("guia.csv").toString();
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");

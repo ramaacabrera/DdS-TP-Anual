@@ -40,11 +40,9 @@ public class VerificacionController {
         Claim realmAccessClaim = jwt.getClaim("realm_access");
 
         if (!realmAccessClaim.isNull()) {
-            // 'realm_access' es un objeto complejo, lo convertimos a Map
             Map<String, Object> realmAccessMap = realmAccessClaim.asMap();
 
             if (realmAccessMap != null && realmAccessMap.containsKey("roles")) {
-                // Keycloak devuelve los roles como una lista de objetos (Strings)
                 List<String> roles = (List<String>) realmAccessMap.get("roles");
 
                 if (roles.contains("administrador")) {
@@ -69,6 +67,6 @@ public class VerificacionController {
             throw new io.javalin.http.ForbiddenResponse("No tienes permisos de administrador");
         }
 
-        System.out.println("✅ Acceso autorizado para: " + username);
+        System.out.println("Acceso autorizado para: " + username);
     };
 }

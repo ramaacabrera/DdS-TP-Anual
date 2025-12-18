@@ -174,7 +174,7 @@ public class SolicitudModificacionService {
             }
         }
 
-        System.out.println("✅ Hecho actualizado correctamente.");
+        System.out.println("Hecho actualizado correctamente.");
     }
 
     private HechoModificado mapHechoModificadoToEntity(HechoModificadoDTO dto) {

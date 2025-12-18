@@ -4,24 +4,15 @@ import java.util.Locale;
 
 public class DesnormalizadorCategorias {
 
-    /**
-     * Convierte un texto normalizado en una versión "linda" para mostrar
-     * - Reemplaza underscores por espacios
-     * - Capitaliza cada palabra
-     * - Aplica reglas especiales para palabras comunes
-     */
     public static String desnormalizar(String textoNormalizado) {
         if (textoNormalizado == null || textoNormalizado.trim().isEmpty()) {
             return "Sin Categoría";
         }
 
-        // Paso 1: Reemplazar underscores por espacios
         String desnormalizado = textoNormalizado.replaceAll("_", " ");
 
-        // Paso 2: Capitalizar cada palabra
         desnormalizado = capitalizarFrase(desnormalizado);
 
-        // Paso 3: Aplicar correcciones específicas para palabras comunes
         desnormalizado = aplicarCorreccionesEspecificas(desnormalizado);
 
         return desnormalizado;
@@ -36,9 +27,6 @@ public class DesnormalizadorCategorias {
         return false;
     }
 
-    /**
-     * Capitaliza cada palabra de una frase
-     */
     private static String capitalizarFrase(String frase) {
         if (frase == null || frase.isEmpty()) {
             return frase;
@@ -64,9 +52,6 @@ public class DesnormalizadorCategorias {
         return resultado.toString();
     }
 
-    /**
-     * Aplica correcciones específicas para palabras comunes
-     */
     private static String aplicarCorreccionesEspecificas(String texto) {
         if (texto == null) return texto;
 

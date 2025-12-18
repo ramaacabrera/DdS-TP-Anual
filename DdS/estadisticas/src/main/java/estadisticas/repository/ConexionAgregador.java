@@ -70,7 +70,6 @@ public class ConexionAgregador {
             for (Object[] fila : resultados) {
                 String categoria = (String) fila[0];
                 String descripcion = (String) fila[1];
-                // SQL Nativo devuelve BigInteger para COUNT, casteamos seguro:
                 Long count = ((Number) fila[2]).longValue();
 
                 if (descripcion == null || descripcion.trim().isEmpty()) continue;

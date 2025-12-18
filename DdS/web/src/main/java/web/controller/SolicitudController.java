@@ -70,7 +70,6 @@ public class SolicitudController {
 
         PageDTO<SolicitudDeEliminacion> solicitudesPage = null;
 
-        // 1. Obtener solicitudes de eliminación
 
         if(estado != null){
             System.out.println("===== Estado: " + estado + " =====");
@@ -95,7 +94,6 @@ public class SolicitudController {
         modelo.put("toIndex", toIndex);
         modelo.put("totalSolicitudes", solicitudesPage.totalElements);
 
-        // Estadísticas para los botones
         modelo.put("totalTodas", totalTodas);
         modelo.put("totalPendientes", totalPendientes);
         modelo.put("totalAceptadas", totalAceptadas);
@@ -262,7 +260,6 @@ public class SolicitudController {
             modelo.put("hecho", hechoData);
 
         } else if ("modificacion".equals(tipo)) {
-            // 1. Obtener la solicitud del servicio
             SolicitudDeModificacion sol = solicitudService.obtenerSolicitudModificacion(id, username, accessToken, rolUsuario);
 
             if (sol == null) {
@@ -318,7 +315,6 @@ public class SolicitudController {
                     compararYAgregar(cambios, "Ubicacion", ubiAnt, ubiNue);
                 }
 
-                // D. Comparar Multimedia
                 List<Map<String, Object>> mediaAnt = (List<Map<String, Object>>) hechoData.get("contenidoMultimedia");
                 List<Map<String, Object>> mediaNue = (List<Map<String, Object>>) propuesta.get("contenidoMultimedia");
 
@@ -326,7 +322,6 @@ public class SolicitudController {
                     String htmlAnt = generarHtmlFotos(mediaAnt);
                     String htmlNue = generarHtmlFotos(mediaNue);
 
-                    // Si son diferentes, agregamos el cambio
                     if (!htmlAnt.equals(htmlNue)) {
                         compararYAgregar(cambios, "Multimedia", htmlAnt, htmlNue);
                     }
@@ -471,7 +466,6 @@ public class SolicitudController {
         modelo.put("toIndex", toIndex);
         modelo.put("totalSolicitudes", solicitudesPage.totalElements);
 
-        // Estadísticas para los botones
         modelo.put("totalTodas", totalTodas);
         modelo.put("totalPendientes", totalPendientes);
         modelo.put("totalAceptadas", totalAceptadas);

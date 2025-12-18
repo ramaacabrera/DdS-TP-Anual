@@ -4,24 +4,15 @@ import java.util.Locale;
 
 public class DesnormalizadorCategorias {
 
-    /**
-     * Convierte un texto normalizado en una versión "linda" para mostrar
-     * - Reemplaza underscores por espacios
-     * - Capitaliza cada palabra
-     * - Aplica reglas especiales para palabras comunes
-     */
     public static String desnormalizar(String textoNormalizado) {
         if (textoNormalizado == null || textoNormalizado.trim().isEmpty()) {
             return "Sin Categoría";
         }
 
-        // Paso 1: Reemplazar underscores por espacios
         String desnormalizado = textoNormalizado.replaceAll("_", " ");
 
-        // Paso 2: Capitalizar cada palabra
         desnormalizado = capitalizarFrase(desnormalizado);
 
-        // Paso 3: Aplicar correcciones específicas para palabras comunes
         desnormalizado = aplicarCorreccionesEspecificas(desnormalizado);
 
         return desnormalizado;
@@ -36,9 +27,6 @@ public class DesnormalizadorCategorias {
         return false;
     }
 
-    /**
-     * Capitaliza cada palabra de una frase
-     */
     private static String capitalizarFrase(String frase) {
         if (frase == null || frase.isEmpty()) {
             return frase;
@@ -50,7 +38,6 @@ public class DesnormalizadorCategorias {
         for (int i = 0; i < palabras.length; i++) {
             if (!palabras[i].isEmpty()) {
                 String palabra = palabras[i];
-                // Capitalizar primera letra, resto en minúsculas
                 String palabraCapitalizada = palabra.substring(0, 1).toUpperCase(Locale.ROOT) +
                         palabra.substring(1).toLowerCase(Locale.ROOT);
                 resultado.append(palabraCapitalizada);
@@ -64,16 +51,11 @@ public class DesnormalizadorCategorias {
         return resultado.toString();
     }
 
-    /**
-     * Aplica correcciones específicas para palabras comunes
-     */
     private static String aplicarCorreccionesEspecificas(String texto) {
         if (texto == null) return texto;
 
-        // Correcciones para palabras específicas
         String corregido = texto;
 
-        // Preposiciones y artículos en minúsculas (excepto al inicio)
         String[] palabrasMinusculas = {"de", "del", "la", "las", "el", "los", "y", "e", "o", "u", "a", "en", "con", "por", "para", "sin", "sobre"};
 
         String[] palabras = corregido.split("\\s+");
@@ -96,7 +78,6 @@ public class DesnormalizadorCategorias {
             corregido = sb.toString();
         }
 
-        // Correcciones específicas de categorías comunes
         corregido = corregido.replace("Gps", "GPS");
         corregido = corregido.replace("Gas Toxico", "Gas Tóxico");
         corregido = corregido.replace("Toxico", "Tóxico");

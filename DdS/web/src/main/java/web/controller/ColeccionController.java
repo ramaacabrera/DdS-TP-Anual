@@ -214,7 +214,6 @@ public class ColeccionController {
         for(JsonNode criterio : body){
             Map<String, Object> map = new HashMap<>();
             map.put("@type", criterio.get("@type").asText());
-            // ... (resto de tu lógica de extracción de JSON se mantiene igual) ...
             switch (criterio.get("@type").asText()){
                 case "CriterioDeTexto":
                     map.put("tipoDeTexto", criterio.get("tipoDeTexto").asText());

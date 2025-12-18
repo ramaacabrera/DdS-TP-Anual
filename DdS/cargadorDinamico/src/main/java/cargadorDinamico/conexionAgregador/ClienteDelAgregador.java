@@ -26,9 +26,9 @@ public class ClienteDelAgregador {
         controlador = contr;
         AGREGADOR_URL = url;
         client = new OkHttpClient.Builder().pingInterval(1000, TimeUnit.SECONDS)
-                .connectTimeout(100, TimeUnit.SECONDS)    // Timeout de conexión
-                .readTimeout(600, TimeUnit.SECONDS)      // ⬅️ AUMENTAR ESTE (5 minutos)
-                .writeTimeout(600, TimeUnit.SECONDS)     // ⬅️ Y ESTE (5 minutos)
+                .connectTimeout(100, TimeUnit.SECONDS)
+                .readTimeout(600, TimeUnit.SECONDS)
+                .writeTimeout(600, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .build();
     }
@@ -45,7 +45,7 @@ public class ClienteDelAgregador {
         }
         Request request = new Request.Builder()
                 .url(AGREGADOR_URL+"cargador")
-                .header("FuenteDTO", jsonFuente)  // Aquí enviamos la clase FuenteDTO en el header
+                .header("FuenteDTO", jsonFuente)
                 .build();
 
         WebSocketListener listener = new WebSocketListener() {
@@ -110,7 +110,7 @@ public class ClienteDelAgregador {
 
     public void enviarMensaje(String mensaje) {
         if (socket != null) {
-            socket.send(mensaje);  // Enviar mensaje al servidor
+            socket.send(mensaje);
         }
     }
 

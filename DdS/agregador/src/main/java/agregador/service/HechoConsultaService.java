@@ -27,9 +27,6 @@ public class HechoConsultaService {
         this.hechoRepositorio = hechoRepositorio;
     }
 
-    // =========================
-    // CONSULTA LISTADA
-    // =========================
     public PageHechoDTO buscarHechos(HechoFiltroDTO filtro, PageRequestDTO pageRequest) {
 
         List<Criterio> criterios = construirCriterios(filtro);
@@ -63,16 +60,10 @@ public class HechoConsultaService {
         );
     }
 
-    // =========================
-    // CONSULTA POR ID
-    // =========================
     public Hecho obtenerHechoPorId(String id) {
         return hechoRepositorio.buscarPorId(UUID.fromString(id));
     }
 
-    // =========================
-    // ARMADO DE CRITERIOS
-    // =========================
     private List<Criterio> construirCriterios(HechoFiltroDTO filtro) {
 
         List<Criterio> criterios = new ArrayList<>();
@@ -134,7 +125,7 @@ public class HechoConsultaService {
             List<Etiqueta> etiquetas = filtro.getEtiquetas().stream()
                     .map(nombre -> {
                         Etiqueta e = new Etiqueta();
-                        e.setNombre(nombre);  // ← Ahora se setea el nombre, no el ID
+                        e.setNombre(nombre);
                         return e;
                     })
                     .toList();
@@ -166,7 +157,7 @@ public class HechoConsultaService {
 
 
             for (Hecho h : hechos) {
-                h.getEtiquetas().size();          // etiquetas
+                h.getEtiquetas().size();
                 if (h.getUbicacion() != null) {
                     h.getUbicacion().getDescripcion();
                 }

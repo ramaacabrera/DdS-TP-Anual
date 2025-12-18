@@ -33,7 +33,6 @@ public class HechoService {
         this.hechoRepositorio = hechoRepositorio;
         this.urlDinamica = urlDinamica;
         this.diccionarioCategorias = diccionarioCategorias;
-        // Asumiendo que ServicioGeoref tiene el constructor sin argumentos que arreglamos antes
         this.servicioGeoref = new ServicioGeoref(null,null);
     }
 

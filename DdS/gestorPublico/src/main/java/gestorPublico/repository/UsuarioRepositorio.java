@@ -17,12 +17,10 @@ public class UsuarioRepositorio {
             BDUtils.comenzarTransaccion(em);
 
             Usuario usuarioGestionado;
-            // Si no tiene ID, es nuevo -> Persist
             if (usuario.getId_usuario() == null) {
                 em.persist(usuario);
                 usuarioGestionado = usuario;
             } else {
-                // Si tiene ID, es existente -> Merge
                 usuarioGestionado = em.merge(usuario);
             }
 
@@ -30,14 +28,12 @@ public class UsuarioRepositorio {
             return usuarioGestionado;
 
         } catch (Exception e) {
-            // Check de seguridad antes de rollback
             if (em.getTransaction().isActive()) {
                 BDUtils.rollback(em);
             }
             System.err.println("ERROR al guardar Usuario: " + e.getMessage());
             e.printStackTrace();
 
-            // CORRECCIÓN: Envolvemos en RuntimeException para no obligar a try-catch sucios arriba
             throw new RuntimeException("Error guardando usuario en base de datos", e);
         } finally {
             em.close();

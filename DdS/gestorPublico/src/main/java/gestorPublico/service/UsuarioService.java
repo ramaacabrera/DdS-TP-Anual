@@ -30,7 +30,6 @@ public class UsuarioService {
     }
 
     public Map<String, Object> login(LoginDTO dto) {
-        // 1. Validar existencia local
         Usuario usuario = usuarioRepositorio.buscarPorUsername(dto.usuario);
         if (usuario == null) {
             throw new IllegalArgumentException("El usuario no existe en la base de datos local");

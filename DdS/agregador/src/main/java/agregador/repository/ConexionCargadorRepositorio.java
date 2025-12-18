@@ -22,7 +22,7 @@ public class ConexionCargadorRepositorio {
         if (fuenteId != null) {
             fuentesContextos.remove(fuenteId);
         } else {
-            System.out.println("⚠️ Aviso: Se intentó borrar una sesión que no estaba registrada: " + sessionId);
+            System.out.println("Aviso: Se intentó borrar una sesión que no estaba registrada: " + sessionId);
         }
 
         return fuenteId;

@@ -86,10 +86,6 @@ public class Application {
         app.get("/logout", new GetLogOutHandler(urlWeb, keycloakUrl));
 
 
-        //app.post("/login", new PostLoginHandler(urlPublica));
-        //app.get("/sign-in", new GetSignInHandler(urlPublica));
-
-
         //hechos
         app.get("/hechos/{id}", hechoController.obtenerHechoPorId); //hecho especifico
         app.get("/hechos", hechoController.listarHechos); //home con hechos
@@ -102,10 +98,8 @@ public class Application {
         app.post("/colecciones", coleccionController.crearColeccion);
         app.put("/colecciones/{id}", coleccionController.editarColeccion);
         app.delete("/colecciones/{id}", coleccionController.eliminarColeccion);
-        //app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
 
 
-        // Falta organizar el tema de categorias y colecciones, y aplicar los estilos
         app.get("/estadisticas", new GetEstadisticasHandler(estadisticasService, categoriasService));
         app.get("/estadisticas/descargar", new GetDescargarEstadisticasHandler(estadisticasService));
         app.get("/api/estadisticas/provinciaMax/categorias/{categoria}", new GetBusquedaAPIHandler(categoriasService, GetBusquedaAPIHandler.TipoBusqueda.PROVINCIA));
@@ -118,7 +112,6 @@ public class Application {
 
         app.get("/hechos/{id}/modificar", solicitudController.obtenerFormsModificarSolicitud);
         app.post("/api/solicitar-modificacion", solicitudController.crearSolicitudModificacion);
-        //app.get("/api/solicitudes/{id}", solicitudController.obtenerFormsModificarSolicitud);
 
         app.get("/admin/solicitudes/eliminacion", solicitudController.listarSolicitudesEliminacion);
         app.get("/admin/solicitudes/modificacion", solicitudController.listarSolicitudesModificacion);
