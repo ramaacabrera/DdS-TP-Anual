@@ -133,6 +133,9 @@ public class SolicitudModificacionService {
         if (limite < 1) limite = 10;
 
         long totalRegistros = solicitudRepositorio.contarTodas(estado);
+        if(estado != null &&  estado.equals("ACEPTADA")){
+            totalRegistros += solicitudRepositorio.contarTodas(EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA.toString());
+        }
 
         System.out.println("Total registros: " + totalRegistros);
 
@@ -339,6 +342,9 @@ public class SolicitudModificacionService {
 
     public Integer obtenerCantidad(String estado) {
         Integer solis = solicitudRepositorio.obtenerCantidad(estado);
+        if(estado.equals("ACEPTADA")){
+            solis += solicitudRepositorio.obtenerCantidad("ACEPTADACONSUGERENCIA");
+        }
         System.out.println("Total solicitudes modificacion: " + solis);
         return solis;
     }

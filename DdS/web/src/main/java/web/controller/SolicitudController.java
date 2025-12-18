@@ -363,7 +363,7 @@ public class SolicitudController {
             return;
         }
 
-        String nuevoEstado;
+        String nuevoEstado = null;
         List<Map<String, String>> cambios = new ArrayList<>();
 
         try {
@@ -371,8 +371,10 @@ public class SolicitudController {
             JsonNode jsonNode = mapper.readTree(body);
 
             if (jsonNode.has("accion")) {
-                if(jsonNode.get("conSugerencias").asText().equals("true")) {
-                    nuevoEstado = EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA.toString();
+                if(jsonNode.has("conSugerencias")){
+                    if(jsonNode.get("conSugerencias").asText().equals("true")) {
+                        nuevoEstado = EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA.toString();
+                    }
                 } else{
                     nuevoEstado = jsonNode.get("accion").asText();
                 }

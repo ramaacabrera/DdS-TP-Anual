@@ -1,49 +1,85 @@
 const solicitudId = window.solicitudData?.id;
 const tipoSolicitud = window.solicitudData?.tipo;
 
-// Variables para rastrear cambios
+// Variables para rastrear cambios (solo aplica para modificación)
 let valoresOriginales = {};
 let hayCambios = false;
 
-// Inicializar al cargar la página
+// Inicializar al cargar la página - SOLO para modificación
 document.addEventListener('DOMContentLoaded', function() {
-    // Almacenar valores originales
-    document.querySelectorAll('.input-modificado').forEach(input => {
-        const key = input.name || input.id || input.className;
-        if (input.tagName === 'TEXTAREA') {
-            valoresOriginales[key] = input.value;
-        } else if (input.tagName === 'SELECT') {
-            valoresOriginales[key] = input.value;
-        } else {
-            valoresOriginales[key] = input.value;
-        }
+    // Solo inicializar para solicitudes de modificación
+    if (tipoSolicitud === 'modificacion') {
+        // Almacenar valores originales usando un identificador único
+        document.querySelectorAll('.input-modificado').forEach((input, index) => {
+            const campo = input.closest('.cambio-row')?.getAttribute('data-campo');
+            const key = campo ? `${campo}_${index}` : `input_${index}`;
 
-        // Agregar listeners para detectar cambios
-        input.addEventListener('input', detectarCambios);
-        input.addEventListener('change', detectarCambios);
-    });
+            // Asignar un atributo data-key para identificarlo
+            input.setAttribute('data-key', key);
 
-    // Cambiar texto inicial del botón si es necesario
-    detectarCambios();
+            // Guardar valor original
+            valoresOriginales[key] = input.value;
+
+            // Para selects, guardar también la opción seleccionada
+            if (input.tagName === 'SELECT') {
+                // Marcar la opción actual como seleccionada
+                Array.from(input.options).forEach(option => {
+                    if (option.value === input.value) {
+                        option.setAttribute('data-original-selected', 'true');
+                    }
+                });
+            }
+
+            // Agregar listeners para detectar cambios
+            input.addEventListener('input', detectarCambios);
+            input.addEventListener('change', detectarCambios);
+
+            // Para selects, también escuchar el evento de apertura/cierre
+            input.addEventListener('click', detectarCambios);
+        });
+
+        // Verificar cambios iniciales después de un pequeño delay
+        setTimeout(detectarCambios, 100);
+    }
 });
 
 function detectarCambios() {
+    // Si no es modificación, no hay cambios posibles
+    if (tipoSolicitud !== 'modificacion') {
+        hayCambios = false;
+        return false;
+    }
+
     hayCambios = false;
     const aceptarBtn = document.querySelector('.btn-success');
 
     // Verificar si algún input ha cambiado
     document.querySelectorAll('.input-modificado').forEach(input => {
-        const key = input.name || input.id || input.className;
+        const key = input.getAttribute('data-key');
         const valorActual = input.value;
         const valorOriginal = valoresOriginales[key];
 
-        if (valorActual !== valorOriginal && valorActual !== 'SIN_CAMBIOS_MANUALES') {
+        // Para selects, verificar si la opción seleccionada es diferente
+        if (input.tagName === 'SELECT') {
+            const opcionOriginal = Array.from(input.options).find(opt =>
+                opt.hasAttribute('data-original-selected')
+            );
+            const opcionActual = Array.from(input.options).find(opt =>
+                opt.value === valorActual && opt.selected
+            );
+
+            if (opcionOriginal && opcionActual && opcionOriginal.value !== opcionActual.value) {
+                hayCambios = true;
+            }
+        }
+        // Para textareas e inputs
+        else if (valorActual !== valorOriginal && valorActual !== 'SIN_CAMBIOS_MANUALES') {
             hayCambios = true;
         }
     });
 
-    // Actualizar botón si hay cambios
-    if (aceptarBtn) {
+    // Actualizar botón si hay cambios (solo para modificación)
+    if (aceptarBtn && tipoSolicitud === 'modificacion') {
         if (hayCambios) {
             aceptarBtn.innerHTML = 'Aceptar con sugerencias';
             aceptarBtn.setAttribute('data-con-sugerencias', 'true');
@@ -57,7 +93,6 @@ function detectarCambios() {
 
     return hayCambios;
 }
-
 
 async function procesarSolicitud(accion) {
     try {
@@ -74,6 +109,7 @@ async function procesarSolicitud(accion) {
 
         let datosExtra = {};
 
+        // Solo aplicar lógica de cambios para solicitudes de modificación
         if (accion === 'ACEPTADA' && tipoSolicitud === 'modificacion') {
             const cambios = [];
             document.querySelectorAll('.cambio-row').forEach(row => {
@@ -94,28 +130,41 @@ async function procesarSolicitud(accion) {
             datosExtra.conSugerencias = conSugerencias;
         }
 
-        // --- Confirmación SweetAlert (modificada para preguntar por sugerencias) ---
+        // --- Confirmación SweetAlert ---
         let confirmMessage, confirmButtonText, confirmIcon;
+        let showDenyButton = false;
+        let denyButtonText = '';
 
         if (accion === 'ACEPTADA') {
-            const conSugerencias = hayCambios;
-
-            if (conSugerencias) {
-                confirmMessage = 'Has realizado cambios a los valores propuestos. ¿Deseas aceptar con estas sugerencias?';
-                confirmButtonText = 'Aceptar con sugerencias';
-                confirmIcon = 'question';
+            // Lógica diferente para eliminación vs modificación
+            if (tipoSolicitud === 'modificacion') {
+                if (hayCambios) {
+                    confirmMessage = 'Has realizado cambios a los valores propuestos. ¿Deseas aceptar con estas sugerencias?';
+                    confirmButtonText = 'Aceptar con sugerencias';
+                    confirmIcon = 'question';
+                    showDenyButton = true;
+                    denyButtonText = 'Aceptar sin sugerencias';
+                } else {
+                    confirmMessage = '¿Estás seguro de aceptar esta solicitud? El hecho será modificado según los cambios propuestos.';
+                    confirmButtonText = 'Aceptar Solicitud';
+                    confirmIcon = 'warning';
+                }
             } else {
-                confirmMessage = '¿Estás seguro de aceptar esta solicitud? El hecho será afectado según su tipo.';
-                confirmButtonText = 'Aceptar sin sugerencias';
+                // Para eliminación - mensaje específico
+                confirmMessage = '¿Estás seguro de aceptar esta solicitud de ELIMINACIÓN? El hecho será eliminado permanentemente.';
+                confirmButtonText = 'Aceptar Eliminación';
                 confirmIcon = 'warning';
+                // Para eliminación, NO mostrar botón "Aceptar sin sugerencias"
+                showDenyButton = false;
             }
         } else {
+            // Para rechazo (ambos tipos)
             confirmMessage = '¿Estás seguro de rechazar esta solicitud?';
             confirmButtonText = 'Sí, rechazar';
             confirmIcon = 'warning';
         }
 
-        const confirmResult = await Swal.fire({
+        const swalOptions = {
             title: 'Confirmación',
             text: confirmMessage,
             icon: confirmIcon,
@@ -128,23 +177,28 @@ async function procesarSolicitud(accion) {
             cancelButtonColor: '#777',
             showClass: {
                 popup: 'animate__animated animate__jello'
-            },
-            // Para aceptaciones con cambios, mostrar botón adicional
-            showDenyButton: accion === 'ACEPTADA' && hayCambios,
-            denyButtonText: 'Aceptar sin sugerencias',
-            denyButtonColor: '#3085d6'
-        });
+            }
+        };
 
-        if (confirmResult.isDenied) {
+        // Solo agregar denyButton si es una modificación con cambios
+        if (showDenyButton) {
+            swalOptions.showDenyButton = true;
+            swalOptions.denyButtonText = denyButtonText;
+            swalOptions.denyButtonColor = '#3085d6';
+        }
+
+        const confirmResult = await Swal.fire(swalOptions);
+
+        if (confirmResult.isDenied && tipoSolicitud === 'modificacion') {
             // Si eligió "Aceptar sin sugerencias", restaurar valores originales
             document.querySelectorAll('.input-modificado').forEach(input => {
-                const key = input.name || input.id || input.className;
+                const key = input.getAttribute('data-key');
                 if (valoresOriginales[key] !== undefined) {
                     input.value = valoresOriginales[key];
                 }
             });
             hayCambios = false;
-        } else if (!confirmResult.isConfirmed) {
+        } else if (!confirmResult.isConfirmed && !confirmResult.isDenied) {
             return; // Cancelar
         }
 
@@ -164,9 +218,15 @@ async function procesarSolicitud(accion) {
         });
 
         if (response.ok) {
+            let successMessage = `Solicitud ${accion.toLowerCase()} correctamente`;
+
+            if (tipoSolicitud === 'modificacion' && hayCambios) {
+                successMessage += ' con sugerencias';
+            }
+
             await Swal.fire({
                 title: '¡Listo!',
-                text: `Solicitud ${accion.toLowerCase()} correctamente ${hayCambios ? 'con sugerencias' : ''}`,
+                text: successMessage,
                 icon: 'success',
                 background: '#fffbec',
                 color: '#333',
@@ -205,15 +265,15 @@ async function procesarSolicitud(accion) {
 
 // --- Botones ---
 function aceptarSolicitud() {
-    // Primero detectar si hay cambios
-    const tieneCambios = detectarCambios();
-
-    if (tieneCambios) {
+    // Si es eliminación, procesar directamente sin verificar cambios
+    if (tipoSolicitud === 'eliminacion') {
         procesarSolicitud('ACEPTADA');
-    } else {
-        // Si no hay cambios, proceder normalmente
-        procesarSolicitud('ACEPTADA');
+        return;
     }
+
+    // Solo para modificación: verificar cambios
+    const tieneCambios = detectarCambios();
+    procesarSolicitud('ACEPTADA');
 }
 
 function rechazarSolicitud() {

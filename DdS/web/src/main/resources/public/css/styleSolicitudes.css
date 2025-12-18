@@ -161,6 +161,12 @@
     border: 1px solid #b3d7ff;
 }
 
+.estado-aceptadaconsugerencia{
+    background-color: #d1edff;
+    color: #004085;
+    border: 1px solid #b3d7ff;
+}
+
 .estado-rechazada {
     background-color: #f8d7da;
     color: #721c24;
