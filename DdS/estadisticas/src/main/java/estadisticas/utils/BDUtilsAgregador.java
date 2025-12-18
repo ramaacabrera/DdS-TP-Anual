@@ -22,7 +22,7 @@ public class BDUtilsAgregador {
                 Map<String, Object> configOverrides = new HashMap<>();
 
                 if (config.containsKey("DB_URL_AGREGADOR")) {
-                    String url = config.getProperty("DB_URL");
+                    String url = config.getProperty("DB_URL_AGREGADOR");
                     System.out.println("🔌 Usando DB URL: " + url);
                     configOverrides.put("javax.persistence.jdbc.url", url);
                     configOverrides.put("hibernate.connection.url", url);
