@@ -71,5 +71,6 @@ public class Application {
         app.get("/api/solicitudes/modificacion/listado", solicitudController.obtenerSolicitudesModificacion);
         app.get("/api/solicitudes-modificacion/{estado}/cantidad", solicitudController.obtenerCantidadModificacion);
         app.get("/api/solicitudes/modificacion/{id}", solicitudController.obtenerSolicitudModificacion);
+        app.patch("api/solicitudes-modificacion/{id}", solicitudController.modificarSolicitud);
     }
 }

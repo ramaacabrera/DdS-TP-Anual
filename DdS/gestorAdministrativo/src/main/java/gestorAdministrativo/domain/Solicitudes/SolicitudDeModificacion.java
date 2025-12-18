@@ -30,6 +30,8 @@ public class SolicitudDeModificacion extends Solicitud {
         this.estado = EstadoSolicitudModificacion.RECHAZADA;
     }
 
+    public void aceptarConSugerencias(){this.estado =  EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA;}
+
     // Getters y Setters
     public EstadoSolicitudModificacion getEstado() { return estado; }
     public void setEstado(EstadoSolicitudModificacion estado) { this.estado = estado; }

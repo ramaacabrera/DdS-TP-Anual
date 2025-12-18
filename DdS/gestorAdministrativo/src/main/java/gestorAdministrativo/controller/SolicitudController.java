@@ -1,5 +1,8 @@
 package gestorAdministrativo.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gestorAdministrativo.dto.PageDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDTO;
 import gestorAdministrativo.dto.Solicitudes.SolicitudDeEliminacionDTO;
@@ -9,6 +12,7 @@ import gestorAdministrativo.service.SolicitudModificacionService;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -177,6 +181,33 @@ public class SolicitudController {
 
             if (resultado) {
                 ctx.status(200).json("Solicitud de modificación procesada");
+            } else {
+                ctx.status(404).json("Solicitud no encontrada");
+            }
+        } catch (Exception e) {
+            ctx.status(400).json("Error: " + e.getMessage());
+        }
+    };
+
+    public Handler modificarSolicitud = ctx -> {
+        String idString = ctx.pathParam("id");
+        System.out.println("Body recibido: " + ctx.body());
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(ctx.body());
+        List<Map<String, String>> cambios = new ArrayList<>();
+
+        if(jsonNode.has("cambiosAprobados")){
+            JsonNode cambiosAprobados = jsonNode.get("cambiosAprobados");
+            cambios = objectMapper.convertValue(cambiosAprobados, new TypeReference<List<Map<String, String>>>() {});
+        }
+
+
+        try {
+            UUID id = UUID.fromString(idString);
+            boolean resultado = modificacionService.modificarSolicitud(id, cambios);
+
+            if (resultado) {
+                ctx.status(200).json("Solicitud de modificación actualizada");
             } else {
                 ctx.status(404).json("Solicitud no encontrada");
             }

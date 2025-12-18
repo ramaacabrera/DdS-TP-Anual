@@ -84,6 +84,13 @@ public class SolicitudModificacionService {
 
             } else if (nuevoEstado == EstadoSolicitudModificacion.RECHAZADA) {
                 solicitud.rechazarSolicitud();
+            } else if(nuevoEstado == EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA) {
+                solicitud.aceptarConSugerencias();
+
+                aplicarCambiosAlHechoOriginal(solicitud.getHechoAsociado(), solicitud.getHechoModificado());
+
+                hechoRepositorio.guardar(solicitud.getHechoAsociado());
+                System.out.println("Termine de guardar");
             } else {
                 throw new IllegalArgumentException("Acción no soportada para procesar: " + accion);
             }
@@ -94,6 +101,31 @@ public class SolicitudModificacionService {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Estado inválido: " + accion);
         }
+    }
+
+    public boolean modificarSolicitud(UUID id,  List<Map<String, String>> cambios) {
+        Optional<SolicitudDeModificacion> soli = solicitudRepositorio.buscarPorId(id);
+        System.out.println("Termine de buscar la soli: " + id.toString());
+        if(soli.isEmpty()) return false;
+        SolicitudDeModificacion solicitud = soli.get();
+        for(Map<String, String> map : cambios){
+            switch (map.get("campo")){
+                case "titulo":
+                    solicitud.getHechoModificado().setTitulo(map.get("valorFinal"));
+                    break;
+                case "descripcion":
+                    solicitud.getHechoModificado().setDescripcion(map.get("valorFinal"));
+                    break;
+                case "categoria":
+                    solicitud.getHechoModificado().setCategoria(map.get("valorFinal"));
+                    break;
+                default:
+                    break;
+            }
+        }
+        solicitudRepositorio.guardar(solicitud);
+        System.out.println("Termine de guardar la nueva solicitud");
+        return true;
     }
 
     public PageDTO<SolicitudDeModificacionDTO> obtenerTodasLasSolicitudes(int pagina, int limite, String estado) {

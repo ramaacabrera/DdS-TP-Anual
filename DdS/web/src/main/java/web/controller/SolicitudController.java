@@ -1,5 +1,6 @@
 package web.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
@@ -363,17 +364,28 @@ public class SolicitudController {
         }
 
         String nuevoEstado;
+        List<Map<String, String>> cambios = new ArrayList<>();
+
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(body);
 
             if (jsonNode.has("accion")) {
-                nuevoEstado = jsonNode.get("accion").asText();
+                if(jsonNode.get("conSugerencias").asText().equals("true")) {
+                    nuevoEstado = EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA.toString();
+                } else{
+                    nuevoEstado = jsonNode.get("accion").asText();
+                }
+
             } else if (jsonNode.isTextual()) {
                 nuevoEstado = jsonNode.asText();
             } else {
                 ctx.status(400).result("Propiedad 'accion' no encontrada en JSON");
                 return;
+            }
+
+            if(jsonNode.has("cambiosAprobados")) {
+                cambios = mapper.convertValue(jsonNode.get("cambiosAprobados"), new TypeReference<List<Map<String, String>>>() {});
             }
         } catch (Exception e) {
             System.out.println("No es JSON válido, tratando como texto: " + body);
@@ -381,9 +393,10 @@ public class SolicitudController {
         }
 
         System.out.println("ID: " + id + ", Tipo: " + tipo + ", Nuevo estado: " + nuevoEstado);
+        System.out.println("Cambios: " + cambios);
 
-        if (!"ACEPTADA".equals(nuevoEstado) && !"RECHAZADA".equals(nuevoEstado)) {
-            ctx.status(400).result("Estado no válido. Use 'ACEPTADA' o 'RECHAZADA'");
+        if (!"ACEPTADA".equals(nuevoEstado) && !"RECHAZADA".equals(nuevoEstado) && !"ACEPTADACONSUGERENCIA".equals(nuevoEstado)) {
+            ctx.status(400).result("Estado no válido. Use 'ACEPTADA', 'ACEPTADACONSUGERENCIA' o 'RECHAZADA'");
             return;
         }
 
@@ -396,7 +409,17 @@ public class SolicitudController {
             return;
         }
 
+        if(nuevoEstado.equals("ACEPTADACONSUGERENCIA")){
+            int status2 = solicitudService.actualizarSolicitud(id, cambios, username, accessToken, rolUsuario);
+            if(status2 != 200){
+                ctx.status(status2).result("Error al actualizar solicitud: HTTP " + status2);
+                return;
+            }
+        }
+
+
         int status = solicitudService.actualizarEstadoSolicitud(id, tipo, nuevoEstado, username, accessToken, rolUsuario);
+
 
         if (status >= 200 && status < 300) {
             ctx.status(200).result("Solicitud actualizada");
@@ -404,6 +427,7 @@ public class SolicitudController {
             ctx.status(status).result("Error del servidor administrativo: HTTP " + status);
         }
     };
+
 
     public Handler listarSolicitudesModificacion = ctx -> {
         ObjectMapper mapper = new ObjectMapper();
