@@ -29,6 +29,7 @@ public class LecturaConfig {
         cargarEnv(config, "DB_PASS");
         cargarEnv(config, "PUERTO_ESTADISTICAS");
         cargarEnv(config, "NEW_RELIC_LICENSE_KEY");
+        cargarEnv(config, "TIEMPO_SCHEDULER");
 
         return config;
     }

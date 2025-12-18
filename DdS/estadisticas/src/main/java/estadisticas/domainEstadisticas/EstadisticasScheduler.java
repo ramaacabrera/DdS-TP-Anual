@@ -9,12 +9,12 @@ import java.util.concurrent.TimeUnit;
 public class EstadisticasScheduler {
     GeneradorEstadisticas generador;
 
-    public EstadisticasScheduler(GeneradorEstadisticas generador){
+    public EstadisticasScheduler(GeneradorEstadisticas generador, int tiempoScheduler){
         this.generador = generador;
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-        scheduler.scheduleAtFixedRate(generador::actualizarEstadisticas, 1, 320, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(generador::actualizarEstadisticas, 1, tiempoScheduler, TimeUnit.SECONDS);
     }
 
 }
