@@ -151,7 +151,6 @@ public class SolicitudService {
             HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                //System.out.println("Obtener solicitud de eliminacion (lista) 3: " );
 
                 return mapper.readValue(response.body(),
                         new TypeReference<PageDTO<SolicitudDeEliminacion>>() {
@@ -261,6 +260,21 @@ public class SolicitudService {
         }
     }
 
+    public int actualizarSolicitud(String id, List<Map<String, String>> cambios, String username, String token, String rolUsuario){
+        try{
+
+            String json = mapper.writeValueAsString(Map.of("cambiosAprobados", cambios));
+
+            HttpRequest request = buildRequestPATCH("api/solicitudes-modificacion/" + id, json, username, token, rolUsuario);
+            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return response.statusCode();
+
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
     public Map<String, Object> obtenerDatosHecho(String hechoId) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         HttpClient http = HttpClient.newHttpClient();
@@ -334,7 +348,6 @@ public class SolicitudService {
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json));
 
-        // Asumimos que los headers de seguridad son CamelCase (ajustado en debug)
         if (username != null && token != null) {
             builder.header("username", username);
             builder.header("accessToken", token);

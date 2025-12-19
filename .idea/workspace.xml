@@ -4,35 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="se aceptan y rechazan las solicitudes de modificacion (solo campos de titulo descripcion categoria y fecha)">
+    <list default="true" id="a5f00a52-5485-4408-a54a-63a8d09eb376" name="Changes" comment="Merge branch 'main' of https://github.com/ramaacabrera/DdS-TP-Anual into Entrega7">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/repository/SolicitudModificacionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/repository/SolicitudModificacionRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/GestorSolicitudes.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/GestorSolicitudes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/service/SolicitudesModificacionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/cargadorDinamico/src/main/java/cargadorDinamico/service/SolicitudesModificacionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/SolicitudModificacionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/SolicitudModificacionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/SolicitudController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/controller/SolicitudController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/domain/HechosYColecciones/Ubicacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/domain/HechosYColecciones/Ubicacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/java/web/dto/Hechos/HechoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/java/web/dto/Hechos/HechoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/solicitud-detalle.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/web/src/main/resources/templates/solicitud-detalle.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/HechoConsultaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/HechoConsultaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/utils/BDUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/utils/BDUtils.java" afterDir="false" />
     </list>
     <list id="5cf2ca0a-dcb4-4c46-9ad7-ddd1c7f781ee" name="Changes by aylu" comment="" />
-    <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="">
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/ContenidoMultimedia.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/domain/HechosYColecciones/ContenidoMultimedia.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/repository/SolicitudModificacionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/repository/SolicitudModificacionRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/GestorSolicitudes.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/GestorSolicitudes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/HechoRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/HechoRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/SolicitudModificacionRepositorio.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/repository/SolicitudModificacionRepositorio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/SolicitudModificacionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/SolicitudModificacionService.java" afterDir="false" />
-    </list>
+    <list id="8947f0c6-185e-41eb-8154-efc847a14d8a" name="Changes by facu" comment="" />
     <list id="055ec5c7-b461-43de-ab28-b66172740804" name="Changes by helga" comment="" />
-    <list id="a81533ab-a3c8-43f9-a8ec-2a28b034f3ab" name="Changes by idiar" comment="">
-      <change beforePath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/GestorSolicitudes.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/GestorSolicitudes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/HechoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/controller/HechoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/Normalizador/ServicioGeoref.java" beforeDir="false" afterPath="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/Normalizador/ServicioGeoref.java" afterDir="false" />
-    </list>
     <list id="cf5373aa-c577-4ecc-a06d-ec4e268c627e" name="Changes by lenovo" comment="" />
     <list id="fbc10810-a605-4e63-80e3-6f0511f82dbf" name="Changes by Luc" comment="" />
     <list id="fa96177a-00ae-4cf8-8120-9cbd2cc80540" name="Changes by Rama" comment="" />
@@ -52,7 +31,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Entrega7" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -66,7 +45,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/ramaacabrera/DdS-TP-Anual.git&quot;,
-    &quot;accountId&quot;: &quot;bd66b56b-8baf-48f7-b0f7-f11bb25aba78&quot;
+    &quot;accountId&quot;: &quot;3d9c5edc-e699-4187-89ad-783fb708a354&quot;
   },
   &quot;editorReviewEnabled&quot;: false
 }</component>
@@ -77,45 +56,6 @@
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/DdS/gestorAdministrativo/src/main/java/gestorAdministrativo/service/SolicitudModificacionService.java">
-      <ranges>
-        <range start1="65" end1="65" start2="65" end2="66" changelist="8947f0c6-185e-41eb-8154-efc847a14d8a" />
-        <range start1="78" end1="78" start2="79" end2="80" changelist="8947f0c6-185e-41eb-8154-efc847a14d8a" />
-        <range start1="138" end1="138" start2="140" end2="141" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/DdS/gestorPublico/src/main/java/gestorPublico/service/HechoService.java">
-      <ranges>
-        <range start1="36" end1="37" start2="36" end2="37" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="122" end1="213" start2="122" end2="122" changelist="a81533ab-a3c8-43f9-a8ec-2a28b034f3ab" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/service/GestorSolicitudes.java">
-      <ranges>
-        <range start1="2" end1="4" start2="2" end2="3" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="7" end1="7" start2="6" end2="8" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="14" end1="14" start2="15" end2="16" changelist="8947f0c6-185e-41eb-8154-efc847a14d8a" />
-        <range start1="15" end1="15" start2="17" end2="19" changelist="8947f0c6-185e-41eb-8154-efc847a14d8a" />
-        <range start1="16" end1="16" start2="20" end2="21" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="25" end1="25" start2="30" end2="31" changelist="a81533ab-a3c8-43f9-a8ec-2a28b034f3ab" />
-        <range start1="33" end1="33" start2="39" end2="40" changelist="a81533ab-a3c8-43f9-a8ec-2a28b034f3ab" />
-        <range start1="107" end1="107" start2="114" end2="116" changelist="8947f0c6-185e-41eb-8154-efc847a14d8a" />
-        <range start1="108" end1="108" start2="117" end2="118" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="120" end1="121" start2="130" end2="143" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-        <range start1="123" end1="123" start2="145" end2="191" changelist="a81533ab-a3c8-43f9-a8ec-2a28b034f3ab" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/DdS/agregador/src/main/java/agregador/repository/SolicitudModificacionRepositorio.java">
-      <ranges>
-        <range start1="21" end1="21" start2="21" end2="22" changelist="8947f0c6-185e-41eb-8154-efc847a14d8a" />
-        <range start1="23" end1="23" start2="24" end2="26" changelist="8947f0c6-185e-41eb-8154-efc847a14d8a" />
-        <range start1="28" end1="28" start2="31" end2="33" changelist="8947f0c6-185e-41eb-8154-efc847a14d8a" />
-        <range start1="30" end1="30" start2="35" end2="36" changelist="8947f0c6-185e-41eb-8154-efc847a14d8a" />
-        <range start1="31" end1="31" start2="37" end2="38" changelist="a5f00a52-5485-4408-a54a-63a8d09eb376" />
-      </ranges>
-    </file>
-  </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -130,52 +70,51 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Agregador.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiAdmin.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiAdministrativa.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiMock.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ApiPublica.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Application.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CargadorDinamico.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CargadorEstatico.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CargadorMetamapa.executor&quot;: &quot;Run&quot;,
-    &quot;Application.DemoMockServer.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Web.executor&quot;: &quot;Run&quot;,
-    &quot;Application.cargadorEstatico.Application.executor&quot;: &quot;Run&quot;,
-    &quot;Application.estadisticas.executor&quot;: &quot;Run&quot;,
-    &quot;Application.gestorPublico.Application.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;solicitudes-modificacion&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/Proyectos Intellij/DdS-TP-Anual/DdS/web/src/main/resources&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/agregador/untitled/src/main/java/com/metamapa/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Agregador.executor": "Run",
+    "Application.ApiAdmin.executor": "Run",
+    "Application.ApiAdministrativa.executor": "Run",
+    "Application.ApiMock.executor": "Run",
+    "Application.ApiPublica.executor": "Run",
+    "Application.Application.executor": "Run",
+    "Application.CargadorDinamico.executor": "Run",
+    "Application.CargadorEstatico.executor": "Run",
+    "Application.CargadorMetamapa.executor": "Run",
+    "Application.DemoMockServer.executor": "Run",
+    "Application.Web.executor": "Run",
+    "Application.cargadorEstatico.Application.executor": "Run",
+    "Application.estadisticas.executor": "Run",
+    "Application.gestorPublico.Application.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "Entrega7",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/Proyectos Intellij/DdS-TP-Anual/DdS/web/src/main/resources",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "C:/Users/Usuario/Documents/GitHub/DdS-TP-Anual/DdS/agregador/untitled/src/main/java/com/metamapa/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
-      <recent name="web.domain.Solicitudes" />
       <recent name="web.controller" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
@@ -195,14 +134,14 @@
       <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="gestorPublico.service.Normalizador" />
       <recent name="cargadorDemo.dto" />
       <recent name="cargadorDemo.domain.HechosYColecciones" />
       <recent name="gestorPublico.utils" />
       <recent name="gestorAdministrativo.utils" />
+      <recent name="agregador.utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.CargadorDinamico">
+  <component name="RunManager" selected="Application.ApiPublica">
     <configuration name="Agregador" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="agregador.Application" />
       <module name="agregador" />
@@ -332,7 +271,7 @@
         <item itemvalue="Application.Application" />
         <item itemvalue="Application.gestorPublico.Application" />
         <item itemvalue="Application.cargadorEstatico.Application" />
-        <item itemvalue="Application.cargadorEstatico.Application" />
+        <item itemvalue="Application.Application" />
         <item itemvalue="Application.gestorPublico.Application" />
       </list>
     </recent_temporary>
@@ -340,8 +279,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
-        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
       </set>
     </attachedChunks>
   </component>
@@ -381,9 +320,6 @@
       <workItem from="1764895871086" duration="8104000" />
       <workItem from="1764933700939" duration="39000" />
       <workItem from="1764947017902" duration="3459000" />
-      <workItem from="1765872823483" duration="163000" />
-      <workItem from="1765901051303" duration="3121000" />
-      <workItem from="1765909102041" duration="5728000" />
     </task>
     <task id="LOCAL-00001" summary="termine cargadorDemo, avanzo con cargadorDinamico (en proceso)">
       <option name="closed" value="true" />
@@ -449,23 +385,7 @@
       <option name="project" value="LOCAL" />
       <updated>1764898796874</updated>
     </task>
-    <task id="LOCAL-00009" summary="se crean y se ven (falta que se acepten) las solicitudes de modificacion (solo campos de titulo descripcion categoria y fecha)">
-      <option name="closed" value="true" />
-      <created>1765870821757</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1765870821757</updated>
-    </task>
-    <task id="LOCAL-00010" summary="se aceptan y rechazan las solicitudes de modificacion (solo campos de titulo descripcion categoria y fecha)">
-      <option name="closed" value="true" />
-      <created>1765872641664</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1765872641664</updated>
-    </task>
-    <option name="localTasksCounter" value="11" />
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -490,9 +410,8 @@
     <MESSAGE value="funcionalidad solicitud de modificacion pero hay probemas con algunos campos DTO" />
     <MESSAGE value="Cambios en el gestorAdministrativo" />
     <MESSAGE value="Arreglos en las fuentes de las colecciones" />
-    <MESSAGE value="se crean y se ven (falta que se acepten) las solicitudes de modificacion (solo campos de titulo descripcion categoria y fecha)" />
-    <MESSAGE value="se aceptan y rechazan las solicitudes de modificacion (solo campos de titulo descripcion categoria y fecha)" />
-    <option name="LAST_COMMIT_MESSAGE" value="se aceptan y rechazan las solicitudes de modificacion (solo campos de titulo descripcion categoria y fecha)" />
+    <MESSAGE value="Merge branch 'main' of https://github.com/ramaacabrera/DdS-TP-Anual into Entrega7" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'main' of https://github.com/ramaacabrera/DdS-TP-Anual into Entrega7" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -18,7 +18,6 @@ import java.util.UUID;
 public class SolicitudModificacionRepositorio {
 
     public SolicitudModificacionRepositorio() {
-        // No necesitamos inyectar HechoRepositorio aquí.
     }
 
     public void guardar(SolicitudDeModificacion solicitud) {
@@ -89,7 +88,30 @@ public class SolicitudModificacionRepositorio {
                 }
 
                 return query.getResultList();
-            } else{
+            } else if(estado.equals("ACEPTADA")){
+                System.out.println("Estado seleccionado: " + estado);
+                String jpql = "SELECT s FROM SolicitudDeModificacion s " +
+                        "LEFT JOIN FETCH s.usuario " +
+                        "LEFT JOIN FETCH s.hechoAsociado " +
+                        "WHERE s.estado = :estado or s.estado = :aceptadaConSugerencia " +
+                        "ORDER BY s.id ASC";
+                TypedQuery<SolicitudDeModificacion> query = em.createQuery(jpql, SolicitudDeModificacion.class);
+                query.setParameter("estado", EstadoSolicitudModificacion.valueOf(estado));
+                query.setParameter("aceptadaConSugerencia", EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA);
+
+                int offset = (pagina - 1) * limite;
+
+                query.setFirstResult(offset);
+                query.setMaxResults(limite);
+
+                for(SolicitudDeModificacion solicitud : query.getResultList()){
+                    Hibernate.initialize(solicitud.getHechoAsociado().getContenidoMultimedia());
+                    Hibernate.initialize(solicitud.getHechoAsociado().getEtiquetas());
+                    Hibernate.initialize(solicitud.getHechoModificado().getContenidoMultimedia());
+                }
+
+                return query.getResultList();
+            } else {
                 System.out.println("Estado seleccionado: " + estado);
                 String jpql = "SELECT s FROM SolicitudDeModificacion s " +
                         "LEFT JOIN FETCH s.usuario " +
@@ -147,7 +169,6 @@ public class SolicitudModificacionRepositorio {
                     s.getHechoAsociado().getTitulo();
                 }
             }
-            // -------------------------------
 
             return lista;
 

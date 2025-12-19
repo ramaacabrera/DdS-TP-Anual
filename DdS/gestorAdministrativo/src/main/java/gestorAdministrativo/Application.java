@@ -5,7 +5,7 @@ import gestorAdministrativo.service.*;
 import gestorAdministrativo.repository.*;
 import io.javalin.Javalin;
 import utils.IniciadorApp;
-import utils.LecturaConfig;
+import gestorAdministrativo.utils.LecturaConfig;
 import utils.Keycloak.TokenValidator;
 
 import java.util.Properties;
@@ -15,7 +15,7 @@ public class Application {
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
         int puerto = Integer.parseInt(config.getProperty("PUERTO_GESTOR_ADMINISTRATIVO"));
-
+        String urlSSO = config.getProperty("URL_KEYCLOAK");
         System.out.println("Iniciando API Administrativa en el puerto " + puerto);
 
         IniciadorApp iniciador = new IniciadorApp();
@@ -36,7 +36,7 @@ public class Application {
         // 3. Controllers
         ColeccionController coleccionController = new ColeccionController(coleccionService);
         SolicitudController solicitudController = new SolicitudController(solicitudEliminacionService, solicitudModificacionService);
-        VerificacionController verificacionController = new VerificacionController();
+        VerificacionController verificacionController = new VerificacionController(urlSSO);
         HechoController hechoController = new HechoController(hechoService);
         // RUTAS
         app.before("/api/*", verificacionController.verificarAdministrador);
@@ -44,6 +44,9 @@ public class Application {
         //Hechos
 
         app.patch("/api/hecho/{hechoId}/etiquetas", hechoController.agregarEtiquetas);
+
+        // Health check
+        app.get("/health", ctx -> { ctx.status(200).result("OK");});
 
         // Rutas de Colecciones
         app.post("/api/colecciones", coleccionController.crearColeccion);
@@ -57,7 +60,6 @@ public class Application {
         app.get("/api/fuentes", coleccionController.obtenerTodasLasFuentes);
 
         // Rutas Solicitud Eliminacion
-        //app.post("/api/solicitudes", solicitudController.crearSolicitud);
         app.patch("/api/solicitudes/{id}", solicitudController.procesarSolicitud);
         app.get("/api/solicitudes", solicitudController.obtenerSolicitudes);
         app.get("api/solicitudes/estado/{estado}", solicitudController.obtenerSolicitudes);
@@ -65,10 +67,10 @@ public class Application {
         app.get("/api/solicitudes/{id}", solicitudController.obtenerSolicitud);
 
         // Rutas Solicitud Modificacion
-        //app.post("/api/solicitudes/modificacion", solicitudController.crearSolicitudModificacion);
         app.patch("/api/solicitudes/modificacion/{id}", solicitudController.procesarSolicitudModificacion);
         app.get("/api/solicitudes/modificacion/listado", solicitudController.obtenerSolicitudesModificacion);
         app.get("/api/solicitudes-modificacion/{estado}/cantidad", solicitudController.obtenerCantidadModificacion);
         app.get("/api/solicitudes/modificacion/{id}", solicitudController.obtenerSolicitudModificacion);
+        app.patch("api/solicitudes-modificacion/{id}", solicitudController.modificarSolicitud);
     }
 }

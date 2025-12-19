@@ -86,7 +86,7 @@ public class CategoriasService {
                     Arrays.asList("hora", "estadisticasCategoria_hora"), "N/A"));
 
         } catch (Exception e) {
-            System.err.println("❌ Error procesando categoría '" + categoria + "': " + e.getMessage());
+            System.err.println("Error procesando categoría '" + categoria + "': " + e.getMessage());
             categoriaData.put("provincia", "N/A");
             categoriaData.put("hora", "N/A");
         }

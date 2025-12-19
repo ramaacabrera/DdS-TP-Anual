@@ -40,18 +40,4 @@ public class DetectorDeSpam {
         }
         return false;
     }
-
-    public static void agregarPalabraSpam(String palabra) {
-        if (palabra != null && !palabra.trim().isEmpty()) {
-            palabrasSpam.add(palabra.toLowerCase().trim());
-        }
-    }
-
-    public static void agregarPalabrasSpam(Collection<String> palabras) {
-        if (palabras != null) {
-            for (String palabra : palabras) {
-                agregarPalabraSpam(palabra);
-            }
-        }
-    }
 }

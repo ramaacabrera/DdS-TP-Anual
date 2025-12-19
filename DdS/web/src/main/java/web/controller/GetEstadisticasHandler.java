@@ -26,13 +26,11 @@ public class GetEstadisticasHandler implements Handler {
     public void handle(@NotNull Context ctx) throws Exception {
             String uuidColeccion = ctx.queryParam("uuid");
 
-            // Obtener estadísticas generales
-            Map<String, Object> statsGenerales = estadisticasService.obtenerEstadisticasGenerales(); //hacerConsulta("/api/estadisticas/categoriaMax");
-            Map<String, Object> statsUsuarios = estadisticasService.obtenerEstadisticasUsuarios(); // hacerConsulta("/api/estadisticas/solicitudesSpam");
+            Map<String, Object> statsGenerales = estadisticasService.obtenerEstadisticasGenerales();
+            Map<String, Object> statsUsuarios = estadisticasService.obtenerEstadisticasUsuarios();
 
             List<String> categoriasTotales = categoriasService.obtenerCategorias();
 
-            // Procesar categorías en paralelo
             List<Map<String, Object>> statsCategoria = categoriasService.procesarCategorias(categoriasTotales);
 
             Map<String, Object> modelo = ViewUtil.baseModel(ctx);

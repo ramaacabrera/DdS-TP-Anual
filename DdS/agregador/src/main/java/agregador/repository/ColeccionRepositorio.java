@@ -3,6 +3,7 @@ package agregador.repository;
 import agregador.domain.Criterios.Criterio;
 import agregador.domain.Criterios.CriterioEtiquetas;
 import agregador.domain.HechosYColecciones.Coleccion;
+import agregador.domain.fuente.Fuente;
 import agregador.domain.HechosYColecciones.Hecho;
 import agregador.utils.BDUtils;
 import org.hibernate.Hibernate;
@@ -83,8 +84,6 @@ public class ColeccionRepositorio {
 
                 Hibernate.initialize(c.getFuente());
             }
-            // ------------------------------
-
             return resultados;
 
         } catch (Exception e) {
@@ -113,53 +112,8 @@ public class ColeccionRepositorio {
         }
     }
 
-    public void eliminar(Coleccion coleccion) {
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            BDUtils.comenzarTransaccion(em);
-            Coleccion aBorrar = em.merge(coleccion);
-            em.remove(aBorrar);
-            BDUtils.commit(em);
-        } catch (Exception e) {
-            BDUtils.rollback(em);
-            e.printStackTrace();
-        } finally {
-            em.close();
-        }
-    }
-
     public void actualizar(Coleccion coleccion) {
         guardar(coleccion);
-    }
-
-    public void actualizarTodas(List<Coleccion> colecciones) {
-        if (colecciones == null || colecciones.isEmpty()) {
-            return;
-        }
-
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            BDUtils.comenzarTransaccion(em);
-
-            int batchSize = 50;
-
-            for (int i = 0; i < colecciones.size(); i++) {
-                if (colecciones.get(i) != null) {
-                    em.merge(colecciones.get(i));
-                }
-                if (i > 0 && i % batchSize == 0) {
-                    em.flush();
-                    em.clear();
-                }
-            }
-            BDUtils.commit(em);
-        } catch (Exception e) {
-            BDUtils.rollback(em);
-            e.printStackTrace();
-            throw new RuntimeException("Error en actualización masiva de colecciones", e);
-        } finally {
-            em.close();
-        }
     }
 
     public long contarTodas() {
@@ -170,6 +124,13 @@ public class ColeccionRepositorio {
         } finally {
             em.close();
         }
+    }
+
+    public List<Fuente> buscarFuentesPorColeccion(EntityManager em, UUID coleccionId) {
+        String jpql = "SELECT f FROM Coleccion c JOIN c.fuentes f WHERE c.handle = :id";
+        return em.createQuery(jpql, Fuente.class)
+                .setParameter("id", coleccionId)
+                .getResultList();
     }
 
     public void actualizarLoteYLimpiar(List<Coleccion> colecciones) {

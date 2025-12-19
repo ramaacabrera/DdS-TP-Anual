@@ -4,8 +4,8 @@ import gestorPublico.service.*;
 import gestorPublico.service.Normalizador.DiccionarioCategorias;
 import io.javalin.Javalin;
 import gestorPublico.controller.*;
-import utils.IniciadorApp;
-import utils.LecturaConfig;
+import gestorPublico.utils.IniciadorApp;
+import gestorPublico.utils.LecturaConfig;
 import gestorPublico.repository.*;
 
 import java.util.Properties;
@@ -16,7 +16,7 @@ public class Application {
         Properties config = lector.leerConfig();
         int puerto = Integer.parseInt(config.getProperty("PUERTO_GESTOR_PUBLICO"));
         String urlDinamica = config.getProperty("URL_DINAMICA");
-        String servidorSSO = config.getProperty("URL_SERVIDOR_SSO");
+        String servidorSSO = config.getProperty("URL_KEYCLOAK");
 
         HechoRepositorio hechoRepositorio = new HechoRepositorio();
         ColeccionRepositorio coleccionRepositorio = new ColeccionRepositorio();
@@ -42,6 +42,8 @@ public class Application {
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
 
+        app.get("/health", ctx -> { ctx.status(200).result("OK");});
+
         // Rutas Hechos
         app.get("/api/hechos", hechoController.obtenerHechos);
         app.get("/api/hechos/{id}", hechoController.obtenerHechoPorId);
@@ -61,8 +63,5 @@ public class Application {
         // Rutas de Usuario / Auth
         app.post("/api/usuario/sincronizar", usuarioController.sincronizar);
         app.get("/api/usuario/{username}", usuarioController.obtenerUsuario);
-
-        //app.post("/api/sign-in", usuarioController.registrar);
-        //app.get("/api/usuario/{username}", usuarioController.obtenerUsuario);
     }
 }

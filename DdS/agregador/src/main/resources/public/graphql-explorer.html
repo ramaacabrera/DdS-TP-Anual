@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GraphQL Explorer - Sistema de Hechos y Colecciones</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1><i class="fas fa-search"></i> Buscador de Hechos y Colecciones</h1>
+        <p>Consulta datos históricos y sus colecciones organizadas</p>
+    </header>
+
+    <!-- Selector de entidad -->
+    <div class="entity-selector">
+        <div class="selector-buttons">
+            <button class="selector-btn active" onclick="switchEntity('hechos')">
+                <i class="fas fa-list"></i> Hechos
+            </button>
+            <button class="selector-btn" onclick="switchEntity('colecciones')">
+                <i class="fas fa-folder"></i> Colecciones
+            </button>
+            <button class="selector-btn" onclick="switchEntity('ambos')">
+                <i class="fas fa-project-diagram"></i> Ambos
+            </button>
+        </div>
+    </div>
+
+    <div class="app-grid">
+        <!-- Panel de Filtros -->
+        <div class="panel">
+            <!-- Filtros de Hechos (visible por defecto) -->
+            <div id="hechos-filtros" class="entity-filters active">
+                <h2><i class="fas fa-filter"></i> Filtros de Hechos</h2>
+
+                <div class="form-group">
+                    <label for="titulo"><i class="fas fa-heading"></i> Título</label>
+                    <input type="text" id="titulo" placeholder="Ej: Ayuda humanitaria en Buenos Aires">
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria"><i class="fas fa-tag"></i> Categoría</label>
+                    <input type="text" id="categoria" placeholder="Ej: ASISTENCIA_SOCIAL, POLITICA, etc.">
+                </div>
+
+                <div class="form-group">
+                    <label for="ubicacion"><i class="fas fa-map-marker-alt"></i> Ubicación</label>
+                    <input type="text" id="ubicacion" placeholder="Ej: Buenos Aires, CABA, etc.">
+                </div>
+
+                <div class="form-group">
+                    <label for="etiquetas"><i class="fas fa-tags"></i> Etiquetas</label>
+                    <input type="text" id="etiquetas" placeholder="Separadas por comas: importante,urgente,política">
+                    <small class="help-text">
+                        El hecho debe contener TODAS las etiquetas especificadas
+                    </small>
+                </div>
+
+                <div class="filters-section">
+                    <h3>Fechas de Acontecimiento</h3>
+                    <div class="field-row">
+                        <div class="form-group">
+                            <label for="fechaAcontecimientoDesde">
+                                <i class="fas fa-calendar-alt"></i> Desde
+                            </label>
+                            <input type="date" id="fechaAcontecimientoDesde">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fechaAcontecimientoHasta">
+                                <i class="fas fa-calendar-alt"></i> Hasta
+                            </label>
+                            <input type="date" id="fechaAcontecimientoHasta">
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 20px;">Fechas de Carga</h3>
+                    <div class="field-row">
+                        <div class="form-group">
+                            <label for="fechaCargaDesde">
+                                <i class="fas fa-upload"></i> Desde
+                            </label>
+                            <input type="date" id="fechaCargaDesde">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fechaCargaHasta">
+                                <i class="fas fa-upload"></i> Hasta
+                            </label>
+                            <input type="date" id="fechaCargaHasta">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contribuyente"><i class="fas fa-user"></i> Contribuyente</label>
+                    <input type="text" id="contribuyente" placeholder="Nombre de usuario del contribuyente">
+                </div>
+
+                <div class="form-group">
+                    <label for="tipoDeFuente"><i class="fas fa-newspaper"></i> Tipo de Fuente</label>
+                    <select id="tipoDeFuente">
+                        <option value="">Seleccionar tipo...</option>
+                        <option value="DINAMICA">DINAMICA</option>
+                        <option value="ESTATICA">ESTATICA</option>
+                        <option value="PROXY">PROXY</option>
+                        <option value="OTRO">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-eye"></i> Campos a mostrar</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fieldId" checked disabled>
+                            <label for="fieldId">ID</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fieldTitulo" checked>
+                            <label for="fieldTitulo">Título</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fieldDescripcion" checked>
+                            <label for="fieldDescripcion">Descripción</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fieldCategoria" checked>
+                            <label for="fieldCategoria">Categoría</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fieldFechaAcontecimiento" checked>
+                            <label for="fieldFechaAcontecimiento">Fecha Acontecimiento</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fieldFechaCarga" checked>
+                            <label for="fieldFechaCarga">Fecha Carga</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fieldUbicacion" checked>
+                            <label for="fieldUbicacion">Ubicación</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fieldFuente" checked>
+                            <label for="fieldFuente">Fuente</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fieldEstadoHecho" checked>
+                            <label for="fieldEstadoHecho">Estado</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fieldContribuyente" checked>
+                            <label for="fieldContribuyente">Contribuyente</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fieldEtiquetas" checked>
+                            <label for="fieldEtiquetas">Etiquetas</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros de Colecciones (oculto por defecto) -->
+            <div id="colecciones-filtros" class="entity-filters">
+                <h2><i class="fas fa-filter"></i> Filtros de Colecciones</h2>
+
+                <div class="form-group">
+                    <label for="coleccionTitulo"><i class="fas fa-heading"></i> Título</label>
+                    <input type="text" id="coleccionTitulo" placeholder="Título de la colección">
+                </div>
+
+                <div class="form-group">
+                    <label for="coleccionDescripcion"><i class="fas fa-align-left"></i> Descripción</label>
+                    <input type="text" id="coleccionDescripcion" placeholder="Descripción de la colección">
+                </div>
+
+                <div class="form-group">
+                    <label for="algoritmoConsenso"><i class="fas fa-cogs"></i> Algoritmo de Consenso</label>
+                    <select id="algoritmoConsenso">
+                        <option value="">Cualquiera</option>
+                        <option value="ABSOLUTA">Absoluta</option>
+                        <option value="MAYORIA_SIMPLE">Mayoría Simple</option>
+                        <option value="MULTIPLES_MENCIONES">Múltiples Menciones</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="minHechos"><i class="fas fa-list-ol"></i> Mínimo de hechos</label>
+                    <input type="number" id="minHechos" min="0" placeholder="Ej: 3">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-eye"></i> Campos a mostrar</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="coleccionFieldId" checked disabled>
+                            <label for="coleccionFieldId">ID</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="coleccionFieldTitulo" checked>
+                            <label for="coleccionFieldTitulo">Título</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="coleccionFieldDescripcion" checked>
+                            <label for="coleccionFieldDescripcion">Descripción</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="coleccionFieldAlgoritmo" checked>
+                            <label for="coleccionFieldAlgoritmo">Algoritmo</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="coleccionFieldHechos">
+                            <label for="coleccionFieldHechos">Hechos</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="coleccionFieldHechosConsensuados">
+                            <label for="coleccionFieldHechosConsensuados">Hechos Consensuados</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="coleccionFieldFuentes">
+                        <label for="coleccionFieldFuentes">Fuentes</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AQUÍ VA EL NUEVO BLOQUE -->
+            <div class="form-group" id="hechos-campos-opciones" style="display: none;">
+                <label><i class="fas fa-list-ul"></i> Campos de Hechos a mostrar</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hechoFieldTitulo" checked>
+                        <label for="hechoFieldTitulo">Título</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hechoFieldCategoria" checked>
+                        <label for="hechoFieldCategoria">Categoría</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hechoFieldDescripcion">
+                        <label for="hechoFieldDescripcion">Descripción</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hechoFieldFecha">
+                        <label for="hechoFieldFecha">Fecha</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hechoFieldUbicacion">
+                        <label for="hechoFieldUbicacion">Ubicación</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hechoFieldEtiquetas">
+                        <label for="hechoFieldEtiquetas">Etiquetas</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Opciones comunes -->
+            <div class="pagination-controls">
+                <div class="form-group">
+                    <label for="page"><i class="fas fa-layer-group"></i> Página</label>
+                    <input type="number" id="page" value="0" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="size"><i class="fas fa-list-ol"></i> Resultados por página</label>
+                    <input type="number" id="size" value="10" min="1" max="100">
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="search()">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+                <button class="btn btn-secondary" onclick="clearFilters()">
+                    <i class="fas fa-broom"></i> Limpiar Filtros
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel de Resultados -->
+        <div class="panel results-panel">
+            <h2><i class="fas fa-chart-bar"></i> Resultados</h2>
+
+            <div class="response-stats" id="responseStats">
+                <strong><i class="fas fa-info-circle"></i> Estadísticas:</strong>
+                <span id="statsText"></span>
+            </div>
+
+            <div id="resultOutput">
+                <p class="empty-state">
+                    <i class="fas fa-search fa-2x"></i>
+                    Selecciona el tipo de consulta y haz clic en "Buscar"
+                </p>
+            </div>
+
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-dot" id="statusDot"></div>
+                    <span id="statusText">Listo</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-clock"></i>
+                    <span id="responseTime">-</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-database"></i>
+                    <span id="resultCount">0 resultados</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel de Query Generada -->
+    <div class="panel query-panel">
+        <h2><i class="fas fa-code"></i> Query GraphQL Generada</h2>
+        <div class="query-container">
+            <pre><code id="generatedQuery" class="language-graphql">
+// La query aparecerá aquí cuando realices una búsqueda
+            </code></pre>
+        </div>
+    </div>
+</div>
+
+<script src="/js/app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,16 +1,236 @@
 version: '3.8'
+
 services:
+  # ==========================================
+  # AGENTE DE DATADOG (Sidecar)
+  # ==========================================
+  datadog-agent:
+    image: gcr.io/datadoghq/agent:7
+    container_name: metamapa_datadog_agent
+    environment:
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_SITE=us5.datadoghq.com
+      - DD_APM_ENABLED=true
+      - DD_APM_NON_LOCAL_TRAFFIC=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+    ports:
+      - "8126:8126"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+
+  # ==========================================
+  # BASE DE DATOS
+  # ==========================================
   mysql_unificado:
     image: mysql:8.0
     container_name: metamapa_mysql_unico
     environment:
-      # CRUCIAL: Contraseña de Root para permitir la conexión y creación de bases de datos
       MYSQL_ROOT_PASSWORD: root
-
+      MYSQL_DATABASE: agregador_db
     ports:
       - "3306:3306"
     volumes:
       - mysql_datos_unificados:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # ==========================================
+  # AGREGADOR (Servidor WebSocket)
+  # ==========================================
+  agregador:
+    container_name: metamapa_agregador
+    build:
+      context: .
+      dockerfile: Dockerfile.agregador
+    ports:
+      - "8080:8080"
+    environment:
+      PUERTO_AGREGADOR: "8080"
+      DB_URL: "jdbc:mysql://mysql_unificado:3306/agregador_db?serverTimezone=America/Buenos_Aires"
+      DB_USER: "root"
+      DB_PASS: "root"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE: "metamapa-agregador"
+    depends_on:
+      mysql_unificado:
+        condition: service_healthy
+      datadog-agent:
+        condition: service_started
+    restart: on-failure:5
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      retries: 3
+
+  # ==========================================
+  # CARGADORES (Clientes WebSocket)
+  # ==========================================
+  cargador-demo:
+    container_name: metamapa_cargador_demo
+    build:
+      context: .
+      dockerfile: Dockerfile.cargadorDemo
+    ports:
+      - "8082:8080"
+    environment:
+      # Apunta al endpoint WS del agregador
+      URL_AGREGADOR: "ws://agregador:8080/cargador"
+      URL_MOCK: "https://demo-api.mock.com"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE: "metamapa-cargador-demo"
+      DD_SERVICE_MAPPING: "agregador:metamapa-agregador"
+    depends_on:
+      - agregador
+      - datadog-agent
+
+  cargador-estatico:
+    container_name: metamapa_cargador_estatico
+    build:
+      context: .
+      dockerfile: Dockerfile.cargadorEstatico
+    ports:
+      - "8083:8080"
+    environment:
+      FILE_SERVER: "/app/csv_files"
+      URL_AGREGADOR: "ws://agregador:8080/cargador"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE: "metamapa-cargador-estatico"
+      DD_SERVICE_MAPPING: "agregador:metamapa-agregador"
+    volumes:
+      - ./cargadorEstatico/csv_files:/app/csv_files
+    depends_on:
+      - agregador
+      - datadog-agent
+
+  cargador-dinamico:
+    container_name: metamapa_cargador_dinamico
+    build:
+      context: .
+      dockerfile: Dockerfile.cargadorDinamico
+    ports:
+      - "8084:8080"
+    environment:
+      URL_AGREGADOR: "ws://agregador:8080/cargador"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE: "metamapa-cargador-dinamico"
+      DD_SERVICE_MAPPING: "agregador:metamapa-agregador"
+    depends_on:
+      - agregador
+      - datadog-agent
+
+  cargador-metamapa:
+    container_name: metamapa_cargador_metamapa
+    build:
+      context: .
+      dockerfile: Dockerfile.cargadorMetaMapa
+    ports:
+      - "8086:8080"
+    environment:
+      URL_AGREGADOR: "ws://agregador:8080/cargador"
+      URL_OTRA_INSTANCIA: "https://otra-instancia.com"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE: "metamapa-cargador-metamapa"
+      DD_SERVICE_MAPPING: "agregador:metamapa-agregador"
+    depends_on:
+      - agregador
+      - datadog-agent
+
+  # ==========================================
+  # GESTORES Y FRONTEND
+  # ==========================================
+  gestor-publico:
+    container_name: metamapa_gestor_publico
+    build:
+      context: .
+      dockerfile: Dockerfile.gestorPublico
+    ports:
+      - "8087:8080"
+    environment:
+      DB_URL: "jdbc:mysql://mysql_unificado:3306/agregador_db?serverTimezone=America/Buenos_Aires"
+      DB_USER: "root"
+      DB_PASS: "root"
+      URL_AGREGADOR: "http://agregador:8080"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE: "metamapa-gestor-publico"
+      DD_SERVICE_MAPPING: "agregador:metamapa-agregador"
+    depends_on:
+      mysql_unificado:
+        condition: service_healthy
+      datadog-agent:
+        condition: service_started
+
+  gestor-administrativo:
+    container_name: metamapa_gestor_admin
+    build:
+      context: .
+      dockerfile: Dockerfile.gestorAdministrativo
+    ports:
+      - "8081:8080"
+    environment:
+      DB_URL: "jdbc:mysql://mysql_unificado:3306/agregador_db?serverTimezone=America/Buenos_Aires"
+      DB_USER: "root"
+      DB_PASS: "root"
+      URL_AGREGADOR: "http://agregador:8080"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE: "metamapa-gestor-administrativo"
+      DD_SERVICE_MAPPING: "agregador:metamapa-agregador"
+    depends_on:
+      mysql_unificado:
+        condition: service_healthy
+      datadog-agent:
+        condition: service_started
+
+  estadisticas:
+    container_name: metamapa_estadisticas
+    build:
+      context: .
+      dockerfile: Dockerfile.estadisticas
+    ports:
+      - "8088:8080"
+    environment:
+      DB_URL: "jdbc:mysql://mysql_unificado:3306/agregador_db?serverTimezone=America/Buenos_Aires"
+      DB_USER: "root"
+      DB_PASS: "root"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE: "metamapa-estadisticas"
+    depends_on:
+      mysql_unificado:
+        condition: service_healthy
+      datadog-agent:
+        condition: service_started
+
+  web:
+    container_name: metamapa_web
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "7070:8080"
+    environment:
+      URL_GESTOR_PUBLICO: "http://gestor-publico:8080"
+      URL_GESTOR_ADMIN: "http://gestor-administrativo:8080"
+      URL_ESTADISTICAS: "http://estadisticas:8080"
+      DD_AGENT_HOST: datadog-agent
+      DD_ENV: local
+      DD_SERVICE: "metamapa-web"
+      DD_SERVICE_MAPPING: "gestor-publico:metamapa-gestor-publico,gestor-administrativo:metamapa-gestor-administrativo,estadisticas:metamapa-estadisticas"
+    depends_on:
+      - gestor-publico
+      - gestor-administrativo
+      - datadog-agent
 
 volumes:
   mysql_datos_unificados: {}

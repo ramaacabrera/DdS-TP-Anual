@@ -83,7 +83,6 @@ public class HechoRepositorio {
         }
     }
 
-    // Helpers privados para evitar duplicar código entre el Count y el Select
     private void agregarCriteriosAQuery(StringBuilder sb, List<Criterio> criterios) {
         if (criterios != null && !criterios.isEmpty()) {
             for (Criterio criterio : criterios) {
@@ -182,15 +181,6 @@ public class HechoRepositorio {
         }
     }
 
-    public Hecho buscarPorTitulo(String titulo) {
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            return buscarPorTituloInterno(em, titulo);
-        } finally {
-            em.close();
-        }
-    }
-
     public void eliminar(Hecho hecho) {
         EntityManager em = BDUtils.getEntityManager();
         try {
@@ -208,19 +198,5 @@ public class HechoRepositorio {
 
     public void actualizar(Hecho hecho) {
         this.guardar(hecho);
-    }
-
-    public List<String> buscarCategorias() {
-        EntityManager em = BDUtils.getEntityManager();
-        try{
-            String jpql = "SELECT DISTINCT h.categoria FROM Hecho h WHERE h.categoria IS NOT NULL ORDER BY h.categoria";
-            TypedQuery<String> query = em.createQuery(jpql, String.class);
-            return query.getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
     }
 }

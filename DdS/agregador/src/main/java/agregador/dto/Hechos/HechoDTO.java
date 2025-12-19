@@ -1,6 +1,5 @@
-package agregador.dto.Hechos; // O el paquete correcto donde lo tengas
+package agregador.dto.Hechos;
 
-// Imports de tus Entidades de Dominio (Ajusta los paquetes si es necesario)
 import agregador.domain.HechosYColecciones.Hecho;
 import agregador.domain.HechosYColecciones.Ubicacion;
 import agregador.dto.Hechos.FuenteDTO;
@@ -53,6 +52,7 @@ public class HechoDTO {
             this.ubicacion.setUbicacionId(u.getId_ubicacion());
             this.ubicacion.setLatitud(u.getLatitud());
             this.ubicacion.setLongitud(u.getLongitud());
+            this.ubicacion.setDescripcion(u.getDescripcion());
         }
 
         // Fuente
@@ -124,6 +124,7 @@ public class HechoDTO {
         this.contenidoMultimedia = contenidoMultimedia;
     }
 
+
     // Getters y Setters
     public UUID getHechoId() { return hechoId; }
     public void setHechoId(UUID hechoId) { this.hechoId = hechoId; }
@@ -151,4 +152,8 @@ public class HechoDTO {
     public void setEsEditable(boolean esEditable) { this.esEditable = esEditable; }
     public List<ContenidoMultimediaDTO> getContenidoMultimedia() { return contenidoMultimedia; }
     public void setContenidoMultimedia(List<ContenidoMultimediaDTO> contenidoMultimedia) { this.contenidoMultimedia = contenidoMultimedia; }
+
+    public String getId() {
+        return hechoId != null ? hechoId.toString() : null;
+    }
 }

@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +27,8 @@ public class Hecho {
     private UUID hecho_id;
 
     private String titulo;
+
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
     private String categoria;
 
@@ -80,22 +83,6 @@ public class Hecho {
         this.contenidoMultimedia = contenidoMultimedia;
         //this.hecho_id = -1;
     }
-
-    /*public Hecho(HechoDTO hechoDTO){
-        this.titulo = hechoDTO.getTitulo();
-        this.descripcion = hechoDTO.getDescripcion();
-        this.categoria = hechoDTO.getCategoria();
-        this.ubicacion = hechoDTO.getUbicacion();
-        this.fechaDeAcontecimiento = hechoDTO.getFechaDeAcontecimiento();
-        this.fechaDeCarga = hechoDTO.getFechaDeCarga();
-        this.fuente = hechoDTO.getFuente();
-        this.estadoHecho = hechoDTO.getEstadoHecho();
-        this.contribuyente = hechoDTO.getContribuyente();
-        this.etiquetas = hechoDTO.getEtiquetas();
-        this.esEditable = hechoDTO.getEsEditable();
-        this.contenidoMultimedia = hechoDTO.getContenidoMultimedia();
-        //this.hecho_id = 0;
-    }*/
 
     // Getters
     public String getTitulo() {
@@ -190,23 +177,6 @@ public class Hecho {
         return contenidoMultimedia;
     }
 
-    //Metodo para ocultar el hecho
-    public void ocultar() {
-        this.estadoHecho = EstadoHecho.OCULTO;
-    }
-
-    //Metodo para modificar un hecho si es editable
-    //REVISAR CON FUENTE DINAMICA Y SOLICITUDES
-    public void modificar(String nuevoTitulo, String nuevaDescripcion, String nuevaCategoria, String nuevoContenidoTexto) {
-        if (esEditable) {
-            this.titulo = nuevoTitulo;
-            this.descripcion = nuevaDescripcion;
-            this.categoria = nuevaCategoria;
-        } else {
-            System.out.println("Este hecho no es editable.");
-        }
-    }
-
     public boolean tieneMismosAtributosQue(Hecho otro) {
         if (otro == null) return false;
 
@@ -216,20 +186,6 @@ public class Hecho {
                 && Objects.equals(this.ubicacion, otro.ubicacion)
                 && Objects.equals(this.fechaDeAcontecimiento, otro.fechaDeAcontecimiento)
                 && Objects.equals(this.contribuyente, otro.contribuyente);
-    }
-
-    public void actualizarCon(Hecho otroHecho) {
-        this.descripcion = otroHecho.getDescripcion();
-        this.categoria = otroHecho.getCategoria();
-        this.ubicacion = otroHecho.getUbicacion();
-        this.fechaDeAcontecimiento = otroHecho.getFechaDeAcontecimiento();
-        this.fechaDeCarga = otroHecho.getFechaDeCarga();
-        this.fuente = otroHecho.getFuente();
-        this.estadoHecho = otroHecho.getEstadoHecho();
-        this.contribuyente = otroHecho.getContribuyente();
-        this.etiquetas = otroHecho.getEtiquetas();
-        this.esEditable = otroHecho.esEditable();
-        this.contenidoMultimedia = otroHecho.getContenidoMultimedia();
     }
 
 

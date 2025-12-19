@@ -84,6 +84,13 @@ public class SolicitudModificacionService {
 
             } else if (nuevoEstado == EstadoSolicitudModificacion.RECHAZADA) {
                 solicitud.rechazarSolicitud();
+            } else if(nuevoEstado == EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA) {
+                solicitud.aceptarConSugerencias();
+
+                aplicarCambiosAlHechoOriginal(solicitud.getHechoAsociado(), solicitud.getHechoModificado());
+
+                hechoRepositorio.guardar(solicitud.getHechoAsociado());
+                System.out.println("Termine de guardar");
             } else {
                 throw new IllegalArgumentException("Acción no soportada para procesar: " + accion);
             }
@@ -96,11 +103,39 @@ public class SolicitudModificacionService {
         }
     }
 
+    public boolean modificarSolicitud(UUID id,  List<Map<String, String>> cambios) {
+        Optional<SolicitudDeModificacion> soli = solicitudRepositorio.buscarPorId(id);
+        System.out.println("Termine de buscar la soli: " + id.toString());
+        if(soli.isEmpty()) return false;
+        SolicitudDeModificacion solicitud = soli.get();
+        for(Map<String, String> map : cambios){
+            switch (map.get("campo")){
+                case "titulo":
+                    solicitud.getHechoModificado().setTitulo(map.get("valorFinal"));
+                    break;
+                case "descripcion":
+                    solicitud.getHechoModificado().setDescripcion(map.get("valorFinal"));
+                    break;
+                case "categoria":
+                    solicitud.getHechoModificado().setCategoria(map.get("valorFinal"));
+                    break;
+                default:
+                    break;
+            }
+        }
+        solicitudRepositorio.guardar(solicitud);
+        System.out.println("Termine de guardar la nueva solicitud");
+        return true;
+    }
+
     public PageDTO<SolicitudDeModificacionDTO> obtenerTodasLasSolicitudes(int pagina, int limite, String estado) {
         if (pagina < 1) pagina = 1;
         if (limite < 1) limite = 10;
 
         long totalRegistros = solicitudRepositorio.contarTodas(estado);
+        if(estado != null &&  estado.equals("ACEPTADA")){
+            totalRegistros += solicitudRepositorio.contarTodas(EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA.toString());
+        }
 
         System.out.println("Total registros: " + totalRegistros);
 
@@ -174,7 +209,7 @@ public class SolicitudModificacionService {
             }
         }
 
-        System.out.println("✅ Hecho actualizado correctamente.");
+        System.out.println("Hecho actualizado correctamente.");
     }
 
     private HechoModificado mapHechoModificadoToEntity(HechoModificadoDTO dto) {
@@ -307,6 +342,9 @@ public class SolicitudModificacionService {
 
     public Integer obtenerCantidad(String estado) {
         Integer solis = solicitudRepositorio.obtenerCantidad(estado);
+        if(estado.equals("ACEPTADA")){
+            solis += solicitudRepositorio.obtenerCantidad("ACEPTADACONSUGERENCIA");
+        }
         System.out.println("Total solicitudes modificacion: " + solis);
         return solis;
     }

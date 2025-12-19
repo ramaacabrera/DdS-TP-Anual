@@ -1,3 +1,4 @@
+dds/.env
 dds/target/
 dds/agregador/target
 dds/apiAdministrativa/target
@@ -10,3 +11,4 @@ dds/estadisticas/target
 dds/utils/target
 dds/web/target
 target/
+DdS/cargadorEstatico/src/main/resources/config/service-account-key.json

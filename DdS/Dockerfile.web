@@ -1,0 +1,35 @@
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+WORKDIR /app
+
+COPY pom.xml .
+COPY agregador/pom.xml agregador/pom.xml
+COPY cargadorDemo/pom.xml cargadorDemo/pom.xml
+COPY cargadorDinamico/pom.xml cargadorDinamico/pom.xml
+COPY cargadorEstatico/pom.xml cargadorEstatico/pom.xml
+COPY cargadorMetamapa/pom.xml cargadorMetamapa/pom.xml
+COPY estadisticas/pom.xml estadisticas/pom.xml
+COPY gestorAdministrativo/pom.xml gestorAdministrativo/pom.xml
+COPY gestorPublico/pom.xml gestorPublico/pom.xml
+COPY utils/pom.xml utils/pom.xml
+COPY web/pom.xml web/pom.xml
+
+COPY utils/src utils/src
+COPY web/src web/src
+
+RUN mvn install -pl utils -am -DskipTests
+RUN mvn package -pl web -am -DskipTests
+
+# --- RUNTIME ---
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+
+# COPY del agente New Relic
+COPY newrelic.jar newrelic.jar
+
+COPY --from=build /app/web/target/web-*.jar app.jar
+
+EXPOSE 8080
+
+CMD ["java", \
+    "-javaagent:newrelic.jar", \
+    "-jar", "app.jar"]

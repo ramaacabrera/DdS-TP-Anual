@@ -11,6 +11,12 @@ import java.util.Map;
 
 public class VerificacionController {
 
+    private String urlSSO;
+
+    public VerificacionController(String urlSSO){
+        this.urlSSO = urlSSO;
+    }
+
     public Handler verificarAdministrador = ctx -> {
 
         System.out.println("Iniciando verificacion de administrativo");
@@ -34,11 +40,9 @@ public class VerificacionController {
         Claim realmAccessClaim = jwt.getClaim("realm_access");
 
         if (!realmAccessClaim.isNull()) {
-            // 'realm_access' es un objeto complejo, lo convertimos a Map
             Map<String, Object> realmAccessMap = realmAccessClaim.asMap();
 
             if (realmAccessMap != null && realmAccessMap.containsKey("roles")) {
-                // Keycloak devuelve los roles como una lista de objetos (Strings)
                 List<String> roles = (List<String>) realmAccessMap.get("roles");
 
                 if (roles.contains("administrador")) {
@@ -51,7 +55,7 @@ public class VerificacionController {
         }
 
         try {
-            TokenValidator validador = new TokenValidator();
+            TokenValidator validador = new TokenValidator(urlSSO);
             validador.validar(accessToken);
         } catch (Exception e) {
             System.err.println("Token inválido: " + e.getMessage());
@@ -63,6 +67,6 @@ public class VerificacionController {
             throw new io.javalin.http.ForbiddenResponse("No tienes permisos de administrador");
         }
 
-        System.out.println("✅ Acceso autorizado para: " + username);
+        System.out.println("Acceso autorizado para: " + username);
     };
 }

@@ -102,7 +102,7 @@ public class AgregadorOrquestador {
         Fuente fuentePersistida = fuenteRepositorio.buscarPorDescriptor(fuenteDto.getDescriptor());
 
         if (fuentePersistida == null) {
-            System.out.println("🆕 Fuente nueva detectada: " + fuenteDto.getDescriptor() + ". Creándola en BD...");
+            System.out.println("Fuente nueva detectada: " + fuenteDto.getDescriptor() + ". Creándola en BD...");
 
             Fuente nuevaFuente = new Fuente();
             nuevaFuente.setDescriptor(fuenteDto.getDescriptor());
@@ -111,7 +111,7 @@ public class AgregadorOrquestador {
                 try {
                     nuevaFuente.setTipoDeFuente(fuenteDto.getTipoDeFuente());
                 } catch (IllegalArgumentException e) {
-                    System.err.println("⚠️ Tipo de fuente desconocido: " + fuenteDto.getTipoDeFuente() + ". Se usará ESTATICA por defecto.");
+                    System.err.println("Tipo de fuente desconocido: " + fuenteDto.getTipoDeFuente() + ". Se usará ESTATICA por defecto.");
                 }
             }
             fuentePersistida = fuenteRepositorio.guardar(nuevaFuente);
@@ -163,7 +163,7 @@ public class AgregadorOrquestador {
         boolean faltaDescripcion = ubicacion.getDescripcion() == null || ubicacion.getDescripcion().trim().isEmpty();
 
         if (tieneCoordenadas && faltaDescripcion) {
-            System.out.println("📍 Buscando descripción para coord: " + ubicacion.getLatitud() + ", " + ubicacion.getLongitud());
+            System.out.println("Buscando descripción para coord: " + ubicacion.getLatitud() + ", " + ubicacion.getLongitud());
 
             String descripcionEncontrada = servicioGeoref.obtenerDescripcionPorCoordenadas(
                     ubicacion.getLatitud(),
@@ -172,9 +172,9 @@ public class AgregadorOrquestador {
 
             if (descripcionEncontrada != null) {
                 ubicacion.setDescripcion(descripcionEncontrada);
-                System.out.println("✅ Ubicación actualizada (API): " + descripcionEncontrada);
+                System.out.println("Ubicación actualizada (API): " + descripcionEncontrada);
             } else {
-                System.out.println("⚠ API falló, calculando ubicación aproximada offline...");
+                System.out.println("API falló, calculando ubicación aproximada offline...");
 
                 String descripcionOffline = GeolocalizadorOffline.obtenerUbicacionAproximada(
                         ubicacion.getLatitud(),
@@ -182,7 +182,7 @@ public class AgregadorOrquestador {
                 );
 
                 ubicacion.setDescripcion(descripcionOffline);
-                System.out.println("✅ Ubicación actualizada (Offline): " + descripcionOffline);
+                System.out.println("Ubicación actualizada (Offline): " + descripcionOffline);
             }
         }
     }

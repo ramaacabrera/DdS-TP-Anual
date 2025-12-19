@@ -24,7 +24,6 @@ public class HechoController {
     }
 
     public Handler listarHechos = ctx -> {
-        // 1) Construir la definición visual de los filtros (para el sidebar)
         List<HechoController.FilterDef> filters = buildFilters();
 
         List<Map<String, Object>> filtersForTemplate = filters.stream()
@@ -36,21 +35,17 @@ public class HechoController {
                 ))
                 .collect(Collectors.toList());
 
-        // 2) Leer parámetros de la URL (Query Params)
         String categoria = ctx.queryParam("categoria");
         String textoBusqueda = ctx.queryParam("textoBusqueda");
 
-        // Fechas
         String fechaAcontecimientoDesde = ctx.queryParam("fecha_acontecimiento_desde");
         String fechaAcontecimientoHasta = ctx.queryParam("fecha_acontecimiento_hasta");
         String descripcion = ctx.queryParam("descripcion");
         String callback =  ctx.queryParam("callback");
 
-        // Paginación (Default: Página 1, Tamaño 10)
         int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
         int size = Math.max(1, ctx.queryParamAsClass("size", Integer.class).getOrDefault(10));
 
-        // 3) Armar mapa de filtros para enviar al servicio
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("categoria", categoria);
         queryParams.put("textoBusqueda", textoBusqueda);
@@ -58,25 +53,20 @@ public class HechoController {
         queryParams.put("fecha_acontecimiento_hasta", fechaAcontecimientoHasta);
         queryParams.put("descripcion", descripcion);
 
-        // 4) Llamar al servicio (Lógica de negocio/HTTP)
         PageDTO<HechoDTO> resp = hechoService.buscarHechos(queryParams, page, size);
 
-        // 5) Índices para visualización "Mostrando X-Y de Z"
         long fromIndex = 0;
         long toIndex = 0;
 
         if (resp.content != null && !resp.content.isEmpty()) {
-            // Backend pagina desde 1.
             fromIndex = ((long) (resp.page - 1) * resp.size) + 1;
             toIndex = fromIndex + resp.content.size() - 1;
         }
 
-        // 6) Preparar el Modelo para FreeMarker
         Map<String, Object> model = ViewUtil.baseModel(ctx);
         model.put("baseHref", "/hechos");
         model.put("filters", filtersForTemplate);
 
-        // Valores actuales para rellenar el formulario (Input values)
         model.put("filterValues", Map.of(
                 "textoBusqueda", textoBusqueda != null ? textoBusqueda : "",
                 "categoria", categoria != null ? categoria : "",
@@ -85,7 +75,6 @@ public class HechoController {
                 "descripcion", descripcion != null ? descripcion : ""
         ));
 
-        // Datos principales
         model.put("hechos", resp.content != null ? resp.content : Collections.emptyList());
         model.put("total", resp.totalElements);
         model.put("page", resp.page);
@@ -96,7 +85,6 @@ public class HechoController {
         model.put("urlAdmin", urlAdmin);
         model.put("callback", callback);
 
-        // 7) Renderizar
         ctx.render("hechos.ftl", model);
     };
 
@@ -131,7 +119,6 @@ public class HechoController {
 
         List<String> categorias = hechoService.obtenerCategorias();
 
-        // Solo renderiza la plantilla con el formulario vacío
         Map<String, Object> modelo = ViewUtil.baseModel(ctx);
         modelo.put("pageTitle", "Reportar un Hecho");
         modelo.put("urlPublica", urlPublica);
@@ -141,9 +128,6 @@ public class HechoController {
         ctx.render("crear-hecho.ftl", modelo);
     };
 
-
-    // --- Helpers Internos ---
-
     private String formatDateForInput(String rawDate) {
         if (rawDate == null || rawDate.isBlank()) return "";
         return hechoService.formatearFechaParaInput(rawDate);
@@ -152,7 +136,6 @@ public class HechoController {
     private List<HechoController.FilterDef> buildFilters() {
         List<HechoController.FilterDef> list = new ArrayList<>();
 
-        // Categoría (Obtenida dinámicamente del servicio)
         HechoController.FilterDef cat = new HechoController.FilterDef("categoria", "Categoría", "select");
         List<String> categorias = hechoService.obtenerCategorias();
         if (categorias != null) {
@@ -160,7 +143,6 @@ public class HechoController {
         }
         list.add(cat);
 
-        // Fechas de acontecimiento
         list.add(new HechoController.FilterDef("fecha_acontecimiento_desde", "Acontecimiento desde", "date"));
         list.add(new HechoController.FilterDef("fecha_acontecimiento_hasta", "Acontecimiento hasta", "date"));
 
@@ -169,7 +151,6 @@ public class HechoController {
         return list;
     }
 
-    // --- Clase interna para definición de filtros ---
     public static class FilterDef {
         private String key;
         private String label;

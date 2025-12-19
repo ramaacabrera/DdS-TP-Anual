@@ -14,10 +14,8 @@ public class TokenValidator {
 
     private final String ISSUER;
 
-    public TokenValidator(){
-        LecturaConfig lector = new LecturaConfig();
-        Properties config = lector.leerConfig();
-        ISSUER = "http://localhost:8080/realms/tpDDSI";
+    public TokenValidator(String urlSSO){
+        ISSUER = urlSSO;
     }
 
     public void validar(String token) {
@@ -26,7 +24,7 @@ public class TokenValidator {
             System.out.println("Token validator: " + ISSUER + ", " +  token);
             //Algorithm algorithm = Algorithm.RSA256(KeycloakKeyProvider.getKey(), null);
             System.out.println("Token recibido: " + token);
-            RSAPublicKey key = KeycloakKeyProvider.getKey(token);
+            RSAPublicKey key = KeycloakKeyProvider.getKey(token, ISSUER);
             System.out.println("Clave obtenida: " + key);
             Algorithm algorithm = Algorithm.RSA256(key, null);
 

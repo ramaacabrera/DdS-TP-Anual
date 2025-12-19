@@ -6,7 +6,6 @@ public class MockNormalizador {
     public MockNormalizador(){}
 
     public Hecho normalizar(Hecho hecho) {
-        //System.out.println("Empezando a normalizar");
         if (hecho == null) {
             return null;
         }
@@ -43,8 +42,6 @@ public class MockNormalizador {
                     .replaceAll("\\s+", " ");
             hechoNormalizado.setDescripcion(descripcionNormalizada);
         }
-
-        // NO HICIMOS NADA CON LAS FECHAS PORQUE SON TODOS TIPO DATE
 
         return hechoNormalizado;
     }

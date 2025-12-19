@@ -13,7 +13,7 @@ import java.util.UUID;
 public class SolicitudModificacionRepositorio {
 
     public SolicitudModificacionRepositorio() {
-        // No necesitamos inyectar HechoRepositorio aquí.
+
     }
 
     public void guardar(SolicitudDeModificacion solicitud) {
@@ -48,43 +48,4 @@ public class SolicitudModificacionRepositorio {
         this.guardar(solicitud);
     }
 
-    public List<SolicitudDeModificacion> buscarTodas() {
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            String jpql = "SELECT DISTINCT s FROM SolicitudDeModificacion s " +
-                    "LEFT JOIN FETCH s.usuario " +
-                    "LEFT JOIN FETCH s.hechoAsociado h " +
-                    "ORDER BY s.estadoSolicitudModificacion ASC";
-
-            TypedQuery<SolicitudDeModificacion> query = em.createQuery(jpql, SolicitudDeModificacion.class);
-            return query.getResultList();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        } finally {
-            em.close();
-        }
-    }
-
-    public Optional<SolicitudDeModificacion> buscarPorId(UUID id) {
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            String jpql = "SELECT DISTINCT s FROM SolicitudDeModificacion s " +
-                    "LEFT JOIN FETCH s.usuario " +
-                    "LEFT JOIN FETCH s.hechoAsociado h " +
-                    "LEFT JOIN FETCH h.etiquetas " +
-                    "WHERE s.id = :id";
-
-            TypedQuery<SolicitudDeModificacion> query = em.createQuery(jpql, SolicitudDeModificacion.class);
-            query.setParameter("id", id);
-
-            return Optional.of(query.getSingleResult());
-
-        } catch (javax.persistence.NoResultException e) {
-            return Optional.empty();
-        } finally {
-            em.close();
-        }
-    }
 }

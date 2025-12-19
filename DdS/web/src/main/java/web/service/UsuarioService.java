@@ -32,8 +32,6 @@ public class UsuarioService {
     }
 
     public Map<String, Object> authCallback(String code,String clientId, String clientSecret, String redirectUri, String keycloakUrl) {
-        // A. Petición POST a Keycloak para obtener el Token
-        // Formateamos los datos como x-www-form-urlencoded
         Map<String, String> tokenParams = Map.of(
                 "grant_type", "authorization_code",
                 "client_id", clientId,
@@ -59,7 +57,6 @@ public class UsuarioService {
             throw new RuntimeException("Error al conectar con Keycloak: " + tokenResponse.body());
         }
 
-        // Parsear token
         JSONObject tokenJson = new JSONObject(tokenResponse.body());
         String accessToken = tokenJson.getString("access_token");
 
@@ -70,11 +67,9 @@ public class UsuarioService {
         Claim realmAccessClaim = jwt.getClaim("realm_access");
 
         if (!realmAccessClaim.isNull()) {
-            // 'realm_access' es un objeto complejo, lo convertimos a Map
             Map<String, Object> realmAccessMap = realmAccessClaim.asMap();
 
             if (realmAccessMap != null && realmAccessMap.containsKey("roles")) {
-                // Keycloak devuelve los roles como una lista de objetos (Strings)
                 List<String> roles = (List<String>) realmAccessMap.get("roles");
 
                 if (roles.contains("administrador")) {
@@ -85,8 +80,6 @@ public class UsuarioService {
             }
         }
 
-
-        // C. Petición POST al GestorPublico para sincronizar
         JSONObject syncBody = new JSONObject();
         syncBody.put("username", username);
 
@@ -103,7 +96,6 @@ public class UsuarioService {
             }
         } catch (Exception e) {
             System.err.println("Error contactando al GestorPublico: " + e.getMessage());
-            // Decidimos no bloquear el login si falla la sincro, pero lo logueamos
         };
 
         return Map.of("username", username,"rolUsuario", rolUsuario, "accessToken", accessToken);

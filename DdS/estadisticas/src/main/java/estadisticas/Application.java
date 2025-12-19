@@ -19,6 +19,7 @@ public class Application {
         LecturaConfig lector = new LecturaConfig();
         Properties config = lector.leerConfig();
         int puerto = Integer.parseInt(config.getProperty("PUERTO_ESTADISTICAS"));
+        int tiempoScheduler = Integer.parseInt(config.getProperty("TIEMPO_SCHEDULER"));
 
         IniciadorApp iniciador = new IniciadorApp();
         Javalin app = iniciador.iniciarApp(puerto, "/");
@@ -31,9 +32,12 @@ public class Application {
         EstadisticasService estadisticasService = new EstadisticasService(estadisticasRepo, categoriaRepo, coleccionRepo);
 
         GeneradorEstadisticas generador = new GeneradorEstadisticas(conexionAgregador);
-        EstadisticasScheduler estadisticasScheduler = new EstadisticasScheduler(generador);
+        EstadisticasScheduler estadisticasScheduler = new EstadisticasScheduler(generador, tiempoScheduler);
 
         EstadisticasController controller = new EstadisticasController(estadisticasService);
+
+        // Health check
+        app.get("/health", ctx -> { ctx.status(200).result("OK");});
 
         app.get("/api/estadisticas/provinciaMax/colecciones/{coleccion}", controller::getProvinciaColeccion);
         app.get("/api/estadisticas/categoriaMax", controller::getCategoriaMax);

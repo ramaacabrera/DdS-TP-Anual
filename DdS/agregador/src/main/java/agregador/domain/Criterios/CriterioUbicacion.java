@@ -1,6 +1,7 @@
 package agregador.domain.Criterios;
 
 import agregador.domain.HechosYColecciones.Hecho;
+import agregador.domain.HechosYColecciones.Ubicacion;
 
 import javax.persistence.*;
 import java.util.HashMap;

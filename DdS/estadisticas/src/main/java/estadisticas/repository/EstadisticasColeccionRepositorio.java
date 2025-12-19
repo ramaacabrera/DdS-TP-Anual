@@ -2,6 +2,7 @@ package estadisticas.repository;
 
 import estadisticas.domainEstadisticas.EstadisticasColeccion;
 import estadisticas.domainEstadisticas.Estadisticas;
+import estadisticas.utils.BDUtilsEstadisticas;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

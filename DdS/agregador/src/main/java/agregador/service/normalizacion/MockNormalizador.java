@@ -10,7 +10,7 @@ public class MockNormalizador {
     }
 
     public Hecho normalizar(Hecho hecho) {
-        //System.out.println("Empezando a normalizar");
+
         if (hecho == null) {
             return null;
         }

@@ -124,9 +124,6 @@ public class UsuarioController {
                 // Leer como JSON
                 RegistroUsuarioDTO registroDto = ctx.bodyAsClass(RegistroUsuarioDTO.class);
 
-                // Para JSON, no podemos validar confirmPassword porque no está en el DTO
-                // Podrías pedir que se envíe como campo adicional en el JSON
-                // O aceptar que la validación se haga solo en el formulario
                 usuarioService.registrarUsuario(registroDto);
             }
 

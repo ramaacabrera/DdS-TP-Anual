@@ -65,7 +65,6 @@ public class HechosDinamicoService {
             return false;   // no existe
         }
 
-        // ACTUALIZACIÓN
         hechoExistente.setTitulo(hechoActualizado.getTitulo());
         hechoExistente.setDescripcion(hechoActualizado.getDescripcion());
 

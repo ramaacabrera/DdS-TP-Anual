@@ -70,7 +70,6 @@ public class ConexionAgregador {
             for (Object[] fila : resultados) {
                 String categoria = (String) fila[0];
                 String descripcion = (String) fila[1];
-                // SQL Nativo devuelve BigInteger para COUNT, casteamos seguro:
                 Long count = ((Number) fila[2]).longValue();
 
                 if (descripcion == null || descripcion.trim().isEmpty()) continue;
@@ -141,8 +140,8 @@ public class ConexionAgregador {
             Map<UUID, Map<String, Object>> datosColecciones = new HashMap<>();
 
             for (Object[] fila : resultados) {
-                String handle = (String) fila[0];
-                UUID coleccionId = UUID.fromString(handle);
+                String handleStr = (String) fila[0];
+                UUID coleccionId = UUID.fromString(handleStr);
                 String titulo = (String) fila[1];
                 String descripcion = (String) fila[2];
 

@@ -84,10 +84,8 @@ public class HechoController {
         try {
             String body = ctx.body();
             System.out.println(body);
-            // Llamamos al servicio que actúa de proxy
             HttpResponse<String> response = hechoService.crearHechoProxy(body);
 
-            // Devolvemos exactamente lo que respondió el otro servicio
             ctx.status(response.statusCode()).result(response.body());
 
         } catch (Exception e) {

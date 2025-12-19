@@ -1,12 +1,9 @@
 
 package cargadorEstatico.service;
 
-import cargadorEstatico.controller.ConexionEstatica;
 import cargadorEstatico.controller.ConexionEstaticaDrive;
 import cargadorEstatico.domain.fuente.Fuente;
-import cargadorEstatico.dto.Hechos.FuenteDTO;
 import cargadorEstatico.dto.Hechos.HechoDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
@@ -24,43 +21,6 @@ public class HechosEstaticoService {
         fuente = fuenteNueva;
     }
 
-    public List<HechoDTO> obtenerHechos(){
-        List<HechoDTO> hechosTotales = new ArrayList<>();
-
-        Path carpeta = Paths.get(fileServer); // "csv_files"
-        Path pathGuia = carpeta.resolve("guia.csv");
-
-        // Cargar archivo guía
-        Set<String> procesados = cargarArchivosProcesados(pathGuia);
-
-        try (DirectoryStream<Path> stream = newDirectoryStream(carpeta, "*.csv")) {
-            for (Path archivo : stream) {
-                String nombreArchivo = archivo.getFileName().toString();
-
-                if (nombreArchivo.equals("guia.csv") || procesados.contains(nombreArchivo))
-                    continue; // Saltear si ya fue procesado o es la guía
-
-                ConexionEstatica conexion = new ConexionEstatica(fileServer + "/" + nombreArchivo);
-
-                List<HechoDTO> hechos = conexion.obtenerHechos();
-                fuente.setDescriptor(nombreArchivo);
-                hechos.forEach(hecho -> {hecho.setFuente(new FuenteDTO(fuente.getId(),fuente.getTipoDeFuente().toString(),fuente.getDescriptor()));});
-                hechosTotales.addAll(hechos); // o tus criterios
-
-                procesados.add(nombreArchivo); // marcar como procesado
-            }
-
-            // Guardar cambios en la guía
-            guardarGuia(pathGuia, procesados);
-
-        } catch (IOException e) {
-            System.err.println("Error al leer archivos CSV: " + e.getMessage());
-        }
-
-        hechosTotales.forEach(hecho->hecho.setFuente(new FuenteDTO(fuente.getId(),fuente.getTipoDeFuente().toString(),fuente.getDescriptor())));
-        return hechosTotales;
-    }
-
     public List<HechoDTO> obtenerHechosDrive() {
         List<HechoDTO> hechosTotales = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
@@ -71,11 +31,8 @@ public class HechosEstaticoService {
             // Obtener instancia del cargador de Drive
             ConexionEstaticaDrive driveCargador = ConexionEstaticaDrive.getInstance();
 
-            // Obtener hechos (solo de archivos no procesados)
-            // Pasamos el ID de la fuente para identificar los hechos
             List<HechoDTO> hechosDrive = driveCargador.obtenerHechos();
 
-            // Mostrar estadísticas de cada hecho (opcional, para debug)
             for (HechoDTO hecho : hechosDrive) {
                 try {
                     System.out.println("Hecho obtenido: " + mapper.writeValueAsString(hecho));
@@ -112,18 +69,6 @@ public class HechosEstaticoService {
         }
         return procesados;
     }
-
-    private void actualizarGuiaProcesados(Set<String> procesados) {
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("guia.csv"))) {
-            // Para Google Drive, podrías guardar la fecha de última sincronización
-            writer.write("Última sincronización: " + new Date());
-            writer.newLine();
-            writer.write("Hechos obtenidos desde Google Drive");
-        } catch (IOException e) {
-            System.err.println("No se pudo escribir la guía: " + e.getMessage());
-        }
-    }
-
 
     private void guardarGuia(Path pathGuia, Set<String> procesados) {
         try (BufferedWriter writer = newBufferedWriter(pathGuia)) {

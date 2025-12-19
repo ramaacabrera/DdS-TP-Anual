@@ -51,4 +51,8 @@ public class UbicacionDTO {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public String getId() {
+        return id_ubicacion != null ? id_ubicacion.toString() : null;
+    }
 }

@@ -1,6 +1,6 @@
 package cargadorDemo.controller;
 
-import cargadorDemo.service.GetHechosService;
+import cargadorDemo.service.HechosService;
 import cargadorDemo.dto.HechoDTO;
 import cargadorDemo.controller.Controlador;
 
@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 public class ControladorDemo implements Controlador {
-    GetHechosService service;
+    HechosService service;
 
-    public ControladorDemo(GetHechosService service) {
+    public ControladorDemo(HechosService service) {
         this.service = service;
     }
 

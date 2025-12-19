@@ -34,7 +34,6 @@ public class AuthCallbackHandler implements Handler {
 
         Map<String, Object> dataUsuario = usuarioService.authCallback(code ,clientId, clientSecret, redirectUri, keycloakUrl);
 
-        // D. Establecer sesión y redirigir
         ctx.sessionAttribute("username", dataUsuario.get("username"));
         ctx.sessionAttribute("accessToken", dataUsuario.get("accessToken"));
         ctx.sessionAttribute("rolUsuario", dataUsuario.get("rolUsuario"));

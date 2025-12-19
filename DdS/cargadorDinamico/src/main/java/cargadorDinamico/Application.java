@@ -8,8 +8,8 @@ import cargadorDinamico.domain.fuente.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javalin.Javalin;
 import cargadorDinamico.conexionAgregador.ClienteDelAgregador;
-import utils.IniciadorApp;
-import utils.LecturaConfig;
+import cargadorDinamico.utils.IniciadorApp;
+import cargadorDinamico.utils.LecturaConfig;
 
 import java.util.Properties;
 
@@ -36,10 +36,12 @@ public class Application {
         ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDinamica(hechosDinamicoService, solicitudesModificacionService, solicitudesEliminacionService));
         cliente.conectar(fuente);
 
+        // Health check
+        app.get("/health", ctx -> { ctx.status(200).result("OK");});
+
         app.post("/hechos", new PostHechosHandler(hechosDinamicoService));
         app.post("/solicitudesModificacion", new PostSolicitudesModificacionHandler(solicitudesModificacionService));
         app.post("/solicitudesEliminacion", new PostSolicitudesEliminacionHandler(solicitudesEliminacionService));
 
-        // DEJO LOS POST PORQUE CREO QUE SE USAN PARA CREAR LOS HECHOS DESDE EL FRONT, LOS GET SE USAN MEDIANTE EL CLIENTEDELAGREGADOR
     }
 }

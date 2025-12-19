@@ -1,7 +1,7 @@
 package cargadorDinamico.repository;
 
-import cargadorDinamico.domain.BDUtilsDinamico;
 import cargadorDinamico.domain.DinamicaDto.*;
+import cargadorDinamico.utils.BDUtilsDinamico;
 import cargadorDinamico.domain.HechosYColeccionesD.*;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudEliminacion_D;
 import cargadorDinamico.domain.Solicitudes.EstadoSolicitudModificacion_D;
@@ -19,6 +19,8 @@ import cargadorDinamico.domain.HechosYColecciones.*;
 
 import cargadorDinamico.domain.Solicitudes.SolicitudDeEliminacion_D;
 import cargadorDinamico.domain.Solicitudes.SolicitudDeModificacion_D;
+
+import cargadorDinamico.domain.Usuario.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

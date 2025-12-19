@@ -4,10 +4,9 @@ import agregador.domain.HechosYColecciones.Coleccion;
 import agregador.dto.Coleccion.TipoAlgoritmoConsensoDTO;
 import agregador.dto.Criterios.CriterioDTO;
 import agregador.dto.Hechos.FuenteDTO;
+import agregador.dto.Hechos.HechoDTO;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ColeccionDTO {
@@ -17,6 +16,8 @@ public class ColeccionDTO {
     private List<FuenteDTO> fuentes = new ArrayList<>();
     private List<CriterioDTO> criteriosDePertenencia = new ArrayList<>();
     private TipoAlgoritmoConsensoDTO algoritmoDeConsenso;
+    private Set<HechoDTO> hechos = new HashSet<>();
+    private Set<HechoDTO> hechosConsensuados = new HashSet<>();
 
     public ColeccionDTO() {}
 
@@ -58,10 +59,18 @@ public class ColeccionDTO {
             }).collect(Collectors.toList());
         }
 
-        // NOTA: El mapeo de Criterios (Lista polimórfica) es complejo para hacerlo dentro del constructor del DTO
-        // sin acoplar demasiadas clases. Por ahora inicializamos la lista vacía.
-        // Si necesitas mostrar los criterios en el listado público, deberías usar un "Mapper" externo
-        // o inyectar la lógica de conversión, pero para listados generales suele dejarse vacío por rendimiento.
+        if (coleccion.getHechos() != null) {
+            this.hechos = coleccion.getHechos().stream()
+                    .map(HechoDTO::new)
+                    .collect(Collectors.toSet());
+        }
+
+        if (coleccion.getHechosConsensuados() != null) {
+            this.hechosConsensuados = coleccion.getHechosConsensuados().stream()
+                    .map(HechoDTO::new)
+                    .collect(Collectors.toSet());
+        }
+
         this.criteriosDePertenencia = new ArrayList<>();
     }
 
@@ -86,5 +95,17 @@ public class ColeccionDTO {
     public TipoAlgoritmoConsensoDTO getAlgoritmoDeConsenso() { return algoritmoDeConsenso; }
     public void setAlgoritmoDeConsenso(TipoAlgoritmoConsensoDTO algoritmoDeConsenso) {
         this.algoritmoDeConsenso = algoritmoDeConsenso;
+    }
+
+    public Set<HechoDTO> getHechos() {
+        return hechos;
+    }
+
+    public Set<HechoDTO> getHechosConsensuados() {
+        return hechosConsensuados;
+    }
+
+    public String getId() {
+        return coleccionId != null ? coleccionId.toString() : null;
     }
 }

@@ -54,7 +54,7 @@ public class EstadisticasService {
     }
 
     public Map<String, String> obtenerProvinciaPorColeccion(String coleccionUuidStr) throws IllegalArgumentException {
-        UUID coleccionUuid = UUID.fromString(coleccionUuidStr); // Puede lanzar IllegalArgumentException
+        UUID coleccionUuid = UUID.fromString(coleccionUuidStr);
         return coleccionesRepo.buscarProvinciaYNombreColeccion(coleccionUuid).orElse(null);
     }
 

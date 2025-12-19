@@ -196,18 +196,6 @@ public class ColeccionService {
         return convertirADTO(coleccion);
     }
 
-    public List<ColeccionDTO> obtenerTodasLasColecciones() {
-        return coleccionRepositorio.obtenerTodas().stream()
-                .map(this::convertirADTO)
-                .collect(Collectors.toList());
-    }
-
-    public ColeccionDTO obtenerColeccionPorId(UUID id) {
-        Coleccion coleccion = coleccionRepositorio.buscarPorHandle(id.toString());
-        if (coleccion == null) throw new IllegalArgumentException("Colección no encontrada");
-        return convertirADTO(coleccion);
-    }
-
     private ColeccionDTO convertirADTO(Coleccion coleccion) {
         ColeccionDTO dto = new ColeccionDTO();
 
@@ -229,28 +217,6 @@ public class ColeccionService {
         System.out.println("ConversorDTO 7");
 
         return dto;
-    }
-
-    private List<Fuente> mapFuentesToEntity(List<FuenteDTO> dtos) {
-        if (dtos == null) return new ArrayList<>();
-
-        return dtos.stream().map(dto -> {
-            Fuente fuente = new Fuente();
-            if (dto.getFuenteId() != null) {
-                fuente.setId(dto.getFuenteId());
-            }
-
-            fuente.setDescriptor(dto.getDescriptor());
-
-            if (dto.getTipoFuente() != null) {
-                try {
-                    fuente.setTipoDeFuente(TipoDeFuente.valueOf(dto.getTipoFuente()));
-                } catch (IllegalArgumentException e) {
-                    System.err.println("Tipo de fuente inválido: " + dto.getTipoFuente());
-                }
-            }
-            return fuente;
-        }).collect(Collectors.toList());
     }
 
     private List<FuenteDTO> mapFuentesToDTO(List<Fuente> entidades) {
@@ -415,27 +381,6 @@ public class ColeccionService {
             d.setNombre(e.getNombre());
             return d;
         }).collect(Collectors.toList());
-    }
-
-    private Ubicacion mapUbicacionToEntity(UbicacionDTO dto) {
-        if (dto == null) return null;
-        Ubicacion u = new Ubicacion();
-        if (dto.getUbicacionId() != null) {
-            u.setId_ubicacion(dto.getUbicacionId());
-        }
-        u.setDescripcion(dto.getDescripcion());
-        u.setLatitud(dto.getLatitud());
-        u.setLongitud(dto.getLongitud());
-        return u;
-    }
-
-    private UbicacionDTO mapUbicacionToDTO(Ubicacion entidad) {
-        if (entidad == null) return null;
-        UbicacionDTO dto = new UbicacionDTO();
-        dto.setUbicacionId(entidad.getId_ubicacion());
-        dto.setLatitud(entidad.getLatitud());
-        dto.setLongitud(entidad.getLongitud());
-        return dto;
     }
 
     private TipoDeTexto convertirTipoTextoEnum(TipoDeTextoDTO dtoEnum) {

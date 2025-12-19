@@ -7,7 +7,7 @@ import web.controller.loginKeycloak.GetLogOutHandler;
 import web.controller.loginKeycloak.GetLoginHandler;
 import web.service.*;
 import utils.IniciadorApp;
-import utils.LecturaConfig;
+import web.utils.LecturaConfig;
 
 
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public class Application {
         String urlEstadisticas = config.getProperty("URL_ESTADISTICAS");
         String cloudinaryUrl = config.getProperty("CLOUDINARY_URL");
         String cloudinaryPreset = config.getProperty("CLOUDINARY_PRESET");
-        String keycloakUrl = config.getProperty("URL_SERVIDOR_SSO");
+        String keycloakUrl = config.getProperty("URL_KEYCLOAK");
         String clientId = config.getProperty("CLIENT_ID");
         String redirectUrl = config.getProperty("REDIRECT_URL");
         String clientSecret = config.getProperty("CLIENT_SECRET");
@@ -73,6 +73,8 @@ public class Application {
             throw new RuntimeException("Error de prueba para verificar estilos CSS");
         });
 
+        app.get("/health", ctx -> { ctx.status(200).result("OK");});
+
         app.get("/", ctx -> {
             ctx.redirect("/home");
         });
@@ -82,10 +84,6 @@ public class Application {
         app.get("/login", new GetLoginHandler(keycloakUrl, clientId, redirectUrl));
         app.get("/auth/callback", new AuthCallbackHandler(usuarioService,clientSecret, keycloakUrl ,clientId, redirectUrl));
         app.get("/logout", new GetLogOutHandler(urlWeb, keycloakUrl));
-
-
-        //app.post("/login", new PostLoginHandler(urlPublica));
-        //app.get("/sign-in", new GetSignInHandler(urlPublica));
 
 
         //hechos
@@ -100,10 +98,8 @@ public class Application {
         app.post("/colecciones", coleccionController.crearColeccion);
         app.put("/colecciones/{id}", coleccionController.editarColeccion);
         app.delete("/colecciones/{id}", coleccionController.eliminarColeccion);
-        //app.get("/api/colecciones/{id}/hechos", new GetHechosColeccionHandler(urlPublica));
 
 
-        // Falta organizar el tema de categorias y colecciones, y aplicar los estilos
         app.get("/estadisticas", new GetEstadisticasHandler(estadisticasService, categoriasService));
         app.get("/estadisticas/descargar", new GetDescargarEstadisticasHandler(estadisticasService));
         app.get("/api/estadisticas/provinciaMax/categorias/{categoria}", new GetBusquedaAPIHandler(categoriasService, GetBusquedaAPIHandler.TipoBusqueda.PROVINCIA));
@@ -116,7 +112,6 @@ public class Application {
 
         app.get("/hechos/{id}/modificar", solicitudController.obtenerFormsModificarSolicitud);
         app.post("/api/solicitar-modificacion", solicitudController.crearSolicitudModificacion);
-        //app.get("/api/solicitudes/{id}", solicitudController.obtenerFormsModificarSolicitud);
 
         app.get("/admin/solicitudes/eliminacion", solicitudController.listarSolicitudesEliminacion);
         app.get("/admin/solicitudes/modificacion", solicitudController.listarSolicitudesModificacion);
