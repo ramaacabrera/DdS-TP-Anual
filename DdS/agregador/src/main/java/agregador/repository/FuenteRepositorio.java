@@ -11,16 +11,6 @@ public class FuenteRepositorio {
 
     public FuenteRepositorio() {}
 
-    public Fuente buscarPorId(UUID id) {
-        if (id == null) return null;
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            return em.find(Fuente.class, id);
-        } finally {
-            em.close();
-        }
-    }
-
     public Fuente buscarPorDescriptor(String descriptor) {
         if (descriptor == null) return null;
 

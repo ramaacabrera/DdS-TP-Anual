@@ -116,36 +116,6 @@ public class ColeccionRepositorio {
         guardar(coleccion);
     }
 
-    public void actualizarTodas(List<Coleccion> colecciones) {
-        if (colecciones == null || colecciones.isEmpty()) {
-            return;
-        }
-
-        EntityManager em = BDUtils.getEntityManager();
-        try {
-            BDUtils.comenzarTransaccion(em);
-
-            int batchSize = 50;
-
-            for (int i = 0; i < colecciones.size(); i++) {
-                if (colecciones.get(i) != null) {
-                    em.merge(colecciones.get(i));
-                }
-                if (i > 0 && i % batchSize == 0) {
-                    em.flush();
-                    em.clear();
-                }
-            }
-            BDUtils.commit(em);
-        } catch (Exception e) {
-            BDUtils.rollback(em);
-            e.printStackTrace();
-            throw new RuntimeException("Error en actualización masiva de colecciones", e);
-        } finally {
-            em.close();
-        }
-    }
-
     public long contarTodas() {
         EntityManager em = BDUtils.getEntityManager();
         try {

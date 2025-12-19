@@ -102,46 +102,6 @@ public class Coleccion {
     public List<Hecho> getHechosConsensuados() { return hechosConsensuados; }
     public void setHechosConsensuados(List<Hecho> hechosConsensuados) { this.hechosConsensuados = hechosConsensuados; }
 
-
-    public void agregarCriterio(Criterio criterio) {
-        if (this.criteriosDePertenencia == null) this.criteriosDePertenencia = new ArrayList<>();
-        this.criteriosDePertenencia.add(criterio);
-    }
-
-    public boolean tieneAlgoritmoDeConsenso(){
-        return algoritmoDeConsenso != null;
-    }
-
-    public void agregarFuente(Fuente fuente){
-        if (this.fuentes == null) this.fuentes = new ArrayList<>();
-        this.fuentes.add(fuente);
-    }
-
-    public void eliminarFuente(Fuente fuente){
-        if (this.fuentes != null) {
-            this.fuentes.remove(fuente);
-        }
-    }
-
-    public List<Hecho> obtenerHechosQueCumplen(List<Criterio> criteriosDeBusqueda, ModosDeNavegacion modosDeNavegacion) {
-        if (this.hechos == null) return new ArrayList<>();
-
-        List<Hecho> hechosFiltrados = hechos.stream()
-                .filter(Hecho::estaActivo) // Primero descartar inactivos
-                .filter(h -> criteriosDeBusqueda.stream().allMatch(c -> c.cumpleConCriterio(h)))
-                .collect(Collectors.toList());
-
-        if (modosDeNavegacion == ModosDeNavegacion.IRRESTRICTA || algoritmoDeConsenso == null ) {
-            return hechosFiltrados;
-        }
-
-        if (this.hechosConsensuados == null) return new ArrayList<>();
-
-        return hechosFiltrados.stream()
-                .filter(hechosConsensuados::contains)
-                .collect(Collectors.toList());
-    }
-
     public void agregarHecho(Hecho hecho) {
         if (this.hechos == null) {
             this.hechos = new ArrayList<>();

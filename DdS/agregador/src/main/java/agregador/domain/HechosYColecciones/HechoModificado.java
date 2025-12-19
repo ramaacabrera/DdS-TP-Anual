@@ -65,10 +65,4 @@ public class HechoModificado {
     public void setUbicacion(Ubicacion ubicacion) { this.ubicacion = ubicacion; }
     public void setFechaDeAcontecimiento(Date fechaDeAcontecimiento) { this.fechaDeAcontecimiento = fechaDeAcontecimiento; }
     public void setContenidoMultimedia(List<ContenidoMultimedia> contenidoMultimedia) { this.contenidoMultimedia = contenidoMultimedia; }
-
-
-    public boolean esIgualAotro(HechoModificado otroHecho) {
-        if (otroHecho == null) return false;
-        return this.titulo != null && this.titulo.equalsIgnoreCase(otroHecho.getTitulo());
-    }
 }

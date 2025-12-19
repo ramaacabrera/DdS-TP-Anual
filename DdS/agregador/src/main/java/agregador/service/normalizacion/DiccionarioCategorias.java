@@ -41,10 +41,4 @@ public class DiccionarioCategorias {
         return mapa.getOrDefault(terminoNormalizado, "OTROS");
     }
 
-    public List<String> obtenerCategoriasCanonicas() {
-        return mapa.values().stream()
-                .distinct() // <--- ESTO ES LA CLAVE: Elimina los repetidos
-                .sorted()   // Las ordena alfabéticamente (A-Z) para que se vean bien
-                .collect(Collectors.toList());
-    }
 }

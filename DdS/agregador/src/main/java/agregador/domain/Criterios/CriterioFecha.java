@@ -35,19 +35,6 @@ public class CriterioFecha extends Criterio {
     public String getTipoFecha() { return tipoFecha; }
     public void setTipoFecha(String tipo){this.tipoFecha = tipo;}
 
-
-/// con before y after no se incluye la fecha limite y falla si alguna fecha es NULL
-
-//    public boolean cumpleConCriterio(Hecho hecho){
-//        if(tipoFecha.equals("fechaDeCarga")){
-//            return  hecho.getFechaDeCarga().after(fechaInicio) && hecho.getFechaDeCarga().before(fechaFin);
-//        }
-//        if(tipoFecha.equals("fechaDeAcontecimiento")){
-//            return hecho.getFechaDeAcontecimiento().after(fechaInicio) && hecho.getFechaDeAcontecimiento().before(fechaFin);
-//        }
-//        return false;
-//    }
-
 @Override
 public String getQueryCondition() {
     StringBuilder retorno = new StringBuilder();
