@@ -5,17 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import web.dto.PageDTO;
 import web.domain.HechosYColecciones.Coleccion;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +22,8 @@ public class ColeccionService {
             .readTimeout(120, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .build();
+
+    private static final MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");
 
     public ColeccionService(String urlPublica, String urlAdmin) {
         this.urlPublica = urlPublica;
@@ -95,13 +89,11 @@ public class ColeccionService {
         String finalUrl = baseUrl + "api/colecciones";
         System.out.println("URL Destino: " + finalUrl);
 
-        HttpClient httpClient = HttpClient.newHttpClient();
-
         try {
-            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-                    .uri(new URI(finalUrl))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody));
+            RequestBody body = RequestBody.create(jsonBody, JSON_MEDIA_TYPE);
+            Request.Builder requestBuilder = new Request.Builder()
+                    .url(finalUrl)
+                    .post(body);
 
             if (username != null && accessToken != null && rolUsuario != null) {
                 System.out.println("Agregando Headers de Seguridad:");
@@ -118,16 +110,17 @@ public class ColeccionService {
                 System.err.println("   Status: User=" + (username!=null) + ", Token=" + (accessToken!=null) + ", Rol=" + (rolUsuario!=null));
             }
 
-            HttpRequest request = requestBuilder.build();
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            Request request = requestBuilder.build();
 
-            System.out.println("Respuesta del servidor: " + response.statusCode());
+            try (Response response = client.newCall(request).execute()) {
+                System.out.println("Respuesta del servidor: " + response.code());
 
-            if (response.statusCode() != 201) {
-                System.err.println("Cuerpo del error: " + response.body());
-                throw new RuntimeException("Error al crear la coleccion, status code: " + response.statusCode());
-            } else {
-                System.out.println("Colección creada exitosamente");
+                if (response.code() != 201) {
+                    System.err.println("Cuerpo del error: " + (response.body() != null ? response.body().string() : "null"));
+                    throw new RuntimeException("Error al crear la coleccion, status code: " + response.code());
+                } else {
+                    System.out.println("Colección creada exitosamente");
+                }
             }
 
         } catch (Exception e) {
@@ -136,7 +129,7 @@ public class ColeccionService {
         }
     }
 
-    public void eliminarColeccion( Map<String, Object> bodyData){
+    public void eliminarColeccion(Map<String, Object> bodyData){
         System.out.println(bodyData);
         String username = null;
         String accessToken = null;
@@ -152,32 +145,30 @@ public class ColeccionService {
         String id = bodyData.get("id").toString();
 
         System.out.println("Mandando a: " + urlAdmin);
-        HttpClient httpClient = HttpClient.newHttpClient();
+
         try{
-            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-                    .uri(new URI(urlAdmin + "api/colecciones/"+id))
-                    .header("Content-Type", "application/json")
-                    .DELETE();
+            Request.Builder requestBuilder = new Request.Builder()
+                    .url(urlAdmin + "api/colecciones/"+id)
+                    .delete();
 
             if (username != null && accessToken != null) {
                 requestBuilder
                         .header("username", username)
                         .header("accessToken", accessToken)
                         .header("rolUsuario", rolUsuario);
-
             }
-            HttpRequest request = requestBuilder.build();
+            Request request = requestBuilder.build();
 
             System.out.println("Se armo la request");
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            try (Response response = client.newCall(request).execute()) {
+                System.out.println("Mandamos la request");
 
-            System.out.println("Mandamos la request");
-
-            if (response.statusCode() != 200) {
-                throw new RuntimeException("Error al eliminar la coleccion, status code: " + response.statusCode());
-            } else{
-                System.out.println("Coleccion eliminada");
+                if (response.code() != 200) {
+                    throw new RuntimeException("Error al eliminar la coleccion, status code: " + response.code());
+                } else{
+                    System.out.println("Coleccion eliminada");
+                }
             }
 
         } catch (Exception e) {
@@ -204,30 +195,29 @@ public class ColeccionService {
         System.out.println("JSON que se va a enviar: " + jsonBody);
 
         System.out.println("Mandando a: " + urlAdmin + "api/colecciones/"+id);
-        HttpClient httpClient = HttpClient.newHttpClient();
+
         try{
-            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-                    .uri(new URI(urlAdmin + "api/colecciones/"+id))
-                    .header("Content-Type", "application/json")
-                    .PUT(HttpRequest.BodyPublishers.ofString(jsonBody));
+            RequestBody body = RequestBody.create(jsonBody, JSON_MEDIA_TYPE);
+            Request.Builder requestBuilder = new Request.Builder()
+                    .url(urlAdmin + "api/colecciones/"+id)
+                    .put(body);
+
             System.out.println("token" + accessToken);
             if (accessToken != null) {
-                requestBuilder
-                        .header("accessToken", accessToken);
-
+                requestBuilder.header("accessToken", accessToken);
             }
-            HttpRequest request = requestBuilder.build();
+            Request request = requestBuilder.build();
 
             System.out.println("Se armo la request");
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            try (Response response = client.newCall(request).execute()) {
+                System.out.println("Mandamos la request");
 
-            System.out.println("Mandamos la request");
-
-            if (response.statusCode() != 200) {
-                throw new RuntimeException("Error al actualizar la coleccion, status code: " + response.statusCode());
-            } else{
-                System.out.println("Coleccion actualizada");
+                if (response.code() != 200) {
+                    throw new RuntimeException("Error al actualizar la coleccion, status code: " + response.code());
+                } else{
+                    System.out.println("Coleccion actualizada");
+                }
             }
 
         } catch (Exception e) {
@@ -235,5 +225,3 @@ public class ColeccionService {
         }
     }
 }
-
-

@@ -4,11 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
-import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
-import web.domain.HechosYColecciones.Coleccion;
 import web.domain.Solicitudes.EstadoSolicitudEliminacion;
 import web.domain.Solicitudes.EstadoSolicitudModificacion;
 import web.domain.Solicitudes.SolicitudDeEliminacion;
@@ -18,12 +16,9 @@ import web.service.SolicitudService;
 import web.service.UsuarioService;
 import web.utils.ViewUtil;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class SolicitudController {
 
@@ -31,12 +26,17 @@ public class SolicitudController {
     private UsuarioService usuarioService;
     private String urlPublica;
     private Map<String, Object> dataCloud;
+    private OkHttpClient httpClient;
 
     public SolicitudController(SolicitudService solicitudService, String urlPublica, UsuarioService usuarioService, Map<String, Object> dataCloud) {
         this.solicitudService = solicitudService;
         this.urlPublica = urlPublica;
         this.usuarioService = usuarioService;
         this.dataCloud = dataCloud;
+        this.httpClient = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .build();
     }
 
     public Handler listarSolicitudesEliminacion = ctx -> {
@@ -125,20 +125,19 @@ public class SolicitudController {
                 solicitudData.put("hechoId", hechoIdStr);
 
                 try {
-                    HttpClient client = HttpClient.newHttpClient();
-                    HttpRequest request = HttpRequest.newBuilder()
-                            .uri(new URI(urlPublica + "/hechos/" + hechoIdStr))
-                            .GET()
+                    Request request = new Request.Builder()
+                            .url(urlPublica + "/hechos/" + hechoIdStr)
+                            .get()
                             .build();
 
-                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                    if (response.statusCode() == 200) {
-                        ObjectMapper mapper = new ObjectMapper();
-                        Map<String, Object> hechoData = mapper.readValue(response.body(), Map.class);
-                        hechoTitulo = (String) hechoData.getOrDefault("titulo", "Sin título");
-                    } else {
-                        hechoTitulo = "Hecho eliminado o no encontrado";
+                    try (Response response = httpClient.newCall(request).execute()) {
+                        if (response.code() == 200 && response.body() != null) {
+                            ObjectMapper mapper = new ObjectMapper();
+                            Map<String, Object> hechoData = mapper.readValue(response.body().string(), Map.class);
+                            hechoTitulo = (String) hechoData.getOrDefault("titulo", "Sin título");
+                        } else {
+                            hechoTitulo = "Hecho eliminado o no encontrado";
+                        }
                     }
                 } catch (Exception e) {
                     System.err.println("Error obteniendo hecho ID " + hechoIdStr + ": " + e.getMessage());
@@ -211,42 +210,42 @@ public class SolicitudController {
                     String hechoIdStr = sol.getHechoAsociado().toString();
                     System.out.println("Buscando hecho para detalle: " + hechoIdStr);
 
-                    HttpClient client = HttpClient.newHttpClient();
                     String urlCompleta = urlPublica + "/hechos/" + hechoIdStr;
                     System.out.println("URL del hecho: " + urlCompleta);
 
-                    HttpRequest request = HttpRequest.newBuilder()
-                            .uri(new URI(urlCompleta))
-                            .GET()
+                    Request request = new Request.Builder()
+                            .url(urlCompleta)
+                            .get()
                             .build();
 
-                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                    System.out.println("Response status: " + response.statusCode());
+                    try (Response response = httpClient.newCall(request).execute()) {
+                        System.out.println("Response status: " + response.code());
 
-                    if (response.statusCode() == 200) {
-                        hechoData = mapper.readValue(response.body(), Map.class);
+                        if (response.code() == 200 && response.body() != null) {
+                            hechoData = mapper.readValue(response.body().string(), Map.class);
 
-                        if (hechoData.containsKey("fechaDeCarga")) {
-                            Object fechaObj = hechoData.get("fechaDeCarga");
-                            if (fechaObj != null) {
-                                try {
-                                    if (fechaObj instanceof Number) {
-                                        long timestamp = ((Number) fechaObj).longValue();
-                                        Date fecha = new Date(timestamp);
-                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                                        hechoData.put("fechaDeCargaFormateada", sdf.format(fecha));
-                                    } else if (fechaObj instanceof String) {
-                                        hechoData.put("fechaDeCargaFormateada", fechaObj.toString());
+                            if (hechoData.containsKey("fechaDeCarga")) {
+                                Object fechaObj = hechoData.get("fechaDeCarga");
+                                if (fechaObj != null) {
+                                    try {
+                                        if (fechaObj instanceof Number) {
+                                            long timestamp = ((Number) fechaObj).longValue();
+                                            Date fecha = new Date(timestamp);
+                                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                                            hechoData.put("fechaDeCargaFormateada", sdf.format(fecha));
+                                        } else if (fechaObj instanceof String) {
+                                            hechoData.put("fechaDeCargaFormateada", fechaObj.toString());
+                                        }
+                                    } catch (Exception e) {
+                                        System.err.println("Error formateando fecha: " + e.getMessage());
+                                        hechoData.put("fechaDeCargaFormateada", "Fecha inválida");
                                     }
-                                } catch (Exception e) {
-                                    System.err.println("Error formateando fecha: " + e.getMessage());
-                                    hechoData.put("fechaDeCargaFormateada", "Fecha inválida");
                                 }
                             }
+                        } else {
+                            System.err.println("Error obteniendo hecho: " + response.code());
+                            hechoData.put("titulo", "Error al cargar el hecho");
                         }
-                    } else {
-                        System.err.println("Error obteniendo hecho: " + response.statusCode());
-                        hechoData.put("titulo", "Error al cargar el hecho");
                     }
                 } catch (Exception e) {
                     System.err.println("Error obteniendo hecho para detalle: " + e.getMessage());
@@ -278,18 +277,17 @@ public class SolicitudController {
             if (sol.getHechoAsociado() != null) {
                 try {
                     String hechoIdStr = sol.getHechoAsociado().toString();
-                    HttpClient client = HttpClient.newHttpClient();
                     String urlCompleta = urlPublica + "/hechos/" + hechoIdStr;
 
-                    HttpRequest request = HttpRequest.newBuilder()
-                            .uri(new URI(urlCompleta))
-                            .GET()
+                    Request request = new Request.Builder()
+                            .url(urlCompleta)
+                            .get()
                             .build();
 
-                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                    if (response.statusCode() == 200) {
-                        hechoData = mapper.readValue(response.body(), Map.class);
+                    try (Response response = httpClient.newCall(request).execute()) {
+                        if (response.code() == 200 && response.body() != null) {
+                            hechoData = mapper.readValue(response.body().string(), Map.class);
+                        }
                     }
                 } catch (Exception e) {
                     hechoData.put("titulo", "Error de conexión");
@@ -371,14 +369,13 @@ public class SolicitudController {
             JsonNode jsonNode = mapper.readTree(body);
 
             if (jsonNode.has("accion")) {
-                if(jsonNode.has("conSugerencias")){
-                    if(jsonNode.get("conSugerencias").asText().equals("true")) {
-                        nuevoEstado = EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA.toString();
-                    }
-                } else{
-                    nuevoEstado = jsonNode.get("accion").asText();
-                }
+                // 1. Primero asignamos el estado base que viene en el JSON
+                nuevoEstado = jsonNode.get("accion").asText();
 
+                // 2. Verificamos si hay que sobrescribirlo por sugerencias
+                if (jsonNode.has("conSugerencias") && jsonNode.get("conSugerencias").asBoolean()) {
+                    nuevoEstado = EstadoSolicitudModificacion.ACEPTADACONSUGERENCIA.toString();
+                }
             } else if (jsonNode.isTextual()) {
                 nuevoEstado = jsonNode.asText();
             } else {
@@ -433,7 +430,6 @@ public class SolicitudController {
 
     public Handler listarSolicitudesModificacion = ctx -> {
         ObjectMapper mapper = new ObjectMapper();
-        HttpClient http = HttpClient.newHttpClient();
         System.out.println("Listando SOLO solicitudes de modificación");
 
         int page = Math.max(1, ctx.queryParamAsClass("page", Integer.class).getOrDefault(1));
@@ -525,18 +521,18 @@ public class SolicitudController {
 
                 try {
                     System.out.println("entra a try antes de request");
-                    HttpRequest request = HttpRequest.newBuilder()
-                            .uri(new URI(urlPublica + "/hechos/" + hechoIdStr))
-                            .GET()
+                    Request request = new Request.Builder()
+                            .url(urlPublica + "/hechos/" + hechoIdStr)
+                            .get()
                             .build();
 
-                    HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
-
-                    if (response.statusCode() == 200) {
-                        Map<String, Object> hechoData = mapper.readValue(response.body(), Map.class);
-                        hechoTitulo = (String) hechoData.getOrDefault("titulo", "Sin título");
-                    } else {
-                        hechoTitulo = "Hecho eliminado o no encontrado (HTTP " + response.statusCode() + ")";
+                    try (Response response = httpClient.newCall(request).execute()) {
+                        if (response.code() == 200 && response.body() != null) {
+                            Map<String, Object> hechoData = mapper.readValue(response.body().string(), Map.class);
+                            hechoTitulo = (String) hechoData.getOrDefault("titulo", "Sin título");
+                        } else {
+                            hechoTitulo = "Hecho eliminado o no encontrado (HTTP " + response.code() + ")";
+                        }
                     }
                 } catch (Exception e) {
                     System.err.println("Error obteniendo hecho ID " + hechoIdStr + ": " + e.getMessage());

@@ -2,22 +2,26 @@ package web.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import web.dto.Hechos.FuenteDTO;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class FuenteService {
     private final String urlAdmin;
     private final ObjectMapper mapper = new ObjectMapper();
-    private final HttpClient http = HttpClient.newHttpClient();
+    private final OkHttpClient http;
 
     public FuenteService(String urlPublica) {
         this.urlAdmin = urlPublica;
+        this.http = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .build();
     }
 
     public List<FuenteDTO> listarFuentes() {
@@ -27,17 +31,17 @@ public class FuenteService {
             System.out.println("--- DEBUG SERVICE ---");
             System.out.println("Solicitando fuentes a: " + finalUrl);
 
-            HttpRequest.Builder builder = HttpRequest.newBuilder()
-                    .uri(new URI(finalUrl))
-                    .GET();
+            Request request = new Request.Builder()
+                    .url(finalUrl)
+                    .get()
+                    .build();
 
-            HttpRequest request = builder.build();
-            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+            try (Response response = http.newCall(request).execute()) {
+                System.out.println("Respuesta Backend Código: " + response.code());
 
-            System.out.println("Respuesta Backend Código: " + response.statusCode());
-
-            if (response.statusCode() == 200) {
-                return mapper.readValue(response.body(), new TypeReference<List<FuenteDTO>>() {});
+                if (response.code() == 200 && response.body() != null) {
+                    return mapper.readValue(response.body().string(), new TypeReference<List<FuenteDTO>>() {});
+                }
             }
 
             return Collections.emptyList();

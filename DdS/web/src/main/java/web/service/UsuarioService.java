@@ -7,58 +7,56 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kong.unirest.json.JSONObject;
-import web.domain.Usuario.Usuario;
+import okhttp3.*;
 
-import java.net.URI;
-import java.net.URLEncoder;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.concurrent.TimeUnit;
 
 public class UsuarioService {
     private final String urlPublica;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    private static final HttpClient httpClient = HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_2)
+    private static final OkHttpClient httpClient = new OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
             .build();
+    private static final MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");
 
     public UsuarioService(String urlPublica){
         this.urlPublica = urlPublica;
     }
 
-    public Map<String, Object> authCallback(String code,String clientId, String clientSecret, String redirectUri, String keycloakUrl) {
-        Map<String, String> tokenParams = Map.of(
-                "grant_type", "authorization_code",
-                "client_id", clientId,
-                "client_secret", clientSecret,
-                "code", code,
-                "redirect_uri", redirectUri
-        );
+    public Map<String, Object> authCallback(String code, String clientId, String clientSecret, String redirectUri, String keycloakUrl) {
 
-        HttpRequest tokenRequest = HttpRequest.newBuilder()
-                .uri(URI.create(keycloakUrl + "/protocol/openid-connect/token"))
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .POST(HttpRequest.BodyPublishers.ofString(formData(tokenParams)))
+        RequestBody formBody = new FormBody.Builder()
+                .add("grant_type", "authorization_code")
+                .add("client_id", clientId)
+                .add("client_secret", clientSecret)
+                .add("code", code)
+                .add("redirect_uri", redirectUri)
                 .build();
 
-        HttpResponse<String> tokenResponse = null;
-        try {
-            tokenResponse = httpClient.send(tokenRequest, HttpResponse.BodyHandlers.ofString());
+        Request tokenRequest = new Request.Builder()
+                .url(keycloakUrl + "/protocol/openid-connect/token")
+                .post(formBody)
+                .build();
+
+        String accessToken;
+
+        try (Response tokenResponse = httpClient.newCall(tokenRequest).execute()) {
+
+            String responseBody = tokenResponse.body() != null ? tokenResponse.body().string() : "";
+
+            if (!tokenResponse.isSuccessful()) {
+                throw new RuntimeException("Error al conectar con Keycloak: " + responseBody);
+            }
+
+            JSONObject tokenJson = new JSONObject(responseBody);
+            accessToken = tokenJson.getString("access_token");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        if (tokenResponse.statusCode() != 200) {
-            throw new RuntimeException("Error al conectar con Keycloak: " + tokenResponse.body());
-        }
-
-        JSONObject tokenJson = new JSONObject(tokenResponse.body());
-        String accessToken = tokenJson.getString("access_token");
 
         DecodedJWT jwt = JWT.decode(accessToken);
         String username = jwt.getClaim("preferred_username").asString();
@@ -70,11 +68,12 @@ public class UsuarioService {
             Map<String, Object> realmAccessMap = realmAccessClaim.asMap();
 
             if (realmAccessMap != null && realmAccessMap.containsKey("roles")) {
+                @SuppressWarnings("unchecked")
                 List<String> roles = (List<String>) realmAccessMap.get("roles");
 
                 if (roles.contains("administrador")) {
                     rolUsuario = "ADMINISTRADOR";
-                }else if (roles.contains("contribuyente")) {
+                } else if (roles.contains("contribuyente")) {
                     rolUsuario = "CONTRIBUYENTE";
                 }
             }
@@ -83,51 +82,50 @@ public class UsuarioService {
         JSONObject syncBody = new JSONObject();
         syncBody.put("username", username);
 
-        HttpRequest syncRequest = HttpRequest.newBuilder()
-                .uri(URI.create(urlPublica + "/usuario/sincronizar"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(syncBody.toString()))
+        RequestBody jsonBody = RequestBody.create(syncBody.toString(), JSON_MEDIA_TYPE);
+
+        Request syncRequest = new Request.Builder()
+                .url(urlPublica + "/usuario/sincronizar")
+                .post(jsonBody)
                 .build();
 
-        try {
-            HttpResponse<String> syncResponse = httpClient.send(syncRequest, HttpResponse.BodyHandlers.ofString());
-            if (syncResponse.statusCode() >= 400) {
-                System.err.println("Advertencia: El GestorPublico devolvió error " + syncResponse.statusCode());
+        try (Response syncResponse = httpClient.newCall(syncRequest).execute()) {
+            if (!syncResponse.isSuccessful()) {
+                System.err.println("Advertencia: El GestorPublico devolvió error " + syncResponse.code());
             }
         } catch (Exception e) {
             System.err.println("Error contactando al GestorPublico: " + e.getMessage());
-        };
+        }
 
-        return Map.of("username", username,"rolUsuario", rolUsuario, "accessToken", accessToken);
+        return Map.of("username", username, "rolUsuario", rolUsuario, "accessToken", accessToken);
     }
 
     public String obtenerId(String username) {
         System.out.println(">>> Buscando ID para el usuario: " + username);
         String id = null;
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(urlPublica + "/usuario/" + username))
-                .header("Content-Type", "application/json")
-                .GET()
+        Request request = new Request.Builder()
+                .url(urlPublica + "/usuario/" + username)
+                .header("Content-Type", "application/json") // Aunque en GET no suele ser necesario, lo mantenemos por consistencia
+                .get()
                 .build();
-        try {
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() != 200) {
-                System.err.println(">>> Error API Publica. Status: " + response.statusCode());
+        try (Response response = httpClient.newCall(request).execute()) {
+
+            if (!response.isSuccessful()) {
+                System.err.println(">>> Error API Publica. Status: " + response.code());
                 return null;
             }
 
-            System.out.println(">>> JSON Recibido: " + response.body());
+            String responseBody = response.body() != null ? response.body().string() : "";
+            System.out.println(">>> JSON Recibido: " + responseBody);
 
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readTree(response.body());
+            JsonNode root = mapper.readTree(responseBody);
 
             if (root.has("usuarioId")) {
                 id = root.get("usuarioId").asText();
                 System.out.println(">>> ID UUID Encontrado: " + id);
             } else if (root.has("id_usuario")) {
-                // Fallback por si acaso cambiara el DTO
                 id = root.get("id_usuario").asText();
                 System.out.println(">>> ID Encontrado (clave id_usuario): " + id);
             } else {
@@ -141,10 +139,4 @@ public class UsuarioService {
         return id;
     }
 
-    private static String formData(Map<String, String> data) {
-        return data.entrySet().stream()
-                .map(entry -> URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "=" +
-                        URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8))
-                .collect(Collectors.joining("&"));
-    }
 }

@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class CategoriasService {
-    // CAMBIO: Usamos OkHttpClient en lugar de java.net.http.HttpClient
     private final OkHttpClient httpClient;
     private final ObjectMapper mapper;
     private final String urlEstadisticas;
@@ -118,16 +117,12 @@ public class CategoriasService {
     }
 
     private Map<String, Object> hacerConsulta(String endpoint) throws Exception {
-        // Mantenemos la lógica de URI original para concatenar
         URI uri = new URI(urlEstadisticas + endpoint);
-
-        // CAMBIO: Request Builder de OkHttp
         Request request = new Request.Builder()
                 .url(uri.toString())
                 .get()
                 .build();
 
-        // CAMBIO: Ejecución con OkHttp
         try (Response response = httpClient.newCall(request).execute()) {
 
             String responseBody = response.body() != null ? response.body().string() : "";
