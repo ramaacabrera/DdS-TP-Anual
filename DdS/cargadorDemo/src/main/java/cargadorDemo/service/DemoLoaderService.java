@@ -37,11 +37,6 @@ public class DemoLoaderService implements FuenteExternaConexion {
         objectMapper.registerModule(new JavaTimeModule()); // Para manejar LocalDateTime del HechoMock
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Para que LocalDateTime se serialice como string ISO
     }
-    // Constructor que permite inicializar la URL del servicio externo y la Fuente asociada
-    /*public cargadorDinamico.service.DemoLoader(String urlServicioExterno) {
-        this(); // Llama al constructor por defecto para inicializar ObjectMapper
-        this.url = urlServicioExterno;
-    }*/
 
     // Getters y Setters
     public String getUrlServicioExterno() {

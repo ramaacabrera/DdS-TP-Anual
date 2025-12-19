@@ -30,19 +30,6 @@ public class MetamapaLoader implements FuenteExternaConexion {
         return null;
     }
 
-    /*
-    public List<HechoDTO> obtenerHechos(Coleccion coleccion){
-        URL urlColeccion;
-        try {
-            urlColeccion = new URL (url + "/coleccion/" + coleccion.getHandle() + "/hechos");
-            return this.conseguirHechos(urlColeccion);
-        } catch (Exception e){
-            System.out.println("Error al crear url " + e.getMessage());
-        }
-        return null;
-    }
-     */
-
     public List<HechoDTO> conseguirHechos(URL urlHecho){
         try {
             HttpURLConnection urlConnection = (HttpURLConnection) urlHecho.openConnection();
@@ -58,33 +45,5 @@ public class MetamapaLoader implements FuenteExternaConexion {
             return null;
         }
     }
-
-//    public void crearSolicitudEliminacion(HechoDTO hechoDTO, String justificacion){
-//        URL urlSolicitudEliminacion;
-//        try{
-//            urlSolicitudEliminacion = new URL(url + "/solicitudes");
-//            HttpURLConnection urlConnection = (HttpURLConnection) urlSolicitudEliminacion.openConnection();
-//            urlConnection.setRequestMethod("POST");
-//            urlConnection.setRequestProperty("Content-Type", "application/json");
-//            urlConnection.setDoOutput(true);
-//
-//            Map<String,Object> parametros = new HashMap<>();
-//            parametros.put("hechoDTO", hechoDTO);
-//            parametros.put("justificacion", justificacion);
-//
-//            ObjectMapper mapper = new ObjectMapper();
-//            String json = mapper.writeValueAsString(parametros);
-//
-//            OutputStream output = urlConnection.getOutputStream();
-//            output.write(json.getBytes());
-//            output.flush();
-//            output.close();
-//
-//            urlConnection.disconnect();
-//        }
-//        catch (Exception e){
-//            System.out.println("Error al crear solicitud " + e.getMessage());
-//        }
-//    }
 
 }

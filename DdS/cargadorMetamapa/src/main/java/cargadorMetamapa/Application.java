@@ -1,13 +1,12 @@
 package cargadorMetamapa;
 
+import cargadorMetamapa.service.HechosService;
 import cargadorMetamapa.controller.MetamapaLoader;
 import cargadorMetamapa.utils.IniciadorApp;
 import cargadorMetamapa.utils.LecturaConfig;
 import utils.ClienteDelAgregador;
 import utils.Dominio.fuente.Fuente;
 import utils.Dominio.fuente.TipoDeFuente;
-import cargadorMetamapa.controller.GetHechosHandler;
-import cargadorMetamapa.controller.PostFuentesHandler;
 import utils.Conexiones.Cargador;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javalin.Javalin;
@@ -39,8 +38,9 @@ public class Application {
         Javalin app = iniciador.iniciarApp(puertoMetamapa, "/");
 
         // 3. Conexión al Agregador
+        ControladorMetamapa controller = new ControladorMetamapa(new HechosService(cargadorMetamapa));
         Fuente fuente = new Fuente(TipoDeFuente.METAMAPA, "METAMAPA");
-        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorMetamapa(new GetHechosHandler(cargadorMetamapa)));
+        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, controller);
         cliente.conectar(fuente);
 
 
@@ -50,7 +50,5 @@ public class Application {
         // Health check
         app.get("/health", ctx -> { ctx.status(200).result("OK");});
 
-        app.get("/hechos", new GetHechosHandler(cargadorMetamapa));
-        app.post("/fuentes", new PostFuentesHandler(cargadorMetamapa));
     }
 }

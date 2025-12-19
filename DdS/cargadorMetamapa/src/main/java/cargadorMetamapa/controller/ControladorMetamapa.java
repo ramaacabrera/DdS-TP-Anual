@@ -1,5 +1,6 @@
 package cargadorMetamapa.controller;
 
+import cargadorMetamapa.service.HechosService;
 import utils.Controladores.Controlador;
 import utils.DTO.HechoDTO;
 import utils.DTO.SolicitudDeEliminacionDTO;
@@ -9,15 +10,15 @@ import java.util.List;
 import java.util.UUID;
 
 public class ControladorMetamapa implements Controlador {
-    GetHechosHandler handler;
+    HechosService service;
 
-    public ControladorMetamapa(GetHechosHandler handlerNuevo) {
-        this.handler = handlerNuevo;
+    public ControladorMetamapa(HechosService service) {
+        this.service = service;
     }
 
     @Override
     public List<HechoDTO> obtenerHechos() {
-        return handler.obtenerHechos();
+        return service.obtenerHechos();
     }
 
     @Override
