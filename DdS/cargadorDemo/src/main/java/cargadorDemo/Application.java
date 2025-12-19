@@ -1,11 +1,11 @@
 package cargadorDemo;
 
 import cargadorDemo.service.DemoLoaderService;
-import cargadorDemo.service.GetHechosService;
 import cargadorDemo.domain.fuente.Fuente;
 import cargadorDemo.domain.fuente.TipoDeFuente;
 import cargadorDemo.conexionAgregador.ClienteDelAgregador;
 import cargadorDemo.domain.Conexiones.Cargador;
+import cargadorDemo.service.HechosService;
 import cargadorDemo.utils.IniciadorApp;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import cargadorDemo.controller.ControladorDemo;
@@ -41,7 +41,7 @@ public class Application {
         cargadorDemo.agregarConexion(new DemoLoaderService(urlMock));
 
         Fuente fuente = new Fuente(TipoDeFuente.DEMO, "Demo");
-        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDemo(new GetHechosService(cargadorDemo)));
+        ClienteDelAgregador cliente = new ClienteDelAgregador(urlAgregador, new ControladorDemo(new HechosService(cargadorDemo)));
         cliente.conectar(fuente);
     }
 }
