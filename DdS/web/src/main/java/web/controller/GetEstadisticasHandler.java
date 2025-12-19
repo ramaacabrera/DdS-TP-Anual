@@ -16,10 +16,12 @@ public class GetEstadisticasHandler implements Handler {
 
     private final EstadisticasService estadisticasService;
     private final CategoriasService categoriasService;
+    private final String urlEstadisticas;
 
-    public GetEstadisticasHandler(EstadisticasService estadisticasService, CategoriasService categoriasService) {
+    public GetEstadisticasHandler(EstadisticasService estadisticasService, CategoriasService categoriasService, String urlEstadisticas) {
         this.estadisticasService = estadisticasService;
         this.categoriasService = categoriasService;
+        this.urlEstadisticas = urlEstadisticas;
     }
 
     @Override
@@ -42,6 +44,7 @@ public class GetEstadisticasHandler implements Handler {
             modelo.put("solicitudesSpam", obtenerValorConFallback(statsUsuarios, Arrays.asList("spam", "spamCount", "estadisticas_spam"), 0));
             modelo.put("categorias", statsCategoria);
             modelo.put("totalCategorias", categoriasTotales.size());
+            modelo.put("urlEstadisticas", urlEstadisticas);
 
             if (uuidColeccion != null && !uuidColeccion.trim().isEmpty() && esUUIDValido(uuidColeccion)) {
                 try {

@@ -155,7 +155,7 @@ public class ColeccionService {
         HttpClient httpClient = HttpClient.newHttpClient();
         try{
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8081/api/colecciones/"+id))
+                    .uri(new URI(urlAdmin + "api/colecciones/"+id))
                     .header("Content-Type", "application/json")
                     .DELETE();
 

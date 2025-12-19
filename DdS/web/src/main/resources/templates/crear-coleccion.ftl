@@ -13,7 +13,7 @@
         </#if>
 
         <script>
-            const URL_ADMIN = '${urlAdmin!"http://localhost:8081"}';
+            const URL_ADMIN = '${urlAdmin}';
         </script>
 
         <form id="form-crear-coleccion" class="form-container" method="POST" action="/colecciones">

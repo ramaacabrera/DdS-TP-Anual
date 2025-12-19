@@ -2,21 +2,28 @@ package web.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import java.io.InputStream;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class EstadisticasService {
-    private final HttpClient httpClient;
+    // CAMBIO: Reemplazo de java.net.http.HttpClient por OkHttpClient
+    private final OkHttpClient httpClient;
     private final ObjectMapper mapper;
     private final String urlEstadisticas;
 
     public EstadisticasService(String urlEstadisticas) {
-        this.httpClient = HttpClient.newHttpClient();
+        // CAMBIO: Inicialización de OkHttpClient con timeouts
+        this.httpClient = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS) // Un poco más largo para el CSV
+                .build();
         this.mapper = new ObjectMapper();
         this.urlEstadisticas = urlEstadisticas;
     }
@@ -51,49 +58,72 @@ public class EstadisticasService {
     public InputStream descargarReporteCSV() throws Exception {
         String endpoint = "/exportar";
         try {
+            // Mantenemos tu lógica de URI para evitar problemas de formato
             URI uri = new URI(urlEstadisticas + endpoint);
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(uri)
-                    .GET()
-                    .timeout(java.time.Duration.ofSeconds(30))
+            Request request = new Request.Builder()
+                    .url(uri.toString())
+                    .get()
                     .build();
 
-            HttpResponse<InputStream> response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
+            Response response = httpClient.newCall(request).execute();
 
-            if (response.statusCode() != 200) {
-                throw new RuntimeException("Error descargando CSV. Status: " + response.statusCode());
+            if (!response.isSuccessful()) {
+                response.close(); // Cerramos manualmente si falló para liberar recursos
+                throw new RuntimeException("Error descargando CSV. Status: " + response.code());
             }
 
-            return response.body();
+            return response.body().byteStream();
+
         } catch (Exception e) {
             throw new Exception("Error al conectar con el servicio de descarga de estadísticas", e);
         }
     }
 
-    private Map<String, Object> hacerConsulta(String endpoint) throws Exception {
+    private Map<String, Object> hacerConsulta(String path) throws Exception {
         try {
-            URI uri = new URI(urlEstadisticas + endpoint);
-
-            System.out.println("Consultando API Estadísticas: " + uri.toString()); // Log para debug
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(uri)
-                    .GET()
-                    .timeout(java.time.Duration.ofSeconds(10))
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() != 200) {
-                throw new RuntimeException("HTTP " + response.statusCode() + " para " + uri);
+            // --- Lógica de Limpieza y Sanitización Original ---
+            String baseUrl = urlEstadisticas.trim();
+            if (baseUrl.endsWith("/")) {
+                baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
             }
 
-            System.out.println("Respuesta al endpoint: " + endpoint + ", " + response.body());
+            String cleanPath = path.trim();
+            if (!cleanPath.startsWith("/")) {
+                cleanPath = "/" + cleanPath;
+            }
 
-            return mapper.readValue(response.body(), new TypeReference<Map<String, Object>>() {});
+            URI uri = new URI(baseUrl + cleanPath);
+            // Esto convierte 'Inundación' a 'Inundaci%C3%B3n' y evita el error 400 de Jetty
+            uri = URI.create(uri.toASCIIString());
+
+            System.out.println("🚀 Consultando (Sanitized): " + uri.toString());
+
+            // --- Petición con OkHttp ---
+            Request request = new Request.Builder()
+                    .url(uri.toString())
+                    .header("Accept", "application/json")
+                    .header("Content-Type", "application/json")
+                    .get()
+                    .build();
+
+            // Usamos try-with-resources para cerrar automáticamente la respuesta
+            try (Response response = httpClient.newCall(request).execute()) {
+
+                String responseBody = response.body() != null ? response.body().string() : "";
+
+                if (!response.isSuccessful()) {
+                    // El log del error con el cuerpo es vital
+                    throw new RuntimeException("Error HTTP " + response.code() + " URL: " + uri + "\nBODY: " + responseBody);
+                }
+
+                return mapper.readValue(responseBody, new TypeReference<Map<String, Object>>() {});
+            }
+
         } catch (Exception e) {
-            throw new Exception("Error al consultar servicio de estadisticas: " + endpoint, e);
+            System.err.println("❌ Fallo crítico consultando: " + path);
+            e.printStackTrace();
+            throw e;
         }
     }
 }

@@ -38,6 +38,7 @@ public class Application {
 
         // Health check
         app.get("/health", ctx -> { ctx.status(200).result("OK");});
+        System.out.println("Entro en application de estadisticas");
 
         app.get("/api/estadisticas/provinciaMax/colecciones/{coleccion}", controller::getProvinciaColeccion);
         app.get("/api/estadisticas/categoriaMax", controller::getCategoriaMax);

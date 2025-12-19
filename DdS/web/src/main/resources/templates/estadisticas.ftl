@@ -2,6 +2,9 @@
 <#assign additionalCss = ["/css/styleEstadisticas.css"]>
 
 <#assign content>
+    <script>
+        const API_BASE_URL = ${urlEstadisticas};
+    </script>
 
     <header class="hero-header">
         <div class="hero-content">

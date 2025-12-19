@@ -24,6 +24,8 @@ public class EstadisticasController {
         Optional<String> categoria = service.obtenerCategoriaMaxHechos();
         Map<String, Object> resultado = new HashMap<>();
 
+        System.out.println("Busco categoria maxima");
+
         if (categoria.isPresent()) {
             resultado.put("categoria", categoria.get());
             ctx.status(200).json(resultado);
@@ -34,10 +36,10 @@ public class EstadisticasController {
     }
 
     public void getCategorias(@NotNull Context ctx) {
+        System.out.println("Busco categorias");
         try {
             List<String> categorias = service.obtenerCategoriasNormalizadas();
             Map<String, Object> resultado = new HashMap<>();
-
             resultado.put("categorias", categorias);
             resultado.put("total", categorias.size());
             resultado.put("timestamp", new Date());
@@ -69,6 +71,7 @@ public class EstadisticasController {
 
     public void getProvinciaCategoria(@NotNull Context ctx) {
         String categoriaParam = ctx.pathParam("categoria");
+        System.out.println("categoriaParam: " + categoriaParam);
         if (parametroVacio(categoriaParam)) {
             ctx.status(400).json(Map.of("error", "Categoría no especificada"));
             return;

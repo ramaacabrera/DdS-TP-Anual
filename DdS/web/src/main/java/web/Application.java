@@ -100,7 +100,7 @@ public class Application {
         app.delete("/colecciones/{id}", coleccionController.eliminarColeccion);
 
 
-        app.get("/estadisticas", new GetEstadisticasHandler(estadisticasService, categoriasService));
+        app.get("/estadisticas", new GetEstadisticasHandler(estadisticasService, categoriasService, urlEstadisticas));
         app.get("/estadisticas/descargar", new GetDescargarEstadisticasHandler(estadisticasService));
         app.get("/api/estadisticas/provinciaMax/categorias/{categoria}", new GetBusquedaAPIHandler(categoriasService, GetBusquedaAPIHandler.TipoBusqueda.PROVINCIA));
         app.get("/api/estadisticas/horaMax/categorias/{categoria}", new GetBusquedaAPIHandler(categoriasService, GetBusquedaAPIHandler.TipoBusqueda.HORA));

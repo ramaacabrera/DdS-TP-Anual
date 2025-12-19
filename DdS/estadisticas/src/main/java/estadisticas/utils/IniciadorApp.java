@@ -19,6 +19,8 @@ public class IniciadorApp {
                 wsFactory.setIdleTimeout(Duration.ofDays(1));
                 wsFactory.setMaxTextMessageSize(2L * 1024 * 1024 * 1024); // 2 MB
             });
+
+            javalinConfig.routing.contextPath = "/gestor-estadisticas";
         }).start(puerto);
     };
 
