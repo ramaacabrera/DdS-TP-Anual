@@ -50,7 +50,7 @@ public class Application {
         FuenteService fuenteService = new FuenteService(urlPublica);
 
         // controllers
-        ColeccionController coleccionController = new ColeccionController(coleccionService, usuarioService, fuenteService);
+        ColeccionController coleccionController = new ColeccionController(coleccionService, usuarioService, fuenteService, urlAdmin);
         HechoController hechoController = new HechoController(urlPublica, urlAdmin,hechoService, dataCloud);
         SolicitudController solicitudController = new SolicitudController(solicitudService, urlPublica, usuarioService, dataCloud);
         AdministradorController administradorController = new AdministradorController(solicitudService);

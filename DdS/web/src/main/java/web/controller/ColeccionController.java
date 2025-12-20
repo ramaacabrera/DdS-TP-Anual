@@ -22,11 +22,13 @@ public class ColeccionController {
     private ColeccionService coleccionService;
     private UsuarioService usuarioService;
     private FuenteService fuenteService;
+    private String urlAdmin;
 
-    public ColeccionController(ColeccionService coleccionService, UsuarioService usuarioService, FuenteService fuenteService) {
+    public ColeccionController(ColeccionService coleccionService, UsuarioService usuarioService, FuenteService fuenteService, String urlAdmin) {
         this.coleccionService = coleccionService;
         this.usuarioService = usuarioService;
         this.fuenteService = fuenteService;
+        this.urlAdmin = urlAdmin;
     }
 
     public Handler listarColecciones = ctx -> {
@@ -87,6 +89,7 @@ public class ColeccionController {
 
         modelo.put("listaFuentes", listaFuentes);
         modelo.put("tiposDeFuente", TipoDeFuente.values());
+        modelo.put("urlAdmin", urlAdmin);
 
         ctx.render("crear-coleccion.ftl", modelo);
     };
@@ -117,6 +120,7 @@ public class ColeccionController {
             List<String> idSeleccionados = coleccion.getFuente().stream().map(fuente -> fuente.getId().toString()).toList();
             System.out.println("ids seleccionados: " + idSeleccionados);
             modelo.put("idSeleccionados", new ObjectMapper().writeValueAsString(idSeleccionados));
+            modelo.put("urlAdmin", urlAdmin);
 
             ctx.render("editar-coleccion.ftlh", modelo);
     };

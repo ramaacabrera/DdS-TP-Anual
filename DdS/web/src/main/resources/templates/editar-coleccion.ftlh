@@ -9,7 +9,7 @@
         <h1 class="main-title">Editar Colección</h1>
 
         <script>
-            const URL_ADMIN = '${URL_ADMIN}';
+            const URL_ADMIN = '${urlAdmin}';
             let COLECCION_ID = '${COLECCION_ID}';
             const USERNAME = '${username!""}';
             const ACCESS_TOKEN = '${accessToken!""}';

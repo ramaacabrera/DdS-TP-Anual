@@ -4,7 +4,7 @@ import gestorAdministrativo.controller.*;
 import gestorAdministrativo.service.*;
 import gestorAdministrativo.repository.*;
 import io.javalin.Javalin;
-import utils.IniciadorApp;
+import gestorAdministrativo.utils.IniciadorApp;
 import gestorAdministrativo.utils.LecturaConfig;
 import utils.Keycloak.TokenValidator;
 
